@@ -64,10 +64,17 @@
  *  是否为有效的邮件格式
  */
 - (BOOL)ssj_validEmial;
+
 /**
  是否为有效的手机号码格式
  */
 - (BOOL)ssj_validPhoneNum;
+
+
+/**
+ 是否为有效的手机号码格式(字母和数组的组合)
+ */
+- (BOOL)ssj_validPassWard;
 
 
 /**

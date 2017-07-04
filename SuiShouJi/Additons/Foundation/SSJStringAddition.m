@@ -215,6 +215,12 @@
     return [phoneTest evaluateWithObject:self];
 }
 
+- (BOOL)ssj_validPassWard {
+    NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,15}$";
+    NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+   return [pred evaluateWithObject:self];
+}
+
 
 - (UIImage *)base64ToImage {
     NSData *decodedImageData = [[NSData alloc] initWithBase64EncodedString:self options:NSDataBase64DecodingIgnoreUnknownCharacters];

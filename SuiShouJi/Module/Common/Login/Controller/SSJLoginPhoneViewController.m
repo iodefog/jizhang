@@ -109,7 +109,7 @@
         _tfPassword.secureTextEntry = YES;
         [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
         [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_tfPassword ssj_setBorderWidth:1];
+        [_tfPassword ssj_setBorderWidth:2];
     }
     return _tfPassword;
 }

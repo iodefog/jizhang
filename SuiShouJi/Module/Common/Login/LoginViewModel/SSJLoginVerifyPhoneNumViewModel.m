@@ -195,7 +195,8 @@
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [subscriber sendError:nil];
+        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
+        [subscriber sendError:error];
         [CDAutoHideMessageHUD showMessage:service.desc];
     }];
 }
@@ -625,7 +626,7 @@
 }
 
 - (RACCommand *)verifyPhoneNumRequestCommand {
-//    if (!_verifyPhoneNumRequestCommand) {
+    if (!_verifyPhoneNumRequestCommand) {
         _verifyPhoneNumRequestCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -640,12 +641,12 @@
                 return nil;
             }];
             //返回的数据处理json->model
-            //1 密码登录(已注册)，0 验证码注册（未注册）
+            //1 密码登录(已注册)，80 验证码注册（未注册）
             return [signal map:^id(NSDictionary *result) {
                 return @([[result objectForKey:@"code"] boolValue]);
             }];
         }];
-//    }
+    }
     return _verifyPhoneNumRequestCommand;
 }
 
@@ -730,10 +731,16 @@
                 @strongify(self);
                 //登录
                 self.loginType = SSJLoginTypeNormal;
-                if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
-                    [self forgetWithPassWord:self.passwardNum AndUserAccount:self.phoneNum authCode:self.verificationCode subscriber:subscriber];
-                } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
-                    [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                //验证密码格式
+                if (![self.passwardNum ssj_validPassWard]) {
+                    [CDAutoHideMessageHUD showMessage:@"请输入6~15位数字、字母组合密码"];
+                    [subscriber sendError:nil];
+                } else {
+                    if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
+                        [self forgetWithPassWord:self.passwardNum AndUserAccount:self.phoneNum authCode:self.verificationCode subscriber:subscriber];
+                    } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
+                        [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+                    }
                 }
                 
                 return nil;
@@ -756,10 +763,6 @@
 }
 
 - (RACCommand *)wxLoginCommand {
-//    if (_wxLoginCommand.executing) {
-//
-//        _wxLoginCommand.executionSignals = [RACSignal empty];
-//    }
     if (!_wxLoginCommand) {
         _wxLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);

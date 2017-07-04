@@ -51,6 +51,10 @@
     [self.viewModel.netWorkService cancel];
 }
 
+- (void)dealloc {
+
+}
+
 - (void)setUpConst {
     [self.tfRegYanZhenF mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topView.mas_bottom).offset(50);
@@ -184,7 +188,9 @@
         UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
         [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
         [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
+        @weakify(self);
         [[rightView rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
+            @strongify(self);
             self.tfPassword.secureTextEntry = button.selected;
             button.selected = !button.selected;
         }];
