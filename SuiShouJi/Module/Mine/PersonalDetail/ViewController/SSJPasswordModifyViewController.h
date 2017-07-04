@@ -8,6 +8,8 @@
 
 #import "SSJNewBaseTableViewController.h"
 
+SSJ_DEPRECATED
+
 @interface SSJPasswordModifyViewController : SSJNewBaseTableViewController<UITextFieldDelegate,UIAlertViewDelegate>
 
 @end

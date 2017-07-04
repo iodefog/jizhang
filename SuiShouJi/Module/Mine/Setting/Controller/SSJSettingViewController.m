@@ -8,7 +8,6 @@
 
 #import "SSJSettingViewController.h"
 #import "SSJMineHomeTabelviewCell.h"
-#import "SSJUserTableManager.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJMagicExportViewController.h"
 #import "SSJLoginVerifyPhoneViewController.h"
@@ -17,6 +16,12 @@
 #import "SSJBindMobileNoViewController.h"
 #import "SSJMobileNoBindingDetailViewController.h"
 #import "SSJSettingPasswordViewController.h"
+#import "SSJUserTableManager.h"
+#import "SSJDataSynchronizer.h"
+#import "SSJUserDefaultDataCreater.h"
+#import "SSJLocalNotificationHelper.h"
+
+static const CGFloat kLogoutButtonHeight = 44;
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
@@ -38,6 +43,8 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 @property (nonatomic, strong) UISwitch *motionPwdCtrl;
 
+@property (nonatomic, strong) UIButton *logoutBtn;
+
 @end
 
 @implementation SSJSettingViewController
@@ -53,11 +60,24 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.logoutBtn];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kLogoutButtonHeight, 0);
+    [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self reorganiseDatas];
+}
+
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.logoutBtn.frame = CGRectMake(0, self.view.height - kLogoutButtonHeight, self.view.width, kLogoutButtonHeight);
 }
 
 #pragma mark - UITableViewDelegate
@@ -191,10 +211,45 @@ static NSString *const kClearDataTitle = @"清理数据";
     [self.navigationController pushViewController:loginVc animated:YES];
 }
 
+- (void)logout {
+    __weak typeof(self) weakSelf = self;
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"退出登录后,后续记账请登录同个帐号哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+        // 退出登陆后强制同步一次
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            NSData *currentUserData = [NSKeyedArchiver archivedDataWithRootObject:userItem];
+            [[NSUserDefaults standardUserDefaults] setObject:currentUserData forKey:SSJLastLoggedUserItemKey];
+        } failure:NULL];
+        
+        NSString *userID = SSJUSERID();
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
+            // 同步后会注册提醒通知，所以同步成功后要取消注册的通知
+            [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:userID];
+        } failure:NULL];
+        
+        SSJClearLoginInfo();
+        //清除当前账本类型
+        clearCurrentBooksCategory();
+        [SSJUserTableManager reloadUserIdWithSuccess:^{
+            [weakSelf.tableView reloadData];
+            [SSJAnaliyticsManager loginOut];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [SSJUserDefaultDataCreater asyncCreateAllDefaultDataWithUserId:SSJUSERID() success:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
+    }], nil];
+}
+
 - (void)settingMotionPwd {
     SSJMotionPasswordViewController *motionPasswordVC = [[SSJMotionPasswordViewController alloc] init];
     motionPasswordVC.type = SSJMotionPasswordViewControllerTypeSetting;
     [self.navigationController pushViewController:motionPasswordVC animated:YES];
+}
+
+- (void)updateAppearance {
+    [self.logoutBtn ssj_setBorderColor:SSJ_BORDER_COLOR];
+    [self.logoutBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+    self.logoutBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
 }
 
 #pragma mark - Getter
@@ -233,6 +288,17 @@ static NSString *const kClearDataTitle = @"清理数据";
         }];
     }
     return _motionPwdCtrl;
+}
+
+- (UIButton *)logoutBtn {
+    if (!_logoutBtn) {
+        _logoutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _logoutBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_logoutBtn setTitle:@"退出账号" forState:UIControlStateNormal];
+        [_logoutBtn ssj_setBorderStyle:SSJBorderStyleTop];
+        [_logoutBtn addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _logoutBtn;
 }
 
 @end

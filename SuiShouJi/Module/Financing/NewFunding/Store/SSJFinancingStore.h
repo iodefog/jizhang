@@ -20,6 +20,7 @@
 
 
 + (void)queryFundingParentListWithFundingType:(SSJAccountType)type
+                                needLoanOrNot:(BOOL)needLoan
                                       Success:(void (^)(NSArray <SSJFundingItem *> *items))success
                                       failure:(void (^)(NSError *error))failure;
 

@@ -8,6 +8,10 @@
 
 #import "SSJBaseTableViewCell.h"
 
+SSJ_DEPRECATED
+
 @interface SSJPasswordModifyCell : SSJBaseTableViewCell
+
 @property(nonatomic, strong) UITextField *passwordInput;
+
 @end

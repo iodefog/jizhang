@@ -94,12 +94,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (self.cardType == SSJCrediteCardTypeAlipay) {
-        self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle7,kTitle8],@[kTitle9,kTitle10]];
-        self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"card_yanse"]];
+        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
+        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
         
     } else {
-        self.titles = @[@[kTitle1,kTitle2],@[kTitle3,kTitle4,kTitle5],@[kTitle6,kTitle7,kTitle8],@[kTitle9,kTitle10]];
-        self.images = @[@[@"loan_person",@"card_zhanghu"],@[@"loan_yield",@"loan_money",@"loan_memo"],@[@"loan_expires",@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"card_yanse"]];
+        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9,kTitle6],@[kTitle10,kTitle5]];
+        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"loan_expires"],@[@"card_yanse",@"loan_memo"]];
     }
 
     if (!self.cardId.length) {

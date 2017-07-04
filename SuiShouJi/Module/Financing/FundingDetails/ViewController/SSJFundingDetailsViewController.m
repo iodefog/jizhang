@@ -131,7 +131,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             _totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
-            weakSelf.creditCardHeader.cardBalance = fabs(cardItem.cardIncome - cardItem.cardExpence);
+            weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
             weakSelf.title = cardItem.cardName;
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
@@ -480,7 +480,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             _totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
-            weakSelf.creditCardHeader.cardBalance = fabs(cardItem.cardIncome - cardItem.cardExpence);
+            weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
             weakSelf.title = cardItem.cardName;
             if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
                 [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
