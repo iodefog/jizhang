@@ -31,11 +31,12 @@
     NSNumber *syncVersion = @(SSJSyncVersion());
     NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSDate *startDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day hour:20 minute:0 second:0];
+    NSString *startDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
     return @[@{@"cremindid":[NSString stringWithFormat:@"%@-0", userId],
                @"cuserid":userId,
                @"cremindname":@"精打细算，有吃有穿，小主快来记账啦～",
                @"cmemo":@"",
-               @"cstartdate":startDate,
+               @"cstartdate":startDateStr,
                @"istate":@0,
                @"cwritedate":writeDate,
                @"iversion":syncVersion,
@@ -48,7 +49,7 @@
                @"cuserid":userId,
                @"cremindname":@"来记账咯，money money go my home",
                @"cmemo":@"",
-               @"cstartdate":startDate,
+               @"cstartdate":startDateStr,
                @"istate":@0,
                @"cwritedate":writeDate,
                @"iversion":syncVersion,
@@ -61,7 +62,7 @@
                @"cuserid":userId,
                @"cremindname":@"记的是账，理的是生活，继续坚持",
                @"cmemo":@"",
-               @"cstartdate":startDate,
+               @"cstartdate":startDateStr,
                @"istate":@0,
                @"cwritedate":writeDate,
                @"iversion":syncVersion,
