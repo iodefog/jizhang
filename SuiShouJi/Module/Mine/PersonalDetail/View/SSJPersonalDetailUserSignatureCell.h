@@ -11,3 +11,13 @@
 @interface SSJPersonalDetailUserSignatureCell : SSJBaseTableViewCell
 
 @end
+
+@interface SSJPersonalDetailUserSignatureCellItem : SSJBaseCellItem
+
+@property (nonatomic) NSUInteger signatureLimit;
+
+@property (nonatomic, copy) NSString *signature;
+
++ (instancetype)itemWithSignatureLimit:(NSUInteger)signatureLimit signature:(NSString *)signature;
+
+@end

@@ -11,3 +11,11 @@
 @interface SSJPersonalDetailUserNicknameCell : SSJBaseTableViewCell
 
 @end
+
+@interface SSJPersonalDetailUserNicknameCellItem : SSJBaseCellItem
+
+@property (nonatomic, copy) NSString *nickname;
+
++ (instancetype)itemWithNickname:(NSString *)nickname;
+
+@end

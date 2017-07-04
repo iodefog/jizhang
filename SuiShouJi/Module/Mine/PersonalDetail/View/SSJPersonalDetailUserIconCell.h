@@ -11,3 +11,11 @@
 @interface SSJPersonalDetailUserIconCell : SSJBaseTableViewCell
 
 @end
+
+@interface SSJPersonalDetailUserIconCellItem : SSJBaseCellItem
+
+@property (nonatomic, strong) NSURL *userIconUrl;
+
++ (instancetype)itemWithIconUrl:(NSURL *)url;
+
+@end

@@ -8,6 +8,16 @@
 
 #import "SSJPersonalDetailUserIconCell.h"
 
+@implementation SSJPersonalDetailUserIconCellItem
+
++ (instancetype)itemWithIconUrl:(NSURL *)url {
+    SSJPersonalDetailUserIconCellItem *item = [[SSJPersonalDetailUserIconCellItem alloc] init];
+    item.userIconUrl = url;
+    return item;
+}
+
+@end
+
 @interface SSJPersonalDetailUserIconCell ()
 
 @property (nonatomic, strong) UILabel *leftLab;
@@ -22,6 +32,9 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.leftLab];
         [self.contentView addSubview:self.userIcon];
+        [self setNeedsUpdateConstraints];
+        [self updateAppearance];
+        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
     return self;
 }
@@ -39,9 +52,30 @@
     [super updateConstraints];
 }
 
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    self.leftLab.textColor = SSJ_MAIN_COLOR;
+}
+
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if (![cellItem isKindOfClass:[SSJPersonalDetailUserIconCellItem class]]) {
+        return;
+    }
+    
+    SSJPersonalDetailUserIconCellItem *item = cellItem;
+    [[RACObserve(item, userIconUrl) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSURL *url) {
+        [self.userIcon sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    }];
+}
+
 - (UILabel *)leftLab {
     if (!_leftLab) {
         _leftLab = [[UILabel alloc] init];
+        _leftLab.text = @"头像";
         _leftLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _leftLab;
@@ -49,7 +83,10 @@
 
 - (UIImageView *)userIcon {
     if (!_userIcon) {
-//        _userIcon = [UIImageView alloc]
+        _userIcon = [[UIImageView alloc] init];
+        _userIcon.layer.cornerRadius = 33;
+        _userIcon.layer.borderWidth = 3;
+        _userIcon.layer.borderColor = RGBCOLOR(245, 245, 245).CGColor;
     }
     return _userIcon;
 }

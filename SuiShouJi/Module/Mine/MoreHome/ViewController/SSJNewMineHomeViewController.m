@@ -290,8 +290,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 - (void)loginButtonClicked {
     if (!SSJIsUserLogined()) {
         [self login];
-    }else{
-        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+    } else {
+        SSJPersonalDetailViewController *personalDetailVc = [[SSJPersonalDetailViewController alloc] init];
         [self.navigationController pushViewController:personalDetailVc animated:YES];
     }
 }
