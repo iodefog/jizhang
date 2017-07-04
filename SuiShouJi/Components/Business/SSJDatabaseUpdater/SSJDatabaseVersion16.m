@@ -8,6 +8,8 @@
 
 #import "SSJDatabaseVersion16.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJReminderItem.h"
+#import "SSJUserDefualtRemindCreater.h"
 
 @implementation SSJDatabaseVersion16
 
@@ -31,6 +33,10 @@
         return error;
     }
     
+    error = [self updateUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
     return nil;
 }
 
@@ -78,6 +84,40 @@
     
     if (![db executeUpdate:@"update BK_USER set ccurrentselectfundid = 'all' where CCURRENTSELECTFUNDID is null"]) {
         return [db lastError];
+    }
+    
+    return nil;
+}
+
+// 更新user_remind表
++ (NSError *)updateUserRemindTableWithDatabase:(FMDatabase *)db {
+    
+    if (![db executeUpdate:@"delete from BK_USER_REMIND where itype = ?",SSJReminderTypeCharge]) {
+        return [db lastError];
+    }
+    
+    NSMutableArray *userArr = [NSMutableArray arrayWithCapacity:0];
+    
+    FMResultSet *result = [db executeQuery:@"select * from BK_USER"];
+    
+    if (!result) {
+        return [db lastError];
+    }
+    
+    while ([result next]) {
+        NSString *userid = [result stringForColumn:@"cuserid"];
+        [userArr addObject:userid];
+    }
+    
+    NSError *error;
+    
+    for (NSString *userid in userArr) {
+        [SSJUserDefualtRemindCreater createDefaultDataTypeForUserId:userid inDatabase:db error:&error];
+    }
+    
+    if (error) {
+        return error;
+
     }
     
     return nil;
