@@ -29,14 +29,14 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 @interface SSJNewAboutUsViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 
-@property(nonatomic, strong) SSJEncourageHeaderView *header;
+@property (nonatomic, strong) SSJEncourageHeaderView *header;
 
 @property (nonatomic,strong) NSArray *titles;
 
 
-@property(nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
+@property (nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
 
 @end
 
@@ -109,8 +109,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle3]) {
-        NSString *qqGroup = self.service.qqgroup ? : @"552563622";
-        NSString *qqGroupId = self.service.qqgroupId ? : @"160aa4d10987c3a6ff17b2fb89e3e1f0e4e996e320207f1e23e1299518f58169";
+        NSString *qqGroup = self.service.qqgroup;
+        NSString *qqGroupId = self.service.qqgroupId;
         SSJJoinQQGroup(qqGroup, qqGroupId);
     }
     
@@ -153,7 +153,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle6]) {
-        NSString *telNum = self.service.telNum ? : @"400-7676-298";
+        NSString *telNum = self.service.telNum;
         NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",telNum];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
@@ -247,17 +247,17 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             SSJEncourageCellModel *item = [[SSJEncourageCellModel alloc] init];
             item.cellTitle = title;
             if ([title isEqualToString:ktitle1]) {
-                item.cellDetail = self.service.wechatId ? : @"youyujz";
+                item.cellDetail = self.service.wechatId;
             } else if ([title isEqualToString:ktitle2]) {
-                item.cellDetail = self.service.sinaBlog ? : @"有鱼记账";
+                item.cellDetail = self.service.sinaBlog;
             } else if ([title isEqualToString:ktitle3]) {
                 item.cellDetail = self.service.qqgroup ? : @"552563622";
             } else if ([title isEqualToString:ktitle4]) {
-                item.cellDetail = self.service.wechatgroup ? : @"youyujz01";
+                item.cellDetail = self.service.wechatgroup;
             } else if ([title isEqualToString:ktitle5]) {
 
             } else if ([title isEqualToString:ktitle6]) {
-                item.cellDetail = self.service.telNum ? : @"400-7676-298";
+                item.cellDetail = self.service.telNum;
                 item.cellSubTitle = @"工作日：9:00——18:00";
                 item.rowHeight = 70;
             }

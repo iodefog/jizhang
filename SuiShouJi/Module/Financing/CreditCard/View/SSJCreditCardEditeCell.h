@@ -45,5 +45,9 @@ typedef NS_ENUM(NSInteger, SSJCreditCardCellType) {
 
 @property (nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
 
+// 是否是展开状态1是展开,0是收起
+@property (nonatomic) BOOL isExpand;
+
+@property (nonatomic, copy) void (^showBalanceTypeSelectViewBlock)(CGPoint arrowPoint, BOOL isExpand, SSJCreditCardEditeCell *cell);
 
 @end
