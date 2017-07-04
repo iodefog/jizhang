@@ -180,13 +180,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     return cell;
 }
 
-#pragma mark - SSJBaseNetworkService
-- (void)serverDidStart:(SSJBaseNetworkService *)service {
-    if ([service.returnCode isEqualToString:@"1"]) {
-        self.header.currentVersion = self.service.updateModel.appVersion;
-    }
-}
-
 #pragma mark - Getter
 - (UITableView *)tableView {
     if (_tableView == nil) {
@@ -210,13 +203,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _header = [[SSJEncourageHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 180)];
     }
     return _header;
-}
-
-- (SSJEncourageService *)service {
-    if (!_service) {
-        _service = [[SSJEncourageService alloc] initWithDelegate:self];
-    }
-    return _service;
 }
 
 #pragma mark - Private
