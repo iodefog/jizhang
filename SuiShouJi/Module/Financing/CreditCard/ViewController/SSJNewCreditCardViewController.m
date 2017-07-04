@@ -721,10 +721,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (SSJListMenu *)debtOrbalanceChoice {
     if (!_debtOrbalanceChoice) {
-        _debtOrbalanceChoice = [[SSJListMenu alloc] init];
-        _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
-        _debtOrbalanceChoice.maxDisplayRowCount = 1;
+        _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 290, 150)];
+        _debtOrbalanceChoice.maxDisplayRowCount = 2;
         _debtOrbalanceChoice.gapBetweenImageAndTitle = 0;
+        _debtOrbalanceChoice.numberOfLines = 0;
+        _debtOrbalanceChoice.rowHeight = 70.f;
+        _debtOrbalanceChoice.contentAlignment = UIControlContentHorizontalAlignmentLeft;
         _debtOrbalanceChoice.backgroundColor = [UIColor clearColor];
         _debtOrbalanceChoice.items = [self debtOrbalanceChoiceItems];
         [_debtOrbalanceChoice addTarget:self action:@selector(debtOrbalanceChoiceChange) forControlEvents:UIControlEventValueChanged];
@@ -791,9 +793,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
     
-    [firstTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    [firstTitle addAttribute:NSForegroundColorAttributeName value:SSJ_SECONDARY_COLOR range:NSMakeRange(4, firstTitle.length - 4)];
     
-    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length - 4)];
 
 
     SSJListMenuItem *firstItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:firstTitle];
@@ -808,9 +810,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
 
-    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length - 4)];
     
-    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length - 4)];
 
     
     SSJListMenuItem *secondItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:secondTitle];
