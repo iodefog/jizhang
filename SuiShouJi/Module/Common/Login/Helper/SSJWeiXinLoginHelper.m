@@ -13,7 +13,12 @@
 @property (nonatomic, copy) weiXinLoginFailBlock failBlock;
 @end
 
+
 @implementation SSJWeiXinLoginHelper
+
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 -(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock failBlock:(weiXinLoginFailBlock)failBlock{
     SendAuthReq* req =[[SendAuthReq alloc ]init];
@@ -22,6 +27,26 @@
     [WXApi sendReq:req];
     self.sucessBlock = sucessBlock;
     self.failBlock = failBlock;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+}
+
+//-(void)applicationWillResignActive:(NSNotification *)notification
+//{
+//    if (self.failBlock) {
+//        self.failBlock();
+//    }
+//    self.failBlock = nil;
+//}
+
+-(void)applicationDidBecomeActive:(NSNotification *)notification
+{
+    if (self.failBlock) {
+        self.failBlock();
+    }
+    self.failBlock = nil;
 }
 
 
