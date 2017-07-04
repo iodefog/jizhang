@@ -33,4 +33,8 @@
     }
 }
 
+- (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {
+    return code == 1;
+}
+
 @end
