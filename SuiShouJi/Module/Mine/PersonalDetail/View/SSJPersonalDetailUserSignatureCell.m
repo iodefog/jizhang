@@ -89,6 +89,7 @@
 
 - (void)updateAppearance {
     self.leftLab.textColor = SSJ_MAIN_COLOR;
+    self.counter.textColor = SSJ_SECONDARY_COLOR;
     self.signatureField.textColor = SSJ_SECONDARY_COLOR;
     
     SSJPersonalDetailUserSignatureCellItem *item = self.cellItem;
@@ -117,6 +118,7 @@
     if (!_signatureField) {
         _signatureField = [[UITextField alloc] init];
         _signatureField.adjustsFontSizeToFitWidth = YES;
+        _signatureField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _signatureField;
 }
