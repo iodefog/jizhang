@@ -38,6 +38,7 @@
     self.cellImageView.left = 10;
     self.cellImageView.centerY = self.height / 2;
     self.titleLabel.width = self.contentView.width - 30;
+    [self.titleLabel sizeToFit];
     self.titleLabel.left = self.cellImageView.right + 10;
     if (!((SSJReminderItem *)self.cellItem).remindMemo.length) {
         self.titleLabel.centerY = self.height / 2;
@@ -77,6 +78,14 @@
     return _switchButton;
 }
 
+- (UIImageView *)cellImageView{
+    if (!_cellImageView) {
+        _cellImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        _cellImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _cellImageView;
+}
+
 - (void)setCellItem:(SSJBaseCellItem *)cellItem{
     [super setCellItem:cellItem];
     if (![cellItem isKindOfClass:[SSJReminderItem class]]) {
@@ -84,7 +93,6 @@
     }
     SSJReminderItem *item = (SSJReminderItem *)cellItem;
     self.titleLabel.text = item.remindName;
-    [self.titleLabel sizeToFit];
     self.memoLabel.text = item.remindMemo;
     [self.memoLabel sizeToFit];
     self.switchButton.on = item.remindState;
