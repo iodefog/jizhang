@@ -154,14 +154,16 @@
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
                                             selectedImageColor:SSJ_MARCATO_COLOR
-                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR],
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR
+                                                attributedText:nil],
                             [SSJListMenuItem itemWithImageName:@"reportForms_member"
                                                          title:@"成员"
                                               normalTitleColor:SSJ_MAIN_COLOR
                                             selectedTitleColor:SSJ_MARCATO_COLOR
                                               normalImageColor:SSJ_SECONDARY_COLOR
                                             selectedImageColor:SSJ_MARCATO_COLOR
-                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR]];
+                                               backgroundColor:SSJ_MAIN_BACKGROUND_COLOR
+                                                attributedText:nil]];
         _listMenu.width = 104;
         [_listMenu addTarget:self action:@selector(listMenuSelectAction) forControlEvents:UIControlEventValueChanged];
     }

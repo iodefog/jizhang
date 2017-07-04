@@ -45,12 +45,19 @@
  */
 @property (nonatomic, strong) UIColor *backgroundColor;
 
+/**
+ cell的富文本
+ */
+@property (nonatomic, strong) NSMutableAttributedString *attributedStr;
+
+
 + (instancetype)itemWithImageName:(NSString *)imageName
                             title:(NSString *)title
                  normalTitleColor:(UIColor *)normalTitleColor
                selectedTitleColor:(UIColor *)selectedTitleColor
                  normalImageColor:(UIColor *)normalImageColor
                selectedImageColor:(UIColor *)selectedImageColor
-                  backgroundColor:(UIColor *)backgroundColor;
+                  backgroundColor:(UIColor *)backgroundColor
+                   attributedText:(NSMutableAttributedString *)attributedStr;
 
 @end
