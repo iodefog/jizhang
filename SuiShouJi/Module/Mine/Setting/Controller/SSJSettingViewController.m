@@ -20,6 +20,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJLocalNotificationHelper.h"
+#import <LocalAuthentication/LocalAuthentication.h>
 
 static const CGFloat kLogoutButtonHeight = 44;
 
@@ -60,8 +61,11 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.logoutBtn];
-    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kLogoutButtonHeight, 0);
+    
+    if (SSJIsUserLogined()) {
+        [self.view addSubview:self.logoutBtn];
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kLogoutButtonHeight, 0);
+    }
     [self updateAppearance];
 }
 
@@ -176,7 +180,17 @@ static NSString *const kClearDataTitle = @"清理数据";
 - (void)reorganiseDatas {
     [[self loadUserItemIfNeeded] subscribeNext:^(NSNumber *bindValue) {
         NSArray *section1 = [bindValue boolValue] ? @[kMobileNoTitle, kModifyPwdTitle] : @[kBindMobileNoTitle];
+        
         NSArray *section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
+        LAContext *context = [[LAContext alloc] init];
+        context.localizedFallbackTitle = @"";
+        NSError *error = nil;
+        if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+            section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
+        } else {
+            section2 = @[kMotionPwdTitle];
+        }
+        
         NSArray *section3 = @[kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
         self.titles = @[section1, section2, section3];
         [self.tableView reloadData];
