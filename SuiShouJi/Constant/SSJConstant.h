@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeDataSyncFailed = 10002,
     SSJErrorCodeImageSyncFailed = 10003,
     SSJErrorCodeNoImageSyncNeedToSync = 10004,
+    SSJErrorCodeLoginPasswordIllegal = 10005
 };
 
 //  用户登录方式
