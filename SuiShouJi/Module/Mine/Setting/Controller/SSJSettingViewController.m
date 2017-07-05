@@ -46,11 +46,17 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 @property (nonatomic, strong) UIButton *logoutBtn;
 
+@property (nonatomic, strong) LAContext *context;
+
 @end
 
 @implementation SSJSettingViewController
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"设置";
@@ -178,14 +184,14 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 #pragma mark - Private
 - (void)reorganiseDatas {
+    @weakify(self);
     [[self loadUserItemIfNeeded] subscribeNext:^(NSNumber *bindValue) {
+        @strongify(self);
         NSArray *section1 = [bindValue boolValue] ? @[kMobileNoTitle, kModifyPwdTitle] : @[kBindMobileNoTitle];
         
         NSArray *section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
-        LAContext *context = [[LAContext alloc] init];
-        context.localizedFallbackTitle = @"";
         NSError *error = nil;
-        if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+        if ([self.context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
             section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
         } else {
             section2 = @[kMotionPwdTitle];
@@ -200,7 +206,9 @@ static NSString *const kClearDataTitle = @"清理数据";
 }
 
 - (RACSignal *)loadUserItemIfNeeded {
+    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
         if (SSJIsUserLogined()) {
             [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
                 self.userItem = userItem;
@@ -271,14 +279,25 @@ static NSString *const kClearDataTitle = @"清理数据";
 - (UISwitch *)fingerPrintPwdCtrl {
     if (!_fingerPrintPwdCtrl) {
         _fingerPrintPwdCtrl = [[UISwitch alloc] init];
+        @weakify(self);
         [[_fingerPrintPwdCtrl rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(UISwitch *ctrl) {
-            if (SSJIsUserLogined()) {
+            @strongify(self);
+            if (!SSJIsUserLogined()) {
+                [self login];
+            } else if (ctrl.on) {
+                [self.context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键验证指纹解锁" reply:^(BOOL success, NSError * _Nullable error) {
+                    self.context = nil;
+                    SSJDispatchMainSync(^{
+                        if (!success) {
+                            ctrl.on = NO;
+                        }
+                    });
+                }];
+            } else {
                 self.userItem.fingerPrintState = [NSString stringWithFormat:@"%d", ctrl.on];
                 [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
                     [SSJAlertViewAdapter showError:error];
                 }];
-            } else {
-                [self login];
             }
         }];
     }
@@ -288,7 +307,9 @@ static NSString *const kClearDataTitle = @"清理数据";
 - (UISwitch *)motionPwdCtrl {
     if (!_motionPwdCtrl) {
         _motionPwdCtrl = [[UISwitch alloc] init];
+        @weakify(self);
         [[_motionPwdCtrl rac_signalForControlEvents:UIControlEventValueChanged] subscribeNext:^(UISwitch *ctrl) {
+            @strongify(self);
             if (!SSJIsUserLogined()) {
                 [self login];
             } else if (ctrl.on) {
@@ -314,6 +335,14 @@ static NSString *const kClearDataTitle = @"清理数据";
         [_logoutBtn addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
     }
     return _logoutBtn;
+}
+
+- (LAContext *)context {
+    if (!_context) {
+        _context = [[LAContext alloc] init];
+        _context.localizedFallbackTitle = @"";
+    }
+    return _context;
 }
 
 @end
