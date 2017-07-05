@@ -221,12 +221,12 @@
 //                请求返回处理好的数据
                 if ([result boolValue]) {
                     SSJLoginPhoneViewController *vc = [[SSJLoginPhoneViewController alloc] init];
-                    vc.viewModel = weakSelf.verifyPhoneViewModel;
+                    vc.phoneNum = weakSelf.verifyPhoneViewModel.phoneNum;
                     vc.finishHandle = weakSelf.finishHandle;
                     [weakSelf.navigationController pushViewController:vc animated:YES];
                 } else {
                     SSRegisterAndLoginViewController *loginVC = [[SSRegisterAndLoginViewController alloc] init];
-                    loginVC.viewModel = weakSelf.verifyPhoneViewModel;
+                    loginVC.phoneNum = weakSelf.verifyPhoneViewModel.phoneNum;
                     loginVC.regOrForgetType = SSJRegistAndForgetPasswordTypeRegist;//注册
                     loginVC.finishHandle = weakSelf.finishHandle;
                     [weakSelf.navigationController pushViewController:loginVC animated:YES];

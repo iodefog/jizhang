@@ -636,10 +636,10 @@
 }
 
 - (RACSignal *)enableNormalLoginSignal {
-    if (_enableNormalLoginSignal) {
-        _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
+    if (!_enableNormalLoginSignal) {
+        _enableNormalLoginSignal = [[RACSignal combineLatest:@[RACObserve(self,passwardNum)] reduce:^id(NSString *passward){
             return @(passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
-        }];
+        }] skip:1];
     }
     return _enableNormalLoginSignal;
 }
