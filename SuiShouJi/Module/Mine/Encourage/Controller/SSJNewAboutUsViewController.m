@@ -89,7 +89,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             [WXApi openWXApp];
         }];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制微信公众号" message:@"有鱼记账,帮你打利好你的小家" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:cancel];
         
@@ -123,7 +123,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             [WXApi openWXApp];
         }];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制鱼仔微信" message:@"添加鱼仔,邀请你加入官方微信群" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:cancel];
         
