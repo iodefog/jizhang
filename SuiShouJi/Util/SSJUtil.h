@@ -292,5 +292,12 @@ BOOL SSJSaveBooksCategory(SSJBooksCategory category);
 
 void clearCurrentBooksCategory();
 
+/**
+ 加入qq群
 
+ @param group qq群号
+ @param key ？？？
+ @return 如果没有安装qq客户端，就返回NO
+ */
+BOOL SSJJoinQQGroup(NSString *group, NSString *key);
 

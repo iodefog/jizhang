@@ -38,28 +38,13 @@
     }
     
     [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState", @"fingerPrintState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-        if ([userItem.fingerPrintState boolValue]) {
-            LAContext *context = [[LAContext alloc] init];
-            context.localizedFallbackTitle = @"";
-            
-            NSError *error = nil;
-            if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-                SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
-                fingerPwdVC.context = context;
-                fingerPwdVC.finishHandle = ^(UIViewController *controller) {
-                    if (finish) {
-                        finish(YES);
-                    }
-                    [controller dismissViewControllerAnimated:YES completion:NULL];
-                };
-                SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
-                [currentVC presentViewController:naviVC animated:animated completion:NULL];
-                return;
-            }
-        }
         
-        // 手势密码开启
-        if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
+        LAContext *context = [[LAContext alloc] init];
+        context.localizedFallbackTitle = @"";
+        BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+        BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
+        
+        if ((motionPwdOpened && fingerPwdOpened) || motionPwdOpened) {
             // 验证手势密码页面
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
@@ -69,14 +54,25 @@
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
+            motionVC.backController = currentVC;
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
-            
-            return;
-        }
-        
-        if (finish) {
-            finish(NO);
+        } else if (fingerPwdOpened) {
+            SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
+            fingerPwdVC.context = context;
+            fingerPwdVC.finishHandle = ^(UIViewController *controller) {
+                if (finish) {
+                    finish(YES);
+                }
+                [controller dismissViewControllerAnimated:YES completion:NULL];
+            };
+            fingerPwdVC.backController = currentVC;
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
+            [currentVC presentViewController:naviVC animated:animated completion:NULL];
+        } else {
+            if (finish) {
+                finish(NO);
+            }
         }
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];

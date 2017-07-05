@@ -48,7 +48,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     self.titleLabel.centerY = self.height / 2;
     self.titleLabel.right = self.containerView.right;
     self.arrowImage.centerX = self.cloudImage.centerX;
-    self.arrowImage.centerY = self.cloudImage.centerY + 6 ;
+    self.arrowImage.centerY = self.cloudImage.centerY + 6;
     self.syncButton.frame = self.bounds;
 }
 
@@ -72,6 +72,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     if (!_arrowImage) {
         _arrowImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 8, 10)];
         _arrowImage.image = [[UIImage imageNamed:@"more_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [_arrowImage sizeToFit];
         _arrowImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
         _arrowImage.hidden = YES;
     }
@@ -82,6 +83,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     if (!_cloudImage) {
         _cloudImage = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 26, 26)];
         _cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [_cloudImage sizeToFit];
         _cloudImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
     }
     return _cloudImage;
@@ -120,6 +122,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
                 dispatch_after(time, dispatch_get_main_queue(), ^{
                     [self stopAnimation];
                     self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_s"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    [self.cloudImage sizeToFit];
                     self.titleLabel.text = @"同步成功";
                     [self.titleLabel sizeToFit];
                     dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
@@ -131,6 +134,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
             }else{
                 [self stopAnimation];
                 self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_s"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                [self.cloudImage sizeToFit];
                 self.titleLabel.text = @"同步成功";
                 [self.titleLabel sizeToFit];
                 dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
@@ -143,11 +147,13 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     }failure:^(SSJDataSynchronizeType type, NSError *error) {
         [self stopAnimation];
         self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu_f"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self.cloudImage sizeToFit];
         self.titleLabel.text = @"同步失败";
         [self.titleLabel sizeToFit];
         dispatch_time_t time=dispatch_time(DISPATCH_TIME_NOW, 1 *NSEC_PER_SEC);
         dispatch_after(time, dispatch_get_main_queue(), ^{
             self.cloudImage.image = [[UIImage imageNamed:@"more_tongbu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [self.cloudImage sizeToFit];
             self.titleLabel.text = @"云同步";
         });
     }];
@@ -156,6 +162,7 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 
 -(void)startAnimation{
     self.cloudImage.image = [[UIImage imageNamed:@"more_tongbuing"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self.cloudImage sizeToFit];
     self.arrowImage.hidden = NO;
     CAKeyframeAnimation *arrowAnimation =[CAKeyframeAnimation animation];
     arrowAnimation.keyPath = @"transform.translation.y";

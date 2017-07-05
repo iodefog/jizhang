@@ -197,7 +197,7 @@
             }
         }
         SSJFundingItem *item = [[SSJFundingItem alloc]init];
-        item.fundingName = @"添加资金新的账户";
+        item.fundingName = @"添加新的资金账户";
         item.fundingIcon = @"add";
         [_items addObject:item];
         SSJDispatch_main_async_safe(^(){

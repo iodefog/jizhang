@@ -29,7 +29,7 @@ static NSString *const kTitle1 = @"账户名称";
 static NSString *const kTitle2 = @"账户类型";
 static NSString *const kTitle3 = @"信用额度";
 static NSString *const kTitle4 = @"余额/欠款";
-static NSString *const kTitle5 = @"备注说明";
+static NSString *const kTitle5 = @"备注";
 static NSString *const kTitle6 = @"以账单日结算";
 static NSString *const kTitle7 = @"账单日";
 static NSString *const kTitle8 = @"还款日";
@@ -103,7 +103,11 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 
     if (!self.cardId.length) {
-        self.title = @"添加资金账户";
+        if (self.cardType == SSJCrediteCardTypeAlipay) {
+            self.title = @"添加信用卡账户";
+        } else {
+            self.title = @"添加蚂蚁花呗账户";
+        }
         self.item = [[SSJCreditCardItem alloc]init];
         self.item.settleAtRepaymentDay = YES;
         self.item.cardBillingDay = 1;
@@ -112,10 +116,19 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
         self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
-        self.title = @"编辑资金账户";
+        if (self.cardType == SSJCrediteCardTypeAlipay) {
+            self.title = @"编辑信用卡账户";
+        } else {
+            self.title = @"编辑蚂蚁花呗账户";
+        }
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
+        if (self.item.cardBalance > 0) {
+            self.debtOrbalance = YES;
+        } else {
+            self.debtOrbalance = NO;
+        }
         if (self.item.cardBillingDay == 0) {
             self.item.cardBillingDay = 1;
         }
@@ -139,9 +152,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
+    
     if ([title isEqualToString:kTitle6]) {
         return 75;
     }
@@ -273,7 +287,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         if (self.cardType == SSJCrediteCardTypeAlipay) {
             newReminderCell.cellDetail = @"蚂蚁花呗";
-            newReminderCell.cellDetailImageName = @"ft_huabei";
+            newReminderCell.cellDetailImageName = @"ft_mayihuabei";
         } else {
             newReminderCell.cellDetail = @"信用卡";
             newReminderCell.cellDetailImageName = @"ft_creditcard";
@@ -307,19 +321,46 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 信用卡余额
     if ([title isEqualToString:kTitle4]) {
         newReminderCell.type = SSJCreditCardBalanceCell;
-        newReminderCell.cellTitle = title;
-        if (self.cardType == SSJCrediteCardTypeAlipay) {
-            newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"当前蚂蚁花呗余额/欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        if (!self.debtOrbalance) {
+            newReminderCell.cellTitle = @"当前欠款";
+            newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         } else {
-            newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"当前信用卡余额/欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-
+            newReminderCell.cellTitle = @"当前余额";
+            newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         }
+        
         if (self.item.cardBalance != 0) {
             newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardBalance];
         }
         _balaceInput = newReminderCell.textInput;
         newReminderCell.textInput.tag = 102;
         newReminderCell.textInput.delegate = self;
+        @weakify(self);
+        newReminderCell.showBalanceTypeSelectViewBlock = ^(CGPoint arrowPoint, BOOL isExpand, SSJCreditCardEditeCell *cell) {
+            @strongify(self);
+            self.debtOrbalanceChoice.selectedIndex = self.debtOrbalance;
+            [self.debtOrbalanceChoice showInView:self.view atPoint:[cell convertPoint:CGPointMake(arrowPoint.x, arrowPoint.y + 10) toView:self.view] superViewInsets:UIEdgeInsetsMake(0, 15, 0, 0) finishHandle:NULL dismissHandle:^(SSJListMenu *listMenu) {
+                self.debtOrbalance = listMenu.selectedIndex;
+                double currentMoney = fabs([cell.textInput.text doubleValue]);
+                if (!self.debtOrbalance) {
+                    cell.cellTitle = @"当前欠款";
+                    cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+                    if (cell.textInput.text.length) {
+                        cell.textInput.text = [[NSString stringWithFormat:@"%f",-currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        self.item.cardBalance = -currentMoney;
+                    }
+                } else {
+                    cell.cellTitle = @"当前余额";
+                    cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+                    if (cell.textInput.text.length) {
+                        cell.textInput.text = [[NSString stringWithFormat:@"%f",currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        self.item.cardBalance = currentMoney;
+                    }
+
+                }
+            }];
+
+        };
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
@@ -328,7 +369,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle5]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoInput = newReminderCell.textInput;
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
@@ -537,6 +578,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 weakSelf.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
+            
             [self.navigationController pushViewController:remindEditeVc animated:YES];
         }
     }
@@ -577,7 +619,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }else*/ if (textField.tag == 102){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
+        
         if (![string isEqualToString:filtered]) {
+            return NO;
+        }
+        
+        if (!self.debtOrbalance) {
+            NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+            text = [text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"-%@", text];
             return NO;
         }
     }
@@ -711,10 +762,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (SSJListMenu *)debtOrbalanceChoice {
     if (!_debtOrbalanceChoice) {
-        _debtOrbalanceChoice = [[SSJListMenu alloc] init];
-        _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 154, 50)];
-        _debtOrbalanceChoice.maxDisplayRowCount = 1;
+        _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 290, 150)];
+        _debtOrbalanceChoice.maxDisplayRowCount = 2;
         _debtOrbalanceChoice.gapBetweenImageAndTitle = 0;
+        _debtOrbalanceChoice.numberOfLines = 0;
+        _debtOrbalanceChoice.rowHeight = 70.f;
+        _debtOrbalanceChoice.titleFont = nil;
+        _debtOrbalanceChoice.contentAlignment = UIControlContentHorizontalAlignmentLeft;
         _debtOrbalanceChoice.backgroundColor = [UIColor clearColor];
         _debtOrbalanceChoice.items = [self debtOrbalanceChoiceItems];
         [_debtOrbalanceChoice addTarget:self action:@selector(debtOrbalanceChoiceChange) forControlEvents:UIControlEventValueChanged];
@@ -734,38 +788,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }];
 }
 
-/**
- *   限制输入框小数点(输入框只改变时候调用valueChange)
- *
- *  @param TF  输入框
- *  @param num 小数点后限制位数
- */
--(void)setupTextFiledNum:(UITextField *)TF num:(int)num
-{
-    NSString *str = [TF.text stringByReplacingOccurrencesOfString:@"¥" withString:@""];
-    NSArray *arr = [TF.text componentsSeparatedByString:@"."];
-    if ([str isEqualToString:@"0."] || [str isEqualToString:@"."]) {
-        TF.text = @"0.";
-    }else if (str.length == 2) {
-        if ([str floatValue] == 0) {
-            TF.text = @"0";
-        }else if(arr.count < 2){
-            TF.text = [NSString stringWithFormat:@"%d",[str intValue]];
-        }
-    }
-    
-    if (arr.count > 2) {
-        TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],arr[1]];
-    }
-    
-    if (arr.count == 2) {
-        NSString * lastStr = arr.lastObject;
-        if (lastStr.length > num) {
-            TF.text = [NSString stringWithFormat:@"%@.%@",arr[0],[lastStr substringToIndex:num]];
-        }
-    }
-}
-
 - (NSArray *)debtOrbalanceChoiceItems {
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     
@@ -781,16 +803,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
     
-    [firstTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    [firstTitle addAttribute:NSForegroundColorAttributeName value:SSJ_SECONDARY_COLOR range:NSMakeRange(4, firstTitle.length - 4)];
     
-    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+    [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length - 4)];
 
 
     SSJListMenuItem *firstItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:firstTitle];
 
     [tempArr addObject:firstItem];
     
-    NSMutableAttributedString *secondTitle = [[NSMutableAttributedString alloc] initWithString:@"当前余额\n输入数字为负数，代表当前信用卡有余额"];
+    NSMutableAttributedString *secondTitle = [[NSMutableAttributedString alloc] initWithString:@"当前余额\n输入数字为正数，代表当前信用卡有余额"];
     
     [secondTitle addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, secondTitle.length)];
 
@@ -798,9 +820,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, 3)];
 
-    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, firstTitle.length)];
+    [secondTitle addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(4, secondTitle.length - 4)];
     
-    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length)];
+    [secondTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, secondTitle.length - 4)];
 
     
     SSJListMenuItem *secondItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:secondTitle];

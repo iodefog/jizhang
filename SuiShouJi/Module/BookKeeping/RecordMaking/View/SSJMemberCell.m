@@ -9,8 +9,11 @@
 #import "SSJMemberCell.h"
 
 @interface SSJMemberCell()
+
 @property(nonatomic, strong) UILabel *titleLab;
+
 @property(nonatomic, strong) UIImageView *addImage;
+
 @end
 
 @implementation SSJMemberCell

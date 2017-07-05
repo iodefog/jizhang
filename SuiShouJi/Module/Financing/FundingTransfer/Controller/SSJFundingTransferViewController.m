@@ -248,7 +248,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kMemo]) {
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"15个字内(选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.text = self.item.transferMemo;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.delegate = self;
@@ -335,7 +335,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             _transferOutFundingTypeSelect.selectFundID = self.item.transferInId;
         }
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
                 _transferInItem = fundingItem;
             }else{
@@ -367,7 +367,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             _transferOutFundingTypeSelect.selectFundID = self.item.transferOutId;
         }
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
                 _transferOutItem = fundingItem;
             }else{

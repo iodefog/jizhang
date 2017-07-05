@@ -198,7 +198,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     if ([title isEqualToString:kTitle1]) {
         repaymentModifyCell.cellDetail = self.repaymentModel.cardName;
     }else if ([title isEqualToString:kTitle3]) {
-        repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        repaymentModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         repaymentModifyCell.cellInput.tag = 101;
         repaymentModifyCell.cellInput.text = self.repaymentModel.memo;
     }else if ([title isEqualToString:kTitle4]) {

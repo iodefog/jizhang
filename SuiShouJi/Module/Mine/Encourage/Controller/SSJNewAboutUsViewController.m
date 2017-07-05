@@ -29,14 +29,14 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 @interface SSJNewAboutUsViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UITableView *tableView;
 
-@property(nonatomic, strong) SSJEncourageHeaderView *header;
+@property (nonatomic, strong) SSJEncourageHeaderView *header;
 
 @property (nonatomic,strong) NSArray *titles;
 
 
-@property(nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
+@property (nonatomic, strong) NSMutableArray <SSJEncourageCellModel *> *items;
 
 @end
 
@@ -89,7 +89,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             [WXApi openWXApp];
         }];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制微信公众号" message:@"有鱼记账,帮你打利好你的小家" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:cancel];
         
@@ -109,9 +109,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle3]) {
-        NSString *qqGroup = self.service.qqgroup ? : @"552563622";
-        NSString *qqGroupId = self.service.qqgroupId ? : @"160aa4d10987c3a6ff17b2fb89e3e1f0e4e996e320207f1e23e1299518f58169";
-        [self joinGroup:qqGroup key:qqGroupId];
+        NSString *qqGroup = self.service.qqgroup;
+        NSString *qqGroupId = self.service.qqgroupId;
+        SSJJoinQQGroup(qqGroup, qqGroupId);
     }
     
     if ([title isEqualToString:ktitle4]) {
@@ -123,7 +123,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             [WXApi openWXApp];
         }];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制鱼仔微信" message:@"添加鱼仔,邀请你加入官方微信群" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:cancel];
         
@@ -153,7 +153,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle6]) {
-        NSString *telNum = self.service.telNum ? : @"400-7676-298";
+        NSString *telNum = self.service.telNum;
         NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",telNum];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
@@ -178,13 +178,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     cell.item = item;
     
     return cell;
-}
-
-#pragma mark - SSJBaseNetworkService
-- (void)serverDidStart:(SSJBaseNetworkService *)service {
-    if ([service.returnCode isEqualToString:@"1"]) {
-        self.header.currentVersion = self.service.updateModel.appVersion;
-    }
 }
 
 #pragma mark - Getter
@@ -212,13 +205,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     return _header;
 }
 
-- (SSJEncourageService *)service {
-    if (!_service) {
-        _service = [[SSJEncourageService alloc] initWithDelegate:self];
-    }
-    return _service;
-}
-
 #pragma mark - Private
 - (void)organizeCellItems {
     NSMutableArray *tempTitleArr = [NSMutableArray arrayWithCapacity:0];
@@ -234,12 +220,12 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         [secondArr insertObject:ktitle4 atIndex:0];
     }
     
-    if ([TencentOAuth iphoneQQInstalled]) {
-        [firstArr insertObject:ktitle2 atIndex:firstArr.count];
+    if ([WeiboSDK isWeiboAppInstalled]) {
+        [secondArr insertObject:ktitle2 atIndex:0];
     }
     
-    if ([WeiboSDK isWeiboAppInstalled]) {
-        [secondArr insertObject:ktitle3 atIndex:0];
+    if ([TencentOAuth iphoneQQInstalled]) {
+        [firstArr insertObject:ktitle3 atIndex:firstArr.count];
     }
     
     [tempTitleArr insertObject:thirdArr atIndex:0];
@@ -261,17 +247,17 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             SSJEncourageCellModel *item = [[SSJEncourageCellModel alloc] init];
             item.cellTitle = title;
             if ([title isEqualToString:ktitle1]) {
-                item.cellDetail = self.service.wechatId ? : @"youyujz";
+                item.cellDetail = self.service.wechatId;
             } else if ([title isEqualToString:ktitle2]) {
-                item.cellDetail = self.service.sinaBlog ? : @"有鱼记账";
+                item.cellDetail = self.service.sinaBlog;
             } else if ([title isEqualToString:ktitle3]) {
                 item.cellDetail = self.service.qqgroup ? : @"552563622";
             } else if ([title isEqualToString:ktitle4]) {
-                item.cellDetail = self.service.wechatgroup ? : @"youyujz01";
+                item.cellDetail = self.service.wechatgroup;
             } else if ([title isEqualToString:ktitle5]) {
 
             } else if ([title isEqualToString:ktitle6]) {
-                item.cellDetail = self.service.telNum ? : @"400-7676-298";
+                item.cellDetail = self.service.telNum;
                 item.cellSubTitle = @"工作日：9:00——18:00";
                 item.rowHeight = 70;
             }
@@ -284,16 +270,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     self.items = [NSMutableArray arrayWithArray:tempArr];
     
     [self.tableView reloadData];
-}
-
-- (BOOL)joinGroup:(NSString *)groupUin key:(NSString *)key{
-    NSString *urlStr = [NSString stringWithFormat:@"mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%@&key=%@&card_type=group&source=external", groupUin,key];
-    NSURL *url = [NSURL URLWithString:urlStr];
-    if([[UIApplication sharedApplication] canOpenURL:url]){
-        [[UIApplication sharedApplication] openURL:url];
-        return YES;
-    }
-    else return NO;
 }
 
 

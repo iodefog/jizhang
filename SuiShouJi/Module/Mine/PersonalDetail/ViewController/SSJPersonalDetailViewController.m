@@ -149,7 +149,7 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
     self.portraitUploadService = [[SSJPortraitUploadNetworkService alloc] init];
     [self.portraitUploadService uploadimgWithIMG:image finishBlock:^(NSString *icon){
-        self.iconItem.userIconUrl = [NSURL URLWithString:icon];
+        self.iconItem.userIconUrl = [NSURL URLWithString:SSJImageURLWithAPI(icon)];
         
         SSJUserItem *userItem = [[SSJUserItem alloc] init];
         userItem.userId = SSJUSERID();
@@ -162,7 +162,7 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
 
 #pragma mark - Private
 - (void)organiseCellItemsWithUserItem:(SSJUserItem *)userItem {
-    self.iconItem = [SSJPersonalDetailUserIconCellItem itemWithIconUrl:[NSURL URLWithString:userItem.icon]];
+    self.iconItem = [SSJPersonalDetailUserIconCellItem itemWithIconUrl:[NSURL URLWithString:SSJImageURLWithAPI(userItem.icon)]];
     self.nicknameItem = [SSJPersonalDetailUserNicknameCellItem itemWithNickname:userItem.nickName];
     self.signatureItem = [SSJPersonalDetailUserSignatureCellItem itemWithSignatureLimit:kUserSignatureLimit signature:userItem.signature];
     self.cellItems = @[@[self.iconItem, self.nicknameItem], @[self.signatureItem]];

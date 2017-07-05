@@ -265,7 +265,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
         _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
+            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 weakSelf.item.fundId = fundingItem.fundingID;
                 weakSelf.item.fundName = fundingItem.fundingName;
                 weakSelf.item.fundOperatorType = 1;

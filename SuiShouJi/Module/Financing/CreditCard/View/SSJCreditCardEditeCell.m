@@ -20,9 +20,11 @@
 
 @property(nonatomic, strong) CAGradientLayer *gradientLayer;
 
-@property(nonatomic, strong) UIButton *triangleButton;
+@property (nonatomic, strong) UIView *containerView;
 
-@property(nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+
+@property (nonatomic, strong) CAShapeLayer *arrow;
 
 @end
 
@@ -30,14 +32,15 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
+        self.isExpand = NO;
         [self.contentView addSubview:self.cellImage];
         [self.contentView addSubview:self.textInput];
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.detailLabel];
         [self.contentView addSubview:self.cellDetailImage];
         [self.contentView addSubview:self.subTitleLabel];
-        [self.contentView addSubview:self.triangleButton];
-        [self.contentView addSubview:self.backView];
+        [self.contentView.layer addSublayer:self.arrow];
+        [self.contentView addSubview:self.containerView];
         [self.contentView.layer addSublayer:self.gradientLayer];
     }
     return self;
@@ -67,6 +70,8 @@
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -104,6 +109,8 @@
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -141,6 +148,8 @@
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -158,6 +167,8 @@
             self.subTitleLabel.hidden = NO;
             self.gradientLayer.hidden = YES;
             self.detailLabel.hidden = NO;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -180,6 +191,8 @@
 
             self.textInput.hidden = YES;
             self.subTitleLabel.hidden = YES;
+            self.arrow.hidden = YES;
+            self.containerView.hidden = YES;
         }
             break;
             
@@ -189,15 +202,22 @@
             self.accessoryView.centerY = self.cellImage.centerY;
             self.titleLabel.left = self.cellImage.image ? self.cellImage.right + 10 : 15;
             self.titleLabel.centerY = self.contentView.height / 2;
-            self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 15, self.contentView.height);
-            self.textInput.left = self.titleLabel.right + 10;
-            self.textInput.centerY = self.contentView.height / 2;
             self.textInput.hidden = NO;
             self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
             self.cellDetailImage.hidden = YES;
             self.subTitleLabel.hidden = YES;
             self.gradientLayer.hidden = YES;
+            self.arrow.hidden = NO;
+            self.containerView.hidden = NO;
+            self.arrow.left = self.titleLabel.right + 10;
+            self.arrow.position = CGPointMake(self.arrow.position.x, self.contentView.height / 2);
+            self.containerView.size = CGSizeMake(self.arrow.right - self.titleLabel.left, self.titleLabel.height);
+            self.containerView.left = self.titleLabel.left;
+            self.containerView.centerY = self.contentView.height / 2;
+            self.textInput.size = CGSizeMake(self.contentView.width - self.containerView.right - 15, self.contentView.height) ;
+            self.textInput.centerY = self.contentView.height / 2;
+            self.textInput.left = self.containerView.right + 10;
         }
             break;
             
@@ -270,6 +290,39 @@
     return _gradientLayer;
 }
 
+- (CAShapeLayer *)arrow {
+    if (!_arrow) {
+        UIBezierPath *path = [UIBezierPath bezierPath];
+        [path moveToPoint:CGPointZero];
+        [path addLineToPoint:CGPointMake(5, 5)];
+        [path addLineToPoint:CGPointMake(10, 0)];
+        
+        _arrow = [CAShapeLayer layer];
+        _arrow.size = CGSizeMake(10, 5);
+        _arrow.path = path.CGPath;
+        _arrow.lineWidth = 1;
+        _arrow.fillColor = SSJ_MAIN_COLOR.CGColor;
+    }
+    return _arrow;
+}
+
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [[UIView alloc] init];
+        _containerView.backgroundColor = [UIColor clearColor];
+        _containerView.userInteractionEnabled = YES;
+        [_containerView addGestureRecognizer:self.tapGesture];
+    }
+    return _containerView;
+}
+
+- (UITapGestureRecognizer *)tapGesture {
+    if (!_tapGesture) {
+        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showBalanceTypeSelectView)];
+    }
+    return _tapGesture;
+}
+
 - (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
     if (!colorItem.startColor) return;
     _gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
@@ -288,31 +341,31 @@
     [self.cellDetailImage sizeToFit];
 }
 
-- (void)setCellTitle:(NSString *)cellTitle{
+- (void)setCellTitle:(NSString *)cellTitle {
     _cellTitle = cellTitle;
     self.titleLabel.text = _cellTitle;
     [self.titleLabel sizeToFit];
 }
 
-- (void)setCellSubTitle:(NSString *)cellSubTitle{
+- (void)setCellSubTitle:(NSString *)cellSubTitle {
     _cellSubTitle = cellSubTitle;
     self.subTitleLabel.text = _cellSubTitle;
     [self.subTitleLabel sizeToFit];
 }
 
-- (void)setType:(SSJCreditCardCellType)type{
+- (void)setType:(SSJCreditCardCellType)type {
     _type = type;
     [self setNeedsLayout];
 }
 
-- (void)setCellDetail:(NSString *)cellDetail{
+- (void)setCellDetail:(NSString *)cellDetail {
     _cellDetail = cellDetail;
     self.detailLabel.text = _cellDetail;
     self.detailLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     [self.detailLabel sizeToFit];
 }
 
-- (void)setCellAtrributedDetail:(NSAttributedString *)cellAtrributedDetail{
+- (void)setCellAtrributedDetail:(NSAttributedString *)cellAtrributedDetail {
     _cellAtrributedDetail = cellAtrributedDetail;
     self.detailLabel.attributedText = _cellAtrributedDetail;
     [self.detailLabel sizeToFit];
@@ -323,6 +376,19 @@
     _cellImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _subTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _arrow.fillColor = SSJ_MAIN_COLOR.CGColor;
+}
+
+- (void)showBalanceTypeSelectView {
+    self.isExpand = !self.isExpand;
+    if (self.isExpand) {
+        self.arrow.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+    } else {
+        self.arrow.transform = CATransform3DIdentity;
+    }
+    if (self.showBalanceTypeSelectViewBlock) {
+        self.showBalanceTypeSelectViewBlock(self.arrow.position,self.isExpand,self);
+    }
 }
 
 /*

@@ -206,8 +206,8 @@ static const int kAuthCodeDigits = 4;
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(25);
-        make.centerX.mas_equalTo(self);
-        make.width.mas_equalTo(self);
+        make.left.mas_offset(15);
+        make.right.mas_offset(-15);
     }];
     [self.authCodeLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab.mas_bottom).offset(25);

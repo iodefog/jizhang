@@ -84,6 +84,7 @@
 - (UIImageView *)userIcon {
     if (!_userIcon) {
         _userIcon = [[UIImageView alloc] init];
+        _userIcon.clipsToBounds = YES;
         _userIcon.layer.cornerRadius = 33;
         _userIcon.layer.borderWidth = 3;
         _userIcon.layer.borderColor = RGBCOLOR(245, 245, 245).CGColor;

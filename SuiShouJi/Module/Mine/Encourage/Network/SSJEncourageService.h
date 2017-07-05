@@ -13,24 +13,30 @@
 
 - (void)request;
 
+- (void)requestWithSuccess:(SSJNetworkServiceHandler)success
+                   failure:(SSJNetworkServiceHandler)failure;
+
 // qq群
-@property(nonatomic, strong) NSString *qqgroup;
+@property (readonly , nonatomic, copy) NSString *qqgroup;
 
 // qq加群id
-@property(nonatomic, strong) NSString *qqgroupId;
+@property (readonly , nonatomic, copy) NSString *qqgroupId;
 
 // 微信群
-@property(nonatomic, strong) NSString *wechatgroup;
+@property (readonly , nonatomic, copy) NSString *wechatgroup;
 
 // 微信公众号
-@property(nonatomic, strong) NSString *wechatId;
+@property (readonly , nonatomic, copy) NSString *wechatId;
 
 // 新浪微博
-@property(nonatomic, strong) NSString *sinaBlog;
+@property (readonly , nonatomic, copy) NSString *sinaBlog;
 
 // 客服电话
-@property(nonatomic, strong) NSString *telNum;
+@property (readonly , nonatomic, copy) NSString *telNum;
 
-@property(nonatomic, strong) SSJAppUpdateModel *updateModel;
+// 新浪微博id
+@property (readonly , nonatomic, copy) NSString *sinaWeiboId;
+
+@property (nonatomic, strong) SSJAppUpdateModel *updateModel;
 
 @end

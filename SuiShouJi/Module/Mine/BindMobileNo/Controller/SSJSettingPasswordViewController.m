@@ -42,7 +42,7 @@
 
 @implementation SSJSettingPasswordViewController
 
-
+#pragma mark - Lifecycle
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitle];
@@ -164,7 +164,9 @@
 }
 
 - (void)executeBindMobileNoProcess {
-    [[[[self bindMobileNo] then:^RACSignal *{
+    [[[[[self verifyPassword] then:^RACSignal *{
+        return [self bindMobileNo];
+    }] then:^RACSignal *{
         return [self queryUserItem];
     }] flattenMap:^RACStream *(SSJUserItem *userItem) {
         return [self saveMobildNo:userItem];
@@ -179,7 +181,9 @@
 }
 
 - (void)executeResetPasswordProcess {
-    [[[[self resetPassword] then:^RACSignal *{
+    [[[[[self verifyPassword] then:^RACSignal *{
+        return [self resetPassword];
+    }] then:^RACSignal *{
         return [self queryUserItem];
     }] flattenMap:^RACStream *(SSJUserItem *userItem) {
         return [self savePassword:userItem];
@@ -190,6 +194,17 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.successAlertView showWithDesc:@"修改密码成功"];
         });
+    }];
+}
+
+- (RACSignal *)verifyPassword {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (SSJVerifyPassword(self.passwordField.text)) {
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"密法格式不正确，请输入字母和数字的组合"}]];
+        }
+        return nil;
     }];
 }
 

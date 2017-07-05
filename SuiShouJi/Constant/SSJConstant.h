@@ -38,6 +38,7 @@ typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeDataSyncFailed = 10002,
     SSJErrorCodeImageSyncFailed = 10003,
     SSJErrorCodeNoImageSyncNeedToSync = 10004,
+    SSJErrorCodeLoginPasswordIllegal = 10005
 };
 
 //  用户登录方式
@@ -192,10 +193,13 @@ extern const UIEdgeInsets UIEdgeInsetsEmpty;
 //
 extern NSString *const SSJErrorDomain;
 
-//  同步加密密钥字符串
+// 同步加密密钥字符串
 extern NSString *const SSJSyncPrivateKey;
 
-//  用户协议url
+// 登录密码加密key
+extern NSString *const SSJLoginPWDEncryptionKey;
+
+// 用户协议url
 extern NSString *const SSJUserProtocolUrl;
 
 //微信appid

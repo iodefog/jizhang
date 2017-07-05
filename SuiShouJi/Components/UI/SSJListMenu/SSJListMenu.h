@@ -74,16 +74,39 @@
 @property (nonatomic) UIEdgeInsets contentInsets;
 
 /**
+ 每个label中的行数,默认是1,如果0自动计算行数
+ */
+@property (nonatomic) NSInteger numberOfLines;
+
+/**
  内容对其方式，默认UIControlContentHorizontalAlignmentCenter，此属性会影响布局
  注意：目前只实现了UIControlContentHorizontalAlignmentCenter、UIControlContentHorizontalAlignmentLeft、UIControlContentHorizontalAlignmentRight三种方式
  */
 @property (nonatomic) UIControlContentHorizontalAlignment contentAlignment;
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point;
+/**
+ 在view中的顶点显示；只是简便方法，内部还是调用showInView:atPoint:superViewInsets:finishHandle:dismissHandle:
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
+ @param view <#view description#>
+ @param point <#point description#>
+ */
+- (void)showInView:(UIView *)view
+           atPoint:(CGPoint)point;
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
+/**
+ <#Description#>
+
+ @param view <#view description#>
+ @param point <#point description#>
+ @param insets <#insets description#>
+ @param finishHandle <#finishHandle description#>
+ @param dismissHandle <#dismissHandle description#>
+ */
+- (void)showInView:(UIView *)view
+           atPoint:(CGPoint)point
+   superViewInsets:(UIEdgeInsets)insets
+      finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle
+     dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle;
 
 - (void)dismiss;
 

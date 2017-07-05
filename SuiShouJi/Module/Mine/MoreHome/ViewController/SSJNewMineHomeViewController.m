@@ -29,6 +29,9 @@
 #import "SSJMineHomeTableViewItem.h"
 #import "SSJUserTableManager.h"
 #import "SSJBannerNetworkService.h"
+#import "SSJBookkeepingTreeStore.h"
+#import "SSJBookkeepingTreeHelper.h"
+#import "SSJBookkeepingTreeCheckInModel.h"
 
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -95,6 +98,12 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         @strongify(self);
         self.header.item = userItem;
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+    
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];

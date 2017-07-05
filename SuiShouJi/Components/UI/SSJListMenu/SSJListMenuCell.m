@@ -112,10 +112,11 @@
     
     self.textLabel.text = item.title;
     self.textLabel.textColor = item.titleColor;
-    if (item.attributeStr.length) {
-        self.textLabel.attributedText = item.attributeStr;
+    self.textLabel.attributedText = item.attributeStr;
+    
+    if (!item.attributeStr.length) {
+        self.textLabel.font = item.titleFont;
     }
-    self.textLabel.font = item.titleFont;
     self.backgroundColor = item.backgroundColor;
     
     [self setNeedsLayout];

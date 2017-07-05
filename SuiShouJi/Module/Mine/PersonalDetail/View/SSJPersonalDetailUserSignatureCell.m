@@ -69,16 +69,12 @@
     [super setCellItem:cellItem];
     
     SSJPersonalDetailUserSignatureCellItem *item = cellItem;
-    RAC(self.signatureField, placeholder) = [[RACObserve(item, signatureLimit) takeUntil:self.rac_prepareForReuseSignal] map:^id(NSNumber *value) {
-        return [NSString stringWithFormat:@"输入记账小目标，更有利于小目标实现%d字", [value intValue]];
-    }];
-    
     [[RACChannelTo(item, signature) takeUntil:self.rac_prepareForReuseSignal] subscribe:self.signatureField.rac_newTextChannel];
     [self.signatureField.rac_newTextChannel subscribe:RACChannelTo(item, signature)];
     
     RAC(self.counter, text) = [[RACSignal merge:@[[RACObserve(item, signature) takeUntil:self.rac_prepareForReuseSignal],
                       self.signatureField.rac_textSignal]] map:^id(NSString *text) {
-        return [NSString stringWithFormat:@"%d", (int)text.length];
+        return [NSString stringWithFormat:@"%d", (int)(item.signatureLimit - text.length)];
     }];
 }
 
@@ -89,11 +85,9 @@
 
 - (void)updateAppearance {
     self.leftLab.textColor = SSJ_MAIN_COLOR;
+    self.counter.textColor = SSJ_SECONDARY_COLOR;
     self.signatureField.textColor = SSJ_SECONDARY_COLOR;
-    
-    SSJPersonalDetailUserSignatureCellItem *item = self.cellItem;
-    NSString *placeholder = [NSString stringWithFormat:@"输入记账小目标，更有利于小目标实现%d字", (int)item.signatureLimit];
-    self.signatureField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
+    self.signatureField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入记账小目标，更有利于小目标实现哦" attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
 }
 
 - (UILabel *)leftLab {
@@ -117,6 +111,7 @@
     if (!_signatureField) {
         _signatureField = [[UITextField alloc] init];
         _signatureField.adjustsFontSizeToFitWidth = YES;
+        _signatureField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     }
     return _signatureField;
 }

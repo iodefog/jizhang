@@ -79,9 +79,14 @@
                 item.remindContent = [NSString stringWithFormat:@"%@该还款啦，小主快去还账单吧！",item.remindName];
                 break;
                 
-            case SSJReminderTypeCharge:
-                item.remindContent = @"精打细算，有吃有穿，小主快来记账啦～";
+            case SSJReminderTypeCharge:{
+                if (item.remindMemo.length) {
+                    item.remindContent = [NSString stringWithFormat:@"%@(%@)",item.remindName,item.remindMemo];
+                }else{
+                    item.remindContent = [NSString stringWithFormat:@"%@",item.remindName];
+                }
                 break;
+            }
                 
             default:
                 break;

@@ -109,7 +109,7 @@
 
     if (item.cardType == SSJCrediteCardTypeAlipay) {
         fundParent = @"16";
-        fundIcoin = @"ft_huabei";
+        fundIcoin = @"ft_mayihuabei";
         item.settleAtRepaymentDay = YES;
     } else {
         fundParent = @"3";

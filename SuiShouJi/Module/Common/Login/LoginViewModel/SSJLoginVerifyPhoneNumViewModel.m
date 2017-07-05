@@ -29,8 +29,12 @@
 
 #import "SSJHomeLoadingView.h"
 
+#import "SSJNavigationController.h"
+#import "SSJFingerprintPWDViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "MMDrawerController.h"
+
+#import <LocalAuthentication/LocalAuthentication.h>
 
 @interface SSJLoginVerifyPhoneNumViewModel ()
 
@@ -167,7 +171,7 @@
     //手机系统版本
     NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
     
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
@@ -289,7 +293,7 @@
     //手机系统版本
     NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
     
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     [dict setObject:useraccount forKey:@"cmobileno"];
@@ -326,7 +330,7 @@
  */
 - (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
@@ -483,9 +487,34 @@
     }] then:^RACSignal *{
          // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-                if ([userItem.motionPWDState boolValue]) {
-                    __weak typeof(self) weakSelf = self;
+            [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                __weak typeof(self) weakSelf = self;
+                // 验证指纹密码
+                if ([userItem.fingerPrintState boolValue]) {
+                    LAContext *context = [[LAContext alloc] init];
+                    context.localizedFallbackTitle = @"";
+                    
+                    NSError *error = nil;
+                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+                        SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
+                        fingerPwdVC.context = context;
+                        fingerPwdVC.finishHandle = ^(UIViewController *controller) {
+                            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                            UINavigationController *navi = [tabVC.viewControllers firstObject];
+                            UIViewController *homeController = [navi.viewControllers firstObject];
+                            
+                            controller.backController = homeController;
+                            [controller ssj_backOffAction];
+                        };
+                        fingerPwdVC.backController = self.vc.backController;
+                        [weakSelf.vc.navigationController pushViewController:fingerPwdVC animated:YES];
+                        [subscriber sendCompleted];
+                        return;
+                    }
+                }
+                
+                // 验证手势密码
+                if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
                     SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                     motionVC.finishHandle = ^(UIViewController *controller) {
                         UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
@@ -496,19 +525,18 @@
                         [controller ssj_backOffAction];
                     };
                     motionVC.backController = self.vc.backController;
-                    if (userItem.motionPWD.length) {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    } else {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                    }
+                    motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
                     [weakSelf.vc.navigationController pushViewController:motionVC animated:YES];
-                } else {
-                    if (self.vc.finishHandle) {
-                        self.vc.finishHandle(self.vc);
-                    } else {
-                        [self.vc ssj_backOffAction];
-                    }
+                    [subscriber sendCompleted];
+                    return;
                 }
+                
+                if (self.vc.finishHandle) {
+                    self.vc.finishHandle(self.vc);
+                } else {
+                    [self.vc ssj_backOffAction];
+                }
+                
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
                 [subscriber sendError:error];
@@ -663,7 +691,7 @@
 - (RACSignal *)enableRegAndLoginSignal {
     if (!_enableRegAndLoginSignal) {
         _enableRegAndLoginSignal = [[RACSignal combineLatest:@[RACObserve(self, verificationCode),RACObserve(self, passwardNum)] reduce:^id(NSString *code,NSString *passward){
-            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
+            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength);
         }] skip:1];
     }
     return _enableRegAndLoginSignal;

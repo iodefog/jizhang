@@ -11,8 +11,6 @@
 
 static const NSTimeInterval kDuration = 0.2;
 
-static const CGFloat kGap = 5;
-
 static const CGFloat kTriangleHeight = 8;
 
 static const CGFloat kCornerRadius = 2;
@@ -29,6 +27,8 @@ static const CGFloat kCornerRadius = 2;
 
 @property (nonatomic) CGPoint showPoint;
 
+@property (nonatomic) UIEdgeInsets superViewInsets;
+
 @end
 
 @implementation SSJListMenu
@@ -42,6 +42,7 @@ static const CGFloat kCornerRadius = 2;
         _separatorColor = [UIColor lightGrayColor];
         _titleFont = [UIFont systemFontOfSize:16];
         _rowHeight = 44;
+        _numberOfLines = 1;
         _minDisplayRowCount = 0;
         _maxDisplayRowCount = 0;
         _imageSize = CGSizeZero;
@@ -124,6 +125,11 @@ static const CGFloat kCornerRadius = 2;
     }
 }
 
+- (void)setNumberOfLines:(NSInteger)numberOfLines {
+    _numberOfLines = numberOfLines;
+    [self.tableView reloadData];
+}
+
 - (void)setMinDisplayRowCount:(CGFloat)minDisplayRowCount {
     if (_minDisplayRowCount < 0) {
         SSJPRINT(@"minDisplayRowCount不能小于0");
@@ -191,25 +197,15 @@ static const CGFloat kCornerRadius = 2;
 }
 
 - (void)showInView:(UIView *)view atPoint:(CGPoint)point {
-    [self showInView:view atPoint:point finishHandle:NULL dismissHandle:NULL];
+    [self showInView:view atPoint:point superViewInsets:UIEdgeInsetsMake(0, 5, 0, 5) finishHandle:NULL dismissHandle:NULL];
 }
 
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle {
-    [self showInView:view atPoint:point finishHandle:NULL dismissHandle:dismissHandle];
-}
-
-- (void)showInView:(UIView *)view atPoint:(CGPoint)point finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle {
+- (void)showInView:(UIView *)view atPoint:(CGPoint)point superViewInsets:(UIEdgeInsets)insets finishHandle:(void(^)(SSJListMenu *listMenu))finishHandle dismissHandle:(void (^)(SSJListMenu *listMenu))dismissHandle {
     if (!self.superview) {
         
         _showPoint = point;
+        _superViewInsets = insets;
         CGFloat vertexX = [self vertexXWithShowPoint:_showPoint inView:view];
-        
-//        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, kTriangleHeight, self.width, self.height - kTriangleHeight) cornerRadius:2];
-//        [path moveToPoint:CGPointMake(vertexX, 0)];
-//        [path addLineToPoint:CGPointMake(vertexX - kTriangleHeight * 0.8, kTriangleHeight)];
-//        [path addLineToPoint:CGPointMake(vertexX + kTriangleHeight * 0.8, kTriangleHeight)];
-//        [path closePath];
-//        _outlineLayer.path = path.CGPath;
         
         _outlineLayer.path = [self drawPathWithVertexX:vertexX].CGPath;
         
@@ -299,10 +295,10 @@ static const CGFloat kCornerRadius = 2;
 }
 
 - (CGFloat)vertexXWithShowPoint:(CGPoint)point inView:(UIView *)view {
-    if (point.x < self.width * 0.5) {
-        return point.x - kGap;
-    } else if (point.x > view.width - self.width * 0.5) {
-        return self.width - (view.width - point.x) + kGap;
+    if (self.width * 0.5 > point.x) {
+        return point.x - _superViewInsets.left;
+    } else if (self.width * 0.5 > view.width - point.x) {
+        return self.width - (view.width - point.x) + _superViewInsets.right;
     } else {
         return self.width * 0.5;
     }
@@ -359,6 +355,8 @@ static const CGFloat kCornerRadius = 2;
     if (!cell) {
         cell = [[SSJListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    
+    cell.textLabel.numberOfLines = self.numberOfLines;
     
     cell.cellItem = [_cellItems ssj_safeObjectAtIndex:indexPath.row];
     
