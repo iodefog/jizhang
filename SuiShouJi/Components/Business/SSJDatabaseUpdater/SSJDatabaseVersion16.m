@@ -56,7 +56,7 @@
         return [db lastError];
     }
     
-    if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CICOIN, CPARENT, CWRITEDATE, OPERATORTYPE) values ('16','蚂蚁花呗','ft_huabei','root','-1','0')"]) {
+    if (![db executeUpdate:@"insert into BK_FUND_INFO (CFUNDID, CACCTNAME, CICOIN, CPARENT, CWRITEDATE, OPERATORTYPE) values ('16','蚂蚁花呗','ft_mayihuabei','root','-1','0')"]) {
         return [db lastError];
     }
     
