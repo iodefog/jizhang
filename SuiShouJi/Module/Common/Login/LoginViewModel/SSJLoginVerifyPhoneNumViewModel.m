@@ -691,7 +691,7 @@
 - (RACSignal *)enableRegAndLoginSignal {
     if (!_enableRegAndLoginSignal) {
         _enableRegAndLoginSignal = [[RACSignal combineLatest:@[RACObserve(self, verificationCode),RACObserve(self, passwardNum)] reduce:^id(NSString *code,NSString *passward){
-            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
+            return @(code.length >= SSJAuthCodeLength && passward.length >= SSJMinPasswordLength);
         }] skip:1];
     }
     return _enableRegAndLoginSignal;
