@@ -8,9 +8,9 @@
 
 #import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJNormalWebViewController.h"
-#import "SSJMotionPasswordViewController.h"
 #import "SSRegisterAndLoginViewController.h"
 #import "SSJLoginPhoneViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -55,15 +55,6 @@
 }
 
 - (void)initData {
-    self.finishHandle = ^(UIViewController *controller) {
-        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-        UINavigationController *navi = [tabVC.viewControllers firstObject];
-        UIViewController *homeController = [navi.viewControllers firstObject];
-        
-        controller.backController = homeController;
-        [controller ssj_backOffAction];
-    };
-    
     NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
     SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
     int loginType = [lastUserItem.loginType intValue];
@@ -75,6 +66,13 @@
 
 - (void)dealloc {
     [self.verifyPhoneViewModel.netWorkService cancel];
+}
+
+- (void)goBackAction {
+    [super goBackAction];
+    if (self.finishHandle) {
+        self.finishHandle(self);
+    }
 }
 
 #pragma mark - Layout

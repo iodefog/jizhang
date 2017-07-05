@@ -163,11 +163,7 @@ static const int kVerifyFailureTimesLimit = 5;
                     _userItem.motionPWD = self.password;
                     _userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:_userItem success:^{
-                        if (self.finishHandle) {
-                            self.finishHandle(self);
-                        } else {
-                            [self ssj_backOffAction];
-                        }
+                        [self goBackAction];
                     } failure:^(NSError * _Nonnull error) {
                         [SSJAlertViewAdapter showError:error];
                     }];
@@ -189,9 +185,8 @@ static const int kVerifyFailureTimesLimit = 5;
                 // 验证陈功
                 if (self.finishHandle) {
                     self.finishHandle(self);
-                } else {
-                    [self ssj_backOffAction];
                 }
+                [self dismissViewControllerAnimated:YES completion:NULL];
                 return SCYMotionEncryptionCircleLayerStatusCorrect;
             } else {
                 // 验证失败
@@ -242,20 +237,10 @@ static const int kVerifyFailureTimesLimit = 5;
             [SSJAlertViewAdapter showError:error];
         } completed:^{
             @strongify(self);
-            UIViewController *previousVC = [self ssj_previousViewController];
-            if ([previousVC isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
-                SSJLoginVerifyPhoneViewController *loginVC = (SSJLoginVerifyPhoneViewController *)previousVC;
-                loginVC.mobileNo = self.userItem.mobileNo;
-                [self.navigationController popViewControllerAnimated:YES];
-            } else {
-                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
-                loginVC.mobileNo = self.userItem.mobileNo;
-                loginVC.finishHandle = self.finishHandle;
-                loginVC.cancelHandle = self.finishHandle;
-                loginVC.backController = self.backController;
-                //[self.navigationController setViewControllers:@[loginVC] animated:YES];
-                [self.navigationController pushViewController:loginVC animated:YES];
-            }
+            SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+            loginVC.finishHandle = self.finishHandle;
+            loginVC.mobileNo = self.userItem.mobileNo;
+            [self.navigationController setViewControllers:@[loginVC] animated:YES];
         }];
     }
 }
@@ -264,15 +249,9 @@ static const int kVerifyFailureTimesLimit = 5;
 - (void)changeAccountAction {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
-        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
-            loginVC.finishHandle = self.finishHandle;
-            loginVC.cancelHandle = self.finishHandle;
-            loginVC.backController = self.backController;
-            [self.navigationController setViewControllers:@[loginVC] animated:YES];
-        }
+        SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+        loginVC.finishHandle = self.finishHandle;
+        [self.navigationController setViewControllers:@[loginVC] animated:YES];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];

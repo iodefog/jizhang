@@ -32,7 +32,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJUserTableManager.h"
 #import "SSJBooksHeadeCollectionrReusableView.h"
 #import "SSJCreateOrDeleteBooksService.h"
-#import "SSJLoginVerifyPhoneViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJInviteCodeJoinSuccessView.h"
 

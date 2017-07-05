@@ -9,7 +9,6 @@
 #import "SSJLoginPopView.h"
 #import "SSJLoginVerifyPhoneViewController.h"
 #import "SSJBookKeepingHomePopView.h"
-#import "SSJRegistGetVerViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 BOOL kHomeNeedLoginPop = YES;
 @implementation SSJLoginPopView

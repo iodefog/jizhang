@@ -19,6 +19,7 @@
 #import "SSJAnnouncementsListViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJEncourageViewController.h"
+#import "SSJNavigationController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -307,7 +308,12 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
 - (void)login {
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
-    [self.navigationController pushViewController:loginVc animated:YES];
+    loginVc.finishHandle = ^(UIViewController *controller) {
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        tabVC.selectedIndex = 0;
+    };
+    SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+    [self presentViewController:naviVC animated:YES completion:NULL];
 }
 
 - (void)leftButtonClicked:(id)sender {

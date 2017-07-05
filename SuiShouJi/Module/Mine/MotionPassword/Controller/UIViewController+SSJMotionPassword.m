@@ -19,10 +19,10 @@
 
 @implementation UIViewController (SSJMotionPassword)
 
-+ (void)verifyMotionPasswordIfNeeded:(void (^)(BOOL isVerified))finish animated:(BOOL)animated {
++ (void)verifyMotionPasswordIfNeeded:(void(^)(BOOL isVerified))completion animated:(BOOL)animated {
     if (!SSJIsUserLogined()) {
-        if (finish) {
-            finish(NO);
+        if (completion) {
+            completion(NO);
         }
         return;
     }
@@ -31,8 +31,8 @@
     UIViewController *currentVC = SSJVisibalController();
     if ([currentVC isKindOfClass:[SSJMotionPasswordViewController class]]
         || [currentVC isKindOfClass:[SSJFingerprintPWDViewController class]]) {
-        if (finish) {
-            finish(NO);
+        if (completion) {
+            completion(NO);
         }
         return;
     }
@@ -49,35 +49,31 @@
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
             motionVC.finishHandle = ^(UIViewController *controller) {
-                if (finish) {
-                    finish(YES);
+                if (completion) {
+                    completion(YES);
                 }
-                [controller dismissViewControllerAnimated:YES completion:NULL];
             };
-            motionVC.backController = currentVC;
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
         } else if (fingerPwdOpened) {
             SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
             fingerPwdVC.context = context;
             fingerPwdVC.finishHandle = ^(UIViewController *controller) {
-                if (finish) {
-                    finish(YES);
+                if (completion) {
+                    completion(YES);
                 }
-                [controller dismissViewControllerAnimated:YES completion:NULL];
             };
-            fingerPwdVC.backController = currentVC;
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
         } else {
-            if (finish) {
-                finish(NO);
+            if (completion) {
+                completion(NO);
             }
         }
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
-        if (finish) {
-            finish(NO);
+        if (completion) {
+            completion(NO);
         }
     }];
 }

@@ -162,9 +162,9 @@
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
             vc.titleL.text = @"忘记密码";
-            vc.finishHandle = self.finishHandle;
             vc.viewModel = self.viewModel;
             vc.regOrForgetType = SSJRegistAndForgetPasswordTypeForgetPassword;
+            vc.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:vc animated:YES];
         }];
     }
