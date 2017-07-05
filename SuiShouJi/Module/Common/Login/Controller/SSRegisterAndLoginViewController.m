@@ -49,6 +49,8 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.viewModel.netWorkService cancel];
+    self.viewModel.graphNum = @"";
+    self.viewModel.verificationCode = @"";
 }
 
 - (void)viewDidAppear:(BOOL)animated {

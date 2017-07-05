@@ -36,6 +36,11 @@
     [self.viewModel.netWorkService cancel];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.tfPassword becomeFirstResponder];
+}
+
 - (void)dealloc {
     
 }

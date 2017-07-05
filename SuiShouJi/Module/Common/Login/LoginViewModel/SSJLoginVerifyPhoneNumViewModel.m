@@ -704,9 +704,6 @@
  @return <#return value description#>
  */
 - (RACCommand *)getVerificationCodeCommand {
-    if (_getVerificationCodeCommand.executing) {//正在执行
-        
-    }
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
