@@ -53,9 +53,10 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.tfRegYanZhenF becomeFirstResponder];
 }
+- (void)dealloc{
 
+}
 
 - (void)setUpConst {
     [self.tfRegYanZhenF mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -269,17 +270,16 @@
         _registerAndLoginButton.layer.cornerRadius = 6;
         _registerAndLoginButton.clipsToBounds = YES;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
-        @weakify(self);
+        __weak __typeof(self)weakSelf = self;
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            [[self.viewModel.registerAndLoginCommand execute:nil] takeUntil:self.rac_willDeallocSignal];
-            [[[self.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
+            [[weakSelf.viewModel.registerAndLoginCommand execute:nil] takeUntil:weakSelf.rac_willDeallocSignal];
+            [[[weakSelf.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                  if ([x boolValue]) {
-                     self.tfPassword.userInteractionEnabled = NO;
-                     self.tfRegYanZhenF.userInteractionEnabled = NO;
+                     weakSelf.tfPassword.userInteractionEnabled = NO;
+                     weakSelf.tfRegYanZhenF.userInteractionEnabled = NO;
                  } else {
-                     self.tfPassword.userInteractionEnabled = YES;
-                     self.tfRegYanZhenF.userInteractionEnabled = YES;
+                     weakSelf.tfPassword.userInteractionEnabled = YES;
+                     weakSelf.tfRegYanZhenF.userInteractionEnabled = YES;
                  }
              }];
         }];

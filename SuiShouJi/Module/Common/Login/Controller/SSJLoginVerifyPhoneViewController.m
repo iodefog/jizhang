@@ -50,8 +50,8 @@
     [super viewDidLoad];
     [self initialUI];
     [self updateViewConstraint];
-    [self initialBind];
     [self initData];
+    [self initialBind];
 }
 
 - (void)initData {

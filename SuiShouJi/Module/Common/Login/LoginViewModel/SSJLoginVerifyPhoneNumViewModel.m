@@ -234,7 +234,7 @@
     
     [param setObject:@(time) forKey:@"timeStamp"];
     [param setObject:strSign forKey:@"signMsg"];
-    [param setObject:@"" forKey:@"imgYzm"];
+    [param setObject:self.graphNum?:@"" forKey:@"imgYzm"];
     [self.netWorkService request:@"/chargebook/user/send_sms.go" params:param success:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendNext:service.rootElement];
         [subscriber sendCompleted];
@@ -684,6 +684,9 @@
  @return <#return value description#>
  */
 - (RACCommand *)getVerificationCodeCommand {
+    if (_getVerificationCodeCommand.executing) {//正在执行
+        
+    }
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
@@ -693,7 +696,7 @@
                 return nil;
             }];
             return [signal map:^id(NSDictionary *value) {
-               return [RACTuple tupleWithObjects:[[value objectForKey:@"code"] stringValue],[[value objectForKey:@"results"] objectForKey:@"image"],[value objectForKey:@"desc"], nil];
+                return value;
             }];
         }];
     }

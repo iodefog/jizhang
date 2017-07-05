@@ -56,8 +56,8 @@ static const NSInteger kCountdownLimit = 60;
         
         __weak typeof(self) wself = self;
         self.observer = [[NSNotificationCenter defaultCenter] addObserverForName:UITextFieldTextDidChangeNotification object:self queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
-            if (wself.text.length > self.authCodeLength && self.authCodeLength > 0) {
-                wself.text = [wself.text substringToIndex:self.authCodeLength];
+            if (wself.text.length > wself.authCodeLength && wself.authCodeLength > 0) {
+                wself.text = [wself.text substringToIndex:wself.authCodeLength];
             }
         }];
     }
@@ -91,42 +91,51 @@ static const NSInteger kCountdownLimit = 60;
 }
 
 - (void)getVerifCode {
-    self.getAuthCodeState = SSJGetVerifCodeStateLoading;
-    [[[self.viewModel.getVerificationCodeCommand execute:nil] takeUntil:self.rac_willDeallocSignal]subscribeNext:^(RACTuple *tuple) {
-        //请求成功并且不需要图形验证码的时候开启倒计时
-        if ([tuple.first isEqualToString:@"1"]) {//发送验证码成功
-            //倒计时
-            [self beginCountdownIfNeeded];
-            self.getAuthCodeState = SSJGetVerifCodeStateSent;
-        } else if ([tuple.first isEqualToString:@"2"]) {//需要图片验证码
-            //显示图形验证码
-            self.graphVerView.verImage = [tuple.second base64ToImage];
-            [self.graphVerView show];
-            self.getAuthCodeState = SSJGetVerifCodeStateNeedImageCode;
-        } else if ([tuple.first isEqualToString:@"3"]) {//图片验证码错误
-            [CDAutoHideMessageHUD showMessage:@"图片验证码错误"];
-            self.getAuthCodeState = SSJGetVerifCodeStateImageCodeError;
-        } else {
-            [CDAutoHideMessageHUD showMessage:tuple.last];
-            self.getAuthCodeState = SSJGetVerifCodeStateFailed;
-        }
+    __weak typeof(self) wself = self;
+    wself.getAuthCodeState = SSJGetVerifCodeStateLoading;
+    [[[wself.viewModel.getVerificationCodeCommand execute:nil] takeUntil:wself.rac_willDeallocSignal] subscribeNext:^(NSDictionary *value) {
+        [wself dealVerifCodeDataWithDic:value];
     } error:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
-        self.getAuthCodeState = SSJGetVerifCodeStateFailed;
+        wself.getAuthCodeState = SSJGetVerifCodeStateFailed;
     }];
 }
 
 #pragma mark - Private
 
+//处理发送验证码返回的数据
+- (void)dealVerifCodeDataWithDic:(NSDictionary *)value {
+    __weak typeof(self) wself = self;
+    NSString *code = [NSString stringWithFormat:@"%@",[value objectForKey:@"code"]];
+    NSString *image = [NSString stringWithFormat:@"%@",[[value objectForKey:@"results"] objectForKey:@"image"]];
+    NSString *desc = [NSString stringWithFormat:@"%@",[value objectForKey:@"desc"]];
+    //请求成功并且不需要图形验证码的时候开启倒计时
+    if ([code isEqualToString:@"1"]) {//发送验证码成功
+        [CDAutoHideMessageHUD showMessage:desc];
+        //倒计时
+        [wself beginCountdownIfNeeded];
+        [wself becomeFirstResponder];
+        wself.getAuthCodeState = SSJGetVerifCodeStateSent;
+        [_graphVerView dismiss];
+    } else if ([code isEqualToString:@"2"]) {//需要图片验证码
+        //显示图形验证码
+        [wself.graphVerView.verNumTextF becomeFirstResponder];
+        wself.graphVerView.verImage = [image base64ToImage];
+        [wself.graphVerView show];
+        wself.getAuthCodeState = SSJGetVerifCodeStateNeedImageCode;
+    } else if ([code isEqualToString:@"3"]) {//图片验证码错误
+        [CDAutoHideMessageHUD showMessage:desc];
+        wself.getAuthCodeState = SSJGetVerifCodeStateImageCodeError;
+    } else {
+        [CDAutoHideMessageHUD showMessage:desc];
+        wself.getAuthCodeState = SSJGetVerifCodeStateFailed;
+    }
+}
 //  开始倒计时
 - (void)beginCountdownIfNeeded {
     if (!self.countdownTimer.valid && !self.countdownTimer) {
         self.countdown = kCountdownLimit;
                 self.countdownTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(updateCountdown) userInfo:nil repeats:YES];
-        //
-//        [[[RACSignal interval:1 onScheduler:[RACScheduler mainThreadScheduler]] takeUntil:self.rac_willDeallocSignal ] subscribeNext:^(id x) {
-//            [self updateCountdown];
-//        }];
         [[NSRunLoop currentRunLoop] addTimer:self.countdownTimer forMode:NSRunLoopCommonModes];
         [self.countdownTimer fire];
     }
@@ -144,6 +153,8 @@ static const NSInteger kCountdownLimit = 60;
         [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds后重新获取",(int)self.countdown] forState:UIControlStateDisabled];
     } else {
         self.getAuthCodeBtn.enabled = YES;
+        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"重新获取验证码"] forState:UIControlStateDisabled];
+        
         [self invalidateTimer];
     }
     self.countdown --;
@@ -187,6 +198,20 @@ static const NSInteger kCountdownLimit = 60;
             [[[self.viewModel.reGetVerificationCodeCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(UIImage *image) {
                 //成功刷新验证码
                 self.graphVerView.verImage = image;
+            }];
+        }];
+        
+        [[_graphVerView.commitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
+            if (!self.viewModel.graphNum.length) {
+                [CDAutoHideMessageHUD showMessage:@"请输入图形验证码"];
+                return ;
+            }
+            
+            //发送获取验证码请求
+            [[[self.viewModel.getVerificationCodeCommand execute:nil] takeUntil:self.rac_willDeallocSignal] subscribeNext:^(NSDictionary *value) {
+                [self endEditing:YES];
+                [self dealVerifCodeDataWithDic:value];
             }];
         }];
     }
