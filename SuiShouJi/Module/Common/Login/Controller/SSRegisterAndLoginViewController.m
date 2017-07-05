@@ -30,6 +30,8 @@
 //验证码
 //@property (nonatomic, strong) UIButton *getAuthCodeBtn;
 
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+
 @property (nonatomic,strong)UIButton *registerAndLoginButton;
 
 /**图形验证码*/
@@ -49,13 +51,12 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     [self.viewModel.netWorkService cancel];
-    self.viewModel.graphNum = @"";
-    self.viewModel.verificationCode = @"";
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
 }
+
 - (void)dealloc{
 
 }
@@ -95,6 +96,7 @@
     self.viewModel.vc = self;
     RAC(self.viewModel,verificationCode) = self.tfRegYanZhenF.rac_textSignal;
     RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
+    RAC(self.viewModel,phoneNum) = RACObserve(self, phoneNum);
 }
 
 ////  开始倒计时
@@ -175,6 +177,13 @@
 //    }
 //    return _tfRegYanZhenNum;
 //}
+
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
+}
 
 - (SSJVerifCodeField *)tfRegYanZhenF {
     if (!_tfRegYanZhenF) {

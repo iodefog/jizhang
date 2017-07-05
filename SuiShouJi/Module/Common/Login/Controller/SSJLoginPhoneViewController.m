@@ -22,6 +22,9 @@
 
 /**忘记密码*/
 @property (nonatomic, strong) UIButton *forgetPasswordBtn;
+
+/**vm*/
+@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 @end
 
 @implementation SSJLoginPhoneViewController
@@ -45,6 +48,7 @@
     
 }
 
+
 - (void)setUpUI {
     [self.scrollView addSubview:self.tipsL];
     [self.scrollView addSubview:self.tfPassword];
@@ -55,6 +59,8 @@
 
 - (void)initBind {
     RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
+    RAC(self.viewModel,phoneNum) = RACObserve(self, phoneNum);
+//    RAC(_loginButton,enabled) = [self.viewModel.enableNormalLoginSignal skip:1];
 }
 
 - (void)updateViewConstraints {
@@ -86,6 +92,13 @@
 }
 
 #pragma mark - Lazy
+- (SSJLoginVerifyPhoneNumViewModel *)viewModel {
+    if (!_viewModel) {
+        _viewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
+    }
+    return _viewModel;
+}
+
 - (UILabel *)tipsL {
     if (!_tipsL) {
         _tipsL = [[UILabel alloc] init];
@@ -163,7 +176,7 @@
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
             vc.titleL.text = @"忘记密码";
             vc.finishHandle = self.finishHandle;
-            vc.viewModel = self.viewModel;
+            vc.phoneNum = self.viewModel.phoneNum;
             vc.regOrForgetType = SSJRegistAndForgetPasswordTypeForgetPassword;
             [self.navigationController pushViewController:vc animated:YES];
         }];
