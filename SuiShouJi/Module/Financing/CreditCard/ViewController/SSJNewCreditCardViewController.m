@@ -287,7 +287,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         if (self.cardType == SSJCrediteCardTypeAlipay) {
             newReminderCell.cellDetail = @"蚂蚁花呗";
-            newReminderCell.cellDetailImageName = @"ft_huabei";
+            newReminderCell.cellDetailImageName = @"ft_mayihuabei";
         } else {
             newReminderCell.cellDetail = @"信用卡";
             newReminderCell.cellDetailImageName = @"ft_creditcard";
