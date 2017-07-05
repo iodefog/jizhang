@@ -37,6 +37,9 @@
 /**图形验证码*/
 //@property (nonatomic, strong) SSJLoginGraphVerView *graphVerView;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIButton *rightBtn;
+
 @end
 
 @implementation SSRegisterAndLoginViewController
@@ -71,11 +74,19 @@
     
     [self.tfPassword mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.tfRegYanZhenF.mas_bottom).offset(20);
-        make.left.right.height.mas_equalTo(self.tfRegYanZhenF);
+        make.left.height.mas_equalTo(self.tfRegYanZhenF);
+        make.right.mas_equalTo(self.tfRegYanZhenF).offset(-40);
+    }];
+    
+    [self.rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self.tfRegYanZhenF);
+        make.bottom.mas_equalTo(self.tfPassword);
+        make.left.mas_equalTo(self.tfPassword.mas_right);
+        make.height.mas_equalTo(50);
     }];
     
     [self.registerAndLoginButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.mas_equalTo(self.tfPassword);
+        make.left.right.mas_equalTo(self.tfRegYanZhenF);
         make.height.mas_equalTo(44);
         make.top.mas_equalTo(self.tfPassword.mas_bottom).offset(30);
     }];
@@ -90,6 +101,7 @@
     [self.scrollView addSubview:self.tfRegYanZhenF];
     [self.scrollView addSubview:self.tfPassword];
     [self.scrollView addSubview:self.registerAndLoginButton];
+    [self.scrollView addSubview:self.rightBtn];
 }
 
 - (void)initialBind {
@@ -199,15 +211,6 @@
 
 - (UITextField*)tfPassword{
     if (!_tfPassword) {
-        UIButton *rightView = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 50)];
-        [rightView setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
-        [rightView setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
-        @weakify(self);
-        [[rightView rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
-            @strongify(self);
-            self.tfPassword.secureTextEntry = button.selected;
-            button.selected = !button.selected;
-        }];
         _tfPassword = [[UITextField alloc] init];
         _tfPassword.delegate = self;
         _tfPassword.textColor = [UIColor ssj_colorWithHex:@"333333"];
@@ -216,14 +219,31 @@
         _tfPassword.font = [UIFont ssj_helveticaRegularFontOfSize:SSJ_FONT_SIZE_3];
         _tfPassword.keyboardType = UIKeyboardTypeASCIICapable;
         _tfPassword.delegate = self;
-        _tfPassword.rightView = rightView;
         _tfPassword.rightViewMode = UITextFieldViewModeAlways;
         _tfPassword.secureTextEntry = YES;
         [_tfPassword ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
         [_tfPassword ssj_setBorderStyle:SSJBorderStyleBottom];
-        [_tfPassword ssj_setBorderWidth:1];
+        [_tfPassword ssj_setBorderWidth:2];
     }
     return _tfPassword;
+}
+
+- (UIButton *)rightBtn {
+    if (!_rightBtn) {
+        _rightBtn = [[UIButton alloc] init];
+        [_rightBtn setImage:[UIImage imageNamed:@"founds_xianshi"] forState:UIControlStateSelected];
+        [_rightBtn setImage:[UIImage imageNamed:@"founds_yincang"] forState:UIControlStateNormal];
+        [_rightBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha]];
+        [_rightBtn ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_rightBtn ssj_setBorderWidth:2];
+        @weakify(self);
+        [[_rightBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
+            @strongify(self);
+            self.tfPassword.secureTextEntry = button.selected;
+            button.selected = !button.selected;
+        }];
+    }
+    return _rightBtn;
 }
 
 //- (UIButton *)getAuthCodeBtn {
