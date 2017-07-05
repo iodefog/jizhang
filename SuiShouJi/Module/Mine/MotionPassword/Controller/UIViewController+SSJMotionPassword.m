@@ -54,6 +54,7 @@
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
+            motionVC.backController = currentVC;
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
         } else if (fingerPwdOpened) {
@@ -65,6 +66,7 @@
                 }
                 [controller dismissViewControllerAnimated:YES completion:NULL];
             };
+            fingerPwdVC.backController = currentVC;
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
         } else {
