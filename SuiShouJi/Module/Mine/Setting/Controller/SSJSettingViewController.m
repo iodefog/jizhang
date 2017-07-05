@@ -160,7 +160,11 @@ static NSString *const kClearDataTitle = @"清理数据";
     if ([title isEqualToString:kBindMobileNoTitle]) {
         mineHomeCell.cellDetail = @"去绑定";
     } else if ([title isEqualToString:kMobileNoTitle]) {
-        mineHomeCell.cellDetail = self.userItem.mobileNo;
+        if (self.userItem.mobileNo.length >= 7) {
+            mineHomeCell.cellDetail = [self.userItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        } else {
+            mineHomeCell.cellDetail = self.userItem.mobileNo;
+        }
     } else {
         mineHomeCell.cellDetail = nil;
     }
