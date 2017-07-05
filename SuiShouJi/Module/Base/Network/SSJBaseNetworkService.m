@@ -188,8 +188,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     return @{@"source":SSJDefaultSource(),
              @"releaseVersion":SSJAppVersion(),
              @"accessToken":(SSJAccessToken() ?: @""),
-             @"appId":(SSJAppId() ?: @""),
-             @"cuserId":SSJUSERID()};
+             @"appId":(SSJAppId() ?: @"")};
 }
 
 /* 封装参数 */
@@ -212,6 +211,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         [self.p_basicParameters enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
             [manager.requestSerializer setValue:obj forHTTPHeaderField:key];
         }];
+        [manager.requestSerializer setValue:SSJUSERID() forHTTPHeaderField:@"cuserId"];
     }
     [manager.operationQueue setMaxConcurrentOperationCount:1];
     return manager;
