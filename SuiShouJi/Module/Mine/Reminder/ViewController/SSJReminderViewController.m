@@ -86,6 +86,18 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     SSJReminderItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     SSJReminderEditeViewController *reminderEditeVc = [[SSJReminderEditeViewController alloc]init];
     reminderEditeVc.needToSave = YES;
+    @weakify(self);
+    reminderEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
+        @strongify(self);
+        [self remindLocationWithItem:item withSwitch:nil];
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:item Success:^(SSJReminderItem *Ritem){
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            
+        }];
+        
+    };
     reminderEditeVc.item = item;
     [self.navigationController pushViewController:reminderEditeVc animated:YES];
 }
@@ -126,6 +138,9 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 #pragma mark - Event
 - (void)rightButtonClicked:(id)sender{
     SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+    
+    remindEditeVc.needToSave = YES;
+    
     __weak typeof(self) weakSelf = self;
     remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
 

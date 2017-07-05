@@ -8,6 +8,35 @@
 
 #import "SSJEncourageService.h"
 
+@interface SSJEncourageService()
+
+
+// qq群
+@property (nonatomic, copy) NSString *qqgroup;
+
+// qq加群id
+@property (nonatomic, copy) NSString *qqgroupId;
+
+// 微信群
+@property (nonatomic, copy) NSString *wechatgroup;
+
+// 微信公众号
+@property (nonatomic, copy) NSString *wechatId;
+
+// 新浪微博
+@property (nonatomic, copy) NSString *sinaBlog;
+
+// 客服电话
+@property (nonatomic, copy) NSString *telNum;
+
+// 新浪微博id
+@property (nonatomic, copy) NSString *sinaWeiboId;
+
+@property (nonatomic, copy) SSJAppUpdateModel *updateModel;
+
+@end
+
+
 @implementation SSJEncourageService
 
 - (void)request {
@@ -28,7 +57,8 @@
         self.wechatId = result[@"wechat_gzh"] ? : @"youyujz";
         self.telNum = result[@"telephone"] ? : @"400-7676-298";
         self.sinaBlog = result[@"sina_blog"] ? : @"有鱼记账";
-                
+        self.sinaWeiboId = result[@"sina_blog_id"] ? : @"5603151337";
+
         self.updateModel = [SSJAppUpdateModel mj_objectWithKeyValues:result[@"app"]];
     }
 }
