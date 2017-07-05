@@ -69,8 +69,8 @@
     [super setCellItem:cellItem];
     
     SSJPersonalDetailUserSignatureCellItem *item = cellItem;
-    [[RACChannelTo(item, signature) takeUntil:self.rac_prepareForReuseSignal] subscribe:self.signatureField.rac_newTextChannel];
-    [self.signatureField.rac_newTextChannel subscribe:RACChannelTo(item, signature)];
+    self.signatureField.text = item.signature;
+    RACChannelTo(item, signature) = self.signatureField.rac_newTextChannel;
     
     RAC(self.counter, text) = [[RACSignal merge:@[[RACObserve(item, signature) takeUntil:self.rac_prepareForReuseSignal],
                       self.signatureField.rac_textSignal]] map:^id(NSString *text) {
@@ -112,6 +112,7 @@
         _signatureField = [[UITextField alloc] init];
         _signatureField.adjustsFontSizeToFitWidth = YES;
         _signatureField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _signatureField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _signatureField;
 }

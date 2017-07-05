@@ -19,7 +19,14 @@
 /**<#注释#>*/
 @property (nonatomic, strong) UIButton *reChooseBtn;
 
+/**commit*/
+@property (nonatomic, strong) UIButton *commitBtn;
+
+/**验证码输入框*/
+@property (nonatomic, strong) UITextField *verNumTextF;
+
 /**<#注释#>*/
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *verViewModel;
 - (void)show;
+- (void)dismiss;
 @end

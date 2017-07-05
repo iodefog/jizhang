@@ -36,6 +36,10 @@
     [self.viewModel.netWorkService cancel];
 }
 
+- (void)dealloc {
+    
+}
+
 - (void)setUpUI {
     [self.scrollView addSubview:self.tipsL];
     [self.scrollView addSubview:self.tfPassword];
@@ -152,6 +156,7 @@
             @strongify(self);
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
+            vc.titleL.text = @"忘记密码";
             vc.finishHandle = self.finishHandle;
             vc.viewModel = self.viewModel;
             vc.regOrForgetType = SSJRegistAndForgetPasswordTypeForgetPassword;

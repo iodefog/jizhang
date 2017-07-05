@@ -64,9 +64,8 @@
     }
     
     SSJPersonalDetailUserNicknameCellItem *item = cellItem;
-//    RAC(self.nicknameField, text) = [RACObserve(item, nickname) takeUntil:self.rac_prepareForReuseSignal];
-    [[RACChannelTo(item, nickname) takeUntil:self.rac_prepareForReuseSignal] subscribe:self.nicknameField.rac_newTextChannel];
-    [self.nicknameField.rac_newTextChannel subscribe:RACChannelTo(item, nickname)];
+    self.nicknameField.text = item.nickname;
+    RACChannelTo(item, nickname) = self.nicknameField.rac_newTextChannel;
 }
 
 - (void)updateAppearance {
@@ -88,6 +87,8 @@
     if (!_nicknameField) {
         _nicknameField = [[UITextField alloc] init];
         _nicknameField.textAlignment = NSTextAlignmentRight;
+        _nicknameField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _nicknameField.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _nicknameField;
 }

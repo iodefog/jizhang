@@ -50,16 +50,27 @@
     [super viewDidLoad];
     [self initialUI];
     [self updateViewConstraint];
+    [self initData];
     [self initialBind];
-    
+}
+
+- (void)initData {
     self.finishHandle = ^(UIViewController *controller) {
-            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-            UINavigationController *navi = [tabVC.viewControllers firstObject];
-            UIViewController *homeController = [navi.viewControllers firstObject];
-            
-            controller.backController = homeController;
-            [controller ssj_backOffAction];
-        };
+        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+        UINavigationController *navi = [tabVC.viewControllers firstObject];
+        UIViewController *homeController = [navi.viewControllers firstObject];
+        
+        controller.backController = homeController;
+        [controller ssj_backOffAction];
+    };
+    
+    NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+    SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+    int loginType = [lastUserItem.loginType intValue];
+    if (loginType == 0) {
+        NSString *userName = lastUserItem.mobileNo;
+        self.numTextF.text = userName;
+    }
 }
 
 - (void)dealloc {

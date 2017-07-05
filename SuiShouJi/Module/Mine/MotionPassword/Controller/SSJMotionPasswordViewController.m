@@ -91,6 +91,12 @@ static const int kVerifyFailureTimesLimit = 5;
     _context = nil;
 }
 
+- (void)viewWillLayoutSubviews {
+    [super viewWillLayoutSubviews];
+    self.portraitContainer.layer.cornerRadius = self.portraitContainer.width * 0.5;
+    self.portraitView.layer.cornerRadius = self.portraitView.width * 0.5;
+}
+
 - (void)updateViewConstraints {
     [self.portraitContainer mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(76, 76));
@@ -367,7 +373,6 @@ static const int kVerifyFailureTimesLimit = 5;
     if (!_portraitContainer) {
         _portraitContainer = [[UIView alloc] init];
         _portraitContainer.clipsToBounds = YES;
-        _portraitContainer.layer.cornerRadius = 38;
         _portraitContainer.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.4];
         [_portraitContainer addSubview:self.portraitView];
     }
@@ -377,6 +382,7 @@ static const int kVerifyFailureTimesLimit = 5;
 - (UIImageView *)portraitView {
     if (!_portraitView) {
         _portraitView = [[UIImageView alloc] init];
+        _portraitView.clipsToBounds = YES;
     }
     return _portraitView;
 }

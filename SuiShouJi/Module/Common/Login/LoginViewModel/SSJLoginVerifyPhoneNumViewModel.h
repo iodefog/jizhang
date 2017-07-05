@@ -50,6 +50,9 @@
 /**同意协议*/
 @property (nonatomic, assign, getter=isAgreeProtocol) BOOL agreeProtocol;
 
+///**是否是图形验证码*/
+//@property (nonatomic, assign, getter=isAgreeProtocol) BOOL agreeProtocol;
+
 /**手机号*/
 @property (nonatomic, copy) NSString *phoneNum;
 

@@ -113,10 +113,6 @@
 }
 
 - (void)setupBindings {
-    RAC(self.viewModel,phoneNum) = [self.mobileNoField rac_textSignal];
-    RAC(self.nextBtn,enabled) = self.viewModel.enableVerifySignal;
-//    RAC(self.mobileNoField,enabled) = self
-    
     @weakify(self);
     [[self.nextBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
         @strongify(self);
@@ -127,10 +123,6 @@
     [self.nextBtn.rac_command.executionSignals.switchToLatest subscribeNext:^(NSNumber *result) {
         @strongify(self);
         if ([result boolValue]) {
-//            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此手机号已经注册过了，换一个吧"}];
-//            [SSJAlertViewAdapter showError:error completion:^{
-//                [self.mobileNoField becomeFirstResponder];
-//            }];
             [CDAutoHideMessageHUD showMessage:@"此手机号已经绑定过了，换一个吧"];
             [self.mobileNoField becomeFirstResponder];
         } else {
@@ -139,6 +131,9 @@
             [self.navigationController pushViewController:thirdVC animated:YES];
         }
     } error:NULL];
+    
+    RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
+    RAC(self.viewModel, phoneNum) = [RACSignal merge:@[[self.mobileNoField rac_textSignal], RACObserve(self.mobileNoField, text)]];
 }
 
 #pragma mark - Lazyloading

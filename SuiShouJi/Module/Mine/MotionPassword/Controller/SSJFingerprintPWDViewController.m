@@ -26,6 +26,7 @@
 
 @implementation SSJFingerprintPWDViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.appliesTheme = NO;
@@ -74,6 +75,7 @@
     [super updateViewConstraints];
 }
 
+#pragma mark - Private
 - (void)loadUserIcon {
     [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         NSString *iconUrlStr = [userItem.icon hasPrefix:@"http"] ? userItem.icon : SSJImageURLWithAPI(userItem.icon);
@@ -126,7 +128,7 @@
     if (!_userIcon) {
         _userIcon = [[UIImageView alloc] init];
         _userIcon.clipsToBounds = YES;
-        _userIcon.layer.borderWidth = 1;
+        _userIcon.layer.borderWidth = 2;
         _userIcon.layer.cornerRadius = 33;
         _userIcon.layer.borderColor = RGBCOLOR(217, 217, 217).CGColor;
     }

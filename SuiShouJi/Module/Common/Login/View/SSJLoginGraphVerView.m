@@ -19,11 +19,9 @@
 
 //@property (nonatomic, strong) UIButton *reChooseBtn;
 
-/**验证码输入框*/
-@property (nonatomic, strong) UITextField *verNumTextF;
 
-/**commit*/
-@property (nonatomic, strong) UIButton *commitBtn;
+
+
 @end
 
 @implementation SSJLoginGraphVerView
@@ -39,11 +37,16 @@
         
         self.layer.cornerRadius = 8;
         self.layer.masksToBounds = YES;
-        [self initBind];//信号绑定
+        
         self.backgroundColor = [UIColor whiteColor];
         [self updateConstraintsIfNeeded];
     }
     return self;
+}
+
+- (void)setVerViewModel:(SSJLoginVerifyPhoneNumViewModel *)verViewModel {
+    _verViewModel = verViewModel;
+    [self initBind];//信号绑定
 }
 
 - (void)initBind{
@@ -87,13 +90,13 @@
 - (void)show {
     if (self.superview) return;
     self.verNumTextF.text = nil;
+    [self.verNumTextF becomeFirstResponder];
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     @weakify(self);
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         @strongify(self);
         self.hidden = NO;
     } timeInterval:0.25 fininshed:NULL];
-    [self.verNumTextF becomeFirstResponder];
 }
 
 - (void)dismiss {
@@ -161,12 +164,6 @@
         _commitBtn = [[UIButton alloc] init];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
         _commitBtn.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-        @weakify(self);
-        [[_commitBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
-            @strongify(self);
-            //发送获取验证码请求
-            [self.verViewModel.getVerificationCodeCommand execute:nil];
-        }];
     }
     return _commitBtn;
 }
