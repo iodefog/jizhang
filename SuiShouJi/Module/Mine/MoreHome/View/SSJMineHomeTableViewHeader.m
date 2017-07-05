@@ -68,10 +68,15 @@
     self.headPotraitImage.size = CGSizeMake(64, 64);
     self.headPotraitImage.left = 20;
     self.headPotraitImage.centerY = (self.height - kBottomViewHeight) * 0.5;
-    self.nicknameLabel.top = self.headPotraitImage.top + 15;
-    self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
-    self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
-    self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
+    if (!self.geXingSignLabel.text.length) {
+        self.nicknameLabel.centerY = self.headPotraitImage.centerY;
+        self.nicknameLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
+    } else {
+        self.nicknameLabel.top = self.headPotraitImage.top + 15;
+        self.nicknameLabel.left = self.geXingSignLabel.left = CGRectGetMaxX(self.headPotraitImage.frame) + 10;
+        self.geXingSignLabel.top = CGRectGetMaxY(self.nicknameLabel.frame);
+        self.geXingSignLabel.size = CGSizeMake(self.width - CGRectGetMinX(self.geXingSignLabel.frame), 21);
+    }
     self.dengjiImage.left = CGRectGetMaxX(self.nicknameLabel.frame) + 10;
     self.dengjiImage.centerY = self.nicknameLabel.centerY;
     self.syncButton.size = CGSizeMake(self.width / 2 , kBottomViewHeight);
@@ -210,29 +215,25 @@
         [self.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
 
         [self.nicknameLabel sizeToFit];
+        
+        _geXingSignLabel.text = item.signature ? : @"";
+        
+        [_geXingSignLabel sizeToFit];
+        
+        if (!_geXingSignLabel.text.length) {
+            _geXingSignLabel.text = @"啥也不留";
+        }
+        
+        [self setNeedsDisplay];
+
     } else {
         self.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
+        _geXingSignLabel.text = @"";
         [self.nicknameLabel sizeToFit];
     }
-
 }
 
-- (void)setSignStr
-{
-    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-        if (userItem.signature.length < 1 || userItem.signature == nil) {
-            _geXingSignLabel.text = @"";
-            self.nicknameLabel.centerY = self.headPotraitImage.centerY;
-        }else{
-            _geXingSignLabel.text = userItem.signature;
-            self.nicknameLabel.top = self.headPotraitImage.top + 15;
-        }
-        self.dengjiImage.centerY = self.nicknameLabel.centerY;
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
-}
 
 -(void)setCheckInLevel:(SSJBookkeepingTreeLevel)checkInLevel{
     _checkInLevel = checkInLevel;
