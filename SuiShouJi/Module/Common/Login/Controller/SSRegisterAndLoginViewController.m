@@ -51,9 +51,11 @@
     [self.viewModel.netWorkService cancel];
 }
 
-- (void)dealloc {
-
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.tfRegYanZhenF becomeFirstResponder];
 }
+
 
 - (void)setUpConst {
     [self.tfRegYanZhenF mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -36,6 +36,10 @@
     [self.viewModel.netWorkService cancel];
 }
 
+- (void)dealloc {
+    
+}
+
 - (void)setUpUI {
     [self.scrollView addSubview:self.tipsL];
     [self.scrollView addSubview:self.tfPassword];

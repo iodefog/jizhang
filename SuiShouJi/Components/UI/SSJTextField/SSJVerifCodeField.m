@@ -141,7 +141,7 @@ static const NSInteger kCountdownLimit = 60;
 - (void)updateCountdown {
     if (self.countdown > 0) {
         self.getAuthCodeBtn.enabled = NO;
-        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds",(int)self.countdown] forState:UIControlStateDisabled];
+        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds后重新获取",(int)self.countdown] forState:UIControlStateDisabled];
     } else {
         self.getAuthCodeBtn.enabled = YES;
         [self invalidateTimer];
@@ -160,7 +160,7 @@ static const NSInteger kCountdownLimit = 60;
         _getAuthCodeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_getAuthCodeBtn setTitle:@"获取验证码" forState:UIControlStateNormal];
         [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateNormal];
-        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#f9cbd0"] forState:UIControlStateDisabled];
+        [_getAuthCodeBtn setTitleColor:[UIColor ssj_colorWithHex:@"#ea4a64"] forState:UIControlStateDisabled];
         [_getAuthCodeBtn ssj_setBorderStyle:SSJBorderStyleLeft];
         [_getAuthCodeBtn ssj_setBorderWidth:2];
         @weakify(self);

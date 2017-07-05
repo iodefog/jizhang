@@ -79,6 +79,8 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
 - (void)show
 {
+    //更新时间
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:SSJAppApplicationLunchTimeKey];
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     self.frame = CGRectMake(0, 0, 300, 340);
     self.center = keyWindow.center;
@@ -130,8 +132,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
     if (days > 30) {
         //弹出
         [self show];
-        //更新时间
-        [[NSUserDefaults standardUserDefaults] setObject:currentDate forKey:SSJAppApplicationLunchTimeKey];
+        
         return YES;
     }
     return NO;
