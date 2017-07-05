@@ -285,9 +285,8 @@ static const int kVerifyFailureTimesLimit = 5;
                 SSJDispatchMainSync(^{
                     if (self.finishHandle) {
                         self.finishHandle(self);
-                    } else {
-                        [self ssj_backOffAction];
                     }
+                    [self dismissViewControllerAnimated:YES completion:NULL];
                 });
             }
         }];
