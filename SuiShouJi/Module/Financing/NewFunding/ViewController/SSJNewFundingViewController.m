@@ -61,22 +61,17 @@
     self.titles = @[@[@"账户名称",@"账户余额",@"选择颜色"],@[@"备注"]];
     self.images = @[@[@"fund_name",@"fund_balance",@"fund_color"],@[@"fund_memo"]];
     if (!self.item) {
-        self.title = @"添加资金账户";
+        NSString *parentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
+        self.title = [NSString stringWithFormat:@"新建%@账户",parentName];
         self.item = [[SSJFinancingHomeitem alloc] init];
     } else {
-        self.title = @"编辑资金账户";
+        self.title = [NSString stringWithFormat:@"编辑%@账户",self.item.fundingParentName];
         self.navigationItem.rightBarButtonItem = self.rightButton;
     }
     
     if (!self.item.startColor.length || !self.item.endColor.length) {
         self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
         self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
-    }
-    
-    if (self.selectParent.length) {
-        self.item.fundingParentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
-        self.item.fundingIcon = [SSJFinancingHomeHelper fundIconForFundingParent:self.selectParent];
-        self.item.fundingParent = self.selectParent;
     }
     
     [self.view addSubview:self.tableview];

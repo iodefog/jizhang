@@ -597,7 +597,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
         item.image = @"add";
-        item.title = @"添加资金新的账户";
+        item.title = @"添加新的资金账户";
         [fundItems addObject:item];
         
         if (success) {

@@ -74,6 +74,11 @@
 @property (nonatomic) UIEdgeInsets contentInsets;
 
 /**
+ 每个label中的行数,默认是1,如果0自动计算行数
+ */
+@property (nonatomic) NSInteger numberOfLines;
+
+/**
  内容对其方式，默认UIControlContentHorizontalAlignmentCenter，此属性会影响布局
  注意：目前只实现了UIControlContentHorizontalAlignmentCenter、UIControlContentHorizontalAlignmentLeft、UIControlContentHorizontalAlignmentRight三种方式
  */

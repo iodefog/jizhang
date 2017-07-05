@@ -42,6 +42,7 @@ static const CGFloat kCornerRadius = 2;
         _separatorColor = [UIColor lightGrayColor];
         _titleFont = [UIFont systemFontOfSize:16];
         _rowHeight = 44;
+        _numberOfLines = 1;
         _minDisplayRowCount = 0;
         _maxDisplayRowCount = 0;
         _imageSize = CGSizeZero;
@@ -122,6 +123,11 @@ static const CGFloat kCornerRadius = 2;
         _separatorInset = separatorInset;
         _tableView.separatorInset = _separatorInset;
     }
+}
+
+- (void)setNumberOfLines:(NSInteger)numberOfLines {
+    _numberOfLines = numberOfLines;
+    [self.tableView reloadData];
 }
 
 - (void)setMinDisplayRowCount:(CGFloat)minDisplayRowCount {
@@ -349,6 +355,8 @@ static const CGFloat kCornerRadius = 2;
     if (!cell) {
         cell = [[SSJListMenuCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
+    
+    cell.textLabel.numberOfLines = self.numberOfLines;
     
     cell.cellItem = [_cellItems ssj_safeObjectAtIndex:indexPath.row];
     
