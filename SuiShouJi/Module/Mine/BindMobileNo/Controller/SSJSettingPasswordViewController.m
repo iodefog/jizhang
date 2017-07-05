@@ -128,12 +128,6 @@
 }
 
 - (void)setUpBindings {
-    self.viewModel.phoneNum = self.mobileNo;
-    self.authCodeField.viewModel = self.viewModel;
-    RAC(self.viewModel, verificationCode) = self.authCodeField.rac_textSignal;
-    RAC(self.viewModel, passwardNum) = self.passwordField.rac_textSignal;
-    RAC(self.bindingBtn, enabled) = self.viewModel.enableRegAndLoginSignal;
-    
     @weakify(self);
     RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
         @strongify(self);
@@ -161,6 +155,12 @@
                 break;
         }
     }];
+    
+    self.viewModel.phoneNum = self.mobileNo;
+    self.authCodeField.viewModel = self.viewModel;
+    RAC(self.viewModel, verificationCode) = self.authCodeField.rac_textSignal;
+    RAC(self.viewModel, passwardNum) = self.passwordField.rac_textSignal;
+    RAC(self.bindingBtn, enabled) = self.viewModel.enableRegAndLoginSignal;
 }
 
 - (void)executeBindMobileNoProcess {

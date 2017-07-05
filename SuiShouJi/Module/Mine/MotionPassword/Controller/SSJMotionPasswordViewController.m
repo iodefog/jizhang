@@ -63,15 +63,17 @@ static const int kVerifyFailureTimesLimit = 5;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self setupViews];
     [self updateNavigationBar];
+    [self.view setNeedsUpdateConstraints];
+    
     [self.view ssj_showLoadingIndicator];
     [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         self.userItem = userItem;
-        [self setupViews];
         [self loadUserIcon];
         [self setupBindings];
         [self verifyFingerPrintPwdIfNeeded];
-        [self.view setNeedsUpdateConstraints];
         [self.view ssj_hideLoadingIndicator];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
