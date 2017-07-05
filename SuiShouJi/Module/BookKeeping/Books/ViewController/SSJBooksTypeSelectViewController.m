@@ -14,6 +14,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJBooksTypeItem.h"
 #import "SSJBooksCollectionViewCell.h"
 #import "UIViewController+MMDrawerController.h"
+#import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJAdWebViewController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJBooksHeaderView.h"
@@ -185,12 +186,9 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                 [self.createShareBookTypeView show];
             } else {
                 //去登录
-                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
-                loginVC.backController = self;
-                loginVC.finishHandle = ^(UIViewController *controller) {
-                    [self.navigationController popToRootViewControllerAnimated:YES];
-                };
-                [self.navigationController pushViewController:loginVC animated:YES];
+//                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+//                [self.navigationController pushViewController:loginVC animated:YES];
+                [SSJLoginVerifyPhoneViewController reloginIfNeeded];
             }
             return;
         }

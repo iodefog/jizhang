@@ -712,10 +712,7 @@
  @return <#return value description#>
  */
 - (RACCommand *)getVerificationCodeCommand {
-    if (_getVerificationCodeCommand.executing) {//正在执行
-        
-    }
-    if (!_getVerificationCodeCommand) {
+//    if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -727,7 +724,7 @@
                 return value;
             }];
         }];
-    }
+//    }
     return _getVerificationCodeCommand;
 }
 
@@ -738,7 +735,7 @@
  @return <#return value description#>
  */
 - (RACCommand *)reGetVerificationCodeCommand {
-    if (!_reGetVerificationCodeCommand) {
+//    if (!_reGetVerificationCodeCommand) {
         _reGetVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -750,12 +747,12 @@
                     return [[[value objectForKey:@"results"] objectForKey:@"image"] base64ToImage];
             }];
         }];
-    }
+//    }
     return _reGetVerificationCodeCommand;
 }
 
 - (RACCommand *)registerAndLoginCommand {
-    if (!_registerAndLoginCommand) {
+//    if (!_registerAndLoginCommand) {
         _registerAndLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -789,12 +786,12 @@
                 [self registerSuccessWithDic:dict];
             }
         }];
-    }
+//    }
     return _registerAndLoginCommand;
 }
 
 - (RACCommand *)wxLoginCommand {
-    if (!_wxLoginCommand) {
+//    if (!_wxLoginCommand) {
         _wxLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -819,12 +816,12 @@
             @strongify(self);
             [self datawithDic:dict];
         }] ;
-    }
+//    }
     return _wxLoginCommand;
 }
 
 - (RACCommand *)qqLoginCommand {
-    if (!_qqLoginCommand) {
+//    if (!_qqLoginCommand) {
         _qqLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -848,12 +845,12 @@
             @strongify(self);
             [self datawithDic:dict];
         }] ;
-    }
+//    }
     return _qqLoginCommand;
 }
 
 - (RACCommand *)normalLoginCommand {
-    if (!_normalLoginCommand) {
+//    if (!_normalLoginCommand) {
         _normalLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
             RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
@@ -869,7 +866,7 @@
             @strongify(self);
             [self datawithDic:dict];
         }] ;
-    }
+//    }
     return _normalLoginCommand;
 }
 
