@@ -348,8 +348,8 @@
 
 
 - (void)datawithDic:(NSDictionary *)dict {
-    NSDictionary *result = [[dict objectForKey:@"results"] objectForKey:@"user"];
-    self.accesstoken = [dict objectForKey:@"accessToken"];
+    NSDictionary *result = [dict objectForKey:@"results"];
+    self.accesstoken = [result objectForKey:@"accessToken"];
     [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
         return @{@"userId":@"cuserid",
                  @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
@@ -357,7 +357,7 @@
                  @"icon":@"cicon",
                  @"openid":@"oauthid"};
     }];
-    _userItem = [SSJUserItem mj_objectWithKeyValues:result];
+    _userItem = [SSJUserItem mj_objectWithKeyValues:result[@"user"]];
     self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
     if (self.loginType != SSJLoginTypeNormal) {
         self.userItem.mobileNo = @"";
@@ -365,12 +365,12 @@
     self.userItem.loginPWD = @"";
     self.userItem.openId = self.openId;
     
-    self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
-    self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
-    self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
-    self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
-    self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
-    self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
+    self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBill"]];
+    self.fundInfoArray = [NSArray arrayWithArray:[result objectForKey:@"fundInfo"]];
+    self.booksTypeArray = [NSArray arrayWithArray:[result objectForKey:@"bookType"]];
+    self.membersArray = [NSArray arrayWithArray:[result objectForKey:@"bk_member"]];
+    self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[result objectForKey:@"userTree"]];
+    self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[result objectForKey:@"bookBillArray"]];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
         //                    __weak typeof(self) weakSelf = self;
@@ -473,7 +473,7 @@
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [self syncData];
-            [self.loadingView show];
+//            [self.loadingView show];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
@@ -488,33 +488,14 @@
          // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-                __weak typeof(self) weakSelf = self;
-                // 验证指纹密码
-                if ([userItem.fingerPrintState boolValue]) {
-                    LAContext *context = [[LAContext alloc] init];
-                    context.localizedFallbackTitle = @"";
-                    
-                    NSError *error = nil;
-                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-                        SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
-                        fingerPwdVC.context = context;
-                        fingerPwdVC.finishHandle = ^(UIViewController *controller) {
-                            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-                            UINavigationController *navi = [tabVC.viewControllers firstObject];
-                            UIViewController *homeController = [navi.viewControllers firstObject];
-                            
-                            controller.backController = homeController;
-                            [controller ssj_backOffAction];
-                        };
-                        fingerPwdVC.backController = self.vc.backController;
-                        [weakSelf.vc.navigationController pushViewController:fingerPwdVC animated:YES];
-                        [subscriber sendCompleted];
-                        return;
-                    }
-                }
                 
-                // 验证手势密码
-                if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
+                LAContext *context = [[LAContext alloc] init];
+                context.localizedFallbackTitle = @"";
+                BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+                BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
+                
+                if (motionPwdOpened) {
+                    // 验证手势密码
                     SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
                     motionVC.finishHandle = ^(UIViewController *controller) {
                         UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
@@ -526,17 +507,28 @@
                     };
                     motionVC.backController = self.vc.backController;
                     motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    [weakSelf.vc.navigationController pushViewController:motionVC animated:YES];
-                    [subscriber sendCompleted];
-                    return;
-                }
-                
-                if (self.vc.finishHandle) {
-                    self.vc.finishHandle(self.vc);
+                    [self.vc.navigationController pushViewController:motionVC animated:YES];
+                } else if (fingerPwdOpened) {
+                    // 验证指纹密码
+                    SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
+                    fingerPwdVC.context = context;
+                    fingerPwdVC.finishHandle = ^(UIViewController *controller) {
+                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+                        UINavigationController *navi = [tabVC.viewControllers firstObject];
+                        UIViewController *homeController = [navi.viewControllers firstObject];
+                        
+                        controller.backController = homeController;
+                        [controller ssj_backOffAction];
+                    };
+                    fingerPwdVC.backController = self.vc.backController;
+                    [self.vc.navigationController pushViewController:fingerPwdVC animated:YES];
                 } else {
-                    [self.vc ssj_backOffAction];
+                    if (self.vc.finishHandle) {
+                        self.vc.finishHandle(self.vc);
+                    } else {
+                        [self.vc ssj_backOffAction];
+                    }
                 }
-                
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
                 [subscriber sendError:error];

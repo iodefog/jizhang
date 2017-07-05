@@ -44,7 +44,7 @@
         BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
         BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
         
-        if ((motionPwdOpened && fingerPwdOpened) || motionPwdOpened) {
+        if (motionPwdOpened) {
             // 验证手势密码页面
             SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
             motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
