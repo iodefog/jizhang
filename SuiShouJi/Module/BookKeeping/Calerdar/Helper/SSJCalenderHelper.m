@@ -98,9 +98,9 @@
         NSString *userId = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
         
-        income = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ?",date,booksid,@(SSJBillTypeIncome)];
+        income = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ? and uc.operatortype <> 2 and bt.istate <> 2",date,booksid,@(SSJBillTypeIncome)];
         
-        expence = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ?",date,booksid,@(SSJBillTypePay)];
+        expence = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.id and bt.itype = ? and uc.operatortype <> 2 and bt.istate <> 2",date,booksid,@(SSJBillTypePay)];
 
         SSJDispatch_main_async_safe(^{
             success(income,expence);

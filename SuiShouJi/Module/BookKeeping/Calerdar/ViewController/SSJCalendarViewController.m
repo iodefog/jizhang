@@ -82,9 +82,8 @@
     [self.view addSubview:self.shareButton];
     [self.tableView registerClass:[SSJCalendarTabelViewHeaderView class] forHeaderFooterViewReuseIdentifier:@"FundingDetailDateHeader"];
     [self.tableView registerClass:[SSJCalendarTableViewCell class] forCellReuseIdentifier:@"BillingChargeCellIdentifier"];
-    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"canleder_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
+    UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightItem;
-
 }
 
 -(void)viewWillAppear:(BOOL)animated{
