@@ -473,7 +473,7 @@
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [self syncData];
-//            [self.loadingView show];
+            [self.loadingView show];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
