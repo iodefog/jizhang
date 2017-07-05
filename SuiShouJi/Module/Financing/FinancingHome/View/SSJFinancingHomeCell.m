@@ -226,7 +226,7 @@ static const CGFloat kRadius = 12.f;
         if (item.cardType == SSJCrediteCardTypeCrediteCard) {
             self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         } else {
-            self.fundingImage.image = [[UIImage imageNamed:@"ft_huabei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            self.fundingImage.image = [[UIImage imageNamed:@"ft_mayihuabei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
         self.fundingNameLabel.text = item.cardName;
         [self.fundingNameLabel sizeToFit];

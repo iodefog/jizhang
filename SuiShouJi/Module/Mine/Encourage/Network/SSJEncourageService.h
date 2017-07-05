@@ -37,8 +37,6 @@
 // 新浪微博id
 @property (readonly , nonatomic, copy) NSString *sinaWeiboId;
 
-@property (readonly , nonatomic, copy) SSJAppUpdateModel *updateModel;
-
-
+@property (nonatomic, strong) SSJAppUpdateModel *updateModel;
 
 @end
