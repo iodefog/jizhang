@@ -7,9 +7,11 @@
 //
 
 #import "SSJNewAboutUsViewController.h"
+#import "SSJNormalWebViewController.h"
 
 #import "SSJEncourageHeaderView.h"
 #import "SSJEncourageCell.h"
+#import "SSJAboutUsFooterView.h"
 
 #import "SSJEncourageService.h"
 #import "SSJShareManager.h"
@@ -32,6 +34,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) SSJEncourageHeaderView *header;
+
+@property (nonatomic, strong) SSJAboutUsFooterView *footerView;
 
 @property (nonatomic,strong) NSArray *titles;
 
@@ -89,7 +93,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             [WXApi openWXApp];
         }];
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制微信公众号" message:@"有鱼记账,帮你打利好你的小家" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"已复制微信公众号" message:@"有鱼记账,帮你打理好你的小家" preferredStyle:UIAlertControllerStyleAlert];
         
         [alert addAction:cancel];
         
@@ -189,6 +193,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.tableHeaderView = self.header;
+        _tableView.tableFooterView = self.footerView;
         [_tableView registerClass:[SSJEncourageCell class] forCellReuseIdentifier:SSJEncourageCellIndetifer];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -203,6 +208,26 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _header = [[SSJEncourageHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 180)];
     }
     return _header;
+}
+
+- (SSJAboutUsFooterView *)footerView {
+    if (!_footerView) {
+        _footerView = [[SSJAboutUsFooterView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 80)];
+        @weakify(self);
+        _footerView.buttonClickBlock = ^(NSString *title) {
+            @strongify(self);
+            if ([title isEqualToString:@"团队介绍"]) {
+                SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://jz.youyuwo.com/about.html"]];
+                webVc.title = @"团队介绍";
+                [self.navigationController pushViewController:webVc animated:YES];
+            } else if ([title isEqualToString:@"用户协议"]) {
+                SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:SSJUserProtocolUrl]];
+                webVc.title = @"用户协议与隐私说明";
+                [self.navigationController pushViewController:webVc animated:YES];
+            }
+        };
+    }
+    return _footerView;
 }
 
 #pragma mark - Private
