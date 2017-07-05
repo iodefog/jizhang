@@ -302,7 +302,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [weakSelf.FundingTypeSelectView dismiss];
         };
         _FundingTypeSelectView.dismissBlock = ^{
-            [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+            if ([[weakSelf.navigationController.viewControllers lastObject] isKindOfClass:[SSJRecordMakingViewController class]]) {
+                [weakSelf.billTypeInputView.moneyInput becomeFirstResponder];
+            }
         };
     }
     return _FundingTypeSelectView;
