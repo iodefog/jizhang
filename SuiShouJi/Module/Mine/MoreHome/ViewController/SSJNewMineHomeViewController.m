@@ -13,7 +13,7 @@
 #import "SSJReminderViewController.h"
 #import "SSJCircleChargeSettingViewController.h"
 #import "SSJThemeHomeViewController.h"
-#import "SSJProductAdviceViewController.h"
+#import "SSJHelpAndAdviceViewController.h"
 #import "SSJAdWebViewController.h"
 #import "SSJSettingViewController.h"
 #import "SSJAnnouncementsListViewController.h"
@@ -165,7 +165,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     
     //建议与咨询
     if ([item.title isEqualToString:kTitle4]) {
-        SSJProductAdviceViewController *adviceVC = [[SSJProductAdviceViewController alloc] init];
+        SSJHelpAndAdviceViewController *adviceVC = [[SSJHelpAndAdviceViewController alloc] init];
         [self.navigationController pushViewController:adviceVC animated:YES];
     }
     
