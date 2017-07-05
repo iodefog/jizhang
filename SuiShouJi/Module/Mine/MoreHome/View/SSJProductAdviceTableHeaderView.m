@@ -110,9 +110,8 @@
 {
     if ([service.returnCode isEqualToString:@"1"]) {
         [self clearAdviceContext];
-    } else {
-        [CDAutoHideMessageHUD showMessage:service.desc];
     }
+    [CDAutoHideMessageHUD showMessage:service.desc];
 }
 
 #pragma mark -Getter

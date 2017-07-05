@@ -14,6 +14,8 @@
     self.showLodingIndicator = NO;
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     [dict setObject:@(1) forKey:@"isystem"];
+    [dict setObject:@(1) forKey:@"type"];
+    [dict setObject:SSJUSERID() forKey:@"cuserid"];
     [dict setObject:SSJAppVersion() forKey:@"cversion"];
     [dict setObject:SSJPhoneModel() forKey:@"cmodel"];
     [dict setObject:@(SSJSystemVersion()) forKey:@"cphoneos"];
