@@ -345,13 +345,17 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                 if (!self.debtOrbalance) {
                     cell.cellTitle = @"当前欠款";
                     cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-                    cell.textInput.text = [[NSString stringWithFormat:@"%f",-currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
-                    self.item.cardBalance = -currentMoney;
+                    if (cell.textInput.text.length) {
+                        cell.textInput.text = [[NSString stringWithFormat:@"%f",-currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        self.item.cardBalance = -currentMoney;
+                    }
                 } else {
                     cell.cellTitle = @"当前余额";
                     cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-                    cell.textInput.text = [[NSString stringWithFormat:@"%f",currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
-                    self.item.cardBalance = currentMoney;
+                    if (cell.textInput.text.length) {
+                        cell.textInput.text = [[NSString stringWithFormat:@"%f",currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+                        self.item.cardBalance = currentMoney;
+                    }
 
                 }
             }];
@@ -808,7 +812,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
     [tempArr addObject:firstItem];
     
-    NSMutableAttributedString *secondTitle = [[NSMutableAttributedString alloc] initWithString:@"当前余额\n输入数字为负数，代表当前信用卡有余额"];
+    NSMutableAttributedString *secondTitle = [[NSMutableAttributedString alloc] initWithString:@"当前余额\n输入数字为正数，代表当前信用卡有余额"];
     
     [secondTitle addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, secondTitle.length)];
 
