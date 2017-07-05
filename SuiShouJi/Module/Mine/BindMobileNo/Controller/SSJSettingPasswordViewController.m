@@ -199,7 +199,7 @@
 
 - (RACSignal *)verifyPassword {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        if (SSJVerifyPassword(self.authCodeField.text)) {
+        if (SSJVerifyPassword(self.passwordField.text)) {
             [subscriber sendCompleted];
         } else {
             [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"密法格式不正确，请输入字母和数字的组合"}]];

@@ -31,6 +31,8 @@ NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
 NSString *const SSJSyncPrivateKey = @"accountbook";
 
+NSString *const SSJLoginPWDEncryptionKey = @"http://www.9188.com/";
+
 NSString *const SSJUserProtocolUrl = @"http://jz.youyuwo.com/protocol.html";
 
 NSString *const SSJLastPopTimeKey = @"lastPopTimeKey";

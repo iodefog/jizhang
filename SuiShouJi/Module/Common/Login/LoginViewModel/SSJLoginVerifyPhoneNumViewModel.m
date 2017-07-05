@@ -171,7 +171,7 @@
     //手机系统版本
     NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
     
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     
     NSString *strSign=[NSString stringWithFormat:@"signType=%@&merchantacctId=%@&mobileNo=%@&pwd=%@&key=%@",strSignType,strAcctID,useraccount,encryptPassword,strKey];
@@ -293,7 +293,7 @@
     //手机系统版本
     NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
     
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
     [dict setObject:useraccount forKey:@"cmobileno"];
@@ -330,7 +330,7 @@
  */
 - (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
     self.netWorkService.showLodingIndicator = YES;
-    NSString *encryptPassword = [password stringByAppendingString:@"http://www.9188.com/"];
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
