@@ -34,6 +34,9 @@
     self.authCode = authCode;
     self.password = password;
     
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
+    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+    
     NSString *authCodeType = nil;
     switch (type) {
         case SSJForgetPasswordType:
@@ -47,7 +50,7 @@
     
     NSDictionary *params = @{@"cmobileNo":mobileNo,
                              @"yzm":authCode,
-                             @"newPwd":password,
+                             @"newPwd":encryptPassword,
                              @"yzmType":authCodeType};
     [self request:@"/chargebook/user/forget_pwd.go" params:params success:success failure:failure];
 }

@@ -28,10 +28,14 @@
     self.mobileNo = mobileNo;
     self.authCode = authCode;
     self.password = password;
+    
+    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
+    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+    
     NSDictionary *params = @{@"cuserId":SSJUSERID(),
                              @"cmobileNo":mobileNo,
                              @"yzm":authCode,
-                             @"cpwd":password,
+                             @"cpwd":encryptPassword,
                              @"mobileType":@2};
     [self requestWithParams:params success:success failure:failure];
 }
