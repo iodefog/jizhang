@@ -75,7 +75,7 @@ static NSString *const kClearDataTitle = @"清理数据";
     [self updateAppearance];
 }
 
-- (void)viewWillAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self reorganiseDatas];
 }
@@ -185,47 +185,59 @@ static NSString *const kClearDataTitle = @"清理数据";
 #pragma mark - Private
 - (void)reorganiseDatas {
     @weakify(self);
-    [[self loadUserItemIfNeeded] subscribeNext:^(NSNumber *bindValue) {
-        @strongify(self);
-        NSArray *section1 = [bindValue boolValue] ? @[kMobileNoTitle, kModifyPwdTitle] : @[kBindMobileNoTitle];
-        
-        NSArray *section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
-        NSError *error = nil;
-        if ([self.context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-            section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
-        } else {
-            section2 = @[kMotionPwdTitle];
-        }
-        
-        NSArray *section3 = @[kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
-        self.titles = @[section1, section2, section3];
-        [self.tableView reloadData];
-    } error:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
-}
-
-- (RACSignal *)loadUserItemIfNeeded {
-    @weakify(self);
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
         if (SSJIsUserLogined()) {
             [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
                 self.userItem = userItem;
-                self.fingerPrintPwdCtrl.on = [self.userItem.fingerPrintState boolValue];
-                self.motionPwdCtrl.on = [self.userItem.motionPWDState boolValue] && self.userItem.motionPWD.length;
-                [subscriber sendNext:@(userItem.mobileNo.length > 0)];
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
                 [subscriber sendError:error];
             }];
         } else {
-            self.fingerPrintPwdCtrl.on = NO;
-            self.motionPwdCtrl.on = NO;
-            [subscriber sendNext:@(NO)];
             [subscriber sendCompleted];
         }
         return nil;
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        @strongify(self);
+        
+        BOOL hasBindMobileNo = SSJIsUserLogined() && self.userItem.mobileNo.length > 0;
+        NSArray *section1 = hasBindMobileNo ? @[kMobileNoTitle, kModifyPwdTitle] : @[kBindMobileNoTitle];
+        
+        BOOL supportTouchID = NO;
+        NSError *error = nil;
+        NSArray *section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
+        if ([self.context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
+            section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
+            supportTouchID = YES;
+        } else {
+            switch (error.code) {
+                case LAErrorTouchIDNotEnrolled: // 没有录入指纹
+                    section2 = @[kFingerPrintPwdTitle, kMotionPwdTitle];
+                    break;
+                    
+                case LAErrorTouchIDNotAvailable: // 设备不支持指纹
+                    section2 = @[kMotionPwdTitle];
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
+        NSArray *section3 = @[kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
+        self.titles = @[section1, section2, section3];
+        [self.tableView reloadData];
+        
+        if (SSJIsUserLogined()) {
+            self.fingerPrintPwdCtrl.on = [self.userItem.fingerPrintState boolValue] && supportTouchID;
+            self.motionPwdCtrl.on = [self.userItem.motionPWDState boolValue] && self.userItem.motionPWD.length;
+        } else {
+            self.fingerPrintPwdCtrl.on = NO;
+            self.motionPwdCtrl.on = NO;
+        }
     }];
 }
 
@@ -288,13 +300,21 @@ static NSString *const kClearDataTitle = @"清理数据";
                 [self.context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键验证指纹解锁" reply:^(BOOL success, NSError * _Nullable error) {
                     self.context = nil;
                     SSJDispatchMainSync(^{
-                        if (!success) {
+                        if (success) {
+                            self.userItem.fingerPrintState = @"1";
+                            [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
+                                [SSJAlertViewAdapter showError:error];
+                            }];
+                        } else {
+                            if (error.code == LAErrorTouchIDNotEnrolled) {
+                                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您尚未设置Touch ID，请在系统设置中添加指纹" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                            }
                             ctrl.on = NO;
                         }
                     });
                 }];
             } else {
-                self.userItem.fingerPrintState = [NSString stringWithFormat:@"%d", ctrl.on];
+                self.userItem.fingerPrintState = @"0";
                 [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
                     [SSJAlertViewAdapter showError:error];
                 }];
