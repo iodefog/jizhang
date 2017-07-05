@@ -344,7 +344,7 @@ static const NSInteger kMemoTag = 1002;
         __weak typeof(self) weakSelf = self;
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem) {
-            if ([fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
+            if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
                 newFundingVC.needLoanOrNot = NO;
                 newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
@@ -382,7 +382,7 @@ static const NSInteger kMemoTag = 1002;
         __weak typeof(self) weakSelf = self;
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if ([fundingItem.fundingName isEqualToString:@"添加资金新的账户"]) {
+            if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
                 newFundingVC.needLoanOrNot = NO;
                 newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {

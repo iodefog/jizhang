@@ -335,7 +335,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             _transferOutFundingTypeSelect.selectFundID = self.item.transferInId;
         }
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
                 _transferInItem = fundingItem;
             }else{
@@ -367,7 +367,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             _transferOutFundingTypeSelect.selectFundID = self.item.transferOutId;
         }
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加资金新的账户"])
+            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
                 _transferOutItem = fundingItem;
             }else{
