@@ -166,7 +166,7 @@ static const NSInteger kMemoTag = 1002;
     } else if ([model.title isEqualToString:kMemo]) {
         
         circleModifyCell.cellInput.hidden = NO;
-        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"15个字内(选填)" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         circleModifyCell.cellInput.text = self.item.transferMemo;
         circleModifyCell.cellInput.tag = kMemoTag;
         circleModifyCell.cellInput.delegate = self;
