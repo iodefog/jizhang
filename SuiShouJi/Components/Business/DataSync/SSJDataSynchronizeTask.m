@@ -145,10 +145,8 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     
     //  上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
-        
         // 因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
-            
             if (error) {
                 if (failure) {
                     failure(error);
@@ -280,7 +278,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     }
     
 #ifdef DEBUG
-    [syncData writeToFile:@"/Users/ricky/Desktop/sync_data.txt" atomically:YES];
+    [syncData writeToFile:[SSJDocumentPath() stringByAppendingPathComponent:@"sync_data.txt"] atomically:YES];
 #endif
     
     return syncData;

@@ -7,7 +7,7 @@
 //
 
 #import "SSJSyncTable.h"
-#import "FMDB.h"
+#import "SSJDataBaseQueue.h"
 
 static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
 
@@ -51,6 +51,14 @@ static NSString *const kSSJSuccessSyncVersionKey = @"kSSJSuccessSyncVersionKey";
     
     SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
     return NO;
+}
+
++ (BOOL)clearSyncRecordsWithUserId:(NSString *)userID {
+    __block BOOL successful = YES;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        successful = [db executeUpdate:@"delete from bk_sync where cuserid = ?", userID];
+    }];
+    return successful;
 }
 
 @end
