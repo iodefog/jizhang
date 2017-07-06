@@ -141,7 +141,6 @@ static NSString *const kQQGroupIdKey = @"kQQGroupIdKey";
             lastSyncTime = [NSString stringWithFormat:@"最后同步日期  %@", lastSyncTime];
         }
         
-        
         NSArray *section1 = @[[SSJSyncSettingTableViewCellItem itemWithTitle:@"仅在Wi-Fi自动同步"
                                                                accessoryType:(self.syncType == SSJSyncSettingTypeWIFI ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone)],
                               [SSJSyncSettingTableViewCellItem itemWithTitle:@"有网络连接时自动同步"
