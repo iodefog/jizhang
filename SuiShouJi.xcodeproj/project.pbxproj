@@ -592,6 +592,8 @@
 		7D1D7F461C86DB520001F72A /* SSJUserBudgetSyncTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F451C86DB520001F72A /* SSJUserBudgetSyncTable.m */; };
 		7D1D7F4A1C87EC660001F72A /* SSJRegularManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1D7F491C87EC660001F72A /* SSJRegularManager.m */; };
 		7D1DB4361D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D1DB4351D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m */; };
+		7D21C4DE1F0E116D0059BE83 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C82933D1ED56FBE0038AAA8 /* YYAnalytics.framework */; };
+		7D21C4DF1F0E116D0059BE83 /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C82933D1ED56FBE0038AAA8 /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7D22A2E61E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		7D22A2E91E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
 		7D22A2EB1E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D22A2E51E4F10C300190CEB /* SSJFundingTransferListPeriodCellItem.m */; };
@@ -9984,6 +9986,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				7D21C4DF1F0E116D0059BE83 /* YYAnalytics.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11666,6 +11669,7 @@
 				7DBB412E1E55C4E00075E638 /* CoreLocation.framework in Frameworks */,
 				7DBB41301E55C4E00075E638 /* SystemConfiguration.framework in Frameworks */,
 				7DBB41311E55C4E00075E638 /* CoreTelephony.framework in Frameworks */,
+				7D21C4DE1F0E116D0059BE83 /* YYAnalytics.framework in Frameworks */,
 				9C8293431ED5738A0038AAA8 /* YYAnalytics.framework in Frameworks */,
 				7DBB41321E55C4E00075E638 /* AudioToolbox.framework in Frameworks */,
 				7DBB41331E55C4E00075E638 /* libz.tbd in Frameworks */,
