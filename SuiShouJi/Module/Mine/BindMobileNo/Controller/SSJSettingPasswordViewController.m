@@ -191,9 +191,6 @@
         [SSJAlertViewAdapter showError:error];
     } completed:^{
         [self goBackToSettingPage];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self.successAlertView showWithDesc:@"修改密码成功"];
-        });
     }];
 }
 
