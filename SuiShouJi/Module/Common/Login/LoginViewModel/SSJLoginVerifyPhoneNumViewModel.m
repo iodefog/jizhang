@@ -142,13 +142,13 @@
             [subscriber sendNext:service.rootElement];
             [subscriber sendCompleted];
         }else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
+            [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
             [subscriber sendError:nil];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -202,7 +202,7 @@
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
         [subscriber sendError:error];
-        [CDAutoHideMessageHUD showMessage:service.desc];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -316,8 +316,8 @@
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [subscriber sendError:service.error];
     }];
 }
 
