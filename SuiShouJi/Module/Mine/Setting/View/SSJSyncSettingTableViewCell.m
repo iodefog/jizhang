@@ -35,20 +35,11 @@
     return self;
 }
 
-//-(void)layoutSubviews{
-//    [super layoutSubviews];
-//    self.titleLabel.left = 10;
-//    self.titleLabel.centerY = self.height / 2;
-//    self.checkMarkImage.size = CGSizeMake(17, 17);
-//    self.checkMarkImage.right = self.width - 10;
-//    self.checkMarkImage.centerY = self.height / 2;
-//}
-
 - (void)updateConstraints {
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(17);
         make.left.mas_equalTo(15);
-        make.right.mas_lessThanOrEqualTo(-15);
+//        make.right.mas_lessThanOrEqualTo(-15);
         make.bottom.mas_equalTo(-17);
     }];
     [self.checkMarkImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -92,22 +83,14 @@
     
     [[RACObserve(item, accessoryType) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(id x) {
         if (item.accessoryType == UITableViewCellAccessoryNone) {
-            self.selected = NO;
+            self.checkMarkImage.hidden = YES;
         } else if (item.accessoryType == UITableViewCellAccessoryCheckmark) {
-            self.selected = YES;
+            self.checkMarkImage.hidden = NO;
         } else if (item.accessoryType == UITableViewCellAccessoryDisclosureIndicator) {
+            self.checkMarkImage.hidden = YES;
             self.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }];
-}
-
--(void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-    if (selected) {
-        self.checkMarkImage.hidden = NO;
-    }else{
-        self.checkMarkImage.hidden = YES;
-    }
 }
 
 @end
