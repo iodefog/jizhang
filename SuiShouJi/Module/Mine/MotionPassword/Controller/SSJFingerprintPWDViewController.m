@@ -102,21 +102,30 @@
             });
         } else {
             if (error.code == LAErrorTouchIDNotEnrolled) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"重新登录" handler:^(SSJAlertViewAction *action){
-                    [self relogin];
-                }], nil];
+                // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”
+                SSJUserItem *userItem = [[SSJUserItem alloc] init];
+                userItem.userId = SSJUSERID();
+                userItem.fingerPrintState = @"0";
+                [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
+                
+                [self relogin:^{
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                }];
             }
         }
     }];
 }
 
 // 重新登录
-- (void)relogin {
+- (void)relogin:(void(^)())completion {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
         loginVC.finishHandle = self.finishHandle;
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
+        if (completion) {
+            completion();
+        }
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
@@ -158,7 +167,11 @@
         _changeAccountBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_changeAccountBtn setTitle:@"登陆其它账号" forState:UIControlStateNormal];
         [_changeAccountBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_changeAccountBtn addTarget:self action:@selector(relogin) forControlEvents:UIControlEventTouchUpInside];
+        @weakify(self);
+        [[_changeAccountBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [self relogin:NULL];
+        }];
     }
     return _changeAccountBtn;
 }
