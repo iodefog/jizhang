@@ -10,6 +10,7 @@
 #import "SSJNavigationController.h"
 #import "SSJFingerprintPWDViewController.h"
 #import "SSJMotionPasswordViewController.h"
+#import "SSJLoginVerifyPhoneViewController.h"
 
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJStartUpgradeAlertView.h"
@@ -39,10 +40,14 @@
     
     [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState", @"fingerPrintState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         
+        BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
+        
         LAContext *context = [[LAContext alloc] init];
         context.localizedFallbackTitle = @"";
-        BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
-        BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
+        BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue];
+        
+        NSError *error = nil;
+        BOOL canEvaluateFingerPwd = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
         
         if (motionPwdOpened) {
             // 验证手势密码页面
@@ -55,7 +60,10 @@
             };
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:motionVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
-        } else if (fingerPwdOpened) {
+            
+        } else if (fingerPwdOpened
+                   && canEvaluateFingerPwd) {
+            // 验证指纹密码页面
             SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
             fingerPwdVC.context = context;
             fingerPwdVC.finishHandle = ^(UIViewController *controller) {
@@ -65,6 +73,26 @@
             };
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
+            
+        } else if (fingerPwdOpened
+                   && !canEvaluateFingerPwd
+                   && error.code == LAErrorTouchIDNotEnrolled) {
+            // 重新登录
+            SSJClearLoginInfo();
+            [SSJUserTableManager reloadUserIdWithSuccess:^{
+                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+                loginVC.finishHandle = ^(UIViewController *controller) {
+                    if (completion) {
+                        completion(YES);
+                    }
+                };
+                SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
+                [currentVC presentViewController:naviVC animated:animated completion:NULL];
+                
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"重新登录" handler:NULL], nil];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         } else {
             if (completion) {
                 completion(NO);

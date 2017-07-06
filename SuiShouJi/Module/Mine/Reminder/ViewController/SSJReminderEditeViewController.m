@@ -270,8 +270,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.remindMemo = text;
     }
     
-    textField.text = text;
-    return NO;
+    return YES;
 }
 
 #pragma mark - Event

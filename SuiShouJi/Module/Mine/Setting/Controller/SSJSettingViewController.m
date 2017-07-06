@@ -68,16 +68,6 @@ static NSString *const kClearDataTitle = @"清理数据";
     return self;
 }
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    if (SSJIsUserLogined()) {
-        [self.view addSubview:self.logoutBtn];
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kLogoutButtonHeight, 0);
-    }
-    [self updateAppearance];
-}
-
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self reorganiseDatas];
@@ -241,10 +231,14 @@ static NSString *const kClearDataTitle = @"清理数据";
         if (SSJIsUserLogined()) {
             self.fingerPrintPwdCtrl.on = [self.userItem.fingerPrintState boolValue] && supportTouchID;
             self.motionPwdCtrl.on = [self.userItem.motionPWDState boolValue] && self.userItem.motionPWD.length;
+            
+            [self.view addSubview:self.logoutBtn];
+            self.tableView.contentInset = UIEdgeInsetsMake(0, 0, kLogoutButtonHeight, 0);
         } else {
             self.fingerPrintPwdCtrl.on = NO;
             self.motionPwdCtrl.on = NO;
         }
+        [self updateAppearance];
     }];
 }
 

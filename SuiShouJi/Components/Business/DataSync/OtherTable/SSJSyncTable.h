@@ -38,4 +38,12 @@
  */
 + (BOOL)insertSuccessSyncVersion:(int64_t)version forUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
+/**
+ 清空用户的所有同步记录
+
+ @param userID 用户id
+ @return 是否清空成功
+ */
++ (BOOL)clearSyncRecordsWithUserId:(NSString *)userID;
+
 @end

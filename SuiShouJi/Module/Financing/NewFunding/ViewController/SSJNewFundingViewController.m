@@ -64,6 +64,9 @@
         NSString *parentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
         self.title = [NSString stringWithFormat:@"新建%@账户",parentName];
         self.item = [[SSJFinancingHomeitem alloc] init];
+        self.item.fundingParent = self.selectParent;
+        self.item.fundingIcon = [SSJFinancingHomeHelper fundIconForFundingParent:self.selectParent];
+
     } else {
         self.title = [NSString stringWithFormat:@"编辑%@账户",self.item.fundingParentName];
         self.navigationItem.rightBarButtonItem = self.rightButton;
@@ -253,6 +256,61 @@
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
+-(void)saveButtonClicked:(id)sender {
+    self.item.fundingName = _nameTextField.text;
+    self.item.fundingAmount = [_amountTextField.text doubleValue];
+    self.item.fundingMemo = _memoTextField.text;
+    
+    NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
+    NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
+    if (![numberPre evaluateWithObject:_amountTextField.text]) {
+        [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
+        return;
+    }
+    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
+    if (![db open]) {
+        SSJPRINT(@"Could not open db");
+    }
+    if ([_nameTextField.text isEqualToString:@""]) {
+        [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
+        return;
+    }
+    if (_nameTextField.text.length > 13) {
+        [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
+        return;
+    }
+    if (_memoTextField.text.length > 15) {
+        [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
+        return;
+    }
+    if ([SSJFinancingStore checkWhetherSameFundingNameExsitsWith:_item]) {
+        [CDAutoHideMessageHUD showMessage:@"已经有相同名称的资金帐户"];
+        return;
+        
+    }
+    __weak typeof(self) weakSelf = self;
+    [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
+        if (weakSelf.addNewFundBlock) {
+            weakSelf.addNewFundBlock(item);
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        if (item.fundOperatortype == 0) {
+            UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
+            [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
+        } else {
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+-(void)closeButtonClicked:(id)sender{
+    [self ssj_backOffAction];
+}
+
+
 - (void)textDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;
     if ([textField isKindOfClass:[UITextField class]]) {
@@ -333,59 +391,6 @@
     }];
 }
 
--(void)saveButtonClicked:(id)sender {
-    self.item.fundingName = _nameTextField.text;
-    self.item.fundingAmount = [_amountTextField.text doubleValue];
-    self.item.fundingMemo = _memoTextField.text;
-    
-    NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
-    NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
-    if (![numberPre evaluateWithObject:_amountTextField.text]) {
-        [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
-        return;
-    }
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        SSJPRINT(@"Could not open db");
-    }
-    if ([_nameTextField.text isEqualToString:@""]) {
-        [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
-        return;
-    }
-    if (_nameTextField.text.length > 13) {
-        [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
-        return;
-    }
-    if (_memoTextField.text.length > 15) {
-        [CDAutoHideMessageHUD showMessage:@"备注不能超过15个字"];
-        return;
-    }
-    if ([SSJFinancingStore checkWhetherSameFundingNameExsitsWith:_item]) {
-        [CDAutoHideMessageHUD showMessage:@"已经有相同名称的资金帐户"];
-        return;
-
-    }
-    __weak typeof(self) weakSelf = self;
-    [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
-        if (weakSelf.addNewFundBlock) {
-            weakSelf.addNewFundBlock(item);
-        }
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        if (item.fundOperatortype == 0) {
-            UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
-            [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
-        } else {
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-
-        }
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
--(void)closeButtonClicked:(id)sender{
-    [self ssj_backOffAction];
-}
 
 - (void)transferTextDidChange:(NSNotification *)notification {
     UITextField *textField = notification.object;

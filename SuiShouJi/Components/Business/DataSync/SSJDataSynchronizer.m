@@ -15,6 +15,7 @@
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJDomainManager.h"
 #import "SSJShareBooksMemberKickedOutAlerter.h"
+#import "SSJSyncTable.h"
 
 @interface SSJSynchronizeBlock : NSObject
 
@@ -227,11 +228,13 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                 }], nil];
             } else if (error.code == -2000) {
                 // 例如同步一条流水失败，可能是流水依赖的资金账户或者收支类别没有同步给服务端，这种情况就会导致－2000
+                // 出现这类情况要清空当前用户的同步记录，然后将所有数据都同步到服务端
+                // 为了防止死循环，只做一次处理
                 BOOL hasResync = [self.userInfo[task.userId] boolValue];
                 if (!hasResync) {
                     shouldPerformFailuer = NO;
-                    
                     self.userInfo[task.userId] = @(YES);
+                    [SSJSyncTable clearSyncRecordsWithUserId:task.userId];
                     void (^success)() = [self.dataSuccessBlocks block];
                     void (^failure)() = [self.dataFailureBlocks block];
                     [self startSyncWithSuccess:success failure:failure];
