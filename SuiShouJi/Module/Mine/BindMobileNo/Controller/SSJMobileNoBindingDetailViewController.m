@@ -26,6 +26,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"手机号";
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -37,6 +38,7 @@
         [self updateAppearance];
         [self.view setNeedsUpdateConstraints];
     }];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)updateViewConstraints {
@@ -88,9 +90,14 @@
 }
 
 - (void)updateAppearance {
-    self.descLab.textColor = SSJ_MAIN_COLOR;
-    [self.changeBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
-    [self.changeBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
+    UIColor *mainColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+    self.descLab.textColor = mainColor;
+    
+    UIColor *normalColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
+    [self.changeBtn ssj_setBackgroundColor:normalColor forState:UIControlStateNormal];
+    
+    UIColor *disableColor = [normalColor colorWithAlphaComponent:SSJButtonDisableAlpha];
+    [self.changeBtn ssj_setBackgroundColor:disableColor forState:UIControlStateDisabled];
 }
 
 - (void)updateMobileNoLab:(NSString *)mobileNo {

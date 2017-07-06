@@ -12,6 +12,8 @@ const int64_t SSJDefaultSyncVersion = -1;
 
 const float SSJMaskAlpha = 0.3;
 
+const float SSJButtonDisableAlpha = 0.2;
+
 //网络请求事件间隔
 const NSTimeInterval SSJRequestTimeDuration = 5;
 

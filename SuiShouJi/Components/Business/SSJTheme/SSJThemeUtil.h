@@ -29,7 +29,7 @@
 
 #define SSJ_BUTTON_NORMAL_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor]
 
-#define SSJ_BUTTON_DISABLE_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:0.5]
+#define SSJ_BUTTON_DISABLE_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:SSJButtonDisableAlpha]
 
 #define SSJ_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]
 
