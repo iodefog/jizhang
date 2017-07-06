@@ -9,6 +9,7 @@
 #import "SSJShareBooksUrlHandle.h"
 #import "SSJInviteCodeJoinViewController.h"
 #import "SSJLoginVerifyPhoneViewController.h"
+#import "SSJNavigationController.h"
 
 @implementation SSJShareBooksUrlHandle
 
@@ -35,8 +36,10 @@
         SSJInviteCodeJoinViewController *codeInviteVc = [[SSJInviteCodeJoinViewController alloc] init];
         codeInviteVc.inviteCode = inviteCode;
         [SSJVisibalController().navigationController pushViewController:codeInviteVc animated:NO];
+        
         SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
-        [SSJVisibalController().navigationController presentViewController:loginVc animated:NO completion:NULL];
+        SSJNavigationController *loginNav = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+        [SSJVisibalController().navigationController presentViewController:loginNav animated:NO completion:NULL];
     }
     
     
