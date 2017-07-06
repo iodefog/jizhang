@@ -114,8 +114,8 @@
     } else {
         self.textLabel.text = item.title;
         self.textLabel.font = item.titleFont;
+        self.textLabel.textColor = item.titleColor;
     }
-    self.textLabel.textColor = item.titleColor;
     self.backgroundColor = item.backgroundColor;
     [self setNeedsLayout];
 }
