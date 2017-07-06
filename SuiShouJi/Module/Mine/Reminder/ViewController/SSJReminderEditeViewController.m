@@ -137,9 +137,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJCreditCardEditeCell *newReminderCell = [tableView dequeueReusableCellWithIdentifier:SSJCreditCardEditeCellIdentifier];
-    if (!newReminderCell) {
-        newReminderCell = [[SSJCreditCardEditeCell alloc] initWithStyle:UITableViewCellStyleDefault  reuseIdentifier:SSJCreditCardEditeCellIdentifier];
-    }
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     NSString *image = [self.images ssj_objectAtIndexPath:indexPath];
     newReminderCell.cellImageName = image;
@@ -161,8 +158,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        _memoInput = newReminderCell.textInput;
-        newReminderCell.textInput.text = self.item.remindMemo;
+//        _memoInput = newReminderCell.textInput;
+            newReminderCell.textInput.text = self.item.remindMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 101;
     }
@@ -265,12 +262,16 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+
     if (textField.tag == 100) {
-        self.item.remindName = textField.text;
+        self.item.remindName = text;
     }else if (textField.tag == 101){
-        self.item.remindMemo = textField.text;
+        self.item.remindMemo = text;
     }
-    return YES;
+    
+    textField.text = text;
+    return NO;
 }
 
 #pragma mark - Event
@@ -290,12 +291,18 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.remindId = SSJUUID();
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
     if (self.needToSave == YES) {
         if (self.addNewReminderAction) {
             self.addNewReminderAction(self.item);
         }
+    } else {
+        self.item.remindState = YES;
+        if (self.addNewReminderAction) {
+            self.addNewReminderAction(self.item);
+        }
     }
+    
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 

@@ -8670,6 +8670,8 @@
 		9CD50DC91F0CCE1B00E6BA11 /* SSJAboutUsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD50DBC1F0CCE1000E6BA11 /* SSJAboutUsFooterView.m */; };
 		9CD50DCA1F0CCE1C00E6BA11 /* SSJAboutUsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD50DBC1F0CCE1000E6BA11 /* SSJAboutUsFooterView.m */; };
 		9CD50DCB1F0CCE1D00E6BA11 /* SSJAboutUsFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD50DBC1F0CCE1000E6BA11 /* SSJAboutUsFooterView.m */; };
+		9CD50DCC1F0E084F00E6BA11 /* YYAnalytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C82933D1ED56FBE0038AAA8 /* YYAnalytics.framework */; };
+		9CD50DCD1F0E084F00E6BA11 /* YYAnalytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9C82933D1ED56FBE0038AAA8 /* YYAnalytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		9CD5168C1D9D00960040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
 		9CD5168F1D9D02570040480B /* SSJHistoryHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD5168B1D9D00960040480B /* SSJHistoryHeader.m */; };
 		9CD9BBFC1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CD9BB5A1CFD2DAA0061803B /* SSJBookkeepingTreeHelpViewController.m */; };
@@ -9961,6 +9963,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				9CD50DCD1F0E084F00E6BA11 /* YYAnalytics.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -11823,6 +11826,7 @@
 				9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */,
 				9C3276F41CE4616900109C4C /* SystemConfiguration.framework in Frameworks */,
 				9C82933E1ED56FBE0038AAA8 /* YYAnalytics.framework in Frameworks */,
+				9CD50DCC1F0E084F00E6BA11 /* YYAnalytics.framework in Frameworks */,
 				9C3276F21CE4615C00109C4C /* CoreTelephony.framework in Frameworks */,
 				9C3276F01CE4615200109C4C /* AudioToolbox.framework in Frameworks */,
 				9C3276EE1CE4614700109C4C /* libz.tbd in Frameworks */,
