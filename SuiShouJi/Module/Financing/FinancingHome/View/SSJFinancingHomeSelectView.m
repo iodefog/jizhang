@@ -260,7 +260,6 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
         UIWindow *window = [UIApplication sharedApplication].keyWindow;
         
         
-        
         [window ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.5 target:self touchAction:@selector(tapBackgroundViewAction) animation:^{
             
             self.transform = CGAffineTransformIdentity;
@@ -302,9 +301,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
 }
 
 - (void)getAllFundIds {
-    if (!self.selectedFundids) {
-        self.selectedFundids = [NSMutableArray arrayWithCapacity:0];
-    }
+    self.selectedFundids = [NSMutableArray arrayWithCapacity:0];
     
     [_items enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *fundId;

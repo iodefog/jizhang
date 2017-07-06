@@ -115,6 +115,7 @@
         [_updateButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _updateButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _updateButton.layer.cornerRadius = 4;
+        [_updateButton addTarget:self action:@selector(updateButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _updateButton;
 }
@@ -145,6 +146,10 @@
     }
     _versionLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _appNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
+
+- (void)updateButtonClicked:(id)sender {
+    [[SSJStartChecker sharedInstance]  checkWithSuccess:NULL failure:NULL];
 }
 
 
