@@ -238,8 +238,9 @@
     NSString *strSign = [NSString stringWithFormat:@"%@%@%@",self.phoneNum,@(time),strKey];
     strSign = [[strSign ssj_md5HexDigest] uppercaseString];
     
-    [param setObject:self.phoneNum  forKey:@"cmobileNo"];
     [param setObject:(type==SSJRegistAndForgetPasswordTypeForgetPassword)?@"14":@"13" forKey:@"yzmType"];//验证码业务类型，13注册 14找回密码
+//
+    [param setObject:[NSString stringWithFormat:@"%@",self.phoneNum] forKey:@"cmobileNo"];
     [param setObject:(channelType == SSJLoginAndRegisterPasswordChannelTypeSMS) ? @"0" : @"1" forKey:@"channelType"];//验证码类型： 0短信 1语音 , 默认为0；
     
     [param setObject:@(time) forKey:@"timeStamp"];
