@@ -79,17 +79,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     UITextField *_nameInput;
     UITextField *_memoInput;
 }
-
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
-}
-
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
-    }
-    return self;
-}
+    
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -141,8 +131,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9,kTitle6],@[kTitle10,kTitle5]];
         self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"loan_expires"],@[@"card_yanse",@"loan_memo"]];
     }
-
-
+    
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     // Do any additional setup after loading the view.
@@ -512,39 +501,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
-- (void)textDidChange:(NSNotification *)notification {
-    UITextField *textField = notification.object;
-    if ([textField isKindOfClass:[UITextField class]]) {
-
-        if (textField.tag == 100) {
-            self.item.cardName = textField.text;
-        }
-        if (textField.tag == 101){
-            textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
-            self.item.cardLimit = [textField.text doubleValue];
-        }
-        if (textField.tag == 102){
-            if ([textField.text rangeOfString:@"+"].location != NSNotFound) {
-                NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
-                nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
-                textField.text = [NSString stringWithFormat:@"+%@", nunberStr];
-            } else if ([textField.text rangeOfString:@"-"].location != NSNotFound) {
-                NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
-                nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"-" withString:@""];
-                nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
-                textField.text = [NSString stringWithFormat:@"-%@", nunberStr];
-            } else {
-                textField.text = [textField.text ssj_reserveDecimalDigits:2 intDigits:9];
-            }
-            self.item.cardBalance = [textField.text doubleValue];
-        }
-        if (textField.tag == 103){
-            self.item.cardMemo = textField.text;
-        }
-    }
-}
-
 - (void)remindSwitchChange:(id)sender{
     if (self.remindItem) {
         self.remindItem.remindState = self.remindStateButton.isOn;
@@ -598,27 +554,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 }
 
-- (void)debtOrbalanceChoiceChange {
-    
-}
-
 #pragma mark - UITextFieldDelegate
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
-    /*NSInteger existedLength = textField.text.length;
-    NSInteger selectedLength = range.length;
-    NSInteger replaceLength = string.length;
-    NSString *newStr = [textField.text stringByReplacingCharactersInRange:range withString:string];
-    if (textField.tag == 100 || textField.tag == 103) {
-        if (string.length == 0) return YES;
-        if (existedLength - selectedLength + replaceLength > 13) {
-            if (textField.tag == 100) {
-                [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
-            }else{
-                [CDAutoHideMessageHUD showMessage:@"备注不能超过13个字"];
-            }
-            return NO;
-        }
-    }else*/ if (textField.tag == 102){
+    
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (textField.tag == 102){
         NSCharacterSet *cs = [[NSCharacterSet characterSetWithCharactersInString:NUM] invertedSet];
         NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs] componentsJoinedByString:@""];
         
@@ -634,15 +575,31 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             return NO;
         }
     }
-    /*if (textField.tag == 100) {
-        self.item.cardName = newStr;
-    }else if (textField.tag == 101){
-        self.item.cardLimit = [newStr doubleValue];
-    }else if (textField.tag == 102){
-        self.item.cardBalance = [newStr doubleValue];
-    }else if (textField.tag == 103){
-        self.item.cardMemo = newStr;
-    }*/
+    
+    if (textField.tag == 101){
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        self.item.cardLimit = [text doubleValue];
+        return NO;
+    }
+    if (textField.tag == 102){
+        if ([textField.text rangeOfString:@"+"].location != NSNotFound) {
+            NSString *nunberStr = [text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+            nunberStr = [text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"+%@", nunberStr];
+        } else if ([textField.text rangeOfString:@"-"].location != NSNotFound) {
+            NSString *nunberStr = [textField.text stringByReplacingOccurrencesOfString:@"+" withString:@""];
+            nunberStr = [text stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            nunberStr = [nunberStr ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"-%@", nunberStr];
+        } else {
+            textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        }
+        self.item.cardBalance = [textField.text doubleValue];
+        return NO;
+    }
+
+
     return YES;
 }
 
