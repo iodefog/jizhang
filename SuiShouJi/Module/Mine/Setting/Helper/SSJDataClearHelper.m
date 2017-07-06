@@ -13,7 +13,6 @@
 #import "SSJClearUserDataService.h"
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJDataSynchronizer.h"
-#import "SSJLoginViewController.h"
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJBookkeepingTreeHelper.h"

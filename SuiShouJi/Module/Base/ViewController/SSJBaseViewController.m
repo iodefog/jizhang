@@ -10,7 +10,6 @@
 #import "SSJBaseViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 //#import <ume/SSJAnaliyticsManager.h>
-#import "SSJLoginViewController.h"
 #import "SSJUserTableManager.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJBookKeepingHomeViewController.h"
