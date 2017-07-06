@@ -7,7 +7,6 @@
 //
 
 #import "SSJSettingViewController.h"
-#import "SSJMineHomeTabelviewCell.h"
 #import "SSJSyncSettingViewController.h"
 #import "SSJMagicExportViewController.h"
 #import "SSJLoginVerifyPhoneViewController.h"
@@ -16,6 +15,10 @@
 #import "SSJBindMobileNoViewController.h"
 #import "SSJMobileNoBindingDetailViewController.h"
 #import "SSJSettingPasswordViewController.h"
+#import "SSJNavigationController.h"
+
+#import "SSJMineHomeTabelviewCell.h"
+
 #import "SSJUserTableManager.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserDefaultDataCreater.h"
@@ -247,7 +250,8 @@ static NSString *const kClearDataTitle = @"清理数据";
 
 - (void)login {
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
-    [self.navigationController pushViewController:loginVc animated:YES];
+    SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+    [self presentViewController:naviVC animated:YES completion:NULL];
 }
 
 - (void)logout {
@@ -339,11 +343,9 @@ static NSString *const kClearDataTitle = @"清理数据";
             } else if (ctrl.on) {
                 [self settingMotionPwd];
             } else {
-                self.userItem.motionPWDState = [NSString stringWithFormat:@"%d", NO];
-                self.userItem.motionPWD = @"";
-                [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
-                    [SSJAlertViewAdapter showError:error];
-                }];
+                SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                motionVC.type = SSJMotionPasswordViewControllerTypeTurnoff;
+                [self.navigationController pushViewController:motionVC animated:YES];
             }
         }];
     }

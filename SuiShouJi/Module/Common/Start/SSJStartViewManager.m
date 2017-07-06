@@ -16,7 +16,6 @@
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJBookkeepingTreeHelper.h"
-#import "SSJMotionPasswordViewController.h"
 #import "SSJUserTableManager.h"
 
 // 请求启动接口超时时间

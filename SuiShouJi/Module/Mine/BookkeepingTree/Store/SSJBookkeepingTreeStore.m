@@ -46,6 +46,15 @@
 }
 
 + (void)saveCheckInModel:(SSJBookkeepingTreeCheckInModel *)model success:(void(^)())success failure:(void(^)(NSError *error))failure {
+    if (!model) {
+        if (failure) {
+            SSJDispatchMainAsync(^{
+                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"model不能为nil"}]);
+            });
+        }
+        return;
+    }
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         BOOL successfull = YES;
         BOOL hasRecord = [db boolForQuery:@"select count(*) from bk_user_tree where cuserid = ?", model.userId];

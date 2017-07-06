@@ -102,7 +102,6 @@
 }
 
 - (void)updateAppearance {
-    
     SSJListMenuCellItem *item = (SSJListMenuCellItem *)self.cellItem;
     
     if (item.imageName) {
@@ -110,15 +109,14 @@
     }
     self.imageView.tintColor = item.imageColor;
     
-    self.textLabel.text = item.title;
-    self.textLabel.textColor = item.titleColor;
-    self.textLabel.attributedText = item.attributeStr;
-    
-    if (!item.attributeStr.length) {
+    if (item.attributeStr) {
+        self.textLabel.attributedText = item.attributeStr;
+    } else {
+        self.textLabel.text = item.title;
         self.textLabel.font = item.titleFont;
     }
+    self.textLabel.textColor = item.titleColor;
     self.backgroundColor = item.backgroundColor;
-    
     [self setNeedsLayout];
 }
 

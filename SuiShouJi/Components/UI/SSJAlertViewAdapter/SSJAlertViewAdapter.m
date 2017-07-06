@@ -9,6 +9,25 @@
 #import "SSJAlertViewAdapter.h"
 #import "SSJAlertViewDelegator.h"
 
+@interface SSJAlertViewAction ()
+
+@property (nonatomic, copy, readwrite) NSString *title;
+
+@property (nonatomic, copy, readwrite) SSJAlertViewActionHandle handler;
+
+@end
+
+@implementation SSJAlertViewAction
+
++ (instancetype)actionWithTitle:(NSString *)title handler:(void (^)(SSJAlertViewAction *action))handler {
+    SSJAlertViewAction *action = [[SSJAlertViewAction alloc] init];
+    action.title = title;
+    action.handler = handler;
+    return action;
+}
+
+@end
+
 @interface SSJAlertViewAdapter ()
 
 @property (readwrite, nonatomic, strong) NSMutableArray *p_Actions;
@@ -74,6 +93,7 @@
         UIAlertAction *alertAction = [UIAlertAction actionWithTitle:action.title style:UIAlertActionStyleDefault handler:^(UIAlertAction *bAction) {
             if (action.handler) {
                 action.handler(action);
+                action.handler = nil;
             }
         }];
         [_alert addAction:alertAction];
@@ -118,6 +138,7 @@
         SSJAlertViewAction *action = [_p_Actions ssj_safeObjectAtIndex:buttonIndex];
         if (action.handler) {
             action.handler(action);
+            action.handler = nil;
         }
     }
 }
@@ -129,6 +150,7 @@
             UIAlertAction *alertAction = [UIAlertAction actionWithTitle:tempAction.title style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 if (tempAction.handler) {
                     tempAction.handler(tempAction);
+                    tempAction.handler = nil;
                 }
             }];
             [alertVC addAction:alertAction];
@@ -155,16 +177,28 @@
 
 + (void)showError:(NSError *)error completion:(nullable void(^)())completion {
     NSString *message = nil;
+    if ([[self errorCodesShowingDetail] containsObject:@(error.code)]) {
+        message = [error localizedDescription];
+    } else {
 #ifdef DEBUG
-    message = [error localizedDescription];
+        message = [error localizedDescription];
 #else
-    message = SSJ_ERROR_MESSAGE;
+        message = SSJ_ERROR_MESSAGE;
 #endif
+    }
+
     [self showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
         if (completion) {
             completion();
         }
     }], nil];
+}
+
+/**
+ 不论是Debug还是Release都显示具体错误信息的code
+ */
++ (NSSet *)errorCodesShowingDetail {
+    return [NSSet setWithObjects:@(SSJErrorCodeLoginPasswordIllegal), nil];
 }
 
 @end

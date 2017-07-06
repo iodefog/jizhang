@@ -33,6 +33,7 @@
 #import "SSJFingerprintPWDViewController.h"
 #import "SSJMotionPasswordViewController.h"
 #import "MMDrawerController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 #import <LocalAuthentication/LocalAuthentication.h>
 
@@ -141,13 +142,13 @@
             [subscriber sendNext:service.rootElement];
             [subscriber sendCompleted];
         }else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
+            [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
             [subscriber sendError:nil];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -201,7 +202,7 @@
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
         [subscriber sendError:error];
-        [CDAutoHideMessageHUD showMessage:service.desc];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -315,8 +316,8 @@
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -348,8 +349,8 @@
 
 
 - (void)datawithDic:(NSDictionary *)dict {
-    NSDictionary *result = [[dict objectForKey:@"results"] objectForKey:@"user"];
-    self.accesstoken = [dict objectForKey:@"accessToken"];
+    NSDictionary *result = [dict objectForKey:@"results"];
+    self.accesstoken = [result objectForKey:@"accessToken"];
     [SSJUserItem mj_setupReplacedKeyFromPropertyName:^NSDictionary *{
         return @{@"userId":@"cuserid",
                  @"nickName":@"crealname",  // 第三方登录时，服务器返回的crealname就是用户昵称
@@ -357,7 +358,7 @@
                  @"icon":@"cicon",
                  @"openid":@"oauthid"};
     }];
-    _userItem = [SSJUserItem mj_objectWithKeyValues:result];
+    _userItem = [SSJUserItem mj_objectWithKeyValues:result[@"user"]];
     self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
     if (self.loginType != SSJLoginTypeNormal) {
         self.userItem.mobileNo = @"";
@@ -365,12 +366,12 @@
     self.userItem.loginPWD = @"";
     self.userItem.openId = self.openId;
     
-    self.userBillArray = [NSArray arrayWithArray:[dict objectForKey:@"userBill"]];
-    self.fundInfoArray = [NSArray arrayWithArray:[dict objectForKey:@"fundInfo"]];
-    self.booksTypeArray = [NSArray arrayWithArray:[dict objectForKey:@"bookType"]];
-    self.membersArray = [NSArray arrayWithArray:[dict objectForKey:@"bk_member"]];
-    self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[dict objectForKey:@"userTree"]];
-    self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[dict objectForKey:@"bookBillArray"]];
+    self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBill"]];
+    self.fundInfoArray = [NSArray arrayWithArray:[result objectForKey:@"fundInfo"]];
+    self.booksTypeArray = [NSArray arrayWithArray:[result objectForKey:@"bookType"]];
+    self.membersArray = [NSArray arrayWithArray:[result objectForKey:@"bk_member"]];
+    self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[result objectForKey:@"userTree"]];
+    self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[result objectForKey:@"bookBillArray"]];
     
     if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
         //                    __weak typeof(self) weakSelf = self;
@@ -488,55 +489,30 @@
          // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-                __weak typeof(self) weakSelf = self;
-                // 验证指纹密码
-                if ([userItem.fingerPrintState boolValue]) {
-                    LAContext *context = [[LAContext alloc] init];
-                    context.localizedFallbackTitle = @"";
-                    
-                    NSError *error = nil;
-                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-                        SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
-                        fingerPwdVC.context = context;
-                        fingerPwdVC.finishHandle = ^(UIViewController *controller) {
-                            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-                            UINavigationController *navi = [tabVC.viewControllers firstObject];
-                            UIViewController *homeController = [navi.viewControllers firstObject];
-                            
-                            controller.backController = homeController;
-                            [controller ssj_backOffAction];
-                        };
-                        fingerPwdVC.backController = self.vc.backController;
-                        [weakSelf.vc.navigationController pushViewController:fingerPwdVC animated:YES];
-                        [subscriber sendCompleted];
-                        return;
-                    }
-                }
                 
-                // 验证手势密码
-                if ([userItem.motionPWDState boolValue] && userItem.motionPWD.length) {
+                LAContext *context = [[LAContext alloc] init];
+                context.localizedFallbackTitle = @"";
+                BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+                BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
+                
+                if (motionPwdOpened) {
+                    // 验证手势密码
                     SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.finishHandle = ^(UIViewController *controller) {
-                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-                        UINavigationController *navi = [tabVC.viewControllers firstObject];
-                        UIViewController *homeController = [navi.viewControllers firstObject];
-                        
-                        controller.backController = homeController;
-                        [controller ssj_backOffAction];
-                    };
-                    motionVC.backController = self.vc.backController;
                     motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    [weakSelf.vc.navigationController pushViewController:motionVC animated:YES];
-                    [subscriber sendCompleted];
-                    return;
-                }
-                
-                if (self.vc.finishHandle) {
-                    self.vc.finishHandle(self.vc);
+                    motionVC.finishHandle = self.vc.finishHandle;
+                    [self.vc.navigationController pushViewController:motionVC animated:YES];
+                } else if (fingerPwdOpened) {
+                    // 验证指纹密码
+                    SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
+                    fingerPwdVC.context = context;
+                    fingerPwdVC.finishHandle = self.vc.finishHandle;
+                    [self.vc.navigationController pushViewController:fingerPwdVC animated:YES];
                 } else {
-                    [self.vc ssj_backOffAction];
+                    if (self.vc.finishHandle) {
+                        self.vc.finishHandle(self.vc);
+                    }
+                    [self.vc dismissViewControllerAnimated:YES completion:NULL];
                 }
-                
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
                 [subscriber sendError:error];
@@ -561,75 +537,37 @@
             userItem.registerState = @"1";
             userItem.loginType = @"0";
             
-            //  只有保存用户登录信息成功后才算登录成功
-            RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            // 只有保存用户登录信息成功后才算登录成功
+            @weakify(self);
+            [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 [SSJUserTableManager saveUserItem:userItem success:^{
                     [subscriber sendCompleted];
                 } failure:^(NSError * _Nonnull error) {
                     [subscriber sendError:error];
                 }];
                 return nil;
-            }];
-            
-            RACSignal *sg_2 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
-                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
-                    && SSJSaveUserLogined(YES)) {
-                    [subscriber sendCompleted];
-                } else {
-                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
-                }
-                return nil;
-            }];
-            
-            @weakify(self);
-            RACSignal *sg_3 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            }] then:^RACSignal *{
+                return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                    if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                        && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                        && SSJSaveUserLogined(YES)) {
+                        [subscriber sendCompleted];
+                    } else {
+                        [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
+                    }
+                    return nil;
+                }];
+            }] subscribeError:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            } completed:^{
                 @strongify(self);
                 [self syncData];
                 [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                 [CDAutoHideMessageHUD showMessage:@"注册成功"];
-                // 如果用户手势密码开启，进入手势密码页面
-                [SSJUserTableManager queryProperty:@[@"motionPWD", @"motionPWDState"] forUserId:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-                    [subscriber sendNext:userItem];
-                    [subscriber sendCompleted];
-                } failure:^(NSError * _Nonnull error) {
-                    [subscriber sendError:error];
-                }];
-                return nil;
-            }];
-            
-            [[[sg_1 then:^RACSignal *{
-                return sg_2;
-            }] then:^RACSignal *{
-                return sg_3;
-            }] subscribeNext:^(SSJUserItem *userItem) {
-                @strongify(self);
-                if ([userItem.motionPWDState boolValue]) {
-                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.finishHandle = ^(UIViewController *controller) {
-                        
-                        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-                        UINavigationController *navi = [tabVC.viewControllers firstObject];
-                        UIViewController *homeController = [navi.viewControllers firstObject];
-                        controller.backController = homeController;
-                        [controller ssj_backOffAction];
-                        
-                    };
-                    if (userItem.motionPWD.length) {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    } else {
-                        motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
-                    }
-                    [self.vc.navigationController pushViewController:motionVC animated:YES];
-                    
-                    return;
-                }
-                
                 if (self.vc.finishHandle) {
                     self.vc.finishHandle(self.vc);
                 }
-            } error:^(NSError *error) {
-                [SSJAlertViewAdapter showError:error];
+                [self.vc dismissViewControllerAnimated:YES completion:NULL];
             }];
         }
     }
@@ -698,10 +636,10 @@
 }
 
 - (RACSignal *)enableNormalLoginSignal {
-    if (_enableNormalLoginSignal) {
-        _enableNormalLoginSignal = [RACSignal combineLatest:@[self.passwardNum] reduce:^id(NSString *passward){
+    if (!_enableNormalLoginSignal) {
+        _enableNormalLoginSignal = [[RACSignal combineLatest:@[RACObserve(self,passwardNum)] reduce:^id(NSString *passward){
             return @(passward.length >= SSJMinPasswordLength && passward.length <= SSJMaxPasswordLength);
-        }];
+        }] skip:1];
     }
     return _enableNormalLoginSignal;
 }
@@ -712,9 +650,6 @@
  @return <#return value description#>
  */
 - (RACCommand *)getVerificationCodeCommand {
-    if (_getVerificationCodeCommand.executing) {//正在执行
-        
-    }
     if (!_getVerificationCodeCommand) {
         _getVerificationCodeCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);

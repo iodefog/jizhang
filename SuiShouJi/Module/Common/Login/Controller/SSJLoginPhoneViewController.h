@@ -12,6 +12,6 @@
 @class SSJLoginVerifyPhoneNumViewModel;
 @interface SSJLoginPhoneViewController : SSJLoginCommonViewController
 
-/**vm*/
-@property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
+/**phone*/
+@property (nonatomic, copy) NSString *phoneNum;
 @end
