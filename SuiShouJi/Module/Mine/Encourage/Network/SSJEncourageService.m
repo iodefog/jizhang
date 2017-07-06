@@ -38,11 +38,13 @@
 @implementation SSJEncourageService
 
 - (void)request {
+    [self getDefualtData];
     [self requestWithSuccess:NULL failure:NULL];
 }
 
 - (void)requestWithSuccess:(SSJNetworkServiceHandler)success
                    failure:(SSJNetworkServiceHandler)failure {
+    [self getDefualtData];
     [self request:@"/chargebook/config/about_us.go" params:nil success:success failure:failure];
 }
 
@@ -63,6 +65,16 @@
 
 - (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {
     return code == 1;
+}
+
+- (void)getDefualtData {
+    self.qqgroup = @"552563622";
+    self.qqgroupId = @"160aa4d10987c3a6ff17b2fb89e3e1f0e4e996e320207f1e23e1299518f58169";
+    self.wechatgroup = @"youyujz01";
+    self.wechatId = @"youyujz";
+    self.telNum = @"400-7676-298";
+    self.sinaBlog = @"有鱼记账";
+    self.sinaWeiboId = @"5603151337";
 }
 
 @end

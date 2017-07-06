@@ -34,11 +34,9 @@
     } else {
         SSJInviteCodeJoinViewController *codeInviteVc = [[SSJInviteCodeJoinViewController alloc] init];
         codeInviteVc.inviteCode = inviteCode;
+        [SSJVisibalController().navigationController pushViewController:codeInviteVc animated:NO];
         SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
-        NSMutableArray *viewControllers = [SSJVisibalController().navigationController.viewControllers mutableCopy];
-        [viewControllers addObject:codeInviteVc];
-        [viewControllers addObject:loginVc];
-        [SSJVisibalController().navigationController setViewControllers:viewControllers animated:NO];
+        [SSJVisibalController().navigationController presentViewController:loginVc animated:NO completion:NULL];
     }
     
     
