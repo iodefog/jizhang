@@ -8,7 +8,7 @@
 
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginVerifyPhoneViewController.h"
-#import "SSJRegistGetVerViewController.h"
+//#import "SSJRegistGetVerViewController.h"
 @interface SSJBookKeepingHomePopView()
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
@@ -72,9 +72,9 @@
                 [nav pushViewController:loginVC animated:YES];
             };
             self.registerBtnClickBlock = ^(){
-                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-                registerVC.backController = backVC;
-                [nav pushViewController:registerVC animated:YES];
+//                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
+//                registerVC.backController = backVC;
+//                [nav pushViewController:registerVC animated:YES];
             };
             [[UIApplication sharedApplication].keyWindow addSubview:self];
             [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];
