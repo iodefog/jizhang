@@ -7,9 +7,22 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJAlertViewAction.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class SSJAlertViewAction;
+
+typedef void (^SSJAlertViewActionHandle)(SSJAlertViewAction *action);
+
+@interface SSJAlertViewAction : NSObject
+
+@property (nullable, nonatomic, copy, readonly) NSString *title;
+
+@property (nullable, nonatomic, copy, readonly) SSJAlertViewActionHandle handler;
+
++ (instancetype)actionWithTitle:(NSString * _Nullable )title handler:(__nullable SSJAlertViewActionHandle)handler;
+
+@end
 
 @interface SSJAlertViewAdapter : NSObject
 

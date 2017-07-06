@@ -46,7 +46,6 @@
 #import "SSJBookKeepingHomeHeaderView.h"
 #import "SSJHomeThemeModifyView.h"
 #import "SSJAlertViewAdapter.h"
-#import "SSJAlertViewAction.h"
 #import "SSJListMenu.h"
 #import "SSJChargeImageBrowseView.h"
 #import "SSJNSNotificationRemindAlertView.h"

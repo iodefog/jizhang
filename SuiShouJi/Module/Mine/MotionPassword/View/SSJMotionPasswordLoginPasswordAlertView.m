@@ -23,6 +23,8 @@ static NSString *const kPinkColor = @"eb4a64";
 
 @property (nonatomic, strong) UIButton *sureButton;
 
+@property (nonatomic, strong) UIButton *cancelButton;
+
 @property (nonatomic, strong) UIView *bodyView;
 
 @end
@@ -39,6 +41,7 @@ static NSString *const kPinkColor = @"eb4a64";
         
         [self addSubview:self.titleLab];
         [self addSubview:self.bodyView];
+        [self addSubview:self.cancelButton];
         [self addSubview:self.sureButton];
         [self.bodyView addSubview:self.passwordInput];
         
@@ -117,12 +120,30 @@ static NSString *const kPinkColor = @"eb4a64";
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _sureButton.frame = CGRectMake(0, kHeaderHeight + kBodyHeight, self.width, kFooterHeight);
+        _sureButton.frame = CGRectMake(self.width * 0.5, kHeaderHeight + kBodyHeight, self.width * 0.5, kFooterHeight);
         _sureButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton setTitleColor:[UIColor ssj_colorWithHex:kPinkColor] forState:UIControlStateNormal];
     }
     return _sureButton;
+}
+
+- (UIButton *)cancelButton {
+    if (!_cancelButton) {
+        _cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _cancelButton.frame = CGRectMake(0, kHeaderHeight + kBodyHeight, self.width * 0.5, kFooterHeight);
+        _cancelButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
+        [_cancelButton setTitleColor:[UIColor ssj_colorWithHex:kPinkColor] forState:UIControlStateNormal];
+        [_cancelButton ssj_setBorderStyle:SSJBorderStyleRight];
+        [_cancelButton ssj_setBorderColor:SSJ_DEFAULT_SEPARATOR_COLOR];
+        @weakify(self);
+        [[_cancelButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [self dismiss:NULL];
+        }];
+    }
+    return _cancelButton;
 }
 
 @end
