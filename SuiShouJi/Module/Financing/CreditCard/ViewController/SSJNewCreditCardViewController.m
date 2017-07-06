@@ -730,8 +730,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _debtOrbalanceChoice.contentAlignment = UIControlContentHorizontalAlignmentLeft;
         _debtOrbalanceChoice.backgroundColor = [UIColor clearColor];
         _debtOrbalanceChoice.items = [self debtOrbalanceChoiceItems];
-        [_debtOrbalanceChoice addTarget:self action:@selector(debtOrbalanceChoiceChange) forControlEvents:UIControlEventValueChanged];
-
     }
     return _debtOrbalanceChoice;
 }
@@ -767,7 +765,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [firstTitle addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(4, firstTitle.length - 4)];
 
 
-    SSJListMenuItem *firstItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:nil selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:firstTitle];
+    SSJListMenuItem *firstItem = [SSJListMenuItem itemWithImageName:nil title:nil normalTitleColor:[UIColor redColor] selectedTitleColor:nil normalImageColor:nil selectedImageColor:nil backgroundColor:nil attributedText:firstTitle];
 
     [tempArr addObject:firstItem];
     
