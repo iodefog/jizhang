@@ -136,18 +136,19 @@
     [dict setObject:item.userGender forKey:@"cgender"];
     [dict setObject:item.unionId forKey:@"cunionid"];
     [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
-
+    __weak __typeof(self)wSelf = self;
     [self.netWorkService request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [wSelf datawithDic:service.rootElement];
             [subscriber sendCompleted];
         }else {
-            [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+            [CDAutoHideMessageHUD showMessage:service.desc?service.desc:SSJ_ERROR_MESSAGE];
             [subscriber sendError:nil];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
         [subscriber sendError:service.error];
     }];
 }
@@ -210,7 +211,7 @@
 - (void )queryCurrentCategoryForUserId:(NSString *)userId {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *currentBookId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
-        BOOL iShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,SSJUSERID()];
+        BOOL iShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,userId];
         if (iShareBook) {//是个人账本
             SSJSaveBooksCategory(SSJBooksCategoryPersional);
         } else { //共享账本
@@ -432,8 +433,8 @@
                 && SSJSaveAccessToken(self.accesstoken)
                 && SSJSetUserId(self.userItem.userId)
                 && SSJSaveUserLogined(YES)) {
-                //保存账本类型个人or共享
-                [self queryCurrentCategoryForUserId:self.userItem.userId];
+//                //保存账本类型个人or共享
+//                [self queryCurrentCategoryForUserId:self.userItem.userId];
                 [subscriber sendCompleted];
                 
             } else {
@@ -486,6 +487,9 @@
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
             [[NSUserDefaults standardUserDefaults] setInteger:self.loginType forKey:SSJUserLoginTypeKey];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            //保存账本类型个人or共享
+            [self queryCurrentCategoryForUserId:self.userItem.userId];
             [subscriber sendCompleted];
             return nil;
         }];
@@ -753,11 +757,11 @@
             return signal;
         }];
         
-        @weakify(self);
-        [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            @strongify(self);
-            [self datawithDic:dict];
-        }] ;
+//        @weakify(self);
+//        [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+//            @strongify(self);
+//            [self datawithDic:dict];
+//        }] ;
     }
     return _wxLoginCommand;
 }
@@ -766,7 +770,7 @@
     if (!_qqLoginCommand) {
         _qqLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
-            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 @strongify(self);
                 //发送qq登录请求
                 [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
@@ -780,13 +784,8 @@
                 
                 return nil;
             }];
+            return signal;
         }];
-        
-        @weakify(self);
-        [_qqLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            @strongify(self);
-            [self datawithDic:dict];
-        }] ;
     }
     return _qqLoginCommand;
 }
@@ -803,11 +802,11 @@
             return signal;
         }];
         
-        @weakify(self);
-        [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            @strongify(self);
-            [self datawithDic:dict];
-        }] ;
+//        @weakify(self);
+//        [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
+//            @strongify(self);
+//            [self datawithDic:dict];
+//        }] ;
     }
     return _normalLoginCommand;
 }
