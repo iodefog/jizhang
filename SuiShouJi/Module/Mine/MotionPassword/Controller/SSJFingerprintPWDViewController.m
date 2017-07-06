@@ -100,12 +100,18 @@
                 }
                 [self dismissViewControllerAnimated:YES completion:NULL];
             });
+        } else {
+            if (error.code == LAErrorTouchIDNotEnrolled) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"重新登录" handler:^(SSJAlertViewAction *action){
+                    [self relogin];
+                }], nil];
+            }
         }
     }];
 }
 
-// 切换账号
-- (void)changeAccountAction {
+// 重新登录
+- (void)relogin {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
@@ -152,7 +158,7 @@
         _changeAccountBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_changeAccountBtn setTitle:@"登陆其它账号" forState:UIControlStateNormal];
         [_changeAccountBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [_changeAccountBtn addTarget:self action:@selector(changeAccountAction) forControlEvents:UIControlEventTouchUpInside];
+        [_changeAccountBtn addTarget:self action:@selector(relogin) forControlEvents:UIControlEventTouchUpInside];
     }
     return _changeAccountBtn;
 }
