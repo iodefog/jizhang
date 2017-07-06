@@ -93,7 +93,7 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return SSJ_CURRENT_THEME.statusBarStyle;
+    return (self.appliesTheme ? SSJ_CURRENT_THEME : [SSJThemeSetting defaultThemeModel]).statusBarStyle;
 }
 
 #pragma mark - UIResponder
