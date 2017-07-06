@@ -8,9 +8,13 @@
 
 #import "SSJBookKeepingHomePopView.h"
 #import "SSJLoginVerifyPhoneViewController.h"
-//#import "SSJRegistGetVerViewController.h"
+#import "SSJNavigationController.h"
+
+
 @interface SSJBookKeepingHomePopView()
+
 @property (weak, nonatomic) IBOutlet UIButton *registerButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 @end
@@ -67,14 +71,14 @@
             
             self.frame = [UIScreen mainScreen].bounds;
             self.loginBtnClickBlock = ^(){
-                SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc]init];
-                loginVC.backController = backVC;
-                [nav pushViewController:loginVC animated:YES];
+                SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+                SSJNavigationController *loginNav = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+                [SSJVisibalController().navigationController presentViewController:loginNav animated:NO completion:NULL];
             };
             self.registerBtnClickBlock = ^(){
-//                SSJRegistGetVerViewController *registerVC = [[SSJRegistGetVerViewController alloc]init];
-//                registerVC.backController = backVC;
-//                [nav pushViewController:registerVC animated:YES];
+                SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+                SSJNavigationController *loginNav = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+                [SSJVisibalController().navigationController presentViewController:loginNav animated:NO completion:NULL];
             };
             [[UIApplication sharedApplication].keyWindow addSubview:self];
             [[NSUserDefaults standardUserDefaults]setObject:currentDate forKey:SSJLastPopTimeKey];

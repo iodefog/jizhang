@@ -709,7 +709,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if (!_themeModifyView) {
         _themeModifyView = [[SSJHomeThemeModifyView alloc] init];
         _themeModifyView.themeSelectBlock = ^(NSString *selectTheme, BOOL selectType){
-
+            
         };
         _themeModifyView.themeSelectCustomImageBlock = ^(){
             //访问相册

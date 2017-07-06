@@ -153,7 +153,7 @@ static const NSInteger kCountdownLimit = 60;
         [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"%ds后重新获取",(int)self.countdown] forState:UIControlStateDisabled];
     } else {
         self.getAuthCodeBtn.enabled = YES;
-        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"重新获取验证码"] forState:UIControlStateDisabled];
+        [self.getAuthCodeBtn setTitle:[NSString stringWithFormat:@"重新获取"] forState:UIControlStateNormal];
         
         [self invalidateTimer];
     }
