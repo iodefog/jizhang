@@ -12,6 +12,7 @@
 typedef NS_ENUM(NSUInteger, SSJMotionPasswordViewControllerType) {
     SSJMotionPasswordViewControllerTypeSetting,      // 设置手势密码
     SSJMotionPasswordViewControllerTypeVerification, // 验证手势密码
+    SSJMotionPasswordViewControllerTypeTurnoff
 };
 
 @interface SSJMotionPasswordViewController : SSJBaseViewController

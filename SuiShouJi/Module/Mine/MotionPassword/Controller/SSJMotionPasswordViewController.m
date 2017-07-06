@@ -36,6 +36,8 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) UIButton *changeAccountBtn;
 
+@property (nonatomic, strong) UIButton *verifyLoginPwdBtn;
+
 @property (nonatomic, strong) SCYMotionEncryptionView *motionView;
 
 @property (nonatomic, strong) SSJMotionPasswordLoginPasswordAlertView *passwordAlertView;
@@ -138,6 +140,11 @@ static const int kVerifyFailureTimesLimit = 5;
         make.right.mas_equalTo(self.view).offset(-30);
         make.bottom.mas_equalTo(self.view).offset(-30);
     }];
+    [self.verifyLoginPwdBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(200, 22));
+        make.centerX.mas_equalTo(self.view);
+        make.bottom.mas_equalTo(self.view).offset(-30);
+    }];
     [super updateViewConstraints];
 }
 
@@ -196,9 +203,40 @@ static const int kVerifyFailureTimesLimit = 5;
                 
                 // 验证失败次数达到最大限制
                 if (self.verifyFailureTimes == 0) {
-                    [self forgetPasswordAction];
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"手势密码已失效，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"密码登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                        [self relogin];
+                    }], nil];
                 }
                 
+                return SCYMotionEncryptionCircleLayerStatusError;
+            }
+        }
+            break;
+            
+            //  关闭手势密码
+        case SSJMotionPasswordViewControllerTypeTurnoff: {
+            if ([_userItem.motionPWD isEqualToString:[keypads componentsJoinedByString:@","]]) {
+                //  验证成功
+                _userItem.motionPWD = @"";
+                _userItem.motionPWDState = @"0";
+                [SSJUserTableManager saveUserItem:_userItem success:^{
+                    [self goBackAction];
+                } failure:^(NSError * _Nonnull error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
+                return SCYMotionEncryptionCircleLayerStatusCorrect;
+            } else {
+                //  验证失败
+                self.verifyFailureTimes --;
+                self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordErrorColor];
+                self.remindLab.text = [NSString stringWithFormat:@"密码错误，您还可以输入%d次", self.verifyFailureTimes];
+                
+                //  验证失败次数达到最大限制
+                if (self.verifyFailureTimes == 0) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"手势密码已失效，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"密码登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                        [self relogin];
+                    }], nil];
+                }
                 return SCYMotionEncryptionCircleLayerStatusError;
             }
         }
@@ -206,46 +244,52 @@ static const int kVerifyFailureTimesLimit = 5;
     }
 }
 
-#pragma mark - Event
-// 忘记密码
-- (void)forgetPasswordAction {
-    if (_userItem.loginPWD.length) {
-        [self.passwordAlertView show];
-    } else {
-        // 注销登录状态、清空用户的手势密码，并跳转至登录页面
-        _userItem.motionPWD = @"";
-        @weakify(self);
-        [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            @strongify(self);
-            [SSJUserTableManager saveUserItem:self.userItem success:^{
+#pragma mark - Private
+// 注销登录状态、清空用户的手势密码，并跳转至登录页面
+- (void)relogin {
+    @weakify(self);
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        self.userItem.motionPWD = @"";
+        self.userItem.motionPWDState = @"0";
+        [SSJUserTableManager saveUserItem:self.userItem success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            SSJClearLoginInfo();
+            [SSJUserTableManager reloadUserIdWithSuccess:^{
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
                 [subscriber sendError:error];
             }];
             return nil;
-        }] then:^RACSignal *{
-            return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                SSJClearLoginInfo();
-                [SSJUserTableManager reloadUserIdWithSuccess:^{
-                    [subscriber sendCompleted];
-                } failure:^(NSError * _Nonnull error) {
-                    [subscriber sendError:error];
-                }];
-                return nil;
-            }];
-        }] subscribeError:^(NSError *error) {
-            [SSJAlertViewAdapter showError:error];
-        } completed:^{
-            @strongify(self);
+        }];
+    }] subscribeError:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        @strongify(self);
+        if (self.type == SSJMotionPasswordViewControllerTypeVerification) {
             SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
             loginVC.finishHandle = self.finishHandle;
             loginVC.mobileNo = self.userItem.mobileNo;
             [self.navigationController setViewControllers:@[loginVC] animated:YES];
-        }];
-    }
+        } else if (self.type == SSJMotionPasswordViewControllerTypeTurnoff) {
+            SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+            loginVC.mobileNo = self.userItem.mobileNo;
+            loginVC.finishHandle = ^(UIViewController *controller) {
+                [self.navigationController popViewControllerAnimated:NO];
+            };
+            SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
+            [self presentViewController:naviVC animated:YES completion:NULL];
+        }
+    }];
 }
 
-//  切换账号
+// 切换账号
 - (void)changeAccountAction {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
@@ -257,7 +301,6 @@ static const int kVerifyFailureTimesLimit = 5;
     }];
 }
 
-#pragma mark - Private
 // 验证登录密码
 - (void)verifyLoginPassword {
     NSString *inputPwd = [_passwordAlertView.passwordInput.text ssj_md5HexDigest];
@@ -267,6 +310,16 @@ static const int kVerifyFailureTimesLimit = 5;
             self.remindLab.text = @"请绘制解锁图案";
             self.remindLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor];
             [_passwordAlertView dismiss:NULL];
+        } else if (_type == SSJMotionPasswordViewControllerTypeTurnoff) {
+            _userItem.motionPWD = @"";
+            _userItem.motionPWDState = @"0";
+            [SSJUserTableManager saveUserItem:_userItem success:^{
+                [_passwordAlertView dismiss:^(BOOL finished) {
+                    [self goBackAction];
+                }];
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
         }
     } else {
         [_passwordAlertView shake];
@@ -322,6 +375,12 @@ static const int kVerifyFailureTimesLimit = 5;
             [self.view addSubview:self.changeAccountBtn];
             self.remindLab.text = @"请绘制手势密码";
             break;
+            
+        case SSJMotionPasswordViewControllerTypeTurnoff:
+            if (SSJUserLoginType() == SSJLoginTypeNormal) {
+                [self.view addSubview:self.verifyLoginPwdBtn];
+            }
+            self.remindLab.text = @"请输入原手势密码";
     }
 }
 
@@ -341,6 +400,12 @@ static const int kVerifyFailureTimesLimit = 5;
     
     if (self.type == SSJMotionPasswordViewControllerTypeSetting) {
         self.title = @"设置手势密码";
+        self.showNavigationBarBaseLine = NO;
+        self.navigationItem.hidesBackButton = YES;
+        self.navigationItem.leftBarButtonItem = nil;
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(goBackAction)];
+    } else if (self.type == SSJMotionPasswordViewControllerTypeTurnoff) {
+        self.title = @"关闭手势密码";
         self.showNavigationBarBaseLine = NO;
         self.navigationItem.hidesBackButton = YES;
         self.navigationItem.leftBarButtonItem = nil;
@@ -414,10 +479,15 @@ static const int kVerifyFailureTimesLimit = 5;
         } else {
             [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         }
-
-        [_forgetPwdBtn addTarget:self action:@selector(forgetPasswordAction) forControlEvents:UIControlEventTouchUpInside];
-        [_forgetPwdBtn sizeToFit];
-        _forgetPwdBtn.leftBottom = CGPointMake(15, self.view.height - 30);
+        @weakify(self);
+        [[_forgetPwdBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            if (self.userItem.loginPWD.length) {
+                [self.passwordAlertView show];
+            } else {
+                [self relogin];
+            }
+        }];
     }
     return _forgetPwdBtn;
 }
@@ -433,10 +503,27 @@ static const int kVerifyFailureTimesLimit = 5;
             [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         }
         [_changeAccountBtn addTarget:self action:@selector(changeAccountAction) forControlEvents:UIControlEventTouchUpInside];
-        [_changeAccountBtn sizeToFit];
-        _changeAccountBtn.rightBottom = CGPointMake(self.view.width - 15, self.view.height - 30);
     }
     return _changeAccountBtn;
+}
+
+- (UIButton *)verifyLoginPwdBtn {
+    if (!_verifyLoginPwdBtn) {
+        _verifyLoginPwdBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _verifyLoginPwdBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
+        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        } else {
+            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+        }
+        @weakify(self);
+        [[_verifyLoginPwdBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [self.passwordAlertView show];
+        }];
+    }
+    return _verifyLoginPwdBtn;
 }
 
 - (SCYMotionEncryptionView *)motionView {

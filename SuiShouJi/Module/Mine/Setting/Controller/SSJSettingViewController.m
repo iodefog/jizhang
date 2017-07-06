@@ -343,11 +343,9 @@ static NSString *const kClearDataTitle = @"清理数据";
             } else if (ctrl.on) {
                 [self settingMotionPwd];
             } else {
-                self.userItem.motionPWDState = [NSString stringWithFormat:@"%d", NO];
-                self.userItem.motionPWD = @"";
-                [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
-                    [SSJAlertViewAdapter showError:error];
-                }];
+                SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+                motionVC.type = SSJMotionPasswordViewControllerTypeTurnoff;
+                [self.navigationController pushViewController:motionVC animated:YES];
             }
         }];
     }

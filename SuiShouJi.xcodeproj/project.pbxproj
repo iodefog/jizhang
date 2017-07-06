@@ -19,7 +19,6 @@
 		7D00D80F1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D80B1DFAA3D30007A8FB /* SSJReportFormsChartCellItem.m */; };
 		7D07B6951CF2AC4900B9C390 /* SSJJsPatchItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6941CF2AC4900B9C390 /* SSJJsPatchItem.m */; };
 		7D07B6981CF2C1F300B9C390 /* SSJLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D07B6971CF2C1F300B9C390 /* SSJLoginHelper.m */; };
-		7D08A0961E4999D30085A8FB /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7D08A0971E4999D30085A8FB /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7D08A0981E4999D30085A8FB /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7D08A0991E4999D30085A8FB /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -1217,7 +1216,6 @@
 		7D8F7C381D2CAED200F7DF6A /* SSJThemeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D8F7C371D2CAED200F7DF6A /* SSJThemeUtil.m */; };
 		7D99D45C1C3522D7006EB113 /* SSJDatabaseQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D99D45B1C3522D7006EB113 /* SSJDatabaseQueue.m */; };
 		7D9E4A531D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D9E4A521D0FFBEF00EE254D /* SSJMagicExportBookTypeSelectionCell.m */; };
-		7DA139ED1E35AED7000490A4 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DA139EE1E35AED7000490A4 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DA139EF1E35AED7000490A4 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7DA139F01E35AED7000490A4 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -1837,7 +1835,6 @@
 		7DBB38231E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381F1E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist */; };
 		7DBB38241E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB38201E55BE2F0075E638 /* YouYuJiZhangGuanJia-Info.plist */; };
 		7DBB3A701E55C13F0075E638 /* YouYuJiZhang-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3A6F1E55C13F0075E638 /* YouYuJiZhang-Info.plist */; };
-		7DBB3A741E55C2EE0075E638 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DBB3A751E55C2EE0075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DBB3A761E55C2EE0075E638 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7DBB3A771E55C2EE0075E638 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -2375,7 +2372,6 @@
 		7DBB3CB31E55C2EE0075E638 /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
 		7DBB3CBD1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3CBC1E55C3500075E638 /* YouYuJiZhangLiCai-Info.plist */; };
 		7DBB3F0B1E55C4530075E638 /* JiZhangGuanJia-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB3F0A1E55C4530075E638 /* JiZhangGuanJia-Info.plist */; };
-		7DBB3F0F1E55C4E00075E638 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DBB3F101E55C4E00075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DBB3F111E55C4E00075E638 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7DBB3F121E55C4E00075E638 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -3155,7 +3151,6 @@
 		7DFB164D1EAF2F0F00292DD3 /* SSJDatabaseSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB16351EAF2EB900292DD3 /* SSJDatabaseSequence.m */; };
 		7DFB164E1EAF2F1000292DD3 /* SSJDatabaseSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB16351EAF2EB900292DD3 /* SSJDatabaseSequence.m */; };
 		7DFB164F1EAF2F1000292DD3 /* SSJDatabaseSequence.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DFB16351EAF2EB900292DD3 /* SSJDatabaseSequence.m */; };
-		7DFB16531EB0341E00292DD3 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		7DFB16541EB0341E00292DD3 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		7DFB16551EB0341E00292DD3 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		7DFB16561EB0341E00292DD3 /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -4169,7 +4164,6 @@
 		91F7FD381DFAB94A005F4B6B /* SSJAdviceItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 91F7FD371DFAB94A005F4B6B /* SSJAdviceItem.m */; };
 		91FD904D1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 91FD904C1E0B8319001C64B7 /* SSJReportFormCanYinChartCell.m */; };
 		9C03D87F1EB855D600D845DD /* customBackGround.zip in Resources */ = {isa = PBXBuildFile; fileRef = 9C03D87E1EB855D600D845DD /* customBackGround.zip */; };
-		9C13F4D71E8267D300AC5FA9 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C13F4D81E8267D300AC5FA9 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C13F4D91E8267D300AC5FA9 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C13F4DA1E8267D300AC5FA9 /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
@@ -5132,7 +5126,6 @@
 		9C47BB841DF1498B0077ACF5 /* SSJRepaymentStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47BB801DF1498B0077ACF5 /* SSJRepaymentStore.m */; };
 		9C47E6EF1D222A26005F338A /* SSJDownLoadProgressButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6EE1D222A26005F338A /* SSJDownLoadProgressButton.m */; };
 		9C47E6F21D224BEF005F338A /* SSJThemeService.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C47E6F11D224BEF005F338A /* SSJThemeService.m */; };
-		9C4C1FFA1E9E30C8000C5F15 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C4C1FFB1E9E30C8000C5F15 /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C4C1FFC1E9E30C8000C5F15 /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C4C1FFD1E9E30C8000C5F15 /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -6035,7 +6028,6 @@
 		9C7C9E651DB5F3100095F49B /* SSJBookKeepingHomeBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E5A1DB5F30A0095F49B /* SSJBookKeepingHomeBar.m */; };
 		9C7C9E691DB706DC0095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
 		9C7C9E6C1DB706E10095F49B /* SSJSearchResultSummaryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C7C9E681DB706DC0095F49B /* SSJSearchResultSummaryItem.m */; };
-		9C7D2CDF1E8DF8A80093001F /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C7D2CE01E8DF8A80093001F /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C7D2CE11E8DF8A80093001F /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C7D2CE21E8DF8A80093001F /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -6621,7 +6613,6 @@
 		9C7D2F471E8DF8A80093001F /* BeiKeJiZhang-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C13F7411E82688400AC5FA9 /* BeiKeJiZhang-Info.plist */; };
 		9C7D2F481E8DF8A80093001F /* YouYuJiZhangBao-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7DBB381E1E55BE2F0075E638 /* YouYuJiZhangBao-Info.plist */; };
 		9C7D2F491E8DF8A80093001F /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
-		9C7D2F561E8DF96B0093001F /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C7D2F571E8DF96B0093001F /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C7D2F581E8DF96B0093001F /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C7D2F591E8DF96B0093001F /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -7209,7 +7200,6 @@
 		9C7D31C01E8DF96B0093001F /* SSJFinancingHomePopView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C9471411CEB224C00D69079 /* SSJFinancingHomePopView.xib */; };
 		9C7D31CC1E8E08980093001F /* youyujizhangpro-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7D31CA1E8E08980093001F /* youyujizhangpro-Info.plist */; };
 		9C7D31CD1E8E08980093001F /* 9188jizhangpro-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 9C7D31CB1E8E08980093001F /* 9188jizhangpro-Info.plist */; };
-		9C80FC991E95E88E00B1BAAC /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C80FC9A1E95E88E00B1BAAC /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C80FC9B1E95E88E00B1BAAC /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C80FC9C1E95E88E00B1BAAC /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -7892,7 +7882,6 @@
 		9C9A0C9E1D73D1AF002AF046 /* SSJBillingDaySelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A0C961D73CE07002AF046 /* SSJBillingDaySelectView.m */; };
 		9C9A0CA41D73D1B8002AF046 /* SSJNewCreditCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9A0C8D1D73CDB7002AF046 /* SSJNewCreditCardViewController.m */; };
 		9C9A42FD1E51C09700C1D7ED /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C9A42FC1E51C09700C1D7ED /* CoreLocation.framework */; };
-		9C9CEE591EA5F73A007657FE /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9C9CEE5A1EA5F73A007657FE /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9C9CEE5B1EA5F73A007657FE /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9C9CEE5C1EA5F73A007657FE /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -8803,7 +8792,6 @@
 		9CDB498C1EF392FE0097E09D /* ani.webp in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB497F1EF38E650097E09D /* ani.webp */; };
 		9CDB498D1EF392FF0097E09D /* ani.webp in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB497F1EF38E650097E09D /* ani.webp */; };
 		9CDB498E1EF392FF0097E09D /* ani.webp in Resources */ = {isa = PBXBuildFile; fileRef = 9CDB497F1EF38E650097E09D /* ani.webp */; };
-		9CDB49921EF3ABBC0097E09D /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9CDB49931EF3ABBC0097E09D /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9CDB49941EF3ABBC0097E09D /* SSJBudgetBillTypeSelectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DAA383C1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m */; };
 		9CDB49951EF3ABBC0097E09D /* SSJAnnouncementsListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CE377191E6837D800218655 /* SSJAnnouncementsListViewController.m */; };
@@ -9521,7 +9509,6 @@
 		9CEC60FF1E70F7170087B361 /* SSJShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155F5E1E69128800FDFD18 /* SSJShareManager.m */; };
 		9CEC61001E70F7170087B361 /* SSJShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C155F5E1E69128800FDFD18 /* SSJShareManager.m */; };
 		9CECFB061D6BF36600DB2C8B /* SSJReminderDateSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CECFB051D6BF36600DB2C8B /* SSJReminderDateSelectView.m */; };
-		9CECFB1C1D6D41A700DB2C8B /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		9CECFB1D1D6D41A700DB2C8B /* SSJForgetPasswordFirstStepViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DE6E8701C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m */; };
 		9CECFB1E1D6D41A700DB2C8B /* SSJPercentCircleAdditionNodeItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DEF544F1C75DEEC00A90153 /* SSJPercentCircleAdditionNodeItem.m */; };
 		9CECFB1F1D6D41A700DB2C8B /* SSJBookKeepingHomeNodateFooter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5F324A1CEAE6C10086B67E /* SSJBookKeepingHomeNodateFooter.m */; };
@@ -9910,7 +9897,6 @@
 		BD0433BC1C1AA3320051E7AB /* SSJReportFormsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0433BB1C1AA3320051E7AB /* SSJReportFormsViewController.m */; };
 		BD0E43F71C21365100F9179D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BD0E43F61C21365100F9179D /* Security.framework */; };
 		BD0E43FB1C21380F00F9179D /* SFHFKeychainUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */; };
 		BD33FD2E1C4B2E4C006A6942 /* SSJAlertViewAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */; };
 		BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */ = {isa = PBXBuildFile; fileRef = BD33FD2C1C4B2E4C006A6942 /* SSJAlertViewDelegator.m */; };
 		BD542B561CB544F700655EE2 /* SSJQQLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BD542B551CB544F700655EE2 /* SSJQQLoginHelper.m */; };
@@ -11572,8 +11558,6 @@
 		BD0E43F61C21365100F9179D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BD0E43F91C21380F00F9179D /* SFHFKeychainUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SFHFKeychainUtils.h; sourceTree = "<group>"; };
 		BD0E43FA1C21380F00F9179D /* SFHFKeychainUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SFHFKeychainUtils.m; sourceTree = "<group>"; };
-		BD33FD271C4B2E4C006A6942 /* SSJAlertViewAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewAction.h; sourceTree = "<group>"; };
-		BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAlertViewAction.m; sourceTree = "<group>"; };
 		BD33FD291C4B2E4C006A6942 /* SSJAlertViewAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewAdapter.h; sourceTree = "<group>"; };
 		BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAlertViewAdapter.m; sourceTree = "<group>"; };
 		BD33FD2B1C4B2E4C006A6942 /* SSJAlertViewDelegator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAlertViewDelegator.h; sourceTree = "<group>"; };
@@ -15383,8 +15367,6 @@
 		BD33FD261C4B2E4C006A6942 /* SSJAlertViewAdapter */ = {
 			isa = PBXGroup;
 			children = (
-				BD33FD271C4B2E4C006A6942 /* SSJAlertViewAction.h */,
-				BD33FD281C4B2E4C006A6942 /* SSJAlertViewAction.m */,
 				BD33FD291C4B2E4C006A6942 /* SSJAlertViewAdapter.h */,
 				BD33FD2A1C4B2E4C006A6942 /* SSJAlertViewAdapter.m */,
 				BD33FD2B1C4B2E4C006A6942 /* SSJAlertViewDelegator.h */,
@@ -17414,7 +17396,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7D08A0961E4999D30085A8FB /* SSJAlertViewAction.m in Sources */,
 				7D08A0971E4999D30085A8FB /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7D08A0981E4999D30085A8FB /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7D08A0991E4999D30085A8FB /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -18089,7 +18070,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DA139ED1E35AED7000490A4 /* SSJAlertViewAction.m in Sources */,
 				7DA139EE1E35AED7000490A4 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DA139EF1E35AED7000490A4 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7DA139F01E35AED7000490A4 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -18764,7 +18744,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DBB3A741E55C2EE0075E638 /* SSJAlertViewAction.m in Sources */,
 				7DBB3A751E55C2EE0075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DBB3A761E55C2EE0075E638 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7DBB3A771E55C2EE0075E638 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -19439,7 +19418,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7DBB3F0F1E55C4E00075E638 /* SSJAlertViewAction.m in Sources */,
 				7DBB3F101E55C4E00075E638 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DBB3F111E55C4E00075E638 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7DBB3F121E55C4E00075E638 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -20115,7 +20093,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				91708B291ECD444B0021A33A /* SSJNewOrEditeBooksViewController.m in Sources */,
-				7DFB16531EB0341E00292DD3 /* SSJAlertViewAction.m in Sources */,
 				7DFB16541EB0341E00292DD3 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DFB16551EB0341E00292DD3 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7DFB16561EB0341E00292DD3 /* SSJAnnouncementsListViewController.m in Sources */,
@@ -20792,7 +20769,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DF4F1041EB88A6B0039FB2C /* SSJReportFormsNavigationBar.m in Sources */,
-				9C13F4D71E8267D300AC5FA9 /* SSJAlertViewAction.m in Sources */,
 				9C13F4D81E8267D300AC5FA9 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C13F4D91E8267D300AC5FA9 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9C13F4DA1E8267D300AC5FA9 /* SSJPercentCircleAdditionNodeItem.m in Sources */,
@@ -21467,7 +21443,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				91708B271ECD444B0021A33A /* SSJNewOrEditeBooksViewController.m in Sources */,
-				9C4C1FFA1E9E30C8000C5F15 /* SSJAlertViewAction.m in Sources */,
 				9C4C1FFB1E9E30C8000C5F15 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C4C1FFC1E9E30C8000C5F15 /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9C4C1FFD1E9E30C8000C5F15 /* SSJAnnouncementsListViewController.m in Sources */,
@@ -22143,7 +22118,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C7D2CDF1E8DF8A80093001F /* SSJAlertViewAction.m in Sources */,
 				9C7D2CE01E8DF8A80093001F /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C7D2CE11E8DF8A80093001F /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CB4A1261F09D8BB001CDAD8 /* SSJEncourageCellModel.m in Sources */,
@@ -22821,7 +22795,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C7D2F561E8DF96B0093001F /* SSJAlertViewAction.m in Sources */,
 				9C7D2F571E8DF96B0093001F /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C7D2F581E8DF96B0093001F /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CB4A12E1F09D8BB001CDAD8 /* SSJEncourageCellModel.m in Sources */,
@@ -23500,7 +23473,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				91708B261ECD444B0021A33A /* SSJNewOrEditeBooksViewController.m in Sources */,
-				9C80FC991E95E88E00B1BAAC /* SSJAlertViewAction.m in Sources */,
 				9C80FC9A1E95E88E00B1BAAC /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C80FC9B1E95E88E00B1BAAC /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9C80FC9C1E95E88E00B1BAAC /* SSJAnnouncementsListViewController.m in Sources */,
@@ -24177,7 +24149,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				91708B281ECD444B0021A33A /* SSJNewOrEditeBooksViewController.m in Sources */,
-				9C9CEE591EA5F73A007657FE /* SSJAlertViewAction.m in Sources */,
 				9C9CEE5A1EA5F73A007657FE /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9C9CEE5B1EA5F73A007657FE /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9C9CEE5C1EA5F73A007657FE /* SSJAnnouncementsListViewController.m in Sources */,
@@ -24853,7 +24824,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CDB49921EF3ABBC0097E09D /* SSJAlertViewAction.m in Sources */,
 				9CDB49931EF3ABBC0097E09D /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9CDB49941EF3ABBC0097E09D /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CB4A1331F09D8BB001CDAD8 /* SSJEncourageCellModel.m in Sources */,
@@ -25532,7 +25502,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C155F2E1E68572700FDFD18 /* UIScrollView+MJExtension.m in Sources */,
-				9CECFB1C1D6D41A700DB2C8B /* SSJAlertViewAction.m in Sources */,
 				9CECFB1D1D6D41A700DB2C8B /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				9CECFB1E1D6D41A700DB2C8B /* SSJPercentCircleAdditionNodeItem.m in Sources */,
 				9CECFB1F1D6D41A700DB2C8B /* SSJBookKeepingHomeNodateFooter.m in Sources */,
@@ -26203,7 +26172,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BD33FD2D1C4B2E4C006A6942 /* SSJAlertViewAction.m in Sources */,
 				7DE6E8711C56419F001C9138 /* SSJForgetPasswordFirstStepViewController.m in Sources */,
 				7DAA383D1D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				9CB4A1281F09D8BB001CDAD8 /* SSJEncourageCellModel.m in Sources */,
