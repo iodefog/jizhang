@@ -152,14 +152,17 @@ static NSString *const kClearDataTitle = @"清理数据";
     
     if ([title isEqualToString:kBindMobileNoTitle]) {
         mineHomeCell.cellDetail = @"去绑定";
+        mineHomeCell.detailTitlefilled = YES;
     } else if ([title isEqualToString:kMobileNoTitle]) {
         if (self.userItem.mobileNo.length >= 7) {
             mineHomeCell.cellDetail = [self.userItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
         } else {
             mineHomeCell.cellDetail = self.userItem.mobileNo;
         }
+        mineHomeCell.detailTitlefilled = NO;
     } else {
         mineHomeCell.cellDetail = nil;
+        mineHomeCell.detailTitlefilled = NO;
     }
     
     if ([title isEqualToString:kFingerPrintPwdTitle]) {
