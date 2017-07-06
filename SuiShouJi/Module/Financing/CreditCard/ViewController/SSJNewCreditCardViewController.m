@@ -93,17 +93,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (self.cardType == SSJCrediteCardTypeAlipay) {
-        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
-        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
-        
-    } else {
-        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9,kTitle6],@[kTitle10,kTitle5]];
-        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"loan_expires"],@[@"card_yanse",@"loan_memo"]];
-    }
 
     if (!self.cardId.length) {
-        if (self.cardType == SSJCrediteCardTypeAlipay) {
+        if (self.cardType == SSJCrediteCardTypeCrediteCard) {
             self.title = @"添加信用卡账户";
         } else {
             self.title = @"添加蚂蚁花呗账户";
@@ -116,11 +108,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
         self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
-        if (self.cardType == SSJCrediteCardTypeAlipay) {
-            self.title = @"编辑信用卡账户";
-        } else {
-            self.title = @"编辑蚂蚁花呗账户";
-        }
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
@@ -135,12 +122,27 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         if (self.item.cardRepaymentDay == 0) {
             self.item.cardRepaymentDay = 10;
         }
-        self.cardType = self.item.cardType;
     }
     if (self.item.remindId.length) {
         self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];
     }
+    self.cardType = self.item.cardType;
+    if (self.cardType == SSJCrediteCardTypeCrediteCard) {
+        self.title = @"编辑信用卡账户";
+    } else {
+        self.title = @"编辑蚂蚁花呗账户";
+    }
     
+    if (self.cardType == SSJCrediteCardTypeAlipay) {
+        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
+        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
+        
+    } else {
+        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9,kTitle6],@[kTitle10,kTitle5]];
+        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"loan_expires"],@[@"card_yanse",@"loan_memo"]];
+    }
+
+
     [self.view addSubview:self.tableView];
     [self.tableView reloadData];
     // Do any additional setup after loading the view.
