@@ -21,16 +21,7 @@
     
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
-        __weak typeof(currentVC) weak_currentVc = currentVC;
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] initWithNibName:nil bundle:nil];
-        loginVC.finishHandle = ^(UIViewController *controller) {
-            controller.backController = weak_currentVc;
-            [controller ssj_backOffAction];
-        };
-        loginVC.cancelHandle = ^(UIViewController *controller) {
-            controller.backController = [weak_currentVc ssj_previousViewController];
-            [controller ssj_backOffAction];
-        };
         SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
         [currentVC presentViewController:naviVC animated:YES completion:NULL];
     } failure:^(NSError * _Nonnull error) {

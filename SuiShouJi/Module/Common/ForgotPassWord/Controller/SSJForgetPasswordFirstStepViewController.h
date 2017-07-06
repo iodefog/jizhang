@@ -9,6 +9,8 @@
 #import "SSJBaseViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 
+SSJ_DEPRECATED
+
 @interface SSJForgetPasswordFirstStepViewController : SSJBaseViewController
 
 @property (nonatomic, copy) NSString *mobileNo;

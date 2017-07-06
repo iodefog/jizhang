@@ -11,13 +11,11 @@
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
 //#import "SSJLoginViewController.h"
-#import "SSJRegistGetVerViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
 #import "UIViewController+MMDrawerController.h"
 #import "SSJSearchingViewController.h"
-#import "SSJRegistGetVerViewController.h"
 #import "SSJThemBgImageClipViewController.h"
 #import "SSJNavigationController.h"
 #import "UIViewController+SSJMotionPassword.h"
@@ -66,7 +64,6 @@
 #import "SSJUserTableManager.h"
 #import "SSJCustomThemeManager.h"
 #import "SSJBooksTypeStore.h"
-
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 

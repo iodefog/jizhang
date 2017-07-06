@@ -146,9 +146,7 @@ NSDate *SCYEnterBackgroundTime() {
     
     _startViewManager = [[SSJStartViewManager alloc] init];
     [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified){
-            // 没有进入手势密码，直接进入首页的话，就调用reloadWithAnimation显示首页数据加载动画;
-            // 因为从手势密码返回到首页会触发首页的viewWillAppear，在这个方法中也做了数据刷新，会把加载动画覆盖掉
+        [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified) {
             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
             UINavigationController *navi = [tabVC.viewControllers firstObject];
             SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
@@ -166,12 +164,8 @@ NSDate *SCYEnterBackgroundTime() {
     }];
     
     [SSJDomainManager requestDomain];
-    
     // 美恰sdk设置
-    [MQManager initWithAppkey:SSJMQAppKey completion:^(NSString *clientId, NSError *error) {
-        
-    }];
-    
+    [MQManager initWithAppkey:SSJMQAppKey completion:NULL];
     //保存app启动时间，判断是否为新用户
     [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
     

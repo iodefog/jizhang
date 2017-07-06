@@ -155,16 +155,28 @@
 
 + (void)showError:(NSError *)error completion:(nullable void(^)())completion {
     NSString *message = nil;
+    if ([[self errorCodesShowingDetail] containsObject:@(error.code)]) {
+        message = [error localizedDescription];
+    } else {
 #ifdef DEBUG
-    message = [error localizedDescription];
+        message = [error localizedDescription];
 #else
-    message = SSJ_ERROR_MESSAGE;
+        message = SSJ_ERROR_MESSAGE;
 #endif
+    }
+
     [self showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
         if (completion) {
             completion();
         }
     }], nil];
+}
+
+/**
+ 不论是Debug还是Release都显示具体错误信息的code
+ */
++ (NSSet *)errorCodesShowingDetail {
+    return [NSSet setWithObjects:@(SSJErrorCodeLoginPasswordIllegal), nil];
 }
 
 @end

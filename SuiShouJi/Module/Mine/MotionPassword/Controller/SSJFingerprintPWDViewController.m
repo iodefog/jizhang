@@ -97,9 +97,8 @@
             SSJDispatchMainSync(^{
                 if (self.finishHandle) {
                     self.finishHandle(self);
-                } else {
-                    [self ssj_backOffAction];
                 }
+                [self dismissViewControllerAnimated:YES completion:NULL];
             });
         }
     }];
@@ -109,15 +108,9 @@
 - (void)changeAccountAction {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
-        if ([[self ssj_previousViewController] isKindOfClass:[SSJLoginVerifyPhoneViewController class]]) {
-            [self.navigationController popViewControllerAnimated:YES];
-        } else {
-            SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
-            loginVC.finishHandle = self.finishHandle;
-            loginVC.cancelHandle = self.finishHandle;
-            loginVC.backController = self.backController;
-            [self.navigationController setViewControllers:@[loginVC] animated:YES];
-        }
+        SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
+        loginVC.finishHandle = self.finishHandle;
+        [self.navigationController setViewControllers:@[loginVC] animated:YES];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
