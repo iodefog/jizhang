@@ -24,6 +24,31 @@
 #import "SSJCreditCardItem.h"
 #import "SSJFundingItem.h"
 
+/**
+ 添加／编辑借贷条目
+
+ - SSJAddOrEditLoanItemLender: 借款人／欠款人
+ - SSJAddOrEditLoanItemMoney: 借出金额／欠款金额
+ - SSJAddOrEditLoanItemAccount: 借出／欠款账户
+ - SSJAddOrEditLoanItemLoanDate: 借款／欠款日
+ - SSJAddOrEditLoanItemPaymentDate: 还款日
+ - SSJAddOrEditLoanItemInterestToggle: 计息
+ - SSJAddOrEditLoanItemEarningsRate: 收益率
+ - SSJAddOrEditLoanItemRemindDate: 到期日提醒
+ - SSJAddOrEditLoanItemMemo: 备注
+ */
+typedef NS_ENUM(NSInteger, SSJAddOrEditLoanItem) {
+    SSJAddOrEditLoanItemLender,
+    SSJAddOrEditLoanItemMoney,
+    SSJAddOrEditLoanItemAccount,
+    SSJAddOrEditLoanItemLoanDate,
+    SSJAddOrEditLoanItemPaymentDate,
+    SSJAddOrEditLoanItemInterestToggle,
+    SSJAddOrEditLoanItemEarningsRate,
+    SSJAddOrEditLoanItemRemindDate,
+    SSJAddOrEditLoanItemMemo
+};
+
 static NSString *const kAddOrEditLoanLabelCellId = @"SSJAddOrEditLoanLabelCell";
 static NSString *const kAddOrEditLoanTextFieldCellId = @"SSJAddOrEditLoanTextFieldCell";
 static NSString *const kAddOrEditLoanMultiLabelCellId = @"SSJAddOrEditLoanMultiLabelCell";
@@ -53,10 +78,13 @@ const int kMemoMaxLength = 15;
 // 期限日
 @property (nonatomic, strong) SSJHomeDatePickerView *repaymentDateSelectionView;
 
+// 提醒模型
 @property (nonatomic, strong) SSJReminderItem *reminderItem;
 
+// 利息
 @property (nonatomic, strong) UILabel *interestLab;
 
+// 是否是编辑
 @property (nonatomic) BOOL edited;
 
 // 原始的借贷金额，只有在编辑记录此金额
@@ -67,6 +95,8 @@ const int kMemoMaxLength = 15;
 
 // 编辑借贷金额新产生的余额变更流水
 @property (nonatomic, strong) SSJLoanCompoundChargeModel *changeCompoundModel;
+
+@property (nonatomic, strong) NSArray<NSNumber *> *items;
 
 @end
 
@@ -88,13 +118,13 @@ const int kMemoMaxLength = 15;
     [super viewDidLoad];
     
     _edited = (_loanModel && _chargeModels);
-    
     if (_loanModel.remindID.length) {
         _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_loanModel.remindID];
     }
     
     [self loadData];
     [self updateTitle];
+    [self reorganiseItems];
     
     if (_edited) {
         self.originalMoney = _loanModel.jMoney;
@@ -122,214 +152,235 @@ const int kMemoMaxLength = 15;
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return self.items.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 3;
-    } else if (section == 1) {
-        return 3;
-    } else if (section == 2) {
-        return self.loanModel.interest ? 2 : 1;
-    } else if (section == 3) {
-        return 1;
-    } else {
-        return 0;
-    }
+    return [[self.items ssj_safeObjectAtIndex:section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:0]] == NSOrderedSame) {
-        SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_person"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (self.loanModel.type) {
-            case SSJLoanTypeLend:
-                cell.textLabel.text = @"被谁借款";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"欠谁钱款";
-                break;
+    SSJAddOrEditLoanItem item = [[self.items ssj_objectAtIndexPath:indexPath] integerValue];
+    switch (item) {
+        case SSJAddOrEditLoanItemLender: {
+            SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_person"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    cell.textLabel.text = @"被谁借款";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    cell.textLabel.text = @"欠谁钱款";
+                    break;
+            }
+            cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+            cell.textField.text = self.loanModel.lender;
+            cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.delegate = self;
+            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.tag = kLenderTag;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = self.loanModel.lender;
-        cell.textField.keyboardType = UIKeyboardTypeDefault;
-        cell.textField.delegate = self;
-        cell.textField.clearsOnBeginEditing = YES;
-        cell.textField.tag = kLenderTag;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:0]] == NSOrderedSame) {
-        SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (self.loanModel.type) {
-            case SSJLoanTypeLend:
-                cell.textLabel.text = @"借出金额";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"欠款金额";
-                break;
+            break;
+            
+        case SSJAddOrEditLoanItemMoney: {
+            SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    cell.textLabel.text = @"借出金额";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    cell.textLabel.text = @"欠款金额";
+                    break;
+            }
+            
+            cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+            cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
+            cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.delegate = self;
+            cell.textField.tag = kMoneyTag;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
-        cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-        cell.textField.clearsOnBeginEditing = YES;
-        cell.textField.delegate = self;
-        cell.textField.tag = kMoneyTag;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:0]] == NSOrderedSame) {
-        SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (self.loanModel.type) {
-            case SSJLoanTypeLend:
-                cell.textLabel.text = @"借出账户";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"借入账户";
-                break;
+            break;
+            
+        case SSJAddOrEditLoanItemAccount: {
+            SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    cell.textLabel.text = @"借出账户";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    cell.textLabel.text = @"借入账户";
+                    break;
+            }
+            
+            if (_fundingSelectionView.selectedIndex >= 0) {
+                SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
+                cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
+                cell.subtitleLabel.text = selectedFundItem.title;
+            } else {
+                cell.additionalIcon.image = nil;
+                cell.subtitleLabel.text = @"请选择账户";
+            }
+            
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.switchControl.hidden = YES;
+            cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        
-        if (_fundingSelectionView.selectedIndex >= 0) {
-            SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
-            cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-            cell.subtitleLabel.text = selectedFundItem.title;
-        } else {
+            break;
+            
+        case SSJAddOrEditLoanItemLoanDate: {
+            SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_calendar"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            switch (self.loanModel.type) {
+                case SSJLoanTypeLend:
+                    cell.textLabel.text = @"借款日";
+                    break;
+                    
+                case SSJLoanTypeBorrow:
+                    cell.textLabel.text = @"欠款日";
+                    break;
+            }
+            
             cell.additionalIcon.image = nil;
-            cell.subtitleLabel.text = @"请选择账户";
+            cell.subtitleLabel.text = [self.loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.switchControl.hidden = YES;
+            cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.switchControl.hidden = YES;
-        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
-        SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_calendar"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        switch (self.loanModel.type) {
-            case SSJLoanTypeLend:
-                cell.textLabel.text = @"借款日";
-                break;
-                
-            case SSJLoanTypeBorrow:
-                cell.textLabel.text = @"欠款日";
-                break;
+            break;
+            
+        case SSJAddOrEditLoanItemPaymentDate: {
+            SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_expires"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.textLabel.text = @"还款日";
+            
+            cell.additionalIcon.image = nil;
+            if (self.loanModel.repaymentDate) {
+                cell.subtitleLabel.text = [self.loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
+                cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+            } else {
+                cell.subtitleLabel.text = @"选填";
+                cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            }
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.switchControl.hidden = YES;
+            cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        
-        cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [self.loanModel.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.switchControl.hidden = YES;
-        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
-        SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_expires"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = @"还款日";
-        
-        cell.additionalIcon.image = nil;
-        if (self.loanModel.repaymentDate) {
-            cell.subtitleLabel.text = [self.loanModel.repaymentDate formattedDateWithFormat:@"yyyy.MM.dd"];
-            cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        } else {
-            cell.subtitleLabel.text = @"选填";
-            cell.subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+            break;
+            
+        case SSJAddOrEditLoanItemInterestToggle: {
+            SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_interest"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.textLabel.text = @"计息";
+            cell.additionalIcon.image = nil;
+            cell.subtitleLabel.text = nil;
+            cell.switchControl.hidden = NO;
+            [cell.switchControl setOn:self.loanModel.interest animated:YES];
+            [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchControl addTarget:self action:@selector(interestSwitchAction:) forControlEvents:UIControlEventValueChanged];
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell setNeedsLayout];
+            
+            return cell;
         }
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        cell.switchControl.hidden = YES;
-        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:1]] == NSOrderedSame) {
-        SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = @"备注";
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = self.loanModel.memo;
-        cell.textField.keyboardType = UIKeyboardTypeDefault;
-        cell.textField.clearsOnBeginEditing = NO;
-        cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        cell.textField.delegate = self;
-        cell.textField.tag = kMemoTag;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:2]] == NSOrderedSame) {
-        SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_interest"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = @"计息";
-        cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = nil;
-        cell.switchControl.hidden = NO;
-        [cell.switchControl setOn:self.loanModel.interest animated:YES];
-        [cell.switchControl addTarget:self action:@selector(interestSwitchAction:) forControlEvents:UIControlEventValueChanged];
-        cell.customAccessoryType = UITableViewCellAccessoryNone;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:2]] == NSOrderedSame) {
-        SSJAddOrEditLoanMultiLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanMultiLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = @"年化收益率";
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        if (self.loanModel.rate) {
-            cell.textField.text = [NSString stringWithFormat:@"%.1f", self.loanModel.rate * 100];
+            break;
+            
+        case SSJAddOrEditLoanItemEarningsRate: {
+            SSJAddOrEditLoanMultiLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanMultiLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_yield"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.textLabel.text = @"年化收益率";
+            cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.0" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+            if (self.loanModel.rate) {
+                cell.textField.text = [NSString stringWithFormat:@"%.1f", self.loanModel.rate * 100];
+            }
+            cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.textField.delegate = self;
+            cell.textField.tag = kRateTag;
+            [cell setNeedsLayout];
+            
+            _interestLab = cell.subtitleLabel;
+            [self updateInterest];
+            
+            return cell;
         }
-        cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-        cell.textField.delegate = self;
-        cell.textField.tag = kRateTag;
-        [cell setNeedsLayout];
-        
-        _interestLab = cell.subtitleLabel;
-        [self updateInterest];
-        
-        return cell;
-        
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
-        SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:@"loan_remind"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = @"到期日提醒";
-        cell.subtitleLabel.text = [_reminderItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
-        cell.additionalIcon.image = nil;
-        cell.customAccessoryType = UITableViewCellAccessoryNone;
-        cell.switchControl.hidden = NO;
-        cell.switchControl.on = _reminderItem.remindState;
-        [cell.switchControl addTarget:self action:@selector(remindSwitchAction:) forControlEvents:UIControlEventValueChanged];
-        cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
-        [cell setNeedsLayout];
-        
-        return cell;
-        
-    } else {
-        return [[UITableViewCell alloc] init];
+            break;
+            
+        case SSJAddOrEditLoanItemRemindDate: {
+            SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanLabelCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_remind"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.textLabel.text = @"到期日提醒";
+            cell.subtitleLabel.text = [_reminderItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
+            cell.additionalIcon.image = nil;
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.switchControl.hidden = NO;
+            cell.switchControl.on = _reminderItem.remindState;
+            [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchControl addTarget:self action:@selector(remindSwitchAction:) forControlEvents:UIControlEventValueChanged];
+            cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
+            [cell setNeedsLayout];
+            
+            return cell;
+        }
+            break;
+            
+        case SSJAddOrEditLoanItemMemo: {
+            SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditLoanTextFieldCellId forIndexPath:indexPath];
+            cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            cell.textLabel.text = @"备注";
+            cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+            cell.textField.text = self.loanModel.memo;
+            cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.clearsOnBeginEditing = NO;
+            cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+            cell.textField.delegate = self;
+            cell.textField.tag = kMemoTag;
+            [cell setNeedsLayout];
+            
+            return cell;
+        }
+            break;
     }
 }
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:2]] == NSOrderedSame) {
-        return 74;
-    } else {
-        return 54;
+    SSJAddOrEditLoanItem item = [[self.items ssj_objectAtIndexPath:indexPath] integerValue];
+    switch (item) {
+        case SSJAddOrEditLoanItemLender:
+        case SSJAddOrEditLoanItemMoney:
+        case SSJAddOrEditLoanItemAccount:
+        case SSJAddOrEditLoanItemLoanDate:
+        case SSJAddOrEditLoanItemPaymentDate:
+        case SSJAddOrEditLoanItemInterestToggle:
+        case SSJAddOrEditLoanItemRemindDate:
+        case SSJAddOrEditLoanItemMemo:
+            return 54;
+            break;
+            
+        case SSJAddOrEditLoanItemEarningsRate:
+            return 74;
+            break;
     }
 }
 
@@ -340,18 +391,19 @@ const int kMemoMaxLength = 15;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if ([indexPath compare:[NSIndexPath indexPathForRow:2 inSection:0]] == NSOrderedSame) {
+    SSJAddOrEditLoanItem item = [[self.items ssj_objectAtIndexPath:indexPath] integerValue];
+    if (item == SSJAddOrEditLoanItemAccount) {
         [self.view endEditing:YES];
         [self.fundingSelectionView show];
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:1]] == NSOrderedSame) {
+    } else if (item == SSJAddOrEditLoanItemLoanDate) {
         [self.view endEditing:YES];
         self.borrowDateSelectionView.date = self.loanModel.borrowDate;
         [self.borrowDateSelectionView show];
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:1 inSection:1]] == NSOrderedSame) {
+    } else if (item == SSJAddOrEditLoanItemPaymentDate) {
         [self.view endEditing:YES];
         self.repaymentDateSelectionView.date = [self paymentDate];
         [self.repaymentDateSelectionView show];
-    } else if ([indexPath compare:[NSIndexPath indexPathForRow:0 inSection:3]] == NSOrderedSame) {
+    } else if (item == SSJAddOrEditLoanItemRemindDate) {
         if (_reminderItem) {
             [self enterReminderVC];
         }
@@ -522,6 +574,7 @@ const int kMemoMaxLength = 15;
 
 - (void)interestSwitchAction:(UISwitch *)switchCtrl {
     self.loanModel.interest = switchCtrl.on;
+    [self reorganiseItems];
     [_tableView beginUpdates];
     [_tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
     [_tableView endUpdates];
@@ -570,6 +623,29 @@ const int kMemoMaxLength = 15;
             self.title = _edited ? @"编辑欠款" : @"添加欠款";
             break;
     }
+}
+
+- (void)reorganiseItems {
+    NSArray *section_1 = @[@(SSJAddOrEditLoanItemLender),
+                           @(SSJAddOrEditLoanItemMoney),
+                           @(SSJAddOrEditLoanItemAccount)];
+    
+    NSArray *section_2 = @[@(SSJAddOrEditLoanItemLoanDate),
+                           @(SSJAddOrEditLoanItemPaymentDate)];
+    
+    NSArray *section_3 = nil;
+    if (self.loanModel.interest) {
+        section_3 = @[@(SSJAddOrEditLoanItemInterestToggle),
+                      @(SSJAddOrEditLoanItemEarningsRate),
+                      @(SSJAddOrEditLoanItemRemindDate)];
+    } else {
+        section_3 = @[@(SSJAddOrEditLoanItemInterestToggle),
+                      @(SSJAddOrEditLoanItemRemindDate)];
+    }
+    
+    NSArray *section_4 = @[@(SSJAddOrEditLoanItemMemo)];
+    
+    self.items = @[section_1, section_2, section_3, section_4];
 }
 
 - (void)updateAppearance {
@@ -1081,9 +1157,9 @@ const int kMemoMaxLength = 15;
         [_sureButton setTitle:@"" forState:UIControlStateDisabled];
         [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
-        _sureButton.frame = CGRectMake(self.footerView.width * 0.1, 30, self.footerView.width * 0.8, 48);
+        _sureButton.frame = CGRectMake(15, 30, self.footerView.width - 30, 44);
         _sureButton.clipsToBounds = YES;
-        _sureButton.layer.cornerRadius = 3;
+        _sureButton.layer.cornerRadius = 6;
     }
     return _sureButton;
 }
