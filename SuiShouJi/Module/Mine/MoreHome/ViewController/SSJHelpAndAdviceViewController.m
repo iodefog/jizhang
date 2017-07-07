@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"帮助与反馈";
     [self.view addSubview:self.webView];
     [self.view addSubview:self.helpBtn];
     [self updateViewConstraints];

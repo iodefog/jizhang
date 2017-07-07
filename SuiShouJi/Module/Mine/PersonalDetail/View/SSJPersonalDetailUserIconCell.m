@@ -34,7 +34,6 @@
         [self.contentView addSubview:self.userIcon];
         [self setNeedsUpdateConstraints];
         [self updateAppearance];
-        self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     }
     return self;
 }
@@ -59,6 +58,9 @@
 
 - (void)updateAppearance {
     self.leftLab.textColor = SSJ_MAIN_COLOR;
+    self.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+    
+//    SeparatorStyle
 }
 
 - (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
