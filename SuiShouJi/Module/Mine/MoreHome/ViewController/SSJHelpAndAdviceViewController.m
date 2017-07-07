@@ -63,6 +63,7 @@
         [[_helpBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             SSJProductAdviceViewController *proVC = [[SSJProductAdviceViewController alloc] init];
+            proVC.defaultAdviceType = SSJAdviceTypeAdvice;
             [self.navigationController pushViewController:proVC animated:YES];
         }];
         [_helpBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellSeparatorColor]];

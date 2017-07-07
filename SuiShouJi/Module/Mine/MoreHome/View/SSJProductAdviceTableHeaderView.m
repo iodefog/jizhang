@@ -7,8 +7,9 @@
 //
 
 #import "SSJProductAdviceTableHeaderView.h"
-#import "SSJProductAdviceNetWorkService.h"
 #import "SSJCustomTextView.h"
+#import "SSJProductAdviceNetWorkService.h"
+
 @interface SSJProductAdviceTableHeaderView()<SSJBaseNetworkServiceDelegate>
 
 @property (nonatomic, strong) UIView *topView;
@@ -120,6 +121,26 @@
     return 417;
 }
 
+- (void)setDefaultAdviceType:(SSJAdviceType)defaultAdviceType {
+    _defaultAdviceType = defaultAdviceType;
+    switch (defaultAdviceType) {
+        case SSJAdviceTypeAdvice:
+            self.adviceBtn.selected = YES;
+            self.adviceType = defaultAdviceType;
+            break;
+        case SSJAdviceTypeFault:
+            self.faultBtn.selected = YES;
+            self.adviceType = defaultAdviceType;
+            break;
+        case SSJAdviceTypeTuCao:
+            self.tucaoBtn.selected = YES;
+            self.adviceType = defaultAdviceType;
+            break;
+        default:
+            break;
+    }
+}
+
 #pragma mark -Lazy
 - (UIView *)topView {
     if (!_topView) {
@@ -142,21 +163,24 @@
         [_adviceBtn setTitle:@"产品建议" forState:UIControlStateNormal];
         [_adviceBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];
         _adviceBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-//        [_adviceBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainBackGroundColor] forState:UIControlStateNormal];
-//        [_adviceBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor] forState:UIControlStateReserved];
+        [_adviceBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"dddddd"] forState:UIControlStateSelected];
+        [_adviceBtn ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        @weakify(self);
+        
         [[_adviceBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             btn.selected = !btn.selected;
             if (btn.selected == YES) {
-                btn.backgroundColor = [UIColor ssj_colorWithHex:@"dddddd"];
+//                btn.backgroundColor = ;
                 self.adviceType = SSJAdviceTypeAdvice;
             } else {
-                btn.backgroundColor = [UIColor whiteColor];
+//                btn.backgroundColor = [UIColor whiteColor];
             }
             self.faultBtn.selected = NO;
-            self.faultBtn.backgroundColor = [UIColor whiteColor];
+//            self.faultBtn.backgroundColor = [UIColor whiteColor];
             
             self.tucaoBtn.selected = NO;
-            self.tucaoBtn.backgroundColor = [UIColor whiteColor];
+//            self.tucaoBtn.backgroundColor = [UIColor whiteColor];
         }];
     }
     return _adviceBtn;
@@ -172,19 +196,24 @@
         [_faultBtn setTitle:@"使用故障" forState:UIControlStateNormal];
         [_faultBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];
         _faultBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_faultBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"dddddd"] forState:UIControlStateSelected];
+        [_faultBtn ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        @weakify(self);
         [[_faultBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             btn.selected = !btn.selected;
             if (btn.selected == YES) {
-                btn.backgroundColor = [UIColor ssj_colorWithHex:@"dddddd"];
+//                btn.backgroundColor = [UIColor ssj_colorWithHex:@"dddddd"];
                 self.adviceType = SSJAdviceTypeFault;
-            } else {
-                btn.backgroundColor = [UIColor whiteColor];
             }
+//            else {
+//                btn.backgroundColor = [UIColor whiteColor];
+//            }
             self.tucaoBtn.selected = NO;
-            self.tucaoBtn.backgroundColor = [UIColor whiteColor];
+//            self.tucaoBtn.backgroundColor = [UIColor whiteColor];
             
             self.adviceBtn.selected = NO;
-            self.adviceBtn.backgroundColor = [UIColor whiteColor];
+//            self.adviceBtn.backgroundColor = [UIColor whiteColor];
         }];
     }
     return _faultBtn;
@@ -200,19 +229,23 @@
         [_tucaoBtn setTitle:@"我要吐槽" forState:UIControlStateNormal];
         [_tucaoBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];
         _tucaoBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_tucaoBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"dddddd"] forState:UIControlStateSelected];
+        [_tucaoBtn ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        @weakify(self);
         [[_tucaoBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            @strongify(self);
             btn.selected = !btn.selected;
             if (btn.selected == YES) {
-                btn.backgroundColor = [UIColor ssj_colorWithHex:@"dddddd"];
+//                btn.backgroundColor = [UIColor ssj_colorWithHex:@"dddddd"];
                 self.adviceType = SSJAdviceTypeTuCao;
             } else {
-                btn.backgroundColor = [UIColor whiteColor];
+//                btn.backgroundColor = [UIColor whiteColor];
             }
             self.faultBtn.selected = NO;
-            self.faultBtn.backgroundColor = [UIColor whiteColor];
+//            self.faultBtn.backgroundColor = [UIColor whiteColor];
             
             self.adviceBtn.selected = NO;
-            self.adviceBtn.backgroundColor = [UIColor whiteColor];
+//            self.adviceBtn.backgroundColor = [UIColor whiteColor];
         }];
     }
     return _tucaoBtn;

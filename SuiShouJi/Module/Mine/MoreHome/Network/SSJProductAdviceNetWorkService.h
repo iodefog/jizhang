@@ -8,12 +8,6 @@
 
 #import "SSJBaseNetworkService.h"
 
-typedef NS_ENUM(NSUInteger, SSJAdviceType) {
-    SSJAdviceTypeAdvice,//产品建议
-    SSJAdviceTypeFault,//使用故障
-    SSJAdviceTypeTuCao,//我要吐槽
-};
-
 @class SSJChatMessageItem,SSJAdviceItem;
 
 

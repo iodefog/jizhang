@@ -115,6 +115,7 @@
 {
     if (!_productAdviceTableHeaderView) {
         _productAdviceTableHeaderView = [[SSJProductAdviceTableHeaderView alloc] init];
+        _productAdviceTableHeaderView.defaultAdviceType = self.defaultAdviceType;
     }
     return _productAdviceTableHeaderView;
 }
