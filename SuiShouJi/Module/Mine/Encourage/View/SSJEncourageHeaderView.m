@@ -149,7 +149,13 @@
 }
 
 - (void)updateButtonClicked:(id)sender {
-    [[SSJStartChecker sharedInstance]  checkWithSuccess:NULL failure:NULL];
+    [[SSJStartChecker sharedInstance] checkWithSuccess:^(BOOL isInReview, SSJAppUpdateType type) {
+        if (type == SSJAppUpdateTypeNone) {
+            [CDAutoHideMessageHUD showMessage:@"当前已经是最新版本,不需要更新"];
+        }
+    } failure:^(NSString *message) {
+        [CDAutoHideMessageHUD showMessage:message];
+    }];
 }
 
 
