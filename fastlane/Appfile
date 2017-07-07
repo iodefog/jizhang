@@ -5,7 +5,7 @@ end
 
 for_lane :release do |options|
 app_identifier "com.youyu.jizhang"
-apple_id "marsfan888@163.com"
+apple_id "iosapp1@9188.com"
 end
 
 for_lane :testflight do |options|
