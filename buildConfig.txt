@@ -2,7 +2,7 @@
     "buildConfig": "Release-production",
     "buildScheme": "YouYuJiZhang",
     "infoplist": "YouYuJiZhang-Info.plist",
-    "uploadToPgy": false,
+    "uploadToPgy": true,
     "uploadToAppStore": false,
-    "testflight":true
+    "testflight":false
 }
