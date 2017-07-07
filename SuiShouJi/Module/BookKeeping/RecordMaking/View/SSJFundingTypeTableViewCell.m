@@ -93,7 +93,9 @@
         _fundingTitle.text = self.item.fundingName;
     }
     [_fundingTitle sizeToFit];
-    _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
+    _fundingImage.image = [[UIImage imageNamed:self.item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _fundingImage.tintColor = [UIColor ssj_colorWithHex:self.item.fundingColor];
+    
 }
 
 -(void)setCellTitle:(NSString *)cellTitle {
