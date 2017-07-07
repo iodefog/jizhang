@@ -51,6 +51,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"验证原手机号";
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -64,6 +65,7 @@
         [self.authCodeField getVerifCode];
         [self.view setNeedsUpdateConstraints];
     }];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -134,11 +136,17 @@
 }
 
 - (void)updateAppearance {
-    self.descLab.textColor = SSJ_MAIN_COLOR;
-    [self.authCodeField updateAppearanceAccordingToTheme];
-    [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
-    [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
-    [self.changeWayBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+    [self.authCodeField defaultAppearanceTheme];
+    
+    UIColor *normalColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
+    [self.nextBtn ssj_setBackgroundColor:normalColor forState:UIControlStateNormal];
+    
+    UIColor *disableColor = [normalColor colorWithAlphaComponent:SSJButtonDisableAlpha];
+    [self.nextBtn ssj_setBackgroundColor:disableColor forState:UIControlStateDisabled];
+    
+    UIColor *mainColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+    self.descLab.textColor = mainColor;
+    [self.changeWayBtn setTitleColor:mainColor forState:UIControlStateNormal];
 }
 
 - (void)setUpViews {

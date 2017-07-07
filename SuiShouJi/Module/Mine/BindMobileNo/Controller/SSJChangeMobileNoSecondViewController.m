@@ -41,6 +41,7 @@
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"新手机号";
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -52,6 +53,7 @@
     [self updateAppearance];
     [self.view setNeedsUpdateConstraints];
 //    [self.mobileNoField becomeFirstResponder];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)updateViewConstraints {
@@ -97,10 +99,16 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
-    self.descLab.textColor = SSJ_MAIN_COLOR;
-    [self.mobileNoField updateAppearanceAccordingToTheme];
-    [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
-    [self.nextBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
+    [self.mobileNoField updateAppearanceAccordingToDefaultTheme];
+    
+    UIColor *mainColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+    self.descLab.textColor = mainColor;
+    
+    UIColor *normalColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
+    [self.nextBtn ssj_setBackgroundColor:normalColor forState:UIControlStateNormal];
+    
+    UIColor *disableColor = [normalColor colorWithAlphaComponent:SSJButtonDisableAlpha];
+    [self.nextBtn ssj_setBackgroundColor:disableColor forState:UIControlStateDisabled];
 }
 
 - (void)setUpViews {

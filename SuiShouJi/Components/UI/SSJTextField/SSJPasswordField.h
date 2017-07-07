@@ -21,4 +21,6 @@
 
 - (void)updateAppearanceAccordingToTheme;
 
+- (void)updateAppearanceAccordingToDefaultTheme;
+
 @end

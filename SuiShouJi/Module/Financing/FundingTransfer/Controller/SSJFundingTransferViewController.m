@@ -417,8 +417,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _saveButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, _saveFooterView.width - 20, 40)];
         _saveButton.layer.cornerRadius = 3.f;
         _saveButton.layer.masksToBounds = YES;
-        [_saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [_saveButton ssj_setBackgroundColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+        [_saveButton ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
+        [_saveButton ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
         [_saveButton setTitle:@"保存" forState:UIControlStateNormal];
         [_saveButton setTitle:nil forState:UIControlStateDisabled];
         [_saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

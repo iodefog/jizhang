@@ -242,8 +242,8 @@ static const NSInteger kMemoTag = 1002;
 
 - (void)updateAppearance {
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-    [_saveButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-    [_saveButton ssj_setBackgroundColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] colorWithAlphaComponent:0.5] forState:UIControlStateDisabled];
+    [_saveButton ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
+    [_saveButton ssj_setBackgroundColor:[SSJ_BUTTON_DISABLE_COLOR colorWithAlphaComponent:SSJButtonDisableAlpha] forState:UIControlStateDisabled];
 }
 
 - (BOOL)checkModelValid {

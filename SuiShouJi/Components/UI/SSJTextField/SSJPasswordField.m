@@ -68,9 +68,17 @@
 @implementation SSJPasswordField (SSJTheme)
 
 - (void)updateAppearanceAccordingToTheme {
-    self.textColor = SSJ_MAIN_COLOR;
-    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
-    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
+    [self updateAppearanceWithThemeModel:[SSJThemeSetting currentThemeModel]];
+}
+
+- (void)updateAppearanceAccordingToDefaultTheme {
+    [self updateAppearanceWithThemeModel:[SSJThemeSetting defaultThemeModel]];
+}
+
+- (void)updateAppearanceWithThemeModel:(SSJThemeModel *)model {
+    self.textColor = [UIColor ssj_colorWithHex:model.mainColor];
+    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:self.placeholder attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:model.secondaryColor]}];
+    [self ssj_setBorderColor:[UIColor ssj_colorWithHex:model.borderColor]];
 }
 
 @end

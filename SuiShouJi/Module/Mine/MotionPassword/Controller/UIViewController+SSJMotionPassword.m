@@ -77,6 +77,11 @@
         } else if (fingerPwdOpened
                    && !canEvaluateFingerPwd
                    && error.code == LAErrorTouchIDNotEnrolled) {
+            // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”
+            SSJUserItem *userItem = [[SSJUserItem alloc] init];
+            userItem.userId = SSJUSERID();
+            userItem.fingerPrintState = @"0";
+            [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
             // 重新登录
             SSJClearLoginInfo();
             [SSJUserTableManager reloadUserIdWithSuccess:^{
@@ -89,7 +94,7 @@
                 SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
                 [currentVC presentViewController:naviVC animated:animated completion:NULL];
                 
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"重新登录" handler:NULL], nil];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
             } failure:^(NSError * _Nonnull error) {
                 [SSJAlertViewAdapter showError:error];
             }];

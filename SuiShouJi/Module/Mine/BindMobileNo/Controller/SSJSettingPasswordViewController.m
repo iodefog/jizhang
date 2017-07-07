@@ -43,6 +43,13 @@
 @implementation SSJSettingPasswordViewController
 
 #pragma mark - Lifecycle
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.appliesTheme = NO;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setTitle];
@@ -51,6 +58,7 @@
     [self updateAppearance];
     [self.authCodeField getVerifCode];
     [self.view setNeedsUpdateConstraints];
+    self.view.backgroundColor = [UIColor whiteColor];
 }
 
 - (void)updateViewConstraints {
@@ -99,11 +107,17 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
-    self.descLab.textColor = SSJ_MAIN_COLOR;
-    [self.authCodeField updateAppearanceAccordingToTheme];
-    [self.passwordField updateAppearanceAccordingToTheme];
-    [self.bindingBtn ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
-    [self.bindingBtn ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
+    [self.authCodeField defaultAppearanceTheme];
+    [self.passwordField updateAppearanceAccordingToDefaultTheme];
+    
+    UIColor *mainColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
+    self.descLab.textColor = mainColor;
+    
+    UIColor *normalColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
+    [self.bindingBtn ssj_setBackgroundColor:normalColor forState:UIControlStateNormal];
+    
+    UIColor *disableColor = [normalColor colorWithAlphaComponent:SSJButtonDisableAlpha];
+    [self.bindingBtn ssj_setBackgroundColor:disableColor forState:UIControlStateDisabled];
 }
 
 - (void)setTitle {

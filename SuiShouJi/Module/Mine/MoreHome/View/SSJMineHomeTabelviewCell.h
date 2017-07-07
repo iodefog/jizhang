@@ -9,9 +9,11 @@
 #import "SSJBaseTableViewCell.h"
 
 @interface SSJMineHomeTabelviewCell : SSJBaseTableViewCell
-@property (nonatomic,strong) NSString *cellTitle;
-@property (nonatomic,strong) NSString *cellDetail;
-@property (nonatomic,strong) NSString *cellSubTitle;
-@property (nonatomic,strong) UILabel *detailLabel;
-@property(nonatomic, strong) UIImageView *portraitImage;
+
+@property (nonatomic, strong) NSString *cellTitle;
+
+@property (nonatomic, strong) NSString *cellDetail;
+
+@property (nonatomic) BOOL detailTitlefilled;
+
 @end
