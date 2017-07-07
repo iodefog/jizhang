@@ -56,7 +56,7 @@
 - (void)requestWithParams:(nullable NSDictionary *)params
                   success:(nullable SSJNetworkServiceHandler)success
                   failure:(nullable SSJNetworkServiceHandler)failure {
-    [self request:@"/chargebook/user/binding_cphone" params:params success:success failure:failure];
+    [self request:@"/chargebook/user/binding_cphone.go" params:params success:success failure:failure];
 }
 
 - (BOOL)isRequestSuccessfulWithCode:(NSInteger)code {

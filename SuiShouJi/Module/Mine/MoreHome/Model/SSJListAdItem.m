@@ -15,7 +15,8 @@
              @"adTitle" : @"title",
              @"hidden" : @"hide",
              @"url" : @"tourl",
-             @"imageUrl" : @"imgurl"
+             @"imageUrl" : @"imgurl",
+             @"smallImage" : @"simg"
              };
 }
 

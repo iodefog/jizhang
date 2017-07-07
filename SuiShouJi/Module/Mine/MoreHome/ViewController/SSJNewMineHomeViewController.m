@@ -236,10 +236,6 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         [_tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
         [_tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
         [_tableView ssj_clearExtendSeparator];
-        
-        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        }
     }
     return _tableView;
 }
@@ -322,6 +318,22 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.rightButton updateAfterThemeChange];
     [self.header updateAfterThemeChange];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+}
+
+- (void)reloadDataAfterSync {
+    @weakify(self);
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        @strongify(self);
+        self.header.item = userItem;
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+    
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 #pragma mark - Private

@@ -204,6 +204,7 @@
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     } completed:^{
+        [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [self goBackToSettingPage];
     }];
 }
