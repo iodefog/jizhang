@@ -342,6 +342,7 @@
     encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
     [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
+            [CDAutoHideMessageHUD showMessage:@"重置密码成功"];
             [subscriber sendNext:service.rootElement];
             [subscriber sendCompleted];
         }else {
@@ -480,9 +481,10 @@
     }] then:^RACSignal *{
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//            [self.loadingView show];
+            [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [self syncData];
             [self.loadingView show];
-            [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:nil];
             [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
@@ -521,7 +523,7 @@
                     if (self.vc.finishHandle) {
                         self.vc.finishHandle(self.vc);
                     }
-                    [self.vc dismissViewControllerAnimated:YES completion:NULL];
+                    [self.vc dismissViewControllerAnimated:NO completion:NULL];
                 }
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
