@@ -1,6 +1,6 @@
 for_lane :adhoc do |options|
-app_identifier "com.9188.jizhangAppStore"
-apple_id "yyfiniancial02@sina.com"
+app_identifier "com.youyu.jizhang"
+apple_id "iosapp1@9188.com"
 end
 
 for_lane :release do |options|
