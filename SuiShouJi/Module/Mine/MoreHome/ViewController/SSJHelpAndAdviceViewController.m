@@ -63,6 +63,7 @@
         @weakify(self);
         [[_helpBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [SSJAnaliyticsManager event:@"more_help_and_advice"];
             SSJProductAdviceViewController *proVC = [[SSJProductAdviceViewController alloc] init];
             proVC.defaultAdviceType = SSJAdviceTypeAdvice;
             [self.navigationController pushViewController:proVC animated:YES];

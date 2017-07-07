@@ -195,6 +195,7 @@
         @weakify(self);
         [[_forgetPasswordBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
             @strongify(self);
+            [SSJAnaliyticsManager event:@"login_forget_pwd"];
             //忘记密码
             SSRegisterAndLoginViewController *vc = [[SSRegisterAndLoginViewController alloc] init];
             vc.titleL.text = @"忘记密码";

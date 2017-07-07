@@ -172,8 +172,10 @@
         if (![self joinGroup:self.qqNumStr key:self.qqKeyStr]) {
             [CDAutoHideMessageHUD showMessage:@"未安装QQ哦"];
         }
+        [SSJAnaliyticsManager event:@"more_help_and_advice_QQ"];
     } else if(indexPath.row == 1) {//在线客服
         [self navRightButtonClicked];
+        [SSJAnaliyticsManager event:@"more_help_and_advice_wChart"];
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

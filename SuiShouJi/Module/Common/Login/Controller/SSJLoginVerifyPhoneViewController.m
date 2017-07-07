@@ -291,6 +291,7 @@
         @weakify(self);
         [[_tencentLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [SSJAnaliyticsManager event:@"login_qq"];
             [self.view endEditing:YES];
             self.verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
@@ -309,6 +310,7 @@
         @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            [SSJAnaliyticsManager event:@"login_weichat"];
             [self.view endEditing:YES];
             self.verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
