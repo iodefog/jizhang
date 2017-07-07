@@ -188,9 +188,14 @@
                              @"yzm":self.authCodeField.text,
                              @"mobileType":@2};
     [self.checkAuthCodeService request:@"/chargebook/user/check_sms.go" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
-        [self.authCodeField resignFirstResponder];
-        SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
-        [self.navigationController pushViewController:secondVC animated:YES];
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [self.authCodeField resignFirstResponder];
+            SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
+            [self.navigationController pushViewController:secondVC animated:YES];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
+        }
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [SSJAlertViewAdapter showError:service.error];
     }];
