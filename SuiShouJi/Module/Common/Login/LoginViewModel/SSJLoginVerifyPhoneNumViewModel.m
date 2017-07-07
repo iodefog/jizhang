@@ -194,6 +194,7 @@
     [self.netWorkService request:SSJURLWithAPI(@"/user/login.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
+            [self datawithDic:service.rootElement];
             [subscriber sendCompleted];
         } else {
             [subscriber sendError:nil];

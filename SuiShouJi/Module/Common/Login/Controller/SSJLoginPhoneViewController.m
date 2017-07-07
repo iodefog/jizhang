@@ -35,6 +35,7 @@
     [super viewDidLoad];
     [self setUpUI];
     [self initBind];
+    [self.tfPassword becomeFirstResponder];
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
@@ -43,7 +44,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.tfPassword becomeFirstResponder];
 }
 
 - (void)dealloc {
@@ -168,14 +168,16 @@
         _loginButton.layer.cornerRadius = 6;
         _loginButton.clipsToBounds = YES;
         RAC(_loginButton,enabled) = self.viewModel.enableNormalLoginSignal;
+        __weak __typeof(self)wSelf = self;
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            self.viewModel.vc = self;
-            [[self.viewModel.normalLoginCommand execute:nil] takeUntil:self.rac_willDeallocSignal];
-            [[[self.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
+            [wSelf.view endEditing:YES];
+            wSelf.viewModel.vc = wSelf;
+            [[wSelf.viewModel.normalLoginCommand execute:nil] takeUntil:wSelf.rac_willDeallocSignal];
+            [[[wSelf.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                 if ([x boolValue]) {
-                    self.tfPassword.userInteractionEnabled = NO;
+                    wSelf.tfPassword.userInteractionEnabled = NO;
                 } else {
-                    self.tfPassword.userInteractionEnabled = YES;
+                    wSelf.tfPassword.userInteractionEnabled = YES;
                 }
             }];
         }];
