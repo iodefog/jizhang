@@ -25,9 +25,7 @@
             item.fundingID = SSJUUID();
         }
         
-        if (!item.fundingColor.length) {
-            item.fundingColor = item.startColor;
-        }
+        item.fundingColor = item.startColor;
         
         NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId] + 1;
         
