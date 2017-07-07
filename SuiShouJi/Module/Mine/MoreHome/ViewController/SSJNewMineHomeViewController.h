@@ -6,8 +6,8 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseViewController.h"
+#import "SSJNewBaseTableViewController.h"
 
-@interface SSJNewMineHomeViewController : SSJBaseViewController
+@interface SSJNewMineHomeViewController : SSJNewBaseTableViewController
 
 @end
