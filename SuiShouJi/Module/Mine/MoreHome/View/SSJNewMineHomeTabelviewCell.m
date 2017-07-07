@@ -14,6 +14,9 @@
 
 @property(nonatomic, strong) UIImageView *cellImageView;
 
+@property(nonatomic) UIImage *cellImage;
+
+
 @end
 
 @implementation SSJNewMineHomeTabelviewCell
@@ -36,12 +39,15 @@
 
 - (void)updateConstraints {
     
-    [self.cellImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.cellImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        if ([self.item.image hasPrefix:@"http"]) {
+            make.size.mas_equalTo(CGSizeMake(self.cellImage.size.width / 2, self.cellImage.size.height / 2));
+        }
         make.left.mas_equalTo(15);
         make.centerY.mas_equalTo(self.contentView);
     }];
     
-    [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.contentView.mas_left).offset(44);
         make.centerY.mas_equalTo(self.cellImageView);
     }];
@@ -73,13 +79,20 @@
     self.titleLab.text = item.title;
     
     if ([item.image hasPrefix:@"http"]) {
-//        [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:item.image]];
+
+        @weakify(self);
+        [self.cellImageView sd_setImageWithURL:[NSURL URLWithString:_item.image] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+            @strongify(self);
+            self.cellImage = image;
+            [self setNeedsUpdateConstraints];
+        }];
+
     } else {
         self.cellImageView.image = [UIImage imageNamed:item.image];
     }
     
     
-    [self updateConstraintsIfNeeded];
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged{

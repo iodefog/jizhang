@@ -256,11 +256,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _header.shouldSyncBlock = ^BOOL() {
             @strongify(self);
             BOOL shouldSync = SSJIsUserLogined();
-//            if (!shouldSync) {
-//                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能同步数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不同步" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
-//                    [self login];
-//                }], nil];
-//            }
+            if (!shouldSync) {
+                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能同步数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不同步" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    [self login];
+                }], nil];
+            }
             return YES;
         };
     }
@@ -365,7 +365,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     for (SSJListAdItem *item in items) {
         SSJMineHomeTableViewItem *cellItem = [[SSJMineHomeTableViewItem alloc] init];
         cellItem.title = item.adTitle;
-        cellItem.image = item.imageUrl;
+        cellItem.image = item.smallImage;
         cellItem.toUrl = item.url;
         [tempArr addObject:cellItem];
     }
