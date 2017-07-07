@@ -131,7 +131,8 @@
         }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showError:error];
+//        [SSJAlertViewAdapter showError:error];
+        [CDAutoHideMessageHUD showMessage:error.localizedDescription.length?error.localizedDescription:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -197,7 +198,8 @@
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+//        [SSJAlertViewAdapter showError:service.error];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -205,7 +207,8 @@
     [self.getQQGroupService requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
         SSJJoinQQGroup(service.qqgroup, service.qqgroupId);
     } failure:^(SSJEncourageService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+//        [SSJAlertViewAdapter showError:service.error];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
     }];
 }
 
