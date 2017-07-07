@@ -25,6 +25,10 @@
             item.fundingID = SSJUUID();
         }
         
+        if (!item.fundingColor.length) {
+            item.fundingColor = item.startColor;
+        }
+        
         NSInteger maxOrder = [db intForQuery:@"select max(iorder) from bk_fund_info where cuserid = ? and operatortype <> 2",userId] + 1;
         
         // 判断是新增还是修改
@@ -32,7 +36,7 @@
             item.fundOperatortype = 0;
             item.fundingOrder = maxOrder;
             // 插入资金账户表
-            if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay, cstartcolor, cendcolor) values (?,?,?,?,?,?,0,?,?,?,?,1,?,?)",item.fundingID,item.fundingName,item.fundingIcon,item.fundingParent,item.startColor,editeDate,@(SSJSyncVersion()),item.fundingMemo,userId,@(maxOrder),item.startColor,item.endColor]) {
+            if (![db executeUpdate:@"insert into bk_fund_info (cfundid ,cacctname ,cicoin ,cparent ,ccolor ,cwritedate ,operatortype ,iversion ,cmemo ,cuserid , iorder ,idisplay, cstartcolor, cendcolor) values (?,?,?,?,?,?,0,?,?,?,?,1,?,?)",item.fundingID,item.fundingName,item.fundingIcon,item.fundingParent,item.fundingColor,editeDate,@(SSJSyncVersion()),item.fundingMemo,userId,@(maxOrder),item.startColor,item.endColor]) {
                 if (failure) {
                     SSJDispatchMainAsync(^{
                         failure([db lastError]);
