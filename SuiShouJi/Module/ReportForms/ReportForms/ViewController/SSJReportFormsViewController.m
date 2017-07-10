@@ -317,7 +317,11 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         [SSJReportFormsUtil queryForPeriodListWithIncomeOrPayType:SSJBillTypeSurplus booksId:self.currentBooksItem.booksId success:^(NSArray<SSJDatePeriod *> *periods) {
             
             _periodControl.periods = periods;
-            if (!_periodControl.selectedPeriod && periods.count >= 3) {
+            // 当前没有选中的周期 或者 选中的周期不在周期列表中
+            if (periods.count >= 3
+                && (!_periodControl.selectedPeriod
+                 || (_periodControl.selectedPeriod
+                     && ![periods containsObject:_periodControl.selectedPeriod]))) {
                 _periodControl.selectedPeriod = periods[periods.count - 3];
             }
             
