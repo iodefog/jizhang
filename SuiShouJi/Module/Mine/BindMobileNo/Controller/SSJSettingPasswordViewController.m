@@ -204,6 +204,7 @@
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     } completed:^{
+        [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [self goBackToSettingPage];
     }];
 }
@@ -257,6 +258,8 @@
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         userItem.mobileNo = self.bindMobileNoService.mobileNo;
         [SSJUserTableManager saveUserItem:userItem success:^{
+            //解决第三方登录后绑定手机号后再次登录手机号输入框默认显示
+            [[NSUserDefaults standardUserDefaults] setObject:userItem forKey:SSJLastLoggedUserItemKey];
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];

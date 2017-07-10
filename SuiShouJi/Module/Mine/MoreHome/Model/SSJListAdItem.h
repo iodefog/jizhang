@@ -22,4 +22,6 @@
 //图片url
 @property (nonatomic, copy) NSString *imageUrl;
 
+@property (nonatomic, strong) NSString *smallImage;
+
 @end

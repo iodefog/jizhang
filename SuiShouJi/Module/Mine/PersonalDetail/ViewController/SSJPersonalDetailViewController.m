@@ -51,6 +51,7 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self updateAppearance];
     [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
         [self organiseCellItemsWithUserItem:userItem];
         [self.view addSubview:self.tableView];
@@ -216,6 +217,15 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
     [self presentViewController:picker animated:YES completion:^{}];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+}
+
 - (TPKeyboardAvoidingTableView *)tableView {
     if (!_tableView) {
         _tableView = [[TPKeyboardAvoidingTableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
@@ -230,5 +240,7 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
     }
     return _tableView;
 }
+
+
 
 @end

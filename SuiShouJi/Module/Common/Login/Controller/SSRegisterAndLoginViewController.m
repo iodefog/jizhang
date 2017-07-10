@@ -46,9 +46,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self initialUI];
-    [self setUpConst];
     [self initialBind];
+    [self initialUI];
+    [self setUpConst];    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -58,6 +58,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    [self.tfRegYanZhenF getVerifCode];//请求验证码
 }
 
 - (void)dealloc{
@@ -204,7 +205,6 @@
         _tfRegYanZhenF.delegate = self;
         _tfRegYanZhenF.viewModel = self.viewModel;
         [_tfRegYanZhenF defaultAppearanceTheme];
-        [_tfRegYanZhenF getVerifCode];//请求验证码
     }
     return _tfRegYanZhenF;
 }
@@ -303,6 +303,7 @@
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
         __weak __typeof(self)weakSelf = self;
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [weakSelf.view endEditing:YES];
             [[weakSelf.viewModel.registerAndLoginCommand execute:nil] takeUntil:weakSelf.rac_willDeallocSignal];
             [[[weakSelf.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                  if ([x boolValue]) {

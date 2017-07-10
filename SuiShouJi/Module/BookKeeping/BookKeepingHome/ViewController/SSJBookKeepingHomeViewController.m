@@ -640,6 +640,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _appEvaluatePopView.tuCaoBtnClickBlock = ^{
             @strongify(self);
             SSJProductAdviceViewController *proVC = [[SSJProductAdviceViewController alloc] init];
+            proVC.defaultAdviceType = SSJAdviceTypeTuCao;
             [self.navigationController pushViewController:proVC animated:YES];
         };
     }

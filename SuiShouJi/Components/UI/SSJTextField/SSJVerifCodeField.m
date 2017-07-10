@@ -125,6 +125,15 @@ static const NSInteger kCountdownLimit = 60;
         wself.getAuthCodeState = SSJGetVerifCodeStateNeedImageCode;
     } else if ([code isEqualToString:@"3"]) {//图片验证码错误
         [CDAutoHideMessageHUD showMessage:desc];
+        //清空之前输入的验证码
+        wself.graphVerView.verNumTextF.text = @"";
+        wself.viewModel.graphNum = @"";
+        //重新获取图形验证码
+        [[[wself.viewModel.reGetVerificationCodeCommand execute:nil] takeUntil:wself.rac_willDeallocSignal] subscribeNext:^(UIImage *image) {
+            //成功刷新验证码
+            wself.graphVerView.verImage = image;
+            
+        }];
         wself.getAuthCodeState = SSJGetVerifCodeStateImageCodeError;
     } else {
         [CDAutoHideMessageHUD showMessage:desc];

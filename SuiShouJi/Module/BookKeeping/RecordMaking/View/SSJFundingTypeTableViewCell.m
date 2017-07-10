@@ -90,10 +90,16 @@
             _fundingTitle.attributedText = attrString;
         }
     }else{
-        _fundingTitle.text = self.item.fundingName;
+        _fundingTitle.text = _item.fundingName;
     }
     [_fundingTitle sizeToFit];
-    _fundingImage.image = [UIImage imageNamed:self.item.fundingIcon];
+    if (_item.fundingColor.length) {
+        _fundingImage.image = [[UIImage imageNamed:_item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _fundingImage.tintColor = [UIColor ssj_colorWithHex:_item.fundingColor];
+    } else {
+        _fundingImage.image = [UIImage imageNamed:_item.fundingIcon];
+    }
+    
 }
 
 -(void)setCellTitle:(NSString *)cellTitle {

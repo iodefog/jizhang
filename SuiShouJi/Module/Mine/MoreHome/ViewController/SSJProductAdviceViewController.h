@@ -9,6 +9,6 @@
 #import "SSJBaseViewController.h"
 
 @interface SSJProductAdviceViewController : SSJBaseViewController
-
+@property (nonatomic, assign) SSJAdviceType defaultAdviceType;
 
 @end

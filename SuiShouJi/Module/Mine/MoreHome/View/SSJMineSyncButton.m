@@ -101,7 +101,8 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
 }
 
 -(void)syncButtonClicked:(id)sender{
-    BOOL shouldSync = YES;
+    BOOL shouldSync = SSJIsUserLogined();
+    
     if (_shouldSyncBlock) {
         shouldSync = _shouldSyncBlock();
     }
@@ -109,6 +110,8 @@ static NSString *const kCircleAnimationKey = @"circleAnimationKey";
     if (!shouldSync) {
         return;
     }
+    
+
     
     [self startAnimation];
     _startTime = CFAbsoluteTimeGetCurrent();

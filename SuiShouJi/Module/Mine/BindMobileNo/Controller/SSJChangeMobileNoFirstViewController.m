@@ -131,7 +131,8 @@
         }
     } failure:^(NSError * _Nonnull error) {
         [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showError:error];
+//        [SSJAlertViewAdapter showError:error];
+        [CDAutoHideMessageHUD showMessage:error.localizedDescription.length?error.localizedDescription:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -188,11 +189,17 @@
                              @"yzm":self.authCodeField.text,
                              @"mobileType":@2};
     [self.checkAuthCodeService request:@"/chargebook/user/check_sms.go" params:params success:^(SSJBaseNetworkService * _Nonnull service) {
-        [self.authCodeField resignFirstResponder];
-        SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
-        [self.navigationController pushViewController:secondVC animated:YES];
+        if ([service.returnCode isEqualToString:@"1"]) {
+            [self.authCodeField resignFirstResponder];
+            SSJChangeMobileNoSecondViewController *secondVC = [[SSJChangeMobileNoSecondViewController alloc] init];
+            [self.navigationController pushViewController:secondVC animated:YES];
+        } else {
+            [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
+        }
+        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+//        [SSJAlertViewAdapter showError:service.error];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
     }];
 }
 
@@ -200,7 +207,8 @@
     [self.getQQGroupService requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
         SSJJoinQQGroup(service.qqgroup, service.qqgroupId);
     } failure:^(SSJEncourageService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
+//        [SSJAlertViewAdapter showError:service.error];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
     }];
 }
 

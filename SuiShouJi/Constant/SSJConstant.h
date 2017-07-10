@@ -166,6 +166,13 @@ typedef NS_ENUM(NSInteger, SSJCrediteCardType) {
 };
 
 
+typedef NS_ENUM(NSUInteger, SSJAdviceType) {
+    SSJAdviceTypeAdvice,//产品建议
+    SSJAdviceTypeFault,//使用故障
+    SSJAdviceTypeTuCao,//我要吐槽
+};
+
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

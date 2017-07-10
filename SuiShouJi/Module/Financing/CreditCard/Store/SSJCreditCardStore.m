@@ -115,6 +115,8 @@
         fundParent = @"3";
         fundIcoin = @"ft_creditcard";
     }
+    
+    item.cardColor = item.startColor;
 
     // 判断是新增还是修改
     if (![db intForQuery:@"select count(1) from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",item.cardId,userId]) {

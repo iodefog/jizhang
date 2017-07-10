@@ -90,6 +90,9 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     self.navigationItem.leftBarButtonItem = leftItem;
     self.navigationItem.rightBarButtonItem = rightItem;
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.tableView.tableHeaderView = self.header;
+    [self.tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
+    [self.tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
     // Do any additional setup after loading the view.
 }
 
@@ -224,25 +227,6 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 }
 
 #pragma mark - Getter
-- (UITableView *)tableView {
-    if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT) style:UITableViewStyleGrouped];
-        _tableView.dataSource=self;
-        _tableView.delegate = self;
-        _tableView.backgroundView = nil;
-        _tableView.tableHeaderView = self.header;
-        _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        [_tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
-        [_tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
-        [_tableView ssj_clearExtendSeparator];
-        
-        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [_tableView setSeparatorInset:UIEdgeInsetsZero];
-        }
-    }
-    return _tableView;
-}
 
 -(SSJMineHomeTableViewHeader *)header {
     if (!_header) {
@@ -260,12 +244,15 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _header.shouldSyncBlock = ^BOOL() {
             @strongify(self);
             BOOL shouldSync = SSJIsUserLogined();
+            
             if (!shouldSync) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能同步数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不同步" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
                     [self login];
                 }], nil];
+                
+                return NO;
             }
-            return shouldSync;
+            return YES;
         };
     }
     return _header;
@@ -324,6 +311,22 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 
+- (void)reloadDataAfterSync {
+    @weakify(self);
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        @strongify(self);
+        self.header.item = userItem;
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+    
+    [SSJBookkeepingTreeStore queryCheckInInfoWithUserId:SSJUSERID() success:^(SSJBookkeepingTreeCheckInModel * _Nonnull checkInModel) {
+        self.header.checkInLevel = [SSJBookkeepingTreeHelper treeLevelForDays:checkInModel.checkInTimes];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+}
+
 #pragma mark - Private
 - (NSMutableArray *)defualtItems {
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
@@ -353,7 +356,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     for (SSJListAdItem *item in items) {
         SSJMineHomeTableViewItem *cellItem = [[SSJMineHomeTableViewItem alloc] init];
         cellItem.title = item.adTitle;
-        cellItem.image = item.imageUrl;
+        cellItem.image = item.smallImage;
         cellItem.toUrl = item.url;
         [tempArr addObject:cellItem];
     }

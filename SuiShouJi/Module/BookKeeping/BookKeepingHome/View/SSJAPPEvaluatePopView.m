@@ -261,6 +261,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 }
 
 - (void)tuCaoButtonClicked {
+    [SSJAnaliyticsManager event:@"evaluate_tucao"];
     [self dismiss];
     self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypeTuCao;
     [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
