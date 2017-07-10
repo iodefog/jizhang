@@ -192,7 +192,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     //  数据库初始化完成后再查询数据
     if (self.isDatabaseInitFinished) {
         [self getDataFromDataBase];
-        [self updateTabbar];
+        [self updateNavigationBar];
         [self updateBooksItem];
     }
 }
@@ -389,7 +389,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJAnaliyticsManager event:@"main_record_edit"];
             weakSelf.selectIndex = nil;
             [weakSelf getDataFromDataBase];
-            [weakSelf updateTabbar];
+            [weakSelf updateNavigationBar];
         };
         return bookKeepingCell;
     } else {
@@ -427,7 +427,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
-        [self updateTabbar];
+        [self updateNavigationBar];
     }
     if (scrollView.contentOffset.y < - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
@@ -474,7 +474,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
     if (scrollView.contentOffset.y <= - scrollView.contentInset.top) {
         if (!_dateViewHasDismiss) {
-            [self updateTabbar];
+            [self updateNavigationBar];
             [self.floatingDateView dismiss];
             [self.mutiFunctionButton dismiss];
             _dateViewHasDismiss = YES;
@@ -948,24 +948,24 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         [self getDataFromDataBase];
     }
     [self stopLoading];
-    [self updateTabbar];
+    [self updateNavigationBar];
     [self updateBooksItem];
 }
 
 - (void)reloadDataAfterInitDatabase {
     [self getDataFromDataBase];
-    [self updateTabbar];
+    [self updateNavigationBar];
     [self updateBooksItem];
 }
 
 - (void)reloadAfterBooksTypeChange{
     _hasChangeBooksType = YES;
     [self getDataFromDataBase];
-    [self updateTabbar];
+    [self updateNavigationBar];
     [self updateBooksItem];
 }
 
-- (void)updateTabbar {
+- (void)updateNavigationBar {
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJBooksTypeStore queryCurrentBooksItemWithSuccess:^(id booksItem) {
             [subscriber sendNext:booksItem];
