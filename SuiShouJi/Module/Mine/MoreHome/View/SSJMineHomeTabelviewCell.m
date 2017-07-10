@@ -10,9 +10,9 @@
 
 @interface SSJMineHomeTabelviewCell()
 
-@property (nonatomic,strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *titleLabel;
 
-@property (nonatomic,strong) UILabel *detailLabel;
+@property (nonatomic, strong) UILabel *detailLabel;
 
 @end
 
@@ -29,6 +29,7 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
+    
     [self.titleLabel sizeToFit];
     self.titleLabel.left = 10;
     self.titleLabel.centerY = self.height / 2;

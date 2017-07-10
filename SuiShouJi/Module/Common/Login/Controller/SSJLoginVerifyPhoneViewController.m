@@ -57,11 +57,11 @@
 - (void)initData {
     NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
     SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-    int loginType = [lastUserItem.loginType intValue];
-    if (loginType == 0) {
+//    int loginType = [lastUserItem.loginType intValue];
+//    if (loginType == 0) {
         NSString *userName = lastUserItem.mobileNo;
         self.numTextF.text = userName;
-    }
+//    }
 }
 
 - (void)dealloc {
