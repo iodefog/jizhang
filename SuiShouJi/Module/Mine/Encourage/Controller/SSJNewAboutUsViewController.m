@@ -83,6 +83,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     if ([title isEqualToString:ktitle1]) {
+        [SSJAnaliyticsManager event:@"aboutus_weixin"];
+        
         NSString *weixin = self.service.wechatId;
         
         [[UIPasteboard generalPasteboard] setString:weixin];
@@ -105,6 +107,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle2]) {
+        
+        [SSJAnaliyticsManager event:@"aboutus_sina"];
+
         NSString *urlStr = [NSString stringWithFormat:@"sinaweibo://userinfo?uid=%@",@"5603151337"];
         NSURL *url = [NSURL URLWithString:urlStr];
         if ([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -113,12 +118,18 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle3]) {
+        [SSJAnaliyticsManager event:@"aboutus_qq_group"];
+
+        
         NSString *qqGroup = self.service.qqgroup;
         NSString *qqGroupId = self.service.qqgroupId;
         SSJJoinQQGroup(qqGroup, qqGroupId);
     }
     
     if ([title isEqualToString:ktitle4]) {
+        [SSJAnaliyticsManager event:@"aboutus_weixin_group"];
+
+        
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
         }];
@@ -137,6 +148,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle5]) {
+        [SSJAnaliyticsManager event:@"aboutus_online_service"];
+
+        
         [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
             NSDictionary* clientCustomizedAttrs = @{@"userid": userItem.userId ?: @"",
                                                     @"openid": userItem.openId ?: @"",
@@ -157,6 +171,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle6]) {
+        
+        
         NSString *telNum = self.service.telNum;
         NSMutableString* str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",telNum];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
@@ -241,8 +257,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     NSMutableArray *thirdArr = [NSMutableArray arrayWithArray:@[ktitle5,ktitle6]];
     
     if ([WXApi isWXAppInstalled]) {
+        [firstArr insertObject:ktitle4 atIndex:0];
         [firstArr insertObject:ktitle1 atIndex:0];
-        [secondArr insertObject:ktitle4 atIndex:0];
     }
     
     if ([WeiboSDK isWeiboAppInstalled]) {
@@ -250,7 +266,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([TencentOAuth iphoneQQInstalled]) {
-        [firstArr insertObject:ktitle3 atIndex:firstArr.count];
+        [secondArr insertObject:ktitle3 atIndex:0];
     }
     
     [tempTitleArr insertObject:thirdArr atIndex:0];
@@ -280,7 +296,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
             } else if ([title isEqualToString:ktitle4]) {
                 item.cellDetail = self.service.wechatgroup;
             } else if ([title isEqualToString:ktitle5]) {
-
+                
             } else if ([title isEqualToString:ktitle6]) {
                 item.cellDetail = self.service.telNum;
                 item.cellSubTitle = @"工作日：9:00——18:00";

@@ -276,6 +276,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _rightButton = [[SSJMoreHomeAnnouncementButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         @weakify(self);
         _rightButton.buttonClickBlock = ^(){
+            [SSJAnaliyticsManager event:@"youyu_message"];
             @strongify(self);
             SSJAnnouncementsListViewController *annoucementListVc = [[SSJAnnouncementsListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
             annoucementListVc.items = [self.announcements mutableCopy];
