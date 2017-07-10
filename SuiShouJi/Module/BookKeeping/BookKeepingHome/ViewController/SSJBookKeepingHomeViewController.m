@@ -389,11 +389,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJAnaliyticsManager event:@"main_record_edit"];
             weakSelf.selectIndex = nil;
             [weakSelf getDataFromDataBase];
-            [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-                self.homeBar.budgetButton.model = [result firstObject];
-            } failure:^(NSError * _Nullable error) {
-                SSJPRINT(@"%@",error.localizedDescription);
-            }];
+            if (cell.item.idType != SSJChargeIdTypeShareBooks) {
+                [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+                    self.homeBar.budgetButton.model = [result firstObject];
+                } failure:^(NSError * _Nullable error) {
+                    [SSJAlertViewAdapter showError:error];
+                }];
+            }
         };
         return bookKeepingCell;
     } else {
@@ -954,8 +956,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self stopLoading];
     [self updateTabbar];
     [self updateBooksItem];
-    
-    
 }
 
 - (void)reloadDataAfterInitDatabase {
@@ -1006,8 +1006,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     } error:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
-
-    
 }
 
 - (void)updateBudgetWithModels:(NSArray *)models {
@@ -1038,9 +1036,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         }
         
     } failure:^(NSError * _Nonnull error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
-
 }
 
 -(void)reloadWithAnimation{
