@@ -40,7 +40,7 @@
 -(UILabel *)dateLabel{
     if (!_dateLabel) {
         _dateLabel = [[UILabel alloc]init];
-        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _dateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _dateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _dateLabel;

@@ -33,6 +33,7 @@
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
+#import "SSJAnnoucementService.h"
 
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -47,8 +48,6 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
 @interface SSJNewMineHomeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
-@property(nonatomic, strong) UITableView *tableView;
-
 @property (nonatomic, strong) NSMutableArray *titles;
 
 @property (nonatomic,strong) SSJMineHomeTableViewHeader *header;
@@ -60,6 +59,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 @property(nonatomic, strong) SSJMoreHomeAnnouncementButton *rightButton;
 
 @property(nonatomic, strong) SSJBannerNetworkService *bannerService;
+
+@property(nonatomic, strong) SSJAnnoucementService *annoucementService;
 
 @property(nonatomic, strong) NSArray *bannerItems;
 
@@ -113,6 +114,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     }];
 
     [self.bannerService requestBannersList];
+    
+    [self.annoucementService requestAnnoucementsWithPage:1];
 }
 
 #pragma mark - UITableViewDelegate
@@ -220,14 +223,17 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
-    [self sortPinnedBannerWithItems:self.bannerService.item.listAdItems];
-    self.listItems = self.bannerService.item.listAdItems;
-    self.bannerItems = self.bannerService.item.bannerItems;
-    [self.tableView reloadData];
+    if (service == self.bannerService) {
+        [self sortPinnedBannerWithItems:self.bannerService.item.listAdItems];
+        self.listItems = self.bannerService.item.listAdItems;
+        self.bannerItems = self.bannerService.item.bannerItems;
+        [self.tableView reloadData];
+    } else if (service == self.annoucementService){
+        self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
+    }
 }
 
 #pragma mark - Getter
-
 -(SSJMineHomeTableViewHeader *)header {
     if (!_header) {
         @weakify(self);
@@ -281,6 +287,13 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         };
     }
     return _rightButton;
+}
+
+- (SSJAnnoucementService *)annoucementService {
+    if (!_annoucementService) {
+        _annoucementService = [[SSJAnnoucementService alloc] initWithDelegate:self];
+    }
+    return _annoucementService;
 }
 
 #pragma mark - Event
