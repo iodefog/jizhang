@@ -371,10 +371,29 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             }];
         };
         bookKeepingCell.enterChargeDetailBlock = ^(SSJBookKeepingHomeTableViewCell *cell) {
-            SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
-            [SSJAnaliyticsManager event:@"home_liushui_detail"];
-            detailVc.item = cell.item;
-            [weakSelf.navigationController pushViewController:detailVc animated:YES];
+            if ([cell.item.userId isEqualToString:SSJUSERID()]) {
+                [cell showEditAndDeleteBtn:!cell.editAndDeleteBtnShowed animated:YES];
+            } else {
+                SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
+                [SSJAnaliyticsManager event:@"home_liushui_detail"];
+                detailVc.item = cell.item;
+                [weakSelf.navigationController pushViewController:detailVc animated:YES];
+            }
+        };
+        bookKeepingCell.editBlock = ^(SSJBookKeepingHomeTableViewCell * _Nonnull cell) {
+            SSJRecordMakingViewController *recordMakingVc = [[SSJRecordMakingViewController alloc]init];
+            recordMakingVc.item = cell.item;
+            [weakSelf.navigationController pushViewController:recordMakingVc animated:YES];
+        };
+        bookKeepingCell.deleteBlock = ^(SSJBookKeepingHomeTableViewCell * _Nonnull cell) {
+            [SSJAnaliyticsManager event:@"main_record_edit"];
+            weakSelf.selectIndex = nil;
+            [weakSelf getDataFromDataBase];
+            [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
+                self.homeBar.budgetButton.model = [result firstObject];
+            } failure:^(NSError * _Nullable error) {
+                SSJPRINT(@"%@",error.localizedDescription);
+            }];
         };
         return bookKeepingCell;
     } else {
