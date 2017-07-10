@@ -389,13 +389,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [SSJAnaliyticsManager event:@"main_record_edit"];
             weakSelf.selectIndex = nil;
             [weakSelf getDataFromDataBase];
-            if (cell.item.idType != SSJChargeIdTypeShareBooks) {
-                [SSJBudgetDatabaseHelper queryForCurrentBudgetListWithSuccess:^(NSArray<SSJBudgetModel *> * _Nonnull result) {
-                    self.homeBar.budgetButton.model = [result firstObject];
-                } failure:^(NSError * _Nullable error) {
-                    [SSJAlertViewAdapter showError:error];
-                }];
-            }
+            [weakSelf updateTabbar];
         };
         return bookKeepingCell;
     } else {
