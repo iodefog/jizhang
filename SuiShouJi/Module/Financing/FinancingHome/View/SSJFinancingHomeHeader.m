@@ -127,6 +127,7 @@
 
 - (void)balanceButtonClicked:(id)sender {
     self.balanceButton.layer.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+    [SSJAnaliyticsManager event:@"fund_statistics"];
     if (self.balanceButtonClickBlock) {
         self.balanceButtonClickBlock();
     }

@@ -90,6 +90,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     
     if ([title isEqualToString:ktitle2]) {
         NSString *urlStr = SSJAppStoreUrl();
+        [SSJAnaliyticsManager event:@"love_good"];
         if (urlStr) {
             NSURL *url = [NSURL URLWithString:urlStr];
             if ([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -100,6 +101,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle3]) {
+        [SSJAnaliyticsManager event:@"love_share_to_friends"];
         if ([SSJDefaultSource() isEqualToString:@"11501"]) {
             [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"财务管理第一步，从记录消费生活开始!" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         } else {

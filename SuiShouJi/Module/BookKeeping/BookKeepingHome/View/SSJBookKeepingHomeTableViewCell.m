@@ -22,9 +22,19 @@ static const CGFloat kCategoryImageButtonRadius = 16;
 
 @property (nonatomic, strong) UILabel *bottomLabel;
 
+/**
+ 流水图片
+ */
 @property (nonatomic, strong) UIImageView *chargeImage;
 
+/**
+ 收支类别按钮
+ */
 @property (nonatomic, strong) UIButton *categoryImageButton;
+
+@property (nonatomic, strong) UIButton *editeButton;
+
+@property (nonatomic, strong) UIButton *deleteButton;
 
 @end
 
@@ -39,7 +49,10 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         [self.contentView addSubview:self.categoryImageButton];
         [self.contentView addSubview:self.labelContainer];
         [self.contentView addSubview:self.chargeImage];
+        [self.contentView addSubview:self.deleteButton];
+        [self.contentView addSubview:self.editeButton];
         [self updateAppearance];
+        [self updateSubviewsAlpha];
         [self setNeedsUpdateConstraints];
     }
     return self;
@@ -100,6 +113,26 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         }];
     }
     
+    [self.deleteButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+        if (self.editAndDeleteBtnShowed) {
+            make.left.mas_equalTo(20);
+        } else {
+            make.centerX.mas_equalTo(self.contentView);
+        }
+        make.size.mas_equalTo(CGSizeMake(kCategoryImageButtonRadius * 2, kCategoryImageButtonRadius * 2));
+        make.centerY.mas_equalTo(self.contentView);
+    }];
+    
+    [self.editeButton mas_remakeConstraints:^(MASConstraintMaker *make) {
+        if (self.editAndDeleteBtnShowed) {
+            make.right.mas_equalTo(-20);
+        } else {
+            make.centerX.mas_equalTo(self.contentView);
+        }
+        make.size.mas_equalTo(CGSizeMake(kCategoryImageButtonRadius * 2, kCategoryImageButtonRadius * 2));
+        make.centerY.mas_equalTo(self.contentView);
+    }];
+    
     [super updateConstraints];
 }
 
@@ -149,6 +182,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     }
     
     [self setNeedsUpdateConstraints];
+    [self showEditAndDeleteBtn:NO animated:NO];
 }
 
 - (void)setIsLastRow:(BOOL)isLastRow {
@@ -206,6 +240,27 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     } else {
         [self shake];
     }
+}
+
+- (void)updateSubviewsAlpha {
+    if (_editAndDeleteBtnShowed) {
+        self.labelContainer.alpha = 0;
+        self.editeButton.alpha = 1;
+        self.deleteButton.alpha = 1;
+    } else {
+        self.labelContainer.alpha = 1;
+        self.editeButton.alpha = 0;
+        self.deleteButton.alpha = 0;
+    }
+}
+
+- (void)showEditAndDeleteBtn:(BOOL)showed animated:(BOOL)animated {
+    _editAndDeleteBtnShowed = showed;
+    [UIView animateWithDuration:(animated ? 0.25 : 0) animations:^{
+        [self updateSubviewsAlpha];
+        [self setNeedsUpdateConstraints];
+        [self layoutIfNeeded];
+    }];
 }
 
 #pragma mark - Private
@@ -303,12 +358,46 @@ static const CGFloat kCategoryImageButtonRadius = 16;
 - (UIImageView *)chargeImage {
     if (!_chargeImage) {
         _chargeImage = [[UIImageView alloc] init];
-        UITapGestureRecognizer *singleTap =
-        [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
+        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(imageClick:)];
         singleTap.numberOfTapsRequired = 1;
         [_chargeImage addGestureRecognizer:singleTap];
     }
     return _chargeImage;
+}
+
+- (UIButton *)editeButton {
+    if (!_editeButton) {
+        _editeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_editeButton setImage:[UIImage imageNamed:@"home_edit"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_editeButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            if (self.editBlock) {
+                self.editBlock(self);
+            }
+        }];
+    }
+    return _editeButton;
+}
+
+- (UIButton *)deleteButton {
+    if (!_deleteButton) {
+        _deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_deleteButton setImage:[UIImage imageNamed:@"home_delete"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_deleteButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [SSJCalenderHelper deleteChargeWithItem:self.item success:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+                if (self.deleteBlock) {
+                    self.deleteBlock(self);
+                }
+            } failure:^(NSError * _Nonnull error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }];
+    }
+    return _deleteButton;
 }
 
 @end

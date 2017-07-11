@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SSJBookKeepingHomeTableViewCell;
 
-
 @interface SSJBookKeepingHomeTableViewCell : SSJBaseTableViewCell
 
 @property (nonatomic, strong) SSJBillingChargeCellItem *item;
@@ -22,14 +21,22 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void(^imageClickBlock)(SSJBillingChargeCellItem *item);
 
+@property (nonatomic, copy) void(^editBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
+@property (nonatomic, copy) void(^deleteBlock)(SSJBookKeepingHomeTableViewCell *cell);
+
 @property (nonatomic) BOOL isLastRow;
 
 @property (nonatomic) BOOL isAnimating;
+
+@property (nonatomic, readonly) BOOL editAndDeleteBtnShowed;
 
 - (void)animatedShowCellWithDistance:(float)distance delay:(float)delay completion:(void (^ __nullable)())completion;
 
 // 执行新增或者编辑流水的动画
 - (void)performAddOrEditAnimation;
+
+- (void)showEditAndDeleteBtn:(BOOL)showed animated:(BOOL)animated;
 
 @end
 

@@ -10,6 +10,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ 类型
+
+ - SSJSettingPasswordTypeMobileNoBinding: 绑定手机号
+ - SSJSettingPasswordTypeResettingPassword: 重置密码
+ */
 typedef NS_ENUM(NSInteger, SSJSettingPasswordType) {
     SSJSettingPasswordTypeMobileNoBinding,
     SSJSettingPasswordTypeResettingPassword

@@ -41,6 +41,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 
 @implementation SSJCalenderDetailViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.statisticsTitle = @"流水详情";
