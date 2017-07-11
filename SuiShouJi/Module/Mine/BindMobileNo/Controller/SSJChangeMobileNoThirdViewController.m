@@ -12,6 +12,7 @@
 #import "SSJVerifCodeField.h"
 #import "SSJInviteCodeJoinSuccessView.h"
 #import "SSJBindMobileNoNetworkService.h"
+#import "SSJEncourageService.h"
 #import "SSJUserTableManager.h"
 
 @interface SSJChangeMobileNoThirdViewController ()
@@ -28,11 +29,15 @@
 
 @property (nonatomic, strong) UIButton *nextBtn;
 
+@property (nonatomic, strong) UIButton *changeWayBtn;
+
 @property (nonatomic, strong) SSJInviteCodeJoinSuccessView *successAlertView;
 
 @property (nonatomic, strong) SSJLoginVerifyPhoneNumViewModel *viewModel;
 
 @property (nonatomic, strong) SSJBindMobileNoNetworkService *service;
+
+@property (nonatomic, strong) SSJEncourageService *getQQGroupService;
 
 @end
 
@@ -93,6 +98,12 @@
         make.centerX.mas_equalTo(self.scrollView);
         make.bottom.mas_equalTo(self.scrollView).offset(-20);
     }];
+    [self.changeWayBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.nextBtn);
+        make.top.mas_equalTo(self.nextBtn.mas_bottom).offset(10);
+        make.width.greaterThanOrEqualTo(0);
+
+    }];
     [super updateViewConstraints];
 }
 
@@ -115,6 +126,16 @@
     [self.nextBtn ssj_setBackgroundColor:disableColor forState:UIControlStateDisabled];
 }
 
+- (void)openQQ {
+    //    __weak __typeof(self)wSelf = self;
+    [self.getQQGroupService requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
+        SSJJoinQQGroup(service.qqgroup, service.qqgroupId);
+    } failure:^(SSJEncourageService * _Nonnull service) {
+        //        [SSJAlertViewAdapter showError:service.error];
+        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
+    }];
+}
+
 - (void)setupViews {
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.stepView];
@@ -122,6 +143,7 @@
     [self.scrollView addSubview:self.descLab];
     [self.scrollView addSubview:self.authCodeField];
     [self.scrollView addSubview:self.nextBtn];
+    [self.scrollView addSubview:self.changeWayBtn];
 }
 
 - (void)setupBindings {
@@ -282,5 +304,30 @@
     }
     return _service;
 }
+
+
+- (SSJEncourageService *)getQQGroupService {
+    if (!_getQQGroupService) {
+        _getQQGroupService = [[SSJEncourageService alloc] init];
+        _getQQGroupService.showLodingIndicator = YES;
+    }
+    return _getQQGroupService;
+}
+
+- (UIButton *)changeWayBtn {
+    if (!_changeWayBtn) {
+        _changeWayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _changeWayBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_changeWayBtn setTitle:@"无法收到验证码，快速反馈" forState:UIControlStateNormal];
+        [_changeWayBtn setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_changeWayBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [self openQQ];
+        }];
+    }
+    return _changeWayBtn;
+}
+
 
 @end

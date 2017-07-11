@@ -273,7 +273,7 @@
     if (!_changeWayBtn) {
         _changeWayBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _changeWayBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        [_changeWayBtn setTitle:@"手机号停用，快速反馈" forState:UIControlStateNormal];
+        [_changeWayBtn setTitle:@"无法收到验证码，快速反馈" forState:UIControlStateNormal];
         [[_changeWayBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             [self openQQ];
         }];
@@ -303,5 +303,7 @@
     }
     return _getQQGroupService;
 }
+
+
 
 @end
