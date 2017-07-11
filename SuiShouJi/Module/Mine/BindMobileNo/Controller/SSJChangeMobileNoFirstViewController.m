@@ -62,7 +62,7 @@
         [self setUpViews];
         [self setupBindings];
         [self updateAppearance];
-        [self.authCodeField getVerifCode];
+//        [self.authCodeField getVerifCode];
         [self.view setNeedsUpdateConstraints];
     }];
     self.view.backgroundColor = [UIColor whiteColor];

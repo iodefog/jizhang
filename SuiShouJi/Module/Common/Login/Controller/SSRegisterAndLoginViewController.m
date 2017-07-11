@@ -58,7 +58,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.tfRegYanZhenF getVerifCode];//请求验证码
+//    [self.tfRegYanZhenF getVerifCode];//请求验证码
 }
 
 - (void)dealloc{
