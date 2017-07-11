@@ -109,7 +109,7 @@
     [self.changeWayBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.nextBtn.mas_bottom).offset(0);
         make.left.mas_equalTo(self.scrollView).offset(15);
-        make.size.mas_equalTo(CGSizeMake(132, 38));
+        make.size.mas_equalTo(CGSizeMake(158, 38));
         make.bottom.mas_equalTo(self.scrollView).offset(-20);
     }];
     [super updateViewConstraints];
