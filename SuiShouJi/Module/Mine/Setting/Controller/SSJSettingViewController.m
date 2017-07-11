@@ -303,20 +303,23 @@ static NSString *const kClearDataTitle = @"清理数据";
                 [self login];
             } else if (ctrl.on) {
                 [self.context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键验证指纹解锁" reply:^(BOOL success, NSError * _Nullable error) {
-                    self.context = nil;
-                    SSJDispatchMainSync(^{
-                        if (success) {
-                            self.userItem.fingerPrintState = @"1";
+                    if (success) {
+                        SSJUpdateEvaluatedPolicyDomainState(self.context.evaluatedPolicyDomainState);
+                        self.userItem.fingerPrintState = @"1";
+                        SSJDispatchMainAsync(^{
                             [SSJUserTableManager saveUserItem:self.userItem success:NULL failure:^(NSError * _Nonnull error) {
                                 [SSJAlertViewAdapter showError:error];
                             }];
-                        } else {
-                            if (error.code == LAErrorTouchIDNotEnrolled) {
+                        });
+                    } else {
+                        if (error.code == LAErrorTouchIDNotEnrolled) {
+                            SSJDispatchMainAsync(^{
+                                ctrl.on = NO;
                                 [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您尚未设置Touch ID，请在系统设置中添加指纹" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
-                            }
-                            ctrl.on = NO;
+                            });
                         }
-                    });
+                    }
+                    self.context = nil;
                 }];
             } else {
                 self.userItem.fingerPrintState = @"0";

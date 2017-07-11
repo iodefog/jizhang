@@ -574,3 +574,14 @@ BOOL SSJJoinQQGroup(NSString *group, NSString *key) {
     }
     else return NO;
 }
+
+static NSString * const kEvaluatedPolicyDomainStateKey = @"kEvaluatedPolicyDomainStateKey";
+
+NSData *SSJEvaluatedPolicyDomainState() {
+    return [[NSUserDefaults standardUserDefaults] objectForKey:kEvaluatedPolicyDomainStateKey];
+}
+
+BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data) {
+    [[NSUserDefaults standardUserDefaults] setObject:data forKey:kEvaluatedPolicyDomainStateKey];
+    return [[NSUserDefaults standardUserDefaults] synchronize];
+}

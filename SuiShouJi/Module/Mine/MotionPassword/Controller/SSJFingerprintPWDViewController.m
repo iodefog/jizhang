@@ -94,12 +94,18 @@
 - (void)verifyTouchIDIfNeeded {
     [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
         if (success) {
-            SSJDispatchMainSync(^{
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                [self dismissViewControllerAnimated:YES completion:NULL];
-            });
+            if ([_context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()]) {
+                SSJDispatchMainSync(^{
+                    if (self.finishHandle) {
+                        self.finishHandle(self);
+                    }
+                    [self dismissViewControllerAnimated:YES completion:NULL];
+                });
+            } else {
+                [self relogin:^{
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                }];
+            }
         } else {
             if (error.code == LAErrorTouchIDNotEnrolled) {
                 // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”

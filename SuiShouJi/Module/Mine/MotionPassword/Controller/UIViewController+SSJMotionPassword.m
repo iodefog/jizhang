@@ -48,6 +48,7 @@
         
         NSError *error = nil;
         BOOL canEvaluateFingerPwd = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
+        BOOL touchIDChanged = ![context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
         
         if (motionPwdOpened) {
             // 验证手势密码页面
@@ -62,7 +63,8 @@
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
         } else if (fingerPwdOpened
-                   && canEvaluateFingerPwd) {
+                   && canEvaluateFingerPwd
+                   && !touchIDChanged) {
             // 验证指纹密码页面
             SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
             fingerPwdVC.context = context;
@@ -74,9 +76,7 @@
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
-        } else if (fingerPwdOpened
-                   && !canEvaluateFingerPwd
-                   && error.code == LAErrorTouchIDNotEnrolled) {
+        } else if (error.code == LAErrorTouchIDNotEnrolled || touchIDChanged) {
             // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”
             SSJUserItem *userItem = [[SSJUserItem alloc] init];
             userItem.userId = SSJUSERID();

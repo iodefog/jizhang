@@ -50,7 +50,6 @@ NSString *SSJURLScheme();
  */
 NSString *SSJAppVersion();
 
-
 /**
  *  返回当前应用的图标名称
  *
@@ -308,3 +307,17 @@ void clearCurrentBooksCategory();
  */
 BOOL SSJJoinQQGroup(NSString *group, NSString *key);
 
+/**
+ 验证指纹成功时得到的数据
+
+ @return <#return value description#>
+ */
+NSData *SSJEvaluatedPolicyDomainState();
+
+/**
+ 保存验证指纹成功后得到的数据
+
+ @param data <#data description#>
+ @return <#return value description#>
+ */
+BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data);
