@@ -182,7 +182,7 @@
                 [userInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"cwritedate"];
             }
             
-            // 因为user表的指纹字段默认是1，但是现在要求默认是0，所以只能在这里处理
+            // 因为老版本user表的指纹字段默认是1，但是现在要求默认是0，所以只能在这里处理
             if (![[userInfo allKeys] containsObject:@"cfingerPrintState"]) {
                 userInfo[@"cfingerPrintState"] = @"0";
             }
