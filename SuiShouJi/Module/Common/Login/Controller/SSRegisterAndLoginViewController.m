@@ -48,7 +48,8 @@
     [super viewDidLoad];
     [self initialBind];
     [self initialUI];
-    [self setUpConst];    
+    [self setUpConst];
+    [self.tfRegYanZhenF getVerifCode];//请求验证码
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -58,7 +59,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    [self.tfRegYanZhenF getVerifCode];//请求验证码
+
 }
 
 - (void)dealloc{
