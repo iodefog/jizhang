@@ -152,6 +152,11 @@
         return [db lastError];
     }
     
+    // 因为老版本指纹状态默认是开启的，升级到新版本后就会出现用户没有开启过指纹，也会进入到指纹解锁
+    if (![db executeUpdate:@"update BK_USER set CFINGERPRINTSTATE = 0"]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
