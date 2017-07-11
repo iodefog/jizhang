@@ -2,7 +2,7 @@
     "buildConfig": "Release-production",
     "buildScheme": "SuiShouJi",
     "infoplist": "SuiShouJi-Info.plist",
-    "uploadToPgy": true,
-    "uploadToAppStore": false,
+    "uploadToPgy": false,
+    "uploadToAppStore": true,
     "testflight":false
 }
