@@ -10,7 +10,6 @@
 #import "SSJCalenderDetailViewController.h"
 #import "SSJRecordMakingViewController.h"
 #import "SSJCalendarViewController.h"
-//#import "SSJLoginViewController.h"
 #import "SSJBudgetListViewController.h"
 #import "SSJBudgetEditViewController.h"
 #import "SSJBooksTypeSelectViewController.h"
@@ -18,8 +17,6 @@
 #import "SSJSearchingViewController.h"
 #import "SSJThemBgImageClipViewController.h"
 #import "SSJNavigationController.h"
-#import "UIViewController+SSJMotionPassword.h"
-//#import "SSJLoginViewController+SSJCategory.h"
 #import "SSJProductAdviceViewController.h"
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
 #import "SSJShareBooksMenberManagerViewController.h"
@@ -199,7 +196,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-//    [self ssj_remindUserToSetMotionPasswordIfNeeded];
     [self whichViewShouldPopToHomeView];//弹框
 }
 

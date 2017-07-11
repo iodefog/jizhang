@@ -20,6 +20,7 @@
 #import "UIViewController+SSJPageFlow.h"
 #import "SSJEncourageViewController.h"
 #import "SSJNavigationController.h"
+#import "UIViewController+SSJMotionPassword.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -95,6 +96,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
     [self.tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
     // Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self ssj_remindUserToSetMotionPasswordIfNeeded];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
