@@ -378,12 +378,12 @@
         NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([item.billId isEqualToString:@"3"]) {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4 limit 1",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
                 error = [db lastError];
                 return NO;
             }
         }else{
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3 limit 1",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3",userId,item.billDate,minDateStr,maxDateStr,item.money]) {
                 error = [db lastError];
                 return NO;
             }

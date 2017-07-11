@@ -29,12 +29,15 @@
     [super handleResult:rootElement];
     if ([self.returnCode isEqualToString:@"1"]) {
         NSDictionary *results = [[NSDictionary dictionaryWithDictionary:rootElement] objectForKey:@"results"];
+        
         NSArray *announcementArr = [results objectForKey:@"announcements"];
         [self saveAnnoucementAtLocalWithArr:announcementArr];
         self.annoucements = [SSJAnnoucementItem mj_objectArrayWithKeyValuesArray:announcementArr];
         self.hasNewAnnouceMent = [[results objectForKey:@"new_announcement"] boolValue];
         self.totalPage = [[rootElement objectForKey:@"tp"] integerValue];
         NSArray *announcements = [[NSUserDefaults standardUserDefaults] objectForKey:SSJAnnouncementHaveReadKey];
+        NSString *annoucementId = [self.annoucements firstObject].announcementId;
+        [[NSUserDefaults standardUserDefaults] setObject:annoucementId forKey:kLastAnnoucementIdKey];
         for (SSJAnnoucementItem *item in self.annoucements) {
             if ([announcements containsObject:item.announcementId]) {
                 item.haveReaded = YES;
