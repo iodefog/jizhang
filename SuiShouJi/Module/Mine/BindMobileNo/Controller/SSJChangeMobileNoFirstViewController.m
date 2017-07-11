@@ -163,21 +163,25 @@
 - (void)setupBindings {
     self.viewModel.phoneNum = self.mobileNo;
     self.authCodeField.viewModel = self.viewModel;
-    
+    @weakify(self);
     RAC(self.nextBtn, enabled) = [RACSignal merge:@[[[self.authCodeField rac_textSignal] map:^id(NSString *authCode) {
+        @strongify(self);
         return @(self.authCodeField.text.length >= 6 && self.checkAuthCodeService.state != SSJNetworkServiceStateLoading);
     }], [RACObserve(self.checkAuthCodeService, state) map:^id(id value) {
         return @(self.authCodeField.text.length >= 6 && self.checkAuthCodeService.state != SSJNetworkServiceStateLoading);
     }]]];
     
     RAC(self.descLab,text) = [RACObserve(self.authCodeField, getAuthCodeState) map:^id(NSNumber *value) {
+        @strongify(self);
         SSJGetVerifCodeState state = [value integerValue];
+        NSString *ciphertext = self.mobileNo;
+        if (self.mobileNo.length >= 7) {
+            ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        }
         if (state == SSJGetVerifCodeStateSent) {
-            NSString *ciphertext = self.mobileNo;
-            if (self.mobileNo.length >= 7) {
-                ciphertext = [self.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            }
             return [NSString stringWithFormat:@"验证码已发送至：%@", ciphertext];
+        } else if (state == SSJGetVerifCodeStateReady) {
+            return [NSString stringWithFormat:@"将验证码发送至：%@", ciphertext];
         } else {
             return nil;
         }
