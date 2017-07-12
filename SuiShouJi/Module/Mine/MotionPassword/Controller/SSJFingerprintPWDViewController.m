@@ -97,6 +97,8 @@
         if (SSJEvaluatedPolicyDomainState()) {
             touchIDChanged = ![_context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
         }
+        
+        
         if (success && !touchIDChanged) {
             SSJDispatchMainSync(^{
                 if (self.finishHandle) {

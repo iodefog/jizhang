@@ -57,13 +57,9 @@ static NSString *const kTitle6 = @"还款账单月份";
     UILabel *_fenQiLab;
 }
 
-- (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
-}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
         self.title = @"还款";
     }
     return self;
@@ -169,7 +165,6 @@ static NSString *const kTitle6 = @"还款账单月份";
             fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
         }
         fenQiCell.haspercentLab = NO;
-        fenQiCell.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         [fenQiCell setNeedsLayout];
         fenQiCell.textField.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
@@ -213,16 +208,30 @@ static NSString *const kTitle6 = @"还款账单月份";
 }
 
 #pragma mark - UITextFieldDelegate
--(void)textFieldDidEndEditing:(UITextField *)textField{
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+
     if (textField.tag == 100) {
-        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:text];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
     }else if (textField.tag == 101){
-        self.repaymentModel.memo = textField.text;
+        self.repaymentModel.memo = text;
     }
+
+    
+    return YES;
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
+    if (textField.tag == 100) {
+        [self setupTextFiledNum:textField num:2];
+        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+    }else if (textField.tag == 101){
+        self.repaymentModel.memo = textField.text;
+    }
     return YES;
 }
 
@@ -231,22 +240,10 @@ static NSString *const kTitle6 = @"还款账单月份";
         self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:@"0.00"];
     }
     
-    
     return YES;
 }
 
 #pragma mark - Event
-- (void)textDidChange:(NSNotification *)notification {
-    UITextField *textField = notification.object;
-    if ([textField isKindOfClass:[UITextField class]]) {
-        if (textField.tag == 100) {
-            [self setupTextFiledNum:textField num:2];
-            self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
-        }else if (textField.tag == 101){
-            self.repaymentModel.memo = textField.text;
-        }
-    }
-}
 
 
 - (void)saveButtonClicked:(id)sender{
@@ -258,6 +255,8 @@ static NSString *const kTitle6 = @"还款账单月份";
         [CDAutoHideMessageHUD showMessage:@"本期账单还没有出不能还款哦"];
         return;
     }
+    
+    [self.view endEditing:YES];
     __weak typeof(self) weakSelf = self;
     [SSJRepaymentStore saveRepaymentWithRepaymentModel:self.repaymentModel Success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
