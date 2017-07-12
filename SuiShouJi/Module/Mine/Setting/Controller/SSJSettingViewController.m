@@ -104,6 +104,7 @@ static NSString *const kClearDataTitle = @"清理数据";
     // 只有清除数据不需要用户登录，其他操作均要求登录
     if (![title isEqualToString:kClearDataTitle]
         && !SSJIsUserLogined()) {
+        [SSJAnaliyticsManager event:@"sync_setup_tologin"];
         [self login];
         return;
     }

@@ -264,6 +264,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             BOOL shouldSync = SSJIsUserLogined();
             
             if (!shouldSync) {
+                [SSJAnaliyticsManager event:@"sync_tologin"];
                 [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"亲，登录后才能同步数据哦" action:[SSJAlertViewAction actionWithTitle:@"暂不同步" handler:NULL], [SSJAlertViewAction actionWithTitle:@"去登录" handler:^(SSJAlertViewAction * _Nonnull action) {
                     [self login];
                 }], nil];

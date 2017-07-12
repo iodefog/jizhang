@@ -244,7 +244,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
 - (void)favorableButtonClicked
 {
-    [SSJAnaliyticsManager event:@"evaluate_good"];
+    [SSJAnaliyticsManager event:@"favorite_good"];
     
     NSString *urlStr = SSJAppStoreUrl();
     if (!urlStr) {
@@ -261,7 +261,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 }
 
 - (void)tuCaoButtonClicked {
-    [SSJAnaliyticsManager event:@"evaluate_tucao"];
+    [SSJAnaliyticsManager event:@"favorite_complaint"];
     [self dismiss];
     self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypeTuCao;
     [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
@@ -272,7 +272,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
 - (void)latterButtonClicked
 {
-    [SSJAnaliyticsManager event:@"evaluate_later"];
+    [SSJAnaliyticsManager event:@"favorite_continue"];
     self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypeLatter;
     [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
     [self dismiss];

@@ -192,6 +192,7 @@
         [self goBackToSettingPage];
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.successAlertView showWithDesc:@"绑定手机号成功"];
+            [SSJAnaliyticsManager event:@"bind_phone"];
         });
     }];
 }
@@ -206,6 +207,7 @@
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     } completed:^{
+        [SSJAnaliyticsManager event:@"modify_pwd"];
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [self goBackToSettingPage];
     }];
