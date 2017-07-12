@@ -35,7 +35,7 @@ static NSString *const kTitle5 = @"还款日期";
 static NSString *const kTitle6 = @"还款账单月份";
 
 
-@interface SSJCreditCardRepaymentViewController ()<UITableViewDataSource,UITableViewDelegate>
+@interface SSJCreditCardRepaymentViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate>
 
 @property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -160,6 +160,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         fenQiCell.textLabel.text = title;
 //        _fenQiLab = fenQiCell.subtitleLabel;
         fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        fenQiCell.textField.delegate = self;
         fenQiCell.textField.tag = 100;
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
             fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
@@ -178,6 +179,8 @@ static NSString *const kTitle6 = @"还款账单月份";
     }
     
     SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJRepaymentEditeCellIdentifier];
+    repaymentModifyCell.cellInput.delegate = self;
+
     repaymentModifyCell.cellTitle = title;
     repaymentModifyCell.cellImageName = image;
     if ([title isEqualToString:kTitle2] || [title isEqualToString:kTitle3]) {
@@ -320,8 +323,8 @@ static NSString *const kTitle6 = @"还款账单月份";
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                    if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+                        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)item;
                         weakSelf.repaymentModel.repaymentSourceFoundId = fundItem.fundingID;
                         weakSelf.repaymentModel.repaymentSourceFoundName = fundItem.fundingName;
                         weakSelf.repaymentModel.repaymentSourceFoundImage = fundItem.fundingIcon;

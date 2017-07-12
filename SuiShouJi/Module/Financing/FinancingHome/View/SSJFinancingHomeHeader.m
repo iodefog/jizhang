@@ -95,8 +95,9 @@
 - (UIButton *)balanceButton {
     if (!_balanceButton) {
         _balanceButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_balanceButton setImage:[UIImage imageNamed:@"founds_selectbutton"] forState:UIControlStateNormal];
-        [_balanceButton sizeToFit];
+        _balanceButton.size = CGSizeMake(22, 22);
+        [_balanceButton setImage:[[UIImage imageNamed:@"founds_selectbutton"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _balanceButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         [_balanceButton addTarget:self action:@selector(balanceButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _balanceButton;
@@ -123,6 +124,7 @@
     [self.transferButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     self.balanceTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.hiddenButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.balanceButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
 }
 
 - (void)balanceButtonClicked:(id)sender {
