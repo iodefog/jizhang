@@ -94,7 +94,7 @@
 - (void)verifyTouchIDIfNeeded {
     [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
         BOOL touchIDChanged = NO;
-        if (SSJEvaluatedPolicyDomainState()) {
+        if (SSJEvaluatedPolicyDomainState() && _context.evaluatedPolicyDomainState) {
             touchIDChanged = ![_context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
         }
         if (success && !touchIDChanged) {
@@ -105,28 +105,35 @@
                 [self dismissViewControllerAnimated:YES completion:NULL];
             });
         } else {
-            // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”
-            [self closeFingerPwd];
-            [self relogin:^{
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
-            }];
+            if (touchIDChanged || error.code == LAErrorTouchIDNotEnrolled) {
+                [self relogin:^{
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                } finishLoginProcess:^{
+                    // 登录成功后保存新的指纹数据
+                    LAContext *context = [[LAContext alloc] init];
+                    context.localizedFallbackTitle = @"";
+                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+                        SSJUpdateEvaluatedPolicyDomainState(context.evaluatedPolicyDomainState);
+                    }
+                }];
+            }
         }
     }];
 }
 
-- (void)closeFingerPwd {
-    SSJUserItem *userItem = [[SSJUserItem alloc] init];
-    userItem.userId = SSJUSERID();
-    userItem.fingerPrintState = @"0";
-    [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
-}
-
 // 重新登录
-- (void)relogin:(void(^)())completion {
+- (void)relogin:(void(^)())completion finishLoginProcess:(void(^)())finishHandle {
     SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
-        loginVC.finishHandle = self.finishHandle;
+        loginVC.finishHandle = ^(UIViewController *controller) {
+            if (finishHandle) {
+                finishHandle();
+            }
+            if (self.finishHandle) {
+                self.finishHandle(controller);
+            }
+        };
         [self.navigationController setViewControllers:@[loginVC] animated:YES];
         if (completion) {
             completion();
@@ -175,7 +182,7 @@
         @weakify(self);
         [[_changeAccountBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [self relogin:NULL];
+            [self relogin:NULL finishLoginProcess:NULL];
         }];
     }
     return _changeAccountBtn;

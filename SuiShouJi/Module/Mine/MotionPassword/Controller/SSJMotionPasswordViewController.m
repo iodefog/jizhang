@@ -50,6 +50,11 @@ static const int kVerifyFailureTimesLimit = 5;
 
 @property (nonatomic, strong) LAContext *context;
 
+/**
+ 指纹发生更改后新的数据
+ */
+@property (nonatomic, strong) NSData *evaluatedPolicyDomainState;
+
 @end
 
 @implementation SSJMotionPasswordViewController
@@ -190,6 +195,10 @@ static const int kVerifyFailureTimesLimit = 5;
         case SSJMotionPasswordViewControllerTypeVerification: {
             if ([self.userItem.motionPWD isEqualToString:[keypads componentsJoinedByString:@","]]) {
                 // 验证陈功
+                if (self.evaluatedPolicyDomainState) {
+                    // 指纹发生过更改就保存最新的数据
+                    SSJUpdateEvaluatedPolicyDomainState(self.evaluatedPolicyDomainState);
+                }
                 if (self.finishHandle) {
                     self.finishHandle(self);
                 }
@@ -336,11 +345,12 @@ static const int kVerifyFailureTimesLimit = 5;
     }
     
     BOOL touchIDChanged = NO;
-    if (SSJEvaluatedPolicyDomainState()) {
+    if (self.context.evaluatedPolicyDomainState && SSJEvaluatedPolicyDomainState()) {
         touchIDChanged = ![self.context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
     }
     
     if (touchIDChanged) {
+        self.evaluatedPolicyDomainState = self.context.evaluatedPolicyDomainState;
         return;
     }
     
