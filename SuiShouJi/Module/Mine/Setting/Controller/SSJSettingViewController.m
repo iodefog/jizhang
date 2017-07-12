@@ -267,9 +267,6 @@ static NSString *const kClearDataTitle = @"清理数据";
             [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:userID];
         } failure:NULL];
         
-        SSJClearLoginInfo();
-        //清除当前账本类型
-        clearCurrentBooksCategory();
         [SSJUserTableManager reloadUserIdWithSuccess:^{
             [weakSelf.tableView reloadData];
             [SSJAnaliyticsManager loginOut];
@@ -313,12 +310,12 @@ static NSString *const kClearDataTitle = @"清理数据";
                             }];
                         });
                     } else {
-                        if (error.code == LAErrorTouchIDNotEnrolled) {
-                            SSJDispatchMainAsync(^{
-                                ctrl.on = NO;
+                        SSJDispatchMainAsync(^{
+                            ctrl.on = NO;
+                            if (error.code == LAErrorTouchIDNotEnrolled) {
                                 [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您尚未设置Touch ID，请在系统设置中添加指纹" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
-                            });
-                        }
+                            }
+                        });
                     }
                     self.context = nil;
                 }];

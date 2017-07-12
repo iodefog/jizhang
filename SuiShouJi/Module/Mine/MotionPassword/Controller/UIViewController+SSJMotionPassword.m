@@ -49,7 +49,9 @@
         NSError *error = nil;
         BOOL canEvaluateFingerPwd = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
         BOOL touchIDChanged = NO;
-        if (SSJEvaluatedPolicyDomainState()) {
+        if (fingerPwdOpened
+            && context.evaluatedPolicyDomainState
+            && SSJEvaluatedPolicyDomainState()) {
             touchIDChanged = ![context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
         }
         
@@ -80,16 +82,17 @@
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
         } else if (error.code == LAErrorTouchIDNotEnrolled || touchIDChanged) {
-            // 关闭用户的指纹解锁，否则重新登录后，再次重启app，又会提示用户“指纹信息发生变更”
-            SSJUserItem *userItem = [[SSJUserItem alloc] init];
-            userItem.userId = SSJUSERID();
-            userItem.fingerPrintState = @"0";
-            [SSJUserTableManager saveUserItem:userItem success:NULL failure:NULL];
             // 重新登录
-            SSJClearLoginInfo();
             [SSJUserTableManager reloadUserIdWithSuccess:^{
                 SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                 loginVC.finishHandle = ^(UIViewController *controller) {
+                    // 登录成功后保存新的指纹数据
+                    LAContext *context = [[LAContext alloc] init];
+                    context.localizedFallbackTitle = @"";
+                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+                        SSJUpdateEvaluatedPolicyDomainState(context.evaluatedPolicyDomainState);
+                    }
+                    
                     if (completion) {
                         completion(YES);
                     }

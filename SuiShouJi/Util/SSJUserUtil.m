@@ -54,7 +54,7 @@ void SSJClearLoginInfo() {
     SSJSaveAppId(nil);
     SSJSaveAccessToken(nil);
     SSJSaveUserLogined(NO);
-    SSJSetUserId(nil);
+    clearCurrentBooksCategory();
 }
 
 static NSString *const kSSJUserIdKey = @"kSSJUserIdKey";

@@ -18,17 +18,6 @@
 }
 
 + (void)reloadUserIdWithSuccess:(void (^)())success failure:(void (^)(NSError *error))failure {
-    __block NSError *tError = nil;
-    
-    if (SSJUSERID().length) {
-        tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"当前的userid无效"}];
-        SSJPRINT(@">>> SSJ warning:current userid is invalid");
-        if (failure) {
-            failure(tError);
-        }
-        return;
-    }
-    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSError *error = nil;
         [self reloadUserIdInDatabase:db error:&error];
@@ -49,6 +38,7 @@
 }
 
 + (void)reloadUserIdInDatabase:(FMDatabase *)db error:(NSError **)error {
+    SSJClearLoginInfo();
     NSString *userId = [self unregisteredUserIdInDatabase:db error:error];
     if (*error) {
         return;

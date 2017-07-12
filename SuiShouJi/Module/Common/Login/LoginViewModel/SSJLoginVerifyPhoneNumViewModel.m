@@ -422,7 +422,7 @@
     }
     
     // 保存用户信息
-    [[[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [[[[[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJUserTableManager saveUserItem:self.userItem success:^{
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
@@ -436,8 +436,8 @@
                 && SSJSaveAccessToken(self.accesstoken)
                 && SSJSetUserId(self.userItem.userId)
                 && SSJSaveUserLogined(YES)) {
-//                //保存账本类型个人or共享
-//                [self queryCurrentCategoryForUserId:self.userItem.userId];
+                //                //保存账本类型个人or共享
+                //                [self queryCurrentCategoryForUserId:self.userItem.userId];
                 [subscriber sendCompleted];
                 
             } else {
@@ -481,7 +481,7 @@
     }] then:^RACSignal *{
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-//            [self.loadingView show];
+            //            [self.loadingView show];
             [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [self syncData];
             [self.loadingView show];
@@ -497,42 +497,13 @@
             [subscriber sendCompleted];
             return nil;
         }];
-    }] then:^RACSignal *{
-         // 如果用户手势密码开启，进入手势密码页面，否则走既定的页面流程
-        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-                
-                LAContext *context = [[LAContext alloc] init];
-                context.localizedFallbackTitle = @"";
-                BOOL fingerPwdOpened = [userItem.fingerPrintState boolValue] && [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
-                BOOL motionPwdOpened = [userItem.motionPWDState boolValue] && userItem.motionPWD.length;
-                
-                if (motionPwdOpened) {
-                    // 验证手势密码
-                    SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
-                    motionVC.type = SSJMotionPasswordViewControllerTypeVerification;
-                    motionVC.finishHandle = self.vc.finishHandle;
-                    [self.vc.navigationController pushViewController:motionVC animated:YES];
-                } else if (fingerPwdOpened) {
-                    // 验证指纹密码
-                    SSJFingerprintPWDViewController *fingerPwdVC = [[SSJFingerprintPWDViewController alloc] init];
-                    fingerPwdVC.context = context;
-                    fingerPwdVC.finishHandle = self.vc.finishHandle;
-                    [self.vc.navigationController pushViewController:fingerPwdVC animated:YES];
-                } else {
-                    if (self.vc.finishHandle) {
-                        self.vc.finishHandle(self.vc);
-                    }
-                    [self.vc dismissViewControllerAnimated:NO completion:NULL];
-                }
-                [subscriber sendCompleted];
-            } failure:^(NSError * _Nonnull error) {
-                [subscriber sendError:error];
-            }];
-            return nil;
-        }];
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
+    } completed:^{
+        if (self.vc.finishHandle) {
+            self.vc.finishHandle(self.vc);
+        }
+        [self.vc dismissViewControllerAnimated:NO completion:NULL];
     }];
 }
 
