@@ -7,6 +7,7 @@
 //
 
 #import "SSJQiuChengWebViewController.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJQiuChengWebViewController ()
 
@@ -19,21 +20,33 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadCurrentUrl];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
 - (void)loadCurrentUrl {
-    NSMutableString *url = [NSMutableString stringWithFormat:@"%@",SSJURLWithAPI(@"/chargebook/partner/qiuchengPage.go?")];
-    
-    [url appendFormat:@"%@:%@",@"cuserId",SSJUSERID()];
-    
-    [url appendFormat:@"%@:%@",@"client_type",@"IOS"];
+    @weakify(self);
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        @strongify(self);
+        
+        NSMutableString *url = [NSMutableString stringWithFormat:@"%@",SSJURLWithAPI(@"/chargebook/partner/qiuchengPage.go?")];
+        
+        [url appendFormat:@"%@=%@",@"cuserId",SSJUSERID()];
+        
+        [url appendFormat:@"%@=%@",@"&client_type",@"IOS"];
+        
+        [url appendFormat:@"%@=%@",@"&client_code",SSJUSERID()];
+        
+        [url appendFormat:@"%@=%@",@"&mobile",userItem.mobileNo ? : @""];
 
-    [url appendFormat:@"%@:%@",@"client_code",SSJUSERID()];
-
-    [url appendFormat:@"%@:%@",@"mobile",SSJUSERID()];
+        [self loadURL:[NSURL URLWithString:url]];
+    } failure:NULL];
 
     
 }

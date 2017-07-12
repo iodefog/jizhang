@@ -13,11 +13,6 @@
 }
 
 
-/**
- *  UIWebView的url
- */
-@property (nonatomic, strong) NSURL *url;
-
 //保存前一个视图控制器navbar和toolbar的状态
 @property (nonatomic, assign) BOOL previousNavigationControllerToolbarHidden, previousNavigationControllerNavigationBarHidden;
 @property (nonatomic, strong) UIBarButtonItem *backButton, *forwardButton, *refreshButton, *stopButton, *actionButton, *fixedSeparator, *flexibleSeparator;

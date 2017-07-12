@@ -42,6 +42,13 @@
  */
 @property (nonatomic, assign) BOOL toolBarHidden;
 
+
+/**
+ *  UIWebView的url
+ */
+@property (nonatomic, strong) NSURL *url;
+
+
 /**
  *  实例化简单方法
  *
@@ -62,5 +69,7 @@
  *  @param HTMLString HTML字符串源码
  */
 - (void)loadHTMLString:(NSString *)HTMLString;
+
+- (void)loadURL:(NSURL *)URL;
 
 @end

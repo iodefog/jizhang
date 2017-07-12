@@ -52,6 +52,7 @@
 
 -(UILabel *)titleLabel{
     if (!_titleLabel) {
+        
         _titleLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _titleLabel.numberOfLines = 2;
         _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];

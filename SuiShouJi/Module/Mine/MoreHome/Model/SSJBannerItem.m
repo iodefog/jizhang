@@ -14,7 +14,8 @@
     return @{
              @"bannerImageUrl" : @"image",
              @"bannerName" : @"title",
-             @"bannerUrl" : @"url"
+             @"bannerUrl" : @"url",
+             @"bannerType" : @"url"
              };
 }
 
