@@ -310,7 +310,7 @@
         @weakify(self);
         [[_weixinLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [SSJAnaliyticsManager event:@"login_weichat"];
+            [SSJAnaliyticsManager event:@"login_weixin"];
             [self.view endEditing:YES];
             self.verifyPhoneViewModel.vc = self;
             [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
