@@ -48,7 +48,10 @@
         
         NSError *error = nil;
         BOOL canEvaluateFingerPwd = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
-        BOOL touchIDChanged = ![context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
+        BOOL touchIDChanged = NO;
+        if (SSJEvaluatedPolicyDomainState()) {
+            touchIDChanged = ![context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
+        }
         
         if (motionPwdOpened) {
             // 验证手势密码页面
