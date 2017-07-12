@@ -269,7 +269,6 @@ static const int kVerifyFailureTimesLimit = 5;
         return nil;
     }] then:^RACSignal *{
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            SSJClearLoginInfo();
             [SSJUserTableManager reloadUserIdWithSuccess:^{
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {
@@ -300,7 +299,6 @@ static const int kVerifyFailureTimesLimit = 5;
 
 // 切换账号
 - (void)changeAccountAction {
-    SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
         loginVC.finishHandle = self.finishHandle;

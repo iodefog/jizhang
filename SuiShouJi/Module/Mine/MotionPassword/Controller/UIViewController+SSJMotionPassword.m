@@ -83,7 +83,6 @@
             
         } else if (error.code == LAErrorTouchIDNotEnrolled || touchIDChanged) {
             // 重新登录
-            SSJClearLoginInfo();
             [SSJUserTableManager reloadUserIdWithSuccess:^{
                 SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                 loginVC.finishHandle = ^(UIViewController *controller) {

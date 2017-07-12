@@ -155,7 +155,6 @@
     if ([service.returnCode isEqualToString:@"1"]) {
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
-        SSJClearLoginInfo();
         [SSJUserTableManager reloadUserIdWithSuccess:^{
             SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc]init];
             loginVc.backController = [self.navigationController.viewControllers firstObject];

@@ -267,9 +267,6 @@ static NSString *const kClearDataTitle = @"清理数据";
             [SSJLocalNotificationHelper cancelLocalNotificationWithUserId:userID];
         } failure:NULL];
         
-        SSJClearLoginInfo();
-        //清除当前账本类型
-        clearCurrentBooksCategory();
         [SSJUserTableManager reloadUserIdWithSuccess:^{
             [weakSelf.tableView reloadData];
             [SSJAnaliyticsManager loginOut];

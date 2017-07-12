@@ -19,7 +19,6 @@
         return NO;
     }
     
-    SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] initWithNibName:nil bundle:nil];
         SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];

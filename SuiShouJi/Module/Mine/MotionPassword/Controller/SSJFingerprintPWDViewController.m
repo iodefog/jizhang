@@ -123,7 +123,6 @@
 
 // 重新登录
 - (void)relogin:(void(^)())completion finishLoginProcess:(void(^)())finishHandle {
-    SSJClearLoginInfo();
     [SSJUserTableManager reloadUserIdWithSuccess:^{
         SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
         loginVC.finishHandle = ^(UIViewController *controller) {
