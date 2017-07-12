@@ -4882,6 +4882,8 @@
 		9C18653C1F16123C0099D389 /* SSJQiuChengWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18652F1F1612320099D389 /* SSJQiuChengWebViewController.m */; };
 		9C18653D1F16123E0099D389 /* SSJQiuChengWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18652F1F1612320099D389 /* SSJQiuChengWebViewController.m */; };
 		9C18653E1F16123E0099D389 /* SSJQiuChengWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18652F1F1612320099D389 /* SSJQiuChengWebViewController.m */; };
+		9C1865441F1626410099D389 /* SSJBaseTableMerge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1865411F1626410099D389 /* SSJBaseTableMerge.m */; };
+		9C1865451F1626410099D389 /* SSJBooksTypeTableMerge.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C1865431F1626410099D389 /* SSJBooksTypeTableMerge.m */; };
 		9C18C0171DF68FB700BC0971 /* SSJMonthSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0161DF68FB700BC0971 /* SSJMonthSelectView.m */; };
 		9C18C0241DF7F84F00BC0971 /* SSJInstalmentEditeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C0231DF7F84E00BC0971 /* SSJInstalmentEditeViewController.m */; };
 		9C18C02E1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C18C02D1DF9323C00BC0971 /* SSJInstalmentDateSelectCell.m */; };
@@ -10955,6 +10957,10 @@
 		9C17FF1B1CE96ED90016EE4C /* SSJCustomKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCustomKeyboard.m; sourceTree = "<group>"; };
 		9C18652E1F1612320099D389 /* SSJQiuChengWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJQiuChengWebViewController.h; sourceTree = "<group>"; };
 		9C18652F1F1612320099D389 /* SSJQiuChengWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJQiuChengWebViewController.m; sourceTree = "<group>"; };
+		9C1865401F1626410099D389 /* SSJBaseTableMerge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBaseTableMerge.h; sourceTree = "<group>"; };
+		9C1865411F1626410099D389 /* SSJBaseTableMerge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBaseTableMerge.m; sourceTree = "<group>"; };
+		9C1865421F1626410099D389 /* SSJBooksTypeTableMerge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJBooksTypeTableMerge.h; sourceTree = "<group>"; };
+		9C1865431F1626410099D389 /* SSJBooksTypeTableMerge.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBooksTypeTableMerge.m; sourceTree = "<group>"; };
 		9C18C0151DF68FB700BC0971 /* SSJMonthSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMonthSelectView.h; sourceTree = "<group>"; };
 		9C18C0161DF68FB700BC0971 /* SSJMonthSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMonthSelectView.m; sourceTree = "<group>"; };
 		9C18C0221DF7F84E00BC0971 /* SSJInstalmentEditeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJInstalmentEditeViewController.h; sourceTree = "<group>"; };
@@ -13605,6 +13611,17 @@
 			path = SSJCustomKeyBoard;
 			sourceTree = "<group>";
 		};
+		9C18653F1F1626410099D389 /* DataMerge */ = {
+			isa = PBXGroup;
+			children = (
+				9C1865401F1626410099D389 /* SSJBaseTableMerge.h */,
+				9C1865411F1626410099D389 /* SSJBaseTableMerge.m */,
+				9C1865421F1626410099D389 /* SSJBooksTypeTableMerge.h */,
+				9C1865431F1626410099D389 /* SSJBooksTypeTableMerge.m */,
+			);
+			path = DataMerge;
+			sourceTree = "<group>";
+		};
 		9C23EA4B1DDAD4FE0003C5AB /* certificates */ = {
 			isa = PBXGroup;
 			children = (
@@ -15336,6 +15353,7 @@
 		BD0E43EB1C2118E600F9179D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				9C18653F1F1626410099D389 /* DataMerge */,
 				9C61E2FC1EE654BC001BA5F2 /* LottieJson */,
 				9C24E6EE1EC428980022D60A /* buildconfig */,
 				9C30AA871EAF6E7C008DD51D /* customTheme */,
@@ -26232,6 +26250,7 @@
 				9C18C0241DF7F84F00BC0971 /* SSJInstalmentEditeViewController.m in Sources */,
 				9C6CA7E61DCAD9D00013A499 /* SSJThemeDownLoaderManger.m in Sources */,
 				7DFD30441D75217300A0D7A0 /* SSJCategoryEditableCollectionView.m in Sources */,
+				9C1865451F1626410099D389 /* SSJBooksTypeTableMerge.m in Sources */,
 				7D22A3191E4F16AC00190CEB /* SSJArrayAddition.m in Sources */,
 				7D5F33851CEAE6C10086B67E /* SSJRecordMakingBillTypeSelectionCellLabel.m in Sources */,
 				9C246BA41DCADB7600C61C34 /* SSJDatabaseVersion10.m in Sources */,
@@ -26760,6 +26779,7 @@
 				91F7FD301DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */,
 				7D6CC8FB1E0A731C00FF6133 /* SSJReportFormsCurveGridView.m in Sources */,
 				9CD9BC2D1CFD2DAA0061803B /* SSJAboutusViewController.m in Sources */,
+				9C1865441F1626410099D389 /* SSJBaseTableMerge.m in Sources */,
 				9C7B9CC91D33BFF800A4F71F /* SSJFundingDetailNoDataView.m in Sources */,
 				7DE69C3A1C8EC401001D31C1 /* SCYMotionEncryptionStrokeLayer.m in Sources */,
 				7D5848741CE4557D0027DAFA /* SSJDatabaseVersion3.m in Sources */,
