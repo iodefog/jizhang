@@ -80,7 +80,14 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [super viewWillAppear:animated];
 //    [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor whiteColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationItem.rightBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    [self getDataFromDataBase];
+    if (!self.selectedFundids) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            self.selectedFundids = userItem.selectFundid;
+            [self getDataFromDataBase];
+        } failure:NULL];
+    } else {
+        [self getDataFromDataBase];
+    }
     if (![[NSUserDefaults standardUserDefaults]boolForKey:SSJHaveEnterFundingHomeKey]) {
         SSJFinancingHomePopView *popView = [[[NSBundle mainBundle] loadNibNamed:@"SSJFinancingHomePopView" owner:nil options:nil] ssj_safeObjectAtIndex:0];
         popView.frame = [UIScreen mainScreen].bounds;
@@ -339,6 +346,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     if (!self.items.count) {
         [self.collectionView ssj_showLoadingIndicator];
     }
+
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
         weakSelf.items = [[NSMutableArray alloc]initWithArray:result];
         for (int i = 0; i < weakSelf.items.count; i ++) {

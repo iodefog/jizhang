@@ -77,7 +77,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.title = @"我的";
         self.extendedLayoutIncludesOpaqueBars = YES;
-    }
+        self.automaticallyAdjustsScrollViewInsets = YES;
+        }
     return self;
 }
 
@@ -122,6 +123,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.bannerService requestBannersList];
     
     [self.annoucementService requestAnnoucementsWithPage:1];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT;
 }
 
 #pragma mark - UITableViewDelegate
