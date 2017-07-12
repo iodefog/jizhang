@@ -93,7 +93,11 @@
 // 验证touchID
 - (void)verifyTouchIDIfNeeded {
     [_context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
-        if (success && [_context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()]) {
+        BOOL touchIDChanged = NO;
+        if (SSJEvaluatedPolicyDomainState()) {
+            touchIDChanged = ![_context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
+        }
+        if (success && !touchIDChanged) {
             SSJDispatchMainSync(^{
                 if (self.finishHandle) {
                     self.finishHandle(self);

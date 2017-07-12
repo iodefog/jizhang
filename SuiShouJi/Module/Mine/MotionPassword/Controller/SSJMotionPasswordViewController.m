@@ -329,21 +329,31 @@ static const int kVerifyFailureTimesLimit = 5;
 }
 
 - (void)verifyFingerPrintPwdIfNeeded {
-    NSError *error = nil;
-    if (self.type == SSJMotionPasswordViewControllerTypeVerification
-        && [self.userItem.fingerPrintState boolValue]
-        && [self.context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error]) {
-        [self.context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
-            if (success) {
-                SSJDispatchMainSync(^{
-                    if (self.finishHandle) {
-                        self.finishHandle(self);
-                    }
-                    [self dismissViewControllerAnimated:YES completion:NULL];
-                });
-            }
-        }];
+    if (self.type != SSJMotionPasswordViewControllerTypeVerification
+        || ![self.userItem.fingerPrintState boolValue]
+        || ![self.context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+        return;
     }
+    
+    BOOL touchIDChanged = NO;
+    if (SSJEvaluatedPolicyDomainState()) {
+        touchIDChanged = ![self.context.evaluatedPolicyDomainState isEqualToData:SSJEvaluatedPolicyDomainState()];
+    }
+    
+    if (touchIDChanged) {
+        return;
+    }
+    
+    [self.context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:@"请按住Home键进行解锁" reply:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            SSJDispatchMainSync(^{
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                [self dismissViewControllerAnimated:YES completion:NULL];
+            });
+        }
+    }];
 }
 
 - (void)loadUserIcon {
