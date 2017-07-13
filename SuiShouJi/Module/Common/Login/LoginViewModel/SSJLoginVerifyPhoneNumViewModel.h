@@ -28,10 +28,7 @@
 @property (nonatomic, strong) RACCommand *normalLoginCommand;
 
 /**注册并登录命令*/
-@property (nonatomic, strong) RACCommand *registerCommand;
-
-/**注册并登录命令*/
-@property (nonatomic, strong) RACCommand *forgetPwdCommand;
+@property (nonatomic, strong) RACCommand *registerAndLoginCommand;
 
 /**获取验证码命令*/
 @property (nonatomic, strong) RACCommand *getVerificationCodeCommand;
@@ -92,4 +89,6 @@
 //登录用户的accesstoken
 @property ( nonatomic,strong) NSString *accesstoken;
 
+/**vc*/
+@property (nonatomic, assign) __kindof UIViewController *vc;
 @end

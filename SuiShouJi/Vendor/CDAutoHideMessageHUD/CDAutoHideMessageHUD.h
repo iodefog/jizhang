@@ -16,8 +16,6 @@
 
 @end
 
-@interface CDAutoHideMessageHUD (Error)
-
-+ (void)showError:(NSError *)error;
+@interface CDNewLabel : UILabel
 
 @end

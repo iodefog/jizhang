@@ -171,19 +171,8 @@
         __weak __typeof(self)wSelf = self;
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             [wSelf.view endEditing:YES];
-            
-            [[[wSelf.viewModel.normalLoginCommand execute:nil] takeUntil:wSelf.rac_willDeallocSignal] subscribeError:^(NSError *error) {
-                if (error.code != SSJErrorCodeUserCancelLogin) {
-                    [CDAutoHideMessageHUD showError:error];
-                }
-            } completed:^{
-                [CDAutoHideMessageHUD showMessage:@"登录成功"];
-                if (wSelf.finishHandle) {
-                    wSelf.finishHandle(self);
-                }
-                [wSelf dismissViewControllerAnimated:NO completion:NULL];
-            }];
-            
+            wSelf.viewModel.vc = wSelf;
+            [[wSelf.viewModel.normalLoginCommand execute:nil] takeUntil:wSelf.rac_willDeallocSignal];
             [[[wSelf.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
                 if ([x boolValue]) {
                     wSelf.tfPassword.userInteractionEnabled = NO;

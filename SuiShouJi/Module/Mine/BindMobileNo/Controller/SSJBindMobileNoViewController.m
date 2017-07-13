@@ -125,13 +125,7 @@
             pwdSetttingVC.mobileNo = self.phoneNoField.text;
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
-    } error:^(NSError *error) {
-        if (error.code == SSJErrorCodeMobileNoIllegal) {
-            [CDAutoHideMessageHUD showMessage:error.localizedDescription];
-        } else {
-            [SSJAlertViewAdapter showError:error];
-        }
-    }];
+    } error:NULL];
     
     RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
     RAC(self.viewModel, phoneNum) = [RACSignal merge:@[self.phoneNoField.rac_textSignal, RACObserve(self.phoneNoField, text)]];
