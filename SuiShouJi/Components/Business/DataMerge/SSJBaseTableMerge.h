@@ -28,6 +28,10 @@
                 TargetUserId:(NSString *)targetUserId
                      DataDic:(NSDictionary *)dic;
 
-
++ (NSDictionary *)queryUserChargeWithUserId:(NSString *)userId
+                                  condition:(NSString *)condition
+                                   FromDate:(NSDate *)fromDate
+                                     ToDate:(NSDate *)toDate
+                                 inDataBase:(FMDatabase *)db;
 
 @end

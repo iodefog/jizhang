@@ -41,7 +41,7 @@
         
         [url appendFormat:@"%@=%@",@"&client_type",@"IOS"];
         
-        [url appendFormat:@"%@=%@",@"&client_code",SSJUSERID()];
+        [url appendFormat:@"%@=%@",@"&client_code",[UIDevice currentDevice].identifierForVendor.UUIDString];
         
         [url appendFormat:@"%@=%@",@"&mobile",userItem.mobileNo ? : @""];
         
