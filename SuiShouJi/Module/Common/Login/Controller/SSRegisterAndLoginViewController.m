@@ -7,6 +7,7 @@
 //
 //static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #import "SSRegisterAndLoginViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -120,7 +121,6 @@
 }
 
 - (void)initialBind {
-    self.viewModel.vc = self;
     RAC(self.viewModel,verificationCode) = self.tfRegYanZhenF.rac_textSignal;
     RAC(self.viewModel,passwardNum) = self.tfPassword.rac_textSignal;
     RAC(self.viewModel,phoneNum) = RACObserve(self, phoneNum);
@@ -131,8 +131,7 @@
     [self.getQQGroupService requestWithSuccess:^(SSJEncourageService * _Nonnull service) {
         SSJJoinQQGroup(service.qqgroup, service.qqgroupId);
     } failure:^(SSJEncourageService * _Nonnull service) {
-        //        [SSJAlertViewAdapter showError:service.error];
-        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
+        [CDAutoHideMessageHUD showError:service.error];
     }];
 }
 
@@ -325,19 +324,36 @@
         _registerAndLoginButton.layer.cornerRadius = 6;
         _registerAndLoginButton.clipsToBounds = YES;
         RAC(_registerAndLoginButton,enabled) = self.viewModel.enableRegAndLoginSignal;
+        
         __weak __typeof(self)weakSelf = self;
         [[_registerAndLoginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             [weakSelf.view endEditing:YES];
-            [[weakSelf.viewModel.registerAndLoginCommand execute:nil] takeUntil:weakSelf.rac_willDeallocSignal];
-            [[[weakSelf.viewModel.registerAndLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
-                 if ([x boolValue]) {
-                     weakSelf.tfPassword.userInteractionEnabled = NO;
-                     weakSelf.tfRegYanZhenF.userInteractionEnabled = NO;
-                 } else {
-                     weakSelf.tfPassword.userInteractionEnabled = YES;
-                     weakSelf.tfRegYanZhenF.userInteractionEnabled = YES;
-                 }
-             }];
+            RACCommand *command = weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist ? weakSelf.viewModel.registerCommand : weakSelf.viewModel.forgetPwdCommand;
+            
+            [[[command execute:nil] takeUntil:weakSelf.rac_willDeallocSignal] subscribeError:^(NSError *error) {
+                [CDAutoHideMessageHUD showError:error];
+            } completed:^{
+                if (weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist) {
+                    [CDAutoHideMessageHUD showMessage:@"注册成功"];
+                } else if (weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeForgetPassword) {
+                    [CDAutoHideMessageHUD showMessage:@"重置密码成功"];
+                }
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                [self dismissViewControllerAnimated:YES completion:NULL];
+            }];
+            
+            [[[command.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
+                if ([x boolValue]) {
+                    weakSelf.tfPassword.userInteractionEnabled = NO;
+                    weakSelf.tfRegYanZhenF.userInteractionEnabled = NO;
+                } else {
+                    weakSelf.tfPassword.userInteractionEnabled = YES;
+                    weakSelf.tfRegYanZhenF.userInteractionEnabled = YES;
+                }
+            }];
+            
         }];
     }
     return _registerAndLoginButton;

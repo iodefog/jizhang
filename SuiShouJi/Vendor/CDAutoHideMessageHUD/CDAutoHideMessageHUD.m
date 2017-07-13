@@ -15,6 +15,17 @@
 #define AUTOHIDEVIEW_MAX_WIDTH 260.0
 #define AUTOHIDEVIEW_MAX_HEIGHT 120.0
 
+@interface CDNewLabel : UILabel
+
+@end
+
+@implementation CDNewLabel
+
+- (void)drawTextInRect:(CGRect)rect{
+    [super drawTextInRect:CGRectMake(10, 10, self.width-20, self.height-20)];
+}
+
+@end
 
 static void * CDAutoHideMessageHUDKey = (void *)@"CDAutoHideMessageHUDKey";
 
@@ -79,10 +90,10 @@ static void * CDAutoHideMessageHUDKey = (void *)@"CDAutoHideMessageHUDKey";
 
 @end
 
-@implementation CDNewLabel
+@implementation CDAutoHideMessageHUD (Error)
 
-- (void)drawTextInRect:(CGRect)rect{
-    [super drawTextInRect:CGRectMake(10, 10, self.width-20, self.height-20)];
++ (void)showError:(NSError *)error {
+    [self showMessage:error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE];
 }
 
 @end

@@ -231,6 +231,8 @@
                     loginVC.finishHandle = weakSelf.finishHandle;
                     [weakSelf.navigationController pushViewController:loginVC animated:YES];
                 }
+            } error:^(NSError *error) {
+                [CDAutoHideMessageHUD showError:error];
             }];
         }];
         
@@ -293,8 +295,17 @@
             @strongify(self);
             [SSJAnaliyticsManager event:@"login_qq"];
             [self.view endEditing:YES];
-            self.verifyPhoneViewModel.vc = self;
-            [self.verifyPhoneViewModel.qqLoginCommand execute:nil];
+            [[self.verifyPhoneViewModel.qqLoginCommand execute:nil] subscribeError:^(NSError *error) {
+                if (error.code != SSJErrorCodeUserCancelLogin) {
+                    [CDAutoHideMessageHUD showError:error];
+                }
+            } completed:^{
+                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                [self dismissViewControllerAnimated:NO completion:NULL];
+            }];
         }];
     }
     return _tencentLoginButton;
@@ -312,8 +323,17 @@
             @strongify(self);
             [SSJAnaliyticsManager event:@"login_weixin"];
             [self.view endEditing:YES];
-            self.verifyPhoneViewModel.vc = self;
-            [self.verifyPhoneViewModel.wxLoginCommand execute:nil];
+            [[self.verifyPhoneViewModel.wxLoginCommand execute:nil] subscribeError:^(NSError *error) {
+                if (error.code != SSJErrorCodeUserCancelLogin) {
+                    [CDAutoHideMessageHUD showError:error];
+                }
+            } completed:^{
+                [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                [self dismissViewControllerAnimated:NO completion:NULL];
+            }];
         }];
     }
     return _weixinLoginButton;
@@ -322,7 +342,6 @@
 - (SSJLoginVerifyPhoneNumViewModel *)verifyPhoneViewModel {
     if (!_verifyPhoneViewModel) {
         _verifyPhoneViewModel = [[SSJLoginVerifyPhoneNumViewModel alloc] init];
-        _verifyPhoneViewModel.vc = self;
     }
     return _verifyPhoneViewModel;
 }
