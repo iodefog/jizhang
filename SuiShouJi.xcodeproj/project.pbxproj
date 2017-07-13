@@ -11,6 +11,7 @@
 		33AD8C2D35F2FAFB182D9E89 /* libPods-YouYuJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 586C68C653542AB7D4E41E03 /* libPods-YouYuJiZhang.a */; };
 		402866CF559EFC2C00B66C2E /* libPods-9188JiZhangPro.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A664D71F3BC9A93FA4D7A4DC /* libPods-9188JiZhangPro.a */; };
 		405B1292827C0532A2E6541D /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C46684FB3B915A8D4F8FBBBD /* libPods-BeiKeJiZhang.a */; };
+		40B605E97FB37EB92043A8DD /* libPods-MaYiJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE65A111B06CF68CBE1E931 /* libPods-MaYiJiZhang.a */; };
 		486A89A1F048342BF34208E4 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 259B7E0CCF1F097EA7B135E7 /* libPods-YouYuJiZhangLiCai.a */; };
 		6F26618EF6C0B60F19ABA4F9 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBB860472808AAC7486169C /* libPods-YouYuJiZhangBen.a */; };
 		7D00D8051DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
@@ -10115,7 +10116,9 @@
 
 /* Begin PBXFileReference section */
 		004889EB34083108A8612BCE /* Pods-YouYuJiZhangBao.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.debug-test.xcconfig"; sourceTree = "<group>"; };
+		0FE65A111B06CF68CBE1E931 /* libPods-MaYiJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MaYiJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		10B02F27B07D9E59BDE1CA2A /* Pods-YouYuJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
+		12D3BEB3AFAC4B15FC19C65E /* Pods-MaYiJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaYiJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		13DED3B91912A4CA23981548 /* Pods-YouYuJiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
 		178510F3259CAD01F56D7B49 /* libPods-YouYuJiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BCD58B8B9CBEA7ED5E6BDD4 /* Pods-JiZhangGuanJia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug.xcconfig"; sourceTree = "<group>"; };
@@ -10134,6 +10137,7 @@
 		3D28921C2AB227ED349FA128 /* Pods-YouYuJiZhangLiCai.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-test.xcconfig"; sourceTree = "<group>"; };
 		408D479324B9408204BAA12F /* Pods-YouYuJiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		409F6679D47EFA5753A58706 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-youyujizhang.release.xcconfig"; path = "Pods/Target Support Files/Pods-youyujizhang/Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
+		44F31057B3DB0805EC580D08 /* Pods-MaYiJiZhang.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaYiJiZhang.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang.release-test.xcconfig"; sourceTree = "<group>"; };
 		4710DD5320AD12CF7C4797B8 /* libPods-9188JiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-9188JiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4EF45D0DA6D692497985E773 /* Pods-JiZhangGuanJia.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.release-test.xcconfig"; sourceTree = "<group>"; };
 		53D02BD02F89C64D5FED1E49 /* Pods-YouYuJiZhangGuanJia.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangGuanJia/Pods-YouYuJiZhangGuanJia.debug-production.xcconfig"; sourceTree = "<group>"; };
@@ -11500,6 +11504,7 @@
 		A684F38344A33CFE5F75ADF5 /* Pods-SuiShouJiEnterprise.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug.xcconfig"; sourceTree = "<group>"; };
 		A7E4DE2394D1465918C3F390 /* Pods-YouYuJiZhangBen.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBen.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBen/Pods-YouYuJiZhangBen.debug-production.xcconfig"; sourceTree = "<group>"; };
 		AA2C404FF4C4201ADF0D39B0 /* Pods-9188JiZhangBen.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBen.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBen/Pods-9188JiZhangBen.debug-production.xcconfig"; sourceTree = "<group>"; };
+		AE32E52D24C03EFFEA555764 /* Pods-MaYiJiZhang.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaYiJiZhang.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang.debug-production.xcconfig"; sourceTree = "<group>"; };
 		AFA0E86A33C63DB5D6AEB327 /* Pods-JiZhangGuanJia.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JiZhangGuanJia.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-JiZhangGuanJia/Pods-JiZhangGuanJia.debug-test.xcconfig"; sourceTree = "<group>"; };
 		B45165BEC4694FA31E285411 /* libPods-JiZhangGuanJia.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JiZhangGuanJia.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B628019ECCD0A5E2646A5A09 /* Pods-YouYuJiZhangBao.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangBao.release.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangBao/Pods-YouYuJiZhangBao.release.xcconfig"; sourceTree = "<group>"; };
@@ -11634,6 +11639,7 @@
 		F3135A79FF17CD25E4802AAF /* libPods-SuiShouJi.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-SuiShouJi.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F36B3F26385C626176D7A485 /* Pods-YouYuJiZhangLiCai.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.release-production.xcconfig"; sourceTree = "<group>"; };
 		F71110703F1BB614825DC7F6 /* libPods-YouYuJiZhangBao.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangBao.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F7333F97A332F73C161C1F9F /* Pods-MaYiJiZhang.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MaYiJiZhang.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang.debug-test.xcconfig"; sourceTree = "<group>"; };
 		F8D4E0B8A39DD37EA1FCC6CB /* Pods-YouYuJiZhangLiCai.debug-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangLiCai/Pods-YouYuJiZhangLiCai.debug-test.xcconfig"; sourceTree = "<group>"; };
 		FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-9188JiZhangBao.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-9188JiZhangBao/Pods-9188JiZhangBao.release-production.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -11830,6 +11836,7 @@
 				9CDB4C0F1EF3ABBC0097E09D /* AVFoundation.framework in Frameworks */,
 				9CDB4C101EF3ABBC0097E09D /* Security.framework in Frameworks */,
 				9CDB4C111EF3ABBC0097E09D /* libPods-SuiShouJi.a in Frameworks */,
+				40B605E97FB37EB92043A8DD /* libPods-MaYiJiZhang.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11909,6 +11916,7 @@
 				178510F3259CAD01F56D7B49 /* libPods-YouYuJiZhangGuanJia.a */,
 				259B7E0CCF1F097EA7B135E7 /* libPods-YouYuJiZhangLiCai.a */,
 				68D06DDEC347B191CEB2DFA1 /* libPods-YouYuJiZhangPro.a */,
+				0FE65A111B06CF68CBE1E931 /* libPods-MaYiJiZhang.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -15701,6 +15709,10 @@
 				DDDAF21ED0ACE6B74EBCB8A6 /* Pods-9188JiZhangBao.debug-production.xcconfig */,
 				BDED39AF20CC5F34BACE95E9 /* Pods-9188JiZhangBao.release-test.xcconfig */,
 				FC699DBB59A6780396A68CE0 /* Pods-9188JiZhangBao.release-production.xcconfig */,
+				F7333F97A332F73C161C1F9F /* Pods-MaYiJiZhang.debug-test.xcconfig */,
+				AE32E52D24C03EFFEA555764 /* Pods-MaYiJiZhang.debug-production.xcconfig */,
+				44F31057B3DB0805EC580D08 /* Pods-MaYiJiZhang.release-test.xcconfig */,
+				12D3BEB3AFAC4B15FC19C65E /* Pods-MaYiJiZhang.release-production.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -17248,7 +17260,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9CDB4C391EF3ABBC0097E09D /* [CP] Copy Pods Resources */ = {
@@ -17263,7 +17275,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-SuiShouJi/Pods-SuiShouJi-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MaYiJiZhang/Pods-MaYiJiZhang-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9EEA079F752C2669B9209682 /* [CP] Embed Pods Frameworks */ = {
@@ -31356,7 +31368,7 @@
 		};
 		9CDB4C3C1EF3ABBC0097E09D /* Debug-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 59B9709CD0561A8AD4BDF638 /* Pods-SuiShouJi.debug-test.xcconfig */;
+			baseConfigurationReference = F7333F97A332F73C161C1F9F /* Pods-MaYiJiZhang.debug-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = mayijizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
@@ -31445,7 +31457,7 @@
 		};
 		9CDB4C3D1EF3ABBC0097E09D /* Debug-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 39E3B4D62A92E52E9A7D3272 /* Pods-SuiShouJi.debug-production.xcconfig */;
+			baseConfigurationReference = AE32E52D24C03EFFEA555764 /* Pods-MaYiJiZhang.debug-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = mayijizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
@@ -31534,7 +31546,7 @@
 		};
 		9CDB4C3E1EF3ABBC0097E09D /* Release-test */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 21EA1E50547213D6FCC8FD05 /* Pods-SuiShouJi.release-test.xcconfig */;
+			baseConfigurationReference = 44F31057B3DB0805EC580D08 /* Pods-MaYiJiZhang.release-test.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = mayijizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
@@ -31622,7 +31634,7 @@
 		};
 		9CDB4C3F1EF3ABBC0097E09D /* Release-production */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6B2E92DAE4FF9F6B4E6CFC2B /* Pods-SuiShouJi.release-production.xcconfig */;
+			baseConfigurationReference = 12D3BEB3AFAC4B15FC19C65E /* Pods-MaYiJiZhang.release-production.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = mayijizhang;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LongTailLaunchImage;
