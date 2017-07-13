@@ -574,6 +574,48 @@
 		7D099BA51F0A45EE00311920 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D099B991F0A45EE00311920 /* SSJDatePeriod.m */; };
 		7D099BA61F0A45EE00311920 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D099B991F0A45EE00311920 /* SSJDatePeriod.m */; };
 		7D099BA71F0A45EE00311920 /* SSJDatePeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D099B991F0A45EE00311920 /* SSJDatePeriod.m */; };
+		7D0AA1B71F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1B81F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1B91F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BA1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BB1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BC1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BD1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BE1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1BF1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C01F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C11F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C21F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C31F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C41F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */; };
+		7D0AA1C71F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1C81F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1C91F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CA1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CB1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CC1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CD1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CE1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1CF1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D01F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D11F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D21F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D31F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D41F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */; };
+		7D0AA1D71F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1D81F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1D91F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DA1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DB1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DC1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DD1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DE1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1DF1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1E01F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1E11F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1E21F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1E31F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
+		7D0AA1E41F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */; };
 		7D0AEC431E31AD3F008FADDB /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
 		7D0EF61E1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
 		7D0EF61F1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */; };
@@ -10175,6 +10217,12 @@
 		7D099B861F0A3D1400311920 /* SSJDataClearHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataClearHelper.m; sourceTree = "<group>"; };
 		7D099B981F0A45EE00311920 /* SSJDatePeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDatePeriod.h; sourceTree = "<group>"; };
 		7D099B991F0A45EE00311920 /* SSJDatePeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDatePeriod.m; sourceTree = "<group>"; };
+		7D0AA1B51F1751D700A3BE82 /* SSJLoginNavigator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginNavigator.h; sourceTree = "<group>"; };
+		7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginNavigator.m; sourceTree = "<group>"; };
+		7D0AA1C51F17805900A3BE82 /* SSJNavigatorConfigurationTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNavigatorConfigurationTree.h; sourceTree = "<group>"; };
+		7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNavigatorConfigurationTree.m; sourceTree = "<group>"; };
+		7D0AA1D51F17AC8900A3BE82 /* SSJLoginNavigatorTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginNavigatorTest.h; sourceTree = "<group>"; };
+		7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginNavigatorTest.m; sourceTree = "<group>"; };
 		7D0EF61C1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJShareBooksMemberKickedOutAlerter.h; sourceTree = "<group>"; };
 		7D0EF61D1EE8F59C003E53D7 /* SSJShareBooksMemberKickedOutAlerter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJShareBooksMemberKickedOutAlerter.m; sourceTree = "<group>"; };
 		7D1D7F411C86BBD90001F72A /* SSJUserChargePeriodConfigSyncTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigSyncTable.h; sourceTree = "<group>"; };
@@ -13754,6 +13802,12 @@
 				9C4EBC941D7D1C4B00BE4982 /* SSJThirdPartLoginItem.m */,
 				9C38999F1DC9D99700715732 /* SSJCustomCategoryItem.h */,
 				9C3899A01DC9D99700715732 /* SSJCustomCategoryItem.m */,
+				7D0AA1B51F1751D700A3BE82 /* SSJLoginNavigator.h */,
+				7D0AA1B61F1751D700A3BE82 /* SSJLoginNavigator.m */,
+				7D0AA1C51F17805900A3BE82 /* SSJNavigatorConfigurationTree.h */,
+				7D0AA1C61F17805900A3BE82 /* SSJNavigatorConfigurationTree.m */,
+				7D0AA1D51F17AC8900A3BE82 /* SSJLoginNavigatorTest.h */,
+				7D0AA1D61F17AC8900A3BE82 /* SSJLoginNavigatorTest.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -17595,6 +17649,7 @@
 				7D08A1181E4999D30085A8FB /* SSJLoanSyncTable.m in Sources */,
 				9CB4A0FA1F063494001CDAD8 /* SSJEncourageService.m in Sources */,
 				7D08A11A1E4999D30085A8FB /* SSJBookKeepingHomeBooksButton.m in Sources */,
+				7D0AA1DC1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C3A2D721E66790100DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
 				7D08A11B1E4999D30085A8FB /* GTMBase64.m in Sources */,
 				7D08A11C1E4999D30085A8FB /* SSJEditBillTypeViewController.m in Sources */,
@@ -17917,6 +17972,7 @@
 				9C155F421E68572700FDFD18 /* UIView+MJExtension.m in Sources */,
 				7DCA2A211E4C9CE700B60F4F /* SSJNewDotNetworkService.m in Sources */,
 				7D08A2291E4999D30085A8FB /* SSJDatabaseVersion5.m in Sources */,
+				7D0AA1CC1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7D08A22A1E4999D30085A8FB /* SSJRegularManager.m in Sources */,
 				7D08A22C1E4999D30085A8FB /* SSJReportFormsCurveCell.m in Sources */,
 				7D08A22D1E4999D30085A8FB /* SSJRecordMakingCategoryItem.m in Sources */,
@@ -17929,6 +17985,7 @@
 				9C3970271ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4E796A1ED817A10028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				7DCA2A271E4C9CFB00B60F4F /* SSJCalenderScreenShotHelper.m in Sources */,
+				7D0AA1BC1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				7D08A2301E4999D30085A8FB /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				7D08A2311E4999D30085A8FB /* SSJChargeCircleTimeSelectView.m in Sources */,
 				7D08A2321E4999D30085A8FB /* SSJPasswordModifyViewController.m in Sources */,
@@ -18268,6 +18325,7 @@
 				7DA13A6F1E35AED7000490A4 /* SSJLoanSyncTable.m in Sources */,
 				9CB4A0F91F063494001CDAD8 /* SSJEncourageService.m in Sources */,
 				7DA13A711E35AED7000490A4 /* SSJBookKeepingHomeBooksButton.m in Sources */,
+				7D0AA1DB1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C3A2D711E66790100DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
 				7DA13A721E35AED7000490A4 /* GTMBase64.m in Sources */,
 				7DA13A731E35AED7000490A4 /* SSJEditBillTypeViewController.m in Sources */,
@@ -18590,6 +18648,7 @@
 				9C155F411E68572700FDFD18 /* UIView+MJExtension.m in Sources */,
 				7DCA2A201E4C9CE700B60F4F /* SSJNewDotNetworkService.m in Sources */,
 				7DA13B801E35AED7000490A4 /* SSJDatabaseVersion5.m in Sources */,
+				7D0AA1CB1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DA13B811E35AED7000490A4 /* SSJRegularManager.m in Sources */,
 				7DA13B831E35AED7000490A4 /* SSJReportFormsCurveCell.m in Sources */,
 				7DA13B841E35AED7000490A4 /* SSJRecordMakingCategoryItem.m in Sources */,
@@ -18602,6 +18661,7 @@
 				9C3970261ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4E796B1ED817A20028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				7DCA2A261E4C9CFB00B60F4F /* SSJCalenderScreenShotHelper.m in Sources */,
+				7D0AA1BB1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				7DA13B871E35AED7000490A4 /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				7DA13B881E35AED7000490A4 /* SSJChargeCircleTimeSelectView.m in Sources */,
 				7DA13B891E35AED7000490A4 /* SSJPasswordModifyViewController.m in Sources */,
@@ -18941,6 +19001,7 @@
 				7DBB3AF81E55C2EE0075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
 				9CB4A0FB1F063494001CDAD8 /* SSJEncourageService.m in Sources */,
 				7DBB3AF91E55C2EE0075E638 /* SSJInterestDetailViewController.m in Sources */,
+				7D0AA1DD1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C3A2D731E66790200DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
 				7DBB3AFA1E55C2EE0075E638 /* SSJMagicExportCalendarDateView.m in Sources */,
 				7DBB3AFB1E55C2EE0075E638 /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
@@ -19263,6 +19324,7 @@
 				7DBB3C091E55C2EE0075E638 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9C155F431E68572700FDFD18 /* UIView+MJExtension.m in Sources */,
 				7DBB3C0A1E55C2EE0075E638 /* SSJBookkeepingTreeStore.m in Sources */,
+				7D0AA1CD1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DBB3C0B1E55C2EE0075E638 /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7DBB3C0C1E55C2EE0075E638 /* SSJReminderItem.m in Sources */,
 				7DBB3C0D1E55C2EE0075E638 /* SSJDatabaseErrorHandler.m in Sources */,
@@ -19275,6 +19337,7 @@
 				9C3970281ECB023000AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4E796C1ED817A20028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				7DBB3C151E55C2EE0075E638 /* SSJRecordMakingCategoryItem.m in Sources */,
+				7D0AA1BD1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				7DBB3C161E55C2EE0075E638 /* SSJFundingTransferDetailItem.m in Sources */,
 				7DBB3C171E55C2EE0075E638 /* FMDatabaseAdditions.m in Sources */,
 				7DBB3C181E55C2EE0075E638 /* SSJMagicExportResultCheckMarkView.m in Sources */,
@@ -19614,6 +19677,7 @@
 				7DBB3F921E55C4E00075E638 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
 				9CB4A0F61F063494001CDAD8 /* SSJEncourageService.m in Sources */,
 				7DBB3F931E55C4E00075E638 /* SSJBudgetEditTextFieldCell.m in Sources */,
+				7D0AA1D81F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				7DBB3F941E55C4E00075E638 /* SSJInterestDetailViewController.m in Sources */,
 				9C3A2D6E1E6678FF00DFAE2C /* SSJBookKeepingHomeNoDataCell.m in Sources */,
 				7DBB3F951E55C4E00075E638 /* SSJMagicExportCalendarDateView.m in Sources */,
@@ -19936,6 +20000,7 @@
 				7D8952D01EB2ED5300FF6D04 /* SSJButtonConentView.m in Sources */,
 				7DBB40A41E55C4E00075E638 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9C155F3D1E68572700FDFD18 /* UIView+MJExtension.m in Sources */,
+				7D0AA1C81F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DBB40A51E55C4E00075E638 /* SSJBookkeepingTreeStore.m in Sources */,
 				7DBB40A61E55C4E00075E638 /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				7DBB40A71E55C4E00075E638 /* SSJReminderItem.m in Sources */,
@@ -19948,6 +20013,7 @@
 				9C3970241ECB022D00AB267A /* SSJShareBooksHintView.m in Sources */,
 				9C4E79681ED8179F0028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				7DBB40B01E55C4E00075E638 /* SSJRecordMakingCategoryItem.m in Sources */,
+				7D0AA1B81F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				7DBB40B11E55C4E00075E638 /* SSJFundingTransferDetailItem.m in Sources */,
 				7DBB40B21E55C4E00075E638 /* FMDatabaseAdditions.m in Sources */,
 				7DBB40B31E55C4E00075E638 /* SSJMagicExportResultCheckMarkView.m in Sources */,
@@ -20513,6 +20579,7 @@
 				7DFB17B01EB0341E00292DD3 /* SSJReportFormsPeriodModel.m in Sources */,
 				7DFB17B11EB0341E00292DD3 /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				7DFB17B21EB0341E00292DD3 /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
+				7D0AA1D31F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DB877461ED2E43B00CD4A9E /* SSJUserDefaultBooksCreater.m in Sources */,
 				7DFB17B31EB0341E00292DD3 /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				7DFB17B41EB0341E00292DD3 /* SSJCreditRepaymentSyncTable.m in Sources */,
@@ -20629,6 +20696,7 @@
 				7DFB181B1EB0341E00292DD3 /* SSJImaageBrowseViewController.m in Sources */,
 				7DFB181C1EB0341E00292DD3 /* SSJUserDefaultDataCreater.m in Sources */,
 				7DFB181D1EB0341E00292DD3 /* SSJBudgetModel.m in Sources */,
+				7D0AA1C31F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				7DFB181E1EB0341E00292DD3 /* SSJAnaliyticsManager.m in Sources */,
 				7DFB181F1EB0341E00292DD3 /* SSJCreditCardRepaymentViewController.m in Sources */,
 				7DFB18201EB0341E00292DD3 /* SSJLoginService.m in Sources */,
@@ -20726,6 +20794,7 @@
 				7DFB186E1EB0341E00292DD3 /* SSJFundAccountTable.m in Sources */,
 				7DFB186F1EB0341E00292DD3 /* SSJFundingDetailListItem.m in Sources */,
 				7DFB18701EB0341E00292DD3 /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
+				7D0AA1E31F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				7DFB18711EB0341E00292DD3 /* SSJBudgetCategorySelectionControl.m in Sources */,
 				7DFB18721EB0341E00292DD3 /* SSJHomeBudgetButton.m in Sources */,
 				9CB4A0DC1F050E41001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
@@ -20962,6 +21031,7 @@
 				9C13F5671E8267D300AC5FA9 /* SSJInterestDetailViewController.m in Sources */,
 				9CB4A0FC1F063494001CDAD8 /* SSJEncourageService.m in Sources */,
 				9C13F5681E8267D300AC5FA9 /* SSJBookKeepingHomeNoDataCell.m in Sources */,
+				7D0AA1DE1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C13F5691E8267D300AC5FA9 /* SSJMagicExportCalendarDateView.m in Sources */,
 				9C13F56A1E8267D300AC5FA9 /* SSJMagicExportBookTypeSelectionCell.m in Sources */,
 				7DB877411ED2E43700CD4A9E /* SSJUserDefaultBooksCreater.m in Sources */,
@@ -21284,6 +21354,7 @@
 				9C13F6851E8267D300AC5FA9 /* SSJCalenderTableViewNoDataHeader.m in Sources */,
 				9C13F6861E8267D300AC5FA9 /* UIView+MJExtension.m in Sources */,
 				7DF4F1291EB890C40039FB2C /* SSJReportFormsPeriodSelectionControl.m in Sources */,
+				7D0AA1CE1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				9C13F6871E8267D300AC5FA9 /* SSJBookkeepingTreeStore.m in Sources */,
 				9C13F6881E8267D300AC5FA9 /* SSJFundingTransferChargeDetailViewController.m in Sources */,
 				9C13F6891E8267D300AC5FA9 /* SSJReminderItem.m in Sources */,
@@ -21296,6 +21367,7 @@
 				9C13F6911E8267D300AC5FA9 /* SSJReportFormsCurveCell.m in Sources */,
 				9C13F6921E8267D300AC5FA9 /* SSJRecordMakingCategoryItem.m in Sources */,
 				9C13F6931E8267D300AC5FA9 /* SSJFundingTransferDetailItem.m in Sources */,
+				7D0AA1BE1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C13F6941E8267D300AC5FA9 /* FMDatabaseAdditions.m in Sources */,
 				9C13F6951E8267D300AC5FA9 /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C13F6961E8267D300AC5FA9 /* SSJChargeCircleTimeSelectView.m in Sources */,
@@ -21861,6 +21933,7 @@
 				9C4C21541E9E30C8000C5F15 /* SSJCustomKeyboard.m in Sources */,
 				9C4C21551E9E30C8000C5F15 /* SSJMemberCell.m in Sources */,
 				9C4C21561E9E30C8000C5F15 /* SSJBorderButton.m in Sources */,
+				7D0AA1D11F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				9C4C21571E9E30C8000C5F15 /* SSJReportFormsPeriodModel.m in Sources */,
 				9C4C21581E9E30C8000C5F15 /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C4C21591E9E30C8000C5F15 /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
@@ -21977,6 +22050,7 @@
 				9C4C21BF1E9E30C8000C5F15 /* SSJCreditCardStore.m in Sources */,
 				9C4C21C01E9E30C8000C5F15 /* SSJDatabaseUpgrader.m in Sources */,
 				9C4C21C11E9E30C8000C5F15 /* SSJBillingChargeCellItem.m in Sources */,
+				7D0AA1C11F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C4C21C21E9E30C8000C5F15 /* SSJImaageBrowseViewController.m in Sources */,
 				9C4C21C31E9E30C8000C5F15 /* SSJUserDefaultDataCreater.m in Sources */,
 				9C4C21C41E9E30C8000C5F15 /* SSJBudgetModel.m in Sources */,
@@ -22074,6 +22148,7 @@
 				9C4C22151E9E30C8000C5F15 /* SSJFundAccountTable.m in Sources */,
 				9C4C22161E9E30C8000C5F15 /* SSJFundingDetailListItem.m in Sources */,
 				9C4C22171E9E30C8000C5F15 /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
+				7D0AA1E11F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C4C22181E9E30C8000C5F15 /* SSJBudgetCategorySelectionControl.m in Sources */,
 				9C4C22191E9E30C8000C5F15 /* SSJHomeBudgetButton.m in Sources */,
 				9CB4A0DA1F050E40001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
@@ -22193,7 +22268,9 @@
 				9CD50DBE1F0CCE1400E6BA11 /* SSJAboutUsFooterView.m in Sources */,
 				9CB586671EE1388400DFA3D5 /* SSJDeleteBooksDetailViewController.m in Sources */,
 				9C7D2D191E8DF8A80093001F /* SSJThemeDownLoadCompleteService.m in Sources */,
+				7D0AA1D71F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C7D2D1A1E8DF8A80093001F /* SSJHomeReminderView.m in Sources */,
+				7D0AA1C71F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				9C7D2D1B1E8DF8A80093001F /* SSJBookKeepingHeader.m in Sources */,
 				9C7D2D1C1E8DF8A80093001F /* SSJBaseCellItem.m in Sources */,
 				9C7D2D1D1E8DF8A80093001F /* SSJChargeSearchingStore.m in Sources */,
@@ -22317,6 +22394,7 @@
 				9C7D2D7D1E8DF8A80093001F /* SSJViewAddition.m in Sources */,
 				9C7D2D7E1E8DF8A80093001F /* MJRefreshStateHeader.m in Sources */,
 				9C7D2D7F1E8DF8A80093001F /* SSJBooksColorAndIconSelectView.m in Sources */,
+				7D0AA1B71F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C7D2D801E8DF8A80093001F /* SSJForgotPSWResetService.m in Sources */,
 				9C7D2D821E8DF8A80093001F /* SSJNewBaseTableViewController.m in Sources */,
 				7DFB16271EAF18F500292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
@@ -22869,7 +22947,9 @@
 				9CD50DC61F0CCE1900E6BA11 /* SSJAboutUsFooterView.m in Sources */,
 				9CB5866E1EE1388800DFA3D5 /* SSJDeleteBooksDetailViewController.m in Sources */,
 				9C7D2F901E8DF96B0093001F /* SSJThemeDownLoadCompleteService.m in Sources */,
+				7D0AA1DF1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C7D2F911E8DF96B0093001F /* SSJHomeReminderView.m in Sources */,
+				7D0AA1CF1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				9C7D2F921E8DF96B0093001F /* SSJBookKeepingHeader.m in Sources */,
 				9C7D2F931E8DF96B0093001F /* SSJBaseCellItem.m in Sources */,
 				9C7D2F941E8DF96B0093001F /* SSJChargeSearchingStore.m in Sources */,
@@ -22993,6 +23073,7 @@
 				9C7D2FF41E8DF96B0093001F /* SSJViewAddition.m in Sources */,
 				9C7D2FF51E8DF96B0093001F /* MJRefreshStateHeader.m in Sources */,
 				9C7D2FF61E8DF96B0093001F /* SSJBooksColorAndIconSelectView.m in Sources */,
+				7D0AA1BF1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C7D2FF71E8DF96B0093001F /* SSJForgotPSWResetService.m in Sources */,
 				9C7D2FF91E8DF96B0093001F /* SSJNewBaseTableViewController.m in Sources */,
 				7DFB162E1EAF18FA00292DD3 /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
@@ -23888,6 +23969,7 @@
 				9C80FDF61E95E88E00B1BAAC /* SSJReportFormsPeriodModel.m in Sources */,
 				9C80FDF71E95E88E00B1BAAC /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C80FDF81E95E88E00B1BAAC /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
+				7D0AA1D01F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DB877431ED2E43900CD4A9E /* SSJUserDefaultBooksCreater.m in Sources */,
 				9C80FDF91E95E88E00B1BAAC /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9C80FDFA1E95E88E00B1BAAC /* SSJCreditRepaymentSyncTable.m in Sources */,
@@ -24004,6 +24086,7 @@
 				9C80FE601E95E88E00B1BAAC /* SSJBillingChargeCellItem.m in Sources */,
 				9C80FE611E95E88E00B1BAAC /* SSJImaageBrowseViewController.m in Sources */,
 				9C80FE621E95E88E00B1BAAC /* SSJUserDefaultDataCreater.m in Sources */,
+				7D0AA1C01F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C80FE631E95E88E00B1BAAC /* SSJBudgetModel.m in Sources */,
 				9C80FE641E95E88E00B1BAAC /* SSJAnaliyticsManager.m in Sources */,
 				9C80FE651E95E88E00B1BAAC /* SSJCreditCardRepaymentViewController.m in Sources */,
@@ -24101,6 +24184,7 @@
 				9C80FEB41E95E88E00B1BAAC /* SSJFundAccountTable.m in Sources */,
 				9C80FEB51E95E88E00B1BAAC /* SSJFundingDetailListItem.m in Sources */,
 				9C80FEB61E95E88E00B1BAAC /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
+				7D0AA1E01F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C80FEB71E95E88E00B1BAAC /* SSJBudgetCategorySelectionControl.m in Sources */,
 				9C80FEB81E95E88E00B1BAAC /* SSJHomeBudgetButton.m in Sources */,
 				9CB4A0D91F050E3F001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
@@ -24563,6 +24647,7 @@
 				9C9CEFB61EA5F73A007657FE /* SSJReportFormsPeriodModel.m in Sources */,
 				9C9CEFB71EA5F73A007657FE /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9C9CEFB81EA5F73A007657FE /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
+				7D0AA1D21F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DB877451ED2E43A00CD4A9E /* SSJUserDefaultBooksCreater.m in Sources */,
 				9C9CEFB91EA5F73A007657FE /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9C9CEFBA1EA5F73A007657FE /* SSJCreditRepaymentSyncTable.m in Sources */,
@@ -24679,6 +24764,7 @@
 				9C9CF0201EA5F73A007657FE /* SSJBillingChargeCellItem.m in Sources */,
 				9C9CF0211EA5F73A007657FE /* SSJImaageBrowseViewController.m in Sources */,
 				9C9CF0221EA5F73A007657FE /* SSJUserDefaultDataCreater.m in Sources */,
+				7D0AA1C21F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C9CF0231EA5F73A007657FE /* SSJBudgetModel.m in Sources */,
 				9C9CF0241EA5F73A007657FE /* SSJAnaliyticsManager.m in Sources */,
 				9C9CF0251EA5F73A007657FE /* SSJCreditCardRepaymentViewController.m in Sources */,
@@ -24776,6 +24862,7 @@
 				9C9CF0741EA5F73A007657FE /* SSJFundAccountTable.m in Sources */,
 				9C9CF0751EA5F73A007657FE /* SSJFundingDetailListItem.m in Sources */,
 				9C9CF0761EA5F73A007657FE /* SSJLoanDetailChargeChangeHeaderView.m in Sources */,
+				7D0AA1E21F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C9CF0771EA5F73A007657FE /* SSJBudgetCategorySelectionControl.m in Sources */,
 				9C9CF0781EA5F73A007657FE /* SSJHomeBudgetButton.m in Sources */,
 				9CB4A0DB1F050E41001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
@@ -24895,7 +24982,9 @@
 				9CD50DCB1F0CCE1D00E6BA11 /* SSJAboutUsFooterView.m in Sources */,
 				9CDB49D21EF3ABBC0097E09D /* SSJMagicExportStore.m in Sources */,
 				9CDB49D31EF3ABBC0097E09D /* SSJAnnoucementItem.m in Sources */,
+				7D0AA1E41F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9CDB49D41EF3ABBC0097E09D /* SSJImageAddition.m in Sources */,
+				7D0AA1D41F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				9CDB49D51EF3ABBC0097E09D /* SSJPasswordModifyService.m in Sources */,
 				9CDB49D61EF3ABBC0097E09D /* SSJFundingTransferStore.m in Sources */,
 				9CDB49D71EF3ABBC0097E09D /* SSJRecordMakingBillTypeInputView.m in Sources */,
@@ -25019,6 +25108,7 @@
 				9CDB4A3E1EF3ABBC0097E09D /* SSJNewBaseTableViewController.m in Sources */,
 				9CDB4A3F1EF3ABBC0097E09D /* UICountingLabel.m in Sources */,
 				9CDB4A401EF3ABBC0097E09D /* SSJCustomThemeSelectCollectionViewCell.m in Sources */,
+				7D0AA1C41F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9CDB4A411EF3ABBC0097E09D /* SSJLoanChargeAddOrEditViewController.m in Sources */,
 				9CDB4A421EF3ABBC0097E09D /* UIBarButtonItem+CDCategory.m in Sources */,
 				9CDB4A431EF3ABBC0097E09D /* SSJMotionPasswordViewController.m in Sources */,
@@ -25775,6 +25865,7 @@
 				9C7C51121DF5053A0032705C /* SSJCreditCardRepaymentViewController.m in Sources */,
 				7DF4F1251EB890C20039FB2C /* SSJReportFormsPeriodSelectionControl.m in Sources */,
 				9C9A0C4F1D6D96BD002AF046 /* SSJAddOrEditLoanTextFieldCell.m in Sources */,
+				7D0AA1DA1F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9CECFBB91D6D41A700DB2C8B /* SSJBookKeepingHomeNoDataHeader.m in Sources */,
 				7DF4F1001EB88A6B0039FB2C /* SSJReportFormsNavigationBar.m in Sources */,
 				9CECFBBA1D6D41A700DB2C8B /* SSJWaveWaterViewItem.m in Sources */,
@@ -25999,6 +26090,7 @@
 				9CECFC3D1D6D41A700DB2C8B /* SSJRecordMakingCategoryItem.m in Sources */,
 				9C4E79691ED817A10028E48B /* SSJShareBooksMemberSyncTable.m in Sources */,
 				9CECFC3E1D6D41A700DB2C8B /* SSJFundingTransferDetailItem.m in Sources */,
+				7D0AA1CA1F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7DF532951E13BBB3009A6F6C /* SSJRepaymentStore.m in Sources */,
 				7D5213E91F05EF78004FE68A /* SSJForgetAndResetPasswordNetworkService.m in Sources */,
 				9CECFC3F1D6D41A700DB2C8B /* SSJMagicExportResultCheckMarkView.m in Sources */,
@@ -26103,6 +26195,7 @@
 				91F7FD331DFA9EF9005F4B6B /* SSJProductAdviceNetWorkService.m in Sources */,
 				9CECFC771D6D41A700DB2C8B /* SSJNetworkReachabilityManager.m in Sources */,
 				9CECFC781D6D41A700DB2C8B /* SSJThemeSetting.m in Sources */,
+				7D0AA1BA1F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9CECFC791D6D41A700DB2C8B /* SSJFundingTypeTableViewCell.m in Sources */,
 				7DAA38401D952330000ED16E /* SSJBudgetBillTypeSelectionViewController.m in Sources */,
 				7D6CC9051E0A797D00FF6133 /* SSJReportFormsCurveBalloonView.m in Sources */,
@@ -26185,6 +26278,7 @@
 				9CE3772D1E6837D800218655 /* SSJScrollalbleAnnounceView.m in Sources */,
 				9CE7D7921D2F4FF80013E97B /* SSJBannerNetworkService.m in Sources */,
 				9C4121931D7EC9B100F29428 /* SSJReminderCircleSelectView.m in Sources */,
+				7D0AA1D91F17AC8900A3BE82 /* SSJLoginNavigatorTest.m in Sources */,
 				9C155EE41E68572700FDFD18 /* MJRefreshBackNormalFooter.m in Sources */,
 				9C66F1201D20D8910094125D /* SSJThemeItem.m in Sources */,
 				9CA5F0C91DD06479003E72E8 /* SSJSummaryBooksViewController.m in Sources */,
@@ -26589,6 +26683,7 @@
 				9CFBAC441E07E6F700C55814 /* SSJCreditRepaymentSyncTable.m in Sources */,
 				7D1DB4361D6AA924006C2AC2 /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				7D5F337F1CEAE6C10086B67E /* SSJNewCategoryCollectionView.m in Sources */,
+				7D0AA1B91F1751D700A3BE82 /* SSJLoginNavigator.m in Sources */,
 				9C2FC0461D3E3A9700A4C0C9 /* SSJMemberSelectView.m in Sources */,
 				9CD9BC0A1CFD2DAA0061803B /* SSJChargeCircleSelectView.m in Sources */,
 				7D2B24241C3E097C009A74A8 /* SSJUserChargeSyncTable.m in Sources */,
@@ -26820,6 +26915,7 @@
 				7D87AE861D63079C0024D33C /* SSJDatabaseVersion8.m in Sources */,
 				9C4E79551ED814C10028E48B /* SSJShareBooksSyncTable.m in Sources */,
 				7D52133C1F022ED3004FE68A /* SSJSettingPasswordViewController.m in Sources */,
+				7D0AA1C91F17805900A3BE82 /* SSJNavigatorConfigurationTree.m in Sources */,
 				7D8F7C381D2CAED200F7DF6A /* SSJThemeUtil.m in Sources */,
 				9C91AE251D94DEB400B585AA /* SSJSearchingViewController.m in Sources */,
 				7D6AAB6A1C313BA70007C0A3 /* SSJReportFormsIncomeAndPayCell.m in Sources */,
