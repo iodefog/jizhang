@@ -44,7 +44,7 @@
         [url appendFormat:@"%@=%@",@"&client_code",SSJUSERID()];
         
         [url appendFormat:@"%@=%@",@"&mobile",userItem.mobileNo ? : @""];
-
+        
         [self loadURL:[NSURL URLWithString:url]];
     } failure:NULL];
 

@@ -8,6 +8,9 @@
 
 #import "SSJBannerNetworkService.h"
 #import "SSJDomainManager.h"
+#import "SSJBannerItem.h"
+
+
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
@@ -28,6 +31,10 @@
     [super handleResult:rootElement];
     NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
     self.item = [SSJAdItem mj_objectWithKeyValues:result];
+    SSJBannerItem *banner = [[SSJBannerItem alloc] init];
+    banner.bannerImageUrl = @"http://download.youyuwo.com/jz/260/qiucheng.png";
+    banner.bannerType = SSJBanneerTypeQiuCheng;
+    self.item.bannerItems = [NSArray arrayWithObjects:banner, nil];
 }
 
 
