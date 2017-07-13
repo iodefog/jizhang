@@ -31,14 +31,27 @@ typedef NS_ENUM(NSInteger, SSJSyncSettingType) {
     SSJSyncSettingTypeWIFI //
 };
 
-//  自定义错误码，从10000开始
+/**
+ 自定义错误码，从10000开始
+
+ - SSJErrorCodeUndefined: 未定义
+ - SSJErrorCodeDataSyncBusy: 数据同步繁忙
+ - SSJErrorCodeDataSyncFailed: 数据同步失败
+ - SSJErrorCodeImageSyncFailed: 图片同步失败
+ - SSJErrorCodeNoImageSyncNeedToSync: 没有图片需要同步
+ - SSJErrorCodeLoginPasswordIllegal: 登录密码格式不合法
+ - SSJErrorCodeMobileNoIllegal: 手机号格式不合法
+ - SSJErrorCodeUserCancelLogin: 用户取消登录
+ */
 typedef NS_ENUM(NSInteger, SSJErrorCode) {
     SSJErrorCodeUndefined = 10000,
     SSJErrorCodeDataSyncBusy = 10001,
     SSJErrorCodeDataSyncFailed = 10002,
     SSJErrorCodeImageSyncFailed = 10003,
     SSJErrorCodeNoImageSyncNeedToSync = 10004,
-    SSJErrorCodeLoginPasswordIllegal = 10005
+    SSJErrorCodeLoginPasswordIllegal = 10005,
+    SSJErrorCodeMobileNoIllegal = 10006,
+    SSJErrorCodeUserCancelLogin = 10007
 };
 
 //  用户登录方式

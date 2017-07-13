@@ -82,12 +82,10 @@
             [subscriber sendNext:service.rootElement];
             [subscriber sendCompleted];
         } else {
-            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
-            [SSJAlertViewAdapter showError:error];
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}];
             [subscriber sendError:error];
         }
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [SSJAlertViewAdapter showError:service.error];
         [subscriber sendError:service.error];
     }];
 }
@@ -136,19 +134,15 @@
     [dict setObject:item.userGender forKey:@"cgender"];
     [dict setObject:item.unionId forKey:@"cunionid"];
     [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
-    __weak __typeof(self)wSelf = self;
     [self.netWorkService request:SSJURLWithAPI(@"/oauth/oauthlogin.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
-            [wSelf datawithDic:service.rootElement];
             [subscriber sendCompleted];
         }else {
-            [CDAutoHideMessageHUD showMessage:service.desc?service.desc:SSJ_ERROR_MESSAGE];
-            [subscriber sendError:nil];
+            [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc.length?service.desc:SSJ_ERROR_MESSAGE];
         [subscriber sendError:service.error];
     }];
 }
@@ -194,17 +188,13 @@
     [self.netWorkService request:SSJURLWithAPI(@"/user/login.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
         if ([service.returnCode isEqualToString:@"1"]) {
             [subscriber sendNext:service.rootElement];
-            [self datawithDic:service.rootElement];
             [subscriber sendCompleted];
         } else {
-            [subscriber sendError:nil];
-            [CDAutoHideMessageHUD showMessage:service.desc];
+            [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:service.desc}];
-        [subscriber sendError:error];
-        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -268,13 +258,11 @@
             [subscriber sendNext:service.rootElement];
             [subscriber sendCompleted];
         } else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
-            [subscriber sendError:nil];
+            [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
         
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+        [subscriber sendError:service.error];
     }];
 }
 
@@ -286,45 +274,44 @@
  @param useraccount <#useraccount description#>
  @param subscriber <#subscriber description#>
  */
-- (void)registerWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
-    self.netWorkService.showLodingIndicator = YES;
-    self.openId = @"";
-    //imei
-    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
-    
-    //手机型号
-    NSString *phoneModel = SSJPhoneModel();
-    
-    //个推id
-    NSString *getuiId = [GeTuiSdk clientId];
-    
-    //手机系统版本
-    NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
-    
-    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
-    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
-    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
-    [dict setObject:useraccount forKey:@"cmobileno"];
-    [dict setObject:self.verificationCode forKey:@"yzm"];
-    [dict setObject:encryptPassword forKey:@"pwd"];
-    [dict setObject:phoneModel forKey:@"cmodel"];
-    [dict setObject:phoneVersion forKey:@"cphoneos"];
-    [dict setObject:phoneModel forKey:@"cphonebrand"];
-    [dict setObject:imei forKey:@"cimei"];
-    [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
-    SSJUSERID();
-    [self.netWorkService request:SSJURLWithAPI(@"/chargebook/user/mobile_register.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
-        if ([service.returnCode isEqualToString:@"1"]) {
-            [subscriber sendNext:service.rootElement];
-            [subscriber sendCompleted];
-        }else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
-            [subscriber sendError:nil];
-        }
+- (RACSignal *)registerWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        self.netWorkService.showLodingIndicator = YES;
+        self.openId = @"";
+        //imei
+        NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
         
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc?:SSJ_ERROR_MESSAGE];
-        [subscriber sendError:service.error];
+        //手机型号
+        NSString *phoneModel = SSJPhoneModel();
+        
+        //个推id
+        NSString *getuiId = [GeTuiSdk clientId];
+        
+        //手机系统版本
+        NSString *phoneVersion = [[UIDevice currentDevice] systemVersion];
+        
+        NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
+        encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+        NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+        [dict setObject:useraccount forKey:@"cmobileno"];
+        [dict setObject:self.verificationCode forKey:@"yzm"];
+        [dict setObject:encryptPassword forKey:@"pwd"];
+        [dict setObject:phoneModel forKey:@"cmodel"];
+        [dict setObject:phoneVersion forKey:@"cphoneos"];
+        [dict setObject:phoneModel forKey:@"cphonebrand"];
+        [dict setObject:imei forKey:@"cimei"];
+        [dict setObject:getuiId ?: @"" forKey:@"cgetuiid"];
+        [self.netWorkService request:SSJURLWithAPI(@"/chargebook/user/mobile_register.go") params:dict success:^(SSJBaseNetworkService * _Nonnull service) {
+            if ([service.returnCode isEqualToString:@"1"]) {
+                [subscriber sendNext:service.rootElement];
+                [subscriber sendCompleted];
+            }else {
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
+            }
+        } failure:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
     }];
 }
 
@@ -336,25 +323,24 @@
  @param useraccount <#useraccount description#>
  @param subscriber <#subscriber description#>
  */
-- (void)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode subscriber:(id<RACSubscriber>) subscriber {
-    self.netWorkService.showLodingIndicator = YES;
-    NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
-    encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
-    [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
-        if ([service.returnCode isEqualToString:@"1"]) {
-            [CDAutoHideMessageHUD showMessage:@"重置密码成功"];
-            [subscriber sendNext:service.rootElement];
-            [subscriber sendCompleted];
-        }else {
-            [CDAutoHideMessageHUD showMessage:service.desc];
-            [subscriber sendError:nil];
-        }
-    } failure:^(SSJBaseNetworkService * _Nonnull service) {
-        [CDAutoHideMessageHUD showMessage:service.desc];
-        [subscriber sendError:nil];
+- (RACSignal *)forgetWithPassWord:(NSString*)password AndUserAccount:(NSString*)mobileNo authCode:(NSString *)authCode {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        self.netWorkService.showLodingIndicator = YES;
+        NSString *encryptPassword = [password stringByAppendingString:SSJLoginPWDEncryptionKey];
+        encryptPassword = [[encryptPassword ssj_md5HexDigest] lowercaseString];
+        [self.netWorkService request:@"/chargebook/user/forget_pwd.go" params:@{@"cmobileNo":mobileNo ?: @"",@"yzm":authCode ?: @"",@"newPwd":encryptPassword ?: @""} success:^(SSJBaseNetworkService * _Nonnull service) {
+            if ([service.returnCode isEqualToString:@"1"]) {
+                [subscriber sendNext:service.rootElement];
+                [subscriber sendCompleted];
+            }else {
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
+            }
+        } failure:^(SSJBaseNetworkService * _Nonnull service) {
+            [subscriber sendError:service.error];
+        }];
+        return nil;
     }];
 }
-
 
 - (void)datawithDic:(NSDictionary *)dict {
     NSDictionary *result = [dict objectForKey:@"results"];
@@ -367,7 +353,7 @@
                  @"openid":@"oauthid"};
     }];
     _userItem = [SSJUserItem mj_objectWithKeyValues:result[@"user"]];
-    self.userItem.loginType = [NSString stringWithFormat:@"%ld",self.loginType];
+    self.userItem.loginType = [NSString stringWithFormat:@"%d", (int)self.loginType];
     if (self.loginType != SSJLoginTypeNormal) {
         self.userItem.mobileNo = @"";
     }
@@ -380,40 +366,53 @@
     self.membersArray = [NSArray arrayWithArray:[result objectForKey:@"bk_member"]];
     self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[result objectForKey:@"userTree"]];
     self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[result objectForKey:@"bookBillArray"]];
-    
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
-        //                    __weak typeof(self) weakSelf = self;
-        NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
-        SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
-        BOOL isSameUser = ([self.userItem.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.userItem.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
-        if (!isSameUser) {
-            NSString *userName;
-            int loginType = [lastUserItem.loginType intValue];
-            if (loginType == 0) {
-                userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
-            }else{
-                userName = lastUserItem.nickName;
-            }
-            NSString *message;
-            if (loginType == 0) {
-                message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
-            }else if (loginType == 1) {
-                message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
-            }else if (loginType == 2) {
-                message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
-            }
-            
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
-                [self comfirmTologin];
-            }], nil];
-            return;
-        }
-    }
-    
-    [self comfirmTologin];
 }
 
--(void)comfirmTologin {
+- (void)showConfirmToLoginAlertView:(void(^)(BOOL confirm))completion {
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey]) {
+        completion(YES);
+        return;
+    }
+    
+    NSData *lastUserData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastLoggedUserItemKey];
+    SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
+    BOOL isSameUser = ([self.userItem.mobileNo isEqualToString:lastUserItem.mobileNo] && lastUserItem.mobileNo.length) || ([self.userItem.openId isEqualToString:lastUserItem.openId] && lastUserItem.openId.length);
+    if (isSameUser) {
+        completion(YES);
+        return;
+    }
+    
+    NSString *userName;
+    SSJLoginType loginType = [lastUserItem.loginType intValue];
+    if (loginType == SSJLoginTypeNormal) {
+        userName = [lastUserItem.mobileNo stringByReplacingCharactersInRange:NSMakeRange(4, 4) withString:@"****"];
+    }else{
+        userName = lastUserItem.nickName;
+    }
+    
+    NSString *message = nil;
+    switch (loginType) {
+        case SSJLoginTypeNormal:
+            message = [NSString stringWithFormat:@"您已使用过手机号%@登陆过,确定使用新账户登录",userName];
+            break;
+            
+        case SSJLoginTypeQQ:
+            message = [NSString stringWithFormat:@"您已使用过QQ:%@登陆过,确定使用新账户登录",userName];
+            break;
+            
+        case SSJLoginTypeWeiXin:
+            message = [NSString stringWithFormat:@"您已使用过微信:%@登陆过,确定使用新账户登录",userName];
+            break;
+    }
+    
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+        completion(NO);
+    }], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+        completion(YES);
+    }], nil];
+}
+
+-(void)comfirmTologinWithSuccess:(void(^)())success failure:(void(^)(NSError *error))failure {
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.userItem.registerState = @"1";
     
@@ -482,7 +481,6 @@
         // 登录成功，做些额外的处理
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             //            [self.loadingView show];
-            [CDAutoHideMessageHUD showMessage:@"登录成功"];
             [self syncData];
             [self.loadingView show];
             [SSJAnaliyticsManager setUserId:SSJUSERID() userName:(self.userItem.nickName.length ? self.userItem.nickName : self.userItem.mobileNo)];
@@ -498,18 +496,17 @@
             return nil;
         }];
     }] subscribeError:^(NSError *error) {
-        [SSJAlertViewAdapter showError:error];
+        failure(error);
     } completed:^{
-        if (self.vc.finishHandle) {
-            self.vc.finishHandle(self.vc);
-        }
-        [self.vc dismissViewControllerAnimated:NO completion:NULL];
+        success();
     }];
 }
 
-
-- (void)registerSuccessWithDic:(NSDictionary *)dic {
-    NSDictionary *resultInfo = [dic objectForKey:@"results"];
+- (RACSignal *)handleRegisterResult:(NSDictionary *)result {
+    @weakify(self);
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        NSDictionary *resultInfo = [result objectForKey:@"results"];
         if (resultInfo) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJHaveLoginOrRegistKey];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -520,40 +517,25 @@
             userItem.registerState = @"1";
             userItem.loginType = @"0";
             
-            // 只有保存用户登录信息成功后才算登录成功
-            @weakify(self);
-            [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                [SSJUserTableManager saveUserItem:userItem success:^{
+            [SSJUserTableManager saveUserItem:userItem success:^{
+                if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
+                    && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
+                    && SSJSaveUserLogined(YES)) {
+                    [self syncData];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
                     [subscriber sendCompleted];
-                } failure:^(NSError * _Nonnull error) {
-                    [subscriber sendError:error];
-                }];
-                return nil;
-            }] then:^RACSignal *{
-                return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                    if (SSJSaveAppId(resultInfo[@"appId"] ?: @"")
-                        && SSJSaveAccessToken(resultInfo[@"accessToken"] ?: @"")
-                        && SSJSaveUserLogined(YES)) {
-                        [subscriber sendCompleted];
-                    } else {
-                        [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
-                    }
-                    return nil;
-                }];
-            }] subscribeError:^(NSError *error) {
-                [SSJAlertViewAdapter showError:error];
-            } completed:^{
-                @strongify(self);
-                [self syncData];
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJLoginOrRegisterNotification object:self];
-                [CDAutoHideMessageHUD showMessage:@"注册成功"];
-                if (self.vc.finishHandle) {
-                    self.vc.finishHandle(self.vc);
+                } else {
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"保存appid／token／登录状态失败"}]];
                 }
-                [self.vc dismissViewControllerAnimated:YES completion:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
             }];
+        } else {
+            [subscriber sendCompleted];
         }
-    }
+        return nil;
+    }];
+}
 
 
 - (void)syncData {
@@ -582,8 +564,7 @@
                 @strongify(self);
                 //判断手机号格式
                 if (![self.phoneNum ssj_validPhoneNum]) {
-                    [CDAutoHideMessageHUD showMessage:@"请输入正确的手机号"];
-                    [subscriber sendError:nil];
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeMobileNoIllegal userInfo:@{NSLocalizedDescriptionKey:@"请输入正确的手机号"}]];
                 } else {
                     [self verityPhoneNumWithPhone:self.phoneNum subscriber:subscriber];
                 }
@@ -649,7 +630,6 @@
     return _getVerificationCodeCommand;
 }
 
-
 /**
  重新获取图形验证码页面
 
@@ -672,50 +652,57 @@
     return _reGetVerificationCodeCommand;
 }
 
-- (RACCommand *)registerAndLoginCommand {
-    if (!_registerAndLoginCommand) {
-        _registerAndLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-            @weakify(self);
-            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                @strongify(self);
+- (RACCommand *)forgetPwdCommand {
+    if (!_forgetPwdCommand) {
+        @weakify(self);
+        _forgetPwdCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @strongify(self);
+            return [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 //登录
                 self.loginType = SSJLoginTypeNormal;
                 //验证密码格式
                 if (![self.passwardNum ssj_validPassWard]) {
-                    [CDAutoHideMessageHUD showMessage:@"请输入6~15位数字、字母组合密码"];
-                    [subscriber sendError:nil];
-                } else {
-                    if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
-                        [self forgetWithPassWord:self.passwardNum AndUserAccount:self.phoneNum authCode:self.verificationCode subscriber:subscriber];
-                    } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
-                        [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
-                    }
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"请输入6~15位数字、字母组合密码"}]];
                 }
-                
                 return nil;
+            }] then:^RACSignal *{
+                return [self forgetWithPassWord:self.passwardNum AndUserAccount:self.phoneNum authCode:self.verificationCode];
+            }] then:^RACSignal *{
+                return [self normalLoginSignal];
             }];
-            return signal;
-        }];
-        
-        @weakify(self);
-        [_registerAndLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-            @strongify(self);
-            if (self.regOrForType == SSJRegistAndForgetPasswordTypeForgetPassword) {//忘记密码
-                //成功之后调用登录接口
-                [self.normalLoginCommand execute:nil];
-            } else if(self.regOrForType == SSJRegistAndForgetPasswordTypeRegist){
-                [self registerSuccessWithDic:dict];
-            }
         }];
     }
-    return _registerAndLoginCommand;
+    return _forgetPwdCommand;
+}
+
+- (RACCommand *)registerCommand {
+    if (!_registerCommand) {
+        @weakify(self);
+        _registerCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+            @strongify(self);
+            return [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+                //登录
+                self.loginType = SSJLoginTypeNormal;
+                //验证密码格式
+                if (![self.passwardNum ssj_validPassWard]) {
+                    [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"请输入6~15位数字、字母组合密码"}]];
+                }
+                return nil;
+            }] then:^RACSignal *{
+                return [self registerWithPassWord:self.passwardNum AndUserAccount:self.phoneNum];
+            }] flattenMap:^RACStream *(NSDictionary *result) {
+                return [self handleRegisterResult:result];
+            }];
+        }];
+    }
+    return _registerCommand;
 }
 
 - (RACCommand *)wxLoginCommand {
     if (!_wxLoginCommand) {
         _wxLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
-            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 @strongify(self);
                 //发送微信登录请求
                 [[SSJThirdPartyLoginManger shareInstance].weixinLogin weixinLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
@@ -726,17 +713,11 @@
                 } failBlock:^{
                     [subscriber sendError:nil];
                 }];
-                
                 return nil;
+            }] flattenMap:^RACStream *(NSDictionary *result) {
+                return [self handleLoginResult:result];
             }];
-            return signal;
         }];
-        
-//        @weakify(self);
-//        [_wxLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-//            @strongify(self);
-//            [self datawithDic:dict];
-//        }] ;
     }
     return _wxLoginCommand;
 }
@@ -745,7 +726,7 @@
     if (!_qqLoginCommand) {
         _qqLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
             @weakify(self);
-            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            RACSignal *signal = [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
                 @strongify(self);
                 //发送qq登录请求
                 [[SSJThirdPartyLoginManger shareInstance].qqLogin qqLoginWithSucessBlock:^(SSJThirdPartLoginItem *item) {
@@ -756,8 +737,9 @@
                 } failBlock:^{
                     [subscriber sendError:nil];
                 }];
-                
                 return nil;
+            }] flattenMap:^RACStream *(NSDictionary *result) {
+                return [self handleLoginResult:result];
             }];
             return signal;
         }];
@@ -768,22 +750,39 @@
 - (RACCommand *)normalLoginCommand {
     if (!_normalLoginCommand) {
         _normalLoginCommand = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
-            @weakify(self);
-            RACSignal *signal = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-                @strongify(self);
-                [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
-                return nil;
-            }];
-            return signal;
+            return [self normalLoginSignal];
         }];
-        
-//        @weakify(self);
-//        [_normalLoginCommand.executionSignals.switchToLatest subscribeNext:^(NSDictionary *dict) {
-//            @strongify(self);
-//            [self datawithDic:dict];
-//        }] ;
     }
     return _normalLoginCommand;
+}
+
+- (RACSignal *)normalLoginSignal {
+    @weakify(self);
+    return [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
+        [self loginNormalWithPassWord:self.passwardNum AndUserAccount:self.phoneNum subscriber:subscriber];
+        return nil;
+    }] flattenMap:^RACStream *(NSDictionary *result) {
+        return [self handleLoginResult:result];
+    }];
+}
+
+- (RACSignal *)handleLoginResult:(NSDictionary *)result {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [self datawithDic:result];
+        [self showConfirmToLoginAlertView:^(BOOL confirm) {
+            if (confirm) {
+                [self comfirmTologinWithSuccess:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError *error) {
+                    [subscriber sendError:error];
+                }];
+            } else {
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUserCancelLogin userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]];
+            }
+        }];
+        return nil;
+    }];
 }
 
 
