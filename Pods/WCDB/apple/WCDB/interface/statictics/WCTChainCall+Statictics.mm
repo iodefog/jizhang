@@ -18,18 +18,35 @@
  * limitations under the License.
  */
 
-#ifndef statement_release_hpp
-#define statement_release_hpp
+#import <WCDB/WCTChainCall+Private.h>
+#import <WCDB/WCTChainCall+Statictics.h>
+#import <WCDB/WCTError+Private.h>
 
-#include <WCDB/statement.hpp>
+@implementation WCTChainCall (Statictics)
 
-namespace WCDB {
+- (void)setStaticticsEnabled:(BOOL)enabled
+{
+    if (!enabled) {
+        _ticker = nullptr;
+    } else if (!_ticker) {
+        _ticker.reset(new WCDB::Ticker);
+    }
+}
 
-class StatementRelease : public Statement {
-public:
-    StatementRelease &release(const std::string &savepointName);
-};
+- (double)cost
+{
+    if (_ticker) {
+        return _ticker->getElapseTime();
+    }
+    return 0;
+}
 
-} //namespace WCDB
+- (WCTError *)error
+{
+    if (_error.isOK()) {
+        return nil;
+    }
+    return [WCTError errorWithWCDBError:_error];
+}
 
-#endif /* statement_release_hpp */
+@end

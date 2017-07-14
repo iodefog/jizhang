@@ -92,9 +92,7 @@
         }
         WCDB::Error innerError;
         return _transaction->runTransaction([inTransaction](WCDB::Error &) -> bool {
-            @autoreleasepool {
-                return inTransaction();
-            }
+            return inTransaction();
         },
                                             event, innerError);
     }

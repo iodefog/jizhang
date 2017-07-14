@@ -18,17 +18,35 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase.h>
+#import <WCDB/WCTError+Private.h>
+#import <WCDB/WCTTransaction+Private.h>
+#import <WCDB/WCTTransaction+Statictics.h>
 
-@interface WCTSelectBase (NoARC)
+@implementation WCTTransaction (Statictics)
 
-- (BOOL)extractPropertyToObject:(WCTObject *)object
-                        atIndex:(int)index
-              withColumnBinding:(const std::shared_ptr<WCTColumnBinding> &)columnBinding;
+- (WCTError *)error
+{
+    if (_error.isOK()) {
+        return nil;
+    }
+    return [WCTError errorWithWCDBError:_error];
+}
 
-- (BOOL)extractValueToRow:(NSMutableArray * /*WCTOneRow*/)row;
+- (void)setStaticticsEnabled:(BOOL)enabled
+{
+    if (!enabled) {
+        _ticker = nullptr;
+    } else if (!_ticker) {
+        _ticker.reset(new WCDB::Ticker);
+    }
+}
 
-- (WCTValue *)extractValue;
+- (double)cost
+{
+    if (_ticker) {
+        return _ticker->getElapseTime();
+    }
+    return 0;
+}
 
 @end

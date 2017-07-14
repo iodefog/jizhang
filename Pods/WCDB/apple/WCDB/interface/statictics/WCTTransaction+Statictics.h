@@ -18,21 +18,33 @@
  * limitations under the License.
  */
 
-#ifndef statement_attach_hpp
-#define statement_attach_hpp
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTTransaction.h>
 
-#include <WCDB/statement.hpp>
+@interface WCTTransaction (Statictics)
 
-namespace WCDB {
+/**
+ More detailed error messages.
+ 
+ @return nil or error.isOK==YES if no error occurs.
+ */
+- (WCTError *)error;
 
-class StatementAttach : public Statement {
-public:
-    StatementAttach &attach(const Expr &expr);
-    StatementAttach &attach(const Expr &expr, const std::string &database);
+/**
+ After enabling, you can call the [cost] interface to get time consuming.
+ Note that you should call it before calling all other interface, otherwise [cost] will return an inaccurate result.
+ See [cost] also.
+ 
+ @param enabled enabled
+ */
+- (void)setStaticticsEnabled:(BOOL)enabled;
 
-    StatementAttach &as(const std::string &schema);
-};
+/**
+ The time consuming. You can call it to profile the performance.
+ See [setStaticticsEnabled:] also.
+ 
+ @return Time in seconds
+ */
+- (double)cost;
 
-} //namespace WCDB
-
-#endif /* statement_attach_hpp */
+@end

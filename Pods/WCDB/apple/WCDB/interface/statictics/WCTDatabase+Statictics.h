@@ -18,18 +18,17 @@
  * limitations under the License.
  */
 
-#ifndef statement_rollback_hpp
-#define statement_rollback_hpp
+#import <Foundation/Foundation.h>
+#import <WCDB/WCTDatabase.h>
+#import <WCDB/WCTStatictics.h>
 
-#include <WCDB/statement.hpp>
+@interface WCTDatabase (Statictics)
 
-namespace WCDB {
+/**
+ @brief You can register a tracer to monitor the performance of all SQLs in this database.
+ @param trace trace
+ @see [WCTStatictics SetGlobalTrace:]
+ */
+- (void)setTrace:(WCTTrace)trace;
 
-class StatementRollback : public Statement {
-public:
-    StatementRollback &rollback(const std::string &savepointName = "");
-};
-
-} //namespace WCDB
-
-#endif /* statement_rollback_hpp */
+@end

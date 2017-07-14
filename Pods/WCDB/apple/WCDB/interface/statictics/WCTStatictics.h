@@ -32,14 +32,14 @@ typedef void (^WCTErrorReport)(WCTError *);
 typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
 
 /**
- Statistics
+ Statictics
  */
-@interface WCTStatistics : NSObject
+@interface WCTStatictics : NSObject
 
 /**
  @brief You can register a reporter to monitor all errors.
  
-     [WCTStatistics SetGlobalErrorReport:^(WCTError* error) {
+     [WCTDatabase SetGlobalErrorReport:^(WCTError* error) {
         NSLog(@"%@", error);
      }];
  
@@ -54,22 +54,18 @@ typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteg
         1. The collection of SQLs and the executions count of each SQL.
         2. Time consuming in nanoseconds.
         3. Tag of database.
-        Note that:
-        1. You should register trace before all db operation. 
-        2. Global tracer will be recovered by db tracer.
  
-    [WCTStatistics SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
-        NSLog(@"Tag: %d", tag);
-        [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
-            NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
-        }];
-        NSLog(@"Total cost %ld nanoseconds", (long)cost);
-    }];
+     [WCTDatabase SetGlobalTrace:^(WCTTag tag, NSDictionary<NSString*, NSNumber*>* sqls, NSInteger cost) {
+         NSLog(@"Tag: %d", tag);
+         [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) {
+             NSLog(@"SQL: %@ Count: %d", sql, count.intValue);
+         }];
+         NSLog(@"Total cost %lld nanoseconds", cost);
+     }];
  
  @warning Tracer may cause wcdb performance degradation, according to your needs to choose whether to open.
  @param trace trace
  @see WCTTrace
- @see [WCTDatabase setTrace:]
  */
 + (void)SetGlobalTrace:(WCTTrace)trace;
 

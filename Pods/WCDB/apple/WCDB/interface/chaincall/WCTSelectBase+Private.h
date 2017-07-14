@@ -19,7 +19,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTSelectBase+NoARC.h>
 #import <WCDB/WCTSelectBase.h>
 #import <WCDB/statement_recyclable.hpp>
 
@@ -31,7 +30,10 @@
 }
 
 - (BOOL)lazyPrepare;
-- (BOOL)next;
+- (BOOL)extractPropertyToObject:(WCTObject *)object
+                        atIndex:(int)index
+              withColumnBinding:(const std::shared_ptr<WCTColumnBinding> &)columnBinding;
+- (id /* WCTValue* */)extractValueAtIndex:(int)i;
 - (void)finalize;
 
 @end

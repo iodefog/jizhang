@@ -18,38 +18,26 @@
  * limitations under the License.
  */
 
-#import <WCDB/WCTError+Private.h>
-#import <WCDB/WCTStatistics.h>
-#import <WCDB/database.hpp>
+#import <WCDB/WCTDatabase+Private.h>
+#import <WCDB/WCTDatabase+Statictics.h>
 
-@implementation WCTStatistics
+@implementation WCTDatabase (Statictics)
 
-+ (void)SetGlobalErrorReport:(WCTErrorReport)report
-{
-    if (report) {
-        WCDB::Error::SetReportMethod([report](const WCDB::Error &error) {
-            report([WCTError errorWithWCDBError:error]);
-        });
-    } else {
-        WCDB::Error::SetReportMethod(nullptr);
-    }
-}
-
-+ (void)SetGlobalTrace:(WCTTrace)trace
+- (void)setTrace:(WCTTrace)trace
 {
     if (trace) {
-        WCDB::Database::SetGlobalTrace([trace](WCDB::Tag tag,
-                                               const std::map<std::string, unsigned int> &footprint,
-                                               const int64_t &cost) {
+        _database->setTrace([trace](WCDB::Tag tag,
+                                    const std::map<std::string, unsigned int> &footprint,
+                                    const int64_t &cost) {
             NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
             for (const auto &iter : footprint) {
-                [dictionary setObject:@(iter.second)
-                               forKey:@(iter.first.c_str())];
+                [dictionary setObject:@(iter.first.c_str())
+                               forKey:@(iter.second)];
             }
             trace(tag, dictionary, (NSUInteger) cost);
         });
     } else {
-        WCDB::Database::SetGlobalTrace(nullptr);
+        _database->setTrace(nullptr);
     }
 }
 
