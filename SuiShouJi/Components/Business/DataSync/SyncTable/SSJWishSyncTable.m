@@ -24,7 +24,8 @@
              @"isfinished",
              @"remindid",
              @"startdate",
-             @"enddate"];
+             @"enddate",
+             @"wishtype"];
 }
 
 + (NSArray *)primaryKeys {

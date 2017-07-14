@@ -22,6 +22,8 @@
 #import "SSJNavigationController.h"
 #import "SSJQiuChengWebViewController.h"
 #import "UIViewController+SSJMotionPassword.h"
+#import "SSJWishStartViewController.h"
+#import "SSJMakeWishViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -37,6 +39,7 @@
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJAnnoucementService.h"
 
+static NSString *const kTitle0 = @"心愿存钱";
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
 static NSString *const kTitle3 = @"周期记账";
@@ -86,8 +89,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
-    self.images = [@[@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
-    self.titles = [@[@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
+    self.images = [@[@[@"more_wish"],@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
+    self.titles = [@[@[kTitle0],@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
     self.items = [self defualtItems];
     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc] initWithImage:[[UIImage imageNamed:@"more_setting"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] style:UIBarButtonItemStyleDone target:self action:@selector(leftButtonClicked:)];
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:self.rightButton];
@@ -158,17 +161,25 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         return;
     }
     
+    //心愿存钱
+    if ([item.title isEqualToString:kTitle0]) {
+        SSJWishStartViewController *wishStartVC = [[SSJWishStartViewController alloc] init];
+        [self.navigationController pushViewController:wishStartVC animated:YES];
+        return;
+    }
+    
+    //记账提醒
     if ([item.title isEqualToString:kTitle1]) {
         SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
     
-    
     //主题
     if ([item.title isEqualToString:kTitle2]) {
         SSJThemeHomeViewController *themeVC = [[SSJThemeHomeViewController alloc]init];
         [self.navigationController pushViewController:themeVC animated:YES];
+        return;
     }
 
     
@@ -181,17 +192,20 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         } else if (SSJGetBooksCategory() == SSJBooksCategoryPublic) {
             [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
         }
+        return;
     }
     
     //建议与咨询
     if ([item.title isEqualToString:kTitle4]) {
         SSJHelpAndAdviceViewController *adviceVC = [[SSJHelpAndAdviceViewController alloc] init];
         [self.navigationController pushViewController:adviceVC animated:YES];
+        return;
     }
     
     if ([item.title isEqualToString:kTitle5]) {
         SSJEncourageViewController *encourageVc = [[SSJEncourageViewController alloc] init];
         [self.navigationController pushViewController:encourageVc animated:YES];
+        return;
     }
     
 }
