@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, SSJNavigationType) {
-    SSJNavigationTypePush,
-    SSJNavigationTypePresent
-};
+#import "SSJLoginNavigator.h"
+
+//typedef NS_ENUM(NSInteger, SSJNavigationType) {
+//    SSJNavigationTypePush,
+//    SSJNavigationTypePresent
+//};
 
 @interface SSJLoginNavigatorTest : NSObject
 

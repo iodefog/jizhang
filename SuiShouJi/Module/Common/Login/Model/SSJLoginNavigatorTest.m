@@ -37,8 +37,6 @@
 
 @property (nonatomic, strong) NSError *lastError;
 
-@property (nonatomic, strong) SSJNavigatorConfigurationTree *navigatorTree;
-
 @property (nonatomic, strong) SSJNavigator *navigator;
 
 @property (nonatomic, strong) NSDictionary *params;
@@ -58,8 +56,7 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.navigatorTree = [[SSJNavigatorConfigurationTree alloc] initWithDataSource:self];
-        self.navigator = [[SSJNavigator alloc] initWithConfiguration:self.navigatorTree];
+        
     }
     return self;
 }
@@ -77,6 +74,28 @@
     self.sourceController = sourceController;
     self.defaultMobileNo = mobileNo;
     
+    switch (self.navigationType) {
+        case SSJNavigationTypePush:
+            if ([self.sourceController isKindOfClass:[SSJNavigationController class]]) {
+                self.navigationVC = (SSJNavigationController *)self.sourceController;
+            } else {
+                if ([self.sourceController.navigationController isKindOfClass:[SSJNavigationController class]]) {
+                    self.navigationVC = (SSJNavigationController *)self.sourceController.navigationController;
+                } else {
+                    self.lastError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"源控制器的导航控制器为nil或者不是SSJNavigationController的实例"}];
+                }
+            }
+            
+            break;
+            
+        case SSJNavigationTypePresent:
+            self.navigationVC = [[SSJNavigationController alloc] init];
+            break;
+    }
+    
+    SSJNavigatorConfigurationTree *navigatorTree = [[SSJNavigatorConfigurationTree alloc] initWithDataSource:self];
+    self.navigator = [[SSJNavigator alloc] initWithConfiguration:navigatorTree];
+    self.navigator.delegate = self;
     [self.navigator beginNavigation];
 }
 
@@ -149,27 +168,13 @@
     if (pageClass == [SSJLoginVerifyPhoneViewController class]) {
         SSJLoginVerifyPhoneViewController *verifyMobileVC = [[SSJLoginVerifyPhoneViewController alloc] init];
         verifyMobileVC.mobileNo = self.defaultMobileNo;
-        
         switch (self.navigationType) {
             case SSJNavigationTypePush:
-                if ([self.sourceController isKindOfClass:[SSJNavigationController class]]) {
-                    self.navigationVC = (SSJNavigationController *)self.sourceController;
-                } else {
-                    if ([self.sourceController.navigationController isKindOfClass:[SSJNavigationController class]]) {
-                        self.navigationVC = (SSJNavigationController *)self.sourceController.navigationController;
-                    } else {
-                        self.lastError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"源控制器的导航控制器为nil或者不是SSJNavigationController的实例"}];
-                    }
-                }
-                
-                if (self.navigationVC) {
-                    [self.navigationVC pushViewController:verifyMobileVC animated:YES];
-                }
-                
+                [self.navigationVC pushViewController:verifyMobileVC animated:YES];
                 break;
                 
             case SSJNavigationTypePresent:
-                self.navigationVC = [[SSJNavigationController alloc] initWithRootViewController:verifyMobileVC];
+                [self.navigationVC pushViewController:verifyMobileVC animated:NO];
                 [self.sourceController presentViewController:self.navigationVC animated:YES completion:NULL];
                 break;
         }
@@ -177,26 +182,30 @@
     } else if (pageClass == [SSJMotionPasswordViewController class]) {
         SSJMotionPasswordViewController *motionSettingVC = [[SSJMotionPasswordViewController alloc] init];
         motionSettingVC.type = SSJMotionPasswordViewControllerTypeSetting;
-//        motionSettingVC.loginNavigator = self;
+        motionSettingVC.loginNavigator = self;
         [self.navigationVC pushViewController:motionSettingVC animated:YES];
         
     } else if (pageClass == [SSJBindMobileNoViewController class]) {
         SSJBindMobileNoViewController *bindMobileNoVC = [[SSJBindMobileNoViewController alloc] init];
-        [self.navigationVC pushViewController:bindMobileNoVC animated:YES];
-        
-    } else if (pageClass == [SSJBindMobileNoViewController class]) {
-        SSJBindMobileNoViewController *bindMobileNoVC = [[SSJBindMobileNoViewController alloc] init];
-        [self.navigationVC pushViewController:bindMobileNoVC animated:YES];
+        bindMobileNoVC.loginNavigator = self;
+        [self.navigationVC setViewControllers:@[bindMobileNoVC] animated:YES];
         
     } else if (pageClass == [SSJSettingPasswordViewController class]) {
         SSJSettingPasswordViewController *bindMobileNoVC = [[SSJSettingPasswordViewController alloc] init];
+        bindMobileNoVC.type = SSJSettingPasswordTypeMobileNoBinding;
         bindMobileNoVC.mobileNo = self.params[@"mobileNo"];
+        bindMobileNoVC.loginNavigator = self;
         [self.navigationVC pushViewController:bindMobileNoVC animated:YES];
         
     }
 }
 
 - (void)navigatorDidFinishNavigation:(SSJNavigator *)navigator {
+    if (self.finishHandler) {
+        self.finishHandler();
+        self.finishHandler = nil;
+    }
+    
     switch (self.navigationType) {
         case SSJNavigationTypePush:
             [self.navigationVC popToViewController:self.sourceController animated:YES];
@@ -206,6 +215,19 @@
             [self.navigationVC dismissViewControllerAnimated:YES completion:NULL];
             break;
     }
+    
+    self.navigationType = SSJNavigationTypePush;
+    self.motionPwdForgeted = NO;
+    self.defaultMobileNo = nil;
+    self.navigationVC = nil;
+    self.sourceController = nil;
+    self.lastError = nil;
+    self.params = nil;
+}
+
+- (void)goNext:(NSDictionary *)params {
+    self.params = params;
+    [self.navigator goNext];
 }
 
 - (NSString *)queryMobileNo {
@@ -216,23 +238,5 @@
     return mobileNo;
 }
 
-- (void)goNext:(NSDictionary *)params {
-    self.params = params;
-    [self.navigator goNext];
-}
-
 @end
 
-
-@interface SSJLoginNavigatorTester : NSObject
-
-@end
-
-@implementation SSJLoginNavigatorTester
-
-//+ (void)load {
-//    [[SSJLoginNavigatorTest sharedNavigator] beginLoginWithSourceController:nil mobileNo:@"133333" loginType:SSJLoginTypeWeiXin navigationType:SSJNavigationTypePresent motionPwdForgeted:YES finishHandler:NULL];
-//    [[SSJLoginNavigatorTest sharedNavigator].navigator goNext];
-//}
-
-@end

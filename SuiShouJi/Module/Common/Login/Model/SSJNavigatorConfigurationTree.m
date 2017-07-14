@@ -118,7 +118,7 @@
             self.rootNode = superNode;
             
         } else {
-            
+            NSMutableArray *tmpSuperNodes = [[NSMutableArray alloc] init];
             for (int superNodeIndex = 0; superNodeIndex < superNodes.count; superNodeIndex ++) {
                 SSJNavigatorConfigurationTreeNode *superNode = superNodes[superNodeIndex];
                 NSArray *nodeClasses = [self.dataSource nodeClassInLayerIndex:layerIndex superNodeIndex:superNode.index inConfigurationTree:self];
@@ -137,29 +137,15 @@
                     relationship.childNode = currentNode;
                     [relationships addObject:relationship];
                     
-                    [superNodes addObject:currentNode];
+                    [tmpSuperNodes addObject:currentNode];
                 }
                 
                 superNode.relationships = relationships;
-                [superNodes removeObjectAtIndex:0];
+//                [superNodes removeObjectAtIndex:0];
             }
             
-//            if (layerIndex == layerCount - 1) {
-//                for (int idx = 0; idx < superNodes.count; idx ++) {
-//                    SSJNavigatorConfigurationTreeNode *finishNode = [[SSJNavigatorConfigurationTreeNode alloc] init];
-//                    finishNode.index = idx;
-//                    finishNode.pageClass = [SSJNavigatorFinishPage class];
-//                    
-//                    SSJNavigatorRelationship *relationship = [[SSJNavigatorRelationship alloc] init];
-//                    relationship.condition = [SSJNavigatiorCondition conditionWithBlock:^BOOL{
-//                        return YES;
-//                    }];
-//                    relationship.childNode = finishNode;
-//                    
-//                    SSJNavigatorConfigurationTreeNode *superNode = superNodes[idx];
-//                    superNode.relationships = @[relationship];
-//                }
-//            }
+            [superNodes removeAllObjects];
+            [superNodes addObjectsFromArray:tmpSuperNodes];
         }
     }
 }
@@ -190,8 +176,7 @@
 }
 
 - (void)beginNavigation {
-    SSJNavigatorRelationship *relationship = [self.currentNode.relationships firstObject];
-    [self navigateToPage:relationship.childNode.pageClass];
+    [self navigateToPage:self.currentNode.pageClass];
 }
 
 - (void)goNext {
