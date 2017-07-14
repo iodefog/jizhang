@@ -14,4 +14,5 @@
 
 /**phone*/
 @property (nonatomic, copy) NSString *phoneNum;
+
 @end

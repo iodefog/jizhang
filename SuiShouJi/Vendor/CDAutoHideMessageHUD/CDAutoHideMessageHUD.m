@@ -93,6 +93,10 @@ static void * CDAutoHideMessageHUDKey = (void *)@"CDAutoHideMessageHUDKey";
 @implementation CDAutoHideMessageHUD (Error)
 
 + (void)showError:(NSError *)error {
+    if ([error.domain isEqualToString:RACCommandErrorDomain]) {
+        return;
+    }
+    
     [self showMessage:error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE];
 }
 

@@ -7,6 +7,7 @@
 //
 //static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #import "SSRegisterAndLoginViewController.h"
+#import "SSJMotionPasswordViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
@@ -15,6 +16,7 @@
 #import "SSJVerifCodeField.h"
 
 #import "SSJEncourageService.h"
+#import "SSJUserTableManager.h"
 
 @interface SSRegisterAndLoginViewController ()<UITextFieldDelegate>
 //@property (nonatomic,strong)UITextField *tfRegYanZhenNum;
@@ -338,10 +340,7 @@
                 } else if (weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeForgetPassword) {
                     [CDAutoHideMessageHUD showMessage:@"重置密码成功"];
                 }
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                [self dismissViewControllerAnimated:YES completion:NULL];
+                [weakSelf handlePageFlow];
             }];
             
             [[[command.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {
@@ -382,7 +381,35 @@
     return _getQQGroupService;
 }
 
-
+#pragma mark - Private
+- (void)handlePageFlow {
+    if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist) {
+        [CDAutoHideMessageHUD showMessage:@"注册成功"];
+        if (self.finishHandle) {
+            self.finishHandle(self);
+        }
+        [self dismissViewControllerAnimated:YES completion:NULL];
+        
+    } else if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeForgetPassword) {
+        [CDAutoHideMessageHUD showMessage:@"重置密码成功"];
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            if ([userItem.motionPWDState boolValue] && !userItem.motionPWD.length) {
+                SSJMotionPasswordViewController *motionPwdVC = [[SSJMotionPasswordViewController alloc] init];
+                motionPwdVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                motionPwdVC.isLoginFlow = YES;
+                motionPwdVC.finishHandle = self.finishHandle;
+                [self.navigationController pushViewController:motionPwdVC animated:YES];
+            } else {
+                if (self.finishHandle) {
+                    self.finishHandle(self);
+                }
+                [self dismissViewControllerAnimated:YES completion:NULL];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [CDAutoHideMessageHUD showError:error];
+        }];
+    }
+}
 
 //- (SSJLoginGraphVerView *)graphVerView {
 //    if (!_graphVerView) {

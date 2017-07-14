@@ -9,6 +9,7 @@
 #import "SSJBindMobileNoViewController.h"
 #import "SSJSettingPasswordViewController.h"
 #import "TPKeyboardAvoidingScrollView.h"
+#import "UIViewController+SSJPageFlow.h"
 #import "SSJMobileNoField.h"
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -104,6 +105,9 @@
     [self.scrollView addSubview:self.descLab];
     [self.scrollView addSubview:self.phoneNoField];
     [self.scrollView addSubview:self.nextBtn];
+    if (self.isLoginFlow) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"跳过", nil) style:UIBarButtonItemStylePlain target:self action:@selector(skipBindMobileNo)];
+    }
 }
 
 - (void)setUpBindings {
@@ -123,6 +127,8 @@
             SSJSettingPasswordViewController *pwdSetttingVC = [[SSJSettingPasswordViewController alloc] init];
             pwdSetttingVC.type = SSJSettingPasswordTypeMobileNoBinding;
             pwdSetttingVC.mobileNo = self.phoneNoField.text;
+            pwdSetttingVC.isLoginFlow = self.isLoginFlow;
+            pwdSetttingVC.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
     } error:^(NSError *error) {
@@ -135,6 +141,13 @@
     
     RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
     RAC(self.viewModel, phoneNum) = [RACSignal merge:@[self.phoneNoField.rac_textSignal, RACObserve(self.phoneNoField, text)]];
+}
+
+- (void)skipBindMobileNo {
+    if (self.finishHandle) {
+        self.finishHandle(self);
+    }
+    [self dismissViewControllerAnimated:NO completion:NULL];
 }
 
 #pragma mark - Lazyloading

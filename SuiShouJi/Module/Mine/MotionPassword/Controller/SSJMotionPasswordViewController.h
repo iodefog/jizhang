@@ -7,7 +7,8 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "UIViewController+SSJPageFlow.h"
+
+@class SSJLoginNavigator;
 
 typedef NS_ENUM(NSUInteger, SSJMotionPasswordViewControllerType) {
     SSJMotionPasswordViewControllerTypeSetting,      // 设置手势密码
@@ -19,5 +20,10 @@ typedef NS_ENUM(NSUInteger, SSJMotionPasswordViewControllerType) {
 
 //  手势密码类型，默认为设置手势密码(SSJMotionPasswordViewControllerTypeSetting)
 @property (nonatomic) SSJMotionPasswordViewControllerType type;
+
+/**
+ 是否属于登录流程
+ */
+@property (nonatomic) BOOL isLoginFlow;
 
 @end
