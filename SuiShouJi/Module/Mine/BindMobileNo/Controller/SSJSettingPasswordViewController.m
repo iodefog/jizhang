@@ -8,6 +8,7 @@
 
 #import "SSJSettingPasswordViewController.h"
 #import "SSJSettingViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJVerifCodeField.h"
 #import "SSJPasswordField.h"
@@ -139,6 +140,9 @@
     [self.scrollView addSubview:self.authCodeField];
     [self.scrollView addSubview:self.passwordField];
     [self.scrollView addSubview:self.bindingBtn];
+    if (self.isLoginFlow) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"跳过", nil) style:UIBarButtonItemStylePlain target:self action:@selector(finishLoginFlow)];
+    }
 }
 
 - (void)setUpBindings {
@@ -189,7 +193,11 @@
     }] subscribeError:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     } completed:^{
-        [self goBackToSettingPage];
+        if (self.isLoginFlow) {
+            [self finishLoginFlow];
+        } else {
+            [self goBackToSettingPage];
+        }
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self.successAlertView showWithDesc:@"绑定手机号成功"];
             [SSJAnaliyticsManager event:@"bind_phone"];
@@ -211,6 +219,13 @@
         [CDAutoHideMessageHUD showMessage:@"修改密码成功"];
         [self goBackToSettingPage];
     }];
+}
+
+- (void)finishLoginFlow {
+    if (self.finishHandle) {
+        self.finishHandle(self);
+    }
+    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (RACSignal *)verifyPassword {

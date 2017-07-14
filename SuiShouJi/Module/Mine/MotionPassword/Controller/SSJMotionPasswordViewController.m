@@ -9,11 +9,14 @@
 #import "SSJMotionPasswordViewController.h"
 #import "SSJNavigationController.h"
 #import "SSJLoginVerifyPhoneViewController.h"
+#import "SSJBindMobileNoViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 #import "SCYMotionEncryptionView.h"
 #import "SSJUserTableManager.h"
 #import "UIImageView+CornerRadius.h"
 #import "SSJMotionPasswordLoginPasswordAlertView.h"
 #import <LocalAuthentication/LocalAuthentication.h>
+//#import "SSJLoginNavigator.h"
 
 static NSString *const kErrorRemindTextColor = @"ff7139";
 
@@ -175,7 +178,21 @@ static const int kVerifyFailureTimesLimit = 5;
                     _userItem.motionPWD = self.password;
                     _userItem.motionPWDState = @"1";
                     [SSJUserTableManager saveUserItem:_userItem success:^{
-                        [self goBackAction];
+                        if (self.isLoginFlow) {
+                            if (_userItem.mobileNo.length) {
+                                if (self.finishHandle) {
+                                    self.finishHandle(self);
+                                }
+                                [self dismissViewControllerAnimated:NO completion:NULL];
+                            } else {
+                                SSJBindMobileNoViewController *bindNoVC = [[SSJBindMobileNoViewController alloc] init];
+                                bindNoVC.isLoginFlow = YES;
+                                bindNoVC.finishHandle = self.finishHandle;
+                                [self.navigationController setViewControllers:@[bindNoVC] animated:YES];
+                            }
+                        } else {
+                            [self goBackAction];
+                        }
                     } failure:^(NSError * _Nonnull error) {
                         [SSJAlertViewAdapter showError:error];
                     }];
@@ -260,7 +277,7 @@ static const int kVerifyFailureTimesLimit = 5;
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
         self.userItem.motionPWD = @"";
-        self.userItem.motionPWDState = @"0";
+        self.userItem.motionPWDState = @"1";
         [SSJUserTableManager saveUserItem:self.userItem success:^{
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
@@ -421,7 +438,9 @@ static const int kVerifyFailureTimesLimit = 5;
         self.showNavigationBarBaseLine = NO;
         self.navigationItem.hidesBackButton = YES;
         self.navigationItem.leftBarButtonItem = nil;
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(goBackAction)];
+        if (!self.isLoginFlow) {
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(goBackAction)];
+        }
     } else if (self.type == SSJMotionPasswordViewControllerTypeTurnoff) {
         self.title = @"关闭手势密码";
         self.showNavigationBarBaseLine = NO;

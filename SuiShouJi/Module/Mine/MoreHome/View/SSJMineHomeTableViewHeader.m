@@ -51,7 +51,7 @@
 #else
         UILabel *testLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.width, 30)];
         testLabel.text = @"当前是测试环境";
-        testLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.moreHomeTitleColor];
+        testLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         testLabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:testLabel];
 #endif

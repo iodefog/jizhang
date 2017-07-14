@@ -661,7 +661,9 @@
                 //登录
                 self.loginType = SSJLoginTypeNormal;
                 //验证密码格式
-                if (![self.passwardNum ssj_validPassWard]) {
+                if ([self.passwardNum ssj_validPassWard]) {
+                    [subscriber sendCompleted];
+                } else {
                     [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"请输入6~15位数字、字母组合密码"}]];
                 }
                 return nil;

@@ -10,6 +10,8 @@
 #import "SSJNormalWebViewController.h"
 #import "SSRegisterAndLoginViewController.h"
 #import "SSJLoginPhoneViewController.h"
+#import "SSJMotionPasswordViewController.h"
+#import "SSJBindMobileNoViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
@@ -171,6 +173,30 @@
     }
 }
 
+- (void)handleThirdPartLoginPageFlow {
+    [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+        if ([userItem.motionPWDState boolValue] && !userItem.motionPWD.length) {
+            SSJMotionPasswordViewController *motionVC = [[SSJMotionPasswordViewController alloc] init];
+            motionVC.type = SSJMotionPasswordViewControllerTypeSetting;
+            motionVC.finishHandle = self.finishHandle;
+            motionVC.isLoginFlow = YES;
+            [self.navigationController pushViewController:motionVC animated:YES];
+        } else if (!userItem.mobileNo.length) {
+            SSJBindMobileNoViewController *bindNoVC = [[SSJBindMobileNoViewController alloc] init];
+            bindNoVC.isLoginFlow = YES;
+            bindNoVC.finishHandle = self.finishHandle;
+            [self.navigationController setViewControllers:@[bindNoVC] animated:YES];
+        } else {
+            if (self.finishHandle) {
+                self.finishHandle(self);
+            }
+            [self dismissViewControllerAnimated:NO completion:NULL];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
 #pragma mark - Lazy
 
 - (UITextField *)numTextF {
@@ -301,10 +327,7 @@
                 }
             } completed:^{
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                [self dismissViewControllerAnimated:NO completion:NULL];
+                [self handleThirdPartLoginPageFlow];
             }];
         }];
     }
@@ -329,10 +352,7 @@
                 }
             } completed:^{
                 [CDAutoHideMessageHUD showMessage:@"登录成功"];
-                if (self.finishHandle) {
-                    self.finishHandle(self);
-                }
-                [self dismissViewControllerAnimated:NO completion:NULL];
+                [self handleThirdPartLoginPageFlow];
             }];
         }];
     }

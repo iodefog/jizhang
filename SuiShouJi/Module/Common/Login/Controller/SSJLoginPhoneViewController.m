@@ -8,9 +8,11 @@
 
 #import "SSJLoginPhoneViewController.h"
 #import "SSRegisterAndLoginViewController.h"
+#import "SSJMotionPasswordViewController.h"
 #import "UIViewController+SSJPageFlow.h"
 
 #import "SSJLoginVerifyPhoneNumViewModel.h"
+#import "SSJUserTableManager.h"
 
 @interface SSJLoginPhoneViewController ()<UITextFieldDelegate>
 /**tips*/
@@ -177,11 +179,23 @@
                     [CDAutoHideMessageHUD showError:error];
                 }
             } completed:^{
-                [CDAutoHideMessageHUD showMessage:@"登录成功"];
-                if (wSelf.finishHandle) {
-                    wSelf.finishHandle(self);
-                }
-                [wSelf dismissViewControllerAnimated:NO completion:NULL];
+                [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+                    if ([userItem.motionPWDState boolValue] && !userItem.motionPWD.length) {
+                        SSJMotionPasswordViewController *motionPwdVC = [[SSJMotionPasswordViewController alloc] init];
+                        motionPwdVC.type = SSJMotionPasswordViewControllerTypeSetting;
+                        motionPwdVC.isLoginFlow = YES;
+                        motionPwdVC.finishHandle = wSelf.finishHandle;
+                        [wSelf.navigationController pushViewController:motionPwdVC animated:YES];
+                    } else {
+                        [CDAutoHideMessageHUD showMessage:@"登录成功"];
+                        if (wSelf.finishHandle) {
+                            wSelf.finishHandle(wSelf);
+                        }
+                        [wSelf dismissViewControllerAnimated:NO completion:NULL];
+                    }
+                } failure:^(NSError * _Nonnull error) {
+                    [CDAutoHideMessageHUD showError:error];
+                }];
             }];
             
             [[[wSelf.viewModel.normalLoginCommand.executing skip:1] distinctUntilChanged] subscribeNext:^(id x) {

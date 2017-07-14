@@ -107,4 +107,10 @@ static const void *kHidesNavigationBarWhenPushedKey = &kHidesNavigationBarWhenPu
     return nil;
 }
 
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    if (self.viewControllers.count) {
+        viewController.hidesBottomBarWhenPushed = YES;
+    }
+    [super pushViewController:viewController animated:YES];
+}
 @end

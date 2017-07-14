@@ -512,8 +512,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     if (!image) return;
     //图片编辑
-    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] init];
-    imageClipVC.normalImage = image;
+    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] initWithNormalImage:image normalClipSize:SSJ_KEYWINDOW.size];
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         [SSJCustomThemeManager changeThemeWithLocalImage:newImage type:0];
         [self.themeModifyView show];
