@@ -12,7 +12,9 @@
 typedef void(^ClipImageBlock)(UIImage *seleImg);
 @interface SSJThemBgImageClipViewController : SSJBaseViewController
 /**<#注释#>*/
-@property (nonatomic, strong) UIImage *normalImage;
+
 /**<#注释#>*/
 @property (nonatomic, copy) ClipImageBlock clipImageBlock;
+
+- (instancetype)initWithNormalImage:(UIImage *)normalImg normalClipSize:(CGSize)clipSize;
 @end

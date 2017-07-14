@@ -19,17 +19,35 @@
 
 @property (nonatomic, strong) UIButton *cancelButton;
 
+/**原始图片*/
+@property (nonatomic, strong) UIImage *normalImage;
+
 /**<#注释#>*/
+@property (nonatomic, assign) CGSize normalImagesize;
+
+/**最原始的裁剪框大小*/
+@property (nonatomic, assign) CGSize normalClipSize;
+
+/**
+ 最终图片
+ */
 @property (nonatomic, strong) UIImage *selectedImage;
-@property (nonatomic, strong) UIImage *oldImage;
+
 @property (nonatomic, strong) CALayer *clipView;
-/**<#注释#>*/
-@property (nonatomic, assign) CGSize oldImagesize;
+
 
 @property (nonatomic, strong) CAShapeLayer *coverLayer;
 @end
-static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
+static CGFloat imageScale = 0.8; //裁剪框和真实尺寸大小比例
 @implementation SSJThemBgImageClipViewController
+
+- (instancetype)initWithNormalImage:(UIImage *)normalImg normalClipSize:(CGSize)clipSize {
+    if (self = [super init]) {
+        self.normalClipSize = clipSize;
+        self.normalImage = normalImg;
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -50,11 +68,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     self.scrollview.frame = self.view.bounds;
     self.cancelButton.leftBottom = CGPointMake(20, self.view.height - 20);
     self.chooseButton.rightBottom = CGPointMake(self.view.width - 20, self.view.height - 20);
-    self.clipView.size = CGSizeMake(self.view.width*imageScale, self.view.height*imageScale);
+    self.clipView.size = CGSizeMake(self.normalClipSize.width*imageScale, self.normalClipSize.height*imageScale);
     self.clipView.left = (self.view.width - self.clipView.size.width)*0.5;
     self.clipView.top = (self.view.height - self.clipView.size.height)*0.5;
-    
-    self.view.frame = self.view.bounds;
 }
 
 - (BOOL)prefersStatusBarHidden {
@@ -62,14 +78,6 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 }
 
 #pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView
-{}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
-{
-    
-}
-
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
     return self.imageView;
@@ -90,11 +98,11 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
     UIImage *resizeImage = [self clipWithImageRect:CGRectMake(0, 0, imageWidth, imageHeight) clipImage:normalImage];
     normalImage = [resizeImage fixOrientation];
     _normalImage = normalImage;
-    self.oldImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
-    self.oldImage = normalImage;
+    self.normalImagesize = CGSizeMake(normalImage.size.width, normalImage.size.height);
+//    self.oldImage = normalImage;
     self.imageView.image = normalImage;
-    double clipH = SSJSCREENHEIGHT * imageScale;
-    double clipW = SSJSCREENWITH * imageScale;
+    double clipH = self.normalClipSize.height * imageScale;
+    double clipW = self.normalClipSize.width * imageScale;
     double imgH = normalImage.size.height;
     double imgW = normalImage.size.width;
     if (imgW > imgH) { //宽》 高
@@ -124,8 +132,8 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 
     self.scrollview.contentSize = self.imageView.size;
     CGPoint conOfSet = self.scrollview.contentOffset;
-    conOfSet.x = -SSJSCREENWITH * (1 - imageScale) * 0.5;
-    conOfSet.y = -SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
+    conOfSet.x = -self.normalClipSize.width * (1 - imageScale) * 0.5;
+    conOfSet.y = -self.normalClipSize.height * (1 - imageScale) * 0.5;
     self.scrollview.contentOffset = conOfSet;
 }
 
@@ -133,7 +141,7 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 - (void)chooseButtonClicked
 {
     //计算裁剪比例
-    CGFloat imageClipScale = self.oldImagesize.width / self.imageView.width;
+    CGFloat imageClipScale = self.normalImagesize.width / self.imageView.width;
     CGSize clipSize = CGSizeMake(self.clipView.width * imageClipScale, self.clipView.height * imageClipScale);
     CGFloat clipLeft = 0;
     CGFloat clipTop = 0;
@@ -170,7 +178,7 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
 //获得某个范围内的屏幕图像
 - (UIImage *)imageFromView: (UIView *)theView atFrame:(CGRect)rect
 {
-    UIImage * image = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.oldImage.CGImage, rect)];
+    UIImage * image = [UIImage imageWithCGImage:CGImageCreateWithImageInRect(self.normalImage.CGImage, rect)];
     NSData *imageData = UIImageJPEGRepresentation(image, 0.4);
     return  [UIImage imageWithData:imageData];
 }
@@ -249,9 +257,9 @@ static CGFloat imageScale = 0.8; //裁剪框和屏幕大小比例
         CGPoint leftBottom = CGPointMake(0, SSJSCREENHEIGHT);
         CGPoint rightBottom = CGPointMake(SSJSCREENWITH, SSJSCREENHEIGHT);
         
-        CGFloat leftPad = SSJSCREENWITH * (1 - imageScale) * 0.5;
-        CGFloat topPad = SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
-        CGPoint leftTops = CGPointMake(leftPad, SSJSCREENHEIGHT * (1 - imageScale) * 0.5);
+        CGFloat leftPad = (SSJSCREENWITH - self.normalClipSize.width * imageScale) * 0.5;//SSJSCREENWITH * (1 - imageScale) * 0.5;
+        CGFloat topPad = (SSJSCREENHEIGHT - self.normalClipSize.height * imageScale) * 0.5;//SSJSCREENHEIGHT * (1 - imageScale) * 0.5;
+        CGPoint leftTops = CGPointMake(leftPad, topPad);
         CGPoint rightTops = CGPointMake(SSJSCREENWITH - leftPad, topPad);
         CGPoint leftBottoms = CGPointMake(leftPad, SSJSCREENHEIGHT - topPad);
         CGPoint rightBottoms = CGPointMake(SSJSCREENWITH - leftPad, SSJSCREENHEIGHT - topPad);
