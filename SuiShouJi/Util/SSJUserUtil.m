@@ -45,7 +45,7 @@ BOOL SSJIsUserLogined() {
     return [[NSUserDefaults standardUserDefaults] boolForKey:kUserLoginedKey];
 }
 
-SSJLoginType SSJUserLoginType(){
+NSInteger SSJUserLoginType(){
     return [[NSUserDefaults standardUserDefaults] integerForKey:SSJUserLoginTypeKey];
 }
 
@@ -89,7 +89,7 @@ BOOL SSJUpdateSyncVersion(int64_t version) {
 
 static NSString *const kSSJSyncSettingTypeKey = @"kSSJSyncSettingTypeKey";
 
-SSJSyncSettingType SSJSyncSetting() {
+NSInteger SSJSyncSetting() {
     return [[NSUserDefaults standardUserDefaults] integerForKey:kSSJSyncSettingTypeKey];
 }
 

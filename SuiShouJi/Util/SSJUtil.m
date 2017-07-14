@@ -543,9 +543,9 @@ BOOL SSJVerifyPassword(NSString *pwd) {
     return [pred evaluateWithObject:pwd];
 }
 
-void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector) {
-    Method originalMethod = class_getInstanceMethod(class, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+void SSJSwizzleSelector(Class className, SEL originalSelector, SEL swizzledSelector) {
+    Method originalMethod = class_getInstanceMethod(className, originalSelector);
+    Method swizzledMethod = class_getInstanceMethod(className, swizzledSelector);
     method_exchangeImplementations(originalMethod, swizzledMethod);
 }
 
