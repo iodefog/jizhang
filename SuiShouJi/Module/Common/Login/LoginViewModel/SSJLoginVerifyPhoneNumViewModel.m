@@ -686,6 +686,8 @@
                 //验证密码格式
                 if (![self.passwardNum ssj_validPassWard]) {
                     [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginPasswordIllegal userInfo:@{NSLocalizedDescriptionKey:@"请输入6~15位数字、字母组合密码"}]];
+                } else {
+                    [subscriber sendCompleted];
                 }
                 return nil;
             }] then:^RACSignal *{

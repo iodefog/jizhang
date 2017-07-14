@@ -36,7 +36,8 @@ def shared_pods
     pod 'UMengUShare/Social/QQ', '~> 6.3.0'
     
     pod 'YYWebImage'
-
+    
+    pod 'WCDB'
 end
 
 target 'SuiShouJi'  do
