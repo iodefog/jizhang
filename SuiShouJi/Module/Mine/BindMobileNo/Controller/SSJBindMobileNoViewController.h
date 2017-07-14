@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJBindMobileNoViewController : SSJBaseViewController
 
+/**
+ 是否属于登录流程
+ */
+@property (nonatomic) BOOL isLoginFlow;
+
 @end
 
 NS_ASSUME_NONNULL_END

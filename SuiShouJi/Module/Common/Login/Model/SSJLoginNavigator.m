@@ -109,7 +109,7 @@
     if (self.motionPwdForgeted) {
         SSJMotionPasswordViewController *motionSettingVC = [[SSJMotionPasswordViewController alloc] init];
         motionSettingVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        motionSettingVC.loginNavigator = self;
+//        motionSettingVC.loginNavigator = self;
         [self.navigationVC pushViewController:motionSettingVC animated:YES];
     } else {
         [self finishLoginNavigation];
@@ -146,7 +146,7 @@
     if (self.motionPwdForgeted) {
         SSJMotionPasswordViewController *motionSettingVC = [[SSJMotionPasswordViewController alloc] init];
         motionSettingVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        motionSettingVC.loginNavigator = self;
+//        motionSettingVC.loginNavigator = self;
         [self.navigationVC pushViewController:motionSettingVC animated:YES];
     } else {
         [self finishLoginNavigation];
@@ -161,7 +161,7 @@
     if (self.motionPwdForgeted) {
         SSJMotionPasswordViewController *motionSettingVC = [[SSJMotionPasswordViewController alloc] init];
         motionSettingVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        motionSettingVC.loginNavigator = self;
+//        motionSettingVC.loginNavigator = self;
         [self.navigationVC pushViewController:motionSettingVC animated:YES];
     } else {
         [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {

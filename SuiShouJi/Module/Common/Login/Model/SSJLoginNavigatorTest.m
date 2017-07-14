@@ -182,19 +182,19 @@
     } else if (pageClass == [SSJMotionPasswordViewController class]) {
         SSJMotionPasswordViewController *motionSettingVC = [[SSJMotionPasswordViewController alloc] init];
         motionSettingVC.type = SSJMotionPasswordViewControllerTypeSetting;
-        motionSettingVC.loginNavigator = self;
+//        motionSettingVC.loginNavigator = self;
         [self.navigationVC pushViewController:motionSettingVC animated:YES];
         
     } else if (pageClass == [SSJBindMobileNoViewController class]) {
         SSJBindMobileNoViewController *bindMobileNoVC = [[SSJBindMobileNoViewController alloc] init];
-        bindMobileNoVC.loginNavigator = self;
+//        bindMobileNoVC.loginNavigator = self;
         [self.navigationVC setViewControllers:@[bindMobileNoVC] animated:YES];
         
     } else if (pageClass == [SSJSettingPasswordViewController class]) {
         SSJSettingPasswordViewController *bindMobileNoVC = [[SSJSettingPasswordViewController alloc] init];
         bindMobileNoVC.type = SSJSettingPasswordTypeMobileNoBinding;
         bindMobileNoVC.mobileNo = self.params[@"mobileNo"];
-        bindMobileNoVC.loginNavigator = self;
+//        bindMobileNoVC.loginNavigator = self;
         [self.navigationVC pushViewController:bindMobileNoVC animated:YES];
         
     }
