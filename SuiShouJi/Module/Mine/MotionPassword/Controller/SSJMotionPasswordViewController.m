@@ -16,7 +16,7 @@
 #import "UIImageView+CornerRadius.h"
 #import "SSJMotionPasswordLoginPasswordAlertView.h"
 #import <LocalAuthentication/LocalAuthentication.h>
-#import "SSJLoginNavigator.h"
+//#import "SSJLoginNavigator.h"
 
 static NSString *const kErrorRemindTextColor = @"ff7139";
 
