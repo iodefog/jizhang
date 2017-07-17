@@ -55,14 +55,18 @@ public:
     static const std::string defaultCipherConfigName;
     static const std::string defaultTraceConfigName;
     static const std::string defaultCheckpointConfigName;
+    static const std::string defaultSyncConfigName;
     static const Configs defaultConfigs;
     void setConfig(const std::string &name,
                    const Config &config,
                    Configs::Order order);
     void setConfig(const std::string &name, const Config &config);
-    void setCipherKey(const void *key, int size);
-    void setTrace(const Trace &trace);
-    static void SetGlobalTrace(const Trace &globalTrace);
+    void setCipher(const void *key, int keySize);
+    void setCipher(const void *key, int keySize, int pageSize);
+    void setSyncEnabled(bool sync);
+    void setPerformanceTrace(const PerformanceTrace &trace);
+    static void SetGlobalPerformanceTrace(const PerformanceTrace &globalTrace);
+    static void SetGlobalSQLTrace(const SQLTrace &globalTrace);
 
     //file
     bool moveFiles(const std::string &directory, Error &error);
@@ -106,7 +110,8 @@ protected:
     static ThreadLocal<std::unordered_map<std::string, RecyclableHandle>>
         s_threadedHandle;
 
-    static std::shared_ptr<Trace> s_globalTrace;
+    static std::shared_ptr<PerformanceTrace> s_globalPerformanceTrace;
+    static std::shared_ptr<SQLTrace> s_globalSQLTrace;
 };
 
 } //namespace WCDB
