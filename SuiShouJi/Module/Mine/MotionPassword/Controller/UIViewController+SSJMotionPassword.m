@@ -81,7 +81,7 @@
             SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:fingerPwdVC];
             [currentVC presentViewController:naviVC animated:animated completion:NULL];
             
-        } else if (error.code == LAErrorTouchIDNotEnrolled || touchIDChanged) {
+        } else if (fingerPwdOpened && (error.code == LAErrorTouchIDNotEnrolled || touchIDChanged)) {
             // 重新登录
             [SSJUserTableManager reloadUserIdWithSuccess:^{
                 SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
