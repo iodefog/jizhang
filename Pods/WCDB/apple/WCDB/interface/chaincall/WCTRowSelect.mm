@@ -57,59 +57,76 @@
 - (WCTColumnsXRows *)allRows
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if ([self lazyPrepare]) {
-        NSMutableArray *allRows = [NSMutableArray array];
-        NSMutableArray *row = nil;
-        while ([self next]) {
-            row = [NSMutableArray array];
-            if ([self extractValueToRow:row]) {
-                [allRows addObject:row];
-            } else {
-                return nil;
-            }
-        }
-        return _error.isOK() ? allRows : nil;
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    NSMutableArray *allRows = [NSMutableArray array];
+    WCTOneRow *nextRow = nil;
+    while ((nextRow = [self _nextRow])) {
+        [allRows addObject:nextRow];
+    }
+    return _error.isOK() ? allRows : nil;
 }
 
 - (WCTOneRow *)nextRow
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if ([self lazyPrepare] && [self next]) {
-        NSMutableArray *row = [NSMutableArray array];
-        if ([self extractValueToRow:row]) {
-            return row;
-        }
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    return [self _nextRow];
+}
+
+- (WCTOneRow *)_nextRow
+{
+    if (!_statementHandle->step() || !_error.isOK()) {
+        [self finalize];
+        return nil;
+    }
+    NSMutableArray *row = [NSMutableArray array];
+    for (int i = 0; i < _statementHandle->getColumnCount(); ++i) {
+        WCTValue *value = [self extractValueAtIndex:i];
+        if (!value) {
+            if (!_error.isOK()) {
+                return nil;
+            }
+            value = [NSNull null];
+        }
+        [row addObject:value];
+    }
+    return _error.isOK() ? row : nil;
 }
 
 - (WCTOneColumn *)allValues
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if ([self lazyPrepare]) {
-        NSMutableArray *allValues = [NSMutableArray array];
-        WCTValue *value = nil;
-        while ([self next]) {
-            value = [self extractValue];
-            if (!value) {
-                value = [NSNull null];
-            }
-            [allValues addObject:value];
-        }
-        return _error.isOK() ? allValues : nil;
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    NSMutableArray *allValues = [NSMutableArray array];
+    WCTValue *nextValue = nil;
+    while ((nextValue = [self _nextValue])) {
+        [allValues addObject:nextValue];
+    }
+    return _error.isOK() ? allValues : nil;
 }
 
 - (WCTValue *)nextValue
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if ([self lazyPrepare] && [self next]) {
-        return [self extractValue];
+    if (![self lazyPrepare]) {
+        return nil;
     }
-    return nil;
+    return [self _nextValue];
+}
+
+- (WCTValue *)_nextValue
+{
+    if (!_statementHandle->step() || !_error.isOK()) {
+        [self finalize];
+        return nil;
+    }
+    return [self extractValueAtIndex:0];
 }
 
 @end

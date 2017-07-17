@@ -7,10 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+
 @class SSJListAdItem;
+
+SSJ_DEPRECATED
+
 static NSInteger const kColum = 3;
 @interface SSJMineHomeCollectionImageCell : UICollectionViewCell
 //- (void)setImage:(NSString *)image title:(NSString *)title subTitle:(NSString *)subTitle;
 
-- (void)setAdItem:(SSJListAdItem *)adItem indexPath:(NSIndexPath *)indexPath;
+
 @end

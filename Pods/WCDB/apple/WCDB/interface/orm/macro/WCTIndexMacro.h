@@ -20,6 +20,7 @@
 
 #define __WCDB_INDEX_IMP(className, indexSubfixName, propertyName, order)      \
     static const auto UNUSED_UNIQUE_ID = [](WCTBinding &binding) {             \
+        WCDB_PROPERTY_HINT(className, propertyName)                            \
         binding.getOrCreateIndexBinding(indexSubfixName)                       \
             ->addIndex(className.propertyName.index(order));                   \
         return nullptr;                                                        \

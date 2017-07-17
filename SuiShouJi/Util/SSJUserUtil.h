@@ -13,28 +13,28 @@
  *
  *  @param id appid
  */
-BOOL SSJSaveAppId(NSString *appId);
+FOUNDATION_EXPORT BOOL SSJSaveAppId(NSString *appId);
 
 /**
  *  返回appid
  *
  *  @return (NSString *)
  */
-NSString *SSJAppId();
+FOUNDATION_EXPORT NSString *SSJAppId();
 
 /**
  *  存储token，如果要清除就传nil
  *
  *  @param token token字符串
  */
-BOOL SSJSaveAccessToken(NSString *token);
+FOUNDATION_EXPORT BOOL SSJSaveAccessToken(NSString *token);
 
 /**
  *  获取token
  *
  *  @return (NSString *)
  */
-NSString *SSJAccessToken();
+FOUNDATION_EXPORT NSString *SSJAccessToken();
 
 /**
  *  存储用户是否登录
@@ -42,28 +42,28 @@ NSString *SSJAccessToken();
  *  @param logined 是否登录
  *  @return (BOOL) 是否存储成功
  */
-BOOL SSJSaveUserLogined(BOOL logined);
+FOUNDATION_EXPORT BOOL SSJSaveUserLogined(BOOL logined);
 
 /**
  *  返回用户是否登录
  *
  *  @return (BOOL)
  */
-BOOL SSJIsUserLogined();
+FOUNDATION_EXPORT BOOL SSJIsUserLogined();
 
 /**
  *  返回用户的登录方式
  *
  *  @return ()
  */
-SSJLoginType SSJUserLoginType();
+FOUNDATION_EXPORT NSInteger SSJUserLoginType();
 
 /**
  *  清除用户登录信息
  *
  *  @return (BOOL) 是否清除成功
  */
-void SSJClearLoginInfo();
+FOUNDATION_EXPORT void SSJClearLoginInfo();
 
 /**
  *  设置userid；如果要清空，就设置为nil
@@ -71,28 +71,28 @@ void SSJClearLoginInfo();
  *  @param userId 用户唯一编号
  *  @return (BOOL) 是否设置成功
  */
-BOOL SSJSetUserId(NSString *userId);
+FOUNDATION_EXPORT BOOL SSJSetUserId(NSString *userId);
 
 /**
  *  获取USERID
  *
  *  @return (NSString *) 用户唯一编号
  */
-NSString *SSJUSERID();
+FOUNDATION_EXPORT NSString *SSJUSERID();
 
 /**
  默认成员id
 
  @return
  */
-NSString *SSJDefaultMemberId();
+FOUNDATION_EXPORT NSString *SSJDefaultMemberId();
 
 /**
  *  获取当前同步记录版本号
  *
  *  @return (int64_t) 当前同步记录版本号
  */
-int64_t SSJSyncVersion();
+FOUNDATION_EXPORT int64_t SSJSyncVersion();
 
 /**
  *  更新当前同步记录版本号
@@ -100,11 +100,11 @@ int64_t SSJSyncVersion();
  *  @param version 新版本号
  *  @return (BOOL) 是否更新成功
  */
-BOOL SSJUpdateSyncVersion(int64_t version);
+FOUNDATION_EXPORT BOOL SSJUpdateSyncVersion(int64_t version);
 
-SSJSyncSettingType SSJSyncSetting();
+FOUNDATION_EXPORT NSInteger SSJSyncSetting();
 
-BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
+FOUNDATION_EXPORT BOOL SSJSaveSyncSetting(SSJSyncSettingType setting);
 
 ///**
 // *  获取用户是否忘记手势密码

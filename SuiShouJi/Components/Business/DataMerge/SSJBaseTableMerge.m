@@ -45,10 +45,14 @@
                                  inDataBase:(FMDatabase *)db {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
     
-    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select * from bk_user_charge where cuserid = '%@' and operatortype <> 2"];
     
+    NSMutableString *sqlStr = [NSMutableString stringWithFormat:@"select * from bk_user_charge where cuserid = '%@' and operatortype <> 2",userId];
     
-    FMResultSet *result = [db executeQuery:@"select * from bk_user_charge where cuserid = ? and operatortype <> 2"];
+    if (condition.length) {
+        [sqlStr appendString:condition];
+    }
+    
+    FMResultSet *result = [db executeQuery:sqlStr];
 
     while ([result next]) {
         NSMutableDictionary *tempDic = [NSMutableDictionary dictionaryWithCapacity:0];\

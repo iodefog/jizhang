@@ -61,6 +61,9 @@
 #import "SSJCustomThemeManager.h"
 #import "SSJBooksTypeStore.h"
 
+#import "SSJDataBaseHelper.h";
+
+
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 @interface SSJBookKeepingHomeViewController () <SSJMultiFunctionButtonDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
@@ -140,6 +143,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    SSJDataBaseHelper *help = [[SSJDataBaseHelper alloc] init];
+
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.homeBar];
     [self.view addSubview:self.tableView];

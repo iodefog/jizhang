@@ -18,65 +18,65 @@
  *
  *  @return (NSString *)
  */
-NSString* SSJURLWithAPI(NSString* api);
+FOUNDATION_EXPORT NSString* SSJURLWithAPI(NSString* api);
 
-NSString* SSJImageURLWithAPI(NSString* api);
+FOUNDATION_EXPORT NSString* SSJImageURLWithAPI(NSString* api);
 
 /**
  返回bundle id
 
  @return bundle id
  */
-NSString *SSJBundleID();
+FOUNDATION_EXPORT NSString *SSJBundleID();
 
 /**
  *  返回本地APP名字
  *
  *  @return (NSString *)
  */
-NSString *SSJAppName();
+FOUNDATION_EXPORT NSString *SSJAppName();
 
 /**
  *  获取plist文件中的url scheme
  *
  *  @return (NSString *)
  */
-NSString *SSJURLScheme();
+FOUNDATION_EXPORT NSString *SSJURLScheme();
 
 /**
  *  返回本地APP版本
  *
  *  @return (NSString *)
  */
-NSString *SSJAppVersion();
+FOUNDATION_EXPORT NSString *SSJAppVersion();
 
 /**
  *  返回当前应用的图标名称
  *
  *  @return (NSString *)
  */
-NSString *SSJAppIcon();
+FOUNDATION_EXPORT NSString *SSJAppIcon();
 
 /**
  *   系统版本
  *
  *   @return (float)
  */
-float SSJSystemVersion();
+FOUNDATION_EXPORT float SSJSystemVersion();
 
 /**
  *  当前手机型号
  *
  *  @return (NSString *)
  */
-NSString *SSJPhoneModel();
+FOUNDATION_EXPORT NSString *SSJPhoneModel();
 
 /**
  *  本地补丁最新的版本号
  *
  *  @return (NSString *)
  */
-NSString *SSJLastPatchVersion();
+FOUNDATION_EXPORT NSString *SSJLastPatchVersion();
 
 
 /**
@@ -86,28 +86,28 @@ NSString *SSJLastPatchVersion();
  *
  *  @return (void)
  */
-BOOL SSJSavePatchVersion(NSInteger patchVersion);
+FOUNDATION_EXPORT BOOL SSJSavePatchVersion(NSInteger patchVersion);
 
 /**
  *  返回当前控制器
  *
  *  @return (UIViewController *)
  */
-UIViewController *SSJVisibalController();
+FOUNDATION_EXPORT UIViewController *SSJVisibalController();
 
 /**
  *  获取当前的渠道值
  *
  *  @return (NSString *)
  */
-NSString *SSJDefaultSource();
+FOUNDATION_EXPORT NSString *SSJDefaultSource();
 
 /**
  返回苹果商店下载地址
  
  @return 苹果商店下载地址
  */
-NSString *SSJAppStoreUrl();
+FOUNDATION_EXPORT NSString *SSJAppStoreUrl();
 
 /**
  *  返回当前渠道具体配置
@@ -116,7 +116,7 @@ NSString *SSJAppStoreUrl();
  *
  *  @return (NSString *)
  */
-NSString* SSJDetailSettingForSource(NSString *key);
+FOUNDATION_EXPORT NSString* SSJDetailSettingForSource(NSString *key);
 
 /**
  *  根据错误返回相应的提示，如果没有对应的错误提示，就返回nil
@@ -124,50 +124,50 @@ NSString* SSJDetailSettingForSource(NSString *key);
  *  @param error 错误
  *  @return (NSString *) 错误提示
  */
-NSString *SSJMessageWithErrorCode(NSError *error);
+FOUNDATION_EXPORT NSString *SSJMessageWithErrorCode(NSError *error);
 
 /**
  *  校验姓名是否合法
  *
  *  @return (BOOL)
  */
-BOOL checkName(NSString *userName);
+FOUNDATION_EXPORT BOOL checkName(NSString *userName);
 
 /**
  把老版本（1.9.2之前并且包涵1.9.2的）版本启动次数数据进行迁移
  */
-void SSJMigrateLaunchTimesInfo();
+FOUNDATION_EXPORT void SSJMigrateLaunchTimesInfo();
 
 /**
  返回不同版本启动次数数据
 
  @return 不同版本启动次数
  */
-NSDictionary *SSJLaunchTimesInfo();
+FOUNDATION_EXPORT NSDictionary *SSJLaunchTimesInfo();
 
 /**
  返回所有版本的启动次数
  
  @return 所有版本的启动次数
  */
-NSInteger SSJLaunchTimesForAllVersion();
+FOUNDATION_EXPORT NSInteger SSJLaunchTimesForAllVersion();
 
 /**
  *  当前版本的启动次数
  */
-NSInteger SSJLaunchTimesForCurrentVersion();
+FOUNDATION_EXPORT NSInteger SSJLaunchTimesForCurrentVersion();
 
 /**
  *  增加当前版本的启动次数
  */
-void SSJAddLaunchTimesForCurrentVersion();
+FOUNDATION_EXPORT void SSJAddLaunchTimesForCurrentVersion();
 
 /**
  *  返回存储证书的目录
  *
  *  @return (NSString *)
  */
-NSString *SSJSSLCertificatePath();
+FOUNDATION_EXPORT NSString *SSJSSLCertificatePath();
 
 /**
  *  存储证书
@@ -175,21 +175,21 @@ NSString *SSJSSLCertificatePath();
  *  @param certificate 证书
  *  @return (BOOL) 是否保存成功
  */
-BOOL SSJSaveSSLCertificate(NSData *certificate);
+FOUNDATION_EXPORT BOOL SSJSaveSSLCertificate(NSData *certificate);
 
 /**
  *  返回沙盒Document目录
  *
  *  @return (NSString *)
  */
-NSString *SSJDocumentPath();
+FOUNDATION_EXPORT NSString *SSJDocumentPath();
 
 /**
  *  返回数据库文件目录
  *
  *  @return (NSString *)
  */
-NSString *SSJSQLitePath();
+FOUNDATION_EXPORT NSString *SSJSQLitePath();
 
 /**
  *  获取qq客服联系人列表，例如：@[@{@"cqqnum": @"2766500669",@"crealname": @"婷婷"}]
@@ -197,7 +197,7 @@ NSString *SSJSQLitePath();
  *  @param certificate 证书
  *  @return (BOOL) 是否保存成功
  */
-NSArray *SSJQQList();
+FOUNDATION_EXPORT NSArray *SSJQQList();
 
 /**
  *  存储qq客服联系人列表
@@ -205,21 +205,21 @@ NSArray *SSJQQList();
  *  @param qqList qq客服数组，例如：@[@{@"cqqnum": @"2766500669",@"crealname": @"婷婷"}]
  *  @return (BOOL) 是否保存成功
  */
-BOOL SSJSaveQQList(NSArray *qqList);
+FOUNDATION_EXPORT BOOL SSJSaveQQList(NSArray *qqList);
 
 /**
  *  获取用户唯一设备编号
  *
  *  @return (NSString *)
  */
-NSString *SSJUUID();
+FOUNDATION_EXPORT NSString *SSJUUID();
 
 /**
  获取设备唯一编号
 
  @return 设备唯一编号
  */
-NSString *SSJUniqueID();
+FOUNDATION_EXPORT NSString *SSJUniqueID();
 
 /**
  *  将图片存进沙盒
@@ -229,7 +229,7 @@ NSString *SSJUniqueID();
  *
  *  @return (void)
  */
-BOOL SSJSaveImage(UIImage *image , NSString *imageName);
+FOUNDATION_EXPORT BOOL SSJSaveImage(UIImage *image , NSString *imageName);
 
 /**
  *  将缩略图存进沙盒
@@ -239,7 +239,7 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName);
  *
  *  @return (void)
  */
-BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName);
+FOUNDATION_EXPORT BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName);
 
 
 /**
@@ -249,7 +249,7 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName);
  *
  *  @return (NSString *)
  */
-NSString *SSJImagePath(NSString *imageName);
+FOUNDATION_EXPORT NSString *SSJImagePath(NSString *imageName);
 
 
 /**
@@ -259,21 +259,21 @@ NSString *SSJImagePath(NSString *imageName);
  *
  *  @return (NSString *) 图片url地址
  */
-NSString *SSJGetChargeImageUrl(NSString *imageName);
+FOUNDATION_EXPORT NSString *SSJGetChargeImageUrl(NSString *imageName);
 
 
 void SSJDispatchMainSync(void (^block)(void));
 
 void SSJDispatchMainAsync(void (^block)(void));
 
-NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
+FOUNDATION_EXPORT NSString *SSJTitleForCycleType(SSJCyclePeriodType type);
 
 /**
  毫秒级的整数时间戳
 
  @return int64_t
  */
-int64_t SSJMilliTimestamp();
+FOUNDATION_EXPORT int64_t SSJMilliTimestamp();
 
 /**
  验证登录密码是否合法
@@ -281,7 +281,7 @@ int64_t SSJMilliTimestamp();
  @param pwd 登录密码
  @return BOOL
  */
-BOOL SSJVerifyPassword(NSString *pwd);
+FOUNDATION_EXPORT BOOL SSJVerifyPassword(NSString *pwd);
 
 /**
  *  交换两个方法的实现，主要用来调试
@@ -290,13 +290,13 @@ BOOL SSJVerifyPassword(NSString *pwd);
  *  @param originalSelector     原始方法
  *  @param swizzledSelector     替换的方法
  */
-void SSJSwizzleSelector(Class class, SEL originalSelector, SEL swizzledSelector);
+FOUNDATION_EXPORT void SSJSwizzleSelector(Class className, SEL originalSelector, SEL swizzledSelector);
 
-SSJBooksCategory SSJGetBooksCategory();
+FOUNDATION_EXPORT SSJBooksCategory SSJGetBooksCategory();
 
-BOOL SSJSaveBooksCategory(SSJBooksCategory category);
+FOUNDATION_EXPORT BOOL SSJSaveBooksCategory(SSJBooksCategory category);
 
-void clearCurrentBooksCategory();
+FOUNDATION_EXPORT void clearCurrentBooksCategory();
 
 /**
  加入qq群
@@ -305,14 +305,14 @@ void clearCurrentBooksCategory();
  @param key ？？？
  @return 如果没有安装qq客户端，就返回NO
  */
-BOOL SSJJoinQQGroup(NSString *group, NSString *key);
+FOUNDATION_EXPORT BOOL SSJJoinQQGroup(NSString *group, NSString *key);
 
 /**
  验证指纹成功时得到的数据
 
  @return <#return value description#>
  */
-NSData *SSJEvaluatedPolicyDomainState();
+FOUNDATION_EXPORT NSData *SSJEvaluatedPolicyDomainState();
 
 /**
  保存验证指纹成功后得到的数据
@@ -320,4 +320,4 @@ NSData *SSJEvaluatedPolicyDomainState();
  @param data <#data description#>
  @return <#return value description#>
  */
-BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data);
+FOUNDATION_EXPORT BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data);

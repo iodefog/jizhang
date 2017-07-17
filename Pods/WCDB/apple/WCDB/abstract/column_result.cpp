@@ -35,7 +35,7 @@ ColumnResult::ColumnResult() : Describable("")
 
 ColumnResult ColumnResult::Any()
 {
-    return ColumnResult(Column::Any);
+    return ColumnResult("*");
 }
 
 ColumnResult ColumnResult::Any(const std::string &tableName)

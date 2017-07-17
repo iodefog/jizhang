@@ -67,7 +67,6 @@ public:
 
     const std::shared_ptr<WCTIndexBindingMap> getIndexBindingMap() const;
     const WCTColumnBindingList &getColumnBindingList() const;
-    const WCTColumnBindingMap &getColumnBindingMap() const;
 
     const std::shared_ptr<std::list<std::pair<std::string, std::string>>>
     getVirtualTableArgumentList() const;

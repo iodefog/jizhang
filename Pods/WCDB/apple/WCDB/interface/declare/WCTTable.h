@@ -24,13 +24,8 @@
 @interface WCTTable : WCTCore
 
 /**
- The name of the table.
+ The name of the table
  */
-@property(nonatomic, readonly) NSString *tableName;
-
-/**
- The class binding to this table.
- */
-@property(nonatomic, readonly) Class cls;
+@property(readonly) NSString *tableName;
 
 @end
