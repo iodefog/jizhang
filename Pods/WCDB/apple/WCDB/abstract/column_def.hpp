@@ -25,6 +25,7 @@
 #include <WCDB/column_type.hpp>
 #include <WCDB/declare.hpp>
 #include <WCDB/describable.hpp>
+#include <WCDB/foreign_key.hpp>
 #include <WCDB/order_term.hpp>
 
 namespace WCDB {
@@ -53,6 +54,14 @@ public:
 
     ColumnDef &makeDefault(const std::nullptr_t &value);
 
+    enum class DefaultType {
+        CurrentTime,
+        CurrentDate,
+        CurrentTimestamp,
+    };
+
+    ColumnDef &makeDefault(DefaultType defaultType);
+
     ColumnDef &
     makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
                 int size);
@@ -60,6 +69,8 @@ public:
     ColumnDef &makeNotNull();
 
     ColumnDef &makeUnique();
+
+    ColumnDef &makeForeignKey(const ForeignKey &foreignKey);
 };
 
 } //namespace WCDB

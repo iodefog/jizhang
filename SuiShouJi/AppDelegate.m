@@ -101,13 +101,13 @@ NSDate *SCYEnterBackgroundTime() {
     
     [self initUserDataWithFinishHandler:^(BOOL successfull){
 #ifdef DEBUG
-        // 如果要模拟用户登录，就开启此开关，并在simulateUserSync方法传入用户的id
+        // 如果要模拟用户登录，就开启此开关，并在simulateUserSync方法传入用户的id；如果用户还有未同步到server端的数据，将用户同步失败的json文件放到bundle中，并以“sync_data.json”命名
         BOOL simulateUserSync = NO;
 #else
         BOOL simulateUserSync = NO;
 #endif
         if (simulateUserSync) {
-            [SSJDataSynchronizeTask simulateUserSync:@"8ed837fa-2912-4ea3-af19-7762ba7ec563"];
+            [SSJDataSynchronizeTask simulateUserSync:@"ec0fd0d4-f2c1-4903-abd9-acabb6a48805"];
         } else {
             [[SSJDataSynchronizer shareInstance] startTimingSync];
             if (SSJIsUserLogined()) {

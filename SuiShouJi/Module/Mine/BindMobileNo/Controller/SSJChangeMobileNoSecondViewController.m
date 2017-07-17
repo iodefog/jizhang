@@ -138,13 +138,7 @@
             thirdVC.mobileNo = self.mobileNoField.text;
             [self.navigationController pushViewController:thirdVC animated:YES];
         }
-    } error:^(NSError *error) {
-        if (error.code == SSJErrorCodeMobileNoIllegal) {
-            [CDAutoHideMessageHUD showMessage:error.localizedDescription];
-        } else {
-            [SSJAlertViewAdapter showError:error];
-        }
-    }];
+    } error:NULL];
     
     RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
     RAC(self.viewModel, phoneNum) = [RACSignal merge:@[[self.mobileNoField rac_textSignal], RACObserve(self.mobileNoField, text)]];

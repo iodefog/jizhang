@@ -137,6 +137,10 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
     return 40;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 0.1;
+}
+
 #pragma mark - Private
 - (void)reloadData {
     if ([self.booksId isEqualToString:SSJAllBooksIds]) {

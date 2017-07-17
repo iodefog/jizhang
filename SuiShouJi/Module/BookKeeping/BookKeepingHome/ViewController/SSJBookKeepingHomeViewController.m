@@ -61,7 +61,7 @@
 #import "SSJCustomThemeManager.h"
 #import "SSJBooksTypeStore.h"
 
-#import "SSJDataBaseHelper.h";
+#import "SSJDataBaseHelper.h"
 
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
@@ -143,7 +143,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    SSJDataBaseHelper *help = [[SSJDataBaseHelper alloc] init];
 
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.homeBar];
@@ -169,6 +168,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    SSJDataBaseHelper *help = [[SSJDataBaseHelper alloc] init];
     
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {

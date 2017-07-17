@@ -153,11 +153,11 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
-                                offset:(const WCTOffset &)offset;
+                                 limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
-                                 limit:(const WCTLimit &)limit;
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
@@ -167,16 +167,11 @@
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCTCondition &)condition
-                                offset:(const WCTOffset &)offset;
-
-- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
-                             fromTable:(NSString *)tableName
-                                 where:(const WCTCondition &)condition
                                  limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
-                               orderBy:(const WCTOrderByList &)orderList
+                                 where:(const WCTCondition &)condition
                                 offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -186,13 +181,12 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                               orderBy:(const WCTOrderByList &)orderList
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
-                                 where:(const WCTCondition &)condition
-                               orderBy:(const WCTOrderByList &)orderList
+                                 limit:(const WCTLimit &)limit
                                 offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
@@ -203,16 +197,28 @@
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
+                                 where:(const WCTCondition &)condition
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                                offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                             fromTable:(NSString *)tableName
+                                 where:(const WCTCondition &)condition
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
+                             fromTable:(NSString *)tableName
+                               orderBy:(const WCTOrderByList &)orderList
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneColumnOnResult:(const WCTResult &)result
                              fromTable:(NSString *)tableName
                                  where:(const WCTCondition &)condition
                                orderBy:(const WCTOrderByList &)orderList
-                                offset:(const WCTOffset &)offset
-                                 limit:(const WCTLimit &)limit;
+                                 limit:(const WCTLimit &)limit
+                                offset:(const WCTOffset &)offset;
 
 #pragma mark - Get One Distinct Column
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -228,11 +234,11 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
-                                        offset:(const WCTOffset &)offset;
+                                         limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
-                                         limit:(const WCTLimit &)limit;
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
@@ -242,16 +248,11 @@
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCTCondition &)condition
-                                        offset:(const WCTOffset &)offset;
-
-- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
-                                     fromTable:(NSString *)tableName
-                                         where:(const WCTCondition &)condition
                                          limit:(const WCTLimit &)limit;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
-                                       orderBy:(const WCTOrderByList &)orderList
+                                         where:(const WCTCondition &)condition
                                         offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -261,13 +262,12 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                       orderBy:(const WCTOrderByList &)orderList
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
-                                         where:(const WCTCondition &)condition
-                                       orderBy:(const WCTOrderByList &)orderList
+                                         limit:(const WCTLimit &)limit
                                         offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
@@ -278,16 +278,28 @@
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
+                                         where:(const WCTCondition &)condition
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                        offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                     fromTable:(NSString *)tableName
+                                         where:(const WCTCondition &)condition
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
+
+- (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
+                                     fromTable:(NSString *)tableName
+                                       orderBy:(const WCTOrderByList &)orderList
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
 
 - (WCTOneColumn *)getOneDistinctColumnOnResult:(const WCTResult &)result
                                      fromTable:(NSString *)tableName
                                          where:(const WCTCondition &)condition
                                        orderBy:(const WCTOrderByList &)orderList
-                                        offset:(const WCTOffset &)offset
-                                         limit:(const WCTLimit &)limit;
+                                         limit:(const WCTLimit &)limit
+                                        offset:(const WCTOffset &)offset;
 
 #pragma mark - Get One Value
 - (id /* WCTValue* */)getOneValueOnResult:(const WCTResult &)result
@@ -427,6 +439,12 @@
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
                                         fromTable:(NSString *)tableName
+                                            where:(const WCTCondition &)condition
+                                            limit:(const WCTLimit &)limit
+                                           offset:(const WCTOffset &)offset;
+
+- (NSArray /* <WCTObject*> */ *)getObjectsOfClass:(Class)cls
+                                        fromTable:(NSString *)tableName
                                           orderBy:(const WCTOrderByList &)orderList
                                             limit:(const WCTLimit &)limit
                                            offset:(const WCTOffset &)offset;
@@ -498,6 +516,12 @@
                                           fromTable:(NSString *)tableName
                                               where:(const WCTCondition &)condition
                                             orderBy:(const WCTOrderByList &)orderList
+                                             offset:(const WCTOffset &)offset;
+
+- (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
+                                          fromTable:(NSString *)tableName
+                                              where:(const WCTCondition &)condition
+                                              limit:(const WCTLimit &)limit
                                              offset:(const WCTOffset &)offset;
 
 - (NSArray /* <WCTObject*> */ *)getObjectsOnResults:(const WCTResultList &)resultList
@@ -577,6 +601,12 @@
 
 - (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
                             fromTable:(NSString *)tableName
+                                where:(const WCTCondition &)condition
+                                limit:(const WCTLimit &)limit
+                               offset:(const WCTOffset &)offset;
+
+- (WCTColumnsXRows *)getRowsOnResults:(const WCTResultList &)resultList
+                            fromTable:(NSString *)tableName
                               orderBy:(const WCTOrderByList &)orderList
                                 limit:(const WCTLimit &)limit
                                offset:(const WCTOffset &)offset;
@@ -618,364 +648,392 @@
                           into:(NSString *)tableName;
 
 #pragma mark - Update Properties With Object
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object;
+- (BOOL)updateAllRowsInTable:(NSString *)tableName
+                onProperties:(const WCTPropertyList &)propertyList
+                  withObject:(WCTObject *)object;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
 #pragma mark - Update Property With Object
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object;
+- (BOOL)updateAllRowsInTable:(NSString *)tableName
+                  onProperty:(const WCTProperty &)property
+                  withObject:(WCTObject *)object;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-         withObject:(WCTObject *)object
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+               withObject:(WCTObject *)object
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
 #pragma mark - Update Properties With Row
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row;
+- (BOOL)updateAllRowsInTable:(NSString *)tableName
+                onProperties:(const WCTPropertyList &)propertyList
+                     withRow:(WCTOneRow *)row;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-       onProperties:(const WCTPropertyList &)propertyList
-            withRow:(WCTOneRow *)row
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsInTable:(NSString *)tableName
+             onProperties:(const WCTPropertyList &)propertyList
+                  withRow:(WCTOneRow *)row
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
 #pragma mark - Update Property With Value
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value;
+- (BOOL)updateAllRowsInTable:(NSString *)tableName
+                  onProperty:(const WCTProperty &)property
+                   withValue:(WCTValue *)value;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
-- (BOOL)updateTable:(NSString *)tableName
-         onProperty:(const WCTProperty &)property
-          withValue:(WCTValue *)value
-              where:(const WCTCondition &)condition
-            orderBy:(const WCTOrderByList &)orderList
-              limit:(const WCTLimit &)limit
-             offset:(const WCTOffset &)offset;
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
+
+- (BOOL)updateRowsInTable:(NSString *)tableName
+               onProperty:(const WCTProperty &)property
+                withValue:(WCTValue *)value
+                    where:(const WCTCondition &)condition
+                  orderBy:(const WCTOrderByList &)orderList
+                    limit:(const WCTLimit &)limit
+                   offset:(const WCTOffset &)offset;
 
 #pragma mark - Delete
 - (BOOL)deleteAllObjectsFromTable:(NSString *)tableName;
@@ -1024,6 +1082,11 @@
 - (BOOL)deleteObjectsFromTable:(NSString *)tableName
                          where:(const WCTCondition &)condition
                        orderBy:(const WCTOrderByList &)orderList
+                        offset:(const WCTOffset &)offset;
+
+- (BOOL)deleteObjectsFromTable:(NSString *)tableName
+                         where:(const WCTCondition &)condition
+                         limit:(const WCTLimit &)limit
                         offset:(const WCTOffset &)offset;
 
 - (BOOL)deleteObjectsFromTable:(NSString *)tableName
