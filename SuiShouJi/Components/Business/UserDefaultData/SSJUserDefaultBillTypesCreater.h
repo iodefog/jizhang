@@ -11,4 +11,10 @@
 
 @interface SSJUserDefaultBillTypesCreater : NSObject <SSJUserDefaultDataCreaterProtocol>
 
++ (void)createDefaultDataTypeForUserId:(NSString *)userId
+                               booksId:(NSString *)booksId
+                             booksType:(SSJBooksType)booksType
+                            inDatabase:(FMDatabase *)db
+                                 error:(NSError **)error;
+
 @end

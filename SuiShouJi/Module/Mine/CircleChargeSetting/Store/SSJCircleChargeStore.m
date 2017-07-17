@@ -20,7 +20,7 @@
             booksId = userid;
         }
         NSMutableArray *chargeList = [NSMutableArray array];
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.CCOIN , b.CNAME , b.CCOLOR , b.ITYPE as INCOMEOREXPENSE , b.ID , c.cbooksname , d.cacctname , d.cicoin from BK_CHARGE_PERIOD_CONFIG as a, BK_BILL_TYPE as b , bk_books_type as c , bk_fund_info as d where a.CUSERID = ? and a.OPERATORTYPE != 2 and a.IBILLID = b.ID and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.ITYPE ASC , A.IMONEY DESC",userid,booksId];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.cicoin as bill_img , b.cname , b.ccolor , b.itype as INCOMEOREXPENSE , b.cbillid , c.cbooksname , d.cacctname , d.cicoin as fund_img from bk_charge_period_config as a, bk_user_bill_type as b , bk_books_type as c , bk_fund_info as d where a.cuserid = ? and a.operatortype != 2 and a.ibillid = b.cbillid and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.itype ASC , A.imoney DESC",userid,booksId];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -31,7 +31,7 @@
         }
         while ([chargeResult next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [chargeResult stringForColumn:@"CCOIN"];
+            item.imageName = [chargeResult stringForColumn:@"bill_img"];
             item.typeName = [chargeResult stringForColumn:@"CNAME"];
             item.money = [chargeResult stringForColumn:@"IMONEY"];
             item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
@@ -47,7 +47,7 @@
             item.isOnOrNot = [chargeResult boolForColumn:@"ISTATE"];
             item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
             item.fundName = [chargeResult stringForColumn:@"CACCTNAME"];
-            item.fundImage = [chargeResult stringForColumn:@"cicoin"];
+            item.fundImage = [chargeResult stringForColumn:@"fund_img"];
             item.chargeCircleEndDate = [chargeResult stringForColumn:@"cbilldateend"];
             NSString *memberStr = [chargeResult stringForColumn:@"CMEMBERIDS"];
             item.membersItem = [NSMutableArray arrayWithCapacity:0];
@@ -83,13 +83,13 @@
         }
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
-        item.billId = [db stringForQuery:@"select a.id from bk_bill_type as a , bk_user_bill as b where b.istate = 1 and b.cuserid = ? and a.id = b.cbillid and a.itype = ? and b.cbooksid = ? order by b.iorder limit 1",userid,@(incomeOrExpence),booksId];
-        item.typeName = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.billId];
+        item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? order by iorder limit 1", userid, @(incomeOrExpence), booksId];
+        item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ?", item.billId];
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 order by iorder limit 1",userid];
         item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",item.fundId];
         item.fundImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",item.fundId ];
-        item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.billId];
+        item.imageName = [db stringForQuery:@"select cicoin from bk_user_bill_type where cbillid = ?",item.billId];
         SSJChargeMemberItem *memberItem = [[SSJChargeMemberItem alloc]init];
         memberItem.memberId = [NSString stringWithFormat:@"%@-0",userid];
         memberItem.memberName = @"我";

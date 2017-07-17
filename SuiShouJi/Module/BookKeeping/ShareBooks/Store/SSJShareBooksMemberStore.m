@@ -63,12 +63,12 @@
             case SSJBillTypeIncome:
             case SSJBillTypePay: {
                 NSString *incomeOrPayType = type == SSJBillTypeIncome ? @"0" : @"1";
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and ichargetype = ? and b.itype = ? and b.istate <> 2 order by a.cbilldate", memberId, booksId, incomeOrPayType, @(SSJChargeIdTypeShareBooks)];
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and ichargetype = ? and b.itype = ? order by a.cbilldate", memberId, booksId, incomeOrPayType, @(SSJChargeIdTypeShareBooks)];
                 
             }   break;
                 
             case SSJBillTypeSurplus: {
-                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_bill_type as b where a.cuserid = ? and a.ibillid = b.id and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and ichargetype = ? and b.istate <> 2 order by a.cbilldate", memberId, booksId, @(SSJChargeIdTypeShareBooks)];
+                result = [db executeQuery:@"select distinct strftime('%Y-%m', a.cbilldate) from bk_user_charge as a, bk_user_bill_type as b where a.cuserid = ? and a.ibillid = b.cbillid and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and a.cbooksid = ? and ichargetype = ? order by a.cbilldate", memberId, booksId, @(SSJChargeIdTypeShareBooks)];
                 
             }   break;
                 
@@ -205,7 +205,7 @@
             tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
-        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];
+        NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b where a.IBILLID = b.CBILLID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.itype = :type" mutableCopy];
         
         NSMutableDictionary *params_1 = [@{@"beginDateStr":beginDateStr,
                                            @"endDateStr":endDateStr,
@@ -243,7 +243,7 @@
         }
         
         //  查询不同收支类型相应的金额、名称、图标、颜色
-        NSMutableString *sql_2 = [@"select sum(a.imoney), b.id, b.cname, b.ccoin, b.ccolor from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type and b.istate <> 2" mutableCopy];
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.cbillid, b.cname, b.cicoin, b.ccolor from bk_user_charge as a, bk_user_bill_type as b where a.cuserid = :userId and a.ibillid = b.cbillid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type" mutableCopy];
         
         NSMutableDictionary *params_2 = [@{@"userId":memberId,
                                            @"beginDateStr":beginDateStr,
@@ -255,7 +255,7 @@
             [params_2 setObject:tBooksId forKey:@"booksId"];
         }
         
-        [sql_2 appendString:@" group by b.id"];
+        [sql_2 appendString:@" group by b.cbillid"];
         
         FMResultSet *resultSet = [db executeQuery:sql_2 withParameterDictionary:params_2];
         
@@ -270,11 +270,11 @@
         NSMutableArray *result = [@[] mutableCopy];
         while ([resultSet next]) {
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-            item.ID = [resultSet stringForColumn:@"id"];
+            item.ID = [resultSet stringForColumn:@"cbillid"];
             item.money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             item.scale = item.money / amount;
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
-            item.imageName = [resultSet stringForColumn:@"ccoin"];
+            item.imageName = [resultSet stringForColumn:@"cicoin"];
             item.name = [resultSet stringForColumn:@"cname"];
             [result addObject:item];
         }
@@ -301,7 +301,7 @@
         NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
         NSString *endDateStr = [endDate formattedDateWithFormat:@"yyyy-MM-dd"];
         
-        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_bill_type as b where a.cuserid = :userId and a.ibillid = b.id and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.istate <> 2" mutableCopy];
+        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_user_bill_type as b where a.cuserid = :userId and a.ibillid = b.cbillid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2" mutableCopy];
         
         NSMutableDictionary *params = [@{@"userId":memberId,
                                          @"beginDateStr":beginDateStr,

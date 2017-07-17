@@ -108,9 +108,9 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
         [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
             SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc]init];
             item.ID = weakSelf.selectedId;
-            item.title = [db stringForQuery:@"select cname from bk_bill_type where id = ?",item.ID];
-            item.imageName = [db stringForQuery:@"select ccoin from bk_bill_type where id = ?",item.ID];
-            item.colorValue = [db stringForQuery:@"select ccolor from bk_bill_type where id = ?",item.ID];
+            item.title = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ?",item.ID];
+            item.imageName = [db stringForQuery:@"select cicoin from bk_user_bill_type where cbillid = ?",item.ID];
+            item.colorValue = [db stringForQuery:@"select ccolor from bk_user_bill_type where cbillid = ?",item.ID];
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.typeSelectBlock) {
                     self.typeSelectBlock(item);

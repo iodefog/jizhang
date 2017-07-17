@@ -27,7 +27,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan, (int)SSJShareBooksMemberStateNormal];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_USER_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.CBILLID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan, (int)SSJShareBooksMemberStateNormal];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -39,7 +39,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         NSString *lastDetailDate = @"";
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.imageName = [resultSet stringForColumn:@"CICOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
@@ -196,7 +196,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_USER_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.CBILLID and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
@@ -210,7 +210,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         SSJFundingListDayItem *lastDayItem;
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.imageName = [resultSet stringForColumn:@"CICOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
@@ -425,7 +425,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                      failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.* from BK_USER_CHARGE a, BK_BILL_TYPE b  where a.IBILLID = b.ID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbooksid  = '%@' and a.cbilldate <= '%@' and a.ibillid <> '13' and a.ibillid <> '14' order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID, booksId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,0,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.* from BK_USER_CHARGE a, BK_USER_BILL_TYPE b  where a.IBILLID = b.CBILLID and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbooksid  = '%@' and a.cbilldate <= '%@' and a.ibillid <> '13' and a.ibillid <> '14' order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID, booksId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -437,7 +437,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         NSString *lastDetailDate = @"";
         while ([resultSet next]) {
             SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc] init];
-            item.imageName = [resultSet stringForColumn:@"CCOIN"];
+            item.imageName = [resultSet stringForColumn:@"CICOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
             item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];

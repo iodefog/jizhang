@@ -59,7 +59,7 @@
 
 + (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
-        if (![db boolForQuery:@"select count(*) from BK_BILL_TYPE where ID = ?", recordInfo[@"cbillid"]]) {
+        if (![db boolForQuery:@"select count(*) from BK_USER_BILL_TYPE where CBILLID = ?", recordInfo[@"cbillid"]]) {
             continue;
         }
         

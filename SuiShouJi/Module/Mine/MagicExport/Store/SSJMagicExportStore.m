@@ -41,7 +41,7 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
             sql = @"select max(cbilldate) as maxDate, min(cbilldate) as minDate from bk_user_charge where (ichargetype <> :shareChargeType and ichargetype <> :loanChargeType and cuserid = :userId and cbilldate <= datetime('now', 'localtime')) or (ichargetype = :loanChargeType and cuserid = :userId) or (ichargetype = :shareChargeType and cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) and cbilldate <= datetime('now', 'localtime')) and operatortype <> 2";
         } else {
             params[@"booksId"] = tBooksId;
-            sql = @"select max(uc.cbilldate) as maxDate, min(uc.cbilldate) as minDate from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.cbooksid = :booksId and bt.istate <> 2";
+            sql = @"select max(uc.cbilldate) as maxDate, min(uc.cbilldate) as minDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.cbooksid = :booksId";
         }
         
         FMResultSet *result = [db executeQuery:sql withParameterDictionary:params];
@@ -114,10 +114,10 @@ NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey"
                         @"shareChargeType":@(SSJChargeIdTypeShareBooks),
                         @"loanChargeType":@(SSJChargeIdTypeLoan),
                         @"memberState":@(SSJShareBooksMemberStateNormal)} mutableCopy];
-            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where (uc.ichargetype <> :shareChargeType and uc.ichargetype <> :loanChargeType and uc.cuserid = :userId and uc.cbilldate <= datetime('now', 'localtime')) or (uc.ichargetype = :loanChargeType and uc.cuserid = :userId) or (uc.ichargetype = :shareChargeType and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) and uc.cbilldate <= datetime('now', 'localtime')) and uc.operatortype <> 2" mutableCopy];
+            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_user_bill_type as bt where (uc.ichargetype <> :shareChargeType and uc.ichargetype <> :loanChargeType and uc.cuserid = :userId and uc.cbilldate <= datetime('now', 'localtime')) or (uc.ichargetype = :loanChargeType and uc.cuserid = :userId) or (uc.ichargetype = :shareChargeType and uc.cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) and uc.cbilldate <= datetime('now', 'localtime')) and uc.operatortype <> 2" mutableCopy];
         } else {
             params = [@{} mutableCopy];
-            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_bill_type as bt where uc.ibillid = bt.id and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')" mutableCopy];
+            sql = [@"select distinct(uc.cbilldate) from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')" mutableCopy];
             if ([tBooksId isEqualToString:SSJAllBooksIds]) {
                 params[@"userId"] = SSJUSERID();
                 [sql appendString:@" and uc.cuserid = :userId"];
