@@ -27,7 +27,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
-        if (!booksid) {
+        if (!booksid.length) {
             booksid = userid;
         }
         NSMutableArray *originalChargeArr = [NSMutableArray array];
@@ -140,6 +140,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
+        booksid = booksid.length > 0 ? booksid : userid;
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
         
         double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.id and bt.itype = %d and operatortype <> 2 and bt.istate <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];

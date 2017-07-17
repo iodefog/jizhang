@@ -212,8 +212,11 @@
 - (void )queryCurrentCategoryForUserId:(NSString *)userId {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *currentBookId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
-        BOOL iShareBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,userId];
-        if (iShareBook) {//是个人账本
+        if (!currentBookId.length) {
+            currentBookId = userId;
+        }
+        BOOL isPersonalBook = [db boolForQuery:@"select count(*) from bk_books_type where cbooksid = ? and operatortype <> 2 and cuserid = ?",currentBookId,userId];
+        if (isPersonalBook) {//是个人账本
             SSJSaveBooksCategory(SSJBooksCategoryPersional);
         } else { //共享账本
             SSJSaveBooksCategory(SSJBooksCategoryPublic);
