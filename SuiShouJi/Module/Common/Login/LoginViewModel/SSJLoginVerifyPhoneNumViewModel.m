@@ -420,7 +420,7 @@
     //  只要登录就设置用户为已注册，因为9188账户、第三方登录没有注册就可以登录
     self.userItem.registerState = @"1";
     
-    if (!self.userItem.currentBooksId) {
+    if (!self.userItem.currentBooksId.length) {
         self.userItem.currentBooksId = self.userItem.userId;
     }
     
