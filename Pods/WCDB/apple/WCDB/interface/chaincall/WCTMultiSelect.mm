@@ -86,6 +86,7 @@
 - (WCTMultiObject *)nextMultiObject
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
+<<<<<<< HEAD
     if ([self lazyPrepare] && [self next]) {
         NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];
         int index = 0;
@@ -118,49 +119,62 @@
             ++index;
         }
         return multiObject;
+=======
+    if (![self lazyPrepare]) {
+        return nil;
+>>>>>>> 01d42f8b2b3af744ff65778e82d16c0df5fb50e2
     }
-    return nil;
+    return [self _nextMultiObject];
 }
 
 - (NSArray<WCTMultiObject *> *)allMultiObjects
 {
     WCDB::ScopedTicker scopedTicker(_ticker);
-    if ([self lazyPrepare]) {
-        NSMutableArray *allMultiObjects = [[NSMutableArray alloc] init];
-        NSMutableDictionary *multiObject = nil;
-        int index = 0;
-        while ([self next]) {
-            multiObject = [[NSMutableDictionary alloc] init];
-            index = 0;
-            for (const WCTResult &result : _resultList) {
-                const char *columnTableName = _statementHandle->getColumnTableName(index);
-                Class cls = result.getBindingClass();
-                if (columnTableName && cls) {
-                    NSString *tableName = @(columnTableName);
-                    WCTObject *object = [multiObject objectForKey:tableName];
-                    if (!object) {
-                        object = [[cls alloc] init];
-                        [multiObject setObject:object forKey:tableName];
-                    }
-                    if (![self extractPropertyToObject:object
-                                               atIndex:index
-                                     withColumnBinding:result.getColumnBinding()]) {
-                        return nil;
-                    };
-                } else {
-                    if (!columnTableName) {
-                        WCDB::Error::Warning("Extracting multi object with an empty table name");
-                    }
-                    if (!cls) {
-                        WCDB::Error::Warning("Extracting multi object with an empty binding cls");
-                    }
-                }
-                ++index;
+    if (![self lazyPrepare]) {
+        return nil;
+    }
+    NSMutableArray *allMultiObjects = [[NSMutableArray alloc] init];
+    WCTMultiObject *multiObject = nil;
+    while ((multiObject = [self _nextMultiObject])) {
+        [allMultiObjects addObject:multiObject];
+    }
+    return _error.isOK() ? allMultiObjects : nil;
+}
+
+- (WCTMultiObject *)_nextMultiObject
+{
+    if (!_statementHandle->step() || !_error.isOK()) {
+        [self finalize];
+        return nil;
+    }
+    NSMutableDictionary *multiObject = [[NSMutableDictionary alloc] init];
+    int index = 0;
+    for (const WCTResult &result : _resultList) {
+        const char *columnTableName = _statementHandle->getColumnTableName(index);
+        Class cls = result.getBindingClass();
+        if (columnTableName && cls) {
+            NSString *tableName = @(columnTableName);
+            WCTObject *object = [multiObject objectForKey:tableName];
+            if (!object) {
+                object = [[cls alloc] init];
+                [multiObject setObject:object forKey:tableName];
+            }
+            if (![self extractPropertyToObject:object
+                                       atIndex:index
+                             withColumnBinding:result.getColumnBinding()]) {
+                return nil;
+            };
+        } else {
+            if (!columnTableName) {
+                WCDB::Error::Warning("Extracting multi object with an empty table name");
+            }
+            if (!cls) {
+                WCDB::Error::Warning("Extracting multi object with an empty binding cls");
             }
         }
-        return _error.isOK() ? allMultiObjects : nil;
+        ++index;
     }
-    return nil;
+    return multiObject;
 }
 
 @end

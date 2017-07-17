@@ -30,8 +30,8 @@
 
 + (NSString *)TableName;
 
-@property(nonatomic, retain) NSString *name;
-@property(nonatomic, assign) int seq;
+@property(retain) NSString *name;
+@property(assign) int seq;
 
 WCDB_PROPERTY(name)
 WCDB_PROPERTY(seq)

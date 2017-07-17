@@ -37,6 +37,7 @@ public:
         , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
+        , m_defaultValue(nil)
     {
     }
 
@@ -52,6 +53,7 @@ public:
         , m_columnDef(cn, (WCDB::ColumnType) accessor->getColumnType())
         , m_isAutoIncrement(false)
         , m_isPrimary(false)
+        , m_defaultValue(nil)
     {
     }
 
@@ -82,15 +84,10 @@ public:
         m_columnDef.makeDefault(defaultValue);
     }
 
-    template <typename T>
-    void makeDefault(WCTDefaultType defaultType)
-    {
-        m_columnDef.makeDefault((WCDB::ColumnDef::DefaultType) defaultType);
-    }
-
 protected:
     void makeDefaultObjC(WCTValue *defaultValue);
     bool m_isPrimary;
     bool m_isAutoIncrement;
+    WCTValue *m_defaultValue;
     WCTColumnDef m_columnDef;
 };

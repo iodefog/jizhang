@@ -148,6 +148,8 @@
 }
 
 - (void)loginNormalWithPassWord:(NSString*)password AndUserAccount:(NSString*)useraccount subscriber:(id<RACSubscriber>) subscriber {
+    if (!password.length) return;
+    if (!useraccount.length) return;
     self.loginType = SSJLoginTypeNormal;
     self.netWorkService.showLodingIndicator = YES;
     self.openId = @"";

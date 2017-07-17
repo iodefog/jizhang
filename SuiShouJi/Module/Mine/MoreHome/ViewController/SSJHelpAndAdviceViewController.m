@@ -8,6 +8,7 @@
 
 #import "SSJHelpAndAdviceViewController.h"
 #import "SSJProductAdviceViewController.h"
+#import "SSJAdWebViewController.h"
 
 @interface SSJHelpAndAdviceViewController ()<UIWebViewDelegate>
 
@@ -86,5 +87,13 @@
     return _webView;
 }
 
+
+-(void)goBackAction{
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
 
 @end

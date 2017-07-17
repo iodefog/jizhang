@@ -31,7 +31,6 @@
 @implementation WCTInsert {
     WCTPropertyList _propertyList;
     WCDB::StatementInsert _statement;
-    BOOL _replace;
 }
 
 - (instancetype)initWithCore:(const std::shared_ptr<WCDB::CoreBase> &)core andClass:(Class)cls andTableName:(NSString *)tableName andReplaceFlag:(BOOL)replace
@@ -46,13 +45,12 @@
                                          &_error);
             return self;
         }
-        _replace = replace;
         const WCTPropertyList &propertyList = [cls AllProperties];
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
                          .insert(tableName.UTF8String,
                                  _propertyList,
-                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
                          .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
@@ -70,12 +68,11 @@
                                          &_error);
             return self;
         }
-        _replace = replace;
         _propertyList.insert(_propertyList.begin(), propertyList.begin(), propertyList.end());
         _statement = WCDB::StatementInsert()
                          .insert(tableName.UTF8String,
                                  _propertyList,
-                                 _replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
+                                 replace ? WCDB::Conflict::Replace : WCDB::Conflict::NotSet)
                          .values(WCDB::ExprList(_propertyList.size(), WCDB::Expr::BindParameter));
     }
     return self;
@@ -87,22 +84,15 @@
     if (!statementHandle) {
         return NO;
     }
-    int index;
-    BOOL fillLastInsertedRowID = [objects[0] respondsToSelector:@selector(lastInsertedRowID)];
     for (WCTObject *object in objects) {
-        index = 1;
+        int index = 1;
         for (const WCTProperty &property : _propertyList) {
-            const std::shared_ptr<WCTColumnBinding> &columnBinding = property.getColumnBinding();
-            if (!_replace && columnBinding->isPrimary() && columnBinding->isAutoIncrement() && object.isAutoIncrement) {
-                statementHandle->bind<(WCDB::ColumnType) WCTColumnTypeNil>(index);
-            } else {
-                if (![self bindProperty:property
-                                 ofObject:object
-                        toStatementHandle:statementHandle
-                                  atIndex:index
-                                withError:error]) {
-                    return NO;
-                }
+            if (![self bindProperty:property
+                             ofObject:object
+                    toStatementHandle:statementHandle
+                              atIndex:index
+                            withError:error]) {
+                return NO;
             }
             ++index;
         }
@@ -111,9 +101,7 @@
             error = statementHandle->getError();
             return NO;
         }
-        if (fillLastInsertedRowID) {
-            object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
-        }
+        object.lastInsertedRowID = statementHandle->getLastInsertedRowID();
         statementHandle->resetBinding();
         if (!statementHandle->isOK()) {
             error = statementHandle->getError();

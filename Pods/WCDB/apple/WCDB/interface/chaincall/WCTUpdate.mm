@@ -104,7 +104,6 @@
                                      &_error);
         return NO;
     }
-
     WCDB::RecyclableStatement statementHandle = _core->prepare(_statement, _error);
     if (!statementHandle) {
         return NO;

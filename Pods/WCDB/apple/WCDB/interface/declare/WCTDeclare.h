@@ -103,14 +103,6 @@ typedef NS_ENUM(int, WCTColumnType) {
     WCTColumnTypeBinary = (WCTColumnType) WCDB::ColumnType::BLOB,
     WCTColumnTypeNil = (WCTColumnType) WCDB::ColumnType::Null,
 };
-typedef NS_ENUM(int, WCTDefaultType) {
-    WCTDefaultTypeCurrentTime = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentTime,
-    WCTDefaultTypeCurrentDate = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentDate,
-    WCTDefaultTypeCurrentTimestamp = (WCTDefaultType)
-        WCDB::ColumnDef::DefaultType::CurrentTimestamp,
-};
 
 #pragma mark - StatementHandle
 @class WCTStatement;

@@ -53,14 +53,6 @@ public:
 
     ColumnDef &makeDefault(const std::nullptr_t &value);
 
-    enum class DefaultType {
-        CurrentTime,
-        CurrentDate,
-        CurrentTimestamp,
-    };
-
-    ColumnDef &makeDefault(DefaultType defaultType);
-
     ColumnDef &
     makeDefault(const typename ColumnTypeInfo<ColumnType::BLOB>::CType &value,
                 int size);
