@@ -86,10 +86,15 @@
             [SSJUserTableManager reloadUserIdWithSuccess:^{
                 SSJLoginVerifyPhoneViewController *loginVC = [[SSJLoginVerifyPhoneViewController alloc] init];
                 loginVC.finishHandle = ^(UIViewController *controller) {
-                    // 登录成功后保存新的指纹数据
-                    LAContext *context = [[LAContext alloc] init];
-                    context.localizedFallbackTitle = @"";
-                    if ([context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil]) {
+                    if (error.code == LAErrorTouchIDNotEnrolled) {
+                        // 没有指纹录入要把指纹数据清空并且关闭指纹开关
+                        SSJUpdateEvaluatedPolicyDomainState(nil);
+                        userItem.fingerPrintState = @"0";
+                        [SSJUserTableManager saveUserItem:userItem success:NULL failure:^(NSError * _Nonnull error) {
+                            [CDAutoHideMessageHUD showMessage:error.localizedDescription];
+                        }];
+                    } else {
+                        // 登录成功后保存新的指纹数据
                         SSJUpdateEvaluatedPolicyDomainState(context.evaluatedPolicyDomainState);
                     }
                     
@@ -100,7 +105,12 @@
                 SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
                 [currentVC presentViewController:naviVC animated:animated completion:NULL];
                 
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                if (error.code == LAErrorTouchIDNotEnrolled) {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息已被移除，请重新登录，若要重新开启指纹密码，请先在系统设置中添加指纹" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                } else {
+                    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您的指纹信息发生变更，请重新登录" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
+                }
+                
             } failure:^(NSError * _Nonnull error) {
                 [SSJAlertViewAdapter showError:error];
             }];
