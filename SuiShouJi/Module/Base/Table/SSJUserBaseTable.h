@@ -1,5 +1,5 @@
 //
-//  SSJSyncTable.h
+//  SSJUserBaseTable.h
 //  SuiShouJi
 //
 //  Created by ricky on 2017/7/17.
@@ -8,7 +8,7 @@
 
 #import <WCDB/WCDB.h>
 
-@interface SSJSyncTable : NSObject <WCTTableCoding>
+@interface SSJUserBaseTable : NSObject <WCTTableCoding>
 
 /*
 @property(nonatomic, assign) int primary;

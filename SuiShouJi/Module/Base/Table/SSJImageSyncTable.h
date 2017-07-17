@@ -10,25 +10,24 @@
 
 @interface SSJImageSyncTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* Id;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* imageName;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, assign) int syncType;
+
+@property (nonatomic, assign) int syncState;
+
+
+WCDB_PROPERTY(Id)
+WCDB_PROPERTY(imageName)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(syncType)
+WCDB_PROPERTY(syncState)
 
 @end

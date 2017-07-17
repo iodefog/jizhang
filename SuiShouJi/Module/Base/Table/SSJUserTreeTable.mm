@@ -1,14 +1,14 @@
 //
-//  SSJSyncTable.mm
+//  SSJUserTreeTable.mm
 //  SuiShouJi
 //
 //  Created by ricky on 2017/7/17.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJSyncTable.h"
+#import "SSJUserTreeTable.h"
 
-@implementation SSJSyncTable
+@implementation SSJUserTreeTable
 
 /*
 @synthesize primary;
@@ -20,7 +20,7 @@
 */
 
 //The order of the definitions is the order of the fields in the database
-WCDB_IMPLEMENTATION(SSJSyncTable)
+WCDB_IMPLEMENTATION(SSJUserTreeTable)
 /*
 //Primary Key
 WCDB_SYNTHESIZE(TestTemplate, primary)

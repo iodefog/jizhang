@@ -10,37 +10,48 @@
 
 @implementation SSJLoanTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize loanId;
+@synthesize userId;
+@synthesize lender;
+@synthesize money;
+@synthesize fundId;
+@synthesize targetFundid;
+@synthesize endTargetFundid;
+@synthesize borrowDate;
+@synthesize repaymentDate;
+@synthesize endDate;
+@synthesize rate;
+@synthesize memo;
+@synthesize interest;
+@synthesize remindId;
+@synthesize type;
+@synthesize end;
+@synthesize interestType;
+@synthesize operatorType;
+@synthesize version;
 
-//The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJLoanTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
 
-//Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, loanId, "LOANID")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, lender, "LENDER")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, money, "JMONEY")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, fundId, "CTHEFUNDID")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, targetFundid, "CTARGETFUNDID")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, endTargetFundid, "CETARGET")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, borrowDate, "CBORROWDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, repaymentDate, "CREPAYMENTDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, endDate, "CENDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, rate, "RATE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, memo, "MEMO")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, interest, "INTEREST")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, remindId, "CREMINDID")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, type, "ITYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, end, "IEND")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, interestType, "INTERESTTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, writeDate, "ITYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, operatorType, "ITYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJLoanTable, version, "ITYPE")
+
 
 @end
