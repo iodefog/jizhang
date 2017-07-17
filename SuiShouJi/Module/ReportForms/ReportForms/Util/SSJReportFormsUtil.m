@@ -35,7 +35,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         // 查询有数据的月份
         NSMutableDictionary *params = [@{} mutableCopy];
@@ -193,7 +193,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSError *error = nil;
@@ -303,7 +303,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userID];
-            tBooksId = tBooksId ?: userID;
+            tBooksId = tBooksId.length > 0 ? tBooksId : userID;
         }
         
         NSError *error = nil;
@@ -410,7 +410,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSString *beginDateStr = [startDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -535,7 +535,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
@@ -627,7 +627,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
@@ -745,7 +745,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
@@ -829,7 +829,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];

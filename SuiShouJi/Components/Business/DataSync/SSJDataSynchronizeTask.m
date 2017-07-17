@@ -696,14 +696,18 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         NSError *error = nil;
         NSString *path = [[NSBundle mainBundle] pathForResource:@"sync_data" ofType:@"json"];
         NSData *jsonData = [NSData dataWithContentsOfFile:path];
-        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
         
+        if (!jsonData) {
+            [subscriber sendCompleted];
+            return nil;
+        }
+        
+        NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
         SSJDataSynchronizeTask *task = [SSJDataSynchronizeTask task];
         task.userId = SSJUSERID();
         //  合并数据
         if ([task mergeData:data error:&error]) {
             [task extraProcessAfterMerge];
-            [subscriber sendNext:nil];
             [subscriber sendCompleted];
         } else {
             [subscriber sendError:error];

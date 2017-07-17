@@ -87,7 +87,6 @@
     return _webView;
 }
 
-
 -(void)goBackAction{
     if (self.webView.canGoBack) {
         [self.webView goBack];

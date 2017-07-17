@@ -38,16 +38,24 @@
 
 #include <WCDB/statement.hpp>
 #include <WCDB/statement_alter_table.hpp>
+#include <WCDB/statement_attach.hpp>
 #include <WCDB/statement_create_index.hpp>
 #include <WCDB/statement_create_table.hpp>
 #include <WCDB/statement_create_virtual_table.hpp>
 #include <WCDB/statement_delete.hpp>
+#include <WCDB/statement_detach.hpp>
 #include <WCDB/statement_drop_index.hpp>
 #include <WCDB/statement_drop_table.hpp>
+#include <WCDB/statement_explain.hpp>
 #include <WCDB/statement_insert.hpp>
 #include <WCDB/statement_pragma.hpp>
+#include <WCDB/statement_reindex.hpp>
+#include <WCDB/statement_release.hpp>
+#include <WCDB/statement_rollback.hpp>
+#include <WCDB/statement_savepoint.hpp>
 #include <WCDB/statement_select.hpp>
 #include <WCDB/statement_transaction.hpp>
 #include <WCDB/statement_update.hpp>
+#include <WCDB/statement_vacuum.hpp>
 
 #endif /* WINQ_h */
