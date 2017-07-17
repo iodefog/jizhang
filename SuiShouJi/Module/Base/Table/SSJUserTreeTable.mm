@@ -10,37 +10,28 @@
 
 @implementation SSJUserTreeTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize userId;
+@synthesize signIn;
+@synthesize signInDate;
+@synthesize hasShaked;
+@synthesize treeImgUrl;
+@synthesize treeGifUrl;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJUserTreeTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, signIn, "ISIGNIN")
+WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, signInDate, "ISIGNINDATE")
+WCDB_SYNTHESIZE_COLUMN_DEFAULT(SSJUserTreeTable, hasShaked, "HASSHAKED", 0)
+WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, treeImgUrl, "TREEIMGURL")
+WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, treeGifUrl, "TREEGIFURL")
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_PRIMARY(SSJUserTreeTable, userId)
+
+WCDB_NOT_NULL(SSJUserTreeTable, userId)
+WCDB_NOT_NULL(SSJUserTreeTable, signIn)
+WCDB_NOT_NULL(SSJUserTreeTable, signInDate)
 
 @end

@@ -10,25 +10,41 @@
 
 @interface SSJUserBillTypeTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* billId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* booksId;
+
+@property (nonatomic, retain) NSString* billType;
+
+@property (nonatomic, retain) NSString* billName;
+
+@property (nonatomic, retain) NSString* billColor;
+
+@property (nonatomic, retain) NSString* billIcon;
+
+@property (nonatomic, assign) int billOrder;
+
+@property (nonatomic, retain) NSString* addDate;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, assign) long long version;
+
+WCDB_PROPERTY(billId)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(booksId)
+WCDB_PROPERTY(billType)
+WCDB_PROPERTY(billName)
+WCDB_PROPERTY(billColor)
+WCDB_PROPERTY(billIcon)
+WCDB_PROPERTY(billOrder)
+WCDB_PROPERTY(addDate)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(version)
 
 @end

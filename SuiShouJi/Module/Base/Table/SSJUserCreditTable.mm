@@ -10,37 +10,34 @@
 
 @implementation SSJUserCreditTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize cardId;
+@synthesize cardQuota;
+@synthesize billingDate;
+@synthesize repaymentDate;
+@synthesize userId;
+@synthesize writeDate;
+@synthesize version;
+@synthesize operatorType;
+@synthesize remindId;
+@synthesize billDateSettlement;
+@synthesize type;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJUserCreditTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, cardId, "CFUNDID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, cardQuota, "IQUOTA")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, billingDate, "CBILLDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, repaymentDate, "CREPAYMENTDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, operatorType, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, remindId, "CREMINDID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, billDateSettlement, "IBILLDATESETTLEMENT")
+WCDB_SYNTHESIZE_COLUMN(SSJUserCreditTable, type, "ITYPE")
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_PRIMARY(SSJUserCreditTable, cardId)
 
 @end

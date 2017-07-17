@@ -10,37 +10,36 @@
 
 @implementation SSJUserRemindTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize remindId;
+@synthesize userId;
+@synthesize remindName;
+@synthesize memo;
+@synthesize startDate;
+@synthesize state;
+@synthesize version;
+@synthesize writeDate;
+@synthesize operatorType;
+@synthesize type;
+@synthesize cycle;
+@synthesize isEnd;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJUserRemindTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, remindId, "CREMINDID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, remindName, "CREMINDNAME")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, memo, "CMEMO")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, startDate, "CSTARTDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, state, "ISTATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, operatorType, "OPERATORTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, type, "ITYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, cycle, "ICYCLE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserRemindTable, isEnd, "IISEND")
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_PRIMARY(SSJUserRemindTable, remindId)
 
 @end

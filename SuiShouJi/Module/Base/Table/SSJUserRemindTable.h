@@ -10,25 +10,42 @@
 
 @interface SSJUserRemindTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* remindId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* remindName;
+
+@property (nonatomic, retain) NSString* memo;
+
+@property (nonatomic, retain) NSString* startDate;
+
+@property (nonatomic, retain) NSString* state;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) int type;
+
+@property (nonatomic, assign) int cycle;
+
+@property (nonatomic, assign) int isEnd;
+
+
+WCDB_PROPERTY(remindId)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(remindName)
+WCDB_PROPERTY(memo)
+WCDB_PROPERTY(startDate)
+WCDB_PROPERTY(state)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(type)
+WCDB_PROPERTY(cycle)
+WCDB_PROPERTY(isEnd)
 
 @end
