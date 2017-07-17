@@ -86,5 +86,13 @@
     return _webView;
 }
 
+- (void)goBackAction {
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+        return;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 @end
