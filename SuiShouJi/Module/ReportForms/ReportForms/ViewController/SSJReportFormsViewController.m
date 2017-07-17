@@ -261,7 +261,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         return 40;
         return self.payIncomeSurplusControl.height;
     }
-    return 0;
+    return 0.1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {

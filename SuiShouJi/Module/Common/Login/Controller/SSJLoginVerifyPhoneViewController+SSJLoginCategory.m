@@ -24,7 +24,7 @@
         SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVC];
         [currentVC presentViewController:naviVC animated:YES completion:NULL];
     } failure:^(NSError * _Nonnull error) {
-        [CDAutoHideMessageHUD showMessage:error.localizedDescription];
+        [SSJAlertViewAdapter showError:error];
     }];
     
     return YES;

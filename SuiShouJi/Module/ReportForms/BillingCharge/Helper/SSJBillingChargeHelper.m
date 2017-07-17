@@ -34,7 +34,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSArray *result = nil;
@@ -137,7 +137,7 @@ NSString *const SSJBillingChargeRecordKey = @"SSJBillingChargeRecordKey";
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSArray *result = nil;

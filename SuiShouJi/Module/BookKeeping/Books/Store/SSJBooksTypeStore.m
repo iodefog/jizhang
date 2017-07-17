@@ -23,6 +23,8 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
         NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
+        booksid = booksid.length > 0 ? booksid : SSJUSERID();
+        
         FMResultSet *rs;
         id currentBooksItem;
         if ([db boolForQuery:@"select count(1) from bk_books_type where cbooksid = ?",booksid]) {

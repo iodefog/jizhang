@@ -202,7 +202,7 @@
         NSString *tBooksId = booksId;
         if (!tBooksId) {
             tBooksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", SSJUSERID()];
-            tBooksId = tBooksId ?: SSJUSERID();
+            tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         
         NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_BILL_TYPE as b where a.IBILLID = b.ID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.cuserid = :userId and a.operatortype <> 2 and b.istate <> 2 and b.itype = :type" mutableCopy];

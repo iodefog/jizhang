@@ -16,7 +16,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
-        if (!booksId) {
+        if (!booksId.length) {
             booksId = userid;
         }
         NSMutableArray *chargeList = [NSMutableArray array];
@@ -78,7 +78,7 @@
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
-        if (!booksId) {
+        if (!booksId.length) {
             booksId = userid;
         }
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
@@ -133,7 +133,7 @@
         NSString *userid = SSJUSERID();
         if (!item.booksId.length) {
             item.booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
-            item.booksId = item.booksId ?: userid;
+            item.booksId = item.booksId.length > 0 ? item.booksId : userid;
         }
         if (!item.sundryId.length) {
             item.sundryId = SSJUUID();
