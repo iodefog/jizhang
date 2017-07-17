@@ -8,7 +8,7 @@
 
 #import <WCDB/WCDB.h>
 
-@interface SSJUserChargeMergeTable : NSObject <WCTTableCoding>
+@interface SSJUserChargeTable : NSObject <WCTTableCoding>
 
 @property (nonatomic, retain) NSString* chargeId;
 
