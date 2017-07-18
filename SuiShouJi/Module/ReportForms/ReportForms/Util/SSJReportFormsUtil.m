@@ -39,7 +39,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         // 查询有数据的月份
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [@"select distinct strftime('%Y-%m', cbilldate) from bk_user_charge where cbilldate <= datetime('now', 'localtime') and operatortype <> 2" mutableCopy];
+        NSMutableString *sql = [@"select distinct strftime('%Y-%m', uc.cbilldate) from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件

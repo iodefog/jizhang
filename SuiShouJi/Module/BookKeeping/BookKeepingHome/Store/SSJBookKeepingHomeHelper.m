@@ -143,9 +143,9 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         booksid = booksid.length > 0 ? booksid : userid;
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
         
-        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];
+        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];
         
-        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypePay]];
+        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypePay]];
         
         [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
         
