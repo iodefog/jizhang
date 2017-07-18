@@ -217,10 +217,6 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    textField.clearsOnInsertion = YES;
-}
-
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kBudgetMoneyTextFieldTag) {
         SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
@@ -231,6 +227,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             [self updateRemindMoneyScaleWithCell:cell];
         }
     }
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == kBudgetMoneyTextFieldTag) {
+        self.model.budgetMoney = 0;
+    } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        self.model.remindMoney = 0;
+    }
+    return YES;
 }
 
 #pragma mark - Event
@@ -549,7 +554,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetMoneyCell.imageView.image = [[UIImage imageNamed:@"xuhuan_jine"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetMoneyCell.textField.tag = kBudgetMoneyTextFieldTag;
         budgetMoneyCell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
+        budgetMoneyCell.textField.placeholder = @"¥0.00";
         budgetMoneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        budgetMoneyCell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         budgetMoneyCell.textField.delegate = self;
         budgetMoneyCell.textField.rightView = nil;
         budgetMoneyCell.detailTextLabel.text = nil;
@@ -573,6 +580,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetScaleCell.textField.tag = kBudgetRemindScaleTextFieldTag;
         budgetScaleCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetScaleCell.textField.delegate = self;
+        budgetScaleCell.textField.placeholder = @"0.0";
         
         [self updateRemindMoneyScaleWithCell:budgetScaleCell];
         [self updateRemindMoneyWithCell:budgetScaleCell];
