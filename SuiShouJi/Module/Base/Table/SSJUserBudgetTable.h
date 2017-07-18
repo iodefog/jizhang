@@ -10,25 +10,57 @@
 
 @interface SSJUserBudgetTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* budgetId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* budgetType;
+
+@property (nonatomic, assign) double money;
+
+@property (nonatomic, assign) double remindMoney;
+
+@property (nonatomic, retain) NSString* startDate;
+
+@property (nonatomic, retain) NSString* endDate;
+
+@property (nonatomic, assign) int budgetState;
+
+@property (nonatomic, retain) NSString* addDate;
+
+@property (nonatomic, retain) NSString* billType;
+
+@property (nonatomic, assign) int needRemind;
+
+@property (nonatomic, assign) int hasRemind;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, retain) NSString* booksId;
+
+@property (nonatomic, assign) int isLastDay;
+
+
+WCDB_PROPERTY(budgetId)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(budgetType)
+WCDB_PROPERTY(money)
+WCDB_PROPERTY(remindMoney)
+WCDB_PROPERTY(startDate)
+WCDB_PROPERTY(endDate)
+WCDB_PROPERTY(budgetState)
+WCDB_PROPERTY(addDate)
+WCDB_PROPERTY(billType)
+WCDB_PROPERTY(needRemind)
+WCDB_PROPERTY(hasRemind)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(booksId)
+WCDB_PROPERTY(isLastDay)
 
 @end

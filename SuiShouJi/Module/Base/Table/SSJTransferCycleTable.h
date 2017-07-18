@@ -10,25 +10,48 @@
 
 @interface SSJTransferCycleTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* cycleId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* transferInId;
+
+@property (nonatomic, retain) NSString* transferOutId;
+
+@property (nonatomic, assign) double money;
+
+@property (nonatomic, retain) NSString* memo;
+
+@property (nonatomic, assign) int cycleType;
+
+@property (nonatomic, retain) NSString* beginDate;
+
+@property (nonatomic, retain) NSString* endDate;
+
+@property (nonatomic, assign) int cycleState;
+
+@property (nonatomic, retain) NSString* clintAddDate;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, assign) int operatorType;
+
+
+WCDB_PROPERTY(cycleId)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(transferInId)
+WCDB_PROPERTY(transferOutId)
+WCDB_PROPERTY(money)
+WCDB_PROPERTY(memo)
+WCDB_PROPERTY(cycleType)
+WCDB_PROPERTY(beginDate)
+WCDB_PROPERTY(endDate)
+WCDB_PROPERTY(cycleState)
+WCDB_PROPERTY(clintAddDate)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(operatorType)
 
 @end

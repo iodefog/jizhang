@@ -10,37 +10,41 @@
 
 @implementation SSJTransferCycleTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize cycleId;
+@synthesize userId;
+@synthesize transferInId;
+@synthesize transferOutId;
+@synthesize money;
+@synthesize memo;
+@synthesize cycleType;
+@synthesize beginDate;
+@synthesize endDate;
+@synthesize cycleState;
+@synthesize clintAddDate;
+@synthesize writeDate;
+@synthesize version;
+@synthesize operatorType;
+
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJTransferCycleTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, cycleId, "ICYCLEID")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, transferInId, "CTRANSFERINACCOUNTID")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, transferOutId, "CTRANSFEROUTACCOUNTID")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, money, "IMONEY")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, memo, "CMEMO")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, cycleType, "ICYCLETYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, beginDate, "CBEGINDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, endDate, "CENDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, cycleState, "ISTATE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, clintAddDate, "CLIENTADDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJTransferCycleTable, operatorType, "OPERATORTYPE")
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_PRIMARY(SSJTransferCycleTable, cycleId)
 
 @end

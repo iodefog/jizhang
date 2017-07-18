@@ -10,25 +10,66 @@
 
 @interface SSJLoanTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* loanId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* lender;
+
+@property (nonatomic, retain) NSString* money;
+
+@property (nonatomic, retain) NSString* fundId;
+
+@property (nonatomic, retain) NSString* targetFundid;
+
+@property (nonatomic, retain) NSString* endTargetFundid;
+
+@property (nonatomic, retain) NSString* borrowDate;
+
+@property (nonatomic, retain) NSString* repaymentDate;
+
+@property (nonatomic, retain) NSString* endDate;
+
+@property (nonatomic, assign) double rate;
+
+@property (nonatomic, retain) NSString* memo;
+
+@property (nonatomic, assign) int interest;
+
+@property (nonatomic, retain) NSString* remindId;
+
+@property (nonatomic, assign) int type;
+
+@property (nonatomic, assign) int end;
+
+@property (nonatomic, assign) int interestType;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, assign) long long version;
+
+WCDB_PROPERTY(loanId)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(lender)
+WCDB_PROPERTY(money)
+WCDB_PROPERTY(fundId)
+WCDB_PROPERTY(targetFundid)
+WCDB_PROPERTY(endTargetFundid)
+WCDB_PROPERTY(borrowDate)
+WCDB_PROPERTY(repaymentDate)
+WCDB_PROPERTY(endDate)
+WCDB_PROPERTY(rate)
+WCDB_PROPERTY(memo)
+WCDB_PROPERTY(interest)
+WCDB_PROPERTY(remindId)
+WCDB_PROPERTY(type)
+WCDB_PROPERTY(end)
+WCDB_PROPERTY(interestType)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(version)
+
 
 @end

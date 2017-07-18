@@ -10,25 +10,39 @@
 
 @interface SSJUserCreditTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* cardId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* cardQuota;
+
+@property (nonatomic, retain) NSString* billingDate;
+
+@property (nonatomic, retain) NSString* repaymentDate;
+
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, retain) NSString* remindId;
+
+@property (nonatomic, assign) int billDateSettlement;
+
+@property (nonatomic, assign) int type;
+
+
+WCDB_PROPERTY(cardId)
+WCDB_PROPERTY(cardQuota)
+WCDB_PROPERTY(billingDate)
+WCDB_PROPERTY(repaymentDate)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(remindId)
+WCDB_PROPERTY(billDateSettlement)
+WCDB_PROPERTY(type)
 
 @end

@@ -10,37 +10,62 @@
 
 @implementation SSJUserBudgetTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize budgetId; 
+@synthesize userId; 
+@synthesize budgetType; 
+@synthesize money; 
+@synthesize remindMoney; 
+@synthesize startDate; 
+@synthesize endDate; 
+@synthesize budgetState; 
+@synthesize addDate; 
+@synthesize billType; 
+@synthesize needRemind; 
+@synthesize hasRemind; 
+@synthesize writeDate; 
+@synthesize version; 
+@synthesize operatorType; 
+@synthesize booksId; 
+@synthesize isLastDay;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJUserBudgetTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, budgetId, "IBID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, budgetType, "ITYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, money, "IMONEY")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, remindMoney, "IREMINDMONEY")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, startDate, "CSDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, endDate, "CEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, budgetState, "ISTATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, addDate, "CCADDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, billType, "CBILLTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, needRemind, "IREMIND")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, hasRemind, "IHASREMIND")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, operatorType, "OPERATORTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBudgetTable, booksId, "CBOOKSID")
+WCDB_SYNTHESIZE_COLUMN_DEFAULT(SSJUserBudgetTable, isLastDay, "ISLASTDAY", 0)
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_PRIMARY(SSJUserBudgetTable, budgetId)
+
+WCDB_NOT_NULL(SSJUserBudgetTable, budgetId)
+WCDB_NOT_NULL(SSJUserBudgetTable, userId)
+WCDB_NOT_NULL(SSJUserBudgetTable, budgetType)
+WCDB_NOT_NULL(SSJUserBudgetTable, money)
+WCDB_NOT_NULL(SSJUserBudgetTable, remindMoney)
+WCDB_NOT_NULL(SSJUserBudgetTable, startDate)
+WCDB_NOT_NULL(SSJUserBudgetTable, endDate)
+WCDB_NOT_NULL(SSJUserBudgetTable, budgetState)
+WCDB_NOT_NULL(SSJUserBudgetTable, addDate)
+WCDB_NOT_NULL(SSJUserBudgetTable, billType)
+WCDB_NOT_NULL(SSJUserBudgetTable, needRemind)
+WCDB_NOT_NULL(SSJUserBudgetTable, hasRemind)
+WCDB_NOT_NULL(SSJUserBudgetTable, writeDate)
+WCDB_NOT_NULL(SSJUserBudgetTable, version)
+WCDB_NOT_NULL(SSJUserBudgetTable, operatorType)
 
 @end

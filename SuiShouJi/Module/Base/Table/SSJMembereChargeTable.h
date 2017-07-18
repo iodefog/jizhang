@@ -10,25 +10,23 @@
 
 @interface SSJMembereChargeTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* chargeId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* memberId;
+
+@property (nonatomic, retain) NSString* money;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, assign) int operatorType;
+
+WCDB_PROPERTY(chargeId)
+WCDB_PROPERTY(memberId)
+WCDB_PROPERTY(money)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(operatorType)
 
 @end

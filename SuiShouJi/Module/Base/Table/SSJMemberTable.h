@@ -10,25 +10,39 @@
 
 @interface SSJMemberTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* memberId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* memberName;
+
+@property (nonatomic, retain) NSString* userId;
+
+@property (nonatomic, assign) int operatorType;
+
+@property (nonatomic, assign) long long version;
+
+@property (nonatomic, retain) NSString* writeDate;
+
+@property (nonatomic, retain) NSString* memberColor;
+
+@property (nonatomic, retain) NSString* state;
+
+@property (nonatomic, retain) NSString* adddate;
+
+@property (nonatomic, retain) NSString* memberOrder;
+
+
+
+
+WCDB_PROPERTY(memberId)
+WCDB_PROPERTY(memberName)
+WCDB_PROPERTY(userId)
+WCDB_PROPERTY(operatorType)
+WCDB_PROPERTY(version)
+WCDB_PROPERTY(writeDate)
+WCDB_PROPERTY(memberColor)
+WCDB_PROPERTY(state)
+WCDB_PROPERTY(adddate)
+WCDB_PROPERTY(memberOrder)
+
 
 @end

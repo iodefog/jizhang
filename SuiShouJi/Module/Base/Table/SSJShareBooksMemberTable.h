@@ -10,25 +10,24 @@
 
 @interface SSJShareBooksMemberTable : NSObject <WCTTableCoding>
 
-/*
-@property(nonatomic, assign) int primary;
-@property(nonatomic, retain) NSString* valueWithIndex;
-@property(nonatomic, assign) int valueWithSpecifiedColumnName;
-@property(nonatomic, retain) NSString* valueWithDefaultValue;
-@property(nonatomic, assign) unsigned int value1WithMultiIndex;
-@property(nonatomic, retain) NSString* value2WithMultiIndex;
+@property (nonatomic, retain) NSString* memberId;
 
-//Primary Key
-WCDB_PROPERTY(primary)
-//Property With Index
-WCDB_PROPERTY(valueWithIndex)
-//Propery With Specified Column Name
-WCDB_PROPERTY(valueWithSpecifiedColumnName)
-//Propery With Default Value
-WCDB_PROPERTY(valueWithDefaultValue)
-//Properies With Multi-Indexes
-WCDB_PROPERTY(value1WithMultiIndex)
-WCDB_PROPERTY(value2WithMultiIndex)
- */
+@property (nonatomic, retain) NSString* booksId;
+
+@property (nonatomic, retain) NSString* joinDate;
+
+@property (nonatomic, retain) NSString* memberState;
+
+@property (nonatomic, retain) NSString* memberIcon;
+
+@property (nonatomic, retain) NSString* leaveDate;
+
+
+WCDB_PROPERTY(memberId)
+WCDB_PROPERTY(booksId)
+WCDB_PROPERTY(joinDate)
+WCDB_PROPERTY(memberState)
+WCDB_PROPERTY(memberIcon)
+WCDB_PROPERTY(leaveDate)
 
 @end

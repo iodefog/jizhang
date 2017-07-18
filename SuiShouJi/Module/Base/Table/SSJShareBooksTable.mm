@@ -10,37 +10,33 @@
 
 @implementation SSJShareBooksTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize booksId;
+@synthesize creatorId;
+@synthesize adminId;
+@synthesize booksName;
+@synthesize booksColor;
+@synthesize booksParent;
+@synthesize addDate;
+@synthesize booksOrder;
+@synthesize writeDate;
+@synthesize version;
+@synthesize operatorType;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJShareBooksTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
 
-//Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, booksId, "CBOOKSID")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, creatorId, "CCREATOR")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, adminId, "CADMIN")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, booksName, "CBOOKSNAME")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, booksColor, "CBOOKSCOLOR")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, booksParent, "IPARENTTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, addDate, "CADDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, booksOrder, "IORDER")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJShareBooksTable, operatorType, "OPERATORTYPE")
+
+WCDB_PRIMARY(SSJShareBooksTable, booksId)
 
 @end

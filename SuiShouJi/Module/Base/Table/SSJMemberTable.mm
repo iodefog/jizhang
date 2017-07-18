@@ -10,37 +10,36 @@
 
 @implementation SSJMemberTable
 
-/*
-@synthesize primary;
-@synthesize valueWithIndex;
-@synthesize valueWithSpecifiedColumnName;
-@synthesize valueWithDefaultValue;
-@synthesize value1WithMultiIndex;
-@synthesize value2WithMultiIndex;
-*/
+@synthesize memberId;
+@synthesize memberName;
+@synthesize userId;
+@synthesize operatorType;
+@synthesize version;
+@synthesize writeDate;
+@synthesize memberColor;
+@synthesize state;
+@synthesize adddate;
+@synthesize memberOrder;
+
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJMemberTable)
-/*
-//Primary Key
-WCDB_SYNTHESIZE(TestTemplate, primary)
-//Property With Index
-WCDB_SYNTHESIZE(TestTemplate, valueWithIndex)
-//Propery With Specified Column Name
-WCDB_SYNTHESIZE_COLUMN(TestTemplate, valueWithSpecifiedColumnName, "column_name_in_database")
-//Propery With Default Value
-WCDB_SYNTHESIZE_DEFAULT(TestTemplate, valueWithDefaultValue, @"default_string_for_database")
-//Properies With Multi-Index
-WCDB_SYNTHESIZE(TestTemplate, value1WithMultiIndex)
-WCDB_SYNTHESIZE(TestTemplate, value2WithMultiIndex)
+
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, memberId, "CMEMBERID")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, memberName, "CNAME")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, userId, "CUSERID")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, operatorType, "OPERATORTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, version, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, writeDate, "CWRITEDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, memberColor, "CCOLOR")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, state, "ISTATE")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, adddate, "CADDDATE")
+WCDB_SYNTHESIZE_COLUMN(SSJMemberTable, memberOrder, "IORDER")
 
 //Primary Key
-WCDB_PRIMARY_ASC_AUTO_INCREMENT(TestTemplate, primary)
-//Index
-WCDB_INDEX_DESC(TestTemplate, "index_subfix_name", valueWithIndex)
-//Multi-Indexes
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value1WithMultiIndex);
-WCDB_INDEX_DESC(TestTemplate, "mutil_indexes_shared_same_name", value2WithMultiIndex);
-*/
+WCDB_MULTI_PRIMARY(SSJMemberTable, "MultiPrimaryConstraint", memberId)
+WCDB_MULTI_PRIMARY(SSJMemberTable, "MultiPrimaryConstraint", userId)
+
+WCDB_NOT_NULL(SSJMemberTable, memberName)
 
 @end
