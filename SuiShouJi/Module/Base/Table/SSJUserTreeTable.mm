@@ -27,9 +27,6 @@ WCDB_SYNTHESIZE_COLUMN_DEFAULT(SSJUserTreeTable, hasShaked, "HASSHAKED", 0)
 WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, treeImgUrl, "TREEIMGURL")
 WCDB_SYNTHESIZE_COLUMN(SSJUserTreeTable, treeGifUrl, "TREEGIFURL")
 
-//Primary Key
-WCDB_PRIMARY(SSJUserTreeTable, userId)
-
 WCDB_NOT_NULL(SSJUserTreeTable, userId)
 WCDB_NOT_NULL(SSJUserTreeTable, signIn)
 WCDB_NOT_NULL(SSJUserTreeTable, signInDate)
