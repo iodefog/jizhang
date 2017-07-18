@@ -366,71 +366,70 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
 
 #pragma mark - private
 - (void)loadData {
-    
-    if (_titleSegmentView.selectedSegmentIndex == 0
-        && _featuredCategoryCollectionView.items.count == 0) {
-        
-        [self.view ssj_showLoadingIndicator];
-        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
-                                                                        custom:0
-                                                                       booksId:self.booksId
-                                                                       success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
-            _featuredCategoryCollectionView.items = result;
-            [self updateButtons];
-            [self updateSelectedIndexForCollectionView:_featuredCategoryCollectionView];
-            [self.view ssj_hideLoadingIndicator];
-            
-            if (_featuredCategoryCollectionView.items.count == 0) {
-                [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:self.noFeaturedCategoryRemindView animated:YES target:nil action:nil];
-            } else {
-                [_featuredCategoryCollectionView ssj_hideWatermark:YES];
-            }
-        } failure:^(NSError *error) {
-            [self.view ssj_hideLoadingIndicator];
-            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
-        }];
-        
-    } else if (_titleSegmentView.selectedSegmentIndex == 1) {
-        
-        if (self.customCategorySwitchConrol.selectedIndex == 0
-            && _customCategoryCollectionView.items.count == 0) {
-            
-            [self.view ssj_showLoadingIndicator];
-            [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
-                                                                            custom:1
-                                                                           booksId:self.booksId
-                                                                           success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
-                _customCategoryCollectionView.items = result;
-                [self updateButtons];
-                [self updateSelectedIndexForCollectionView:_customCategoryCollectionView];
-                [self.view ssj_hideLoadingIndicator];
-                
-                if (_customCategoryCollectionView.items.count == 0) {
-                    [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noCustomCategoryRemindView animated:YES target:nil action:nil];
-                } else {
-                    [_customCategoryCollectionView ssj_hideWatermark:YES];
-                }
-                
-            } failure:^(NSError *error) {
-                [self.view ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
-            }];
-            
-        } else if (self.customCategorySwitchConrol.selectedIndex == 1
-                   && _newOrEditCategoryView.images.count == 0) {
-            // 查询自定义类别图标
-            [self.view ssj_showLoadingIndicator];
-            [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<NSString *> *images) {
-                [self.view ssj_hideLoadingIndicator];
-                [self updateButtons];
-                _newOrEditCategoryView.images = images;
-                _newOrEditCategoryView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
-            } failure:^(NSError *error) {
-                [self.view ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
-            }];
-        }
-    }
+//    if (_titleSegmentView.selectedSegmentIndex == 0
+//        && _featuredCategoryCollectionView.items.count == 0) {
+//        
+//        [self.view ssj_showLoadingIndicator];
+//        [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
+//                                                                        custom:0
+//                                                                       booksId:self.booksId
+//                                                                       success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+//            _featuredCategoryCollectionView.items = result;
+//            [self updateButtons];
+//            [self updateSelectedIndexForCollectionView:_featuredCategoryCollectionView];
+//            [self.view ssj_hideLoadingIndicator];
+//            
+//            if (_featuredCategoryCollectionView.items.count == 0) {
+//                [_featuredCategoryCollectionView ssj_showWatermarkWithCustomView:self.noFeaturedCategoryRemindView animated:YES target:nil action:nil];
+//            } else {
+//                [_featuredCategoryCollectionView ssj_hideWatermark:YES];
+//            }
+//        } failure:^(NSError *error) {
+//            [self.view ssj_hideLoadingIndicator];
+//            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+//        }];
+//        
+//    } else if (_titleSegmentView.selectedSegmentIndex == 1) {
+//        
+//        if (self.customCategorySwitchConrol.selectedIndex == 0
+//            && _customCategoryCollectionView.items.count == 0) {
+//            
+//            [self.view ssj_showLoadingIndicator];
+//            [SSJCategoryListHelper queryForUnusedCategoryListWithIncomeOrExpenture:_incomeOrExpence
+//                                                                            custom:1
+//                                                                           booksId:self.booksId
+//                                                                           success:^(NSMutableArray<SSJRecordMakingCategoryItem *> *result) {
+//                _customCategoryCollectionView.items = result;
+//                [self updateButtons];
+//                [self updateSelectedIndexForCollectionView:_customCategoryCollectionView];
+//                [self.view ssj_hideLoadingIndicator];
+//                
+//                if (_customCategoryCollectionView.items.count == 0) {
+//                    [_customCategoryCollectionView ssj_showWatermarkWithCustomView:self.noCustomCategoryRemindView animated:YES target:nil action:nil];
+//                } else {
+//                    [_customCategoryCollectionView ssj_hideWatermark:YES];
+//                }
+//                
+//            } failure:^(NSError *error) {
+//                [self.view ssj_hideLoadingIndicator];
+//                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+//            }];
+//            
+//        } else if (self.customCategorySwitchConrol.selectedIndex == 1
+//                   && _newOrEditCategoryView.images.count == 0) {
+//            // 查询自定义类别图标
+//            [self.view ssj_showLoadingIndicator];
+//            [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_incomeOrExpence success:^(NSArray<NSString *> *images) {
+//                [self.view ssj_hideLoadingIndicator];
+//                [self updateButtons];
+//                _newOrEditCategoryView.images = images;
+//                _newOrEditCategoryView.colors = _incomeOrExpence ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+//            } failure:^(NSError *error) {
+//                [self.view ssj_hideLoadingIndicator];
+//                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+//            }];
+//        }
+//    }
 }
 
 - (void)updateSelectedIndexForCollectionView:(SSJCategoryEditableCollectionView *)view {
@@ -585,19 +584,18 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     } else {
         [_newOrEditCategoryView.textField resignFirstResponder];
     }
-}
+} 
 
 - (void)openCategoryWithID:(NSString *)ID name:(NSString *)name color:(NSString *)color image:(NSString *)image type:(int)type {
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:1
-                                                                    type:type
+    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithType:type
                                                                  booksId:self.booksId] + 1;
     [SSJCategoryListHelper updateCategoryWithID:ID
                                            name:name
                                           color:color
                                           image:image
                                           order:order
-                                          state:1
                                         booksId:self.booksId
+                                       billType:self.incomeOrExpence
                                         Success:^(NSString *categoryId) {
                                             
         [self.navigationController popViewControllerAnimated:YES];

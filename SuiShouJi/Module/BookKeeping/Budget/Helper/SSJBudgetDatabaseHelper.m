@@ -39,7 +39,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         if (!booksId.length) {
             booksId = SSJUSERID();
         }
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", SSJUSERID()];
+        
+        FMResultSet *resultSet = [db executeQuery:@"select cbillid, cname, ccolor from bk_user_bill_type where cuserid = ? and itype = 1", SSJUSERID()];
+        
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -259,9 +261,9 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     NSString *userid = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
         // 查询当前用户所有有效的支出类别
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname, b.ccolor from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userid];
+        FMResultSet *resultSet = [db executeQuery:@"select cbillid, cname, ccolor from bk_user_bill_type where cuserid = ? and itype = 1", userid];
+        
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -299,7 +301,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
         //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
-        NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.ccoin, b.ccolor, b.cname, b.id from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1 and b.istate <> 2", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
+        NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.cicoin, b.ccolor, b.cname, b.cbillid from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
         if (![budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
             NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
@@ -336,7 +338,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 
                 SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                 circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
-                circleItem.imageName = [resultSet stringForColumn:@"ccoin"];
+                circleItem.imageName = [resultSet stringForColumn:@"cicoin"];
                 circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", scale * 100];
                 circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
                 circleItem.imageBorderShowed = YES;
@@ -344,8 +346,8 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             }
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
-            item.ID = [resultSet stringForColumn:@"id"];
-            item.imageName = [resultSet stringForColumn:@"ccoin"];
+            item.ID = [resultSet stringForColumn:@"cbillid"];
+            item.imageName = [resultSet stringForColumn:@"cicoin"];
             item.name = [resultSet stringForColumn:@"cname"];
             item.colorValue = [resultSet stringForColumn:@"ccolor"];
             item.money = money;
@@ -481,7 +483,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     NSString *userID = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableDictionary *map = [NSMutableDictionary dictionary];
-        FMResultSet *resultSet = [db executeQuery:@"select a.cbillid, b.cname from bk_user_bill as a, bk_bill_type as b where a.cuserid = ? and a.cbillid = b.id and b.itype = 1 and b.istate <> 2", userID];
+        FMResultSet *resultSet = [db executeQuery:@"select cbillid, cname from bk_user_bill_type where cuserid = ? and itype = 1", userID];
         if (!resultSet) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -753,7 +755,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     budgetModel.isLastDay = [set boolForColumn:@"islastday"];
     
     // 当前账本所有有效支出流水的总金额
-    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_bill_type as b where a.ibillid = b.id and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.istate <> 2 and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
+    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
     
     if (![[budgetModel.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
         NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
@@ -803,7 +805,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             tBooksId = tBooksId.length > 0 ? tBooksId : SSJUSERID();
         }
         // 查询所有默认支出类别
-        FMResultSet *resultSet = [db executeQuery:@"select bt.cname, bt.ccolor, bt.ccoin, ub.cwritedate, bt.id from BK_BILL_TYPE bt, BK_USER_BILL ub where ub.istate = 1 and bt.itype = 1 and bt.id = ub.cbillid and ub.cuserid = ? and ub.cbooksid = ? and (bt.cparent <> 'root' or bt.cparent is null) order by ub.iorder, ub.cwritedate, bt.id", userID, tBooksId];
+        FMResultSet *resultSet = [db executeQuery:@"select cname, ccolor, cicoin, cbillid, cwritedate from bk_user_bill_type where itype = 1 and cuserid = ? and cbooksid = ? order by iorder, cwritedate, cbillid", userID, tBooksId];
         
         if (!resultSet) {
             if (failure) {
@@ -818,8 +820,8 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         while ([resultSet next]) {
             SSJBudgetBillTypeSelectionCellItem *item = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
-            item.billID = [resultSet stringForColumn:@"id"];
-            item.leftImage = [resultSet stringForColumn:@"ccoin"];
+            item.billID = [resultSet stringForColumn:@"cbillid"];
+            item.leftImage = [resultSet stringForColumn:@"cicoin"];
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;

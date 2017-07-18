@@ -55,17 +55,17 @@
 - (void)loadData {
     // 查询自定义类别图标
     [self.view ssj_showLoadingIndicator];
-    [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_model.type success:^(NSArray<NSString *> *images) {
-        [self.view ssj_hideLoadingIndicator];
-        _categoryEditView.images = images;
-        _categoryEditView.colors = _model.type ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
-        _categoryEditView.textField.text = _model.name;
-        _categoryEditView.selectedImage = _model.icon;
-        _categoryEditView.selectedColor = _model.color;
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
-    }];
+//    [SSJCategoryListHelper queryCustomCategoryImagesWithIncomeOrExpenture:_model.type success:^(NSArray<NSString *> *images) {
+//        [self.view ssj_hideLoadingIndicator];
+//        _categoryEditView.images = images;
+//        _categoryEditView.colors = _model.type ? [SSJCategoryListHelper payOutColors] : [SSJCategoryListHelper incomeColors];
+//        _categoryEditView.textField.text = _model.name;
+//        _categoryEditView.selectedImage = _model.icon;
+//        _categoryEditView.selectedColor = _model.color;
+//    } failure:^(NSError *error) {
+//        [self.view ssj_hideLoadingIndicator];
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL]];
+//    }];
 }
 
 - (void)updateAppearance {
@@ -140,8 +140,8 @@
                                           color:_model.color
                                           image:_model.icon
                                           order:_model.order
-                                          state:_model.state
                                         booksId:self.booksId
+                                       billType:_model.type
                                         Success:^(NSString *categoryId) {
                                             [self.navigationController popViewControllerAnimated:YES];
                                             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];

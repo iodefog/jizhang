@@ -23,14 +23,6 @@
     return nil;
 }
 
-+ (NSString *)queryRecordsForSyncAdditionalCondition {
-    return nil;
-}
-
-+ (NSString *)updateSyncVersionAdditionalCondition {
-    return nil;
-}
-
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     return YES;
 }
@@ -44,12 +36,7 @@
         return nil;
     }
     
-    NSMutableString *query = [NSMutableString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, userId];
-    
-    NSString *additionalCondition = [self queryRecordsForSyncAdditionalCondition];
-    if (additionalCondition.length) {
-        [query appendFormat:@" and %@", additionalCondition];
-    }
+    NSString *query = [NSString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [self tableName], version, userId];
     
     FMResultSet *result = [db executeQuery:query];
     if (!result) {
@@ -91,12 +78,7 @@
         return NO;
     }
     
-    NSMutableString *update = [NSMutableString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION = %lld and CUSERID = '%@'", [self tableName], newVersion, version + 2, userId];
-    NSString *additionalCondition = [self updateSyncVersionAdditionalCondition];
-    if (additionalCondition.length) {
-        [update appendFormat:@" and %@", additionalCondition];
-    }
-    
+    NSString *update = [NSString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION = %lld and CUSERID = '%@'", [self tableName], newVersion, version + 2, userId];
     BOOL success = [db executeUpdate:update];
     if (!success) {
         if (error) {
