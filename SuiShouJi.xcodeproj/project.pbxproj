@@ -752,7 +752,6 @@
 		7D4A79761DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4A79721DD46D6100E905F4 /* SSJLoanChargeAddOrEditViewController.m */; };
 		7D4CF7041D38D16D009CC8ED /* SSJBudgetNodataRemindView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */; };
 		7D4EF8851C43B1A3003C4B20 /* SSJDailySumChargeTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */; };
-		7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */; };
 		7D4EF8941C4B5625003C4B20 /* ProjectSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */; };
 		7D52133A1F022ED3004FE68A /* SSJSettingPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213391F022ED3004FE68A /* SSJSettingPasswordViewController.m */; };
 		7D52133B1F022ED3004FE68A /* SSJSettingPasswordViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D5213391F022ED3004FE68A /* SSJSettingPasswordViewController.m */; };
@@ -10619,7 +10618,6 @@
 		7D4CF7031D38D16D009CC8ED /* SSJBudgetNodataRemindView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJBudgetNodataRemindView.m; sourceTree = "<group>"; };
 		7D4EF8831C43B1A3003C4B20 /* SSJDailySumChargeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJDailySumChargeTable.h; path = OtherTable/SSJDailySumChargeTable.h; sourceTree = "<group>"; };
 		7D4EF8841C43B1A3003C4B20 /* SSJDailySumChargeTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJDailySumChargeTable.m; path = OtherTable/SSJDailySumChargeTable.m; sourceTree = "<group>"; };
-		7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataSynchronizerTests.m; sourceTree = "<group>"; };
 		7D4EF8931C4B5625003C4B20 /* ProjectSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ProjectSettings.plist; sourceTree = "<group>"; };
 		7D5213381F022ED3004FE68A /* SSJSettingPasswordViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJSettingPasswordViewController.h; sourceTree = "<group>"; };
 		7D5213391F022ED3004FE68A /* SSJSettingPasswordViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJSettingPasswordViewController.m; sourceTree = "<group>"; };
@@ -15884,7 +15882,6 @@
 			isa = PBXGroup;
 			children = (
 				BD543C591C1A6DBC00910D61 /* SuiShouJiTests.m */,
-				7D4EF8861C44EE4A003C4B20 /* SSJDataSynchronizerTests.m */,
 				BD543C5B1C1A6DBC00910D61 /* Info.plist */,
 			);
 			path = SuiShouJiTests;
@@ -27608,7 +27605,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C9A0C101D6D9523002AF046 /* SSJNewFundingViewController.m in Sources */,
-				7D4EF8871C44EE4A003C4B20 /* SSJDataSynchronizerTests.m in Sources */,
 				9C4EBCA21D7D1D0E00BE4982 /* SSJThirdPartLoginItem.m in Sources */,
 				BD543C5A1C1A6DBC00910D61 /* SuiShouJiTests.m in Sources */,
 			);

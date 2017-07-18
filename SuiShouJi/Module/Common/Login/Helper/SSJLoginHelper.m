@@ -12,7 +12,7 @@
 #import "SSJUserDefaultDataCreater.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJBooksTypeSyncTable.h"
-#import "SSJUserBillSyncTable.h"
+#import "SSJUserBillTypeSyncTable.h"
 #import "SSJFinancingGradientColorItem.h"
 #import "SSJLoginVerifyPhoneNumViewModel.h"
 
@@ -81,7 +81,7 @@
         [SSJBooksTypeSyncTable mergeRecords:viewModel.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
         [self updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJUserBillSyncTable mergeRecords:viewModel.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [SSJUserBillTypeSyncTable mergeRecords:viewModel.userBillArray forUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJFundInfoSyncTable mergeRecords:viewModel.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
         
 #warning 懵逼
