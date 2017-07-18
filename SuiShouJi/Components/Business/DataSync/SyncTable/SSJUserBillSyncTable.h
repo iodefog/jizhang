@@ -10,6 +10,7 @@
 
 #import "SSJBaseSyncTable.h"
 
+SSJ_DEPRECATED
 @interface SSJUserBillSyncTable : SSJBaseSyncTable
 
 @end

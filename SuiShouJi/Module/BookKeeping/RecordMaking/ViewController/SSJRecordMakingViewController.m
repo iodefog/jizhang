@@ -1076,21 +1076,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (void)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item ofItems:(NSArray *)items {
-    int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithState:0 type:_customNaviBar.selectedBillType booksId:self.item.booksId] + 1;
-    
-    [SSJCategoryListHelper updateCategoryWithID:item.ID
-                                           name:item.title
-                                          color:item.colorValue
-                                          image:item.imageName
-                                          order:order
-                                          state:0
-                                        booksId:self.item.booksId
-                                        Success:NULL
-                                        failure:^(NSError *error) {
-                                            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了"
-                                                                                message:[error localizedDescription]
-                                                                                 action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-                                        }];
+    [SSJCategoryListHelper deleteBillTypeWithId:item.ID userId:SSJUSERID() booksId:self.item.booksId success:NULL failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
 }
 
 - (void)updateAppearance {

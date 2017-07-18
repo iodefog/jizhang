@@ -22,6 +22,12 @@
 }
 
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSString *booksId = [NSString stringWithFormat:@"%@-%d", userId, (int)SSJBooksTypeDaily];
+    [self createDefaultDataTypeForUserId:userId booksId:booksId booksType:SSJBooksTypeDaily inDatabase:db error:error];
+}
+
++ (void)createDefaultDataTypeForUserId:(NSString *)userId booksId:(NSString *)booksId booksType:(SSJBooksType)booksType inDatabase:(FMDatabase *)db error:(NSError **)error {
+#warning TODO
     FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder, ibookstype from BK_BILL_TYPE where istate <> 2 and icustom = 0 and (cparent isnull or cparent <> 'root')"];
     if (!billTypeResult) {
         if (error) {

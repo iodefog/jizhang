@@ -40,21 +40,17 @@
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
+    NSString *booksId = record[@"cbooksid"];
     
-    if (!billId || !fundId) {
+    if (!billId || !fundId || !booksId) {
         if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"收支类别id／资金账户id／账本id不能为nil"}];
         }
-        SSJPRINT(@">>> SSJ warning:cuserid and ibillid in record must not be nil \n record:%@", record);
         return NO;
     }
     
-    // 如果此流水不依赖于特殊收支类型（istate等于2），还要从user_bill表中查询是否有此类型(因为user_bill中没有特殊收支类型)
-    BOOL hasBillType = [db intForQuery:@"select istate from bk_bill_type where id = ?", billId] == 2;
-    if (!hasBillType) {
-        hasBillType = [db boolForQuery:@"select count(*) from bk_user_bill where cuserid = ? and cbillid = ?", userId, billId];
-    }
-    
+    // 从user_bill表中查询是否有此类型
+    BOOL hasBillType = [db boolForQuery:@"select count(*) from bk_user_bill_type where cuserid = ? and cbillid = ? and cbooksid = ?", userId, billId, booksId];
     // 查询fund_info中是否有对应的资金账户
     BOOL hasFundAccount = [db boolForQuery:@"select count(*) from bk_fund_info where cuserid = ? and cfundid = ?", userId, fundId];
     

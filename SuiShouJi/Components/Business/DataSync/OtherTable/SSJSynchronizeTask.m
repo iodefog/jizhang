@@ -28,49 +28,7 @@
 }
 
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
-    
 }
 
-- (NSURLSessionUploadTask *)uploadBodyData:(NSData *)data headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path fileName:(NSString *)fileName mimeType:(NSString *)mimeType completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    
-    return [self constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        [formData appendPartWithFileData:data name:fileName fileName:fileName mimeType:mimeType];
-    } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)uploadModelList:(NSArray<SSJSyncFileModel *> *)modelList headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    
-    return [self constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
-        for (int i = 0; i < modelList.count; i ++) {
-            SSJSyncFileModel *model = [modelList ssj_safeObjectAtIndex:i];
-            if (model.fileData && model.fileName && model.mimeType) {
-                [formData appendPartWithFileData:model.fileData name:model.fileName fileName:model.fileName mimeType:model.mimeType];
-            }
-        }
-    } headerParams:prarms toUrlPath:path completionHandler:completionHandler];
-}
-
-- (NSURLSessionUploadTask *)constructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block headerParams:(NSDictionary *)prarms toUrlPath:(NSString *)path completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    //  创建请求
-    NSError *tError = nil;
-    NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(path) parameters:nil constructingBodyWithBlock:block error:&tError];
-    
-    if (tError) {
-        if (completionHandler) {
-            completionHandler(nil, nil, tError);
-        }
-        return nil;
-    }
-    
-    [prarms enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        [request setValue:obj forHTTPHeaderField:key];
-    }];
-    
-    //  开始上传
-    NSURLSessionUploadTask *task = [self.sessionManager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
-    [task resume];
-    
-    return task;
-}
 
 @end

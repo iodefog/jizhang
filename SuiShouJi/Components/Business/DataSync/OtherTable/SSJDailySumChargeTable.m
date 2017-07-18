@@ -40,7 +40,7 @@
     }
     
     //  查询当前用户不同日期、账本的收入、支出总金额
-    __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY), A.CBOOKSID, A.ICHARGEID from BK_USER_CHARGE as A, BK_BILL_TYPE as B where A.IBILLID = B.ID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and B.istate <> 2 and A.cbilldate <= datetime('now', 'localtime') group by A.CBILLDATE, A.CBOOKSID, B.ITYPE", userId];
+    __block FMResultSet *result = [db executeQuery:@"select A.CBILLDATE, B.ITYPE, sum(A.IMONEY), A.CBOOKSID, A.ICHARGEID from BK_USER_CHARGE as A, BK_USER_BILL_TYPE as B where A.IBILLID = B.CBILLID and A.CUSERID = ? and A.OPERATORTYPE <> 2 and A.cbilldate <= datetime('now', 'localtime') group by A.CBILLDATE, A.CBOOKSID, B.ITYPE", userId];
     if (!result) {
         SSJPRINT(@">>>SSJ warning\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return NO;

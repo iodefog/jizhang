@@ -32,8 +32,7 @@
  *  @param state    0:关闭 1:开启
  *  @param type     SSJBillTypeIncome:收入 SSJBillTypePay:支出；如果非上述两个值，则查询出错
  */
-+ (int)queryForBillTypeMaxOrderWithState:(int)state
-                                    type:(SSJBillType)type
++ (int)queryForBillTypeMaxOrderWithType:(SSJBillType)type
                                  booksId:(NSString *)booksId;
 
 /**
@@ -54,35 +53,23 @@
                        color:(NSString *)color
                        image:(NSString *)image
                        order:(int)order
-                       state:(int)state
                      booksId:(NSString *)booksId
+                    billType:(SSJBillType)billType
                      Success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure;
 
 /**
- *  查询未启用的默认、自定义类别
- *
- *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
- *  @param custom            默认、自定义(0为默认,1为自定义)
- *  @param success           查询成功的回调
- *  @param failure           查询失败的回调
- */
-+ (void)queryForUnusedCategoryListWithIncomeOrExpenture:(int)incomeOrExpenture
-                                                 custom:(int)custom
-                                                booksId:(NSString *)booksId
-                                                success:(void(^)(NSMutableArray<SSJRecordMakingCategoryItem *> *result))success
-                                                failure:(void (^)(NSError *error))failure;
+ 删除收支类别
 
-/**
- *  查询自定义收支类型图标
- *
- *  @param incomeOrExpenture 收入还是支出(1为支出,0为收入)
- *  @param success    查询成功的回调
- *  @param failure    查询失败的回调
+ @param billId 收支类别id
+ @param userId 用户id
+ @param booksId 账本id
  */
-+ (void)queryCustomCategoryImagesWithIncomeOrExpenture:(int)incomeOrExpenture
-                                              success:(void(^)(NSArray<NSString *> *images))success
-                                              failure:(void (^)(NSError *error))failure;
++ (void)deleteBillTypeWithId:(NSString *)billId
+                      userId:(NSString *)userId
+                     booksId:(NSString *)booksId
+                     success:(void(^)())success
+                     failure:(void(^)(NSError *error))failure;
 
 /**
  *  新增自定义收支类型

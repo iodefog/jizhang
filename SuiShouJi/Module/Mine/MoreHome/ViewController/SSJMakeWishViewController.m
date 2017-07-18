@@ -1,4 +1,4 @@
-//
+ //
 //  SSJMakeWishViewController.m
 //  SuiShouJi
 //
@@ -7,9 +7,15 @@
 //
 
 #import "SSJMakeWishViewController.h"
+#import "SSJWishPhotoChooseViewController.h"
+#import "SSJWishProgressViewController.h"
+
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMakeWishMoneyCollectionViewCell.h"
 #import "SSJWishTableViewCell.h"
+
+#import "SSJWishModel.h"
+#import "SSJWishHelper.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 @interface SSJMakeWishViewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
@@ -19,9 +25,12 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 /**topImg*/
 @property (nonatomic, strong) UIImageView *topImg;
 
+/**图片蒙层*/
+@property (nonatomic, strong) UIView *coverView;
+
 @property (nonatomic, strong) UILabel *slognL;
 
-@property (nonatomic, strong) UIImageView *cameraImg;
+@property (nonatomic, strong) UIButton *cameraImg;
 
 @property (nonatomic, strong) UILabel *wishTitleL;
 
@@ -49,6 +58,9 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 /**心愿列表数据源*/
 @property (nonatomic, strong) NSMutableArray *wishMoneyDataArray;
+
+/**model*/
+@property (nonatomic, strong) SSJWishModel *wishModel;
 @end
 
 @implementation SSJMakeWishViewController
@@ -65,6 +77,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)setUpUI {
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.topImg];
+    [self.topImg addSubview:self.coverView];
     [self.topImg addSubview:self.slognL];
     [self.topImg addSubview:self.cameraImg];
     
@@ -90,10 +103,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [super viewWillLayoutSubviews];
     self.scrollView.frame = self.view.bounds;
     self.topImg.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 150);
+    self.coverView.frame = CGRectMake(0, 0, self.view.width, 150);
     self.slognL.centerX = self.topImg.centerX;
     self.slognL.centerY = self.topImg.height * 0.5;
     self.cameraImg.rightTop = CGPointMake(self.view.width - 15, 15);
-    
+    self.cameraImg.size = CGSizeMake(50, 50);
     self.wishTitleL.leftTop = CGPointMake(15, CGRectGetMaxY(self.topImg.frame) + 25);
     self.topBg.frame = CGRectMake(15, CGRectGetMaxY(self.wishTitleL.frame)+10, self.view.width - 30, 44);
     self.wishNameTextF.frame = CGRectMake(15, 0, self.topBg.width - 30, 44);
@@ -123,8 +137,9 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.makeWishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.makeWishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:SSJButtonDisableAlpha] forState:UIControlStateSelected];
     
-    if (SSJCurrentThemeID() == SSJDefaultThemeID) {
-        self.bottomBg.backgroundColor = self.topBg.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.bottomBg.backgroundColor = self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
+        self.view.backgroundColor = [UIColor whiteColor];
     } else {
         self.bottomBg.backgroundColor = self.topBg.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
     }
@@ -211,8 +226,17 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_topImg) {
         _topImg = [[UIImageView alloc] init];
         _topImg.image = [UIImage imageNamed:@"calendar_shareheader"];
+        _topImg.userInteractionEnabled = YES;
     }
     return _topImg;
+}
+
+- (UIView *)coverView {
+    if (!_coverView) {
+        _coverView = [[UIView alloc] init];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.7];
+    }
+    return _coverView;
 }
 
 - (UILabel *)slognL {
@@ -226,9 +250,17 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     return _slognL;
 }
 
-- (UIImageView *)cameraImg {
+- (UIButton *)cameraImg {
     if (!_cameraImg) {
-        _cameraImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wish_bg_camera"]];
+        _cameraImg = [[UIButton alloc] init];
+        [_cameraImg setImage:[UIImage imageNamed:@"wish_bg_camera"] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_cameraImg rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
+            [self.navigationController pushViewController:photoVC animated:YES];
+            
+        }];
     }
     return _cameraImg;
 }
@@ -326,6 +358,21 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [_makeWishBtn setTitle:@"许下心愿" forState:UIControlStateNormal];
         _makeWishBtn.layer.cornerRadius = 6;
         _makeWishBtn.layer.masksToBounds = YES;
+        @weakify(self);
+        [[_makeWishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+           //保存心愿
+            self.wishModel.wishName = self.wishNameTextF.text;
+            self.wishModel.wishMoney = self.wishAmountTextF.text;
+            [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
+                //进入许愿成功进度反馈页面
+                SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+                [self.navigationController pushViewController:wishProVC animated:YES];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showMessage:error.localizedDescription];
+            }];
+
+        }];
     }
     return _makeWishBtn;
 }
@@ -342,5 +389,12 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishMoneyDataArray = [NSMutableArray array];
     }
     return _wishMoneyDataArray;
+}
+
+- (SSJWishModel *)wishModel {
+    if (!_wishModel) {
+        _wishModel = [[SSJWishModel alloc] init];
+    }
+    return _wishModel;
 }
 @end

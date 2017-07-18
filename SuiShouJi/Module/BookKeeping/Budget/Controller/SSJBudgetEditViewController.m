@@ -229,6 +229,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     }
 }
 
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == kBudgetMoneyTextFieldTag) {
+        self.model.budgetMoney = 0;
+    } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        self.model.remindMoney = 0;
+    }
+    return YES;
+}
+
 #pragma mark - Event
 - (void)goBackAction {
     // 如果没有预算直接返回首页
@@ -305,7 +314,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     [self updateSaveButtonState:YES];
     
-    //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
+    // 检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
     [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code, NSDictionary *additionalInfo) {
         
         [self updateSaveButtonState:NO];
@@ -545,7 +554,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetMoneyCell.imageView.image = [[UIImage imageNamed:@"xuhuan_jine"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         budgetMoneyCell.textField.tag = kBudgetMoneyTextFieldTag;
         budgetMoneyCell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
+        budgetMoneyCell.textField.placeholder = @"¥0.00";
         budgetMoneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        budgetMoneyCell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         budgetMoneyCell.textField.delegate = self;
         budgetMoneyCell.textField.rightView = nil;
         budgetMoneyCell.detailTextLabel.text = nil;
@@ -569,6 +580,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetScaleCell.textField.tag = kBudgetRemindScaleTextFieldTag;
         budgetScaleCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetScaleCell.textField.delegate = self;
+        budgetScaleCell.textField.placeholder = @"0.0";
         
         [self updateRemindMoneyScaleWithCell:budgetScaleCell];
         [self updateRemindMoneyWithCell:budgetScaleCell];

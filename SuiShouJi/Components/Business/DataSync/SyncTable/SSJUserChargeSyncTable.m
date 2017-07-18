@@ -52,9 +52,8 @@
     SSJChargeIdType idtype = [record[@"ichargetype"] integerValue];
     if (!billId || !fundId) {
         if (error) {
-            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"ibillid and fundId in record must not be nil"}];
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"流水合并失败，服务端返回的ibillid或者fundId为nil"}];
         }
-        SSJPRINT(@">>> SSJ warning: ibillid and fundId in record must not be nil \n record:%@", record);
         return NO;
     }
     

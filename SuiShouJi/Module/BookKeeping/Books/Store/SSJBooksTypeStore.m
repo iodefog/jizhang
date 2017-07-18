@@ -15,6 +15,7 @@
 #import "SSJShareBookMemberItem.h"
 #import "SSJUserItem.h"
 #import "SSJUserChargeSyncTable.h"
+#import "SSJUserDefaultBillTypesCreater.h"
 
 @implementation SSJBooksTypeStore
 
@@ -190,10 +191,12 @@
         }
         
         if (![db boolForQuery:@"select count(*) from BK_BOOKS_TYPE where CBOOKSID = ?", booksid]) {//判断添加账本还是修改账本
-            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:userId]) {
+            NSError *tError = nil;
+            [SSJUserDefaultBillTypesCreater createDefaultDataTypeForUserId:userId booksId:item.booksId booksType:item.booksParent inDatabase:db error:&tError];
+            if (tError) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
+                        failure(tError);
                     });
                 }
                 return;
@@ -359,60 +362,12 @@
     }];
 }
 
-+ (BOOL)generateBooksTypeForBooksItem:(id<SSJBooksItemProtocol>)item
-                           indatabase:(FMDatabase *)db
-                            forUserId:(NSString *)userId {
-    //        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)item;
-    
-    // 补充每个账本独有的记账类型
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.sss"];
-    if (![db intForQuery:@"select count(1) from bk_user_bill where cbooksid = ?",item.booksId]) {
-        if (![db executeUpdate:@"delete from bk_user_bill where cbooksid = ?",item.booksId]) {
-            return NO;
-        }
-    }
-    
-    if (![db executeUpdate:@"replace into bk_user_bill select ?, id, istate, ?, ?, 1, defaultorder,? from bk_bill_type where ibookstype = ? and icustom = 0",userId,writeDate,@(SSJSyncVersion()),item.booksId,@(item.booksParent)]) {
-        return NO;
-    }
-    
-    // 补充账本公用的记账类型
-    FMResultSet *result = [db executeQuery:@"select id ,defaultorder ,ibookstype from bk_bill_type where length(ibookstype) > 1"];
-    
-    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-    
-    while ([result next]) {
-        NSString *cbillid = [result stringForColumn:@"id"];
-        NSString *defualtOrder = [result stringForColumn:@"defaultorder"];
-        NSString *iparenttype = [result stringForColumn:@"ibookstype"];
-        NSDictionary *dic = @{@"kBillIdKey":cbillid,
-                              @"kDefualtOrderKey":defualtOrder,
-                              @"kParentTypeKey":iparenttype};
-        [tempArr addObject:dic];
-    };
-    
-    for (NSDictionary *dict in tempArr) {
-        NSString *cbillid = [dict objectForKey:@"kBillIdKey"];
-        NSString *defualtOrder = [dict objectForKey:@"kDefualtOrderKey"];
-        NSString *iparenttype = [dict objectForKey:@"kParentTypeKey"];
-        NSArray *parentArr = [iparenttype componentsSeparatedByString:@","];
-        for (NSString *parenttype in parentArr) {
-            if ([parenttype integerValue] == item.booksParent) {
-                if (![db executeUpdate:@"replace into bk_user_bill values (?,?,1,?,?,1,?,?)",userId,cbillid,writeDate,@(SSJSyncVersion()),defualtOrder,item.booksId]) {
-                    return NO;
-                }
-            }
-        }
-    }
-    return YES;
-}
-
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
                                     failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        double income = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 0 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
-        double expenture = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_bill_type bt where uc.ibillid = bt.id and bt.itype = 1 and uc.cuserid = ? and bt.istate <> 2 and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
+        double income = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.ibillid = bt.cbillid and bt.itype = 0 and uc.cuserid = ? and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
+        double expenture = [db doubleForQuery:@"select sum(uc.imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.ibillid = bt.cbillid and bt.itype = 1 and uc.cuserid = ? and uc.operatortype <> 2 and uc.cbilldate <= date('now', 'localtime')",userId];
         if (success) {
             SSJDispatchMainAsync(^{
                 success(income,expenture);
@@ -543,11 +498,13 @@
         
         //账本类别(新建)
         if (shareBookOperate == ShareBookOperateCreate) {
-            if (![self generateBooksTypeForBooksItem:item indatabase:db forUserId:SSJUSERID()]) {
+            NSError *tError = nil;
+            [SSJUserDefaultBillTypesCreater createDefaultDataTypeForUserId:SSJUSERID() booksId:item.booksId booksType:item.booksParent inDatabase:db error:&tError];
+            if (tError) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
+                        failure(tError);
                     });
                 }
                 return;

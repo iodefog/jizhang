@@ -15,7 +15,7 @@
 #import "SSJShareBooksMemberSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
 #import "SSJShareBooksFriendMarkSyncTable.h"
-#import "SSJBooksTypeStore.h"
+#import "SSJUserDefaultBillTypesCreater.h"
 
 #import "SSJDatabaseQueue.h"
 #import "SSJCodeInputEnableService.h"
@@ -253,9 +253,13 @@
                     return;
                 }
                 
-                if (![SSJBooksTypeStore generateBooksTypeForBooksItem:[SSJShareBookItem mj_objectWithKeyValues:self.service.shareBooksTableInfo] indatabase:db forUserId:SSJUSERID()]) {
+                NSError *tError = nil;
+                SSJBooksType booksType = [self.service.shareBooksTableInfo[@"iparenttype"] integerValue];
+                [SSJUserDefaultBillTypesCreater createDefaultDataTypeForUserId:SSJUSERID() booksId:booksId booksType:booksType inDatabase:db error:&tError];
+                if (tError) {
                     return;
                 }
+                
                 NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
                 
                 SSJDispatchMainSync(^{
