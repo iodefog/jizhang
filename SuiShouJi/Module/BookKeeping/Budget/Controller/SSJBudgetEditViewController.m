@@ -217,6 +217,10 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     return YES;
 }
 
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    textField.clearsOnInsertion = YES;
+}
+
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     if (textField.tag == kBudgetMoneyTextFieldTag) {
         SSJBudgetEditTextFieldCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:2 inSection:0]];
@@ -305,7 +309,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     [self updateSaveButtonState:YES];
     
-    //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
+    // 检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
     [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code, NSDictionary *additionalInfo) {
         
         [self updateSaveButtonState:NO];

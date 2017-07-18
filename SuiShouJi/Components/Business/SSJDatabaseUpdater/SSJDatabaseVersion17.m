@@ -26,6 +26,11 @@
         return error;
     }
     
+    error = [self createUserBillTypeTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     error = [self migrateBillTypeRecordsToNewTableWithDatabase:db];
     if (error) {
         return error;
@@ -43,6 +48,13 @@
 
 + (NSError *)createWishChargeTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"create table if not exists BK_WISH_CHARGE(CHARGEID text not null, MONEY real not null, WISHID text not null, CUSERID text not null, IVERSION integer, CWRITEDATE text, OPERATORTYPE integer, MEMO text, ITYPE integer, CBILLDATE text, primary key(CHARGEID))"]) {
+        return db.lastError;
+    }
+    return nil;
+}
+
++ (NSError *)createUserBillTypeTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_BILL_TYPE (CBILLID TEXT, CUSERID TEXT, CBOOKSID TEXT, ITYPE INTEGER, CNAME TEXT, CCOLOR TEXT, CICOIN TEXT, IORDER INTEGER, CWRITEDATE TEXT, OPERATORTYPE INTEGER, IVERSION INTEGER, PRIMARY KEY(CBILLID, CUSERID, CBOOKSID))"]) {
         return db.lastError;
     }
     return nil;
