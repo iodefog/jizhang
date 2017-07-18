@@ -178,7 +178,7 @@ const int kMemoMaxLength = 15;
             cell.textField.text = self.loanModel.lender;
             cell.textField.keyboardType = UIKeyboardTypeDefault;
             cell.textField.delegate = self;
-            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.tag = kLenderTag;
             [cell setNeedsLayout];
             
@@ -202,7 +202,7 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.delegate = self;
             cell.textField.tag = kMoneyTag;
             [cell setNeedsLayout];

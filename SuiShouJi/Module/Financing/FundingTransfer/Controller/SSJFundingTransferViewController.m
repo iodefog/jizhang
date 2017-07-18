@@ -244,7 +244,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
-        circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeNever;
+        circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeWhileEditing;
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kMemo]) {
         circleModifyCell.cellInput.hidden = NO;

@@ -12,7 +12,7 @@
 #import "SSJLoanDetailCellItem.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJLoanCompoundChargeModel.h"
-
+#import "SSJBillTypeManager.h"
 
 NSString *const SSJFundItemListKey = @"SSJFundItemListKey";
 NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
@@ -172,7 +172,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         double surplus = 0; // 剩余金额
         
         // 查询依赖借贷的转帐流水
-        FMResultSet *resultSet = [db executeQuery:@"select uc.ichargeid, uc.ifunsid, uc.ibillid, uc.imoney, uc.cmemo, uc.cbilldate, uc.cwritedate, bt.cicoin from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = ? and uc.ifunsid = ? and uc.cid = ? and uc.ichargetype = ? and uc.operatortype <> 2 order by uc.cbilldate, uc.cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID,@(SSJChargeIdTypeLoan)];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
         
         while ([resultSet next]) {
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
@@ -180,7 +180,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             chargeModel.fundId = [resultSet stringForColumn:@"ifunsid"];
             chargeModel.billId = [resultSet stringForColumn:@"ibillid"];
             chargeModel.userId = loanModel.userID;
-            chargeModel.icon = [resultSet stringForColumn:@"cicoin"];
+            chargeModel.icon = SSJBillTypeModel(chargeModel.billId).icon;
             chargeModel.memo = [resultSet stringForColumn:@"cmemo"];
             chargeModel.billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
             chargeModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
