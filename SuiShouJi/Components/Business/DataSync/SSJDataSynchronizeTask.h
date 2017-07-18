@@ -20,23 +20,23 @@
  5.成员流水
  
  
- (5)                    member_charge
-                        /          \
-                       v            \
- (4)                user_charge      \
-                    /         \       \
-                   /           \       \
-                  v             \       \
- (3)       period_charge       loan      \
-         (transfer_cycle)       |\        \
-             /       \          | \        \
-            /         \         |  \        \
-           v           v        v   \        \
- (2)  fund(credit)  user_bill  fund  \        \            budget
-          |           /   \           \        \            /  \
-          |          /     \           \        \          /    \
-          v         v       v           v        v        v      v
- (1)    remind    books  bill_type    remind  member   books   remind
+ (5)                        member_charge
+                            /          \
+                           v            \
+ (4)                    user_charge      \
+                        /         \       \
+                       /           \       \
+                      v             \       \
+ (3)           period_charge        loan      \
+             (transfer_cycle)        |\        \
+              /       \              | \        \
+             /         \             |  \        \
+            v           v            v   \        \
+ (2)  fund(credit) user_bill_type  fund   \        \            budget
+          |             |                  \        \            /  \
+          |             |                   \        \          /    \
+          v             v                    v        v        v      v
+ (1)    remind        books                remind  member   books   remind
  
  */
 @interface SSJDataSynchronizeTask : SSJSynchronizeTask

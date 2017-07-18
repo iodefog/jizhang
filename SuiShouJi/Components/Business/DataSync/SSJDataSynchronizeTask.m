@@ -7,8 +7,7 @@
 //
 
 #import "SSJDataSynchronizeTask.h"
-#import "SSJBillTypeSyncTable.h"
-#import "SSJUserBillSyncTable.h"
+#import "SSJUserBillTypeSyncTable.h"
 #import "SSJFundInfoSyncTable.h"
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserChargePeriodConfigSyncTable.h"
@@ -71,13 +70,12 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     if (self = [super init]) {
         NSSet *firstLayer = [NSSet setWithObjects:[SSJUserRemindSyncTable class],
                                                   [SSJBooksTypeSyncTable class],
-                                                  [SSJMemberSyncTable class],
-                                                  [SSJBillTypeSyncTable class], nil];
+                                                  [SSJMemberSyncTable class], nil];
         
         NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoSyncTable class],
                                                    [SSJUserCreditSyncTable class],
                                                    [SSJCreditRepaymentSyncTable class],
-                                                   [SSJUserBillSyncTable class],
+                                                   [SSJUserBillTypeSyncTable class],
                                                    [SSJUserBudgetSyncTable class], nil];
         
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
