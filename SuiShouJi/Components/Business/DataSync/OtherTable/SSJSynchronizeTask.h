@@ -28,16 +28,4 @@
  */
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure;
 
-- (NSURLSessionUploadTask *)uploadBodyData:(NSData *)data
-                              headerParams:(NSDictionary *)prarms
-                                 toUrlPath:(NSString *)path
-                                  fileName:(NSString *)fileName
-                                  mimeType:(NSString *)mimeType
-                         completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
-
-- (NSURLSessionUploadTask *)uploadModelList:(NSArray<SSJSyncFileModel *> *)modelList
-                               headerParams:(NSDictionary *)prarms
-                                  toUrlPath:(NSString *)path
-                          completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler;
-
 @end
