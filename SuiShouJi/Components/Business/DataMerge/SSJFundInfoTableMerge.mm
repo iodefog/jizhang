@@ -105,7 +105,7 @@
     
     __block BOOL success = NO;
     
-    // 和账本有关的表:流水,周期记账
+    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,转账,周期转账,信用卡还款
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *newId = obj;
         NSString *oldId = key;

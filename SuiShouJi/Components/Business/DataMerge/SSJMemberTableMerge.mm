@@ -115,28 +115,49 @@
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *newId = obj;
         NSString *oldId = key;
-        if (![db isTableExists:@"temp_user_charge"]) {
+        if (![db isTableExists:@"temp_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
             SSJPRINT(@">>>>>>>>借贷所关联的表不存在<<<<<<<<");
             *stop = YES;
             success = NO;
         }
         
-        // 更新流水表
-        SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
-        userCharge.cid = newId;
+        // 更新成员流水表
+        SSJMembereChargeTable *memberCharge = [[SSJMembereChargeTable alloc] init];
+        memberCharge.memberId = newId;
         success = [db updateRowsInTable:@"temp_user_charge"
-                           onProperties:SSJUserChargeTable.cid
-                             withObject:userCharge
-                                  where:SSJUserChargeTable.cid == oldId];
+                           onProperties:SSJMembereChargeTable.memberId
+                             withObject:memberCharge
+                                  where:SSJMembereChargeTable.memberId == oldId];
         if (!success) {
             *stop = YES;
         }
         
+        // 更新周期记账表
+        WCTSelect *chargePeriodSelect = [db prepareSelectObjectsOfClass:SSJChargePeriodConfigTable.class
+                                                  fromTable:@"temp_period_config"];
         
+        if (chargePeriodSelect.error) {
+            *stop = YES;
+            success = NO;
+        }
+        
+        // 首先查出所有用到这个成员的周期记账
+        NSArray <SSJChargePeriodConfigTable *> *periodCharges = [chargePeriodSelect
+                                                                 where:SSJChargePeriodConfigTable.memberIds.like([NSString stringWithFormat:@"%%%@%%",oldId])                                                                 && SSJChargePeriodConfigTable.operatorType != 2].allObjects;
+    
+        // 然后将周期记账中的成员id改成新的id
+        for (SSJChargePeriodConfigTable *periodCharge in periodCharges) {
+            NSString *newMembers = [periodCharge.memberIds stringByReplacingOccurrencesOfString:oldId withString:newId];
+            periodCharge.memberIds = newMembers;
+            success = [db updateRowsInTable:@"temp_period_config"
+                               onProperties:SSJChargePeriodConfigTable.memberIds
+                                 withObject:periodCharge
+                                      where:SSJChargePeriodConfigTable.configId == periodCharge.configId];
+        }
         
         // 删除同名的资金账户
-        success = [db deleteObjectsFromTable:@"temp_loan"
-                                       where:SSJLoanTable.loanId == oldId];
+        success = [db deleteObjectsFromTable:@"temp_member"
+                                       where:SSJMemberTable.memberId == oldId];
         
         if (!success) {
             *stop = YES;
