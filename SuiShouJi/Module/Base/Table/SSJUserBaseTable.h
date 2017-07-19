@@ -66,6 +66,8 @@
 
 @property (nonatomic, retain) NSString* lastSyncTime;
 
+@property (nonatomic, retain) NSString* lastMergeTime;
+
 
 WCDB_PROPERTY(userId)
 WCDB_PROPERTY(password)
@@ -91,5 +93,6 @@ WCDB_PROPERTY(email)
 WCDB_PROPERTY(adviceTime)
 WCDB_PROPERTY(currentSelectFundids)
 WCDB_PROPERTY(lastSyncTime)
+WCDB_PROPERTY(lastMergeTime)
 
 @end

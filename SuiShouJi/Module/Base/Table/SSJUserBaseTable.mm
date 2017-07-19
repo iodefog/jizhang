@@ -34,6 +34,7 @@
 @synthesize adviceTime;
 @synthesize currentSelectFundids;
 @synthesize lastSyncTime;
+@synthesize lastMergeTime;
 
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJUserBaseTable)
@@ -62,6 +63,8 @@ WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, email, "CEMAIL")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, adviceTime, "CADVICETIME")
 WCDB_SYNTHESIZE_COLUMN_DEFAULT(SSJUserBaseTable, currentSelectFundids, "CCURRENTSELECTFUNDID", @"all")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, lastSyncTime, "CLASTSYNCTIME")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, lastMergeTime, "CLASTMERGETIME")
+
 
 //Primary Key
 WCDB_PRIMARY(SSJUserBaseTable, userId)
