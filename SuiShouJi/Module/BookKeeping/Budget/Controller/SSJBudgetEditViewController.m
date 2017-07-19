@@ -20,6 +20,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
+#import "SSJTextFieldAddition.h"
 //#import <UMSSJAnaliyticsManager/SSJAnaliyticsManager.h>
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
@@ -66,14 +67,21 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 //  提醒百分比
 @property (nonatomic) double remindPercent;
 
+@property (nonatomic, strong) SSJTextFieldToolbarManager *textFieldManager;
+
 @end
 
 @implementation SSJBudgetEditViewController
 
 #pragma mark - Lifecycle
+- (void)dealloc {
+    [self.textFieldManager uninstallAllTextFieldToolbar];
+}
+
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesBottomBarWhenPushed = YES;
+        self.textFieldManager = [[SSJTextFieldToolbarManager alloc] init];
     }
     return self;
 }
@@ -563,6 +571,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetMoneyCell.detailTextLabel.text = nil;
         budgetMoneyCell.detailTextLabel.attributedText = nil;
         [budgetMoneyCell.detailTextLabel sizeToFit];
+        [self.textFieldManager installTextFieldToolbar:budgetMoneyCell.textField];
         
     } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
         //  预算提醒
@@ -596,6 +605,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
         budgetScaleCell.textField.rightView = percentLab;
         budgetScaleCell.textField.rightViewMode = UITextFieldViewModeAlways;
+        [self.textFieldManager installTextFieldToolbar:budgetScaleCell.textField];
         
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
         //  周期

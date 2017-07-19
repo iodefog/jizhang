@@ -23,6 +23,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingItem.h"
+#import "SSJTextFieldAddition.h"
 
 /**
  添加／编辑借贷条目
@@ -98,18 +99,22 @@ const int kMemoMaxLength = 15;
 
 @property (nonatomic, strong) NSArray<NSNumber *> *items;
 
+@property (nonatomic, strong) SSJTextFieldToolbarManager *textFieldManager;
+
 @end
 
 @implementation SSJAddOrEditLoanViewController
 
 #pragma mark - Lifecycle
 - (void)dealloc {
+    [self.textFieldManager uninstallAllTextFieldToolbar];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
+        self.textFieldManager = [[SSJTextFieldToolbarManager alloc] init];
     }
     return self;
 }
@@ -177,10 +182,14 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = self.loanModel.lender;
             cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.delegate = self;
             cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.tag = kLenderTag;
             [cell setNeedsLayout];
+            
+            [cell.textField ssj_setOrder:1];
+            [self.textFieldManager installTextFieldToolbar:cell.textField];
             
             return cell;
         }
@@ -202,10 +211,14 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.delegate = self;
             cell.textField.tag = kMoneyTag;
             [cell setNeedsLayout];
+            
+            [cell.textField ssj_setOrder:2];
+            [self.textFieldManager installTextFieldToolbar:cell.textField];
             
             return cell;
         }
@@ -315,12 +328,16 @@ const int kMemoMaxLength = 15;
                 cell.textField.text = [NSString stringWithFormat:@"%.1f", self.loanModel.rate * 100];
             }
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.delegate = self;
             cell.textField.tag = kRateTag;
             [cell setNeedsLayout];
             
             _interestLab = cell.subtitleLabel;
             [self updateInterest];
+            
+            [cell.textField ssj_setOrder:3];
+            [self.textFieldManager installTextFieldToolbar:cell.textField];
             
             return cell;
         }
@@ -351,11 +368,15 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = self.loanModel.memo;
             cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.clearsOnBeginEditing = NO;
             cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.delegate = self;
             cell.textField.tag = kMemoTag;
             [cell setNeedsLayout];
+            
+            [cell.textField ssj_setOrder:4];
+            [self.textFieldManager installTextFieldToolbar:cell.textField];
             
             return cell;
         }

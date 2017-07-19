@@ -9,6 +9,15 @@
 #ifndef MoneyMore_Macro_h
 #define MoneyMore_Macro_h
 
+// 检测内存泄漏的开关
+#ifdef DEBUG
+#define MEMORY_LEAKS_FINDER_ENABLED 1
+#define MEMORY_LEAKS_FINDER_RETAIN_CYCLE_ENABLED 1
+#else
+#define MEMORY_LEAKS_FINDER_ENABLED 0
+#define MEMORY_LEAKS_FINDER_RETAIN_CYCLE_ENABLED 0
+#endif
+
 //  安全地给主线程同步添加任务
 #define SSJDispatch_main_sync_safe(block)\
     if ([NSThread isMainThread]) {\
