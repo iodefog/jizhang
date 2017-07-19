@@ -99,22 +99,18 @@ const int kMemoMaxLength = 15;
 
 @property (nonatomic, strong) NSArray<NSNumber *> *items;
 
-@property (nonatomic, strong) SSJTextFieldToolbarManager *textFieldManager;
-
 @end
 
 @implementation SSJAddOrEditLoanViewController
 
 #pragma mark - Lifecycle
 - (void)dealloc {
-    [self.textFieldManager uninstallAllTextFieldToolbar];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textDidChange:) name:UITextFieldTextDidChangeNotification object:nil];
-        self.textFieldManager = [[SSJTextFieldToolbarManager alloc] init];
     }
     return self;
 }
@@ -188,9 +184,6 @@ const int kMemoMaxLength = 15;
             cell.textField.tag = kLenderTag;
             [cell setNeedsLayout];
             
-            [cell.textField ssj_setOrder:1];
-            [self.textFieldManager installTextFieldToolbar:cell.textField];
-            
             return cell;
         }
             break;
@@ -216,9 +209,7 @@ const int kMemoMaxLength = 15;
             cell.textField.delegate = self;
             cell.textField.tag = kMoneyTag;
             [cell setNeedsLayout];
-            
-            [cell.textField ssj_setOrder:2];
-            [self.textFieldManager installTextFieldToolbar:cell.textField];
+            [cell.textField ssj_installToolbar];
             
             return cell;
         }
@@ -335,9 +326,7 @@ const int kMemoMaxLength = 15;
             
             _interestLab = cell.subtitleLabel;
             [self updateInterest];
-            
-            [cell.textField ssj_setOrder:3];
-            [self.textFieldManager installTextFieldToolbar:cell.textField];
+            [cell.textField ssj_installToolbar];
             
             return cell;
         }
@@ -374,9 +363,6 @@ const int kMemoMaxLength = 15;
             cell.textField.delegate = self;
             cell.textField.tag = kMemoTag;
             [cell setNeedsLayout];
-            
-            [cell.textField ssj_setOrder:4];
-            [self.textFieldManager installTextFieldToolbar:cell.textField];
             
             return cell;
         }
