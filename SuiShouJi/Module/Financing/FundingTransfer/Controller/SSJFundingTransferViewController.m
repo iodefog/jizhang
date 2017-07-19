@@ -21,6 +21,7 @@
 #import "FMDB.h"
 #import "SSJFundingTransferStore.h"
 #import "SSJAnaliyticsManager.h"
+#import "SSJTextFieldToolbarManager.h"
 
 static NSString *const kTransOutAcctName = @"转出账户";
 static NSString *const kTransInAcctName = @"转入账户";
@@ -245,6 +246,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
         circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeWhileEditing;
+        [circleModifyCell.cellInput ssj_installToolbar];
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kMemo]) {
         circleModifyCell.cellInput.hidden = NO;

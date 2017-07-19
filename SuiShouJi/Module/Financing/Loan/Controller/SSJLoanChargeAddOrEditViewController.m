@@ -16,9 +16,11 @@
 #import "SSJHomeDatePickerView.h"
 #import "SSJLoanInterestTypeAlertView.h"
 #import "UIView+SSJViewAnimatioin.h"
+#import "SSJTextFieldToolbarManager.h"
 #import "SSJFundingItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJLoanHelper.h"
+
 
 static NSString *const kAddOrEditLoanLabelCellId = @"SSJAddOrEditLoanLabelCell";
 static NSString *const kAddOrEditLoanTextFieldCellId = @"SSJAddOrEditLoanTextFieldCell";
@@ -109,6 +111,7 @@ static NSUInteger kDateTag = 1005;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         cell.textField.tag = kMoneyTag;
+        [cell.textField ssj_installToolbar];
         [cell setNeedsLayout];
         return cell;
         
@@ -120,6 +123,7 @@ static NSUInteger kDateTag = 1005;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.interestChargeModel.money];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+        [cell.textField ssj_installToolbar];
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         cell.textField.tag = kInterestTag;

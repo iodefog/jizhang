@@ -13,6 +13,7 @@
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJLoanFundAccountSelectionView.h"
 #import "SSJHomeDatePickerView.h"
+#import "SSJTextFieldToolbarManager.h"
 #import "SSJLoanHelper.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJFundingItem.h"
@@ -121,6 +122,7 @@ static NSUInteger kClostOutDateTag = 1004;
             interestCell.textField.clearsOnBeginEditing = YES;
             interestCell.textField.delegate = self;
             interestCell.textField.tag = kInterestTag;
+            [interestCell.textField ssj_installToolbar];
             
         } else if (tag == kFundAccountTag) {
             

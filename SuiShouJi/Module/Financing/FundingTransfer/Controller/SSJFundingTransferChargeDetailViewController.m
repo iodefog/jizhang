@@ -16,6 +16,7 @@
 #import "SSJCreditCardItem.h"
 #import "SSJFundingTransferStore.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJTextFieldToolbarManager.h"
 
 static NSString *const kMoneyImage = @"loan_money";
 static NSString *const kTransOutAcctImage = @"founds_zhuanchuzhanghu";
@@ -140,6 +141,7 @@ static const NSInteger kMemoTag = 1002;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = kMoneyTag;
         circleModifyCell.cellInput.clearButtonMode = UITextFieldViewModeNever;
+        [circleModifyCell.cellInput ssj_installToolbar];
         
     } else if ([model.title isEqualToString:kTransOutAcctName]) {
         
