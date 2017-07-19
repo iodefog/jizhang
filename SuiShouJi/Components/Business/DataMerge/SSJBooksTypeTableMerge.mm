@@ -47,7 +47,8 @@
                                                fromTables:@[ [self tableName], @"bk_user_charge" ]]
                    where:SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJBooksTypeTable.booksId.inTable([self tableName])
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid]
+                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
 
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
@@ -55,7 +56,8 @@
                                                fromTables:@[ @"bk_user_charge", [self tableName] ]]
                    where:SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJBooksTypeTable.booksId.inTable([self tableName])
                    && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid]
+                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
 
     }
@@ -89,7 +91,8 @@
         
         SSJBooksTypeTable *sameNameBook = [[db getOneObjectOfClass:SSJBooksTypeTable.class
                                                           fromTable:[self tableName]]
-                                     where:SSJBooksTypeTable.booksName == currentBooks.booksName && SSJBooksTypeTable.userId == targetUserId];
+                                     where:SSJBooksTypeTable.booksName == currentBooks.booksName
+                                           && SSJBooksTypeTable.userId == targetUserId];
 
         [newAndOldIdDic setObject:currentBooks.booksId forKey:sameNameBook.booksId];
         
@@ -112,7 +115,7 @@
         NSString *oldId = key;
         if (![db isTableExists:@"temp_books_type"] || ![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_period_config"]) {
             SSJPRINT(@">>>>>>>>账本所关联的表不存在<<<<<<<<");
-            *stop = NO;
+            *stop = YES;
             success = NO;
         }
         
@@ -124,7 +127,7 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.booksId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
         
         // 更新周期记账表
@@ -135,7 +138,7 @@
                              withObject:periodConfig
                                   where:SSJChargePeriodConfigTable.booksId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
         
         // 删除账本中同名的账本
@@ -143,7 +146,7 @@
                                        where:SSJBooksTypeTable.booksId == oldId];
 
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
     }];
     
