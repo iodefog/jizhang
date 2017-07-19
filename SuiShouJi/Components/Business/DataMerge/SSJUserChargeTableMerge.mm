@@ -104,14 +104,14 @@
                              withObject:memberCharge
                                   where:SSJMembereChargeTable.memberId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
 
         // 删除通一条流水
         success = [db deleteObjectsFromTable:@"temp_user_charge"
                                        where:SSJUserChargeTable.chargeId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
     }];
     

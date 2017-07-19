@@ -69,6 +69,7 @@
 @property (nonatomic, retain) NSString* lastMergeTime;
 
 
+
 WCDB_PROPERTY(userId)
 WCDB_PROPERTY(password)
 WCDB_PROPERTY(fPassword)

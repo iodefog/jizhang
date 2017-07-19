@@ -50,7 +50,8 @@
                    where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                               && SSJUserRemindTable.userId == sourceUserid]
+                               && SSJUserRemindTable.userId == sourceUserid
+                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
@@ -68,8 +69,8 @@
     WCTMultiObject *creditRemindMultiObject;
     
     while ((creditRemindMultiObject = [creditRemindSelect nextMultiObject])) {
-        SSJUserRemindTable *userBooks = (SSJUserRemindTable *)[creditRemindMultiObject objectForKey:[self tableName]];
-        [tempArr addObject:userBooks];
+        SSJUserRemindTable *reminds = (SSJUserRemindTable *)[creditRemindMultiObject objectForKey:[self tableName]];
+        [tempArr addObject:reminds];
     }
     
     // 然后查出借贷的提醒
@@ -124,7 +125,8 @@
         SSJUserRemindTable *sameRemind = [[db getOneObjectOfClass:SSJUserRemindTable.class
                                                         fromTable:[self tableName]]
                                           
-                                          where:SSJUserRemindTable.remindName == currentRemind.remindName];
+                                          where:SSJUserRemindTable.remindName == currentRemind.remindName
+                                          && SSJUserRemindTable.userId = targetUserId];
         
         [newAndOldIdDic setObject:currentRemind.remindName forKey:sameRemind.remindName];
         
@@ -146,7 +148,7 @@
         NSString *oldId = key;
         if (![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_loan"]) {
             SSJPRINT(@">>>>>>>>提醒所关联的表不存在<<<<<<<<");
-            *stop = NO;
+            *stop = YES;
             success = NO;
         }
         
@@ -158,7 +160,7 @@
                              withObject:credit
                                   where:SSJUserCreditTable.remindId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
         
         // 更新借贷
@@ -170,14 +172,14 @@
                                   where:SSJLoanTable.remindId == oldId];
         
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
         
         // 删除同名的提醒
         success = [db deleteObjectsFromTable:[self tableName]
                                        where:SSJUserChargeTable.chargeId == oldId];
         if (!success) {
-            *stop = NO;
+            *stop = YES;
         }
     }];
     

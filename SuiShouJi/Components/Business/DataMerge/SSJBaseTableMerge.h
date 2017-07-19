@@ -18,7 +18,9 @@
 #import "SSJUserCreditTable.h"
 #import "SSJLoanTable.h"
 #import "SSJFundInfoTable.h"
-
+#import "SSJLoanTable.h"
+#import "SSJMembereChargeTable.h"
+#import "SSJMemberTable.h"
 
 @interface SSJBaseTableMerge : NSObject
 
