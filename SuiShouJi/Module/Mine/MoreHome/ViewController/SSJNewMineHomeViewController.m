@@ -124,7 +124,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         [SSJAlertViewAdapter showError:error];
     }];
 
-//    [self.bannerService requestBannersList];
+    [self.bannerService requestBannersList];
     
     [self.annoucementService requestAnnoucementsWithPage:1];
 }
