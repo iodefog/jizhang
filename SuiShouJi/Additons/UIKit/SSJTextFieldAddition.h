@@ -20,6 +20,10 @@
 
 @interface UITextField (SSJToolbar)
 
+- (void)ssj_installToolbar;
+
+- (void)ssj_uninstallToolbar;
+
 - (void)ssj_setOrder:(NSUInteger)order;
 
 - (NSUInteger)ssj_order;
