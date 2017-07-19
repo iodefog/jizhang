@@ -6,7 +6,7 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJTextFieldAddition.h"
+#import "SSJTextFieldToolbarManager.h"
 #import <objc/runtime.h>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +44,11 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
 }
 
 - (void)ssj_uninstallToolbar {
+    [self ssj_setToolbar:nil];
+    [self ssj_setPreItem:nil];
+    [self ssj_setNextItem:nil];
+    [self ssj_setDoneItem:nil];
+    [self ssj_setSpaceItem:nil];
     self.inputAccessoryView = nil;
 }
 
@@ -185,14 +190,16 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
 }
 
 - (void)uninstallTextFieldToolbar:(UITextField *)textField {
-    [self clearTextField:textField];
+    [textField ssj_uninstallToolbar];
+    [textField removeObserver:self forKeyPath:@"ssj_order"];
     [self.textFields removeObject:textField];
     [self updateToolbarPreAndNextBtnEnable];
 }
 
 - (void)uninstallAllTextFieldToolbar {
     for (UITextField *textField in self.textFields) {
-        [self clearTextField:textField];
+        [textField ssj_uninstallToolbar];
+        [textField removeObserver:self forKeyPath:@"ssj_order"];
     }
     [self.textFields removeAllObjects];
 }
@@ -218,16 +225,6 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
     }
     [self updateToolbarPreAndNextBtnEnable];
     [textField addObserver:self forKeyPath:@"ssj_order" options:(NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew) context:NULL];
-}
-
-- (void)clearTextField:(UITextField *)textField {
-    [textField ssj_setToolbar:nil];
-    [textField ssj_setPreItem:nil];
-    [textField ssj_setNextItem:nil];
-    [textField ssj_setDoneItem:nil];
-    [textField ssj_setSpaceItem:nil];
-    textField.inputAccessoryView = nil;
-    [textField removeObserver:self forKeyPath:@"ssj_order"];
 }
 
 - (void)updateToolbarPreAndNextBtnEnable {

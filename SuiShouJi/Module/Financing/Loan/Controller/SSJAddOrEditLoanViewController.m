@@ -23,7 +23,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingItem.h"
-#import "SSJTextFieldAddition.h"
+#import "SSJTextFieldToolbarManager.h"
 
 /**
  添加／编辑借贷条目

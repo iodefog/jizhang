@@ -20,7 +20,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
-#import "SSJTextFieldAddition.h"
+#import "SSJTextFieldToolbarManager.h"
 //#import <UMSSJAnaliyticsManager/SSJAnaliyticsManager.h>
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
