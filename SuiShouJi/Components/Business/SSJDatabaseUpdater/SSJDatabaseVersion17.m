@@ -85,6 +85,11 @@
     }
     [rs close];
     
+    // 将自定义类别迁移到新表中
+    if (![db executeUpdate:@"replace into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, ?, ub.operatortype, ? from bk_bill_type as bt, bk_user_bill as ub where bt.id = ub.cbillid and ub.operatortype <> 2 and bt.icustom = 1", writeDateStr, @(SSJSyncVersion())]) {
+        return [db lastError];
+    }
+    
     return nil;
 }
 
