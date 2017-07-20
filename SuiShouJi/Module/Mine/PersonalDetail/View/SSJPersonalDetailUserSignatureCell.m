@@ -11,10 +11,12 @@
 
 @implementation SSJPersonalDetailUserSignatureCellItem
 
-+ (instancetype)itemWithSignatureLimit:(NSUInteger)signatureLimit signature:(NSString *)signature {
++ (instancetype)itemWithSignatureLimit:(NSUInteger)signatureLimit signature:(NSString *)signature title:(NSString *)title placeholder:(NSString *)placeholder {
     SSJPersonalDetailUserSignatureCellItem *item = [[SSJPersonalDetailUserSignatureCellItem alloc] init];
     item.signatureLimit = signatureLimit;
     item.signature = signature;
+    item.titleStr = title;
+    item.placeholder = placeholder;
     return item;
 }
 
@@ -69,6 +71,8 @@
     [super setCellItem:cellItem];
     
     SSJPersonalDetailUserSignatureCellItem *item = cellItem;
+    self.leftLab.text = item.titleStr;
+    self.signatureField.placeholder = item.placeholder;
     self.signatureField.text = item.signature;
     RACChannelTo(item, signature) = self.signatureField.rac_newTextChannel;
     
@@ -87,7 +91,8 @@
     self.leftLab.textColor = SSJ_MAIN_COLOR;
     self.counter.textColor = SSJ_SECONDARY_COLOR;
     self.signatureField.textColor = SSJ_SECONDARY_COLOR;
-    self.signatureField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入记账小目标，更有利于小目标实现哦" attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
+    NSString *placeholder = @"输入记账小目标，更有利于小目标实现哦";
+    self.signatureField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:SSJ_SECONDARY_COLOR}];
 }
 
 - (UILabel *)leftLab {

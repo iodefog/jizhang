@@ -8,6 +8,9 @@
 
 #import "SSJBaseViewController.h"
 
+
 @interface SSJWishProgressViewController : SSJBaseViewController
 
+/**wishId*/
+@property (nonatomic, copy) NSString *wishId;
 @end

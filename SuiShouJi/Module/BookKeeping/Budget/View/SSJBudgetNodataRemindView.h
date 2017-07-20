@@ -14,6 +14,9 @@
 
 @property (nonatomic, copy) NSString *title;
 
+/**subTitle*/
+@property (nonatomic, copy) NSString *subTitle;
+
 - (void)updateAppearance;
 
 @end

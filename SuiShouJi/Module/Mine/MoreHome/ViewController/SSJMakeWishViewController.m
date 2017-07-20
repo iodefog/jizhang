@@ -361,16 +361,22 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         @weakify(self);
         [[_makeWishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            //进入许愿成功进度反馈页面
+            SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+            [self.navigationController pushViewController:wishProVC animated:YES];
+            return ;
+            
+#warning zhongyao
            //保存心愿
             self.wishModel.wishName = self.wishNameTextF.text;
             self.wishModel.wishMoney = self.wishAmountTextF.text;
-            [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
-                //进入许愿成功进度反馈页面
-                SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
-                [self.navigationController pushViewController:wishProVC animated:YES];
-            } failure:^(NSError *error) {
-                [CDAutoHideMessageHUD showMessage:error.localizedDescription];
-            }];
+//            [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
+//                //进入许愿成功进度反馈页面
+//                SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+//                [self.navigationController pushViewController:wishProVC animated:YES];
+//            } failure:^(NSError *error) {
+//                [CDAutoHideMessageHUD showMessage:error.localizedDescription];
+//            }];
 
         }];
     }

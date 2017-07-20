@@ -209,6 +209,22 @@ typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     SSJSpecialBillIdShareBooksCloseOutExpense = 14
 };
 
+typedef NS_ENUM(NSInteger, SSJReminderType) {
+    SSJReminderTypeNormal,       //自定义提醒
+    SSJReminderTypeCharge,       //记账提醒
+    SSJReminderTypeCreditCard,   //信用卡提醒
+    SSJReminderTypeBorrowing,     //借贷提醒提醒
+    SSJReminderTypeWish           //愿望提醒
+};
+
+typedef NS_ENUM(NSInteger, SSJWishState) {
+    SSJWishStateNormalIng,       //进行中且没有完成
+    SSJWishStateFinish,          //正常完成
+    SSJWishStateOverfulFinish,   //超额完成
+    SSJWishStateTermination,     //终止
+    SSJReminderTypeRestart,      //重新启动（终止后重新启动）
+    SSJWishStateDelete           //删除
+};
 
 ///------------------------------------------
 /// @name 基本数据常量

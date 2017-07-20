@@ -9,7 +9,6 @@
 #import "SSJBaseTableViewCell.h"
 
 @interface SSJPersonalDetailUserSignatureCell : SSJBaseTableViewCell
-
 @end
 
 @interface SSJPersonalDetailUserSignatureCellItem : SSJBaseCellItem
@@ -18,6 +17,12 @@
 
 @property (nonatomic, copy) NSString *signature;
 
-+ (instancetype)itemWithSignatureLimit:(NSUInteger)signatureLimit signature:(NSString *)signature;
+@property (nonatomic, copy) NSString *titleStr;
+
+@property (nonatomic, copy) NSString *placeholder;
+
++ (instancetype)itemWithSignatureLimit:(NSUInteger)signatureLimit signature:(NSString *)signature title:(NSString *)title placeholder:(NSString *)placeholder;
+
+
 
 @end
