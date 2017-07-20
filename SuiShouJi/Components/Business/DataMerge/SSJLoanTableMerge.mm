@@ -131,15 +131,14 @@
             *stop = YES;
         }
         
-        
-        
-        // 删除同名的资金账户
+        // 删除同名的借贷
         success = [db deleteObjectsFromTable:@"temp_loan"
                                        where:SSJLoanTable.loanId == oldId];
         
         if (!success) {
             *stop = YES;
         }
+        
     }];
     
     return success;

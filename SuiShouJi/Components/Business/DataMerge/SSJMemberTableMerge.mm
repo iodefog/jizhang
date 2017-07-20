@@ -14,7 +14,6 @@
     return @"BK_MEMBER";
 }
 
-
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
                                    mergeType:(SSJMergeDataType)mergeType
@@ -33,9 +32,6 @@
     for (const WCTProperty& property : SSJMemberTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
-    for (const WCTProperty& property : SSJMembereChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable(@"bk_member_charge"));
-    }
     
     NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
     
@@ -45,7 +41,7 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
+                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
                    where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge") == SSJMemberTable.memberId.inTable([self tableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
@@ -55,7 +51,7 @@
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
+                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
                    where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge") == SSJMemberTable.memberId.inTable([self tableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
@@ -116,7 +112,7 @@
         NSString *newId = obj;
         NSString *oldId = key;
         if (![db isTableExists:@"temp_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
-            SSJPRINT(@">>>>>>>>借贷所关联的表不存在<<<<<<<<");
+            SSJPRINT(@">>>>>>>>成员所关联的表不存在<<<<<<<<");
             *stop = YES;
             success = NO;
         }
@@ -155,13 +151,14 @@
                                       where:SSJChargePeriodConfigTable.configId == periodCharge.configId];
         }
         
-        // 删除同名的资金账户
+        // 删除同名的成员
         success = [db deleteObjectsFromTable:@"temp_member"
                                        where:SSJMemberTable.memberId == oldId];
         
         if (!success) {
             *stop = YES;
         }
+        
     }];
     
     return success;

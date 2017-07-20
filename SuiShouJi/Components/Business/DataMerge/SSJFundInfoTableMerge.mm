@@ -105,11 +105,11 @@
     
     __block BOOL success = NO;
     
-    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,转账,周期转账,信用卡还款
+    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *newId = obj;
         NSString *oldId = key;
-        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_period_config"]) {
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_credit_repayment"] || ![db isTableExists:@"temp_loan"] || ![db isTableExists:@"temp_fund_info"] || ![db isTableExists:@"temp_transfer_cycle"]) {
             SSJPRINT(@">>>>>>>>资金账户所关联的表不存在<<<<<<<<");
             *stop = NO;
             success = NO;
@@ -141,10 +141,22 @@
         // 更新信用卡表
         SSJUserCreditTable *creditCard = [[SSJUserCreditTable alloc] init];
         creditCard.cardId = newId;
-        success = [db updateRowsInTable:@"temp_charge_period_config"
+        success = [db updateRowsInTable:@"temp_user_credit"
                            onProperties:SSJUserCreditTable.cardId
                              withObject:creditCard
                                   where:SSJUserCreditTable.cardId == oldId];
+        
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 更新信用卡还款表
+        SSJCreditRepaymentTable *creditRepayMent = [[SSJCreditRepaymentTable alloc] init];
+        creditRepayMent.cardId = newId;
+        success = [db updateRowsInTable:@"temp_credit_repayment"
+                           onProperties:SSJCreditRepaymentTable.cardId
+                             withObject:creditRepayMent
+                                  where:SSJCreditRepaymentTable.cardId == oldId];
         
         if (!success) {
             *stop = YES;
@@ -176,9 +188,37 @@
             *stop = YES;
         }
         
+        // 更新周期转账
+        SSJTransferCycleTable *cycleTransferIn = [[SSJTransferCycleTable alloc] init];
+        cycleTransferIn.transferInId = newId;
+        success = [db updateRowsInTable:@"temp_transfer_cycle"
+                           onProperties:SSJTransferCycleTable.transferInId
+                             withObject:cycleTransferIn
+                                  where:SSJTransferCycleTable.transferInId == oldId];
+        
+        // 更新周期转账,要分别更新转入和转出两个字段
+        SSJTransferCycleTable *cycleTransferOut = [[SSJTransferCycleTable alloc] init];
+        cycleTransferOut.transferOutId = newId;
+        success = [db updateRowsInTable:@"temp_transfer_cycle"
+                           onProperties:SSJTransferCycleTable.transferOutId
+                             withObject:cycleTransferOut
+                                  where:SSJTransferCycleTable.transferOutId == oldId];
+        
+        if (!success) {
+            *stop = YES;
+        }
+        
         // 删除同名的资金账户
         success = [db deleteObjectsFromTable:@"temp_fund_info"
                                        where:SSJFundInfoTable.fundId == oldId];
+        
+        // 要删除相应的信用卡,信用卡还款
+        success = [db deleteObjectsFromTable:@"temp_credit_repayment"
+                                       where:SSJCreditRepaymentTable.cardId == oldId];
+
+        success = [db deleteObjectsFromTable:@"temp_user_credit"
+                                       where:SSJUserCreditTable.cardId == oldId];
+
         
         if (!success) {
             *stop = YES;

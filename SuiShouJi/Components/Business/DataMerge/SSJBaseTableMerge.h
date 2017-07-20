@@ -22,6 +22,8 @@
 #import "SSJMembereChargeTable.h"
 #import "SSJMemberTable.h"
 #import "SSJChargePeriodConfigTable.h"
+#import "SSJCreditRepaymentTable.h"
+#import "SSJTransferCycleTable.h"
 
 @interface SSJBaseTableMerge : NSObject
 
