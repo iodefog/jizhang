@@ -321,6 +321,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishAmountTextF = [[UITextField alloc] init];
         _wishAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _wishAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _wishAmountTextF.keyboardType = UIKeyboardTypePhonePad;
         _wishAmountTextF.delegate = self;
     }
     return _wishAmountTextF;
