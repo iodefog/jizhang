@@ -157,6 +157,7 @@
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     if (!NewFundingCell) {
         NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        NewFundingCell.cellDetail.returnKeyType = UIReturnKeyDone;
     }
     NewFundingCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     NewFundingCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];

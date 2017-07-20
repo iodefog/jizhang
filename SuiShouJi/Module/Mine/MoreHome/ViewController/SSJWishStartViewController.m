@@ -8,6 +8,7 @@
 
 #import "SSJWishStartViewController.h"
 #import "SSJMakeWishViewController.h"
+#import "SSJWishManageViewController.h"
 
 @interface SSJWishStartViewController ()
 
@@ -29,6 +30,17 @@
     [self setUpUI];
     [self appearanceWithTheme];
     [self updateViewConstraints];
+    
+#warning test
+    [self setUpNav];
+}
+- (void)setUpNav {
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清单" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
+}
+
+- (void)navRightClick {
+    SSJWishManageViewController *vc = [[SSJWishManageViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - Layout
@@ -81,6 +93,8 @@
 - (UIButton *)startBtn {
     if (!_startBtn) {
         _startBtn = [[UIButton alloc] init];
+        _startBtn.layer.cornerRadius = 6;
+        _startBtn.layer.masksToBounds = YES;
         [_startBtn setTitle:@"开启" forState:UIControlStateNormal];
         _startBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         @weakify(self);

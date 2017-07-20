@@ -100,8 +100,9 @@
 }
 
 #pragma mark - UITextFieldDelegate
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self commitButtonAction];
+    return YES;
 }
 
 #pragma mark - SSJBaseNetworkServiceDelegate
@@ -356,6 +357,7 @@
         _emailTextField.leftView = leftView;
         _emailTextField.leftViewMode = UITextFieldViewModeAlways;
         _emailTextField.keyboardType = UIKeyboardTypeEmailAddress;
+        _emailTextField.returnKeyType = UIReturnKeyDone;
     }
     return _emailTextField;
 }

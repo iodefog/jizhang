@@ -40,7 +40,7 @@
 }
 
 + (NSError *)createWishTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"create table if not exists BK_WISH(WISHID text not null, CUSERID text not null, WISHNAME text not null, WISHMONEY real not null, WISHIMAGE text, IVERSION integer, CWRITEDATE text, OPERATORTYPE integer, ISFINISHED integer, REMINDID text, STARTDATE text, ENDDATE text, WISHTYPE integer,primary key(WISHID))"]) {
+    if (![db executeUpdate:@"create table if not exists BK_WISH(WISHID text not null, CUSERID text not null, WISHNAME text not null, WISHMONEY real not null, WISHIMAGE text, IVERSION integer, CWRITEDATE text, OPERATORTYPE integer, STATUS integer, REMINDID text, STARTDATE text, ENDDATE text, WISHTYPE integer,primary key(WISHID))"]) {
         return [db lastError];
     }
     return nil;

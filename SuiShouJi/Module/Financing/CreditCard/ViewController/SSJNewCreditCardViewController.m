@@ -268,6 +268,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.text = self.item.cardName;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         _nameInput = newReminderCell.textInput;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -367,6 +368,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 103;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }

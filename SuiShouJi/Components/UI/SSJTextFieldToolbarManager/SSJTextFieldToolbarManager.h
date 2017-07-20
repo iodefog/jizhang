@@ -60,4 +60,9 @@
  */
 - (NSUInteger)ssj_order;
 
+/**
+ 根据主题适配颜色
+ */
+- (void)ssj_updateAppearanceAccordingToTheme;
+
 @end

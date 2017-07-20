@@ -41,6 +41,7 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
 - (void)ssj_installToolbar {
     [self.ssj_toolbar setItems:@[self.ssj_spaceItem, self.ssj_doneItem]];
     self.inputAccessoryView = self.ssj_toolbar;
+    [self ssj_updateAppearanceAccordingToTheme];
 }
 
 - (void)ssj_uninstallToolbar {
@@ -50,6 +51,11 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
     [self ssj_setDoneItem:nil];
     [self ssj_setSpaceItem:nil];
     self.inputAccessoryView = nil;
+}
+
+- (void)ssj_updateAppearanceAccordingToTheme {
+    self.ssj_toolbar.tintColor = SSJ_MAIN_COLOR;
+    self.ssj_toolbar.barTintColor = SSJ_MAIN_FILL_COLOR;
 }
 
 - (NSUInteger)ssj_order {
@@ -74,8 +80,6 @@ static const void *kSSJTextFieldToolbarManagerKey = &kSSJTextFieldToolbarManager
     UIToolbar *toolbar = objc_getAssociatedObject(self, kToolbarKey);
     if (!toolbar) {
         toolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, self.width, 44)];
-        toolbar.tintColor = SSJ_MARCATO_COLOR;
-        toolbar.barTintColor = [UIColor whiteColor];
         [self ssj_setToolbar:toolbar];
     }
     return toolbar;

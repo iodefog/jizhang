@@ -21,7 +21,7 @@
              @"iversion",
              @"cwritedate",
              @"operatortype",
-             @"isfinished",
+             @"status",
              @"remindid",
              @"startdate",
              @"enddate",

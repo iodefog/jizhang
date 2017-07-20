@@ -238,6 +238,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.textInput.text = self.bookName;
         cell.textInput.clearButtonMode = UITextFieldViewModeAlways;
+        cell.textInput.returnKeyType = UIReturnKeyDone;
         self.bookNameTextField = cell.textInput;
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeDetail;

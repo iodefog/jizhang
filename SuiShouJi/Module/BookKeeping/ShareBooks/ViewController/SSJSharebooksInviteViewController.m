@@ -212,6 +212,7 @@
 - (SSJCodeInputView *)codeInput {
     if (!_codeInput) {
         _codeInput = [[SSJCodeInputView alloc] initWithFrame:CGRectZero clearButtonInsects:CGPointMake(-72, 0) editeInsect:UIEdgeInsetsMake(0, 0, 0, 72)];
+        _codeInput.returnKeyType = UIReturnKeyDone;
         _codeInput.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_codeInput ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#DDDDDD"]];

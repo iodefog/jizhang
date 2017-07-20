@@ -13,6 +13,7 @@ typedef NS_ENUM(NSUInteger, SSJBudgetEditUnitTextFieldStyle) {
     SSJBudgetEditUnitTextFieldStyleRight
 };
 
+SSJ_DEPRECATED
 @interface SSJBudgetEditUnitTextField : UITextField
 
 @property (nonatomic, copy) NSString *unit;

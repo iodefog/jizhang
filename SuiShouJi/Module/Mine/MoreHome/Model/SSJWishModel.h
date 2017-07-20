@@ -8,13 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, SSJWishType) {
-    SSJWishTypeCustom,          // 自定义
-    SSJWishTypeDefaultFirst,    // 存下人生第一个1万
-    SSJWishTypeTravel,          // 一场说走就走的旅行
-    SSJWishTypeBuyGift          // 为‘ta’买礼物
-};
-
 @interface SSJWishModel : SSJBaseCellItem
 
 @property (nonatomic, copy) NSString *wishId;
@@ -29,9 +22,9 @@ typedef NS_ENUM(NSInteger, SSJWishType) {
 
 @property (nonatomic, copy) NSString *cwriteDate;
 
-@property (nonatomic, assign) int operatorType;
+@property (nonatomic, assign) SSJOperatorType operatorType;
 
-@property (nonatomic, assign) BOOL isFinished;
+@property (nonatomic, assign) SSJWishState status;
 
 @property (nonatomic, copy) NSString *remindId;
 
