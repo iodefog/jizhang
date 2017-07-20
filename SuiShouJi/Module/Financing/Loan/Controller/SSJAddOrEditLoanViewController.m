@@ -23,6 +23,7 @@
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFundingItem.h"
+#import "SSJTextFieldToolbarManager.h"
 
 /**
  添加／编辑借贷条目
@@ -177,8 +178,9 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = self.loanModel.lender;
             cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.delegate = self;
-            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.tag = kLenderTag;
             [cell setNeedsLayout];
             
@@ -202,10 +204,12 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.loanModel.jMoney];
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-            cell.textField.clearsOnBeginEditing = YES;
+            cell.textField.returnKeyType = UIReturnKeyDone;
+            cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.delegate = self;
             cell.textField.tag = kMoneyTag;
             [cell setNeedsLayout];
+            [cell.textField ssj_installToolbar];
             
             return cell;
         }
@@ -315,12 +319,14 @@ const int kMemoMaxLength = 15;
                 cell.textField.text = [NSString stringWithFormat:@"%.1f", self.loanModel.rate * 100];
             }
             cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.delegate = self;
             cell.textField.tag = kRateTag;
             [cell setNeedsLayout];
             
             _interestLab = cell.subtitleLabel;
             [self updateInterest];
+            [cell.textField ssj_installToolbar];
             
             return cell;
         }
@@ -351,6 +357,7 @@ const int kMemoMaxLength = 15;
             cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
             cell.textField.text = self.loanModel.memo;
             cell.textField.keyboardType = UIKeyboardTypeDefault;
+            cell.textField.returnKeyType = UIReturnKeyDone;
             cell.textField.clearsOnBeginEditing = NO;
             cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
             cell.textField.delegate = self;

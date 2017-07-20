@@ -9,6 +9,7 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJFinancingGradientColorItem.h"
 
+SSJ_DEPRECATED
 @interface SSJNewFundingTypeCell : SSJBaseTableViewCell
 
 @property(nonatomic, strong) NSString *cellText;

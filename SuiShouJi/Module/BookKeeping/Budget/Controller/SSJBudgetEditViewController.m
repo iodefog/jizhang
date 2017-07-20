@@ -20,6 +20,7 @@
 #import "SSJDatePeriod.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJUserTableManager.h"
+#import "SSJTextFieldToolbarManager.h"
 //#import <UMSSJAnaliyticsManager/SSJAnaliyticsManager.h>
 
 static NSString *const kBudgetEditLabelCellId = @"kBudgetEditLabelCellId";
@@ -229,6 +230,15 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     }
 }
 
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField.tag == kBudgetMoneyTextFieldTag) {
+        self.model.budgetMoney = 0;
+    } else if (textField.tag == kBudgetRemindScaleTextFieldTag) {
+        self.model.remindMoney = 0;
+    }
+    return YES;
+}
+
 #pragma mark - Event
 - (void)goBackAction {
     // 如果没有预算直接返回首页
@@ -305,7 +315,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
     
     [self updateSaveButtonState:YES];
     
-    //  检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
+    // 检测是否有预算类别、开始时间、预算周期和当前保存的预算冲突的配置
     [SSJBudgetDatabaseHelper checkIfConflictBudgetModel:self.model success:^(int code, NSDictionary *additionalInfo) {
         
         [self updateSaveButtonState:NO];
@@ -547,10 +557,14 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetMoneyCell.textField.text = [NSString stringWithFormat:@"￥%.2f", self.model.budgetMoney];
         budgetMoneyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetMoneyCell.textField.delegate = self;
+        budgetMoneyCell.textField.placeholder = @"¥0.00";
+        budgetMoneyCell.textField.clearsOnBeginEditing = NO;
+        budgetMoneyCell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         budgetMoneyCell.textField.rightView = nil;
         budgetMoneyCell.detailTextLabel.text = nil;
         budgetMoneyCell.detailTextLabel.attributedText = nil;
         [budgetMoneyCell.detailTextLabel sizeToFit];
+        [budgetMoneyCell.textField ssj_installToolbar];
         
     } else if ([cellTitle isEqualToString:kBudgetRemindTitle]) {
         //  预算提醒
@@ -569,6 +583,9 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         budgetScaleCell.textField.tag = kBudgetRemindScaleTextFieldTag;
         budgetScaleCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         budgetScaleCell.textField.delegate = self;
+        budgetScaleCell.textField.placeholder = @"0.0";
+        budgetScaleCell.textField.clearsOnBeginEditing = YES;
+        budgetScaleCell.textField.clearButtonMode = UITextFieldViewModeNever;
         
         [self updateRemindMoneyScaleWithCell:budgetScaleCell];
         [self updateRemindMoneyWithCell:budgetScaleCell];
@@ -581,6 +598,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         
         budgetScaleCell.textField.rightView = percentLab;
         budgetScaleCell.textField.rightViewMode = UITextFieldViewModeAlways;
+        [budgetScaleCell.textField ssj_installToolbar];
         
     } else if ([cellTitle isEqualToString:kBudgetPeriodTitle]) {
         //  周期

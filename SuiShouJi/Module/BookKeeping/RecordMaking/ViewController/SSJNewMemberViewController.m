@@ -91,6 +91,11 @@
 }
 
 #pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self rightButtonClicked:nil];
+    return YES;
+}
+
 - (void)textFieldDidChange {
     if (self.header.nameInput.text.length >= 1) {
         self.header.firstWord = [self.header.nameInput.text substringWithRange:NSMakeRange(0, 1)];
@@ -98,7 +103,6 @@
         self.header.firstWord = @"";
     }
 }
-
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {

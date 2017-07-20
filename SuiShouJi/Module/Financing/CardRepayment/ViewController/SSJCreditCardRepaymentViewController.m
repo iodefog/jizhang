@@ -16,6 +16,7 @@
 #import "SSJFundingTypeSelectView.h"
 #import "SSJReminderDateSelectView.h"
 #import "SSJHomeDatePickerView.h"
+#import "SSJTextFieldToolbarManager.h"
 
 #import "SSJFinancingHomeHelper.h"
 #import "SSJRepaymentStore.h"
@@ -162,6 +163,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         fenQiCell.textField.delegate = self;
         fenQiCell.textField.tag = 100;
+        [fenQiCell.textField ssj_installToolbar];
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
             fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
         }
@@ -180,6 +182,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     
     SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJRepaymentEditeCellIdentifier];
     repaymentModifyCell.cellInput.delegate = self;
+    repaymentModifyCell.cellInput.returnKeyType = UIReturnKeyDone;
 
     repaymentModifyCell.cellTitle = title;
     repaymentModifyCell.cellImageName = image;

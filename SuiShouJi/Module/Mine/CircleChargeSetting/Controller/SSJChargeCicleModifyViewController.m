@@ -43,6 +43,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJNewMemberViewController.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
+#import "SSJTextFieldToolbarManager.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 @property(nonatomic, strong) NSArray *titles;
@@ -258,6 +259,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellInput.keyboardType = UIKeyboardTypeDecimalPad;
         circleModifyCell.cellInput.delegate = self;
         circleModifyCell.cellInput.tag = 100;
+        [circleModifyCell.cellInput ssj_installToolbar];
         _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTitle5]) {
         circleModifyCell.cellInput.attributedPlaceholder = [[NSAttributedString alloc]initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -265,6 +267,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.text = self.item.chargeMemo;
+        circleModifyCell.cellInput.returnKeyType = UIReturnKeyDone;
         _memoInput = circleModifyCell.cellInput;
     }else{
         circleModifyCell.cellInput.hidden = YES;

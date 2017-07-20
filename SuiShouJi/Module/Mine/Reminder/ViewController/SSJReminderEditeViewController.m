@@ -150,6 +150,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         _nameInput = newReminderCell.textInput;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
@@ -162,6 +163,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             newReminderCell.textInput.text = self.item.remindMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 101;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
     }
     
     // 提醒周期

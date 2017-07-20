@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJBooksTypeItem.h"
 
+SSJ_DEPRECATED
 @interface SSJBooksTypeEditeView : UIView<UITextFieldDelegate>
 @property(nonatomic, strong) SSJBooksTypeItem *item;
 

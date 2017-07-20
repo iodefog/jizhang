@@ -105,7 +105,7 @@
         return NO;
     }
     
-    BOOL success = [db executeUpdate:@"update bk_fund_info set iversion = ? where iversion = ? and cuserid = ? and cparent <> 'root'", newVersion, version + 2, userId];
+    BOOL success = [db executeUpdate:@"update bk_fund_info set iversion = ? where iversion = ? and cuserid = ? and cparent <> 'root'", @(newVersion), @(version + 2), userId];
     if (!success) {
         if (error) {
             *error = [db lastError];

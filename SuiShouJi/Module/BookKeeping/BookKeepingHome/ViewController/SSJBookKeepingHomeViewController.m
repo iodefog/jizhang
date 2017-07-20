@@ -61,7 +61,6 @@
 #import "SSJCustomThemeManager.h"
 #import "SSJBooksTypeStore.h"
 
-#import "SSJDataBaseHelper.h"
 
 
 static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
@@ -169,8 +168,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     
-    SSJDataBaseHelper *help = [[SSJDataBaseHelper alloc] init];
-    
     __weak typeof(self) weakSelf = self;
     [self.mm_drawerController setGestureCompletionBlock:^(MMDrawerController *drawerController, UIGestureRecognizer *gesture) {
         __strong typeof(weakSelf) sself = weakSelf;
@@ -183,7 +180,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             sself->_dateViewHasDismiss = YES;
         }
     }];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     
     if (_needEditeThemeModel) {
         [self.themeModifyView show];
@@ -213,8 +209,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
     _dateViewHasDismiss = YES;
-    
-    
 }
 
 -(void)viewDidLayoutSubviews{
@@ -255,7 +249,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.statusLabel.top = self.homeButton.bottom;
     self.statusLabel.centerX = self.view.width / 2;
     self.themeModifyView.leftBottom = CGPointMake(0, self.view.height);
-} 
+}
+
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
 
 
 #pragma mark - UITableViewDelegate

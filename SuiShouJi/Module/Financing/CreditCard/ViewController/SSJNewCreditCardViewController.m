@@ -21,6 +21,7 @@
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJTextFieldToolbarManager.h"
 #import "SSJListMenu.h"
 
 #define NUM @"+-.0123456789"
@@ -267,6 +268,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.text = self.item.cardName;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         _nameInput = newReminderCell.textInput;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -304,6 +306,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         }
         newReminderCell.textInput.tag = 101;
         newReminderCell.textInput.delegate = self;
+        [newReminderCell.textInput ssj_installToolbar];
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         _limitInput = newReminderCell.textInput;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -365,6 +368,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.textInput.text = self.item.cardMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 103;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
     }

@@ -33,6 +33,8 @@
 
 #define SSJ_BORDER_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]
 
+#define SSJ_MAIN_FILL_COLOR [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor]
+
 
 //  切换主题通知
 extern NSString *const SSJThemeDidChangeNotification;

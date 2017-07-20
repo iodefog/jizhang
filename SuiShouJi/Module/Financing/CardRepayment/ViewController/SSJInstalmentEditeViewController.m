@@ -16,6 +16,7 @@
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJInstalmentDateSelectCell.h"
 #import "SSJHomeDatePickerView.h"
+#import "SSJTextFieldToolbarManager.h"
 
 #import "SSJRepaymentStore.h"
 #import "SSJDatabaseQueue.h"
@@ -170,6 +171,7 @@ static NSString *const kTitle6 = @"分期申请日";
         _poundageLab = poundageModifyCell.subtitleLabel;
         poundageModifyCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         poundageModifyCell.textField.delegate = self;
+        [poundageModifyCell.textField ssj_installToolbar];
         [poundageModifyCell setNeedsLayout];
         [self updatePoundageLab];
         return poundageModifyCell;
@@ -191,6 +193,7 @@ static NSString *const kTitle6 = @"分期申请日";
         fenQiCell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         fenQiCell.textField.tag = 101;
         fenQiCell.textField.delegate = self;
+        [fenQiCell.textField ssj_installToolbar];
         if ([self.repaymentModel.repaymentMoney doubleValue] > 0) {
             fenQiCell.textField.text = [NSString stringWithFormat:@"%.2f",[self.repaymentModel.repaymentMoney doubleValue]];
         }
