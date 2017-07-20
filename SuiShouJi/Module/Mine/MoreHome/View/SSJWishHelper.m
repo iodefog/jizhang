@@ -20,7 +20,7 @@
 + (BOOL)queryHasWishsWithError:(NSError **)error {
     __block BOOL hasWish = NO;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       hasWish = [db intForQuery:@"select count(1) form bk_wish where cuserid = ? and operator",SSJUSERID()];
+       hasWish = [db boolForQuery:@"select count(1) form bk_wish where cuserid = ? and operatortype <> 2",SSJUSERID()];
     }];
     return hasWish;
 }

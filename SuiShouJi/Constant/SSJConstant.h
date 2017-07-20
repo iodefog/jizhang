@@ -220,10 +220,23 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
 typedef NS_ENUM(NSInteger, SSJWishState) {
     SSJWishStateNormalIng,       //进行中且没有完成
     SSJWishStateFinish,          //正常完成
-    SSJWishStateOverfulFinish,   //超额完成
     SSJWishStateTermination,     //终止
+    SSJWishStateOverfulFinish,   //超额完成
     SSJReminderTypeRestart,      //重新启动（终止后重新启动）
     SSJWishStateDelete           //删除
+};
+
+typedef NS_ENUM(NSInteger, SSJWishType) {
+    SSJWishTypeCustom,          // 自定义
+    SSJWishTypeDefaultFirst,    // 存下人生第一个1万
+    SSJWishTypeTravel,          // 一场说走就走的旅行
+    SSJWishTypeBuyGift          // 为‘ta’买礼物
+};
+
+typedef NS_ENUM(NSInteger, SSJOperatorType) {
+    SSJOperatorTypeCreate,          // 新建
+    SSJOperatorTypeModify,          // 修改
+    SSJOperatorTypeDelete           // 删除
 };
 
 ///------------------------------------------
