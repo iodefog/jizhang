@@ -267,6 +267,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.cellInput.hidden = NO;
         circleModifyCell.cellInput.tag = 101;
         circleModifyCell.cellInput.text = self.item.chargeMemo;
+        circleModifyCell.cellInput.returnKeyType = UIReturnKeyDone;
         _memoInput = circleModifyCell.cellInput;
     }else{
         circleModifyCell.cellInput.hidden = YES;

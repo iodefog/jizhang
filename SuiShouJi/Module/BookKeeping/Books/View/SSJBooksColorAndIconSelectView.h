@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJCategoryEditableCollectionView.h"
 
+SSJ_DEPRECATED
 @interface SSJBooksColorAndIconSelectView : UIView
 
 @property (nonatomic, strong, readonly) UITextField *textField;

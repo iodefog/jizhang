@@ -182,6 +182,7 @@ static NSString *const kTitle6 = @"还款账单月份";
     
     SSJChargeCircleModifyCell *repaymentModifyCell = [tableView dequeueReusableCellWithIdentifier:SSJRepaymentEditeCellIdentifier];
     repaymentModifyCell.cellInput.delegate = self;
+    repaymentModifyCell.cellInput.returnKeyType = UIReturnKeyDone;
 
     repaymentModifyCell.cellTitle = title;
     repaymentModifyCell.cellImageName = image;

@@ -159,6 +159,7 @@ static NSUInteger kDateTag = 1005;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"选填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = self.compoundModel.chargeModel.memo;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
+        cell.textField.returnKeyType = UIReturnKeyDone;
         cell.textField.clearsOnBeginEditing = NO;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
