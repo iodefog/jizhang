@@ -138,6 +138,44 @@
             *stop = YES;
         }
         
+        // 更新信用卡表
+        SSJUserCreditTable *creditCard = [[SSJUserCreditTable alloc] init];
+        creditCard.cardId = newId;
+        success = [db updateRowsInTable:@"temp_charge_period_config"
+                           onProperties:SSJUserCreditTable.cardId
+                             withObject:creditCard
+                                  where:SSJUserCreditTable.cardId == oldId];
+        
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 更新借贷表,分别更新来源和目标账户,结清账户
+        SSJLoanTable *loanfund = [[SSJLoanTable alloc] init];
+        loanfund.fundId = newId;
+        success = [db updateRowsInTable:@"temp_loan"
+                           onProperties:SSJLoanTable.fundId
+                             withObject:loanfund
+                                  where:SSJLoanTable.fundId == oldId];
+        
+        SSJLoanTable *loanTargetFund = [[SSJLoanTable alloc] init];
+        loanTargetFund.targetFundid = newId;
+        success = [db updateRowsInTable:@"temp_loan"
+                           onProperties:SSJLoanTable.targetFundid
+                             withObject:loanTargetFund
+                                  where:SSJLoanTable.targetFundid == oldId];
+        
+        SSJLoanTable *loanEndFund = [[SSJLoanTable alloc] init];
+        loanEndFund.endTargetFundid = newId;
+        success = [db updateRowsInTable:@"temp_loan"
+                           onProperties:SSJLoanTable.endTargetFundid
+                             withObject:loanEndFund
+                                  where:SSJLoanTable.endTargetFundid == oldId];
+        
+        if (!success) {
+            *stop = YES;
+        }
+        
         // 删除同名的资金账户
         success = [db deleteObjectsFromTable:@"temp_fund_info"
                                        where:SSJFundInfoTable.fundId == oldId];

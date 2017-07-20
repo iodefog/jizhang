@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *appChannel; //市场渠道名
 @property (nonatomic, copy, nullable) NSString *userId; //若用户未登录可空
 @property (nonatomic, copy, nullable) NSString *userName; //若用户未登录可空
-@property (nonatomic, assign) BOOL isDebug; 
+@property (nonatomic, assign) BOOL logEnable;
+@property (nonatomic, assign) BOOL isDebug;
 @end
 
 @interface YYAnalytics : NSObject
