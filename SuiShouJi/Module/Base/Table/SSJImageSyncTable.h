@@ -10,7 +10,11 @@
 
 @interface SSJImageSyncTable : NSObject <WCTTableCoding>
 
-@property (nonatomic, retain) NSString* Id;
+
+/**
+ 图片的来源id
+ */
+@property (nonatomic, retain) NSString* imageSourceId;
 
 @property (nonatomic, retain) NSString* imageName;
 
@@ -23,7 +27,7 @@
 @property (nonatomic, assign) int syncState;
 
 
-WCDB_PROPERTY(Id)
+WCDB_PROPERTY(imageSourceId)
 WCDB_PROPERTY(imageName)
 WCDB_PROPERTY(writeDate)
 WCDB_PROPERTY(operatorType)
