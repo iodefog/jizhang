@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
 @interface SSJMemoMakingView : UIView<UITextViewDelegate>
 
 @property(nonatomic, strong) NSString *originalText;

@@ -10,6 +10,7 @@
 #import "SSJRecordMakingCategoryItem.h"
 #import "SSJBaseViewController.h"
 
+SSJ_DEPRECATED
 @interface SSJADDNewTypeViewController : SSJBaseViewController
 
 // 是否是支出

@@ -11,6 +11,7 @@
 
 @class SSJRecordMakingCategoryItem;
 
+SSJ_DEPRECATED
 @interface SSJNewOrEditCustomCategoryView : UIView
 
 @property (nonatomic, strong, readonly) UITextField *textField;
