@@ -384,6 +384,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             self.wishModel.wishMoney = self.wishAmountTextF.text;
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
+                self.wishModel = nil;
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
                 [self.navigationController pushViewController:wishProVC animated:YES];
             } failure:^(NSError *error) {

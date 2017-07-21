@@ -10,6 +10,8 @@
 
 #import "SSJWishListTableViewCell.h"
 
+#import "SSJWishHelper.h"
+
 @interface SSJWishFinishedViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 
@@ -23,6 +25,18 @@
     [self.view addSubview:self.tableView];
     [self updateViewConstraints];
     [self updateAppearance];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    @weakify(self);
+    [SSJWishHelper queryIngWishWithState:SSJWishStateFinish success:^(NSMutableArray<SSJWishModel *> *resultArr) {
+        @strongify(self);
+        self.dataArray = resultArr;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -50,8 +64,7 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-    //    return self.dataArray.count;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

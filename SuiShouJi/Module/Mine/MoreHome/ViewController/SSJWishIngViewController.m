@@ -7,12 +7,15 @@
 //
 
 #import "SSJWishIngViewController.h"
+#import "SSJWishProgressViewController.h"
 
 #import "SSJWishListTableViewCell.h"
 
 #import "SSJBudgetNodataRemindView.h"
 
 #import "SSJWishHelper.h"
+
+#import "SSJWishModel.h"
 
 @interface SSJWishIngViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -79,12 +82,18 @@
 }
 
 #pragma mark - UITableViewDelegate
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SSJWishModel *model = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
+    SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
+    wishProgressVC.wishId = model.wishId;
+    
+    [SSJVisibalController().navigationController pushViewController:wishProgressVC animated:YES];
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-//    return self.dataArray.count;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

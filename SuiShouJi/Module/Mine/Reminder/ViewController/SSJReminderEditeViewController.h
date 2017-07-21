@@ -15,6 +15,9 @@
 
 @property (nonatomic, copy) void (^addNewReminderAction)(SSJReminderItem *item);
 
+@property (nonatomic, copy) void (^notSaveReminderAction)();
+
+
 @property (nonatomic, copy) void (^deleteReminderAction)();
 
 @property(nonatomic) BOOL needToSave;

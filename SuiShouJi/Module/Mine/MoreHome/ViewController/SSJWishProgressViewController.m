@@ -16,6 +16,8 @@
 #import "SSJWishModel.h"
 #import "SSJWishChargeItem.h"
 
+#import "SSJWishHelper.h"
+
 @interface SSJWishProgressViewController ()<UITableViewDelegate,UITableViewDataSource>
 /**topBg*/
 @property (nonatomic, strong) UIView *topBg;
@@ -58,6 +60,17 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    @weakify(self);
+    [SSJWishHelper queryWishWithWisId:self.wishId Success:^(SSJWishModel *resultItem) {
+        @strongify(self);
+        //更新头
+        self.wishModel = resultItem;
+        [self updateDataOfTableHeaderView];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+    
+    
 }
 
 #pragma mark - Private
@@ -65,9 +78,17 @@
    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
 }
 
+- (void)updateDataOfTableHeaderView {
+    self.wishTitleL.text = self.wishModel.wishName;
+    self.wishProgressView.progress = [self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue];
+    self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%.2lf",[self.wishModel.wishSaveMoney doubleValue]];
+    self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%.2lf",[self.wishModel.wishMoney doubleValue]];
+}
+
 
 - (void)navRightClick {
     SSJWishDetailViewController *wishDetailVC = [[SSJWishDetailViewController alloc] init];
+    wishDetailVC.wishModel = self.wishModel;
     [self.navigationController pushViewController:wishDetailVC animated:YES];
 }
 
@@ -81,7 +102,8 @@
     }];
     
     [self.wishTitleL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.leftMargin.rightMargin.mas_equalTo(15);
+        make.leftMargin.mas_equalTo(15);
+        make.right.mas_equalTo(-15);
         make.height.lessThanOrEqualTo(@50);
         make.top.mas_equalTo(15);
         make.height.greaterThanOrEqualTo(@22);
@@ -98,12 +120,13 @@
         make.left.mas_equalTo(self.wishTitleL);
         make.width.mas_equalTo(self.wishTitleL.mas_width).multipliedBy(0.5);
         make.top.mas_equalTo(self.wishProgressView.mas_bottom).offset(15);
+        make.height.greaterThanOrEqualTo(0);
     }];
     
     [self.targetAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.saveAmountL.mas_right);
         make.width.top.mas_equalTo(self.saveAmountL);
-        
+        make.height.greaterThanOrEqualTo(0);
     }];
     
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -217,5 +240,12 @@
         _wishChargeListArr = [NSMutableArray array];
     }
     return _wishChargeListArr;
+}
+
+- (SSJWishModel *)wishModel {
+    if (!_wishModel) {
+        _wishModel = [[SSJWishModel alloc] init];
+    }
+    return _wishModel;
 }
 @end

@@ -307,6 +307,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
 }
 
+- (void)ssj_backOffAction {
+    if (self.notSaveReminderAction) {
+        self.notSaveReminderAction();
+    }
+    [super ssj_backOffAction];
+}
+
 - (void)rightButtonCliked:(id)sender{
     if ([SSJLocalNotificationStore deleteReminderWithItem:self.item error:NULL]) {
         if (self.deleteReminderAction) {

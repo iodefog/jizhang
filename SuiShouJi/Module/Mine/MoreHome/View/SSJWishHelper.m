@@ -78,17 +78,18 @@
         }
         
         wishModel.cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:wishModel]];
+        NSMutableDictionary *typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:wishModel]];
+        [typeInfo removeObjectForKey:@"wishSaveMoney"];
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
         NSString *sqlStr = @"";
         if ([db boolForQuery:@"select count(1) from bk_wish where cuserid = ? and wishid = ?",SSJUSERID(),wishId]) {
             //更新
             [typeInfo setObject:@(1) forKey:@"operatortype"];
             sqlStr = [self updateSQLStatementWithTypeInfo:typeInfo tableName:@"bk_wish"];
-            sqlStr = @"";
         } else {
             //新增
             [typeInfo setObject:@(0) forKey:@"operatortype"];
+            [typeInfo setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"startdate"];
             sqlStr = [self insertSQLStatementWithTypeInfo:typeInfo tableName:@"bk_wish"];
         }
         
@@ -165,6 +166,79 @@
         
     }];
 
+}
+
+/**
+ 根据心愿ID查询心愿详情
+ 
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)queryWishWithWisId:(NSString *)wishId
+                   Success:(void(^)(SSJWishModel *resultItem))success
+                   failure:(void(^)(NSError *error))failure {
+    if (!wishId.length) return ;
+    
+     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+         
+        FMResultSet *result = [db executeQuery:@"select bw.*,(select sum(bwc.money) from bk_wish_charge bwc where bw.wishid = bwc.wishid) as savemoney from bk_wish as bw where bw.cuserid = ? and bw.wishid = ?",SSJUSERID(),wishId];
+         
+         if (!result) {
+             SSJDispatch_main_async_safe(^{
+                 failure([db lastError]);
+             });
+             return ;
+         }
+         SSJWishModel *wishModel = [[SSJWishModel alloc] init];
+         while ([result next]) {
+             wishModel.wishId = [result stringForColumn:@"wishid"];
+             wishModel.cuserId = [result stringForColumn:@"cuserid"];
+             wishModel.wishName = [result stringForColumn:@"wishname"];
+             wishModel.wishMoney = [result stringForColumn:@"wishmoney"];
+             wishModel.wishImage = [result stringForColumn:@"wishimage"];
+             wishModel.cwriteDate = [result stringForColumn:@"cwritedate"];
+             wishModel.operatorType = [result intForColumn:@"operatortype"];
+             wishModel.remindId = [result stringForColumn:@"remindid"];
+             wishModel.status = [result intForColumn:@"status"];
+             wishModel.startDate = [result stringForColumn:@"startdate"];
+             wishModel.endDate = [result stringForColumn:@"enddate"];
+             wishModel.wishType = [result intForColumn:@"wishtype"];
+             wishModel.wishSaveMoney = [NSString stringWithFormat:@"%ld",[result longForColumn:@"savemoney"]];
+         }
+         
+         if (success) {
+             SSJDispatchMainAsync(^{
+                 success(wishModel);
+             });
+         }
+     }];
+}
+
+/**
+ 根据心愿ID删除某个心愿
+ 
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)deleteWishWithWisId:(NSString *)wishId
+                    Success:(void(^)())success
+                    failure:(void(^)(NSError *error))failure{
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        if (![db executeUpdate:@""]) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+        
+    }];
 }
 
 #pragma mark - Private

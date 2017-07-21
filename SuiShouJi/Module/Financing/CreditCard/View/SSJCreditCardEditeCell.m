@@ -64,6 +64,7 @@
             self.textInput.size = CGSizeMake(self.contentView.width - self.titleLabel.right - 15, self.contentView.height);
             self.textInput.left = self.titleLabel.right + 10;
             self.textInput.centerY = self.contentView.height / 2;
+            self.textInput.right = self.contentView.width - 15;
             self.textInput.hidden = NO;
             self.titleLabel.hidden = NO;
             self.detailLabel.hidden = YES;
@@ -274,6 +275,7 @@
         _textInput.textAlignment = NSTextAlignmentRight;
         _textInput.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _textInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _textInput.clearButtonMode = UITextFieldViewModeWhileEditing;
     }
     return _textInput;
 }
