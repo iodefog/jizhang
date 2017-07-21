@@ -245,8 +245,10 @@ typedef NS_ENUM(NSInteger, SSJOperatorType) {
 #pragma mark - 基本数据常量
 extern const int64_t SSJDefaultSyncVersion;
 
+// 半透明遮罩背景的透明度
 extern const float SSJMaskAlpha;
 
+// 按钮禁用状态的透明度
 extern const float SSJButtonDisableAlpha;
 
 extern const NSTimeInterval SSJRequestTimeDuration;
