@@ -14,6 +14,9 @@
     return @"BK_FUND_INFO";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_fund_info";
+}
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
@@ -95,7 +98,9 @@
                                       && SSJLoanTable.targetFundid == currentLoan.targetFundid
                                       && SSJLoanTable.userId == targetUserId];
         
-        [newAndOldIdDic setObject:currentLoan.loanId forKey:sameNameLoan.loanId];
+        if (sameNameLoan) {
+            [newAndOldIdDic setObject:currentLoan.loanId forKey:sameNameLoan.loanId];
+        }
         
     }];
     

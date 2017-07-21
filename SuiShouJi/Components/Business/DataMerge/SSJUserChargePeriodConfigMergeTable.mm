@@ -1,31 +1,30 @@
 //
-//  SSJAccountTableMerge.m
+//  SSJUserChargePeriodConfigMergeTable.m
 //  SuiShouJi
 //
-//  Created by ricky on 2017/7/12.
+//  Created by ricky on 2017/7/21.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBooksTypeTableMerge.h"
+#import "SSJUserChargePeriodConfigMergeTable.h"
 
-
-@implementation SSJBooksTypeTableMerge
+@implementation SSJUserChargePeriodConfigMergeTable
 
 + (NSString *)tableName {
-    return @"BK_BOOKS_TYPE";
+    return @"BK_CHARGE_PERIOD_CONFIG";
 }
 
 + (NSString *)tempTableName {
-    return @"temp_books_type";
+    return @"temp_charge_period_config";
 }
 
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
-                                                 TargetUserId:(NSString *)targetUserId
-                                                    mergeType:(SSJMergeDataType)mergeType
-                                                     FromDate:(NSDate *)fromDate
-                                                       ToDate:(NSDate *)toDate
-                                                   inDataBase:(WCTDatabase *)db {
+                                TargetUserId:(NSString *)targetUserId
+                                   mergeType:(SSJMergeDataType)mergeType
+                                    FromDate:(NSDate *)fromDate
+                                      ToDate:(NSDate *)toDate
+                                  inDataBase:(WCTDatabase *)db {
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithCapacity:0];
     
     
@@ -36,7 +35,7 @@
     for (const WCTProperty& property : SSJUserChargeTable.AllProperties) {
         multiProperties.push_back(property.inTable(@"bk_user_charge"));
     }
-    for (const WCTProperty& property : SSJBooksTypeTable.AllProperties) {
+    for (const WCTProperty& property : SSJChargePeriodConfigTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
     
@@ -49,21 +48,21 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJBooksTypeTable.booksId.inTable([self tableName])
+                   where:SSJChargePeriodConfigTable.configId.inTable([self tableName]) == SSJUserChargeTable.cid.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
-
+        
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ @"bk_user_charge", [self tableName] ]]
-                   where:SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJBooksTypeTable.booksId.inTable([self tableName])
+                   where:SSJChargePeriodConfigTable.configId.inTable([self tableName]) == SSJUserChargeTable.cid.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
-
+        
     }
     
     WCTError *error = select.error;
@@ -71,10 +70,10 @@
     [dict setObject:error forKey:@"error"];
     
     WCTMultiObject *multiObject;
-
+    
     while ((multiObject = [select nextMultiObject])) {
-        SSJBooksTypeTable *userBooks = (SSJBooksTypeTable *)[multiObject objectForKey:[self tableName]];
-        [tempArr addObject:userBooks];
+        SSJChargePeriodConfigTable *periodConfigs = (SSJChargePeriodConfigTable *)[multiObject objectForKey:[self tableName]];
+        [tempArr addObject:periodConfigs];
     }
     
     [dict setObject:tempArr forKey:@"results"];
@@ -83,23 +82,25 @@
 }
 
 + (NSDictionary *)getSameNameIdsWithSourceUserId:(NSString *)sourceUserid
-                                         TargetUserId:(NSString *)targetUserId
-                                            withDatas:(NSArray *)datas
-                                           inDataBase:(WCTDatabase *)db {
+                                    TargetUserId:(NSString *)targetUserId
+                                       withDatas:(NSArray *)datas
+                                      inDataBase:(WCTDatabase *)db {
     
     // 建立一个新老id对照的字典,key是老的id,value是新的id
     NSMutableDictionary *newAndOldIdDic = [NSMutableDictionary dictionaryWithCapacity:0];
     
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        SSJBooksTypeTable *currentBooks = (SSJBooksTypeTable *)obj;
+        SSJChargePeriodConfigTable *currentConfig = (SSJChargePeriodConfigTable *)obj;
         
-        SSJBooksTypeTable *sameNameBook = [[db getOneObjectOfClass:SSJBooksTypeTable.class
-                                                          fromTable:[self tableName]]
-                                     where:SSJBooksTypeTable.booksName == currentBooks.booksName
-                                           && SSJBooksTypeTable.userId == targetUserId];
-
-        if (sameNameBook) {
-            [newAndOldIdDic setObject:currentBooks.booksId forKey:sameNameBook.booksId];
+        SSJChargePeriodConfigTable *sameNameConfig = [[db getOneObjectOfClass:SSJChargePeriodConfigTable.class
+                                                         fromTable:[self tableName]]
+                                                    where:SSJChargePeriodConfigTable.fundId == currentConfig.fundId
+                                                    && SSJChargePeriodConfigTable.billDate == currentConfig.billDate
+                                                    && SSJChargePeriodConfigTable.booksId == currentConfig.booksId
+                                                    && SSJChargePeriodConfigTable.userId == targetUserId];
+        
+        if (sameNameConfig) {
+            [newAndOldIdDic setObject:currentConfig.configId forKey:sameNameConfig.configId];
         }
         
     }];
@@ -109,9 +110,9 @@
 }
 
 + (BOOL)updateRelatedTableWithSourceUserId:(NSString *)sourceUserid
-                                    TargetUserId:(NSString *)targetUserId
-                                       withDatas:(NSDictionary *)datas
-                                      inDataBase:(WCTDatabase *)db {
+                              TargetUserId:(NSString *)targetUserId
+                                 withDatas:(NSDictionary *)datas
+                                inDataBase:(WCTDatabase *)db {
     
     __block BOOL success = NO;
     
@@ -150,7 +151,7 @@
         // 删除账本中同名的账本
         success = [db deleteObjectsFromTable:@"temp_books_type"
                                        where:SSJBooksTypeTable.booksId == oldId];
-
+        
         if (!success) {
             *stop = YES;
         }
@@ -158,5 +159,6 @@
     
     return success;
 }
+
 
 @end

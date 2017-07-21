@@ -14,6 +14,10 @@
     return @"BK_MEMBER";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_member";
+}
+
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
                                    mergeType:(SSJMergeDataType)mergeType
@@ -33,7 +37,7 @@
         multiProperties.push_back(property.inTable([self tableName]));
     }
     for (const WCTProperty& property : SSJMembereChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable(bk_member_charge));
+        multiProperties.push_back(property.inTable(@"bk_member_charge"));
     }
     
     NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
@@ -55,9 +59,9 @@
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
-                   where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge").like(SSJMemberTable.memberId.inTable([self tableName]) + @"123")
+                   where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge") == SSJMemberTable.memberId.inTable([self tableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                   && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
@@ -97,7 +101,9 @@
                                       where:SSJMemberTable.memberName == currentMember.memberName
                                           && SSJMemberTable.userId == targetUserId];
         
-        [newAndOldIdDic setObject:currentMember.memberId forKey:sameNameMember.memberId];
+        if (sameNameMember) {
+            [newAndOldIdDic setObject:currentMember.memberId forKey:sameNameMember.memberId];
+        }
         
     }];
     

@@ -1,18 +1,21 @@
 //
-//  SSJImageSyncTableMerge.m
+//  SSJMemberChargeTableMerge.m
 //  SuiShouJi
 //
-//  Created by ricky on 2017/7/20.
+//  Created by ricky on 2017/7/21.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJImageSyncTableMerge.h"
+#import "SSJMemberChargeTableMerge.h"
 
-@implementation SSJImageSyncTableMerge
-#warning TODO - 因为wcdb暂时没有字符串拼接,等下礼拜一再做
+@implementation SSJMemberChargeTableMerge
 
 + (NSString *)tableName {
-    return @"BK_MEMBER";
+    return @"BK_MEMBER_CHARGE";
+}
+
++ (NSString *)tempTableName {
+    return @"temp_member_charge";
 }
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
@@ -30,9 +33,10 @@
     for (const WCTProperty& property : SSJUserChargeTable.AllProperties) {
         multiProperties.push_back(property.inTable(@"bk_user_charge"));
     }
-    for (const WCTProperty& property : SSJImageSyncTable.AllProperties) {
+    for (const WCTProperty& property : SSJMembereChargeTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
+
     
     NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
     
@@ -42,8 +46,8 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJUserChargeTable.imgUrl.inTable(@"bk_user_charge") == SSJMemberTable.memberId.inTable([self tableName])
+                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
+                   where:SSJMembereChargeTable.chargeId.inTable([self tableName]) == SSJUserChargeTable.chargeId.inTable([self tableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -53,12 +57,14 @@
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
-                   where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge") == SSJMemberTable.memberId.inTable([self tableName])
+                   where:SSJMembereChargeTable.chargeId.inTable([self tableName]) == SSJUserChargeTable.chargeId.inTable([self tableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                   && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
+        
+        
     }
     
     WCTError *error = select.error;
@@ -68,8 +74,8 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJMemberTable *members = (SSJMemberTable *)[multiObject objectForKey:[self tableName]];
-        [tempArr addObject:members];
+        SSJMembereChargeTable *memberCharges = (SSJMembereChargeTable *)[multiObject objectForKey:[self tableName]];
+        [tempArr addObject:memberCharges];
     }
     
     [dict setObject:tempArr forKey:@"results"];
@@ -86,14 +92,27 @@
     NSMutableDictionary *newAndOldIdDic = [NSMutableDictionary dictionaryWithCapacity:0];
     
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        SSJMemberTable *currentMember = (SSJMemberTable *)obj;
+        // 成员流水表由于是最后合并的,只要把同样的成员流水,或者被合并账户中已经存在的删掉即可
         
-        SSJMemberTable *sameNameMember = [[db getOneObjectOfClass:SSJLoanTable.class
+        SSJMembereChargeTable *currentMemberCharge = (SSJMembereChargeTable *)obj;
+        
+        SSJMembereChargeTable *sameNameMemberCharge = [[db getOneObjectOfClass:SSJMembereChargeTable.class
                                                         fromTable:[self tableName]]
-                                          where:SSJMemberTable.memberName == currentMember.memberName
-                                          && SSJMemberTable.userId == targetUserId];
+                                          where:SSJMembereChargeTable.chargeId == currentMemberCharge.chargeId
+                                                       && SSJMembereChargeTable.memberId == currentMemberCharge.memberId];
         
-        [newAndOldIdDic setObject:currentMember.memberId forKey:sameNameMember.memberId];
+        NSString *currentMemberChargeUnionId = [NSString stringWithFormat:@"%@,%@",currentMemberCharge.memberId,currentMemberCharge.chargeId];
+        
+        if (sameNameMemberCharge) {
+            [newAndOldIdDic setObject:currentMemberChargeUnionId forKey:@""];
+        }
+        
+        NSNumber *userChargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"bk_user_charge"] where:SSJUserChargeTable.chargeId == currentMemberCharge.chargeId
+                                          && SSJUserChargeTable.userId == targetUserId];
+        
+        if (userChargeCount > 0 ) {
+            [newAndOldIdDic setObject:currentMemberChargeUnionId forKey:@""];
+        }
         
     }];
     
@@ -112,49 +131,15 @@
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *newId = obj;
         NSString *oldId = key;
-        if (![db isTableExists:@"temp_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
-            SSJPRINT(@">>>>>>>>成员所关联的表不存在<<<<<<<<");
-            *stop = YES;
-            success = NO;
-        }
         
-        // 更新成员流水表
-        SSJMembereChargeTable *memberCharge = [[SSJMembereChargeTable alloc] init];
-        memberCharge.memberId = newId;
-        success = [db updateRowsInTable:@"temp_user_charge"
-                           onProperties:SSJMembereChargeTable.memberId
-                             withObject:memberCharge
-                                  where:SSJMembereChargeTable.memberId == oldId];
-        if (!success) {
-            *stop = YES;
-        }
+        NSString *oldMemberId = [[obj componentsSeparatedByString:@","] firstObject];
+        NSString *oldChargeId = [[obj componentsSeparatedByString:@","] lastObject];
         
-        // 更新周期记账表
-        WCTSelect *chargePeriodSelect = [db prepareSelectObjectsOfClass:SSJChargePeriodConfigTable.class
-                                                              fromTable:@"temp_period_config"];
-        
-        if (chargePeriodSelect.error) {
-            *stop = YES;
-            success = NO;
-        }
-        
-        // 首先查出所有用到这个成员的周期记账
-        NSArray <SSJChargePeriodConfigTable *> *periodCharges = [chargePeriodSelect
-                                                                 where:SSJChargePeriodConfigTable.memberIds.like([NSString stringWithFormat:@"%%%@%%",oldId])                                                                 && SSJChargePeriodConfigTable.operatorType != 2].allObjects;
-        
-        // 然后将周期记账中的成员id改成新的id
-        for (SSJChargePeriodConfigTable *periodCharge in periodCharges) {
-            NSString *newMembers = [periodCharge.memberIds stringByReplacingOccurrencesOfString:oldId withString:newId];
-            periodCharge.memberIds = newMembers;
-            success = [db updateRowsInTable:@"temp_period_config"
-                               onProperties:SSJChargePeriodConfigTable.memberIds
-                                 withObject:periodCharge
-                                      where:SSJChargePeriodConfigTable.configId == periodCharge.configId];
-        }
         
         // 删除同名的成员
-        success = [db deleteObjectsFromTable:@"temp_member"
-                                       where:SSJMemberTable.memberId == oldId];
+        success = [db deleteObjectsFromTable:@"temp_member_charge"
+                                       where:SSJMembereChargeTable.memberId == oldMemberId
+                                             && SSJMembereChargeTable.chargeId == oldChargeId];
         
         if (!success) {
             *stop = YES;

@@ -14,6 +14,10 @@
     return @"BK_USER_REMIND";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_user_remind";
+}
+
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
                                    mergeType:(SSJMergeDataType)mergeType
@@ -128,7 +132,9 @@
                                           where:SSJUserRemindTable.remindName == currentRemind.remindName
                                           && SSJUserRemindTable.userId = targetUserId];
         
-        [newAndOldIdDic setObject:currentRemind.remindName forKey:sameRemind.remindName];
+        if (sameRemind) {
+            [newAndOldIdDic setObject:currentRemind.remindName forKey:sameRemind.remindName];
+        }
         
     }];
     

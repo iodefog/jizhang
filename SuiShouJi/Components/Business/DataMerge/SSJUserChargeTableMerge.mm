@@ -14,6 +14,9 @@
     return @"BK_USER_CHARGE";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_user_charge";
+}
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
@@ -72,7 +75,9 @@
                                           && SSJUserChargeTable.chargeType == currentCharge.chargeType
                                           && SSJUserChargeTable.userId == targetUserId];
 
-        [newAndOldIdDic setObject:currentCharge.chargeId forKey:sameCharge.chargeId];
+        if (sameCharge) {
+            [newAndOldIdDic setObject:currentCharge.chargeId forKey:sameCharge.chargeId];
+        }
         
     }];
     
@@ -107,7 +112,7 @@
             *stop = YES;
         }
         
-        // 更新成员流水
+        // 更新图片同步表
         SSJImageSyncTable *syncImage = [[SSJImageSyncTable alloc] init];
         syncImage.imageSourceId = newId;
         success = [db updateRowsInTable:@"temp_member_charge"
