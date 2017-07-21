@@ -19,8 +19,8 @@
  */
 + (BOOL)queryHasWishsWithError:(NSError **)error {
     __block BOOL hasWish = NO;
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-       hasWish = [db boolForQuery:@"select count(1) form bk_wish where cuserid = ? and operatortype <> 2",SSJUSERID()];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+       hasWish = [db boolForQuery:@"select count(1) from bk_wish where cuserid = ? and operatortype <> 2", SSJUSERID()];
     }];
     return hasWish;
 }
@@ -108,6 +108,66 @@
         
     }];
 }
+
+/**
+ 查询心愿列表
+ 
+ @param state 已完成或者未完成
+ @param success 成功
+ @param failure 失败
+ */
++ (void)queryIngWishWithState:(SSJWishState)state
+                      success:(void(^)(NSMutableArray <SSJWishModel *>*resultArr))success
+                      failure:(void(^)(NSError *error))failure {
+    
+    NSMutableString *queryStr;
+    
+    if (state == SSJWishStateFinish) {
+        queryStr = [NSMutableString stringWithFormat:@"select bw.*,(select sum(bwc.money) from bk_wish_charge bwc where bw.wishid = bwc.wishid) as savemoney from bk_wish  as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and status = 1 order by bw.startdate asc",SSJUSERID()];
+
+    } else if (state == SSJWishStateNormalIng) {
+        queryStr = [NSMutableString stringWithFormat:@"select bw.*,(select sum(bwc.money) from bk_wish_charge bwc where bw.wishid = bwc.wishid) as savemoney from bk_wish  as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and status <> 1 order by bw.startdate asc",SSJUSERID()];
+    }
+
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+       FMResultSet *result = [db executeQuery:queryStr];
+        if (!result) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        NSMutableArray *relultArray = [NSMutableArray array];
+        while (result.next) {
+            SSJWishModel *wishModel = [[SSJWishModel alloc] init];
+            wishModel.wishId = [result stringForColumn:@"wishid"];
+            wishModel.cuserId = [result stringForColumn:@"cuserid"];
+            wishModel.wishName = [result stringForColumn:@"wishname"];
+            wishModel.wishMoney = [result stringForColumn:@"wishmoney"];
+            wishModel.wishImage = [result stringForColumn:@"wishimage"];
+            wishModel.cwriteDate = [result stringForColumn:@"cwritedate"];
+            wishModel.operatorType = [result intForColumn:@"operatortype"];
+            wishModel.remindId = [result stringForColumn:@"remindid"];
+            wishModel.status = [result intForColumn:@"status"];
+            wishModel.startDate = [result stringForColumn:@"startdate"];
+            wishModel.endDate = [result stringForColumn:@"enddate"];
+            wishModel.wishType = [result intForColumn:@"wishtype"];
+            wishModel.wishSaveMoney = [NSString stringWithFormat:@"%ld",[result longForColumn:@"savemoney"]];
+            [relultArray addObject:wishModel];
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(relultArray);
+            });
+        }
+        
+    }];
+
+}
+
+#pragma mark - Private
 
 + (NSDictionary *)fieldMapWithTypeItem:(SSJWishModel *)item {
     [SSJWishModel mj_setupReplacedKeyFromPropertyName:^NSDictionary *{

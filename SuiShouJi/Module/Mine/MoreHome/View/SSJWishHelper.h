@@ -63,4 +63,17 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
                       success:(void(^)())success
                       failure:(void(^)(NSError *error))failure;
 
+
+
+/**
+ 查询心愿列表
+
+ @param state 已完成或者未完成
+ @param success 成功
+ @param failure 失败
+ */
++ (void)queryIngWishWithState:(SSJWishState)state
+                      success:(void(^)(NSMutableArray <SSJWishModel *>*resultArr))success
+                     failure:(void(^)(NSError *error))failure;
+
 @end

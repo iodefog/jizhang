@@ -78,6 +78,7 @@
         [_progressBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_progressBtn setTitle:@"0" forState:UIControlStateNormal];
         _progressBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
+        [_progressBtn setTitleEdgeInsets:UIEdgeInsetsMake(-2, 0, 2, 0)];
         [_progressBtn sizeToFit];
     }
     return _progressBtn;

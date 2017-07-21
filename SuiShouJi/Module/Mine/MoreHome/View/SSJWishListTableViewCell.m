@@ -9,6 +9,9 @@
 #import "SSJWishListTableViewCell.h"
 
 #import "SSJWishProgressView.h"
+
+#import "SSJWishModel.h"
+
 @interface SSJWishListTableViewCell ()
 /**bg*/
 @property (nonatomic, strong) UIView *bgView;
@@ -23,6 +26,8 @@
 
 /**stateLabel*/
 @property (nonatomic, strong) UILabel *stateLabel;
+
+@property (nonatomic, strong) UIButton *stateBtn;
 @end
 
 
@@ -35,8 +40,12 @@
         [self.bgView addSubview:self.saveAmountL];
         [self.bgView addSubview:self.targetAmountL];
         [self.bgView addSubview:self.stateLabel];
+        [self.bgView addSubview:self.stateBtn];
 
         [self setNeedsUpdateConstraints];
+        [self updateAppearance];
+        self.stateBtn.hidden = YES;
+        self.stateLabel.hidden = YES;
     }
     return self;
 }
@@ -49,6 +58,19 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     return cell;
+}
+
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    [super setCellItem:cellItem];
+    if ([cellItem isKindOfClass:[SSJWishModel class]]) {
+        SSJWishModel *item = cellItem;
+        self.wishTitleL.text = item.wishName;
+        self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%@",item.wishSaveMoney];
+        self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%@",item.wishMoney];
+        self.wishProgressView.progress = [item.wishSaveMoney floatValue] / [item.wishMoney floatValue];
+        [self updateStateBtnAppearance];
+    }
+    
 }
 
 #pragma mark - Layout
@@ -93,8 +115,54 @@
         make.right.mas_equalTo(0);
         make.width.mas_equalTo(66);
     }];
+    
+    [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.wishTitleL);
+        make.height.mas_equalTo(22);
+        make.right.mas_equalTo(-15);
+        make.width.mas_equalTo(66);
+    }];
 
     [super updateConstraints];
+}
+
+#pragma mark - Theme
+- (void)updateCellAppearanceAfterThemeChanged {
+    [super updateCellAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    self.stateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
+        self.contentView.backgroundColor = [UIColor clearColor];
+//    self.bgView.backgroundColor =
+    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+//    [self.accessoryBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.bgView.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
+    } else {
+        self.bgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
+    }
+    [self updateStateBtnAppearance];
+}
+
+- (void)updateStateBtnAppearance {
+    if (![self.cellItem isKindOfClass:[SSJWishModel class]]) return;
+    SSJWishModel *item = self.cellItem;
+    if (item.status == SSJWishStateTermination) {//终止
+        [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [self.stateBtn setTitle:@"重新开始" forState:UIControlStateNormal];
+        self.stateBtn.hidden = NO;
+    } else if (item.status == SSJWishStateFinish) {//完成
+        self.stateBtn.hidden = YES;
+    } else {//进行中
+        [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [self.stateBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        [self.stateBtn setTitle:@"存" forState:UIControlStateNormal];
+        self.stateBtn.hidden = NO;
+    }
 }
 
 #pragma mark - Lazy
@@ -128,6 +196,7 @@
         _targetAmountL = [[UILabel alloc] init];
         _targetAmountL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _targetAmountL.text = @"目标金额";
+        _targetAmountL.textAlignment = NSTextAlignmentRight;
     }
     return _targetAmountL;
 }
@@ -136,6 +205,7 @@
     if (!_wishTitleL) {
         _wishTitleL = [[UILabel alloc] init];
         _wishTitleL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _wishTitleL.numberOfLines = 0;
     }
     return _wishTitleL;
 }
@@ -146,5 +216,16 @@
         _stateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _stateLabel;
+}
+
+- (UIButton *)stateBtn {
+    if (!_stateBtn) {
+        _stateBtn = [[UIButton alloc] init];
+        _stateBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _stateBtn.layer.cornerRadius = 11;
+        _stateBtn.layer.borderWidth = 1;
+        _stateBtn.layer.masksToBounds = YES;
+    }
+    return _stateBtn;
 }
 @end

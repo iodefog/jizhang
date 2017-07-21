@@ -40,5 +40,8 @@
  */
 @property (nonatomic, assign) SSJWishType wishType;
 
+/**已存入金额*/
+@property (nonatomic, copy) NSString *wishSaveMoney;
+
 + (NSDictionary *)propertyMapping;
 @end

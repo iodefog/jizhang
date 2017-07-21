@@ -12,10 +12,12 @@
 
 #import "SSJBudgetNodataRemindView.h"
 
+#import "SSJWishHelper.h"
+
 @interface SSJWishIngViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray <SSJWishModel *> *dataArray;
 
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
@@ -28,16 +30,28 @@
     [self.view addSubview:self.tableView];
     [self.tableView addSubview:self.noDataRemindView];
     [self updateViewConstraints];
-    
+    [self updateAppearance];
 //    [RACObserve(self, dataArray.count) subscribeNext:^(id x) {
     
 //        NSInteger count = x.count;
 //        if (count > 0) {
-//            self.noDataRemindView.hidden = YES;
+            self.noDataRemindView.hidden = YES;
 //        } else {
 //            self.noDataRemindView.hidden = NO;
 //        }
 //    }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    @weakify(self);
+    [SSJWishHelper queryIngWishWithState:SSJWishStateNormalIng success:^(NSMutableArray<SSJWishModel *> *resultArr) {
+        @strongify(self);
+        self.dataArray = resultArr;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -52,6 +66,17 @@
     [super updateViewConstraints];
 }
 
+#pragma mark - Theme
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.view.backgroundColor =[UIColor whiteColor];
+    }
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -64,6 +89,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
+    cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
@@ -82,7 +108,7 @@
     return _tableView;
 }
 
-- (NSMutableArray *)dataArray {
+- (NSMutableArray<SSJWishModel *> *)dataArray {
     if (!_dataArray) {
         _dataArray = [NSMutableArray array];
     }

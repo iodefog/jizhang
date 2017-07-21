@@ -41,4 +41,5 @@
              @"wishType":@"wishtype"
              };
 }
+
 @end

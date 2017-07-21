@@ -22,6 +22,7 @@
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     [self updateViewConstraints];
+    [self updateAppearance];
 }
 
 - (void)updateViewConstraints {
@@ -32,6 +33,17 @@
     [super updateViewConstraints];
 }
 
+#pragma mark - Theme
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.view.backgroundColor =[UIColor whiteColor];
+    }
+}
 
 #pragma mark - UITableViewDelegate
 
