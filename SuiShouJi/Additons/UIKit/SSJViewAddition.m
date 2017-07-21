@@ -585,22 +585,36 @@ static const void *kShowViewsIdentifier = &kShowViewsIdentifier;
 
 #ifdef DEBUG
 + (void)load {
+    SSJSwizzleSelector([self class], @selector(updateConstraints), @selector(ssj_updateConstraints));
     SSJSwizzleSelector([self class], @selector(setNeedsUpdateConstraints), @selector(ssj_setNeedsUpdateConstraints));
     SSJSwizzleSelector([self class], @selector(updateConstraintsIfNeeded), @selector(ssj_updateConstraintsIfNeeded));
 }
 #endif
 
+- (void)ssj_updateConstraints {
+    [self ssj_updateConstraints];
+    if (![NSThread isMainThread]) {
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更新约束"}]];
+        });
+    }
+}
+
 - (void)ssj_setNeedsUpdateConstraints {
     [self ssj_setNeedsUpdateConstraints];
     if (![NSThread isMainThread]) {
-        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更新约束"}]];
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更新约束"}]];
+        });
     }
 }
 
 - (void)ssj_updateConstraintsIfNeeded {
     [self ssj_updateConstraintsIfNeeded];
     if (![NSThread isMainThread]) {
-        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更新约束"}]];
+        SSJDispatchMainAsync(^{
+            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更新约束"}]];
+        });
     }
 }
 

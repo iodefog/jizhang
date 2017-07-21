@@ -9,6 +9,7 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJChargeMemberItem.h"
 
+SSJ_DEPRECATED
 @interface SSJMemberCell : SSJBaseTableViewCell
 @property(nonatomic, strong) SSJChargeMemberItem *item;
 @end

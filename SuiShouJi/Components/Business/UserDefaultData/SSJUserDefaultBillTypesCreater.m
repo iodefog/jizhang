@@ -11,68 +11,66 @@
 
 @implementation SSJUserDefaultBillTypesCreater
 
-
-/**
- 创建哪些账本的收支类别，目前只创建日常账本的类别，如果要创建其它账本的类别，就在返回的集合中添加
-
- @return
- */
-+ (NSSet *)booksTypesNeedToCreateBillTypes {
-    return [NSSet setWithObjects:@(SSJBooksTypeDaily), nil];
-}
-
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    NSString *booksId = [NSString stringWithFormat:@"%@-%d", userId, (int)SSJBooksTypeDaily];
+    NSString *booksId = userId;
     [self createDefaultDataTypeForUserId:userId booksId:booksId booksType:SSJBooksTypeDaily inDatabase:db error:error];
 }
 
-+ (void)createDefaultDataTypeForUserId:(NSString *)userId booksId:(NSString *)booksId booksType:(SSJBooksType)booksType inDatabase:(FMDatabase *)db error:(NSError **)error {
-#warning TODO
-    FMResultSet *billTypeResult = [db executeQuery:@"select id, istate, defaultOrder, ibookstype from BK_BILL_TYPE where istate <> 2 and icustom = 0 and (cparent isnull or cparent <> 'root')"];
-    if (!billTypeResult) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return;
-    }
++ (void)createDefaultDataTypeForUserId:(NSString *)userId
+                               booksId:(NSString *)booksId
+                             booksType:(SSJBooksType)booksType
+                            inDatabase:(FMDatabase *)db
+                                 error:(NSError **)error {
     
-    BOOL successfull = YES;
-    NSString *date = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    NSSet *booksTypes = [self booksTypesNeedToCreateBillTypes];
-    
-    while ([billTypeResult next]) {
-        NSString *billId = [billTypeResult stringForColumn:@"id"];
-        int state = [billTypeResult intForColumn:@"istate"];
-        NSString *order = [billTypeResult stringForColumn:@"defaultOrder"];
-        NSString *booksIds = [billTypeResult stringForColumn:@"ibookstype"];
-        NSArray *booksIdArr = [booksIds componentsSeparatedByString:@","];
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSArray *billTypes = [self billTypesForBooksType:booksType];
+    for (NSDictionary *record in billTypes) {
+        NSMutableDictionary *tmpRecord = [record mutableCopy];
+        tmpRecord[@"cuserid"] = userId;
+        tmpRecord[@"cbooksid"] = booksId;
+        tmpRecord[@"cwritedate"] = writeDate;
+        tmpRecord[@"operatortype"] = @0;
+        tmpRecord[@"iversion"] = @(SSJSyncVersion());
         
-        for (NSString *bkId in booksIdArr) {
-            SSJBooksType type = [bkId integerValue];
-            if (![booksTypes containsObject:@(type)]) {
-                continue;
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", record[@"cbillid"], userId, booksId];
+        if (!existed) {
+            BOOL successful = [db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, itype, cname, ccolor, cicoin, iorder, cwritedate, operatortype, iversion) values (:cbillid, :cuserid, :cbooksid, :itype, :cname, :ccolor, :cicoin, :iorder, :cwritedate, :operatortype, :iversion)" withParameterDictionary:tmpRecord];
+            if (!successful) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return;
             }
-            
-            NSString *booksId = nil;
-            if (type == SSJBooksTypeDaily) {
-                booksId = userId;
-            } else {
-                booksId = [NSString stringWithFormat:@"%@-%@", userId, bkId];
-                state = 1;
-            }
-            
-            BOOL executeSuccessfull = [db executeUpdate:@"insert into bk_user_bill (cuserid, cbillid, istate, iorder, cwritedate, iversion, operatortype, cbooksid) select ?, ?, ?, ?, ?, ?, 1, ? where not exists (select * from bk_user_bill where cbillid = ? and cuserid = ? and cbooksid = ?)", userId, billId, @(state), order, date, @(SSJSyncVersion()), booksId, billId, userId, booksId];
-            successfull = successfull && executeSuccessfull;
         }
     }
-    
-    [billTypeResult close];
-    
-    if (!successfull) {
-        if (error) {
-            *error = [db lastError];
-        }
+}
+
++ (NSArray<NSDictionary *> *)billTypesForBooksType:(SSJBooksType)booksType {
+    NSString *fileName = nil;
+    switch (booksType) {
+        case SSJBooksTypeDaily:
+            fileName = @"SSJDailyBillTypes";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            fileName = @"SSJBusinessBillTypes";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            fileName = @"SSJMarriageBillTypes";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            fileName = @"SSJDecorationBillTypes";
+            break;
+            
+        case SSJBooksTypeTravel:
+            fileName = @"SSJTravelBillTypes";
+            break;
     }
+    
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];
+    return [NSArray arrayWithContentsOfFile:filePath];
 }
 
 @end

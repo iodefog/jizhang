@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "SSJCalendarView.h"
 
+SSJ_DEPRECATED
 @interface SSJDateSelectedView : UIView
 @property (nonatomic) long selectedYear;
 @property (nonatomic) long selectedMonth;
