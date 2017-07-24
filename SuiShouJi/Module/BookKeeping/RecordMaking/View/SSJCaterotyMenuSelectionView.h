@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class SSJCaterotyMenuSelectionView;
-@class SSJCreateOrEditBillTypeIconSelectionCellItem;
+@class SSJCaterotyMenuSelectionCellItem;
 @class SSJCaterotyMenuSelectionViewIndexPath;
 
 @protocol SSJCaterotyMenuSelectionViewDataSource <NSObject>
@@ -28,13 +28,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfItemsAtCategoryIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex;
 
-- (SSJCreateOrEditBillTypeIconSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath;
+- (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath;
 
 @end
 
 
 @protocol SSJCaterotyMenuSelectionViewDelegate <NSObject>
 
+@optional
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectMenuAtIndex:(NSInteger)menuIndex;
 
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath;
@@ -43,15 +44,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJCaterotyMenuSelectionView : UIView
 
+// default NO
+@property (nonatomic) BOOL needToCacheData;
+
 @property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDataSource> dataSource;
 
 @property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDelegate> delegate;
 
 @property (nonatomic, strong) SSJCaterotyMenuSelectionViewIndexPath *selectedIndexPath;
 
-- (void)reloadAllData;
+- (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated;
 
-- (void)reloadCategoryItemsAtMenuIndex:(NSUInteger)index;
+- (void)reloadAllData;
 
 @end
 

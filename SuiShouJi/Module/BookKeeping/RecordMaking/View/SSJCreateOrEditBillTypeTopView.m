@@ -8,13 +8,17 @@
 
 #import "SSJCreateOrEditBillTypeTopView.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - _SSJCreateOrEditBillTypeTopViewColorControl
+#pragma mark -
 @interface _SSJCreateOrEditBillTypeTopViewColorControl : UIControl
 
 @property (nonatomic, strong) UIView *colorView;
 
 @property (nonatomic, strong) UIImageView *arrowView;
 
-@property (nonatomic) BOOL isArrowDown;
+@property (nonatomic) BOOL arrowDown;
 
 @end
 
@@ -22,9 +26,11 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        _arrowDown = YES;
         [self addSubview:self.colorView];
         [self addSubview:self.arrowView];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction)];
+        [self addGestureRecognizer:tap];
     }
     return self;
 }
@@ -38,18 +44,26 @@
     [self.arrowView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.colorView.mas_right).offset(10);
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(7, 7));
+        make.size.mas_equalTo(CGSizeMake(12, 7));
         make.right.mas_equalTo(self.mas_right).offset(-10);
     }];
     [super updateConstraints];
 }
 
 - (void)tapAction {
-    _isArrowDown = !_isArrowDown;
-    [UIView animateWithDuration:0.25 animations:^{
-        self.arrowView.transform = CGAffineTransformMakeRotation(_isArrowDown ? M_PI : 0);
-    }];
+    [self setArrowDown:!_arrowDown animated:YES];
     [self sendActionsForControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)setArrowDown:(BOOL)arrowDown {
+    [self setArrowDown:arrowDown animated:NO];
+}
+
+- (void)setArrowDown:(BOOL)arrowDown animated:(BOOL)animated {
+    _arrowDown = arrowDown;
+    [UIView animateWithDuration:(animated ? 0.25 : 0) animations:^{
+        self.arrowView.transform = CGAffineTransformMakeRotation(_arrowDown ? M_PI : 0);
+    }];
 }
 
 - (UIView *)colorView {
@@ -64,13 +78,17 @@
 - (UIImageView *)arrowView {
     if (!_arrowView) {
         _arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"loan_arrow"]];
-        _arrowView.transform = CGAffineTransformMakeRotation(M_PI);
+        _arrowView.transform = CGAffineTransformMakeRotation(_arrowDown ? M_PI : 0);
     }
     return _arrowView;
 }
 
 @end
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJCreateOrEditBillTypeTopView
+#pragma mark -
 @interface SSJCreateOrEditBillTypeTopView ()
 
 @property (nonatomic, strong) _SSJCreateOrEditBillTypeTopViewColorControl *colorControl;
@@ -109,6 +127,18 @@
     [super updateConstraints];
 }
 
+- (void)setArrowDown:(BOOL)arrowDown {
+    self.colorControl.arrowDown = arrowDown;
+}
+
+- (void)setArrowDown:(BOOL)arrowDown animated:(BOOL)animated {
+    [self.colorControl setArrowDown:arrowDown animated:animated];
+}
+
+- (BOOL)arrowDown {
+    return self.colorControl.arrowDown;
+}
+
 - (_SSJCreateOrEditBillTypeTopViewColorControl *)colorControl {
     if (!_colorControl) {
         _colorControl = [[_SSJCreateOrEditBillTypeTopViewColorControl alloc] init];
@@ -118,7 +148,7 @@
         [[_colorControl rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             if (self.tapColorAction) {
-                self.tapColorAction();
+                self.tapColorAction(self);
             }
         }];
     }

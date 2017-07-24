@@ -8,6 +8,10 @@
 
 #import "SSJCreateOrEditBillTypeColorSelectionView.h"
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJCreateOrEditBillTypeColorSelectionCell
+#pragma mark -
 static const CGSize kColorLumpSize = {40, 25};
 static const CGFloat kZoomScale = 1.25;
 static const NSTimeInterval kDuration = 0.25;
@@ -23,6 +27,7 @@ static const NSTimeInterval kDuration = 0.25;
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self.contentView addSubview:self.colorLump];
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
@@ -30,6 +35,7 @@ static const NSTimeInterval kDuration = 0.25;
 - (void)updateConstraints {
     [self.colorLump mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(kColorLumpSize);
+        make.center.mas_equalTo(self.contentView);
     }];
     [super updateConstraints];
 }
@@ -56,6 +62,10 @@ static const NSTimeInterval kDuration = 0.25;
 
 @end
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJCreateOrEditBillTypeColorSelectionView
+#pragma mark -
 static NSString *const kCellId = @"kCellId";
 static const NSUInteger kColorLumpCountPerRow = 5;
 
@@ -87,15 +97,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     [self.backView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(self);
     }];
-    [self.collectionView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        if (self.showed) {
-            make.top.mas_equalTo(self);
-        } else {
-            make.bottom.mas_equalTo(self.mas_top);
-        }
-        make.left.and.right.mas_equalTo(self);
-        make.height.mas_equalTo(280);
-    }];
+    [self setupCollectionViewConstraint];
     [super updateConstraints];
 }
 
@@ -105,6 +107,8 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     CGFloat verticalSpace = 26;
     CGFloat itemWidth = horizontalSpace + kColorLumpSize.width;
     CGFloat itemHeight = kColorLumpSize.height + verticalSpace;
+    
+    [self.layout invalidateLayout];
     self.layout.itemSize = CGSizeMake(itemWidth, itemHeight);
     self.layout.sectionInset = UIEdgeInsetsMake(verticalSpace * 0.5, horizontalSpace * 0.5, verticalSpace * 0.5, horizontalSpace * 0.5);
 }
@@ -122,18 +126,40 @@ static const NSUInteger kColorLumpCountPerRow = 5;
 }
 
 - (void)show {
+    if (self.showed) {
+        return;
+    }
+    
     self.showed = YES;
+    [self setupCollectionViewConstraint];
     [UIView animateWithDuration:kDuration animations:^{
         self.backView.alpha = SSJMaskAlpha;
-        [self updateConstraintsIfNeeded];
+        [self layoutIfNeeded];
     }];
 }
 
 - (void)dismiss {
+    if (!self.showed) {
+        return;
+    }
+    
     self.showed = NO;
+    [self setupCollectionViewConstraint];
     [UIView animateWithDuration:kDuration animations:^{
         self.backView.alpha = 0;
-        [self updateConstraintsIfNeeded];
+        [self layoutIfNeeded];
+    }];
+}
+
+- (void)setupCollectionViewConstraint {
+    [self.collectionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        if (self.showed) {
+            make.top.mas_equalTo(self);
+        } else {
+            make.bottom.mas_equalTo(self.mas_top);
+        }
+        make.left.and.right.mas_equalTo(self);
+        make.height.mas_equalTo(280);
     }];
 }
 
@@ -172,7 +198,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView registerClass:[SSJCreateOrEditBillTypeColorSelectionCell class] forCellWithReuseIdentifier:kCellId];
-        _collectionView.backgroundColor = [UIColor clearColor];
+        _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;
 }

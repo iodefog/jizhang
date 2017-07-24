@@ -16,6 +16,10 @@
 
 @property (nonatomic, copy) NSString *billTypeName;
 
-@property (nonatomic, copy) void (^tapColorAction)();
+@property (nonatomic) BOOL arrowDown;
+
+@property (nonatomic, copy) void (^tapColorAction)(SSJCreateOrEditBillTypeTopView *view);
+
+- (void)setArrowDown:(BOOL)arrowDown animated:(BOOL)animated;
 
 @end

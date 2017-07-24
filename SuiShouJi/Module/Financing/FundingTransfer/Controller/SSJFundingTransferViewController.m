@@ -548,6 +548,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     __block NSString *transferOutId;
     __block NSString *transferInName;
     __block NSString *transferOutName;
+    
     if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
         transferInId = ((SSJFundingItem *)_transferInItem).fundingID;
         transferInName = ((SSJFundingItem *)_transferInItem).fundingName;
@@ -555,6 +556,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         transferInId = ((SSJCreditCardItem *)_transferInItem).cardId;
         transferInName = ((SSJCreditCardItem *)_transferInItem).cardName;
     }
+    
     if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
         transferOutId = ((SSJFundingItem *)_transferOutItem).fundingID;
         transferOutName = ((SSJFundingItem *)_transferOutItem).fundingName
@@ -563,6 +565,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         transferOutId = ((SSJCreditCardItem *)_transferOutItem).cardId;
         transferOutName = ((SSJCreditCardItem *)_transferOutItem).cardName;
     }
+    
     if ([transferInId isEqualToString:transferOutId]) {
         [CDAutoHideMessageHUD showMessage:@"请选择不同账户"];
         return;
