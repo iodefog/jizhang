@@ -15,6 +15,7 @@
     YYAnalyticsConfig *config = [[YYAnalyticsConfig alloc] init];
     config.appSource = SSJDefaultSource();
     config.appKey = @"yy_jz";
+//    config.logEnable = YES;
     [YYAnalytics startWithConfig:config];
     [MobClick setCrashReportEnabled:YES]; // 如果不需要捕捉异常，注释掉此行
 #ifdef DEBUG

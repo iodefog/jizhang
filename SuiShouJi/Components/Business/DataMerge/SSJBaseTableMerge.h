@@ -22,6 +22,9 @@
 #import "SSJMembereChargeTable.h"
 #import "SSJMemberTable.h"
 #import "SSJChargePeriodConfigTable.h"
+#import "SSJCreditRepaymentTable.h"
+#import "SSJTransferCycleTable.h"
+#import "SSJImageSyncTable.h"
 
 @interface SSJBaseTableMerge : NSObject
 
@@ -40,6 +43,12 @@ typedef NS_ENUM(NSInteger, SSJMergeDataType) {
 + (NSString *)tableName;
 
 
+/**
+ 临时表表名
+
+ @return 临时表的名称
+ */
++ (NSString *)tempTableName;
 
 /**
  在要合并的表中查出所有需要合并的数据

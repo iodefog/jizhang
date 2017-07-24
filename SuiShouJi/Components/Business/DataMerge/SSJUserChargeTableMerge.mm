@@ -14,6 +14,9 @@
     return @"BK_USER_CHARGE";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_user_charge";
+}
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
@@ -72,7 +75,9 @@
                                           && SSJUserChargeTable.chargeType == currentCharge.chargeType
                                           && SSJUserChargeTable.userId == targetUserId];
 
-        [newAndOldIdDic setObject:currentCharge.chargeId forKey:sameCharge.chargeId];
+        if (sameCharge) {
+            [newAndOldIdDic setObject:currentCharge.chargeId forKey:sameCharge.chargeId];
+        }
         
     }];
     
@@ -86,11 +91,11 @@
     
     __block BOOL success = NO;
     
-    // 和流水有关的表:成员流水
+    // 和流水有关的表:成员流水,图片同步表
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         NSString *newId = obj;
         NSString *oldId = key;
-        if (![db isTableExists:@"temp_member_charge"] || ![db isTableExists:@"temp_user_charge"]) {
+        if (![db isTableExists:@"temp_member_charge"] || ![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");
             *stop = NO;
             success = NO;
@@ -103,6 +108,17 @@
                            onProperties:SSJMembereChargeTable.memberId
                              withObject:memberCharge
                                   where:SSJMembereChargeTable.memberId == oldId];
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 更新图片同步表
+        SSJImageSyncTable *syncImage = [[SSJImageSyncTable alloc] init];
+        syncImage.imageSourceId = newId;
+        success = [db updateRowsInTable:@"temp_member_charge"
+                           onProperties:SSJImageSyncTable.imageSourceId
+                             withObject:memberCharge
+                                  where:SSJImageSyncTable.imageSourceId == oldId];
         if (!success) {
             *stop = YES;
         }

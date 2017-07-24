@@ -14,6 +14,9 @@
     return @"BK_FUND_INFO";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_fund_info";
+}
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
@@ -95,7 +98,9 @@
                                       && SSJLoanTable.targetFundid == currentLoan.targetFundid
                                       && SSJLoanTable.userId == targetUserId];
         
-        [newAndOldIdDic setObject:currentLoan.loanId forKey:sameNameLoan.loanId];
+        if (sameNameLoan) {
+            [newAndOldIdDic setObject:currentLoan.loanId forKey:sameNameLoan.loanId];
+        }
         
     }];
     
@@ -131,15 +136,14 @@
             *stop = YES;
         }
         
-        
-        
-        // 删除同名的资金账户
+        // 删除同名的借贷
         success = [db deleteObjectsFromTable:@"temp_loan"
                                        where:SSJLoanTable.loanId == oldId];
         
         if (!success) {
             *stop = YES;
         }
+        
     }];
     
     return success;

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
-	<string>有鱼记账</string>
+	<string>9188记账统计测试</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.6.1</string>
+	<string>2.6.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -26,10 +26,20 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>jizhangAppStore</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>jz</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>weixin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wx1973e4bbb6b9d773</string>
+				<string>wxf77f7a5867124dfd</string>
 			</array>
 		</dict>
 		<dict>
@@ -39,7 +49,7 @@
 			<string>weibo</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wb2128876025</string>
+				<string>wb4058368695</string>
 			</array>
 		</dict>
 		<dict>
@@ -49,7 +59,7 @@
 			<string>qq</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>QQ41e2278d</string>
+				<string>QQ41deff49</string>
 			</array>
 			<key>tencent1105086761</key>
 			<string></string>
@@ -61,22 +71,12 @@
 			<string>qqlogin</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>tencent1105340301</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>youyujizhang</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>jz</string>
+				<string>tencent1105086761</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>2</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wechat</string>
@@ -209,6 +209,11 @@
 	<string>App需要您的同意,才能访问麦克风</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>App需要您的同意,才能访问相册</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UIFileSharingEnabled</key>
 	<false/>
 	<key>UIRequiredDeviceCapabilities</key>
