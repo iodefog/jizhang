@@ -67,7 +67,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     
@@ -139,6 +141,7 @@
                                        where:SSJMembereChargeTable.memberId == oldMemberId
                                              && SSJMembereChargeTable.chargeId == oldChargeId];
         
+
         if (!success) {
             *stop = YES;
         }

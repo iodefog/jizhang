@@ -67,7 +67,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     

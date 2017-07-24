@@ -45,7 +45,7 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct()
+                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
                                                                                                        fromTable:@"bk_user_charge"
                                                                                                            where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                       
@@ -56,7 +56,7 @@
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct()
+                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
                                                                                                        fromTable:@"bk_user_charge"
                                                                                                            where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -64,9 +64,9 @@
         
     }
     
-    WCTError *error = select.error;
-    
-    [dict setObject:error forKey:@"error"];
+    if (select.error) {
+        [dict setObject:select.error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     
@@ -148,9 +148,20 @@
         }
         
         // 删除账本中同名的账本
-        success = [db deleteObjectsFromTable:@"temp_books_type"
+        success = [db deleteObjectsFromTable:@"temp_charge_period_config"
                                        where:SSJBooksTypeTable.booksId == oldId];
         
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 将所有的周期记账的userid更新为目标userid
+        SSJChargePeriodConfigTable *chargePeriod = [[SSJChargePeriodConfigTable alloc] init];
+        chargePeriod.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_charge_period_config"
+                           onProperties:SSJChargePeriodConfigTable.userId
+                             withObject:chargePeriod
+                                  where:SSJChargePeriodConfigTable.userId == sourceUserid];
         if (!success) {
             *stop = YES;
         }

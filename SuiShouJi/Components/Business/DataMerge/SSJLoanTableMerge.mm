@@ -36,28 +36,33 @@
     
     NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];    
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                                                                                          && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                                                                                          && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
+                                                                                                fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                          && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                          && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
+                                                                                                fromTable:@"bk_user_charge"
+                                                                                                    where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
     }
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     
@@ -132,6 +137,15 @@
         // 删除同名的借贷
         success = [db deleteObjectsFromTable:@"temp_loan"
                                        where:SSJLoanTable.loanId == oldId];
+        
+        // 将所有的借贷的userid更新为目标userid
+        SSJLoanTable *userLoan = [[SSJLoanTable alloc] init];
+        userLoan.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_loan"
+                           onProperties:SSJLoanTable.userId
+                             withObject:userLoan
+                                  where:SSJLoanTable.userId == sourceUserid];
+        
         
         if (!success) {
             *stop = YES;

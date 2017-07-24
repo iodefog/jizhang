@@ -54,7 +54,7 @@
                    where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                               && SSJUserRemindTable.userId == sourceUserid
+                               && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
         
@@ -64,7 +64,8 @@
                                where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                                && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                               && SSJUserRemindTable.userId == sourceUserid]
+                               && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                               groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
     }
     
@@ -86,7 +87,8 @@
                                where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                                && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                              && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                             && SSJUserRemindTable.userId == sourceUserid]
+                             && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                             && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                               groupBy:{SSJUserRemindTable.remindId.inTable([self tableName])}];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
@@ -95,7 +97,8 @@
                                where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJLoanTable.remindId.inTable(@"bk_loan")
                                && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                              && SSJUserCreditTable.cardId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                             && SSJUserRemindTable.userId == sourceUserid]
+                             && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                             && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                             groupBy:{SSJUserRemindTable.remindId.inTable([self tableName])}];
     }
     
@@ -110,7 +113,9 @@
     
     [dict setObject:tempArr forKey:@"results"];
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     return dict;
 }
@@ -182,8 +187,20 @@
         }
         
         // 删除同名的提醒
-        success = [db deleteObjectsFromTable:[self tableName]
-                                       where:SSJUserChargeTable.chargeId == oldId];
+        success = [db deleteObjectsFromTable:@"temp_user_remind"
+                                       where:SSJUserRemindTable.remindId == oldId];
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 将所有的提醒的userid更新为目标userid
+        SSJUserRemindTable *userRemind = [[SSJUserRemindTable alloc] init];
+        userRemind.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_user_remind"
+                           onProperties:SSJUserRemindTable.userId
+                             withObject:userRemind
+                                  where:SSJUserRemindTable.userId == sourceUserid];
+        
         if (!success) {
             *stop = YES;
         }

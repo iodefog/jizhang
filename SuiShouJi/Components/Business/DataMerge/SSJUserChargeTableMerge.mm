@@ -48,7 +48,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     [dict setObject:tempArr forKey:@"results"];
     
@@ -123,9 +125,21 @@
             *stop = YES;
         }
 
-        // 删除通一条流水
+        // 删除同一条流水
         success = [db deleteObjectsFromTable:@"temp_user_charge"
                                        where:SSJUserChargeTable.chargeId == oldId];
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 将所有的流水的userid更新为目标userid
+        SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
+        userCharge.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_user_charge"
+                           onProperties:SSJUserChargeTable.userId
+                             withObject:userCharge
+                                  where:SSJUserChargeTable.userId == sourceUserid];
+        
         if (!success) {
             *stop = YES;
         }

@@ -30,9 +30,6 @@
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     
     WCTPropertyList multiProperties;
-    for (const WCTProperty& property : SSJUserChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable(@"bk_user_charge"));
-    }
     for (const WCTProperty& property : SSJTransferCycleTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
@@ -46,14 +43,15 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
+                                                                                               fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct()
+                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
                                                                                                  fromTable:@"bk_user_charge"
                                                                                                      where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                     && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -64,7 +62,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     
@@ -137,9 +137,18 @@
             *stop = YES;
         }
         
-        // 删除同名的成员
+        // 删除周期转账的成员
         success = [db deleteObjectsFromTable:@"temp_transfer_cycle"
                                        where:SSJTransferCycleTable.cycleId == oldId];
+        
+        // 将所有的周期转账的userid更新为目标userid
+        SSJTransferCycleTable *userCycleTransfer = [[SSJTransferCycleTable alloc] init];
+        userCycleTransfer.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_loan"
+                           onProperties:SSJTransferCycleTable.userId
+                             withObject:userCycleTransfer
+                                  where:SSJTransferCycleTable.userId == sourceUserid];
+        
         
         if (!success) {
             *stop = YES;

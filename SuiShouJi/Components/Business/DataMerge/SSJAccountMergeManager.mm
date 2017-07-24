@@ -87,7 +87,7 @@
                 
                 NSArray *datas = [result objectForKey:@"results"];
                 
-                [self.db insertObjects:datas into:[mergeTable tempTableName]];
+                [self.db insertOrReplaceObjects:datas into:[mergeTable tempTableName]];
             }
         }
         

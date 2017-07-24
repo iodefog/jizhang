@@ -71,7 +71,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     
@@ -165,6 +167,17 @@
         // 删除同名的成员
         success = [db deleteObjectsFromTable:@"temp_member"
                                        where:SSJMemberTable.memberId == oldId];
+        
+        // 将所有的成员的userid更新为目标userid
+        SSJMemberTable *userMember = [[SSJMemberTable alloc] init];
+        userMember.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_member"
+                           onProperties:SSJMemberTable.userId
+                             withObject:userMember
+                                  where:SSJMemberTable.userId == sourceUserid];
+        if (!success) {
+            *stop = YES;
+        }
         
         if (!success) {
             *stop = YES;

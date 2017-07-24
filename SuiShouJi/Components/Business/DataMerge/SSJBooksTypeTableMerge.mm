@@ -43,26 +43,31 @@
     
     WCTMultiSelect *select;
     
+
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName] ]]
-                   where:SSJBooksTypeTable.booksId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.booksId.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                       && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                       && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                                              fromTables:@[ [self tableName] ]]
+                  where:SSJBooksTypeTable.booksId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
+                                                                                                      fromTable:@"bk_user_charge"
+                                                                                                          where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                                && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
 
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJBooksTypeTable.booksId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.booksId.distinct()
-                                                                                             fromTable:@"bk_user_charge"
-                                                                                                 where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                  where:SSJBooksTypeTable.booksId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
+                                                                                                      fromTable:@"bk_user_charge"
+                                                                                                          where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                 && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                                 && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
     }
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
 
@@ -144,7 +149,18 @@
         // 删除账本中同名的账本
         success = [db deleteObjectsFromTable:@"temp_books_type"
                                        where:SSJBooksTypeTable.booksId == oldId];
-
+        
+        if (!success) {
+            *stop = YES;
+        }
+        
+        // 将所有的账本的userid更新为目标userid
+        SSJBooksTypeTable *booksType = [[SSJBooksTypeTable alloc] init];
+        booksType.userId = targetUserId;
+        success = [db updateRowsInTable:@"temp_books_type"
+                           onProperties:SSJBooksTypeTable.userId
+                             withObject:booksType
+                                  where:SSJChargePeriodConfigTable.booksId == sourceUserid];
         if (!success) {
             *stop = YES;
         }

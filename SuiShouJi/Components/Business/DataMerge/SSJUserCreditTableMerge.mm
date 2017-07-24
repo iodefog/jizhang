@@ -44,7 +44,7 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.fundId.distinct()
+                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
                                                                                            fromTable:@"bk_user_charge"
                                                                                                where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                               
@@ -55,7 +55,7 @@
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self tableName] ]]
-                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.fundId.distinct()
+                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
                                                                                            fromTable:@"bk_user_charge"
                                                                                                where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                               
@@ -66,7 +66,9 @@
     
     WCTError *error = select.error;
     
-    [dict setObject:error forKey:@"error"];
+    if (error) {
+        [dict setObject:error forKey:@"error"];
+    }
     
     WCTMultiObject *multiObject;
     

@@ -95,3 +95,7 @@ end
 target 'MaYiJiZhang'  do
     shared_pods
 end
+
+target 'SuiShouJiTests'  do
+    shared_pods
+end
