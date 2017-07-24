@@ -275,6 +275,57 @@ static const CGFloat kBorderRadius = 20;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - _SSJSubscriptLine
+#pragma mark -
+
+@interface _SSJSubscriptLine : UIView
+
+@end
+
+@implementation _SSJSubscriptLine
+
++ (Class)layerClass {
+    return [CAShapeLayer class];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
+        self.shapeLayer.fillColor = [UIColor clearColor].CGColor;
+    }
+    return self;
+}
+
+- (CAShapeLayer *)shapeLayer {
+    return (CAShapeLayer *)self.layer;
+}
+
+- (void)setLineColor:(UIColor *)color {
+    self.shapeLayer.strokeColor = color.CGColor;
+}
+
+- (void)setPosition:(CGFloat)position {
+    self.top = position - self.height * 0.5;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    CGFloat halfSideLength = self.width;
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    [path moveToPoint:CGPointMake(0, 0)];
+    [path addLineToPoint:CGPointMake(0, self.height * 0.5 - halfSideLength)];
+    [path addLineToPoint:CGPointMake(self.width, self.height * 0.5)];
+    [path addLineToPoint:CGPointMake(0, self.height * 0.5 + halfSideLength)];
+    [path addLineToPoint:CGPointMake(0, self.height)];
+    self.shapeLayer.path = path.CGPath;
+    self.shapeLayer.lineWidth = 1;
+    self.shapeLayer.contentsScale = SSJ_SCREEN_SCALE;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - _SSJCategoryItemSet
 #pragma mark -
 
@@ -391,6 +442,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 @interface SSJCaterotyMenuSelectionView () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
+@property (nonatomic, strong) _SSJSubscriptLine *subscriptLine;
+
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -407,13 +460,16 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     if (self = [super initWithFrame:frame]) {
         self.itemsSet = [[_SSJMenuItemSet alloc] init];
         [self addSubview:self.tableView];
+        [self addSubview:self.subscriptLine];
         [self addSubview:self.collectionView];
         [self updateAppearanceAccordingToTheme];
+        self.clipsToBounds = YES;
     }
     return self;
 }
 
 - (void)updateConstraints {
+    [self updateSubscriptLineConstraint];
     [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(50);
         make.top.and.left.and.height.mas_equalTo(self);
@@ -428,6 +484,19 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.layout.itemSize = CGSizeMake((self.collectionView.width - self.layout.sectionInset.left - self.layout.sectionInset.right) / 4, 66);
+}
+
+#pragma mark - Private
+- (void)updateSubscriptLineConstraint {
+    CGRect frame = [self.tableView rectForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
+    CGFloat centerY = (CGRectGetMidY(frame) - self.tableView.contentOffset.y);
+    CGFloat height = self.tableView.rowHeight * [self.tableView numberOfRowsInSection:0] * 2;
+    
+    [self.subscriptLine mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(7, height));
+        make.centerY.mas_equalTo(self.mas_top).offset(centerY);
+        make.left.mas_equalTo(self.tableView.mas_right);
+    }];
 }
 
 #pragma mark - Public
@@ -460,6 +529,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (void)updateAppearanceAccordingToTheme {
     self.tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
+    [self.subscriptLine setLineColor:SSJ_BORDER_COLOR];
 }
 
 #pragma mark - UITableViewDataSource
@@ -480,7 +550,13 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    [UIView animateWithDuration:0.25 animations:^{
+        [self updateSubscriptLineConstraint];
+        [self layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
+    }];
+    
     [self.collectionView reloadData];
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectionView:didSelectMenuAtIndex:)]) {
         [self.delegate selectionView:self didSelectMenuAtIndex:indexPath.row];
@@ -564,7 +640,22 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     }
 }
 
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView == self.tableView) {
+        [self updateSubscriptLineConstraint];
+        [self layoutIfNeeded];
+    }
+}
+
 #pragma mark - Lazyloading
+- (_SSJSubscriptLine *)subscriptLine {
+    if (!_subscriptLine) {
+        _subscriptLine = [[_SSJSubscriptLine alloc] init];
+    }
+    return _subscriptLine;
+}
+
 - (UITableView *)tableView {
     if (!_tableView) {
         _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];

@@ -26,8 +26,6 @@
 
 @property (nonatomic, strong) NSArray<NSArray<SSJCaterotyMenuSelectionCellItem *> *> *categoryItems1;
 
-@property (nonatomic, strong) NSArray<NSArray<SSJCaterotyMenuSelectionCellItem *> *> *categoryItems2;
-
 @end
 
 @implementation SSJCreateOrEditBillTypeViewController
@@ -74,7 +72,7 @@
 
 #pragma mark - SSJCaterotyMenuSelectionViewDataSource
 - (NSUInteger)numberOfMenuTitlesInSelectionView:(SSJCaterotyMenuSelectionView *)selectionView {
-    return 2;
+    return 20;
 }
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForLeftMenuAtIndex:(NSInteger)index {
@@ -82,41 +80,21 @@
 }
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfCategoriesAtMenuIndex:(NSInteger)index {
-    if (index == 0) {
-        return self.categoryItems1.count;
-    } else if (index == 1) {
-        return self.categoryItems2.count;
-    } else {
-        return 0;
-    }
+    return self.categoryItems1.count;
 }
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForCategoryAtIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
-    return @"test";
+    return [NSString stringWithFormat:@"menu_%d_category_%d", (int)menuIndex, (int)categoryIndex];
 }
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfItemsAtCategoryIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
-    if (menuIndex == 0) {
-        NSArray *items = self.categoryItems1[categoryIndex];
-        return items.count;
-    } else if (menuIndex == 1) {
-        NSArray *items = self.categoryItems2[categoryIndex];
-        return items.count;
-    } else {
-        return 0;
-    }
+    NSArray *items = self.categoryItems1[categoryIndex];
+    return items.count;
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
-    if (indexPath.menuIndex == 0) {
-        NSArray *items = self.categoryItems1[indexPath.categoryIndex];
-        return items[indexPath.itemIndex];
-    } else if (indexPath.menuIndex == 1) {
-        NSArray *items = self.categoryItems2[indexPath.categoryIndex];
-        return items[indexPath.itemIndex];
-    } else {
-        return nil;
-    }
+    NSArray *items = self.categoryItems1[indexPath.categoryIndex];
+    return items[indexPath.itemIndex];
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDelegate
@@ -125,13 +103,7 @@
 }
 
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
-    NSArray *items = nil;
-    if (indexPath.menuIndex == 0) {
-        items = self.categoryItems1[indexPath.categoryIndex];
-    } else if (indexPath.menuIndex == 1) {
-        items = self.categoryItems2[indexPath.categoryIndex];
-    }
-    
+    NSArray *items = self.categoryItems1[indexPath.categoryIndex];
     SSJCaterotyMenuSelectionCellItem *item = items[indexPath.itemIndex];
     self.topView.billTypeIcon = item.icon;
     self.topView.billTypeName = item.title;
@@ -216,40 +188,6 @@
                                                                          icon:[UIImage imageNamed:@"bt_baby"]
                                                                         color:[UIColor orangeColor]],
                               
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]]]];
-    
-    self.categoryItems2 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]]],
-                            @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
                               [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
                                                                          icon:[UIImage imageNamed:@"bt_baby"]
                                                                         color:[UIColor orangeColor]],
