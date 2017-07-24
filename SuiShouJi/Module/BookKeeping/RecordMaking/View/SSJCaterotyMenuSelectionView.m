@@ -436,8 +436,13 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 }
 
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated {
-    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
-    [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndexPath.itemIndex inSection:selectedIndexPath.categoryIndex] animated:animated scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+    if (selectedIndexPath.menuIndex >= 0) {
+        [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
+    }
+    
+    if (selectedIndexPath.itemIndex >= 0 && selectedIndexPath.categoryIndex >= 0) {
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndexPath.itemIndex inSection:selectedIndexPath.categoryIndex] animated:animated scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+    }
 }
 
 - (void)reloadAllData {

@@ -223,6 +223,7 @@
         _bodyView = [[SSJCaterotyMenuSelectionView alloc] init];
         _bodyView.dataSource = self;
         _bodyView.delegate = self;
+        [_bodyView setSelectedIndexPath:[SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:0 categoryIndex:-1 itemIndex:-1]];
     }
     return _bodyView;
 }
