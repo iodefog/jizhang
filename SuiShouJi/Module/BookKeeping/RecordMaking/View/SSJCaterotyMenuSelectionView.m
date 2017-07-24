@@ -451,6 +451,13 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     [self.collectionView reloadData];
 }
 
+- (void)setContentInsets:(UIEdgeInsets)contentInsets {
+    _contentInsets = contentInsets;
+    UIEdgeInsets tInset = UIEdgeInsetsMake(contentInsets.top, 0, contentInsets.bottom, 0);
+    self.tableView.contentInset = tInset;
+    self.collectionView.contentInset = tInset;
+}
+
 - (void)updateAppearanceAccordingToTheme {
     self.tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
 }
@@ -473,6 +480,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     [self.collectionView reloadData];
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectionView:didSelectMenuAtIndex:)]) {
         [self.delegate selectionView:self didSelectMenuAtIndex:indexPath.row];
@@ -548,6 +556,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectionView:didSelectItemAtIndexPath:)]) {
         NSInteger selectedMenuIndex = self.tableView.indexPathForSelectedRow.row;
         SSJCaterotyMenuSelectionViewIndexPath *tIndexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:selectedMenuIndex categoryIndex:indexPath.section itemIndex:indexPath.item];

@@ -44,6 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJCaterotyMenuSelectionView : UIView
 
+// 只有top、bottom有效
+@property (nonatomic) UIEdgeInsets contentInsets;
+
 // default NO
 @property (nonatomic) BOOL needToCacheData;
 

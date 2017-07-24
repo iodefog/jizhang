@@ -12,8 +12,9 @@
 #import "SSJCaterotyMenuSelectionView.h"
 
 #import "SSJCategoryListHelper.h"
+#import "YYKeyboardManager.h"
 
-@interface SSJCreateOrEditBillTypeViewController () <SSJCaterotyMenuSelectionViewDataSource, SSJCaterotyMenuSelectionViewDelegate>
+@interface SSJCreateOrEditBillTypeViewController () <SSJCaterotyMenuSelectionViewDataSource, SSJCaterotyMenuSelectionViewDelegate, YYKeyboardObserver>
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeTopView *topView;
 
@@ -31,77 +32,11 @@
 
 @implementation SSJCreateOrEditBillTypeViewController
 
+#pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.categoryItems1 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]]],
-                                @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]]]];
-        
-        self.categoryItems2 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]]],
-                                @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]],
-                                  [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                             icon:[UIImage imageNamed:@"bt_baby"]
-                                                                            color:[UIColor orangeColor]]]];
-        
+        [[YYKeyboardManager defaultManager] addObserver:self];
+        [self initItems];
     }
     return self;
 }
@@ -202,6 +137,12 @@
     self.topView.billTypeName = item.title;
 }
 
+#pragma mark - YYKeyboardObserver
+- (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
+    CGFloat bottom = transition.toVisible ? [YYKeyboardManager defaultManager].keyboardFrame.size.height : 0;
+    self.bodyView.contentInsets = UIEdgeInsetsMake(0, 0, bottom, 0);
+}
+
 #pragma mark - Lazyloading
 - (SSJCreateOrEditBillTypeTopView *)topView {
     if (!_topView) {
@@ -250,6 +191,77 @@
     }
     self.colorSelectionView.colors = colors;
     self.topView.billTypeColor =  [colors firstObject];
+}
+
+- (void)initItems {
+    self.categoryItems1 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]]],
+                            @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]]]];
+    
+    self.categoryItems2 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]]],
+                            @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]],
+                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
+                                                                         icon:[UIImage imageNamed:@"bt_baby"]
+                                                                        color:[UIColor orangeColor]]]];
 }
 
 @end
