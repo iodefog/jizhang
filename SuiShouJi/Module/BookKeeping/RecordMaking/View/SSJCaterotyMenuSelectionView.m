@@ -84,7 +84,9 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLab];
+        [self updateAppearanceAccordingToTheme];
         [self setNeedsUpdateConstraints];
+        self.selectedBackgroundView = [[UIView alloc] init];
     }
     return self;
 }
@@ -94,6 +96,15 @@
         make.center.mas_equalTo(self);
     }];
     [super updateConstraints];
+}
+
+- (void)setSelected:(BOOL)selected {
+    [super setSelected:selected];
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    [super setSelected:selected animated:animated];
+    self.backgroundColor = selected ? [UIColor clearColor] : SSJ_MAIN_BACKGROUND_COLOR;
 }
 
 - (UILabel *)titleLab {
@@ -107,7 +118,12 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     [super updateCellAppearanceAfterThemeChanged];
-    _titleLab.textColor = self.selected ? SSJ_MAIN_COLOR : SSJ_SECONDARY_COLOR;
+    [self updateAppearanceAccordingToTheme];
+}
+
+- (void)updateAppearanceAccordingToTheme {
+    self.titleLab.textColor = self.selected ? SSJ_MAIN_COLOR : SSJ_SECONDARY_COLOR;
+    self.backgroundColor = self.selected ? [UIColor clearColor] : SSJ_MAIN_BACKGROUND_COLOR;
 }
 
 @end
@@ -152,6 +168,8 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - _SSJCaterotyMenuSelectionViewCollectionCell
 #pragma mark -
+
+static const CGFloat kBorderRadius = 20;
 
 @interface _SSJCaterotyMenuSelectionViewCollectionCell : UICollectionViewCell
 
@@ -199,7 +217,7 @@
         make.center.mas_equalTo(self.contentView);
     }];
     [self.borderView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(40, 40));
+        make.size.mas_equalTo(CGSizeMake(kBorderRadius * 2, kBorderRadius * 2));
         make.center.mas_equalTo(self.icon);
     }];
     [super updateConstraints];
@@ -224,6 +242,7 @@
         _borderView = [[UIView alloc] init];
         _borderView.backgroundColor = [UIColor clearColor];
         _borderView.layer.borderWidth = 1;
+        _borderView.layer.cornerRadius = kBorderRadius;
         _borderView.alpha = 0;
     }
     return _borderView;
@@ -389,6 +408,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
         self.itemsSet = [[_SSJMenuItemSet alloc] init];
         [self addSubview:self.tableView];
         [self addSubview:self.collectionView];
+        [self updateAppearanceAccordingToTheme];
     }
     return self;
 }
@@ -405,6 +425,11 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     [super updateConstraints];
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    self.layout.itemSize = CGSizeMake((self.collectionView.width - self.layout.sectionInset.left - self.layout.sectionInset.right) / 4, 66);
+}
+
 #pragma mark - Public
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath {
     [self setSelectedIndexPath:selectedIndexPath animated:NO];
@@ -419,6 +444,10 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     [self.itemsSet clear];
     [self.tableView reloadData];
     [self.collectionView reloadData];
+}
+
+- (void)updateAppearanceAccordingToTheme {
+    self.tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
 }
 
 #pragma mark - UITableViewDataSource
@@ -528,6 +557,9 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.rowHeight = 90;
+        _tableView.separatorInset = UIEdgeInsetsZero;
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.tableFooterView = [[UIView alloc] init];
         [_tableView registerClass:[_SSJCaterotyMenuSelectionViewTableViewCell class] forCellReuseIdentifier:kTableViewCellID];
     }
     return _tableView;
@@ -538,6 +570,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:self.layout];
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
+        _collectionView.backgroundColor = [UIColor clearColor];
         [_collectionView registerClass:[_SSJCaterotyMenuSelectionViewCollectionCell class] forCellWithReuseIdentifier:kCollectionViewCellID];
         [_collectionView registerClass:[_SSJCaterotyMenuSelectionViewCollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kCollectionHeaderViewID];
     }
@@ -546,10 +579,12 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (UICollectionViewFlowLayout *)layout {
     if (!_layout) {
-        _layout = [[UICollectionViewFlowLayout alloc]init];
+        _layout = [[UICollectionViewFlowLayout alloc] init];
         [_layout setScrollDirection:UICollectionViewScrollDirectionVertical];
         _layout.minimumInteritemSpacing = 0;
         _layout.minimumLineSpacing = 0;
+        _layout.headerReferenceSize = CGSizeMake(0, 44);
+        _layout.sectionInset = UIEdgeInsetsMake(18, 12, 20, 12);
     }
     return _layout;
 }

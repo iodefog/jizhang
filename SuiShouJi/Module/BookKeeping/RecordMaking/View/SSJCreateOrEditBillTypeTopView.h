@@ -22,4 +22,6 @@
 
 - (void)setArrowDown:(BOOL)arrowDown animated:(BOOL)animated;
 
+- (void)updateAppearanceAccordingToTheme;
+
 @end

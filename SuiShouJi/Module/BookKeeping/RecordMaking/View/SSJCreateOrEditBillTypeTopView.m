@@ -89,7 +89,7 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJCreateOrEditBillTypeTopView
 #pragma mark -
-@interface SSJCreateOrEditBillTypeTopView ()
+@interface SSJCreateOrEditBillTypeTopView () <UITextFieldDelegate>
 
 @property (nonatomic, strong) _SSJCreateOrEditBillTypeTopViewColorControl *colorControl;
 
@@ -106,6 +106,8 @@
         [self addSubview:self.colorControl];
         [self addSubview:self.iconView];
         [self addSubview:self.nameField];
+        [self ssj_setBorderStyle:SSJBorderStyleBottom];
+        [self updateAppearanceAccordingToTheme];
     }
     return self;
 }
@@ -147,6 +149,7 @@
 - (void)setBillTypeIcon:(UIImage *)billTypeIcon {
     _billTypeIcon = billTypeIcon;
     self.iconView.image = billTypeIcon;
+    [self setNeedsUpdateConstraints];
 }
 
 - (void)setBillTypeName:(NSString *)billTypeName {
@@ -154,6 +157,24 @@
     self.nameField.text = billTypeName;
 }
 
+- (void)updateAppearanceAccordingToTheme {
+    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
+    self.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+    [self.colorControl ssj_setBorderColor:SSJ_BORDER_COLOR];
+}
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    _billTypeName = nil;
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.nameField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - LazyInit
 - (_SSJCreateOrEditBillTypeTopViewColorControl *)colorControl {
     if (!_colorControl) {
         _colorControl = [[_SSJCreateOrEditBillTypeTopViewColorControl alloc] init];
@@ -182,12 +203,11 @@
         _nameField = [[UITextField alloc] init];
         _nameField.textAlignment = NSTextAlignmentRight;
         _nameField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _nameField.returnKeyType = UIReturnKeyDone;
+        _nameField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _nameField.delegate = self;
     }
     return _nameField;
-}
-
-- (void)updateAppearanceAccordingToTheme {
-    [self.colorControl ssj_setBorderColor:SSJ_BORDER_COLOR];
 }
 
 @end

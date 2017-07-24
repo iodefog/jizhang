@@ -131,6 +131,12 @@
     [super updateViewConstraints];
 }
 
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self.topView updateAppearanceAccordingToTheme];
+    [self.bodyView updateAppearanceAccordingToTheme];
+}
+
 #pragma mark - SSJCaterotyMenuSelectionViewDataSource
 - (NSUInteger)numberOfMenuTitlesInSelectionView:(SSJCaterotyMenuSelectionView *)selectionView {
     return 2;
@@ -179,6 +185,22 @@
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDelegate
+- (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectMenuAtIndex:(NSInteger)menuIndex {
+    
+}
+
+- (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
+    NSArray *items = nil;
+    if (indexPath.menuIndex == 0) {
+        items = self.categoryItems1[indexPath.categoryIndex];
+    } else if (indexPath.menuIndex == 1) {
+        items = self.categoryItems2[indexPath.categoryIndex];
+    }
+    
+    SSJCaterotyMenuSelectionCellItem *item = items[indexPath.itemIndex];
+    self.topView.billTypeIcon = item.icon;
+    self.topView.billTypeName = item.title;
+}
 
 #pragma mark - Lazyloading
 - (SSJCreateOrEditBillTypeTopView *)topView {
