@@ -11,6 +11,26 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSArray (SSJCaterotyMenuSelectionView)
+#pragma mark -
+
+@interface NSArray (SSJCaterotyMenuSelectionView)
+
+@end
+
+@implementation NSArray (SSJCaterotyMenuSelectionView)
+
+- (id)ssj_objectAtIndex:(NSUInteger)index {
+    if (self.count > index) {
+        return [self objectAtIndex:index];
+    }
+    return nil;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJCaterotyMenuSelectionCellItem
 #pragma mark -
 
@@ -64,6 +84,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.titleLab];
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
@@ -256,7 +277,7 @@
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)itemAtIndex:(NSInteger)index {
-    return [self.items ssj_safeObjectAtIndex:index];
+    return [self.items ssj_objectAtIndex:index];
 }
 
 - (void)addItem:(SSJCaterotyMenuSelectionCellItem *)item {
@@ -286,7 +307,7 @@
 }
 
 - (void)addItem:(SSJCaterotyMenuSelectionCellItem *)item atMenuIndex:(NSInteger)menuIndex categoryIndex:(NSInteger)categoryIndex {
-    NSMutableArray *categories = [self.items ssj_safeObjectAtIndex:menuIndex];
+    NSMutableArray *categories = [self.items ssj_objectAtIndex:menuIndex];
     if (!categories) {
         for (int i = self.items.count; i <= menuIndex; i ++) {
             [self.items addObject:[NSMutableArray array]];
@@ -295,7 +316,7 @@
     }
     
     if (categories) {
-        _SSJCategoryItemSet *category = [categories ssj_safeObjectAtIndex:categoryIndex];
+        _SSJCategoryItemSet *category = [categories ssj_objectAtIndex:categoryIndex];
         if (!category) {
             for (int i = categories.count; i <= categoryIndex; i ++) {
                 [categories addObject:[[_SSJCategoryItemSet alloc] init]];
@@ -310,24 +331,24 @@
 }
 
 - (NSArray<NSArray<SSJCaterotyMenuSelectionCellItem *> *> *)categoriesAtMenuIndex:(NSInteger)index {
-    return [self.items ssj_safeObjectAtIndex:index];
+    return [self.items ssj_objectAtIndex:index];
 }
 
 - (_SSJCategoryItemSet *)itemsAtMenuIndex:(NSInteger)index categoryIndex:(NSInteger)categoryIndex {
-    NSArray *categories = [self.items ssj_safeObjectAtIndex:index];
+    NSArray *categories = [self.items ssj_objectAtIndex:index];
     if (categories) {
-        return [categories ssj_safeObjectAtIndex:categoryIndex];
+        return [categories ssj_objectAtIndex:categoryIndex];
     }
     
     return nil;
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)itemAtMenuIndex:(NSInteger)index categoryIndex:(NSInteger)categoryIndex itemIndex:(NSInteger)itemIndex {
-    NSArray *categories = [self.items ssj_safeObjectAtIndex:index];
+    NSArray *categories = [self.items ssj_objectAtIndex:index];
     if (categories) {
-        _SSJCategoryItemSet *category = [categories ssj_safeObjectAtIndex:categoryIndex];
+        _SSJCategoryItemSet *category = [categories ssj_objectAtIndex:categoryIndex];
         if (category.items) {
-            return [category.items ssj_safeObjectAtIndex:itemIndex];
+            return [category.items ssj_objectAtIndex:itemIndex];
         }
     }
     

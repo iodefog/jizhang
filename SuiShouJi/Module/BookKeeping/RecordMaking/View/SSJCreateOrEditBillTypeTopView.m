@@ -139,6 +139,21 @@
     return self.colorControl.arrowDown;
 }
 
+- (void)setBillTypeColor:(UIColor *)billTypeColor {
+    _billTypeColor = billTypeColor;
+    self.colorControl.colorView.backgroundColor = billTypeColor;
+}
+
+- (void)setBillTypeIcon:(UIImage *)billTypeIcon {
+    _billTypeIcon = billTypeIcon;
+    self.iconView.image = billTypeIcon;
+}
+
+- (void)setBillTypeName:(NSString *)billTypeName {
+    _billTypeName = billTypeName;
+    self.nameField.text = billTypeName;
+}
+
 - (_SSJCreateOrEditBillTypeTopViewColorControl *)colorControl {
     if (!_colorControl) {
         _colorControl = [[_SSJCreateOrEditBillTypeTopViewColorControl alloc] init];

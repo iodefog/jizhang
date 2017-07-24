@@ -89,6 +89,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         [self addSubview:self.collectionView];
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
+        self.hidden = YES;
     }
     return self;
 }
@@ -131,6 +132,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     }
     
     self.showed = YES;
+    self.hidden = NO;
     [self setupCollectionViewConstraint];
     [UIView animateWithDuration:kDuration animations:^{
         self.backView.alpha = SSJMaskAlpha;
@@ -144,6 +146,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     }
     
     self.showed = NO;
+    self.hidden = YES;
     [self setupCollectionViewConstraint];
     [UIView animateWithDuration:kDuration animations:^{
         self.backView.alpha = 0;

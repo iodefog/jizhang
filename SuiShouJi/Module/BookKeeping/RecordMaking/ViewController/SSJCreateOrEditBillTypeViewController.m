@@ -212,6 +212,9 @@
         _colorSelectionView.selectColorAction = ^(SSJCreateOrEditBillTypeColorSelectionView *view) {
             [view dismiss];
             [wself.topView setArrowDown:YES animated:YES];
+            [UIView animateWithDuration:0.25 animations:^{
+                wself.topView.billTypeColor = view.colors[view.selectedIndex];
+            }];
         };
     }
     return _colorSelectionView;
