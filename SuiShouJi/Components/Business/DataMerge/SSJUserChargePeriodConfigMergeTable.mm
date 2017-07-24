@@ -10,7 +10,7 @@
 
 @implementation SSJUserChargePeriodConfigMergeTable
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_CHARGE_PERIOD_CONFIG";
 }
 
@@ -33,19 +33,27 @@
     
     WCTPropertyList multiProperties;
     for (const WCTProperty& property : SSJChargePeriodConfigTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
+                  where:SSJChargePeriodConfigTable.configId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
                                                                                                        fromTable:@"bk_user_charge"
                                                                                                            where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                       
@@ -54,9 +62,8 @@
                                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJChargePeriodConfigTable.configId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
+                  where:SSJChargePeriodConfigTable.configId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
                                                                                                        fromTable:@"bk_user_charge"
                                                                                                            where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -71,7 +78,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJChargePeriodConfigTable *periodConfigs = (SSJChargePeriodConfigTable *)[multiObject objectForKey:[self tableName]];
+        SSJChargePeriodConfigTable *periodConfigs = (SSJChargePeriodConfigTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:periodConfigs];
     }
     
@@ -92,7 +99,7 @@
         SSJChargePeriodConfigTable *currentConfig = (SSJChargePeriodConfigTable *)obj;
         
         SSJChargePeriodConfigTable *sameNameConfig = [[db getOneObjectOfClass:SSJChargePeriodConfigTable.class
-                                                         fromTable:[self tableName]]
+                                                         fromTable:[self mergeTableName]]
                                                     where:SSJChargePeriodConfigTable.fundId == currentConfig.fundId
                                                     && SSJChargePeriodConfigTable.billDate == currentConfig.billDate
                                                     && SSJChargePeriodConfigTable.booksId == currentConfig.booksId

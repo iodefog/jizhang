@@ -11,7 +11,7 @@
 
 @implementation SSJBaseTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return nil;
 }
 

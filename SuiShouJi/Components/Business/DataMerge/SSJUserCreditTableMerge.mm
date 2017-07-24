@@ -10,7 +10,7 @@
 
 @implementation SSJUserCreditTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_USER_CREDIT";
 }
 
@@ -32,31 +32,36 @@
     
     WCTPropertyList multiProperties;
     for (const WCTProperty& property : SSJUserCreditTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
-                                                                                           fromTable:@"bk_user_charge"
-                                                                                               where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
+                  where:SSJUserCreditTable.cardId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge"
+                                                                                                               where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                               
                                                                               && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                               
                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
-                                                                                           fromTable:@"bk_user_charge"
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
+                  where:SSJUserCreditTable.cardId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge"
                                                                                                where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                               
                                                                               && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -73,7 +78,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJUserCreditTable *credits = (SSJUserCreditTable *)[multiObject objectForKey:[self tableName]];
+        SSJUserCreditTable *credits = (SSJUserCreditTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:credits];
     }
     

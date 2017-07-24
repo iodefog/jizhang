@@ -10,7 +10,7 @@
 
 @implementation SSJUserChargeTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_USER_CHARGE";
 }
 
@@ -29,12 +29,21 @@
     
     NSArray *tempArr = [NSArray array];
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTSelect *select = [db prepareSelectObjectsOfClass:SSJUserChargeTable.class
-                                                   fromTable:[self tableName]];
+                                                   fromTable:[self mergeTableName]];
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         tempArr = [select where:SSJUserChargeTable.userId == sourceUserid
@@ -69,7 +78,7 @@
         SSJUserChargeTable *currentCharge = (SSJUserChargeTable *)obj;
 
         SSJUserChargeTable *sameCharge = [[db getOneObjectOfClass:SSJUserChargeTable.class
-                                                         fromTable:[self tableName]]
+                                                         fromTable:[self mergeTableName]]
                                             
                                            where:SSJUserChargeTable.fundId == currentCharge.fundId
                                             && SSJUserChargeTable.billDate == currentCharge.billDate

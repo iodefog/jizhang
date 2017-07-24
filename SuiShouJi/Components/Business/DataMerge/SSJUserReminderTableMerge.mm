@@ -10,7 +10,7 @@
 
 @implementation SSJUserReminderTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_USER_REMIND";
 }
 
@@ -36,12 +36,21 @@
     WCTPropertyList multiProperties;
 
     for (const WCTProperty& property : SSJUserRemindTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTError *error;
     
@@ -49,22 +58,20 @@
     WCTMultiSelect *creditRemindSelect;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        creditRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_user_credit" ]]
-                   where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
+        creditRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_user_credit" ]]
+                   where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                               && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                               && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        creditRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                                           fromTables:@[ [self tableName], @"bk_user_charge", @"bk_user_credit" ]]
-                               where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
+        creditRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_user_credit" ]]
+                               where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                                && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                               && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                               && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                               groupBy:{SSJUserChargeTable.booksId.inTable(@"bk_user_charge")}];
     }
@@ -74,7 +81,7 @@
     WCTMultiObject *creditRemindMultiObject;
     
     while ((creditRemindMultiObject = [creditRemindSelect nextMultiObject])) {
-        SSJUserRemindTable *reminds = (SSJUserRemindTable *)[creditRemindMultiObject objectForKey:[self tableName]];
+        SSJUserRemindTable *reminds = (SSJUserRemindTable *)[creditRemindMultiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:reminds];
     }
     
@@ -83,23 +90,23 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         loanRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                                           fromTables:@[ [self tableName], @"bk_user_charge", @"bk_user_credit" ]]
-                               where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
+                                                           fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_user_credit" ]]
+                               where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                                && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                              && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                             && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                             && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                              groupBy:{SSJUserRemindTable.remindId.inTable([self tableName])}];
+                              groupBy:{SSJUserRemindTable.remindId.inTable([self mergeTableName])}];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         loanRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                                           fromTables:@[ [self tableName], @"bk_user_charge", @"bk_loan" ]]
-                               where:SSJUserRemindTable.remindId.inTable([self tableName]) == SSJLoanTable.remindId.inTable(@"bk_loan")
+                                                           fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_loan" ]]
+                               where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJLoanTable.remindId.inTable(@"bk_loan")
                                && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                              && SSJUserCreditTable.cardId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                             && SSJUserRemindTable.userId.inTable([self tableName]) == sourceUserid
+                             && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                            groupBy:{SSJUserRemindTable.remindId.inTable([self tableName])}];
+                            groupBy:{SSJUserRemindTable.remindId.inTable([self mergeTableName])}];
     }
     
     error = loanRemindSelect.error;
@@ -107,7 +114,7 @@
     WCTMultiObject *loanRemindMultiObject;
     
     while ((loanRemindMultiObject = [loanRemindSelect nextMultiObject])) {
-        SSJUserRemindTable *remind = (SSJUserRemindTable *)[loanRemindMultiObject objectForKey:[self tableName]];
+        SSJUserRemindTable *remind = (SSJUserRemindTable *)[loanRemindMultiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:remind];
     }
     
@@ -132,7 +139,7 @@
         SSJUserRemindTable *currentRemind = (SSJUserRemindTable *)obj;
         
         SSJUserRemindTable *sameRemind = [[db getOneObjectOfClass:SSJUserRemindTable.class
-                                                        fromTable:[self tableName]]
+                                                        fromTable:[self mergeTableName]]
                                           
                                           where:SSJUserRemindTable.remindName == currentRemind.remindName
                                           && SSJUserRemindTable.userId = targetUserId];

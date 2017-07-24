@@ -10,7 +10,7 @@
 
 @implementation SSJTrasferCycleTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_TRANSFER_CYCLE";
 }
 
@@ -31,27 +31,36 @@
     
     WCTPropertyList multiProperties;
     for (const WCTProperty& property : SSJTransferCycleTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
+                                              fromTables:@[ [self mergeTableName] ]]
+                  where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
                                                                                                fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
+                                              fromTables:@[ [self mergeTableName] ]]
+                  where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
                                                                                                  fromTable:@"bk_user_charge"
                                                                                                      where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                     && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -69,7 +78,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJTransferCycleTable *transfers = (SSJTransferCycleTable *)[multiObject objectForKey:[self tableName]];
+        SSJTransferCycleTable *transfers = (SSJTransferCycleTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:transfers];
     }
     
@@ -89,8 +98,7 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJTransferCycleTable *currentTransfer = (SSJTransferCycleTable *)obj;
         
-        SSJTransferCycleTable *sameNameTransfer = [[db getOneObjectOfClass:SSJTransferCycleTable.class
-                                                        fromTable:[self tableName]]
+        SSJTransferCycleTable *sameNameTransfer = [[db getOneObjectOfClass:SSJTransferCycleTable.class fromTable:[self mergeTableName]]
                                           where:SSJTransferCycleTable.transferOutId == currentTransfer.transferOutId
                                                    && SSJTransferCycleTable.transferInId == currentTransfer.transferInId
                                                    && SSJTransferCycleTable.money == currentTransfer.money

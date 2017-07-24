@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, SSJMergeDataType) {
 
  @return 表的名称
  */
-+ (NSString *)tableName;
++ (NSString *)mergeTableName;
 
 
 /**

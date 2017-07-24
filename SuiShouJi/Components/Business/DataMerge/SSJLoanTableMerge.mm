@@ -10,7 +10,7 @@
 
 @implementation SSJLoanTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_LOAN";
 }
 
@@ -31,28 +31,34 @@
     
     WCTPropertyList multiProperties;
     for (const WCTProperty& property : SSJLoanTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];    
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
-                                                                                                fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
+                  where:SSJLoanTable.loanId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid fromTable:@"bk_user_charge"
+                                                                                                         where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
-                                              fromTables:@[ [self tableName] ]]
-                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
-                                                                                                fromTable:@"bk_user_charge"
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties  fromTables:@[ [self mergeTableName] ]]
+                  where:SSJLoanTable.loanId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid fromTable:@"bk_user_charge"
                                                                                                     where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
@@ -67,7 +73,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJLoanTable *loans = (SSJLoanTable *)[multiObject objectForKey:[self tableName]];
+        SSJLoanTable *loans = (SSJLoanTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:loans];
     }
     
@@ -88,7 +94,7 @@
         SSJLoanTable *currentLoan = (SSJLoanTable *)obj;
         
         SSJLoanTable *sameNameLoan = [[db getOneObjectOfClass:SSJLoanTable.class
-                                                        fromTable:[self tableName]]
+                                                        fromTable:[self mergeTableName]]
                                           where:SSJLoanTable.lender == currentLoan.lender
                                       && SSJLoanTable.money == currentLoan.money
                                       && SSJLoanTable.borrowDate == currentLoan.borrowDate

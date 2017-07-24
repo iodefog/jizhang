@@ -10,7 +10,7 @@
 
 @implementation SSJMemberChargeTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return @"BK_MEMBER_CHARGE";
 }
 
@@ -34,20 +34,29 @@
         multiProperties.push_back(property.inTable(@"bk_user_charge"));
     }
     for (const WCTProperty& property : SSJMembereChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable([self tableName]));
+        multiProperties.push_back(property.inTable([self mergeTableName]));
     }
 
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *startDate;
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    NSString *endDate;
+    
+    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+        startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    }
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
-                   where:SSJMembereChargeTable.chargeId.inTable([self tableName]) == SSJUserChargeTable.chargeId.inTable([self tableName])
+                                               fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_member_charge" ]]
+                   where:SSJMembereChargeTable.chargeId.inTable([self mergeTableName]) == SSJUserChargeTable.chargeId.inTable([self mergeTableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -56,8 +65,8 @@
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge", @"bk_member_charge" ]]
-                   where:SSJMembereChargeTable.chargeId.inTable([self tableName]) == SSJUserChargeTable.chargeId.inTable([self tableName])
+                                               fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_member_charge" ]]
+                   where:SSJMembereChargeTable.chargeId.inTable([self mergeTableName]) == SSJUserChargeTable.chargeId.inTable([self mergeTableName])
                    && SSJMembereChargeTable.chargeId.inTable(@"bk_member_charge") == SSJUserChargeTable.chargeId.inTable(@"bk_user_charge")
                    && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
@@ -74,7 +83,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJMembereChargeTable *memberCharges = (SSJMembereChargeTable *)[multiObject objectForKey:[self tableName]];
+        SSJMembereChargeTable *memberCharges = (SSJMembereChargeTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:memberCharges];
     }
     
@@ -97,7 +106,7 @@
         SSJMembereChargeTable *currentMemberCharge = (SSJMembereChargeTable *)obj;
         
         SSJMembereChargeTable *sameNameMemberCharge = [[db getOneObjectOfClass:SSJMembereChargeTable.class
-                                                        fromTable:[self tableName]]
+                                                        fromTable:[self mergeTableName]]
                                           where:SSJMembereChargeTable.chargeId == currentMemberCharge.chargeId
                                                        && SSJMembereChargeTable.memberId == currentMemberCharge.memberId];
         

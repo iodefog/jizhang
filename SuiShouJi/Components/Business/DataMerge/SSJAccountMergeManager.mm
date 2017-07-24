@@ -65,31 +65,66 @@
                            endDate:(NSDate *)endDate
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure {
+    @weakify(self);
     [self.db runTransaction:^BOOL{
+        @strongify(self);
         [self dropAllTempleTableInDataBase:self.db];
         [self creatAllTempleTableInDataBase:self.db];
+        
+        // 需要一个字典存下同名的id,key为相应的表的表明(不是临时表)
+        NSMutableDictionary *sameNameIdDic = [NSMutableDictionary dictionaryWithCapacity:0];
         
         // 首先将所有数据取出存入临时表
         for (NSSet *layer in self.mergeTableClasses) {
             for (Class mergeTable in layer) {
-                NSDictionary *result = [mergeTable queryDatasWithSourceUserId:sourceUserId
-                                                                 TargetUserId:targetUserId
-                                                                    mergeType:SSJMergeDataTypeByWriteDate
-                                                                     FromDate:startDate
-                                                                       ToDate:endDate
-                                                                   inDataBase:self.db];
+                NSDictionary *result = [mergeTable queryDatasWithSourceUserId:sourceUserId TargetUserId:targetUserId mergeType:SSJMergeDataTypeByWriteDate FromDate:startDate ToDate:endDate inDataBase:self.db];
                 
                 NSError *error = [result objectForKey:@"error"];
                 
                 if (error) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure(error);
+                        }
+                    });
                     return NO;
                 }
                 
                 NSArray *datas = [result objectForKey:@"results"];
                 
-                [self.db insertOrReplaceObjects:datas into:[mergeTable tempTableName]];
+                if (![self.db insertOrReplaceObjects:datas into:[mergeTable tempTableName]]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"合并%@表失败",[mergeTable tempTableName]]}]);
+                        }
+                    });
+                    return NO;
+                }
+                
+                NSDictionary *sameNameDic = [mergeTable getSameNameIdsWithSourceUserId:sourceUserId                                              TargetUserId:targetUserId withDatas:datas inDataBase:self.db];
+                
+                [sameNameIdDic setObject:sameNameDic forKey:[mergeTable mergeTableName]];
             }
         }
+        
+        
+        for (NSSet *layer in self.mergeTableClasses) {
+            for (Class mergeTable in layer) {
+                NSDictionary *sameNameIds = [sameNameIdDic objectForKey:[mergeTable mergeTableName]];
+                if ([mergeTable updateRelatedTableWithSourceUserId:sourceUserId TargetUserId:targetUserId withDatas:sameNameIds inDataBase:self.db]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"更新%@关联表失败",[mergeTable tempTableName]]}]);
+                        }
+                    });
+
+                    return NO;
+                }
+            }
+        }
+        
+        
+        [self dropAllTempleTableInDataBase:self.db];
         
         return YES;
     }];
