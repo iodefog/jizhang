@@ -11,11 +11,11 @@
 @implementation SSJLoanTableMerge
 
 + (NSString *)tableName {
-    return @"BK_FUND_INFO";
+    return @"BK_LOAN";
 }
 
 + (NSString *)tempTableName {
-    return @"temp_fund_info";
+    return @"temp_loan";
 }
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
@@ -30,36 +30,29 @@
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     
     WCTPropertyList multiProperties;
-    for (const WCTProperty& property : SSJUserChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable(@"bk_user_charge"));
-    }
     for (const WCTProperty& property : SSJLoanTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJLoanTable.loanId.inTable([self tableName]) == SSJUserChargeTable.cid.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                  groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
+                                              fromTables:@[ [self tableName] ]]
+                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                                          && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                                          && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJLoanTable.loanId.inTable([self tableName]) == SSJUserChargeTable.cid.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                  groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
+                                              fromTables:@[ [self tableName] ]]
+                  where:SSJLoanTable.loanId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.cid.distinct() fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                          && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                          && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
     }
     
     WCTError *error = select.error;

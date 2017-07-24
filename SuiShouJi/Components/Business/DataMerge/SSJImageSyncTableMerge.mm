@@ -12,7 +12,11 @@
 #warning TODO - 因为wcdb暂时没有字符串拼接,等下礼拜一再做
 
 + (NSString *)tableName {
-    return @"BK_MEMBER";
+    return @"BK_IMG_SYNC";
+}
+
++ (NSString *)tempTableName {
+    return @"temp_img_sync";
 }
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
@@ -34,9 +38,9 @@
         multiProperties.push_back(property.inTable([self tableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
     WCTMultiSelect *select;
     

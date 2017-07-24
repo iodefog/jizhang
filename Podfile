@@ -37,7 +37,7 @@ def shared_pods
     
     pod 'YYWebImage'
     
-    pod 'WCDB', :git => 'https://github.com/Tencent/wcdb', :commit => '8d0a8967aaf19309d23dfe2a8ec217658bd81cc7'
+    pod 'WCDB'
 end
 
 target 'SuiShouJi'  do

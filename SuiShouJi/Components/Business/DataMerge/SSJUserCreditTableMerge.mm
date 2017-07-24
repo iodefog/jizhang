@@ -14,6 +14,10 @@
     return @"BK_USER_CREDIT";
 }
 
++ (NSString *)tempTableName {
+    return @"temp_user_credit";
+}
+
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId
@@ -27,36 +31,37 @@
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     
     WCTPropertyList multiProperties;
-    for (const WCTProperty& property : SSJUserChargeTable.AllProperties) {
-        multiProperties.push_back(property.inTable(@"bk_user_charge"));
-    }
     for (const WCTProperty& property : SSJUserCreditTable.AllProperties) {
         multiProperties.push_back(property.inTable([self tableName]));
     }
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
     WCTMultiSelect *select;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJUserCreditTable.cardId.inTable([self tableName]) == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                  groupBy:{SSJUserCreditTable.cardId.inTable([self tableName])}];
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
+                                              fromTables:@[ [self tableName] ]]
+                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.fundId.distinct()
+                                                                                           fromTable:@"bk_user_charge"
+                                                                                               where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                              
+                                                                              && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                              
+                                                                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
     } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
-        select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                               fromTables:@[ [self tableName], @"bk_user_charge" ]]
-                   where:SSJUserCreditTable.cardId.inTable([self tableName]) == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
-                   && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                   && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                   && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
-                  groupBy:{SSJUserCreditTable.cardId.inTable([self tableName])}];
+        select = [[db prepareSelectMultiObjectsOnResults:multiProperties
+                                              fromTables:@[ [self tableName] ]]
+                  where:SSJUserCreditTable.cardId.inTable([self tableName]).in([db getObjectsOnResults:SSJUserChargeTable.fundId.distinct()
+                                                                                           fromTable:@"bk_user_charge"
+                                                                                               where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                              
+                                                                              && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                                                                              
+                                                                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
     }
     
     WCTError *error = select.error;

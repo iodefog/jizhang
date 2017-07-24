@@ -38,9 +38,9 @@
     }
 
     
-    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
-    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+    NSString *endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
     
     WCTMultiSelect *select;
     
@@ -63,8 +63,6 @@
                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
-        
-        
     }
     
     WCTError *error = select.error;
