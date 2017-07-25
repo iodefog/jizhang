@@ -20,7 +20,7 @@
 		<key>ID</key>
 		<string>1001</string>
 		<key>name</key>
-		<string>烟酒茶</string>
+		<string>烟酒饮料</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -98,7 +98,7 @@
 		<key>ID</key>
 		<string>1007</string>
 		<key>name</key>
-		<string>话费</string>
+		<string>话费网费</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -111,7 +111,7 @@
 		<key>ID</key>
 		<string>1008</string>
 		<key>name</key>
-		<string>医药</string>
+		<string>医疗</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -124,7 +124,7 @@
 		<key>ID</key>
 		<string>1009</string>
 		<key>name</key>
-		<string>住房</string>
+		<string>居住</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -306,7 +306,7 @@
 		<key>ID</key>
 		<string>1023</string>
 		<key>name</key>
-		<string>健身</string>
+		<string>健身运动</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -618,7 +618,7 @@
 		<key>ID</key>
 		<string>1047</string>
 		<key>name</key>
-		<string>小孩零用</string>
+		<string>零花钱</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -631,7 +631,7 @@
 		<key>ID</key>
 		<string>1048</string>
 		<key>name</key>
-		<string>KTV</string>
+		<string>K歌</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -644,7 +644,7 @@
 		<key>ID</key>
 		<string>1049</string>
 		<key>name</key>
-		<string>游园</string>
+		<string>旅游度假</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -910,7 +910,7 @@
 		<key>icon</key>
 		<string>bt_baoxian</string>
 		<key>color</key>
-		<string>#d13e3e</string>
+		<string>#D29361</string>
 	</dict>
 	<key>1075</key>
 	<dict>

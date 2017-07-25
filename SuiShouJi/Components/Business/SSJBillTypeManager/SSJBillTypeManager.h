@@ -32,8 +32,6 @@
 
 @property (nonatomic) BOOL expended;
 
-@property (nonatomic) int order;
-
 @property (nonatomic, copy) NSArray *booksIds;
 
 @end
