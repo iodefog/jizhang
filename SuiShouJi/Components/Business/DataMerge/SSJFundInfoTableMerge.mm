@@ -38,11 +38,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -57,7 +57,7 @@
                                                                               && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
                   where:SSJFundInfoTable.fundId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge"
                                                                                                              where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
@@ -94,8 +94,8 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJFundInfoTable *currentFund = (SSJFundInfoTable *)obj;
         
-        SSJFundInfoTable *sameNameFund = [[db getOneObjectOfClass:SSJFundInfoTable.class
-                                                         fromTable:[self mergeTableName]]
+        SSJFundInfoTable *sameNameFund = [db getOneObjectOfClass:SSJFundInfoTable.class
+                                                         fromTable:[self mergeTableName]
                                            where:SSJFundInfoTable.fudName == currentFund.fudName
                                           && SSJBooksTypeTable.userId == targetUserId];
         
@@ -118,8 +118,8 @@
     
     // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
+        NSString *oldId = obj;
+        NSString *newId = key;
         if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_credit_repayment"] || ![db isTableExists:@"temp_loan"] || ![db isTableExists:@"temp_fund_info"] || ![db isTableExists:@"temp_transfer_cycle"]) {
             SSJPRINT(@">>>>>>>>资金账户所关联的表不存在<<<<<<<<");
             *stop = NO;
@@ -223,53 +223,39 @@
         success = [db deleteObjectsFromTable:@"temp_fund_info"
                                        where:SSJFundInfoTable.fundId == oldId];
         
-        // 将所有的资金账户的userid更新为目标userid
-        SSJFundInfoTable *userfund = [[SSJFundInfoTable alloc] init];
-        userfund.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_fund_info"
-                           onProperties:SSJFundInfoTable.userId
-                             withObject:userfund
-                                  where:SSJFundInfoTable.userId == sourceUserid];
-        
-        if (!success) {
-            *stop = YES;
-        }
-        
-        
         // 要删除相应的信用卡,信用卡还款
-        success = [db deleteObjectsFromTable:@"temp_credit_repayment"
-                                       where:SSJCreditRepaymentTable.cardId == oldId];
-        
-        
-
-        // 将所有信用卡还款的userid更新为目标userid
-        SSJCreditRepaymentTable *userCreditRepayment = [[SSJCreditRepaymentTable alloc] init];
-        userCreditRepayment.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_credit_repayment"
-                           onProperties:SSJCreditRepaymentTable.userId
-                             withObject:userCreditRepayment
-                                  where:SSJCreditRepaymentTable.userId == sourceUserid];
-        
-        if (!success) {
-            *stop = YES;
-        }
-
         success = [db deleteObjectsFromTable:@"temp_user_credit"
                                        where:SSJUserCreditTable.cardId == oldId];
         
-        // 将所有的信用卡的userid更新为目标userid
-        SSJUserCreditTable *userCredit = [[SSJUserCreditTable alloc] init];
-        userCredit.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_user_credit"
-                           onProperties:SSJUserCreditTable.userId
-                             withObject:userCredit
-                                  where:SSJUserCreditTable.userId == sourceUserid];
+        success = [db deleteObjectsFromTable:@"temp_credit_repayment"
+                                       where:SSJCreditRepaymentTable.cardId == oldId];
 
         
-        if (!success) {
-            *stop = YES;
-        }
     }];
+    
+    // 将所有的资金账户的userid更新为目标userid
+    SSJFundInfoTable *userfund = [[SSJFundInfoTable alloc] init];
+    userfund.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_fund_info"
+                       onProperties:SSJFundInfoTable.userId
+                         withObject:userfund
+                              where:SSJFundInfoTable.userId == sourceUserid];
+    
+    // 将所有信用卡还款的userid更新为目标userid
+    SSJCreditRepaymentTable *userCreditRepayment = [[SSJCreditRepaymentTable alloc] init];
+    userCreditRepayment.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_credit_repayment"
+                       onProperties:SSJCreditRepaymentTable.userId
+                         withObject:userCreditRepayment
+                              where:SSJCreditRepaymentTable.userId == sourceUserid];
+    
+    // 将所有的信用卡的userid更新为目标userid
+    SSJUserCreditTable *userCredit = [[SSJUserCreditTable alloc] init];
+    userCredit.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_user_credit"
+                       onProperties:SSJUserCreditTable.userId
+                         withObject:userCredit
+                              where:SSJUserCreditTable.userId == sourceUserid];
     
     return success;
 }

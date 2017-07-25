@@ -44,11 +44,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -65,7 +65,7 @@
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_member_charge" ]]
                    where:SSJMembereChargeTable.memberId.inTable(@"bk_member_charge") == SSJMemberTable.memberId.inTable([self mergeTableName])
@@ -107,8 +107,8 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJMemberTable *currentMember = (SSJMemberTable *)obj;
         
-        SSJMemberTable *sameNameMember = [[db getOneObjectOfClass:SSJLoanTable.class
-                                                    fromTable:[self mergeTableName]]
+        SSJMemberTable *sameNameMember = [db getOneObjectOfClass:SSJMemberTable.class
+                                                    fromTable:[self mergeTableName]
                                       where:SSJMemberTable.memberName == currentMember.memberName
                                           && SSJMemberTable.userId == targetUserId];
         
@@ -131,9 +131,9 @@
     
     // 和成员有关的表:成员流水,周期记账,
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
-        if (![db isTableExists:@"temp_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
+        NSString *oldId = obj;
+        NSString *newId = key;
+        if (![db isTableExists:@"temp_charge_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
             SSJPRINT(@">>>>>>>>成员所关联的表不存在<<<<<<<<");
             *stop = YES;
             success = NO;
@@ -142,7 +142,7 @@
         // 更新成员流水表
         SSJMembereChargeTable *memberCharge = [[SSJMembereChargeTable alloc] init];
         memberCharge.memberId = newId;
-        success = [db updateRowsInTable:@"temp_user_charge"
+        success = [db updateRowsInTable:@"temp_member_charge"
                            onProperties:SSJMembereChargeTable.memberId
                              withObject:memberCharge
                                   where:SSJMembereChargeTable.memberId == oldId];
@@ -152,7 +152,7 @@
         
         // 更新周期记账表
         WCTSelect *chargePeriodSelect = [db prepareSelectObjectsOfClass:SSJChargePeriodConfigTable.class
-                                                  fromTable:@"temp_period_config"];
+                                                  fromTable:@"temp_charge_period_config"];
         
         if (chargePeriodSelect.error) {
             *stop = YES;
@@ -167,7 +167,7 @@
         for (SSJChargePeriodConfigTable *periodCharge in periodCharges) {
             NSString *newMembers = [periodCharge.memberIds stringByReplacingOccurrencesOfString:oldId withString:newId];
             periodCharge.memberIds = newMembers;
-            success = [db updateRowsInTable:@"temp_period_config"
+            success = [db updateRowsInTable:@"temp_charge_period_config"
                                onProperties:SSJChargePeriodConfigTable.memberIds
                                  withObject:periodCharge
                                       where:SSJChargePeriodConfigTable.configId == periodCharge.configId];
@@ -177,23 +177,21 @@
         success = [db deleteObjectsFromTable:@"temp_member"
                                        where:SSJMemberTable.memberId == oldId];
         
-        // 将所有的成员的userid更新为目标userid
-        SSJMemberTable *userMember = [[SSJMemberTable alloc] init];
-        userMember.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_member"
-                           onProperties:SSJMemberTable.userId
-                             withObject:userMember
-                                  where:SSJMemberTable.userId == sourceUserid];
-        if (!success) {
-            *stop = YES;
-        }
         
         if (!success) {
             *stop = YES;
         }
+        
         
     }];
     
+    // 将所有的成员的userid更新为目标userid
+    SSJMemberTable *userMember = [[SSJMemberTable alloc] init];
+    userMember.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_member"
+                       onProperties:SSJMemberTable.userId
+                         withObject:userMember
+                              where:SSJMemberTable.userId == sourceUserid];
     return success;
 }
 

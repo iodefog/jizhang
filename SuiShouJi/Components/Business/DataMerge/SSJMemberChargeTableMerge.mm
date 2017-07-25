@@ -42,11 +42,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -63,7 +63,7 @@
                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                   groupBy:{SSJUserChargeTable.cid.inTable(@"bk_user_charge")}];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_member_charge" ]]
                    where:SSJMembereChargeTable.chargeId.inTable([self mergeTableName]) == SSJUserChargeTable.chargeId.inTable([self mergeTableName])
@@ -105,10 +105,7 @@
         
         SSJMembereChargeTable *currentMemberCharge = (SSJMembereChargeTable *)obj;
         
-        SSJMembereChargeTable *sameNameMemberCharge = [[db getOneObjectOfClass:SSJMembereChargeTable.class
-                                                        fromTable:[self mergeTableName]]
-                                          where:SSJMembereChargeTable.chargeId == currentMemberCharge.chargeId
-                                                       && SSJMembereChargeTable.memberId == currentMemberCharge.memberId];
+        SSJMembereChargeTable *sameNameMemberCharge = [db getOneObjectOfClass:SSJMembereChargeTable.class fromTable:[self mergeTableName] where:SSJMembereChargeTable.chargeId == currentMemberCharge.chargeId && SSJMembereChargeTable.memberId == currentMemberCharge.memberId];
         
         NSString *currentMemberChargeUnionId = [NSString stringWithFormat:@"%@,%@",currentMemberCharge.memberId,currentMemberCharge.chargeId];
         
@@ -138,8 +135,8 @@
     
     // 和成员有关的表:成员流水,周期记账,
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
+        NSString *oldId = obj;
+        NSString *newId = key;
         
         NSString *oldMemberId = [[obj componentsSeparatedByString:@","] firstObject];
         NSString *oldChargeId = [[obj componentsSeparatedByString:@","] lastObject];

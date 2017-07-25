@@ -39,11 +39,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -53,13 +53,13 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
                   where:SSJUserCreditTable.cardId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge"
-                                                                                                               where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                                                               where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                               
                                                                               && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                               
                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
                   where:SSJUserCreditTable.cardId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge"
                                                                                                where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)

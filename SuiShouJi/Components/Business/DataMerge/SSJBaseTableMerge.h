@@ -25,13 +25,14 @@
 #import "SSJCreditRepaymentTable.h"
 #import "SSJTransferCycleTable.h"
 #import "SSJImageSyncTable.h"
+#import "SSJUserBillTypeTable.h"
 
 @interface SSJBaseTableMerge : NSObject
 
 
 typedef NS_ENUM(NSInteger, SSJMergeDataType) {
     SSJMergeDataTypeByWriteDate,           //  按照修改日期合并
-    SSJMergeDataTypeByWriteBillDate        //  按照记账日期合并
+    SSJMergeDataTypeByBillDate        //  按照记账日期合并
 };
 
 

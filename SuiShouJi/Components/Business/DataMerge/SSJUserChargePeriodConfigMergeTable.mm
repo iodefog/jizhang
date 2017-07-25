@@ -40,11 +40,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -61,7 +61,7 @@
                       
                                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
                   where:SSJChargePeriodConfigTable.configId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
                                                                                                        fromTable:@"bk_user_charge"
@@ -98,8 +98,8 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJChargePeriodConfigTable *currentConfig = (SSJChargePeriodConfigTable *)obj;
         
-        SSJChargePeriodConfigTable *sameNameConfig = [[db getOneObjectOfClass:SSJChargePeriodConfigTable.class
-                                                         fromTable:[self mergeTableName]]
+        SSJChargePeriodConfigTable *sameNameConfig = [db getOneObjectOfClass:SSJChargePeriodConfigTable.class
+                                                         fromTable:[self mergeTableName]
                                                     where:SSJChargePeriodConfigTable.fundId == currentConfig.fundId
                                                     && SSJChargePeriodConfigTable.billDate == currentConfig.billDate
                                                     && SSJChargePeriodConfigTable.booksId == currentConfig.booksId
@@ -124,9 +124,9 @@
     
     // 和账本有关的表:流水,周期记账
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
-        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_period_config"] || ![db isTableExists:@"temp_books_type"]) {
+        NSString *oldId = obj;
+        NSString *newId = key;
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_books_type"]) {
             SSJPRINT(@">>>>>>>>账本所关联的表不存在<<<<<<<<");
             *stop = YES;
             success = NO;
@@ -162,17 +162,15 @@
             *stop = YES;
         }
         
-        // 将所有的周期记账的userid更新为目标userid
-        SSJChargePeriodConfigTable *chargePeriod = [[SSJChargePeriodConfigTable alloc] init];
-        chargePeriod.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_charge_period_config"
-                           onProperties:SSJChargePeriodConfigTable.userId
-                             withObject:chargePeriod
-                                  where:SSJChargePeriodConfigTable.userId == sourceUserid];
-        if (!success) {
-            *stop = YES;
-        }
     }];
+    
+    // 将所有的周期记账的userid更新为目标userid
+    SSJChargePeriodConfigTable *chargePeriod = [[SSJChargePeriodConfigTable alloc] init];
+    chargePeriod.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_charge_period_config"
+                       onProperties:SSJChargePeriodConfigTable.userId
+                         withObject:chargePeriod
+                              where:SSJChargePeriodConfigTable.userId == sourceUserid];
     
     return success;
 }

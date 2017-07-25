@@ -30,11 +30,11 @@
 }
 
 - (void)testExample {
-    NSDate *startDate = [NSDate dateWithYear:2017 month:7 day:24 hour:0 minute:0 second:0];
+    NSDate *startDate = [NSDate dateWithYear:2017 month:7 day:25 hour:0 minute:0 second:0];
 
-    NSDate *endDate = [NSDate dateWithYear:2017 month:7 day:24 hour:23 minute:59 second:59];
+    NSDate *endDate = [NSDate dateWithYear:2017 month:7 day:25 hour:23 minute:59 second:59];
     
-    [self.manager startMergeWithSourceUserId:@"19699a48-2ee9-4bdc-b6b4-c03a52c651d9" targetUserId:@"5a881e09-7402-4e2d-8729-c25bb6742bdc" startDate:startDate endDate:endDate Success:^{
+    [self.manager startMergeWithSourceUserId:@"90d7a2ba-d4bf-4f1e-8af9-c8ff13c2c900" targetUserId:@"5a881e09-7402-4e2d-8729-c25bb6742bdc" startDate:startDate endDate:endDate Success:^{
         XCTAssert(@"合并成功");
     } failure:^(NSError *error) {
         XCTAssertNotNil(error,@"合并失败");

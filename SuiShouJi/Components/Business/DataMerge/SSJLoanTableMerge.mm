@@ -38,11 +38,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -52,11 +52,11 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
                   where:SSJLoanTable.loanId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid fromTable:@"bk_user_charge"
-                                                                                                         where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                                                         where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties  fromTables:@[ [self mergeTableName] ]]
                   where:SSJLoanTable.loanId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid fromTable:@"bk_user_charge"
                                                                                                     where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
@@ -93,8 +93,8 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJLoanTable *currentLoan = (SSJLoanTable *)obj;
         
-        SSJLoanTable *sameNameLoan = [[db getOneObjectOfClass:SSJLoanTable.class
-                                                        fromTable:[self mergeTableName]]
+        SSJLoanTable *sameNameLoan = [db getOneObjectOfClass:SSJLoanTable.class
+                                                        fromTable:[self mergeTableName]
                                           where:SSJLoanTable.lender == currentLoan.lender
                                       && SSJLoanTable.money == currentLoan.money
                                       && SSJLoanTable.borrowDate == currentLoan.borrowDate
@@ -121,8 +121,8 @@
     
     // 和借贷有关的表:流水
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
+        NSString *oldId = obj;
+        NSString *newId = key;
         if (![db isTableExists:@"temp_user_charge"]) {
             SSJPRINT(@">>>>>>>>借贷所关联的表不存在<<<<<<<<");
             *stop = YES;
@@ -144,20 +144,18 @@
         success = [db deleteObjectsFromTable:@"temp_loan"
                                        where:SSJLoanTable.loanId == oldId];
         
-        // 将所有的借贷的userid更新为目标userid
-        SSJLoanTable *userLoan = [[SSJLoanTable alloc] init];
-        userLoan.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_loan"
-                           onProperties:SSJLoanTable.userId
-                             withObject:userLoan
-                                  where:SSJLoanTable.userId == sourceUserid];
-        
-        
-        if (!success) {
-            *stop = YES;
-        }
-        
+
     }];
+    
+    // 将所有的借贷的userid更新为目标userid
+    SSJLoanTable *userLoan = [[SSJLoanTable alloc] init];
+    userLoan.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_loan"
+                       onProperties:SSJLoanTable.userId
+                         withObject:userLoan
+                              where:SSJLoanTable.userId == sourceUserid];
+    
+    
     
     return success;
 }

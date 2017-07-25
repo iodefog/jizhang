@@ -15,7 +15,7 @@
 }
 
 + (NSString *)tempTableName {
-    return @"temp_trasfer_cycle";
+    return @"temp_transfer_cycle";
 }
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
@@ -38,11 +38,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -53,11 +53,11 @@
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self mergeTableName] ]]
                   where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
-                                                                                               fromTable:@"bk_user_charge" where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                                                                               fromTable:@"bk_user_charge" where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                                                                                           && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                                                                                           && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
         
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self mergeTableName] ]]
                   where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.fundId
@@ -98,7 +98,7 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJTransferCycleTable *currentTransfer = (SSJTransferCycleTable *)obj;
         
-        SSJTransferCycleTable *sameNameTransfer = [[db getOneObjectOfClass:SSJTransferCycleTable.class fromTable:[self mergeTableName]]
+        SSJTransferCycleTable *sameNameTransfer = [db getOneObjectOfClass:SSJTransferCycleTable.class fromTable:[self mergeTableName]
                                           where:SSJTransferCycleTable.transferOutId == currentTransfer.transferOutId
                                                    && SSJTransferCycleTable.transferInId == currentTransfer.transferInId
                                                    && SSJTransferCycleTable.money == currentTransfer.money
@@ -126,8 +126,8 @@
     
     // 和周期转账有关的表:流水表
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
+        NSString *newId = key;
+        NSString *oldId = obj;
         if (![db isTableExists:@"temp_user_charge"]) {
             SSJPRINT(@">>>>>>>>周期转账所关联的表不存在<<<<<<<<");
             *stop = YES;
@@ -149,13 +149,6 @@
         success = [db deleteObjectsFromTable:@"temp_transfer_cycle"
                                        where:SSJTransferCycleTable.cycleId == oldId];
         
-        // 将所有的周期转账的userid更新为目标userid
-        SSJTransferCycleTable *userCycleTransfer = [[SSJTransferCycleTable alloc] init];
-        userCycleTransfer.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_loan"
-                           onProperties:SSJTransferCycleTable.userId
-                             withObject:userCycleTransfer
-                                  where:SSJTransferCycleTable.userId == sourceUserid];
         
         
         if (!success) {
@@ -163,6 +156,14 @@
         }
         
     }];
+    
+    // 将所有的周期转账的userid更新为目标userid
+    SSJTransferCycleTable *userCycleTransfer = [[SSJTransferCycleTable alloc] init];
+    userCycleTransfer.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_loan"
+                       onProperties:SSJTransferCycleTable.userId
+                         withObject:userCycleTransfer
+                              where:SSJTransferCycleTable.userId == sourceUserid];
     
     return success;
 }
