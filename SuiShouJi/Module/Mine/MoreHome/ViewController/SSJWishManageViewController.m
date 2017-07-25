@@ -49,7 +49,7 @@
 }
 
 - (void)initTopView {
-    NSArray *btnTitle = @[@"心愿清单",@"已完成心愿"];
+    NSArray *btnTitle = @[@"心愿清单",@"历史心愿"];
     _topScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, SSJSCREENWITH, 44)];
     CGFloat kbtnWith = SSJSCREENWITH * 0.5;
     for (NSInteger i=0; i<btnTitle.count; i++) {

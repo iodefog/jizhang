@@ -31,17 +31,17 @@
     [self appearanceWithTheme];
     [self updateViewConstraints];
     
-#warning test
-    [self setUpNav];
+//#warning test
+//    [self setUpNav];
 }
-- (void)setUpNav {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清单" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
-}
-
-- (void)navRightClick {
-    SSJWishManageViewController *vc = [[SSJWishManageViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-}
+//- (void)setUpNav {
+//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清单" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
+//}
+//
+//- (void)navRightClick {
+//    SSJWishManageViewController *vc = [[SSJWishManageViewController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+//}
 
 #pragma mark - Layout
 - (void)updateViewConstraints {
@@ -75,7 +75,9 @@
 - (void)appearanceWithTheme {
     self.tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.startBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
-    
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.view.backgroundColor = [UIColor whiteColor];
+    }
 }
 
 #pragma mark - Lazy

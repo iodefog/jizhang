@@ -13,4 +13,7 @@
 
 /**进度*/
 @property (nonatomic, assign) float progress;
+
+/**进度条颜色*/
+@property (nonatomic, strong) UIColor *progressColor;
 @end

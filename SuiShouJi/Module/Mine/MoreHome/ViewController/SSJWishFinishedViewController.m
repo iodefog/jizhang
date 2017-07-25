@@ -7,8 +7,13 @@
 //
 
 #import "SSJWishFinishedViewController.h"
+#import "SSJWishProgressViewController.h"
 
 #import "SSJWishListTableViewCell.h"
+
+#import "SSJWishModel.h"
+
+#import "SSJWishHelper.h"
 
 @interface SSJWishFinishedViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property (nonatomic, strong) UITableView *tableView;
@@ -22,6 +27,19 @@
     [super viewDidLoad];
     [self.view addSubview:self.tableView];
     [self updateViewConstraints];
+    [self updateAppearance];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    @weakify(self);
+    [SSJWishHelper queryIngWishWithState:SSJWishStateFinish success:^(NSMutableArray<SSJWishModel *> *resultArr) {
+        @strongify(self);
+        self.dataArray = resultArr;
+        [self.tableView reloadData];
+    } failure:^(NSError *error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -32,18 +50,36 @@
     [super updateViewConstraints];
 }
 
+#pragma mark - Theme
+- (void)updateAppearanceAfterThemeChanged {
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
+
+- (void)updateAppearance {
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        self.view.backgroundColor =[UIColor whiteColor];
+    }
+}
 
 #pragma mark - UITableViewDelegate
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SSJWishModel *model = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
+    SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
+    wishProgressVC.wishId = model.wishId;
+    
+    [SSJVisibalController().navigationController pushViewController:wishProgressVC animated:YES];
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-    //    return self.dataArray.count;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
+    cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
