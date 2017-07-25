@@ -18,6 +18,8 @@
 
 @end
 
+
+
 @interface SSJBillTypeModel : NSObject
 
 @property (nonatomic, copy) NSString *ID;

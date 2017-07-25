@@ -116,18 +116,20 @@ typedef NS_ENUM(NSInteger, SSJCyclePeriodType) {
 /**
  账本类型
 
- - SSJDefaultBooksTypeDaily: 日常
- - SSJDefaultBooksTypeBusiness: 生意
- - SSJDefaultBooksTypeMarriage: 结婚
- - SSJDefaultBooksTypeDecoration: 装修
- - SSJDefaultBooksTypeTravel: 旅行
+ - SSJBooksTypeDaily: 日常
+ - SSJBooksTypeBusiness: 生意
+ - SSJBooksTypeMarriage: 结婚
+ - SSJBooksTypeDecoration: 装修
+ - SSJBooksTypeTravel: 旅行
+ - SSJBooksTypeBaby: 宝宝
  */
 typedef NS_ENUM(NSInteger, SSJBooksType) {
     SSJBooksTypeDaily = 0,
     SSJBooksTypeBusiness = 1,
     SSJBooksTypeMarriage = 2,
     SSJBooksTypeDecoration = 3,
-    SSJBooksTypeTravel = 4
+    SSJBooksTypeTravel = 4,
+    SSJBooksTypeBaby = 5
 };
 
 /**
