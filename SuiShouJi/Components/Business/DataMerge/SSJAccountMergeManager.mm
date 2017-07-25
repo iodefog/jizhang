@@ -107,7 +107,7 @@
             }
         }
         
-        
+        // 处理每个表所关联的表,并把合并来源标的userid改为目标表的userid
         for (NSSet *layer in self.mergeTableClasses) {
             for (Class mergeTable in layer) {
                 NSDictionary *sameNameIds = [sameNameIdDic objectForKey:[mergeTable mergeTableName]];
@@ -122,6 +122,8 @@
                 }
             }
         }
+        
+        
         
         
         [self dropAllTempleTableInDataBase:self.db];

@@ -18,20 +18,26 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTStatistics.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTValue.h>
 
-/**
- @see WCTPerformanceTrace
- */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
+@implementation NSObject (WCTValue)
 
-@interface WCTStatistics (Compatible)
-
-/**
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- @param trace trace
- */
-+ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("Use -SetGlobalPerformanceTrace: instead");
+- (WCTValueType)valueType
+{
+    if ([self isKindOfClass:NSString.class]) {
+        return WCTValueTypeString;
+    } else if ([self isKindOfClass:NSData.class]) {
+        return WCTValueTypeData;
+    } else if ([self isKindOfClass:NSNumber.class]) {
+        return WCTValueTypeNumber;
+    } else if ([self isKindOfClass:NSNull.class]) {
+        return WCTValueTypeNil;
+    } else if ([self conformsToProtocol:@protocol(WCTColumnCoding)]) {
+        return WCTValueTypeColumnCoding;
+    } else {
+        return WCTValueTypeUnknown;
+    }
+}
 
 @end

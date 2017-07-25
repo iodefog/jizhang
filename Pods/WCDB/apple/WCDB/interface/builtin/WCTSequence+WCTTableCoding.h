@@ -18,20 +18,17 @@
  * limitations under the License.
  */
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCTStatistics.h>
+#import <WCDB/WCTCoding.h>
+#import <WCDB/WCTCodingMacro.h>
+#import <WCDB/WCTProperty.h>
+#import <WCDB/WCTSequence.h>
 
 /**
- @see WCTPerformanceTrace
+ Builtin ORM for "sqlite_sequence" table. For further information, see https://sqlite.org/autoinc.html .
  */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
+@interface WCTSequence (WCTTableCoding) <WCTTableCoding>
 
-@interface WCTStatistics (Compatible)
-
-/**
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- @param trace trace
- */
-+ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("Use -SetGlobalPerformanceTrace: instead");
+WCDB_PROPERTY(name)
+WCDB_PROPERTY(seq)
 
 @end

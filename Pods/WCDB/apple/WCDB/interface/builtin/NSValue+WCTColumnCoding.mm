@@ -18,20 +18,31 @@
  * limitations under the License.
  */
 
+#ifdef WCDB_BUILTIN_COLUMN_CODING
+
 #import <Foundation/Foundation.h>
-#import <WCDB/WCTStatistics.h>
+#import <WCDB/WCDB.h>
 
-/**
- @see WCTPerformanceTrace
- */
-typedef void (^WCTTrace)(WCTTag, NSDictionary<NSString *, NSNumber *> *, NSInteger);
+@interface NSValue (WCTColumnCoding) <WCTColumnCoding>
+@end
 
-@interface WCTStatistics (Compatible)
+@implementation NSValue (WCTColumnCoding)
 
-/**
- @see [WCTStatistics SetGlobalPerformanceTrace:]
- @param trace trace
- */
-+ (void)SetGlobalTrace:(WCTTrace)trace DEPRECATED_MSG_ATTRIBUTE("Use -SetGlobalPerformanceTrace: instead");
++ (instancetype)unarchiveWithWCTValue:(NSData *)value
+{
+    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+}
+
+- (NSData *)archivedWCTValue
+{
+    return [NSKeyedArchiver archivedDataWithRootObject:self];
+}
+
++ (WCTColumnType)columnTypeForWCDB
+{
+    return WCTColumnTypeBinary;
+}
 
 @end
+
+#endif //WCDB_BUILTIN_COLUMN_CODING
