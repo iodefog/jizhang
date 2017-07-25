@@ -127,6 +127,11 @@
         case SSJBooksTypeTravel:
         return @"bk_lvxing";
         break;
+            
+        case SSJBooksTypeBaby:
+#warning TODO
+            return @"";
+            break;
     }
 }
 
