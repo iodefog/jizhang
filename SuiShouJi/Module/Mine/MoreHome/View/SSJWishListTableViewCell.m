@@ -67,6 +67,10 @@
         self.wishTitleL.text = item.wishName;
         self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%@",item.wishSaveMoney];
         self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%@",item.wishMoney];
+        if (self.wishProgressView.width == 0) {
+            self.wishProgressView.width = self.width - 30;
+            self.wishProgressView.height = 37;
+        }
         self.wishProgressView.progress = [item.wishSaveMoney floatValue] / [item.wishMoney floatValue];
         [self updateStateBtnAppearance];
     }
@@ -112,7 +116,7 @@
     [self.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.wishTitleL);
         make.height.mas_equalTo(22);
-        make.right.mas_equalTo(0);
+        make.right.mas_equalTo(11);
         make.width.mas_equalTo(66);
     }];
     
@@ -135,10 +139,11 @@
 - (void)updateAppearance {
     self.stateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
         self.contentView.backgroundColor = [UIColor clearColor];
-//    self.bgView.backgroundColor =
+    self.stateLabel.textColor = [UIColor whiteColor];
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-//    [self.accessoryBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] forState:UIControlStateNormal];
+    self.stateLabel.backgroundColor = [UIColor lightGrayColor];
+
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.bgView.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
     } else {
@@ -151,16 +156,22 @@
     if (![self.cellItem isKindOfClass:[SSJWishModel class]]) return;
     SSJWishModel *item = self.cellItem;
     if (item.status == SSJWishStateTermination) {//终止
+        self.stateLabel.hidden = NO;
+        self.stateLabel.text = @"终止";
+        self.stateBtn.hidden = YES;
+    } else if (item.status == SSJWishStateFinish) {//完成
+        if ([item.wishSaveMoney doubleValue] > [item.wishMoney doubleValue]) {
+            self.stateLabel.text = @"超额完成";
+        } else {
+            self.stateLabel.text = @"已完成";
+        }
+        self.stateBtn.hidden = YES;
+        self.stateLabel.hidden = NO;
+    } else {//进行中
         [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [self.stateBtn setTitle:@"重新开始" forState:UIControlStateNormal];
-        self.stateBtn.hidden = NO;
-    } else if (item.status == SSJWishStateFinish) {//完成
-        self.stateBtn.hidden = YES;
-    } else {//进行中
-        [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [self.stateBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         [self.stateBtn setTitle:@"存" forState:UIControlStateNormal];
+        self.stateLabel.hidden = YES;
         self.stateBtn.hidden = NO;
     }
 }
@@ -214,6 +225,9 @@
     if (!_stateLabel) {
         _stateLabel = [[UILabel alloc] init];
         _stateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _stateLabel.textAlignment = NSTextAlignmentCenter;
+        _stateLabel.layer.cornerRadius = 11;
+        _stateLabel.layer.masksToBounds = YES;
     }
     return _stateLabel;
 }
@@ -225,7 +239,24 @@
         _stateBtn.layer.cornerRadius = 11;
         _stateBtn.layer.borderWidth = 1;
         _stateBtn.layer.masksToBounds = YES;
+        
+        [_stateBtn addTarget:self action:@selector(stateBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _stateBtn;
 }
+
+- (void)stateBtnClicked:(UIButton *)stateBtn {
+    SSJWishModel *item = self.cellItem;
+    if (self.wishSaveMoneyBlock) {
+        self.wishSaveMoneyBlock(item);
+    }
+//    if (item.status == SSJWishStateTermination) {//终止
+//
+//    } else if (item.status == SSJWishStateFinish) {//完成
+//    } else {//进行中
+//        
+//    }
+
+}
+
 @end

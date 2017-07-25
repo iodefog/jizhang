@@ -216,11 +216,21 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [UIView animateWithDuration:0.1 animations:^{
             self.topBg.height = CGRectGetMaxY(self.wishNameTextF.frame);
         }];
-    } else if(self.wishAmountTextF) {
+    } else if(textField == self.wishAmountTextF) {
+        //textField.clearsOnInsertion = YES;
         [UIView animateWithDuration:0.1 animations:^{
             self.bottomBg.height = CGRectGetMaxY(self.wishAmountTextF.frame);
         }];
     }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (self.wishAmountTextF == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Lazy
@@ -338,7 +348,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishAmountTextF = [[UITextField alloc] init];
         _wishAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _wishAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _wishAmountTextF.keyboardType = UIKeyboardTypePhonePad;
+        _wishAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _wishAmountTextF.delegate = self;
     }
     return _wishAmountTextF;
@@ -381,12 +391,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             @strongify(self);
            //保存心愿
             self.wishModel.wishName = self.wishNameTextF.text;
-            self.wishModel.wishMoney = self.wishAmountTextF.text;
+            self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
-                self.wishModel = nil;
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+                wishProVC.wishId = self.wishModel.wishId;
                 [self.navigationController pushViewController:wishProVC animated:YES];
+                self.wishModel = nil;
             } failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:error.localizedDescription];
             }];

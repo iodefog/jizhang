@@ -10,6 +10,7 @@
 #import "SSJWishPhotoChooseViewController.h"
 #import "SSJReminderEditeViewController.h"
 #import "TPKeyboardAvoidingtableView.h"
+#import "SSJWishManageViewController.h"
 
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
@@ -72,11 +73,43 @@
 }
 
 - (void)setUpNav {
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"终止" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
+    NSString *navTitle;
+    //进行中-----终止
+    //终止------删除
+    if (self.wishModel.status == SSJWishStateNormalIng) {
+        navTitle = @"终止";
+    } else if(self.wishModel.status == SSJWishStateFinish) {
+        navTitle = @"删除";
+    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:navTitle style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
 }
 
 - (void)navRightClick {
-    
+    __weak __typeof(self)weakSelf = self;
+    if (self.wishModel.status == SSJWishStateNormalIng) {
+        //终止
+        [SSJWishHelper termWishWithWishModel:self.wishModel success:^{
+            [CDAutoHideMessageHUD showMessage:@"终止成功"];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:@"终止失败"];
+        }];
+        
+    } else if(self.wishModel.status == SSJWishStateFinish) {
+        //删除
+        [SSJWishHelper deleteWishWithWisId:self.wishModel.wishId Success:^{
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+            if ([lastVc isKindOfClass:[SSJWishManageViewController class]]) {
+                if ([self.navigationController.viewControllers containsObject:lastVc]) {
+                    [weakSelf.navigationController popToViewController:lastVc animated:YES];
+                }
+            }
+            
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:@"删除失败"];
+        }];
+    }
 }
 
 - (void)setUpUI {

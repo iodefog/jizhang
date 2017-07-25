@@ -8,6 +8,7 @@
 
 #import "SSJWishIngViewController.h"
 #import "SSJWishProgressViewController.h"
+#import "SSJWishWithdrawMoneyViewController.h"
 
 #import "SSJWishListTableViewCell.h"
 
@@ -99,6 +100,17 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
     cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
+    cell.wishSaveMoneyBlock = ^(SSJWishModel *item) {
+        if (item.status == SSJWishStateTermination) {//终止
+            //重新开始
+        } else if (item.status == SSJWishStateNormalIng) {//进行中
+            //去存钱
+            SSJWishWithdrawMoneyViewController *saveVC = [[SSJWishWithdrawMoneyViewController alloc] init];
+            saveVC.wishModel = item;
+            [SSJVisibalController().navigationController pushViewController:saveVC animated:YES];
+        }
+    };
+
     return cell;
 }
 

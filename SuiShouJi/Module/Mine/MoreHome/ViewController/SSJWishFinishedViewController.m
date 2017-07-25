@@ -7,8 +7,11 @@
 //
 
 #import "SSJWishFinishedViewController.h"
+#import "SSJWishProgressViewController.h"
 
 #import "SSJWishListTableViewCell.h"
+
+#import "SSJWishModel.h"
 
 #import "SSJWishHelper.h"
 
@@ -60,7 +63,14 @@
 }
 
 #pragma mark - UITableViewDelegate
-
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    SSJWishModel *model = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
+    SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
+    wishProgressVC.wishId = model.wishId;
+    
+    [SSJVisibalController().navigationController pushViewController:wishProgressVC animated:YES];
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -69,6 +79,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
+    cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
