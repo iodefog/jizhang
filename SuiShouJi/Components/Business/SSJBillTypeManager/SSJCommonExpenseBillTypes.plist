@@ -540,7 +540,7 @@
 		<key>ID</key>
 		<string>1041</string>
 		<key>name</key>
-		<string>出差</string>
+		<string>差旅费</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -748,7 +748,7 @@
 		<key>ID</key>
 		<string>1059</string>
 		<key>name</key>
-		<string>材料费</string>
+		<string>材料</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -930,7 +930,7 @@
 		<key>ID</key>
 		<string>1077</string>
 		<key>name</key>
-		<string>结婚照</string>
+		<string>结婚摄影</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -969,7 +969,7 @@
 		<key>ID</key>
 		<string>1081</string>
 		<key>name</key>
-		<string>婚礼</string>
+		<string>婚礼场地</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -982,7 +982,7 @@
 		<key>ID</key>
 		<string>1082</string>
 		<key>name</key>
-		<string>礼服</string>
+		<string>婚纱礼服</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1034,7 +1034,7 @@
 		<key>ID</key>
 		<string>1087</string>
 		<key>name</key>
-		<string>婚庆服务</string>
+		<string>婚庆</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1099,7 +1099,7 @@
 		<key>ID</key>
 		<string>1092</string>
 		<key>name</key>
-		<string>造型化妆</string>
+		<string>结婚饰品</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1216,7 +1216,7 @@
 		<key>ID</key>
 		<string>1103</string>
 		<key>name</key>
-		<string>室内设计费</string>
+		<string>设计费</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1242,7 +1242,7 @@
 		<key>ID</key>
 		<string>1105</string>
 		<key>name</key>
-		<string>水电工</string>
+		<string>装修人工</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1281,7 +1281,7 @@
 		<key>ID</key>
 		<string>1110</string>
 		<key>name</key>
-		<string>杂费</string>
+		<string>装修杂费</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1307,7 +1307,7 @@
 		<key>ID</key>
 		<string>1117</string>
 		<key>name</key>
-		<string>小吃</string>
+		<string>特色小吃</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
@@ -1346,7 +1346,7 @@
 		<key>ID</key>
 		<string>1122</string>
 		<key>name</key>
-		<string>的士</string>
+		<string>车票</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
