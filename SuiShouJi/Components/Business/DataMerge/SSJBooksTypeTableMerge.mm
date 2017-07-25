@@ -154,14 +154,14 @@
         }
         
         // 删除账本中同名账本中的非自定义类型
-        success = [db deleteObjectsFromTable:@"temp_books_type"
-                                       where:SSJBooksTypeTable.booksId == oldId];
+        success = [db deleteObjectsFromTable:@"temp_user_bill_type"
+                                       where:SSJUserBillTypeTable.booksId == oldId && SSJUserBillTypeTable.billId.like(@"____")];
 
         
         // 删除账本中同名的账本
-        success = [db deleteObjectsFromTable:@"temp_user_bill_type"
-                                       where:SSJUserBillTypeTable.booksId == oldId && SSJUserBillTypeTable.billId.like(@"____")];
-        
+        success = [db deleteObjectsFromTable:@"temp_books_type"
+                                       where:SSJBooksTypeTable.booksId == oldId];
+
         if (!success) {
             *stop = YES;
         }
