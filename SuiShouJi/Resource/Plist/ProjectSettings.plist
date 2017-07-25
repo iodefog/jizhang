@@ -35,6 +35,39 @@
 		<key>AppStoreUrl</key>
 		<string>https://itunes.apple.com/cn/app/9188ji-zhang/id1080564439?mt=8</string>
 	</dict>
+	<key>com.9188.jizhangAppStoretest</key>
+	<dict>
+		<key>source</key>
+		<string>11501</string>
+		<key>WeiXinKey</key>
+		<string>wxf77f7a5867124dfd</string>
+		<key>WeiXinSecret</key>
+		<string>597d6402c3cd82ff12ba0e81abd34b1a</string>
+		<key>QQAppId</key>
+		<string>1105086761</string>
+		<key>QQAppKey</key>
+		<string>mgRX8CiiIIrCoyu6</string>
+		<key>YWAppKey</key>
+		<string>23359906</string>
+		<key>WeiBoAppKey</key>
+		<string>4058368695</string>
+		<key>WeiBoSecret</key>
+		<string>b0584e24371e5ad6118dfa0e3de3197c</string>
+		<key>UMAppKey</key>
+		<string>59705e638630f536dd001719</string>
+		<key>ShareTitle</key>
+		<string>9188记账，一种快速实现财务自由的方式。</string>
+		<key>ShareUrl</key>
+		<string>http://5.9188.com/note/d/</string>
+		<key>ShareContent</key>
+		<string>财务管理第一步，从记录消费生活开始!</string>
+		<key>ShareIcon</key>
+		<string>icon</string>
+		<key>WeiboBanner</key>
+		<string>weibo_banner</string>
+		<key>AppStoreUrl</key>
+		<string>https://itunes.apple.com/cn/app/9188ji-zhang/id1080564439?mt=8</string>
+	</dict>
 	<key>com.9188.jizhangAppStore</key>
 	<dict>
 		<key>GeTuiAppSecret</key>
@@ -66,7 +99,7 @@
 		<key>WeiBoSecret</key>
 		<string>b0584e24371e5ad6118dfa0e3de3197c</string>
 		<key>UMAppKey</key>
-		<string>566e6f12e0f55ac052003f62</string>
+		<string>59705e638630f536dd001719</string>
 		<key>ShareTitle</key>
 		<string>9188记账，一种快速实现财务自由的方式。</string>
 		<key>ShareUrl</key>

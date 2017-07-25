@@ -10,7 +10,7 @@
 
 const int64_t SSJDefaultSyncVersion = -1;
 
-const float SSJMaskAlpha = 0.3;
+const float SSJMaskAlpha = 0.5;
 
 const float SSJButtonDisableAlpha = 0.2;
 

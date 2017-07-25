@@ -13,6 +13,7 @@
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJCreateOrEditBillTypeViewController.h"
 
 #import "SSJCustomKeyboard.h"
 #import "SSJMemberSelectView.h"
@@ -1006,7 +1007,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     };
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-        SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
+        /*SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
         addNewTypeVc.booksId = wself.item.booksId;
         addNewTypeVc.incomeOrExpence = wself.customNaviBar.selectedBillType;
         addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
@@ -1021,7 +1022,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             
             [wself updateNavigationRightItem];
         };
-        [wself.navigationController pushViewController:addNewTypeVc animated:YES];
+        [wself.navigationController pushViewController:addNewTypeVc animated:YES];*/
+        
+        SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
+        [wself.navigationController pushViewController:addBillTypeVC animated:YES];
     };
     
     billTypeView.dragAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, BOOL isDragUp) {

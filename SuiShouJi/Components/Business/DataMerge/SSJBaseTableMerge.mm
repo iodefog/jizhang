@@ -11,10 +11,13 @@
 
 @implementation SSJBaseTableMerge
 
-+ (NSString *)tableName {
++ (NSString *)mergeTableName {
     return nil;
 }
 
++ (NSString *)tempTableName {
+    return nil;
+}
 
 + (NSDictionary *)queryDatasWithSourceUserId:(NSString *)sourceUserid
                                 TargetUserId:(NSString *)targetUserId

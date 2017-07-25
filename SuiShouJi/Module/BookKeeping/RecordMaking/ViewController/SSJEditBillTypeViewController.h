@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class SSJBillModel;
 
+SSJ_DEPRECATED
 @interface SSJEditBillTypeViewController : SSJBaseViewController
 
 @property (nonatomic, copy) SSJBillModel *model;

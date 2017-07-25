@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
 @interface SSJSmallCalendarView : UIView
 @property (nonatomic,strong) NSString *currentDay;
 

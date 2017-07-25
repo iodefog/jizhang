@@ -10,4 +10,11 @@
 
 @interface SSJAccountMergeManager : NSObject
 
+- (void)startMergeWithSourceUserId:(NSString *)sourceUserId
+                      targetUserId:(NSString *)targetUserId
+                         startDate:(NSDate *)startDate
+                           endDate:(NSDate *)endDate
+                           Success:(void(^)())success
+                           failure:(void (^)(NSError *error))failure;
+
 @end

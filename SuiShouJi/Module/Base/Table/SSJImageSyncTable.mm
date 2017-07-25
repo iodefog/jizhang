@@ -10,7 +10,7 @@
 
 @implementation SSJImageSyncTable
 
-@synthesize Id;
+@synthesize imageSourceId;
 @synthesize imageName;
 @synthesize writeDate;
 @synthesize operatorType;
@@ -21,7 +21,7 @@
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJImageSyncTable)
 
-WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, Id, "RID")
+WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, imageSourceId, "RID")
 WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, imageName, "CIMGNAME")
 WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, writeDate, "CWRITEDATE")
 WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, operatorType, "OPERATORTYPE")
@@ -30,7 +30,7 @@ WCDB_SYNTHESIZE_COLUMN(SSJImageSyncTable, syncState, "ISYNCSTATE")
 
 WCDB_PRIMARY(SSJImageSyncTable, imageName)
 
-WCDB_NOT_NULL(SSJImageSyncTable, Id)
+WCDB_NOT_NULL(SSJImageSyncTable, imageSourceId)
 WCDB_NOT_NULL(SSJImageSyncTable, imageName)
 WCDB_NOT_NULL(SSJImageSyncTable, writeDate)
 WCDB_NOT_NULL(SSJImageSyncTable, operatorType)
