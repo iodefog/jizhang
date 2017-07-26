@@ -597,54 +597,54 @@ static const void *kShowViewsIdentifier = &kShowViewsIdentifier;
 - (void)ssj_setNeedsLayout {
     [self ssj_setNeedsLayout];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用setNeedsLayout"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用setNeedsLayout"}]];
+//        });
     }
 }
 
 - (void)ssj_layoutIfNeeded {
     [self ssj_layoutIfNeeded];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用layoutIfNeeded"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用layoutIfNeeded"}]];
+//        });
     }
 }
 
 - (void)ssj_layoutSubviews {
     [self ssj_layoutSubviews];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用layoutSubviews"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用layoutSubviews"}]];
+//        });
     }
 }
 
 - (void)ssj_updateConstraints {
     [self ssj_updateConstraints];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用updateConstraints"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用updateConstraints"}]];
+//        });
     }
 }
 
 - (void)ssj_setNeedsUpdateConstraints {
     [self ssj_setNeedsUpdateConstraints];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更调用setNeedsUpdateConstraints"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中更调用setNeedsUpdateConstraints"}]];
+//        });
     }
 }
 
 - (void)ssj_updateConstraintsIfNeeded {
     [self ssj_updateConstraintsIfNeeded];
     if (![NSThread isMainThread]) {
-        SSJDispatchMainAsync(^{
-            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用updateConstraintsIfNeeded"}]];
-        });
+//        SSJDispatchMainAsync(^{
+//            [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"警告：在子线程中调用updateConstraintsIfNeeded"}]];
+//        });
     }
 }
 

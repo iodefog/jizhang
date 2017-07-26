@@ -57,6 +57,17 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJCaterotyMenuSelectionViewIndexPath
 #pragma mark -
+
+@interface SSJCaterotyMenuSelectionViewIndexPath ()
+
+@property (nonatomic) NSInteger menuIndex;
+
+@property (nonatomic) NSInteger categoryIndex;
+
+@property (nonatomic) NSInteger itemIndex;
+
+@end
+
 @implementation SSJCaterotyMenuSelectionViewIndexPath
 
 + (instancetype)indexPathWithMenuIndex:(NSInteger)menuIndex categoryIndex:(NSInteger)categoryIndex itemIndex:(NSInteger)itemIndex {
@@ -505,6 +516,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 }
 
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated {
+    _selectedIndexPath = selectedIndexPath;
     if (selectedIndexPath.menuIndex >= 0) {
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
     }
@@ -532,6 +544,20 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     [self.subscriptLine setLineColor:SSJ_BORDER_COLOR];
 }
 
+- (SSJCaterotyMenuSelectionCellItem *)itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
+//    SSJCaterotyMenuSelectionCellItem *item = [self.itemsSet itemAtMenuIndex:indexPath.menuIndex categoryIndex:indexPath.categoryIndex itemIndex:indexPath.itemIndex];
+//    if (item) {
+//        return item;
+//    }
+    
+    if (indexPath.menuIndex != self.tableView.indexPathForSelectedRow.row) {
+        return nil;
+    }
+    
+    _SSJCaterotyMenuSelectionViewCollectionCell *cell = (_SSJCaterotyMenuSelectionViewCollectionCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForItem:indexPath.categoryIndex inSection:indexPath.itemIndex]];
+    return cell.item;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(numberOfMenuTitlesInSelectionView:)]) {
@@ -550,6 +576,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedIndexPath.menuIndex = indexPath.row;
     [UIView animateWithDuration:0.25 animations:^{
         [self updateSubscriptLineConstraint];
         [self layoutIfNeeded];
@@ -632,6 +659,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 #pragma mark - UICollectionViewDelegate
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    self.selectedIndexPath.categoryIndex = indexPath.section;
+    self.selectedIndexPath.itemIndex = indexPath.item;
     [collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:YES];
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectionView:didSelectItemAtIndexPath:)]) {
         NSInteger selectedMenuIndex = self.tableView.indexPathForSelectedRow.row;
