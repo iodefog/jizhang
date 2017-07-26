@@ -7,10 +7,15 @@
 //
 
 #import "SSJBooksHeadeCollectionrReusableView.h"
+
 @interface SSJBooksHeadeCollectionrReusableView()
+
 @property (nonatomic, strong) UILabel *titleLab;
+
 @end
+
 @implementation SSJBooksHeadeCollectionrReusableView
+
 - (instancetype)initWithFrame:(CGRect)frame
 {
     if ([super initWithFrame:frame]) {

@@ -10,10 +10,14 @@
 #import "SSJFinancingGradientColorItem.h"
 
 @interface SSJBookColorSelectedCollectionViewCell ()
+
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
+
 /**<#注释#>*/
 @property (nonatomic, strong) CAShapeLayer *sharpLayer;
+
 @end
+
 @implementation SSJBookColorSelectedCollectionViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame

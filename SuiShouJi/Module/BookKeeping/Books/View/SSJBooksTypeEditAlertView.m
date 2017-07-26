@@ -20,6 +20,8 @@ static const CGSize kButtonSize = {200, 40};
 
 @property (nonatomic, strong) UIButton *deleteBtn;
 
+@property (nonatomic, strong) UIButton *transferBtn;
+
 @property (nonatomic, strong) UIButton *cancelBtn;
 
 @end
@@ -39,6 +41,7 @@ static const CGSize kButtonSize = {200, 40};
         [self addSubview:self.editBtn];
         [self addSubview:self.deleteBtn];
         [self addSubview:self.cancelBtn];
+        [self addSubview:self.transferBtn];
         [self updateAppearance];
         [self setNeedsUpdateConstraints];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearance) name:SSJThemeDidChangeNotification object:nil];
@@ -47,18 +50,19 @@ static const CGSize kButtonSize = {200, 40};
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(280, 260);
+    return CGSizeMake(280, 290);
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self.editBtn ssj_layoutContent];
     [self.deleteBtn ssj_layoutContent];
+    [self.transferBtn ssj_layoutContent];
 }
 
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(27);
+        make.top.mas_equalTo(24);
         make.centerX.mas_equalTo(self);
         make.width.mas_equalTo(self);
         make.height.mas_equalTo(16);
@@ -68,13 +72,18 @@ static const CGSize kButtonSize = {200, 40};
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(kButtonSize);
     }];
+    [self.transferBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.editBtn.mas_bottom).offset(15);
+        make.centerX.mas_equalTo(self);
+        make.size.mas_equalTo(kButtonSize);
+    }];
     [self.deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.editBtn.mas_bottom).offset(22);
+        make.top.mas_equalTo(self.transferBtn.mas_bottom).offset(15);
         make.centerX.mas_equalTo(self);
         make.size.mas_equalTo(kButtonSize);
     }];
     [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.deleteBtn.mas_bottom).offset(11);
+        make.top.mas_equalTo(self.deleteBtn.mas_bottom).offset(10);
         make.bottom.centerX.width.mas_equalTo(self);
     }];
     [super updateConstraints];
@@ -103,13 +112,18 @@ static const CGSize kButtonSize = {200, 40};
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     
-    self.editBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
-    self.editBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.editBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+    self.editBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     [self.editBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    
+    self.transferBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+    self.transferBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    [self.transferBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
     
     self.deleteBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
     self.deleteBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     [self.deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+
     
     [self.cancelBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
 }
@@ -132,7 +146,7 @@ static const CGSize kButtonSize = {200, 40};
         _editBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _editBtn.spaceBetweenImageAndTitle = 10;
         [_editBtn setTitle:@"编辑账本" forState:UIControlStateNormal];
-        [_editBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_editBtn setImage:[[UIImage imageNamed:@"books_edite"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         @weakify(self);
         [[_editBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -153,7 +167,7 @@ static const CGSize kButtonSize = {200, 40};
         _deleteBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _deleteBtn.spaceBetweenImageAndTitle = 10;
         [_deleteBtn setTitle:@"删除账本" forState:UIControlStateNormal];
-        [_deleteBtn setImage:[UIImage imageNamed:@""] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[[UIImage imageNamed:@"books_delete"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         @weakify(self);
         [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -164,6 +178,27 @@ static const CGSize kButtonSize = {200, 40};
         }];
     }
     return _deleteBtn;
+}
+
+- (UIButton *)transferBtn {
+    if (!_transferBtn) {
+        _transferBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _transferBtn.layer.borderWidth = 1;
+        _transferBtn.layer.cornerRadius = kButtonSize.height * 0.5;
+        _transferBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _transferBtn.spaceBetweenImageAndTitle = 10;
+        [_transferBtn setTitle:@"迁移账本" forState:UIControlStateNormal];
+        [_transferBtn setImage:[[UIImage imageNamed:@"books_transfer"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        @weakify(self);
+        [[_transferBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            [self dismiss];
+            if (self.transferHandler) {
+                self.transferHandler();
+            }
+        }];
+    }
+    return _transferBtn;
 }
 
 - (UIButton *)cancelBtn {

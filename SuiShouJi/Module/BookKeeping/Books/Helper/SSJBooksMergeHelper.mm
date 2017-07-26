@@ -52,16 +52,16 @@
                                                                                                                                                                                              where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
                                                                                                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
                                                                                                                                                               && SSJUserChargeTable.booksId == sourceBooksId])
-                                    && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId fromTable:@"BK_USER_CHARGE"
-                                                                                                         where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
-                                                                                                                                                                                                                                                     && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
-                                                                                                                                                                                                                                                     && SSJUserChargeTable.booksId == targetBooksId])];
+                                    && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
+                                                                                                         where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
+                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
+                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.booksId == targetBooksId])];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
             userBill.booksId = targetBooksId;
             userBill.writeDate = writeDate;
             userBill.version = SSJSyncVersion();
-            SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@""
+            SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE"
                                                                         where:SSJUserBillTypeTable.billName == userBill.billName
                                                   && SSJUserBillTypeTable.booksId == sourceBooksId];
             if (sameNameBill) {
