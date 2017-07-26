@@ -9616,7 +9616,6 @@
 		9C9274ED1F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
 		9C9274EE1F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
 		9C9274EF1F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
-		9C9274F01F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
 		9C9274F11F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
 		9C9274F21F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9C9274E31F27670A008A7594 /* SSJBooksMergeHelper.mm */; };
 		9C9323F61D9DFA9500EBD216 /* SSJSearchResultHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C9323F51D9DFA9500EBD216 /* SSJSearchResultHeader.m */; };
@@ -18410,16 +18409,11 @@
 				9C30AA9C1EAF6EB1008DD51D /* 1000.zip in Resources */,
 				7D08A2C01E4999D30085A8FB /* 9188.cer in Resources */,
 				7D08A2C21E4999D30085A8FB /* sr_refresh@2x.png in Resources */,
-
-
-				7D68252F1F1E199600A7587D /* SSJIncomeBillType.plist in Resources */,
 				91EE66491F20B08F002931B7 /* wish_image_def.png in Resources */,
 				7D08A2C31E4999D30085A8FB /* SSJBookKeepingHomePopView.xib in Resources */,
 				91EE662D1F20B08F002931B7 /* wish_image_def_three.png in Resources */,
-
 				7D08A2C31E4999D30085A8FB /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D6825CA1F20B02800A7587D /* SSJMarriageBillTypes.plist in Resources */,
-
 				9CDB49851EF392F90097E09D /* ani.webp in Resources */,
 				7D6825D91F20B03E00A7587D /* SSJBabyBillTypes.plist in Resources */,
 				7D551FF71F271AC300DD8720 /* SSJCommonExpenseBillTypes.plist in Resources */,
@@ -18429,11 +18423,8 @@
 				7D08A2C51E4999D30085A8FB /* rain_sound.wav in Resources */,
 				9C61E3151EE6AA07001BA5F2 /* lottie_1.json in Resources */,
 				7D08A2C61E4999D30085A8FB /* Assets.xcassets in Resources */,
-
 				91EE663B1F20B08F002931B7 /* wish_image_def_two.png in Resources */,
-
 				7D5520071F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
-
 				7D08A2C81E4999D30085A8FB /* sr_refresh.png in Resources */,
 				7D08A2C91E4999D30085A8FB /* homeDefualtLoading.gif in Resources */,
 				7D68258E1F20AF8C00A7587D /* SSJDailyBillTypes.plist in Resources */,
@@ -18466,7 +18457,6 @@
 				9C30AA9B1EAF6EB1008DD51D /* 1000.zip in Resources */,
 				7DA13C171E35AED7000490A4 /* 9188.cer in Resources */,
 				7DA13C191E35AED7000490A4 /* sr_refresh@2x.png in Resources */,
-				7D68252E1F1E199600A7587D /* SSJIncomeBillType.plist in Resources */,
 				91EE66481F20B08F002931B7 /* wish_image_def.png in Resources */,
 				7DA13C1A1E35AED7000490A4 /* SSJBookKeepingHomePopView.xib in Resources */,
 				91EE662C1F20B08F002931B7 /* wish_image_def_three.png in Resources */,
@@ -18508,7 +18498,6 @@
 				7DBB3C9F1E55C2EE0075E638 /* YouYuJiZhangBen-Info.plist in Resources */,
 				7DBB3CA01E55C2EE0075E638 /* xiaomao.gif in Resources */,
 				91EE663C1F20B08F002931B7 /* wish_image_def_two.png in Resources */,
-				7D68253F1F1E19E600A7587D /* SSJExpenseBillType.plist in Resources */,
 				7DBB3CA11E55C2EE0075E638 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7D6825DA1F20B03E00A7587D /* SSJBabyBillTypes.plist in Resources */,
 				7DBB3CA21E55C2EE0075E638 /* mydatabase.db in Resources */,
@@ -18644,14 +18633,11 @@
 				7DFB18B71EB0341E00292DD3 /* YouYuJiZhang-Info.plist in Resources */,
 				7DFB18B81EB0341E00292DD3 /* 9188jizhangpro-Info.plist in Resources */,
 				7DFB18B91EB0341E00292DD3 /* JiZhangGuanJia-Info.plist in Resources */,
-
 				91EE66261F20B08F002931B7 /* wish_image_def_one.png in Resources */,
-
 				7D6825951F20AF8C00A7587D /* SSJDailyBillTypes.plist in Resources */,
 				7D6825B31F20AFF400A7587D /* SSJTravelBillTypes.plist in Resources */,
 				7D6825E01F20B03E00A7587D /* SSJBabyBillTypes.plist in Resources */,
 				7D55200E1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
-
 				9CDB498E1EF392FF0097E09D /* ani.webp in Resources */,
 				7D6825D11F20B02800A7587D /* SSJMarriageBillTypes.plist in Resources */,
 				7DFB18BA1EB0341E00292DD3 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
@@ -18687,11 +18673,8 @@
 				9C13F7251E8267D300AC5FA9 /* sr_refresh@2x.png in Resources */,
 				9C13F7261E8267D300AC5FA9 /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D6825221F1E170200A7587D /* SSJSpecialType.plist in Resources */,
-
 				91EE66211F20B08F002931B7 /* wish_image_def_one.png in Resources */,
-
 				7D6825AE1F20AFF400A7587D /* SSJTravelBillTypes.plist in Resources */,
-
 				9CDB49791EF38E3C0097E09D /* ani@960.webp in Resources */,
 				91EE664B1F20B08F002931B7 /* wish_image_def.png in Resources */,
 				9C13F7271E8267D300AC5FA9 /* youyuwo.cer in Resources */,
@@ -18796,10 +18779,7 @@
 				9C4C22581E9E30C8000C5F15 /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C30AAA11EAF6EB5008DD51D /* 1000.zip in Resources */,
 				9C61E31C1EE6AA0B001BA5F2 /* lottie_1.json in Resources */,
-
 				91EE66161F20B08F002931B7 /* wish_image_def_four.png in Resources */,
-				7D6825341F1E199600A7587D /* SSJIncomeBillType.plist in Resources */,
-
 				9C4C22591E9E30C8000C5F15 /* SuiShouJi-Info.plist in Resources */,
 				91EE66401F20B08F002931B7 /* wish_image_def_two.png in Resources */,
 				9C30AA961EAF6EAB008DD51D /* 1001.zip in Resources */,
@@ -18971,10 +18951,7 @@
 				9C80FEF61E95E88E00B1BAAC /* youyuwo.cer in Resources */,
 				9C80FEF71E95E88E00B1BAAC /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C61E31B1EE6AA0A001BA5F2 /* lottie_1.json in Resources */,
-
 				91EE66151F20B08F002931B7 /* wish_image_def_four.png in Resources */,
-				7D6825331F1E199600A7587D /* SSJIncomeBillType.plist in Resources */,
-
 				9C30AAA21EAF6EB5008DD51D /* 1000.zip in Resources */,
 				91EE663F1F20B08F002931B7 /* wish_image_def_two.png in Resources */,
 				9C80FEF81E95E88E00B1BAAC /* SuiShouJi-Info.plist in Resources */,
@@ -19032,10 +19009,7 @@
 				9C9CF0B61EA5F73A007657FE /* youyuwo.cer in Resources */,
 				9C9CF0B71EA5F73A007657FE /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C61E31D1EE6AA0B001BA5F2 /* lottie_1.json in Resources */,
-
 				91EE66171F20B08F002931B7 /* wish_image_def_four.png in Resources */,
-				7D6825351F1E199600A7587D /* SSJIncomeBillType.plist in Resources */,
-
 				9C30AAA31EAF6EB6008DD51D /* 1000.zip in Resources */,
 				91EE66411F20B08F002931B7 /* wish_image_def_two.png in Resources */,
 				9C9CF0B81EA5F73A007657FE /* SuiShouJi-Info.plist in Resources */,
@@ -19108,14 +19082,11 @@
 				9CDB4C2B1EF3ABBC0097E09D /* YouYuJiZhang-Info.plist in Resources */,
 				9CDB4C2C1EF3ABBC0097E09D /* 9188jizhangpro-Info.plist in Resources */,
 				9CDB4C2D1EF3ABBC0097E09D /* JiZhangGuanJia-Info.plist in Resources */,
-
 				91EE66271F20B08F002931B7 /* wish_image_def_one.png in Resources */,
-
 				7D6825961F20AF8C00A7587D /* SSJDailyBillTypes.plist in Resources */,
 				7D6825B41F20AFF400A7587D /* SSJTravelBillTypes.plist in Resources */,
 				7D6825E11F20B03E00A7587D /* SSJBabyBillTypes.plist in Resources */,
 				7D55200F1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
-
 				9CDB4C2E1EF3ABBC0097E09D /* ani.webp in Resources */,
 				7D6825D21F20B02800A7587D /* SSJMarriageBillTypes.plist in Resources */,
 				9CDB4C2F1EF3ABBC0097E09D /* YouYuJiZhangGuanJia-Info.plist in Resources */,
@@ -19153,13 +19124,10 @@
 				9C61E3401EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				7D6825D71F20B03E00A7587D /* SSJBabyBillTypes.plist in Resources */,
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
-
 				91EE66391F20B08F002931B7 /* wish_image_def_two.png in Resources */,
 				91EE662B1F20B08F002931B7 /* wish_image_def_three.png in Resources */,
 				91EE66471F20B08F002931B7 /* wish_image_def.png in Resources */,
-
 				7D68259B1F20AFD400A7587D /* SSJBusinessBillTypes.plist in Resources */,
-
 				9C61E3131EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				7D5520051F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
 				9CECFE461D6D41A700DB2C8B /* sr_refresh.png in Resources */,
@@ -19188,12 +19156,9 @@
 				7D6825A91F20AFF400A7587D /* SSJTravelBillTypes.plist in Resources */,
 				7D68251D1F1E170200A7587D /* SSJSpecialType.plist in Resources */,
 				BD6C388F1C910A8F000E2E42 /* pushsound.wav in Resources */,
-
 				91EE660E1F20B08F002931B7 /* wish_image_def_four.png in Resources */,
 				91EE66381F20B08F002931B7 /* wish_image_def_two.png in Resources */,
-
 				9C23D2B51F209F88008C7500 /* YouYuStatTest-Info.plist in Resources */,
-
 				7DBB38231E55BE2F0075E638 /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C155F111E68572700FDFD18 /* MJRefresh.bundle in Resources */,
 				7D7EF14C1ECDA05200E5D51D /* 9188JiZhangBao-info.plist in Resources */,
@@ -19219,11 +19184,8 @@
 				9C61E3311EE6B224001BA5F2 /* lottie_3.json in Resources */,
 				7D6825B81F20B00F00A7587D /* SSJDecorationBillTypes.plist in Resources */,
 				BD543C4C1C1A6DBC00910D61 /* Assets.xcassets in Resources */,
-
 				91EE66001F20B08F002931B7 /* wish_image_def_five.png in Resources */,
-
 				7D551FF31F271AC300DD8720 /* SSJCommonExpenseBillTypes.plist in Resources */,
-
 				BD0432F01C1A77BB0051E7AB /* sr_refresh.png in Resources */,
 				9CDB49741EF38E3C0097E09D /* ani@960.webp in Resources */,
 				7D68258B1F20AF8C00A7587D /* SSJDailyBillTypes.plist in Resources */,
@@ -28201,7 +28163,6 @@
 				9152949C1EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */,
 				9C9CEEF01EA5F73A007657FE /* GTMBase64.m in Sources */,
 				9C9CEEF11EA5F73A007657FE /* SSJEditBillTypeViewController.m in Sources */,
-				9C9274F01F27670B008A7594 /* SSJBooksMergeHelper.mm in Sources */,
 				9C9CEEF21EA5F73A007657FE /* SSJBillingChargeViewController.m in Sources */,
 				9C9CEEF31EA5F73A007657FE /* SSJHomeBarCalenderButton.m in Sources */,
 				9C9CEEF41EA5F73A007657FE /* SSJSearchResultHeader.m in Sources */,
