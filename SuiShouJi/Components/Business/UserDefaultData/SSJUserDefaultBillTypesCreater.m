@@ -45,11 +45,11 @@
     }
 }
 
-+ (NSArray<NSDictionary *> *)billTypesForBooksType:(SSJBooksType)booksType {
++ (NSArray<NSString *> *)billTypesForBooksType:(SSJBooksType)booksType {
     NSString *fileName = nil;
     switch (booksType) {
         case SSJBooksTypeDaily:
-            fileName = @"SSJDailyBillTypes";
+            
             break;
             
         case SSJBooksTypeBusiness:
@@ -71,6 +71,59 @@
     
     NSString *filePath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"plist"];
     return [NSArray arrayWithContentsOfFile:filePath];
+}
+
++ (NSArray<NSString *> *)dailyIDs {
+    return @[@"1000",
+             @"1002",
+             @"1003",
+             @"1009",
+             @"1004",
+             @"1008",
+             @"1022",
+             @"人情",
+             @"1033",
+             @"2001",
+             @"2005",
+             @"2007",
+             @"2002",
+             @"2008",
+             @"2006",
+             @"2020",
+             @"2004",
+             @"其它收入"];
+}
+
++ (NSArray<NSString *> *)babyIDs {
+    return @[@"宝宝食物",
+             @"宝宝用品",
+             @"衣服",
+             @"早教",
+             @"玩乐",
+             @"医疗护理",
+             @"1047",
+             @"写真",
+             @"宝宝其它",
+             @"2012",
+             @"压岁钱",
+             @"2007",
+             @"其它收入"];
+}
+
++ (NSArray<NSString *> *)businessIDs {
+    return @[@"货品材料",
+             @"人工支出",
+             @"运营费用",
+             @"1062",
+             @"1009",
+             @"医疗护理",
+             @"1047",
+             @"写真",
+             @"宝宝其它",
+             @"2012",
+             @"压岁钱",
+             @"2007",
+             @"其它收入"];
 }
 
 @end

@@ -72,7 +72,7 @@
 
 - (NSDictionary *)incomeBillTypes {
     if (!_incomeBillTypes) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"SSJIncomeBillType" ofType:@"plist"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"SSJCommonIncomeBillTypes" ofType:@"plist"];
         _incomeBillTypes = [NSDictionary dictionaryWithContentsOfFile:path];
     }
     return _incomeBillTypes;
@@ -80,7 +80,7 @@
 
 - (NSDictionary *)expenseBillTypes {
     if (!_expenseBillTypes) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"SSJExpenseBillType" ofType:@"plist"];
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"SSJCommonExpenseBillTypes" ofType:@"plist"];
         _expenseBillTypes = [NSDictionary dictionaryWithContentsOfFile:path];
     }
     return _expenseBillTypes;
