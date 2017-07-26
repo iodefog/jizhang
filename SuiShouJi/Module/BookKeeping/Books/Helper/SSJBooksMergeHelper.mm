@@ -87,12 +87,7 @@
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
             
-            [self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:{
-                SSJUserChargeTable.booksId,
-                SSJUserChargeTable.writeDate,
-                SSJUserChargeTable.version,
-                SSJUserChargeTable.billId
-            } withObject:userCharge];
+            [self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge];
         }
         
         // 取出账本中所有的流水
@@ -109,12 +104,7 @@
                 chargePeriod.billId = [sameNameDic objectForKey:chargePeriod.billId];
             }
             
-            [self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:{
-                SSJChargePeriodConfigTable.booksId,
-                SSJChargePeriodConfigTable.writeDate,
-                SSJChargePeriodConfigTable.version,
-                SSJChargePeriodConfigTable.billId
-            } withObject:chargePeriod];
+            [self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:chargePeriod];
         }
 
     }];
