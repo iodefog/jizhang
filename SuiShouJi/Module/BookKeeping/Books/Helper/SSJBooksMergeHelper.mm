@@ -39,6 +39,9 @@
         
         NSString *userId = SSJUSERID();
         
+        
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         NSMutableArray *sameNameBillArr = [NSMutableArray arrayWithCapacity:0];
         
         NSMutableDictionary *sameNameDic = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -56,7 +59,18 @@
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
             userBill.booksId = targetBooksId;
+            userBill.writeDate = writeDate;
+            userBill.version = SSJSyncVersion();
+            SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@""
+                                                                        where:SSJUserBillTypeTable.billName == userBill.billName
+                                                  && SSJUserBillTypeTable.booksId == sourceBooksId];
+            if (sameNameBill) {
+                [sameNameBillArr addObject:userBill.billId];
+                [sameNameDic setObject:userBill.billId forKey:sameNameBill.billId];
+            }
         }
+        
+        [self.db insertOrReplaceObjects:userBillTypeArr into:@"BK_USER_BILL_TYPE"];
 
         
         // 取出账本中所有的流水
@@ -67,8 +81,19 @@
         
         for (SSJUserChargeTable *userCharge in chargeArr) {
             userCharge.booksId = targetBooksId;
+            userCharge.writeDate = writeDate;
+            userCharge.version = SSJSyncVersion();
+            if ([sameNameBillArr containsObject:userCharge.billId]) {
+                userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
+            }
+            
+            [self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:{
+                SSJUserChargeTable.booksId,
+                SSJUserChargeTable.writeDate,
+                SSJUserChargeTable.version,
+                SSJUserChargeTable.billId
+            } withObject:userCharge];
         }
-        
         
         
     }];
