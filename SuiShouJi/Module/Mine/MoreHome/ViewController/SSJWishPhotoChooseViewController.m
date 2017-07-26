@@ -84,13 +84,20 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         @strongify(self);
         //图片写进沙河
-        SSJSaveImage(newImage, SSJUUID());
+#warning 未完成
+        NSString *imageName = SSJUUID();
+        if (SSJSaveImage(newImage, imageName)) {
+            //切换背景
+            if (self.changeTopImage) {
+               NSString *imgPath = SSJImagePath(imageName);
+                UIImage *seImg = [UIImage imageWithContentsOfFile:imgPath];
+                self.changeTopImage(seImg);
+            }
+        }
         //在同步表中保存
         //在心愿表中保存图片
-        //切换背景
-        if (self.changeTopImage) {
-            self.changeTopImage(newImage);
-        }
+        
+        
     };
     [self presentViewController:imageClipVC animated:YES completion:NULL];
 }
@@ -114,7 +121,9 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
     //保存图片
     
     //切换背景
-    
+    if (self.changeTopImage) {
+        self.changeTopImage([UIImage imageNamed:[self.dataArray ssj_safeObjectAtIndex:indexPath.row]]);
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -143,8 +152,7 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
 
 - (NSArray *)dataArray {
     if (!_dataArray) {
-        _dataArray = @[@"calendar_shareheader",@"calendar_shareheader",@"calendar_shareheader",@"calendar_shareheader",@"calendar_shareheader",@"calendar_shareheader"];
-        //@[@"wish_image_def",@"wish_image_def_one",@"wish_image_def_two",@"wish_image_def_three",@"wish_image_def_four",@"wish_image_def_five"];
+        _dataArray = @[@"wish_image_def",@"wish_image_def_one",@"wish_image_def_two",@"wish_image_def_three",@"wish_image_def_four",@"wish_image_def_five"];
     }
     return _dataArray;
 }

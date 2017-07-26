@@ -15,6 +15,8 @@
 #import "SSJWishTableViewCell.h"
 
 #import "SSJWishModel.h"
+#import "SSJWishDefItem.h"
+
 #import "SSJWishHelper.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
@@ -54,10 +56,10 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 @property (nonatomic, strong) UIButton *makeWishBtn;
 
 /**心愿列表数据源*/
-@property (nonatomic, strong) NSMutableArray *wishListDataArray;
+@property (nonatomic, strong) NSMutableArray <SSJWishDefItem *>*wishListDataArray;
 
 /**心愿列表数据源*/
-@property (nonatomic, strong) NSMutableArray *wishMoneyDataArray;
+@property (nonatomic, strong) NSArray *wishMoneyDataArray;
 
 /**model*/
 @property (nonatomic, strong) SSJWishModel *wishModel;
@@ -95,15 +97,14 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 }
 
 - (void)initNormalData {
-    self.wishListDataArray = [NSMutableArray arrayWithObjects:@"存下人生第一个 1 万",@"一场说走就走的旅行",@"为“ta”买礼物", nil];
-    self.wishMoneyDataArray = [NSMutableArray arrayWithObjects:@"2000",@"5000",@"10000",@"100000", nil];;
+    self.wishMoneyDataArray = @[@"2000",@"5000",@"10000",@"100000"];
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     self.scrollView.frame = self.view.bounds;
-    self.topImg.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 150);
-    self.coverView.frame = CGRectMake(0, 0, self.view.width, 150);
+    self.topImg.frame = CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, kFinalImgHeight(self.view.width));
+    self.coverView.frame = self.topImg.bounds;
     self.slognL.centerX = self.topImg.centerX;
     self.slognL.centerY = self.topImg.height * 0.5;
     self.cameraImg.rightTop = CGPointMake(self.view.width - 15, 15);
@@ -146,7 +147,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 }
 
 - (void)signalBind {
-    RACSignal *signal = [RACSignal combineLatest:@[self.wishNameTextF.rac_textSignal,self.wishAmountTextF.rac_textSignal] reduce:^id(NSString *name, NSString *money) {
+    RACSignal *signal = [RACSignal combineLatest:@[RACObserve(self, wishNameTextF.text),RACObserve(self, wishAmountTextF.text)] reduce:^id(NSString *name, NSString *money) {
         return @(name.length && money.length);
     }];
     RAC(self.makeWishBtn,enabled) = signal;
@@ -159,12 +160,19 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJWishTableViewCell *cell = [SSJWishTableViewCell cellWithTableView:tableView];
-    [cell setWishName:[self.wishListDataArray ssj_safeObjectAtIndex:indexPath.row] readNum:@"1234"];
+    cell.cellItem = [self.wishListDataArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    self.wishModel.wishType = indexPath.row + 1;
+    SSJWishDefItem *item = [self.wishListDataArray ssj_safeObjectAtIndex:indexPath.row];
+    if (item.wishMoney.length) {
+        self.wishAmountTextF.text = item.wishMoney;
+    }
+    if (item.wishName.length) {
+        self.wishNameTextF.text = item.wishName;
+    }
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -173,7 +181,8 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    NSString *amount = [self.wishMoneyDataArray ssj_safeObjectAtIndex:indexPath.row];
+    self.wishAmountTextF.text = amount;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -207,11 +216,21 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [UIView animateWithDuration:0.1 animations:^{
             self.topBg.height = CGRectGetMaxY(self.wishNameTextF.frame);
         }];
-    } else if(self.wishAmountTextF) {
+    } else if(textField == self.wishAmountTextF) {
+        //textField.clearsOnInsertion = YES;
         [UIView animateWithDuration:0.1 animations:^{
             self.bottomBg.height = CGRectGetMaxY(self.wishAmountTextF.frame);
         }];
     }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (self.wishAmountTextF == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
+    }
+    return YES;
 }
 
 #pragma mark - Lazy
@@ -225,7 +244,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (UIImageView *)topImg {
     if (!_topImg) {
         _topImg = [[UIImageView alloc] init];
-        _topImg.image = [UIImage imageNamed:@"calendar_shareheader"];
+        _topImg.image = [UIImage imageNamed:@"wish_image_def"];
         _topImg.userInteractionEnabled = YES;
     }
     return _topImg;
@@ -234,7 +253,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (UIView *)coverView {
     if (!_coverView) {
         _coverView = [[UIView alloc] init];
-        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.7];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
     }
     return _coverView;
 }
@@ -258,6 +277,14 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [[_cameraImg rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
             SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
+            @weakify(self);
+            photoVC.changeTopImage = ^(UIImage *seleImg) {
+                @strongify(self);
+                //切换背景
+                self.topImg.image = seleImg;
+                [self.navigationController popViewControllerAnimated:YES];
+            };
+            
             [self.navigationController pushViewController:photoVC animated:YES];
             
         }];
@@ -321,7 +348,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishAmountTextF = [[UITextField alloc] init];
         _wishAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _wishAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _wishAmountTextF.keyboardType = UIKeyboardTypePhonePad;
+        _wishAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _wishAmountTextF.delegate = self;
     }
     return _wishAmountTextF;
@@ -364,11 +391,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             @strongify(self);
            //保存心愿
             self.wishModel.wishName = self.wishNameTextF.text;
-            self.wishModel.wishMoney = self.wishAmountTextF.text;
+            self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+                wishProVC.wishId = self.wishModel.wishId;
                 [self.navigationController pushViewController:wishProVC animated:YES];
+                self.wishModel = nil;
             } failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:error.localizedDescription];
             }];
@@ -380,21 +409,16 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 - (NSMutableArray *)wishListDataArray {
     if (!_wishListDataArray) {
-        _wishListDataArray = [NSMutableArray array];
+//        _wishListDataArray = [NSMutableArray array];
+        _wishListDataArray = [SSJWishDefItem defWishItemArr];
     }
     return _wishListDataArray;
-}
-
-- (NSMutableArray *)wishMoneyDataArray {
-    if (!_wishMoneyDataArray) {
-        _wishMoneyDataArray = [NSMutableArray array];
-    }
-    return _wishMoneyDataArray;
 }
 
 - (SSJWishModel *)wishModel {
     if (!_wishModel) {
         _wishModel = [[SSJWishModel alloc] init];
+        _wishModel.wishImage = @"wish_image_def";
     }
     return _wishModel;
 }

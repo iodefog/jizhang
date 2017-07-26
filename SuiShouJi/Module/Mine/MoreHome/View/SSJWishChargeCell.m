@@ -8,6 +8,8 @@
 
 #import "SSJWishChargeCell.h"
 
+#import "SSJWishChargeItem.h"
+
 @interface SSJWishChargeCell ()
 
 @property (nonatomic, strong) UILabel *wishTimeL;
@@ -24,24 +26,34 @@
 
 @property (nonatomic, strong) UIButton *wishDeleteBtn;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIView *vLine;
+
 /**是否已经选中*/
 @property (nonatomic, assign) BOOL isSelected;
 @end
 
 @implementation SSJWishChargeCell
 
-+ (SSJWishChargeCell *)cellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
++ (SSJWishChargeCell *)cellWithTableView:(UITableView *)tableView{
     static NSString *cellId = @"SSJWishChargeCell";
     SSJWishChargeCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[SSJWishChargeCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.wishTimeL.text = @"2017-10-3";
-        cell.wishNameL.text = @"+100000";
-        cell.wishMemoL.text = @"我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房我要买房";
         [cell layoutIfNeeded];
     }
     return cell;
+}
+
+- (void)cellLayoutWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath {
+    if (indexPath.row == [tableView numberOfRowsInSection:0] - 1) {
+        self.vLine.hidden = NO;
+        self.verticalLine.hidden = YES;
+    } else {
+        self.vLine.hidden = YES;
+        self.verticalLine.hidden = NO;
+    }
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -53,6 +65,7 @@
         [self.contentView addSubview:self.circleView];
         [self.contentView addSubview:self.wishEditBtn];
         [self.contentView addSubview:self.wishDeleteBtn];
+        [self.contentView addSubview:self.vLine];
         
         [self normalSubviewsAlpha];
         [self updateAppearance];
@@ -63,6 +76,10 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
+    SSJWishChargeItem *item = self.cellItem;
+    if (!item.chargeId.length) return;
+//如果不是正常状态则返回
+    if (!self.isAlowEdit) return;
     if (selected == YES) {
         if (self.isSelected == YES) {
             [self normalSubviewsAlpha];
@@ -76,6 +93,26 @@
             self.isSelected = NO;
         }
         [self normalSubviewsAlpha];
+    }
+}
+
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    [super setCellItem:cellItem];
+    if ([cellItem isKindOfClass:[SSJWishChargeItem class]]) {
+        SSJWishChargeItem *item = cellItem;
+        self.wishTimeL.text = [[item.cbillDate ssj_dateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] formattedDateWithFormat:@"yyyy.MM.dd"];
+        if (item.itype == SSJWishChargeBillTypeSave) {
+            if (!item.chargeId.length) {
+                self.wishNameL.text = [NSString stringWithFormat:@"%@",item.money];
+            } else {
+                self.wishNameL.text = [NSString stringWithFormat:@"+%@",item.money];
+            }
+            
+        } else if(item.itype == SSJWishChargeBillTypeWithdraw) {
+            self.wishNameL.text = [NSString stringWithFormat:@"-%@",item.money];
+        }
+        
+        self.wishMemoL.text = item.memo.length?item.memo:@"";
     }
 }
 
@@ -151,6 +188,13 @@
         make.size.mas_equalTo(self.wishEditBtn);
     }];
     
+    [self.vLine mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(0);
+        make.bottom.mas_equalTo(self.circleView.mas_centerY);
+        make.width.mas_equalTo(1);
+        make.centerX.mas_equalTo(self.contentView);
+    }];
+    
     [super updateConstraints];
 }
 
@@ -164,7 +208,7 @@
     self.backgroundColor = [UIColor clearColor];
     self.wishTimeL.textColor = self.wishNameL.textColor = SSJ_MAIN_COLOR;
     self.wishMemoL.textColor = SSJ_SECONDARY_COLOR;
-    self.verticalLine.backgroundColor = self.circleView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
+    self.vLine.backgroundColor = self.verticalLine.backgroundColor = self.circleView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
 }
 
 #pragma mark - Lazy
@@ -233,11 +277,18 @@
         @weakify(self);
         [[_wishDeleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            if (self.wishChargeDelegateBlock) {
-                self.wishChargeDelegateBlock(self);
+            if (self.wishChargeDeleteBlock) {
+                self.wishChargeDeleteBlock(self);
             }
         }];
     }
     return _wishDeleteBtn;
+}
+
+- (UIView *)vLine {
+    if (!_vLine) {
+        _vLine = [[UIView alloc] init];
+    }
+    return _vLine;
 }
 @end

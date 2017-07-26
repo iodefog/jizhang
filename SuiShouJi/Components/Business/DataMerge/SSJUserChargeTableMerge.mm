@@ -33,11 +33,11 @@
     
     NSString *endDate;
     
-    if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    if (mergeType == SSJMergeDataTypeByWriteDate) {
         startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
         
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
     }
@@ -49,7 +49,7 @@
         tempArr = [select where:SSJUserChargeTable.userId == sourceUserid
                    && SSJUserChargeTable.operatorType != 2
                    && SSJUserChargeTable.writeDate.between(startDate, endDate)].allObjects;
-    } else if (mergeType == SSJMergeDataTypeByWriteBillDate) {
+    } else if (mergeType == SSJMergeDataTypeByBillDate) {
         tempArr = [select where:SSJUserChargeTable.userId == sourceUserid
                    && SSJUserChargeTable.operatorType != 2
                    && SSJUserChargeTable.billDate.between(startDate, endDate)].allObjects;
@@ -77,8 +77,8 @@
     [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJUserChargeTable *currentCharge = (SSJUserChargeTable *)obj;
 
-        SSJUserChargeTable *sameCharge = [[db getOneObjectOfClass:SSJUserChargeTable.class
-                                                         fromTable:[self mergeTableName]]
+        SSJUserChargeTable *sameCharge = [db getOneObjectOfClass:SSJUserChargeTable.class
+                                                         fromTable:[self mergeTableName]
                                             
                                            where:SSJUserChargeTable.fundId == currentCharge.fundId
                                             && SSJUserChargeTable.billDate == currentCharge.billDate
@@ -104,8 +104,8 @@
     
     // 和流水有关的表:成员流水,图片同步表
     [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = obj;
-        NSString *oldId = key;
+        NSString *oldId = obj;
+        NSString *newId = key;
         if (![db isTableExists:@"temp_member_charge"] || ![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");
             *stop = NO;
@@ -141,18 +141,15 @@
             *stop = YES;
         }
         
-        // 将所有的流水的userid更新为目标userid
-        SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
-        userCharge.userId = targetUserId;
-        success = [db updateRowsInTable:@"temp_user_charge"
-                           onProperties:SSJUserChargeTable.userId
-                             withObject:userCharge
-                                  where:SSJUserChargeTable.userId == sourceUserid];
-        
-        if (!success) {
-            *stop = YES;
-        }
     }];
+    // 将所有的流水的userid更新为目标userid
+    SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
+    userCharge.userId = targetUserId;
+    success = [db updateRowsInTable:@"temp_user_charge"
+                       onProperties:SSJUserChargeTable.userId
+                         withObject:userCharge
+                              where:SSJUserChargeTable.userId == sourceUserid];
+    
     
     return success;
 }

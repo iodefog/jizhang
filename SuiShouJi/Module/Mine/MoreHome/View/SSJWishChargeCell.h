@@ -9,13 +9,18 @@
 #import "SSJBaseTableViewCell.h"
 
 @interface SSJWishChargeCell : SSJBaseTableViewCell
-+ (SSJWishChargeCell *)cellWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
++ (SSJWishChargeCell *)cellWithTableView:(UITableView *)tableView;
+
+- (void)cellLayoutWithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath;
+
+/**是否允许编辑*/
+@property (nonatomic, assign,getter=isAlowEdit) BOOL alowEdit;
 
 typedef void(^SSJWishChargeEdidBlock)(SSJWishChargeCell *cell);
 
-typedef void(^SSJWishChargeDelegateBlock)(SSJWishChargeCell *cell);
+typedef void(^SSJWishChargeDeleteBlock)(SSJWishChargeCell *cell);
 
 @property (nonatomic, copy) SSJWishChargeEdidBlock wishChargeEdidBlock;
 
-@property (nonatomic, copy) SSJWishChargeDelegateBlock wishChargeDelegateBlock;
+@property (nonatomic, copy) SSJWishChargeDeleteBlock wishChargeDeleteBlock;
 @end

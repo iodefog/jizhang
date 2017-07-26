@@ -24,6 +24,7 @@
 #import "UIViewController+SSJMotionPassword.h"
 #import "SSJWishStartViewController.h"
 #import "SSJMakeWishViewController.h"
+#import "SSJWishManageViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -36,6 +37,7 @@
 #import "SSJBannerNetworkService.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJBookkeepingTreeHelper.h"
+#import "SSJWishHelper.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJAnnoucementService.h"
 
@@ -163,6 +165,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     
     //心愿存钱
     if ([item.title isEqualToString:kTitle0]) {
+        if ([SSJWishHelper queryHasWishsWithError:nil]) {
+            SSJWishManageViewController *wishManageVC = [[SSJWishManageViewController alloc] init];
+            [self.navigationController pushViewController:wishManageVC animated:YES];
+            return;
+        }
         SSJWishStartViewController *wishStartVC = [[SSJWishStartViewController alloc] init];
         [self.navigationController pushViewController:wishStartVC animated:YES];
         return;

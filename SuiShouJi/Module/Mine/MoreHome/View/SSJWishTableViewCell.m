@@ -7,6 +7,9 @@
 //
 
 #import "SSJWishTableViewCell.h"
+
+#import "SSJWishDefItem.h"
+
 @interface SSJWishTableViewCell ()
 
 @property (nonatomic, strong) UIButton *accessoryBtn;
@@ -34,16 +37,20 @@
 
 }
 
-- (void)setWishName:(NSString *)wishName readNum:(NSString *)readNum {
-    if (readNum.length) {
-        self.accessoryView = self.accessoryBtn;
-        [self.accessoryBtn setTitle:readNum forState:UIControlStateNormal];
-        [self.accessoryBtn sizeToFit];
-    } else {
-        self.accessoryView = nil;
+- (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    if ([cellItem isKindOfClass:[SSJWishDefItem class]]) {
+        SSJWishDefItem *item = cellItem;
+        if (item.wishCount.length) {
+            self.accessoryView = self.accessoryBtn;
+            [self.accessoryBtn setTitle:item.wishCount forState:UIControlStateNormal];
+            [self.accessoryBtn sizeToFit];
+        } else {
+            self.accessoryView = nil;
+        }
+        self.textLabel.text = item.wishName;
     }
-    self.textLabel.text = wishName;
 }
+
 
 - (void)updateCellAppearanceAfterThemeChanged {
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];

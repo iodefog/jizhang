@@ -11,5 +11,5 @@
 #import "SSJBaseTableViewCell.h"
 @interface SSJWishTableViewCell : SSJBaseTableViewCell
 + (SSJWishTableViewCell *)cellWithTableView:(__kindof UITableView*)tableView;
-- (void)setWishName:(NSString *)wishName readNum:(NSString *)readNum;
+
 @end

@@ -37,10 +37,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.progressBtn.centerX = 5;
     self.progressBtn.size = CGSizeMake(36, 22);
     self.trackView.frame = CGRectMake(0, self.progressBtn.height, self.width, self.height - self.progressBtn.height);
-    self.progressView.frame = CGRectMake(0, 0, 0, self.trackView.height);
+    self.progressView.frame = CGRectMake(0, 0, self.progress * self.width, self.trackView.height);
+    self.progressBtn.centerX = self.progressView.width;
 }
 - (void)setProgress:(float)progress {
     _progress = progress;
@@ -48,10 +48,16 @@
         progress = 1;
     }
     self.progressView.width = progress * self.width;
-    [self.progressBtn setTitle:[NSString stringWithFormat:@"%.2f%@",progress * 100,@"%"] forState:UIControlStateNormal];
+    [self.progressBtn setTitle:[NSString stringWithFormat:@"%.f%@",progress * 100,@"%"] forState:UIControlStateNormal];
     self.progressBtn.centerX = self.progressView.width;
 }
 
+- (void)setProgressColor:(UIColor *)progressColor {
+    _progressColor = progressColor;
+    self.progressView.backgroundColor = progressColor;
+    self.progressBtn.tintColor = self.progressColor;
+    
+}
 
 - (UIView *)progressView {
     if (!_progressView) {
@@ -65,7 +71,7 @@
     if (!_trackView) {
         _trackView = [[UIView alloc] init];
         _trackView.backgroundColor = self.trackTintColor;
-        _trackView.layer.cornerRadius = 12;
+        _trackView.layer.cornerRadius = 8;
         _trackView.layer.masksToBounds = YES;
     }
     return _trackView;;
@@ -74,10 +80,12 @@
 - (UIButton *)progressBtn {
     if (!_progressBtn) {
         _progressBtn = [[UIButton alloc] init];
-        [_progressBtn setBackgroundImage:[UIImage imageNamed:@"wish_progress_bg"] forState:UIControlStateNormal];
+        [_progressBtn setBackgroundImage:[[UIImage imageNamed:@"wish_progress_bg"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _progressBtn.tintColor = self.progressColor?: self.progressTintColor;
         [_progressBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_progressBtn setTitle:@"0" forState:UIControlStateNormal];
         _progressBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
+        [_progressBtn setTitleEdgeInsets:UIEdgeInsetsMake(-2, 0, 2, 0)];
         [_progressBtn sizeToFit];
     }
     return _progressBtn;

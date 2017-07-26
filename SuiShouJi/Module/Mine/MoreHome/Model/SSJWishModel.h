@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJWishModel : SSJBaseCellItem
+@interface SSJWishModel : SSJBaseCellItem<NSCopying>
 
 @property (nonatomic, copy) NSString *wishId;
 
@@ -24,6 +24,11 @@
 
 @property (nonatomic, assign) SSJOperatorType operatorType;
 
+/**
+ SSJWishStateNormalIng,       //进行中且没有完成
+ SSJWishStateFinish,          //正常完成
+ SSJWishStateTermination,     //终止
+ */
 @property (nonatomic, assign) SSJWishState status;
 
 @property (nonatomic, copy) NSString *remindId;
@@ -39,6 +44,9 @@
  3:为‘ta’买礼物
  */
 @property (nonatomic, assign) SSJWishType wishType;
+
+/**已存入金额*/
+@property (nonatomic, copy) NSString *wishSaveMoney;
 
 + (NSDictionary *)propertyMapping;
 @end

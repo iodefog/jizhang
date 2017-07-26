@@ -241,6 +241,14 @@ typedef NS_ENUM(NSInteger, SSJOperatorType) {
     SSJOperatorTypeDelete           // 删除
 };
 
+typedef NS_ENUM(NSInteger, SSJWishChargeType) {
+    SSJWishChargeTypeNormal,          // 金额
+    SSJWishChargeTypeStart,           // 开启心愿
+    SSJWishChargeTermination,          //终止心愿
+    SSJWishChargeTypeRestart,         // 重新启动（终止后重新启动）
+    SSJWishChargeTypeFinish           // 完成心愿
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------
