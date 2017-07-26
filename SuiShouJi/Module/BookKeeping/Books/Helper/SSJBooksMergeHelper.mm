@@ -39,12 +39,20 @@
         
         NSString *userId = SSJUSERID();
         
+        NSMutableArray *sameNameBillArr = [NSMutableArray arrayWithCapacity:0];
+        
+        NSMutableDictionary *sameNameDic = [NSMutableDictionary dictionaryWithCapacity:0];
+        
         // 取出所有用到的记账类型
         NSArray *userBillTypeArr = [self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
                                                                                                                                                                                          fromTable:@"BK_USER_CHARGE"
                                                                                                                                                                                              where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
                                                                                                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
-                                                                                                                                                              && SSJUserChargeTable.booksId == sourceBooksId])];
+                                                                                                                                                              && SSJUserChargeTable.booksId == sourceBooksId])
+                                    && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId fromTable:@"BK_USER_CHARGE"
+                                                                                                         where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
+                                                                                                                                                                                                                                                     && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+                                                                                                                                                                                                                                                     && SSJUserChargeTable.booksId == targetBooksId])];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
             userBill.booksId = targetBooksId;
