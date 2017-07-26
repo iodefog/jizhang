@@ -95,7 +95,28 @@
             } withObject:userCharge];
         }
         
+        // 取出账本中所有的流水
+        NSArray *periodChargeArr = [self.db getObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"BK_CHARGE_PERIOD_CONFIG"
+                                                  where:SSJChargePeriodConfigTable.userId == userId
+                              && SSJChargePeriodConfigTable.booksId == sourceBooksId
+                              && SSJChargePeriodConfigTable.operatorType != 2];
         
+        for (SSJChargePeriodConfigTable *chargePeriod in chargeArr) {
+            chargePeriod.booksId = targetBooksId;
+            chargePeriod.writeDate = writeDate;
+            chargePeriod.version = SSJSyncVersion();
+            if ([sameNameBillArr containsObject:chargePeriod.billId]) {
+                chargePeriod.billId = [sameNameDic objectForKey:chargePeriod.billId];
+            }
+            
+            [self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:{
+                SSJChargePeriodConfigTable.booksId,
+                SSJChargePeriodConfigTable.writeDate,
+                SSJChargePeriodConfigTable.version,
+                SSJChargePeriodConfigTable.billId
+            } withObject:chargePeriod];
+        }
+
     }];
 }
 
