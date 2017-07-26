@@ -33,6 +33,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy) NSString *billTypeName;
 
+/**
+ 是否支出
+ */
+@property (nonatomic) BOOL expended;
+
 @end
 
 NS_ASSUME_NONNULL_END

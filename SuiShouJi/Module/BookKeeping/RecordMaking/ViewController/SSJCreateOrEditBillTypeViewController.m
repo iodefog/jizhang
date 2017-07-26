@@ -115,6 +115,9 @@
     self.bodyView.contentInsets = UIEdgeInsetsMake(0, 0, bottom, 0);
 }
 
+#pragma mark - Private
+//- ()
+
 #pragma mark - Lazyloading
 - (SSJCreateOrEditBillTypeTopView *)topView {
     if (!_topView) {
