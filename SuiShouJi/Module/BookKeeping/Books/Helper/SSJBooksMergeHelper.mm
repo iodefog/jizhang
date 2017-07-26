@@ -39,6 +39,18 @@
         
         NSString *userId = SSJUSERID();
         
+        // 取出所有用到的记账类型
+        NSArray *userBillTypeArr = [self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
+                                                                                                                                                                                         fromTable:@"BK_USER_CHARGE"
+                                                                                                                                                                                             where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
+                                                                                                                                                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+                                                                                                                                                              && SSJUserChargeTable.booksId == sourceBooksId])];
+        
+        for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
+            userBill.booksId = targetBooksId;
+        }
+
+        
         // 取出账本中所有的流水
         NSArray *chargeArr = [self.db getObjectsOfClass:SSJUserChargeTable.class fromTable:@"BK_USER_CHARGE"
                                                   where:SSJUserChargeTable.userId == userId
@@ -50,16 +62,6 @@
         }
         
         
-        // 取出所有用到的记账类型
-        NSArray *userBillTypeArr = [self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
-                                                                                                                                                                                    fromTable:@"BK_USER_CHARGE"
-                                                                                                                                                                                        where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
-                                                                                                                                                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
-                                                                                                                                                              && SSJUserChargeTable.booksId == sourceBooksId])];
-        
-        for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
-            userBill.booksId = targetBooksId;
-        }
         
     }];
 }
