@@ -62,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)updateAppearanceAccordingToTheme;
 
+- (SSJCaterotyMenuSelectionCellItem *)itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath;
+
 @end
 
 
@@ -82,11 +84,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJCaterotyMenuSelectionViewIndexPath : NSObject
 
-@property (nonatomic) NSInteger menuIndex;
+@property (nonatomic, readonly) NSInteger menuIndex;
 
-@property (nonatomic) NSInteger categoryIndex;
+@property (nonatomic, readonly) NSInteger categoryIndex;
 
-@property (nonatomic) NSInteger itemIndex;
+@property (nonatomic, readonly) NSInteger itemIndex;
 
 + (instancetype)indexPathWithMenuIndex:(NSInteger)menuIndex categoryIndex:(NSInteger)categoryIndex itemIndex:(NSInteger)itemIndex;
 

@@ -14,24 +14,19 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJCreateOrEditBillTypeViewController : SSJBaseViewController
 
 /**
- 默认选中的账本标签
+ 当前账本id（编辑、新建都要传）
  */
-@property (nonatomic) SSJBooksType booksType;
+@property (nonatomic, copy) NSString *booksId;
 
 /**
- 默认选中的类别颜色
+ 收支类别id（编辑必传，新建不用）
  */
-@property (nonatomic, strong) UIColor *billTypeColor;
+@property (nonatomic, copy, nullable) NSString *billId;
 
 /**
- 默认选中的类别图标
+ 是否支出（新建必传，编辑不用）
  */
-@property (nonatomic, strong) UIImage *billTypeIcon;
-
-/**
- 默认的类别名称
- */
-@property (nonatomic, copy) NSString *billTypeName;
+@property (nonatomic) BOOL expended;
 
 @end
 

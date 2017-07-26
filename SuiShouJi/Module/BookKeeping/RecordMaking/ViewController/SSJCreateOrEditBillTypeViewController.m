@@ -11,9 +11,17 @@
 #import "SSJCreateOrEditBillTypeColorSelectionView.h"
 #import "SSJCaterotyMenuSelectionView.h"
 
+#import "SSJBillTypeCategoryModel.h"
 #import "SSJCategoryListHelper.h"
+#import "SSJCreateOrEditBillTypeHelper.h"
 #import "YYKeyboardManager.h"
 
+static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJCreateOrEditBillTypeViewController
+#pragma mark -
 @interface SSJCreateOrEditBillTypeViewController () <SSJCaterotyMenuSelectionViewDataSource, SSJCaterotyMenuSelectionViewDelegate, YYKeyboardObserver>
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeTopView *topView;
@@ -22,9 +30,9 @@
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeColorSelectionView *colorSelectionView;
 
-@property (nonatomic, strong) NSArray *menuTitle;
+@property (nonatomic, strong) NSArray<NSNumber *> *booksTypes;
 
-@property (nonatomic, strong) NSArray<NSArray<SSJCaterotyMenuSelectionCellItem *> *> *categoryItems1;
+@property (nonatomic, strong) NSMutableDictionary<id<NSCopying>, NSArray<SSJBillTypeCategoryModel *> *> *catgegoriesInfo;
 
 @end
 
@@ -33,8 +41,8 @@
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.catgegoriesInfo = [NSMutableDictionary dictionary];
         [[YYKeyboardManager defaultManager] addObserver:self];
-        [self initItems];
     }
     return self;
 }
@@ -72,29 +80,55 @@
 
 #pragma mark - SSJCaterotyMenuSelectionViewDataSource
 - (NSUInteger)numberOfMenuTitlesInSelectionView:(SSJCaterotyMenuSelectionView *)selectionView {
-    return 20;
+    return self.expended ? self.booksTypes.count : 1;
 }
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForLeftMenuAtIndex:(NSInteger)index {
-    return [NSString stringWithFormat:@"title_%d", (int)index];
+    SSJBooksType booksType = [[self.booksTypes ssj_safeObjectAtIndex:index] integerValue];
+    switch (booksType) {
+        case SSJBooksTypeDaily:
+            return @"日常";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"生意";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"结婚";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"装修";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"旅行";
+            break;
+            
+        case SSJBooksTypeBaby:
+            return @"宝宝";
+            break;
+    }
 }
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfCategoriesAtMenuIndex:(NSInteger)index {
-    return self.categoryItems1.count;
+    return self.currentCategories.count;
 }
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForCategoryAtIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
-    return [NSString stringWithFormat:@"menu_%d_category_%d", (int)menuIndex, (int)categoryIndex];
+    SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:categoryIndex];
+    return category.title;
 }
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfItemsAtCategoryIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
-    NSArray *items = self.categoryItems1[categoryIndex];
-    return items.count;
+    SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:categoryIndex];
+    return category.items.count;
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
-    NSArray *items = self.categoryItems1[indexPath.categoryIndex];
-    return items[indexPath.itemIndex];
+    SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
+    return [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDelegate
@@ -103,8 +137,8 @@
 }
 
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
-    NSArray *items = self.categoryItems1[indexPath.categoryIndex];
-    SSJCaterotyMenuSelectionCellItem *item = items[indexPath.itemIndex];
+    SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
+    SSJCaterotyMenuSelectionCellItem *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
     self.topView.billTypeIcon = item.icon;
     self.topView.billTypeName = item.title;
 }
@@ -113,6 +147,37 @@
 - (void)keyboardChangedWithTransition:(YYKeyboardTransition)transition {
     CGFloat bottom = transition.toVisible ? [YYKeyboardManager defaultManager].keyboardFrame.size.height : 0;
     self.bodyView.contentInsets = UIEdgeInsetsMake(0, 0, bottom, 0);
+}
+
+#pragma mark - Private
+- (void)loadColors {
+    NSMutableArray *colors = [NSMutableArray array];
+    for (NSString *colorValue in [SSJCategoryListHelper payOutColors]) {
+        [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
+    }
+    self.colorSelectionView.colors = colors;
+    self.topView.billTypeColor =  [colors firstObject];
+}
+
+- (NSArray<SSJBillTypeCategoryModel *> *)currentCategories {
+    if (self.expended) {
+        NSNumber *booksTypeValue = [self.booksTypes ssj_safeObjectAtIndex:self.bodyView.selectedIndexPath.menuIndex];
+        NSArray *categories = self.catgegoriesInfo[booksTypeValue];
+        if (categories) {
+            return categories;
+        }
+        categories = [SSJCreateOrEditBillTypeHelper expenseCategoriesWithBooksType:[booksTypeValue integerValue]];
+        self.catgegoriesInfo[booksTypeValue] = categories;
+        return categories;
+    } else {
+        NSArray *categories = self.catgegoriesInfo[kCatgegoriesInfoIncomeKey];
+        if (categories) {
+            return categories;
+        }
+        categories = [SSJCreateOrEditBillTypeHelper incomeCategories];
+        self.catgegoriesInfo[kCatgegoriesInfoIncomeKey] = categories;
+        return categories;
+    }
 }
 
 #pragma mark - Lazyloading
@@ -156,50 +221,16 @@
     return _colorSelectionView;
 }
 
-- (void)loadColors {
-    NSMutableArray *colors = [NSMutableArray array];
-    for (NSString *colorValue in [SSJCategoryListHelper payOutColors]) {
-        [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
+- (NSArray<NSNumber *> *)booksTypes {
+    if (!_booksTypes) {
+        _booksTypes = @[@(SSJBooksTypeDaily),
+                        @(SSJBooksTypeBaby),
+                        @(SSJBooksTypeBusiness),
+                        @(SSJBooksTypeTravel),
+                        @(SSJBooksTypeDecoration),
+                        @(SSJBooksTypeMarriage)];
     }
-    self.colorSelectionView.colors = colors;
-    self.topView.billTypeColor =  [colors firstObject];
-}
-
-- (void)initItems {
-    self.categoryItems1 = @[@[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]]],
-                            @[[SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]],
-                              [SSJCaterotyMenuSelectionCellItem itemWithTitle:@"category_1"
-                                                                         icon:[UIImage imageNamed:@"bt_baby"]
-                                                                        color:[UIColor orangeColor]]]];
+    return _booksTypes;
 }
 
 @end
