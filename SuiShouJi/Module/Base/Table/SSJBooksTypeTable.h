@@ -28,7 +28,7 @@
 
 @property (nonatomic, assign) int booksOrder;
 
-@property (nonatomic, assign) int parentType;
+@property (nonatomic, assign) SSJBooksType parentType;
 
 
 WCDB_PROPERTY(booksId)

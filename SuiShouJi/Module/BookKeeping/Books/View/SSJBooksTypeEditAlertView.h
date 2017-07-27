@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void(^deleteHandler)();
 
+@property (nonatomic, copy) void(^transferHandler)();
+
 - (void)showWithBookCategory:(SSJBooksCategory)category;
 
 - (void)dismiss;

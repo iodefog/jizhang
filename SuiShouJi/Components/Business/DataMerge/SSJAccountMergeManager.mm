@@ -21,6 +21,7 @@
 #import "SSJTrasferCycleTableMerge.h"
 #import "SSJBaseTableMerge.h"
 #import "SSJUserChargePeriodConfigMergeTable.h"
+#import "SSJUserBillTypeTableMerge.h"
 
 @interface SSJAccountMergeManager()
 
@@ -38,6 +39,7 @@
     if (self) {
         NSSet *firstLayer = [NSSet setWithObjects:[SSJUserReminderTableMerge class],
                              [SSJBooksTypeTableMerge class],
+                             [SSJUserBillTypeTableMerge class],
                              [SSJMemberTableMerge class], nil];
         
         NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoTableMerge class],

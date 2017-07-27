@@ -20,7 +20,7 @@
 
 @property (nonatomic, retain) NSString* booksColor;
 
-@property (nonatomic, assign) int booksParent;
+@property (nonatomic, assign) SSJBooksType booksParent;
 
 @property (nonatomic, retain) NSString* addDate;
 

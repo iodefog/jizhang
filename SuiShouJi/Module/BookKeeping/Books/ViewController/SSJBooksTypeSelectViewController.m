@@ -9,7 +9,9 @@
 static NSString * SSJBooksTypeCellIdentifier = @"booksTypeCell";
 static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIdentifier";
 
+
 #import "SSJBooksTypeSelectViewController.h"
+#import "SSJBooksMergeViewController.h"
 #import "SSJBooksTypeStore.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJBooksCollectionViewCell.h"
@@ -485,18 +487,25 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 
 - (SSJBooksTypeEditAlertView *)editAlertView {
     if (!_editAlertView) {
-        __weak typeof(self) wself = self;
+        @weakify(self);
         _editAlertView = [[SSJBooksTypeEditAlertView alloc] init];
         _editAlertView.editHandler = ^{
-            [wself enterBooksTypeEditController];
+            @strongify(self);
+            [self enterBooksTypeEditController];
         };
         _editAlertView.deleteHandler = ^{
-            SSJBooksTypeItem *persionalBook = wself.editBooksItem;
+            @strongify(self);
+            SSJBooksTypeItem *persionalBook = self.editBooksItem;
             if ([persionalBook.booksId isEqualToString:SSJUSERID()]) {
                 [CDAutoHideMessageHUD showMessage:@"日常账本无法删除"];
             } else {
-                [wself.authCodeAlertView show];
+                [self.authCodeAlertView show];
             }
+        };
+        _editAlertView.transferHandler = ^{
+            @strongify(self);
+            SSJBooksMergeViewController *mergeVc = [[SSJBooksMergeViewController alloc] init];
+            [self.navigationController pushViewController:mergeVc animated:YES];
         };
     }
     return _editAlertView;
