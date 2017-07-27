@@ -245,6 +245,7 @@ static const CGFloat kBorderRadius = 20;
     _item = item;
     self.icon.image = item.icon;
     self.titleLab.text = item.title;
+    self.borderView.layer.borderColor = item.color.CGColor;
     [self setNeedsUpdateConstraints];
 }
 

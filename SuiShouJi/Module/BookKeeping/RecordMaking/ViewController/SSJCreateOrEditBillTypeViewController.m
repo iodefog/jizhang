@@ -65,6 +65,12 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     }] subscribeNext:^(SSJCaterotyMenuSelectionViewIndexPath *indexPath) {
         [self.bodyView reloadAllData];
         self.bodyView.selectedIndexPath = indexPath;
+
+        SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
+        SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+        self.topView.billTypeIcon = [UIImage imageNamed:item.icon];
+        self.topView.billTypeName = item.name;
+        
     } error:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     }];
@@ -171,6 +177,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
     }
     self.colorSelectionView.colors = colors;
+    self.colorSelectionView.selectedIndex = 0;
     self.topView.billTypeColor =  [colors firstObject];
 }
 
@@ -264,7 +271,6 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         _colorSelectionView = [[SSJCreateOrEditBillTypeColorSelectionView alloc] init];
         __weak typeof(self) wself = self;
         _colorSelectionView.selectColorAction = ^(SSJCreateOrEditBillTypeColorSelectionView *view) {
-            [view dismiss];
             [wself.topView setArrowDown:YES animated:YES];
             [UIView animateWithDuration:0.25 animations:^{
                 wself.topView.billTypeColor = view.colors[view.selectedIndex];

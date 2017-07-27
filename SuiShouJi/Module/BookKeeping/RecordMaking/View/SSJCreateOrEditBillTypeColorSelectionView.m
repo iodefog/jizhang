@@ -85,11 +85,13 @@ static const NSUInteger kColorLumpCountPerRow = 5;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self addSubview:self.backView];
-        [self addSubview:self.collectionView];
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
         self.hidden = YES;
+        self.selectedIndex = -1;
+        
+        [self addSubview:self.backView];
+        [self addSubview:self.collectionView];
     }
     return self;
 }
@@ -119,10 +121,23 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     [self.collectionView reloadData];
 }
 
-- (void)setSelectedIndex:(NSUInteger)selectedIndex {
-    if (_selectedIndex != selectedIndex) {
-        _selectedIndex = selectedIndex;
-        [self.collectionView reloadData];
+- (void)setSelectedIndex:(NSInteger)selectedIndex {
+    if (selectedIndex >= 0 && selectedIndex >= self.colors.count) {
+        SSJPRINT(@"selectedIndex必须小于self.colors.count");
+        return;
+    }
+    
+    if (_selectedIndex == selectedIndex) {
+        return;
+    }
+    
+    _selectedIndex = selectedIndex;
+    if (selectedIndex >= 0) {
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+    } else {
+        for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
+        }
     }
 }
 
@@ -146,11 +161,12 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     }
     
     self.showed = NO;
-    self.hidden = YES;
     [self setupCollectionViewConstraint];
     [UIView animateWithDuration:kDuration animations:^{
         self.backView.alpha = 0;
         [self layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        self.hidden = YES;
     }];
 }
 
@@ -174,7 +190,6 @@ static const NSUInteger kColorLumpCountPerRow = 5;
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     SSJCreateOrEditBillTypeColorSelectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCellId forIndexPath:indexPath];
     cell.colorLump.backgroundColor = _colors[indexPath.item];
-    cell.selected = indexPath.item == self.selectedIndex;
     return cell;
 }
 
@@ -184,6 +199,9 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     if (self.selectColorAction) {
         self.selectColorAction(self);
     }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self dismiss];
+    });
 }
 
 - (UIView *)backView {

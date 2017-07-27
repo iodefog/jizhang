@@ -2303,5 +2303,18 @@
 		<key>color</key>
 		<string>#006F5F</string>
 	</dict>
+	<key>1197</key>
+	<dict>
+		<key>ID</key>
+		<string>1197</string>
+		<key>name</key>
+		<string>固定资产</string>
+		<key>expended</key>
+		<true/>
+		<key>icon</key>
+		<string>bt_gudingzichan</string>
+		<key>color</key>
+		<string>#A8A67E</string>
+	</dict>
 </dict>
 </plist>

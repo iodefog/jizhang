@@ -12,6 +12,8 @@
 
 @interface SSJBillTypeLibraryModel ()
 
+@property (nonatomic) SSJBooksType booksType;
+
 @property (nonatomic, strong) NSArray<SSJBillTypeCategoryModel *> *incomeCategories;
 
 @property (nonatomic, strong) NSArray<SSJBillTypeCategoryModel *> *dailyCategories;
@@ -268,7 +270,7 @@
                                                                                    SSJBillTypeModel(@"1142"),
                                                                                    SSJBillTypeModel(@"1067"),
                                                                                    SSJBillTypeModel(@"1041")]]];
-    [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"固定资产" items:@[SSJBillTypeModel(@"1041"),
+    [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"固定资产" items:@[SSJBillTypeModel(@"1197"),
                                                                                    SSJBillTypeModel(@"1068"),
                                                                                    SSJBillTypeModel(@"1141"),
                                                                                    SSJBillTypeModel(@"1135")]]];
@@ -357,6 +359,10 @@
                                                                                    SSJBillTypeModel(@"1080"),
                                                                                    SSJBillTypeModel(@"1034")]]];
     return [categories copy];
+}
+
+- (NSString *)debugDescription {
+    return [NSString stringWithFormat:@"incomeCategories:%@ \nexpenseCategories:%@", [self incomeCategories], [self expenseCategoriesWithBooksType:self.booksType]];
 }
 
 @end
