@@ -8,8 +8,10 @@
 
 #import "SSJWishFinishedViewController.h"
 #import "SSJWishProgressViewController.h"
+#import "SSJMakeWishViewController.h"
 
 #import "SSJWishListTableViewCell.h"
+#import "SSJBudgetNodataRemindView.h"
 
 #import "SSJWishModel.h"
 
@@ -19,13 +21,21 @@
 @property (nonatomic, strong) UITableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray *dataArray;
+
+/**stateL 许下心愿，努力实现～*/
+@property (nonatomic, strong) UILabel *stateL;
+
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
+
 @end
 
 @implementation SSJWishFinishedViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.stateL];
     [self.view addSubview:self.tableView];
+    [self.tableView addSubview:self.noDataRemindView];
     [self updateViewConstraints];
     [self updateAppearance];
 }
@@ -36,17 +46,30 @@
     [SSJWishHelper queryIngWishWithState:SSJWishStateFinish success:^(NSMutableArray<SSJWishModel *> *resultArr) {
         @strongify(self);
         self.dataArray = resultArr;
-        [self.tableView reloadData];
+        if (self.dataArray.count == 0) {
+            self.noDataRemindView.hidden = NO;
+        } else {
+            self.noDataRemindView.hidden = YES;
+            [self.tableView reloadData];
+        }
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
 }
 
 - (void)updateViewConstraints {
+    [self.stateL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.mas_equalTo(0);
+        make.height.mas_equalTo(30);
+    }];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
         make.top.mas_equalTo(44);
     }];
+//    [self.noDataRemindView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerX.mas_equalTo(self.tableView);
+//        make.top.mas_equalTo(50);
+//    }];
     [super updateViewConstraints];
 }
 
@@ -60,6 +83,7 @@
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.view.backgroundColor =[UIColor whiteColor];
     }
+    self.stateL.textColor = SSJ_SECONDARY_COLOR;
 }
 
 #pragma mark - UITableViewDelegate
@@ -97,6 +121,35 @@
     }
     return _tableView;
 }
+
+- (UILabel *)stateL {
+    if (!_stateL) {
+        _stateL = [[UILabel alloc] init];
+        _stateL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _stateL.textAlignment = NSTextAlignmentCenter;
+        _stateL.backgroundColor = [UIColor clearColor];
+        _stateL.text = @"许下心愿，努力实现～";
+    }
+    return _stateL;
+}
+
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
+        _noDataRemindView.image = @"wish_list_has_no_finish";
+        _noDataRemindView.title = @"暂无已完成的心愿";
+        _noDataRemindView.subTitle = @"不如和一百万人一起\n为心愿存钱\n一步步实现自己的小心愿吧";
+        _noDataRemindView.actionTitle = @"许下心愿";
+        _noDataRemindView.centerX = SSJSCREENWITH * 0.5;
+        _noDataRemindView.centerY = (SSJSCREENHEIGHT - 60) * 0.5;
+        _noDataRemindView.actionBlock = ^{
+            SSJMakeWishViewController *makeWish = [[SSJMakeWishViewController alloc] init];
+            [SSJVisibalController().navigationController pushViewController:makeWish animated:YES];
+        };
+    }
+    return _noDataRemindView;
+}
+
 
 - (NSMutableArray *)dataArray {
     if (!_dataArray) {

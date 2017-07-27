@@ -14,13 +14,15 @@
 #import "SSJMakeWishMoneyCollectionViewCell.h"
 #import "SSJWishTableViewCell.h"
 
+#import "SSJMakeWishDefoDataService.h"
+
 #import "SSJWishModel.h"
 #import "SSJWishDefItem.h"
 
 #import "SSJWishHelper.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
-@interface SSJMakeWishViewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
+@interface SSJMakeWishViewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,SSJBaseNetworkServiceDelegate>
 
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
@@ -54,6 +56,8 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 @property (nonatomic, strong) UIView *bottomBg;
 
 @property (nonatomic, strong) UIButton *makeWishBtn;
+
+@property (nonatomic, strong) SSJMakeWishDefoDataService *defoWishDataService;
 
 /**心愿列表数据源*/
 @property (nonatomic, strong) NSMutableArray <SSJWishDefItem *>*wishListDataArray;
@@ -98,6 +102,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 - (void)initNormalData {
     self.wishMoneyDataArray = @[@"2000",@"5000",@"10000",@"100000"];
+    [self.defoWishDataService requestDefoWish];
 }
 
 - (void)viewWillLayoutSubviews {
@@ -153,6 +158,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     RAC(self.makeWishBtn,enabled) = signal;
 }
 
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+   self.wishListDataArray = self.defoWishDataService.wishDefoArray;
+    self.wishListTableView.height = self.wishListDataArray.count * 38;
+    [self.wishListTableView reloadData];
+}
+
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.wishListDataArray.count;
@@ -165,8 +177,8 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    self.wishModel.wishType = indexPath.row + 1;
     SSJWishDefItem *item = [self.wishListDataArray ssj_safeObjectAtIndex:indexPath.row];
+    self.wishModel.wishType = item.wishType;
     if (item.wishMoney.length) {
         self.wishAmountTextF.text = item.wishMoney;
     }
@@ -389,12 +401,18 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         @weakify(self);
         [[_makeWishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            
+            if (self.wishNameTextF.text.length > 20) {
+                [CDAutoHideMessageHUD showMessage:@"心愿名称不能超过20个字哦"];
+                return ;
+            }
            //保存心愿
             self.wishModel.wishName = self.wishNameTextF.text;
             self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+                wishProVC.showWishGuide = YES;
                 wishProVC.wishId = self.wishModel.wishId;
                 [self.navigationController pushViewController:wishProVC animated:YES];
                 self.wishModel = nil;
@@ -407,9 +425,15 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     return _makeWishBtn;
 }
 
+- (SSJMakeWishDefoDataService *)defoWishDataService {
+    if (!_defoWishDataService) {
+        _defoWishDataService = [[SSJMakeWishDefoDataService alloc] initWithDelegate:self];
+    }
+    return _defoWishDataService;
+}
+
 - (NSMutableArray *)wishListDataArray {
     if (!_wishListDataArray) {
-//        _wishListDataArray = [NSMutableArray array];
         _wishListDataArray = [SSJWishDefItem defWishItemArr];
     }
     return _wishListDataArray;

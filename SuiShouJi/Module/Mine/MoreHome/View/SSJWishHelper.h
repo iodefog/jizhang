@@ -10,6 +10,7 @@
 
 #import "SSJWishChargeItem.h"
 @class SSJWishModel;
+@class SSJReminderItem;
 
 @interface SSJWishHelper : NSObject
 
@@ -69,6 +70,17 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
                    Success:(void(^)(SSJWishModel *resultItem))success
                    failure:(void(^)(NSError *error))failure;
 
+/**
+ 根据心愿ID完成某个心愿
+ 
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)finishWishWithWisId:(NSString *)wishId
+                    Success:(void(^)())success
+                    failure:(void(^)(NSError *error))failure;
+
 
 /**
  根据心愿ID删除某个心愿
@@ -91,6 +103,18 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
 + (void)terminateWishWithWisId:(NSString *)wishId
                     Success:(void(^)())success
                        failure:(void(^)(NSError *error))failure;
+
+
+
+/**
+ 根据心愿ID查询提醒信息
+
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)queryWishRemindWithWishId:(NSString *)wishId Success:(void(^)(SSJReminderItem *remindItem))success
+                          failure:(void(^)(NSError *error))failure;
 
 #pragma mark - 流水操作
 

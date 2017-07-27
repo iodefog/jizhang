@@ -114,10 +114,9 @@
     }];
 
     [self.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.wishTitleL);
-        make.height.mas_equalTo(22);
-        make.right.mas_equalTo(11);
-        make.width.mas_equalTo(66);
+        make.size.mas_equalTo(CGSizeMake(100, 20));
+        make.centerX.mas_equalTo(self.bgView.mas_right).offset(-20);
+        make.centerY.mas_equalTo(self.bgView.mas_top).offset(20);
     }];
     
     [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -139,7 +138,7 @@
 - (void)updateAppearance {
     self.stateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
         self.contentView.backgroundColor = [UIColor clearColor];
-    self.stateLabel.textColor = [UIColor whiteColor];
+    self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.stateLabel.backgroundColor = [UIColor lightGrayColor];
@@ -226,8 +225,8 @@
         _stateLabel = [[UILabel alloc] init];
         _stateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _stateLabel.textAlignment = NSTextAlignmentCenter;
-        _stateLabel.layer.cornerRadius = 11;
-        _stateLabel.layer.masksToBounds = YES;
+        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
+        _stateLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
     }
     return _stateLabel;
 }

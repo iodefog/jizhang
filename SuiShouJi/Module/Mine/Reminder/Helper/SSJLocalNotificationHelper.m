@@ -79,6 +79,7 @@
                 item.remindContent = [NSString stringWithFormat:@"%@该还款啦，小主快去还账单吧！",item.remindName];
                 break;
                 
+            case SSJReminderTypeWish:
             case SSJReminderTypeCharge:{
                 if (item.remindMemo.length) {
                     item.remindContent = [NSString stringWithFormat:@"%@(%@)",item.remindName,item.remindMemo];
@@ -87,6 +88,7 @@
                 }
                 break;
             }
+
                 
             default:
                 break;
