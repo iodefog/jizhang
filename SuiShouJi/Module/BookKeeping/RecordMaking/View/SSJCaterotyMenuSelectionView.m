@@ -9,6 +9,8 @@
 #import "SSJCaterotyMenuSelectionView.h"
 #import "SSJBaseTableViewCell.h"
 
+static const NSTimeInterval kDuration = 0.25;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSArray (SSJCaterotyMenuSelectionView)
@@ -109,13 +111,11 @@
     [super updateConstraints];
 }
 
-- (void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    self.backgroundColor = selected ? [UIColor clearColor] : SSJ_MAIN_BACKGROUND_COLOR;
+    [UIView transitionWithView:self.contentView duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self updateAppearanceAccordingToTheme];
+    } completion:NULL];
 }
 
 - (UILabel *)titleLab {
@@ -215,11 +215,11 @@ static const CGFloat kBorderRadius = 20;
 - (void)updateConstraints {
     [self.icon mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.and.centerX.mas_equalTo(self.container).offset(0);
-        make.size.mas_equalTo(self.icon.image.size);
+        make.size.mas_equalTo(CGSizeMake(24, 24));
     }];
     
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.icon.mas_bottom).offset(5);
+        make.top.mas_equalTo(self.icon.mas_bottom).offset(10);
         make.bottom.and.centerX.mas_equalTo(self.container).offset(0);
     }];
     
@@ -236,7 +236,7 @@ static const CGFloat kBorderRadius = 20;
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:kDuration animations:^{
         self.borderView.alpha = selected ? 1 : 0;
     }];
 }
@@ -245,6 +245,7 @@ static const CGFloat kBorderRadius = 20;
     _item = item;
     self.icon.image = item.icon;
     self.titleLab.text = item.title;
+    self.borderView.layer.borderColor = item.color.CGColor;
     [self setNeedsUpdateConstraints];
 }
 
@@ -453,6 +454,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 @interface SSJCaterotyMenuSelectionView () <UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource>
 
+@property (nonatomic) SSJCaterotyMenuSelectionViewStyle style;
+
 @property (nonatomic, strong) _SSJSubscriptLine *subscriptLine;
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -468,36 +471,68 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 @implementation SSJCaterotyMenuSelectionView
 
 - (instancetype)initWithFrame:(CGRect)frame {
+    return [self initWithFrame:frame style:SSJCaterotyMenuSelectionViewNoMenu];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame style:(SSJCaterotyMenuSelectionViewStyle)style {
     if (self = [super initWithFrame:frame]) {
-        self.itemsSet = [[_SSJMenuItemSet alloc] init];
-        [self addSubview:self.tableView];
-        [self addSubview:self.subscriptLine];
-        [self addSubview:self.collectionView];
-        [self updateAppearanceAccordingToTheme];
+        self.style = style;
         self.clipsToBounds = YES;
+        self.numberOfItemPerRow = 4;
+        self.itemsSet = [[_SSJMenuItemSet alloc] init];
+        [self setupViews];
+        [self updateAppearanceAccordingToTheme];
+        self.selectedIndexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:-1 categoryIndex:-1 itemIndex:-1];
     }
     return self;
 }
 
 - (void)updateConstraints {
-    [self updateSubscriptLineConstraint];
-    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(50);
-        make.top.and.left.and.height.mas_equalTo(self);
-    }];
-    [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.tableView.mas_right);
-        make.top.and.bottom.and.right.mas_equalTo(self);
-    }];
+    switch (self.style) {
+        case SSJCaterotyMenuSelectionViewNoMenu: {
+            [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.edges.mas_equalTo(self);
+            }];
+        }
+            break;
+            
+        case SSJCaterotyMenuSelectionViewMenuLeft: {
+            [self updateSubscriptLineConstraint];
+            [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.mas_equalTo(50);
+                make.top.and.left.and.height.mas_equalTo(self);
+            }];
+            [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.mas_equalTo(self.tableView.mas_right);
+                make.top.and.bottom.and.right.mas_equalTo(self);
+            }];
+        }
+            break;
+    }
+    
     [super updateConstraints];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.layout.itemSize = CGSizeMake((self.collectionView.width - self.layout.sectionInset.left - self.layout.sectionInset.right) / 4, 66);
+    self.layout.itemSize = CGSizeMake((self.collectionView.width - self.layout.sectionInset.left - self.layout.sectionInset.right) / self.numberOfItemPerRow, 66);
 }
 
 #pragma mark - Private
+- (void)setupViews {
+    switch (self.style) {
+        case SSJCaterotyMenuSelectionViewNoMenu:
+            [self addSubview:self.collectionView];
+            break;
+            
+        case SSJCaterotyMenuSelectionViewMenuLeft:
+            [self addSubview:self.tableView];
+            [self addSubview:self.subscriptLine];
+            [self addSubview:self.collectionView];
+            break;
+    }
+}
+
 - (void)updateSubscriptLineConstraint {
     CGRect frame = [self.tableView rectForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
     CGFloat centerY = (CGRectGetMidY(frame) - self.tableView.contentOffset.y);
@@ -517,7 +552,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated {
     _selectedIndexPath = selectedIndexPath;
-    if (selectedIndexPath.menuIndex >= 0) {
+    if (selectedIndexPath.menuIndex >= 0 && self.style == SSJCaterotyMenuSelectionViewMenuLeft) {
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
     }
     
@@ -528,8 +563,16 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (void)reloadAllData {
     [self.itemsSet clear];
-    [self.tableView reloadData];
-    [self.collectionView reloadData];
+    switch (self.style) {
+        case SSJCaterotyMenuSelectionViewNoMenu:
+            [self.collectionView reloadData];
+            break;
+            
+        case SSJCaterotyMenuSelectionViewMenuLeft:
+            [self.tableView reloadData];
+            [self.collectionView reloadData];
+            break;
+    }
 }
 
 - (void)setContentInsets:(UIEdgeInsets)contentInsets {
@@ -540,8 +583,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 }
 
 - (void)updateAppearanceAccordingToTheme {
-    self.tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
-    [self.subscriptLine setLineColor:SSJ_BORDER_COLOR];
+    _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
+    [_subscriptLine setLineColor:SSJ_BORDER_COLOR];
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
@@ -569,7 +612,12 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     _SSJCaterotyMenuSelectionViewTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kTableViewCellID];
     if (self.dataSource && [self.dataSource respondsToSelector:@selector(selectionView:titleForLeftMenuAtIndex:)]) {
-        cell.titleLab.text = [self.dataSource selectionView:self titleForLeftMenuAtIndex:indexPath.row];
+        NSString *title = [self.dataSource selectionView:self titleForLeftMenuAtIndex:indexPath.row];
+        NSMutableArray *characters = [NSMutableArray arrayWithCapacity:title.length];
+        for (int i = 0; i < title.length; i ++) {
+            [characters addObject:[title substringWithRange:NSMakeRange(i, 1)]];
+        }
+        cell.titleLab.text = [characters componentsJoinedByString:@"\n"];
     }
     return cell;
 }
@@ -577,7 +625,9 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedIndexPath.menuIndex = indexPath.row;
-    [UIView animateWithDuration:0.25 animations:^{
+    self.selectedIndexPath.categoryIndex = -1;
+    self.selectedIndexPath.itemIndex = -1;
+    [UIView animateWithDuration:kDuration animations:^{
         [self updateSubscriptLineConstraint];
         [self layoutIfNeeded];
     } completion:^(BOOL finished) {

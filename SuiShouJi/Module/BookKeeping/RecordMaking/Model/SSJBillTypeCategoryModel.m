@@ -10,11 +10,15 @@
 
 @implementation SSJBillTypeCategoryModel
 
-+ (instancetype)modelWithTitle:(NSString *)title items:(NSArray<SSJCaterotyMenuSelectionCellItem *> *)items {
++ (instancetype)modelWithTitle:(NSString *)title items:(NSArray<SSJBillTypeModel *> *)items {
     SSJBillTypeCategoryModel *model = [[SSJBillTypeCategoryModel alloc] init];
     model.title = title;
     model.items = items;
     return model;
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
 }
 
 @end

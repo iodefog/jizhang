@@ -18,10 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @required
 
-- (NSUInteger)numberOfMenuTitlesInSelectionView:(SSJCaterotyMenuSelectionView *)selectionView;
-
-- (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForLeftMenuAtIndex:(NSInteger)index;
-
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfCategoriesAtMenuIndex:(NSInteger)index;
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForCategoryAtIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex;
@@ -29,6 +25,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfItemsAtCategoryIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex;
 
 - (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath;
+
+@optional
+
+- (NSUInteger)numberOfMenuTitlesInSelectionView:(SSJCaterotyMenuSelectionView *)selectionView;
+
+- (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForLeftMenuAtIndex:(NSInteger)index;
 
 @end
 
@@ -42,7 +44,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+typedef NS_ENUM(NSInteger, SSJCaterotyMenuSelectionViewStyle) {
+    SSJCaterotyMenuSelectionViewNoMenu,
+    SSJCaterotyMenuSelectionViewMenuLeft
+};
+
 @interface SSJCaterotyMenuSelectionView : UIView
+
+@property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDataSource> dataSource;
+
+@property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDelegate> delegate;
+
+@property (nonatomic, strong) SSJCaterotyMenuSelectionViewIndexPath *selectedIndexPath;
 
 // 只有top、bottom有效
 @property (nonatomic) UIEdgeInsets contentInsets;
@@ -50,11 +63,14 @@ NS_ASSUME_NONNULL_BEGIN
 // default NO
 @property (nonatomic) BOOL needToCacheData;
 
-@property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDataSource> dataSource;
+@property (nonatomic, readonly) SSJCaterotyMenuSelectionViewStyle style;
 
-@property (nonatomic, weak) id<SSJCaterotyMenuSelectionViewDelegate> delegate;
+/**
+ default 4
+ */
+@property (nonatomic) NSUInteger numberOfItemPerRow;
 
-@property (nonatomic, strong) SSJCaterotyMenuSelectionViewIndexPath *selectedIndexPath;
+- (instancetype)initWithFrame:(CGRect)frame style:(SSJCaterotyMenuSelectionViewStyle)style;
 
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated;
 

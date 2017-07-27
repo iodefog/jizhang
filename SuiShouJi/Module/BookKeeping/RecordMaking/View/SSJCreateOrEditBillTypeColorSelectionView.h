@@ -14,7 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSArray<UIColor *> *colors;
 
-@property (nonatomic) NSUInteger selectedIndex;
+/**
+ 如果等于NSNotFound取消所有选中的cell;反之就选中指定下标的cell；默认NSNotFound
+ */
+@property (nonatomic) NSInteger selectedIndex;
 
 @property (nonatomic, copy) void(^selectColorAction)(SSJCreateOrEditBillTypeColorSelectionView *view);
 
