@@ -16,6 +16,8 @@
 
 @interface SSJBooksMergeViewController ()
 
+@property (nonatomic, strong) UIScrollView *scrollView;
+
 @property (nonatomic, strong) SSJBooksMergeProgressButton *mergeButton;
 
 @property (nonatomic, strong) UIView *transferOutBookBackView;
@@ -52,17 +54,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.mergeButton];
-    [self.view addSubview:self.transferOutBookBackView];
-    [self.view addSubview:self.transferInBookBackView];
-    [self.view addSubview:self.chargeCountTitleLab];
-    [self.view addSubview:self.chargeCountLab];
-    [self.view addSubview:self.bookTypeTitleLab];
-    [self.view addSubview:self.bookTypeLab];
-    [self.view addSubview:self.transferInButton];
+    [self.view addSubview:self.scrollView];
+    [self.scrollView addSubview:self.mergeButton];
+    [self.scrollView addSubview:self.transferOutBookBackView];
+    [self.scrollView addSubview:self.transferInBookBackView];
+    [self.scrollView addSubview:self.transferInBookView];
+    [self.scrollView addSubview:self.transferOutBookView];
+    [self.scrollView addSubview:self.chargeCountTitleLab];
+    [self.scrollView addSubview:self.chargeCountLab];
+    [self.scrollView addSubview:self.bookTypeTitleLab];
+    [self.scrollView addSubview:self.bookTypeLab];
+    [self.scrollView addSubview:self.transferInButton];
     [self.transferInButton addSubview:self.transferInLab];
     [self.transferInButton addSubview:self.transferInNameLab];
-    [self.view addSubview:self.transferImage];
+    [self.scrollView addSubview:self.transferImage];
+    
     [self.transferInButton addSubview:self.arrowImage];
     [self.view updateConstraintsIfNeeded];
     // Do any additional setup after loading the view.
@@ -137,6 +143,7 @@
         make.width.mas_equalTo(self.view);
         make.height.mas_equalTo(55);
         make.right.mas_equalTo(self.view);
+        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
     }];
     
     [self.transferInLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -152,6 +159,24 @@
     [self.arrowImage mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.transferInButton.mas_centerY);
         make.right.mas_equalTo(self.transferInButton.mas_right).offset(-15);
+    }];
+    
+    [self.transferInBookView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(80, 110));
+        make.top.mas_equalTo(self.transferInBookBackView.mas_top).offset(15);
+        make.centerX.mas_equalTo(self.transferInBookBackView);
+    }];
+    
+    [self.transferOutBookView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(80, 110));
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_top).offset(15);
+        make.centerX.mas_equalTo(self.transferInBookBackView);
+    }];
+    
+    [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.equalTo(self.view);
+        make.left.equalTo(self.view);
+        make.top.equalTo(self.view).offset(SSJ_NAVIBAR_BOTTOM);
     }];
 
     [super updateViewConstraints];
@@ -277,6 +302,26 @@
     return _transferInButton;
 }
 
+- (SSJBooksView *)transferInBookView {
+    if (!_transferInBookView) {
+        _transferInBookView = [[SSJBooksView alloc] init];
+    }
+    return _transferInBookView;
+}
+
+- (SSJBooksView *)transferOutBookView {
+    if (!_transferOutBookView) {
+        _transferOutBookView = [[SSJBooksView alloc] init];
+    }
+    return _transferOutBookView;
+}
+
+- (UIScrollView *)scrollView {
+    if (!_scrollView) {
+        _scrollView = [[UIScrollView alloc] init];
+    }
+    return _scrollView;
+}
 
 #pragma mark - Private
 - (void)updateWithBookData {

@@ -51,20 +51,21 @@ static const CGFloat kBooksCornerRadius = 10.f;
 #pragma mark - Setter
 - (void)setBooksTypeItem:(__kindof SSJBaseCellItem <SSJBooksItemProtocol> *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
-    self.nameLab.text = _booksTypeItem.booksName;
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     
-    if (!_booksTypeItem.booksId.length) {
+    if (!_booksTypeItem.booksId.length || !_booksTypeItem) {
         self.gradientLayer.hidden = YES;
         self.nameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         self.layer.borderWidth = 1;
+        self.nameLab.text = @"账本名称";
     } else {
         self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:_booksTypeItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:_booksTypeItem.booksColor.startColor].CGColor];
         self.gradientLayer.hidden = NO;
         self.nameLab.textColor = [UIColor whiteColor];
         self.layer.borderWidth = 0;
+        self.nameLab.text = _booksTypeItem.booksName;
     }
     
     [CATransaction commit];

@@ -127,7 +127,7 @@
     NSNumber *chargeCount = [self.db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"BK_USER_CHARGE"
                                                    where:SSJUserChargeTable.userId == userId
                              && SSJUserChargeTable.booksId == booksId
-                             && SSJUserChargeTable.operatorType == 2];
+                             && SSJUserChargeTable.operatorType != 2];
     return chargeCount;
 }
 
