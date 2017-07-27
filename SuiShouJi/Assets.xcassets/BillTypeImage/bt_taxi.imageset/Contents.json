@@ -6,12 +6,12 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "btTaxi@2x.png",
+      "filename" : "bt_taxi@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "btTaxi@3x.png",
+      "filename" : "bt_taxi@3x.png",
       "scale" : "3x"
     }
   ],

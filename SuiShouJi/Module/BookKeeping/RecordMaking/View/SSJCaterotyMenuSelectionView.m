@@ -625,6 +625,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     self.selectedIndexPath.menuIndex = indexPath.row;
+    self.selectedIndexPath.categoryIndex = -1;
+    self.selectedIndexPath.itemIndex = -1;
     [UIView animateWithDuration:0.25 animations:^{
         [self updateSubscriptLineConstraint];
         [self layoutIfNeeded];
