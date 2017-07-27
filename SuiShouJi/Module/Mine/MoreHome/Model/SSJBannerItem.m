@@ -15,6 +15,7 @@
              @"bannerImageUrl" : @"image",
              @"bannerName" : @"title",
              @"bannerUrl" : @"url",
+             @"bannerType" : @"url",
              @"bannerType" : @"url"
              };
 }

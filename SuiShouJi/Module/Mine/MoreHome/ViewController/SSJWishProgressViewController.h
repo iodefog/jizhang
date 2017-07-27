@@ -13,4 +13,7 @@
 
 /**wishId*/
 @property (nonatomic, copy) NSString *wishId;
+
+/**是否显示指引*/
+@property (nonatomic, assign) BOOL showWishGuide;
 @end

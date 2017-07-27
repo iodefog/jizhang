@@ -64,8 +64,19 @@
     [self setUpUI];
     [self setUpNav];
     [self normalData];
+    //查询提醒信息
+    [self getWishRemindDetailFromDB];
     [self updateViewConstraints];
     [self appearanceWithTheme];
+}
+
+- (void)getWishRemindDetailFromDB {
+    if (self.wishModel.remindId.length) {
+       self.reminderItem = [SSJLocalNotificationStore queryReminderItemForID:self.wishModel.remindId];
+        if (self.wishModel.remindId.length && self.reminderItem.remindState == 1) {
+            self.remindSwitch.on = YES;
+        }
+    }
 }
 
 - (void)normalData {
@@ -204,6 +215,21 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 0.01;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (self.remindSwitch.isOn) {//修改
+        SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+        remindEditeVc.needToSave = YES;
+        remindEditeVc.item = self.reminderItem;
+        __weak typeof(self) weakSelf = self;
+        remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
+            weakSelf.reminderItem = item;
+        };
+
+        [self.navigationController pushViewController:remindEditeVc animated:YES];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -386,18 +412,29 @@
         [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         __weak typeof(self) weakSelf = self;
         [[saveButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            if (weakSelf.wishNameTF.text.length > 20) {
+                [CDAutoHideMessageHUD showMessage:@"心愿名称不能超过20个字哦"];
+                return ;
+            }
             //保存提醒
             if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
+                weakSelf.wishModel.remindId = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
+                weakSelf.reminderItem.remindState = 1;
+                weakSelf.reminderItem.remindType = SSJReminderTypeWish;
                 [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
                     [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
                     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                 } failure:^(NSError *error) {
                     
                 }];
-                weakSelf.wishModel.remindId = weakSelf.reminderItem.remindId;
-            } else {
+                
+            } else if (weakSelf.wishModel.remindId.length && !weakSelf.remindSwitch.isOn) {//删除(关闭)提醒
+                [SSJLocalNotificationStore deleteWishReminderWithItem:weakSelf.reminderItem error:nil];
+                weakSelf.wishModel.remindId = @"";
+            }  else {
                 weakSelf.wishModel.remindId = @"";
             }
+            
             weakSelf.wishModel.wishName = weakSelf.wishNameTF.text;
             weakSelf.wishModel.wishMoney = weakSelf.wishAmountTF.text;
             //保存愿望详情
@@ -406,7 +443,6 @@
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             }];
-            
             
         }];
 

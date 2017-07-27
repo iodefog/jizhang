@@ -17,6 +17,13 @@
 /**subTitle*/
 @property (nonatomic, copy) NSString *subTitle;
 
+/**actionTitle*/
+@property (nonatomic, copy) NSString *actionTitle;
+
+typedef void(^SSJActionBlock)();
+
+@property (nonatomic, copy) SSJActionBlock actionBlock;
+
 - (void)updateAppearance;
 
 @end

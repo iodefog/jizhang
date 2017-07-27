@@ -13,6 +13,7 @@
 
 #import "SSJWishChargeCell.h"
 #import "SSJWishProgressView.h"
+#import "SSJMakeWishGuideView.h"
 
 #import "SSJWishModel.h"
 #import "SSJWishChargeItem.h"
@@ -33,6 +34,9 @@
 /**状态*/
 @property (nonatomic, strong) UIButton *stateBtn;
 
+/**完成心愿*/
+@property (nonatomic, strong) UIButton *finishBtn;
+
 @property (nonatomic, strong) SSJWishProgressView *wishProgressView;
 
 /**tableView*/
@@ -49,6 +53,9 @@
 
 /**头*/
 @property (nonatomic, strong) UIView *tableHeaderView;
+
+/**guild*/
+@property (nonatomic, strong) SSJMakeWishGuideView *guideView;
 
 /**model*/
 @property (nonatomic, strong) SSJWishModel *wishModel;
@@ -70,8 +77,11 @@
     [self.topBg addSubview:self.saveAmountL];
     [self.topBg addSubview:self.targetAmountL];
     [self.topBg addSubview:self.stateBtn];
+    [self.topBg addSubview:self.finishBtn];
+    
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomView];
+    
     [self updateAppearanceWithTheme];
     [self updateViewConstraints];
 }
@@ -79,8 +89,13 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    if (self.showWishGuide == YES) {
+        [self.guideView show];
+        self.showWishGuide = NO;
+    }
     [self getDataFromDatabase];
 }
+
 
 #pragma mark - Private
 - (void)getDataFromDatabase {
@@ -126,37 +141,88 @@
 
 
 - (void)setUpNav {
+    NSString *navStr;
     if (self.wishModel.status == SSJWishStateNormalIng) {
-           self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
+        navStr = @"编辑";
     } else {
-        self.navigationItem.rightBarButtonItem = nil;
+        navStr = @"删除";
     }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:navStr style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
 }
 
 - (void)updateDataOfTableHeaderView {
     [self setUpNav];
+    [self updateBottomView];
     self.wishTitleL.text = self.wishModel.wishName;
     self.wishProgressView.progress = [self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue];
     self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%.2lf",[self.wishModel.wishSaveMoney doubleValue]];
     self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%.2lf",[self.wishModel.wishMoney doubleValue]];
     
+    if (self.wishModel.status == SSJWishStateNormalIng && [self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue]) {
+        self.finishBtn.hidden = NO;
+    } else {
+        self.finishBtn.hidden = YES;
+    }
+    
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
         [self.stateBtn setTitle:@"完成心愿" forState:UIControlStateNormal];
+
     } else if (self.wishModel.status == SSJWishStateTermination) {//终止
-        self.stateBtn.enabled = NO;
         self.wishProgressView.progressColor = [UIColor lightGrayColor];
-        [self.stateBtn setTitle:@"终止" forState:UIControlStateDisabled];
+        [self.stateBtn setTitle:@"终止" forState:UIControlStateNormal];
     }
+}
+
+- (void)updateBottomView {
+    if ([self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue] && self.wishModel.status == SSJWishStateNormalIng) {
+        [self.bottomView ssj_setBorderWidth:1];
+        [self.saveBtn ssj_setBorderWidth:1];
+        [self.bottomView ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
+        [self.saveBtn ssj_setBorderStyle:SSJBorderStyleLeft];
+        [self.saveBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
+        [self.saveBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        
+    }else if (self.wishModel.status == SSJWishStateNormalIng) {//进行
+        self.bottomView.hidden = NO;
+        [self.bottomView ssj_setBorderWidth:0];
+        [self.saveBtn ssj_setBorderWidth:1];
+        [self.saveBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
+        [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
+        [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+       
+    } else if (self.wishModel.status == SSJWishStateFinish) {//完成
+        self.bottomView.hidden = YES;
+    } else if (self.wishModel.status == SSJWishStateTermination) {//终止
+        self.bottomView.hidden = YES;
+    }
+
 }
 
 
 - (void)navRightClick {
-    SSJWishDetailViewController *wishDetailVC = [[SSJWishDetailViewController alloc] init];
-    wishDetailVC.wishModel = [self.wishModel copy];
-    [self.navigationController pushViewController:wishDetailVC animated:YES];
+    if (self.wishModel.status == SSJWishStateNormalIng) {
+        SSJWishDetailViewController *wishDetailVC = [[SSJWishDetailViewController alloc] init];
+        wishDetailVC.wishModel = [self.wishModel copy];
+        [self.navigationController pushViewController:wishDetailVC animated:YES];
+    } else {
+        @weakify(self);
+        [SSJWishHelper deleteWishWithWisId:self.wishId Success:^{
+            @strongify(self);
+            [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [self.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:@"删除失败"];
+        }];
+    }
 }
+
 
 #pragma mark - Layout
 - (void)updateViewConstraints {
@@ -167,9 +233,21 @@
         make.bottom.mas_equalTo(self.targetAmountL.mas_bottom).offset(35);
     }];
     
+    [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(100, 20));
+        make.centerX.mas_equalTo(self.topBg.mas_right).offset(-20);
+        make.centerY.mas_equalTo(self.topBg.mas_top).offset(20);
+    }];
+    
+    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(71, 24));
+        make.right.mas_equalTo(self.stateBtn.mas_left);
+        make.top.mas_equalTo(15);
+    }];
+    
     [self.wishTitleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leftMargin.mas_equalTo(15);
-        make.right.mas_equalTo(-15);
+        make.right.mas_equalTo(self.finishBtn.mas_left).offset(-5);
         make.height.lessThanOrEqualTo(@50);
         make.top.mas_equalTo(15);
         make.height.greaterThanOrEqualTo(@22);
@@ -184,14 +262,15 @@
     
     [self.saveAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.wishTitleL);
-        make.width.mas_equalTo(self.wishTitleL.mas_width).multipliedBy(0.5);
+        make.width.mas_equalTo(self.targetAmountL.mas_width);
         make.top.mas_equalTo(self.wishProgressView.mas_bottom).offset(15);
         make.height.greaterThanOrEqualTo(0);
     }];
     
     [self.targetAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.saveAmountL.mas_right);
-        make.width.top.mas_equalTo(self.saveAmountL);
+        make.right.mas_equalTo(-15);
+        make.top.mas_equalTo(self.saveAmountL);
         make.height.greaterThanOrEqualTo(0);
     }];
     
@@ -206,11 +285,6 @@
         make.bottom.left.right.mas_equalTo(0);
     }];
     
-    [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(75, 24));
-        make.right.mas_equalTo(12);
-        make.top.mas_equalTo(self.wishTitleL.mas_top);
-    }];
     [super updateViewConstraints];
 }
 #pragma mark - Theme
@@ -222,21 +296,16 @@
 - (void)updateAppearanceWithTheme {
     self.wishTitleL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
-    [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-    
-//    [self.restartBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [self.restartBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     self.tableHeaderView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     
-    [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-    [self.withdrawBtn ssj_setBackgroundColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.saveBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.withdrawBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-    [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    
-    [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"666666" alpha:1] forState:UIControlStateDisabled];
-    [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
+    [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"999999"] forState:UIControlStateNormal];
+    [self.finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+    [self.finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+
+    [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
@@ -244,6 +313,7 @@
     } else {
         self.topBg.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
     }
+    [self.guideView updateAppearance];
 }
 
 #pragma mark - UITableViewDelegate
@@ -265,6 +335,7 @@
     cell.wishChargeEdidBlock = ^(SSJWishChargeCell *cell) {
         SSJWishChargeDetailViewController *chargeDetailVC = [[SSJWishChargeDetailViewController alloc] init];
         chargeDetailVC.chargeItem = [[wSelf.wishChargeListArr ssj_safeObjectAtIndex:indexPath.row] copy];
+        chargeDetailVC.wishModel = wSelf.wishModel;
         [wSelf.navigationController pushViewController:chargeDetailVC animated:YES];
     };
     
@@ -297,6 +368,7 @@
     if (!_wishTitleL) {
         _wishTitleL = [[UILabel alloc] init];
         _wishTitleL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _wishTitleL.numberOfLines = 0;
     }
     return _wishTitleL;
 }
@@ -305,12 +377,35 @@
     if (!_stateBtn) {
         _stateBtn = [[UIButton alloc] init];
         _stateBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        CAShapeLayer *layer = [CAShapeLayer layer];
-        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 75, 24) cornerRadius:12];
-        layer.path= path.CGPath;
-        _stateBtn.layer.mask = layer;
+        _stateBtn.transform = CGAffineTransformMakeRotation(M_PI_4);
+        _stateBtn.layer.anchorPoint = CGPointMake(0.5, 0.5);
     }
     return _stateBtn;
+}
+
+
+- (UIButton *)finishBtn {
+    if (!_finishBtn) {
+        _finishBtn = [[UIButton alloc] init];
+        _finishBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 71, 24) cornerRadius:12];
+        layer.path= path.CGPath;
+        _finishBtn.layer.mask = layer;
+        _finishBtn.hidden = YES;
+        [_finishBtn setTitle:@"完成心愿" forState:UIControlStateNormal];
+        __weak typeof(self) weakSelf = self;
+        //完成心愿
+        [[_finishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            [SSJWishHelper finishWishWithWisId:self.wishId Success:^{
+                [CDAutoHideMessageHUD showMessage:@"心愿完成"];
+                [weakSelf getDataFromDatabase];
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+        }];
+    }
+    return _finishBtn;
 }
 
 - (SSJWishProgressView *)wishProgressView {
@@ -357,7 +452,6 @@
         _bottomView = [[UIView alloc] init];
         [_bottomView addSubview:self.saveBtn];
         [_bottomView addSubview:self.withdrawBtn];
-//        [_bottomView addSubview:self.restartBtn];
     }
     return _bottomView;
 }
@@ -372,6 +466,7 @@
             @strongify(self);
             SSJWishWithdrawMoneyViewController *saveVC = [[SSJWishWithdrawMoneyViewController alloc] init];
             saveVC.wishModel = [self.wishModel copy];
+            saveVC.saveMoneyType = SSJSaveImgTypeCustom;
             [SSJVisibalController().navigationController pushViewController:saveVC animated:YES];
         }];
     }
@@ -397,14 +492,14 @@
     return _withdrawBtn;
 }
 
-//- (UIButton *)restartBtn {
-//    if (!_restartBtn) {
-//        _restartBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 44)];
-//        _restartBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-//        [_restartBtn setTitle:@"重新开启" forState:UIControlStateNormal];
-//    }
-//    return _restartBtn;
-//}
+- (SSJMakeWishGuideView *)guideView {
+    if (!_guideView) {
+        _guideView = [[SSJMakeWishGuideView alloc] initWithFrame:CGRectMake(0, 0, 260, 190)];
+        _guideView.image = @"wish_guite_mg";
+        _guideView.title = @"愿望已经开启，快去存一笔，一步步实现愿望吧～";
+    }
+    return _guideView;
+}
 
 - (UIView *)tableHeaderView {
     if (!_tableHeaderView) {

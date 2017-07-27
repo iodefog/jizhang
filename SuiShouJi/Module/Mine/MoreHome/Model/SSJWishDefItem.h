@@ -10,7 +10,7 @@
 
 @interface SSJWishDefItem : SSJBaseCellItem
 
-//@property (nonatomic, assign) NSInteger wishType;
+@property (nonatomic, assign) NSInteger wishType;
 
 @property (nonatomic, copy) NSString *wishName;
 

@@ -7,8 +7,8 @@
 //
 
 #import "SSJWishProgressView.h"
-#import "SSJListMenu.h"
 
+static NSTimeInterval animationTime = 1;
 @interface SSJWishProgressView ()
 
 @property(nonatomic, strong, nullable) UIColor *progressTintColor;
@@ -43,13 +43,19 @@
     self.progressBtn.centerX = self.progressView.width;
 }
 - (void)setProgress:(float)progress {
-    _progress = progress;
     if (progress > 1) {
         progress = 1;
     }
-    self.progressView.width = progress * self.width;
+    _progress = progress;
     [self.progressBtn setTitle:[NSString stringWithFormat:@"%.f%@",progress * 100,@"%"] forState:UIControlStateNormal];
-    self.progressBtn.centerX = self.progressView.width;
+    
+    @weakify(self);
+    [UIView animateWithDuration:progress * animationTime animations:^{
+        @strongify(self);
+        self.progressView.width = progress * self.width;
+        self.progressBtn.centerX = self.progressView.width;
+    }];
+
 }
 
 - (void)setProgressColor:(UIColor *)progressColor {

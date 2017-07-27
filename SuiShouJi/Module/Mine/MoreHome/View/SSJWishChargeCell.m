@@ -105,11 +105,11 @@
             if (!item.chargeId.length) {
                 self.wishNameL.text = [NSString stringWithFormat:@"%@",item.money];
             } else {
-                self.wishNameL.text = [NSString stringWithFormat:@"+%@",item.money];
+                self.wishNameL.text = [NSString stringWithFormat:@"+%.2lf",[item.money doubleValue]];
             }
             
         } else if(item.itype == SSJWishChargeBillTypeWithdraw) {
-            self.wishNameL.text = [NSString stringWithFormat:@"-%@",item.money];
+            self.wishNameL.text = [NSString stringWithFormat:@"-%.2lf",[item.money doubleValue]];
         }
         
         self.wishMemoL.text = item.memo.length?item.memo:@"";

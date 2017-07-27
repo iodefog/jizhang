@@ -8,8 +8,16 @@
 
 #import "SSJBaseViewController.h"
 @class SSJWishModel;
+typedef enum : NSUInteger {
+    SSJSaveMoneyTypeNormal,
+    SSJSaveMoneyTypeList
+} SSJSaveMoneyType;
 
 @interface SSJWishWithdrawMoneyViewController : SSJBaseViewController
 
 @property (nonatomic, strong) SSJWishModel *wishModel;
+
+/**进入页面类型*/
+@property (nonatomic, assign) SSJSaveMoneyType saveMoneyType;
+
 @end
