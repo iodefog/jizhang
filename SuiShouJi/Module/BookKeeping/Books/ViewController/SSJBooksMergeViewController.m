@@ -12,7 +12,7 @@
 #import "SSJBooksMergeHelper.h"
 
 #import "SSJBooksMergeProgressButton.h"
-#import "SSJBooksView.h"
+#import "SSJBooksTransferSelectView.h"
 
 @interface SSJBooksMergeViewController ()
 
@@ -20,13 +20,9 @@
 
 @property (nonatomic, strong) SSJBooksMergeProgressButton *mergeButton;
 
-@property (nonatomic, strong) UIView *transferOutBookBackView;
+@property (nonatomic, strong) SSJBooksTransferSelectView *transferOutBookBackView;
 
-@property (nonatomic, strong) UIView *transferInBookBackView;
-
-@property (nonatomic, strong) SSJBooksView *transferInBookView;
-
-@property (nonatomic, strong) SSJBooksView *transferOutBookView;
+@property (nonatomic, strong) SSJBooksTransferSelectView *transferInBookBackView;
 
 @property (nonatomic, strong) UIImageView *transferImage;
 
@@ -54,10 +50,6 @@
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH];
     [self.mm_drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeNone];
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
-}
-
-- (void)viewDidLayoutSubviews {
-    [super viewDidLayoutSubviews];
 }
 
 - (void)updateViewConstraints {
@@ -103,17 +95,17 @@
     return _mergeHelper;
 }
 
-- (UIView *)transferInBookBackView {
+- (SSJBooksTransferSelectView *)transferInBookBackView {
     if (!_transferInBookBackView) {
-        _transferInBookBackView = [[UIView alloc] init];
+        _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
         _transferInBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _transferInBookBackView;
 }
 
-- (UIView *)transferOutBookBackView {
+- (SSJBooksTransferSelectView *)transferOutBookBackView {
     if (!_transferOutBookBackView) {
-        _transferOutBookBackView = [[UIView alloc] init];
+        _transferOutBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferOut];
         _transferOutBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _transferOutBookBackView;
@@ -137,20 +129,6 @@
 }
 
 
-- (SSJBooksView *)transferInBookView {
-    if (!_transferInBookView) {
-        _transferInBookView = [[SSJBooksView alloc] init];
-    }
-    return _transferInBookView;
-}
-
-- (SSJBooksView *)transferOutBookView {
-    if (!_transferOutBookView) {
-        _transferOutBookView = [[SSJBooksView alloc] init];
-    }
-    return _transferOutBookView;
-}
-
 - (UIScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc] init];
@@ -166,10 +144,11 @@
     
     NSNumber *chargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferOutBooksItem.booksId];
     
-//    self.chargeCountLab.text = [NSString stringWithFormat:@"%@条",chargeCount];
+    self.transferOutBookBackView.chargeCount = chargeCount;
     
-//    self.bookTypeLab.text = [NSString stringWithFormat:@"%@",[self.transferOutBooksItem parentName]];
+    self.transferOutBookBackView.booksTypeItem = self.transferOutBooksItem;
     
+    self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
     
 }
 

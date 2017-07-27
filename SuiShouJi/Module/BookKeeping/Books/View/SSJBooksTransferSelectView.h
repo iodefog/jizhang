@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJBooksItem.h"
+
 
 @interface SSJBooksTransferSelectView : UIView
 
@@ -15,5 +17,11 @@ typedef NS_ENUM(NSInteger, SSJBooksTransferViewType) {
     SSJBooksTransferViewTypeTransferOut = 0,
     SSJBooksTransferViewTypeTransferIn = 1
 };
+
+@property (nonatomic, strong) __kindof SSJBaseCellItem <SSJBooksItemProtocol> *booksTypeItem;
+
+@property (nonatomic, strong) NSNumber *chargeCount;
+
+- (instancetype)initWithFrame:(CGRect)frame type:(SSJBooksTransferViewType)type;
 
 @end

@@ -48,13 +48,13 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.type = type;
-        if (type == SSJBooksTransferViewTypeTransferIn) {
+        if (type == SSJBooksTransferViewTypeTransferOut) {
             [self addSubview:self.transferInBookView];
             [self addSubview:self.chargeCountTitleLab];
             [self addSubview:self.chargeCountLab];
             [self addSubview:self.bookTypeTitleLab];
             [self addSubview:self.bookTypeLab];
-        } else if (type == SSJBooksTransferViewTypeTransferOut) {
+        } else if (type == SSJBooksTransferViewTypeTransferIn) {
             [self addSubview:self.transferInButton];
             [self.transferInButton addSubview:self.transferInLab];
             [self.transferInButton addSubview:self.transferInNameLab];            
@@ -200,6 +200,33 @@
     return _arrowImage;
 }
 
+- (UIButton *)transferInButton {
+    if (!_transferInButton) {
+        _transferInButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_transferInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
+        [_transferInButton ssj_setBorderWidth:1];
+        [_transferInButton ssj_setBorderStyle:SSJBorderStyleTop];
+    }
+    return _transferInButton;
+}
+
+- (void)setBooksTypeItem:(__kindof SSJBaseCellItem<SSJBooksItemProtocol> *)booksTypeItem {
+    _booksTypeItem = booksTypeItem;
+    if (self.type == SSJBooksTransferViewTypeTransferOut) {
+        self.bookTypeLab.text = [_booksTypeItem parentName];
+        self.transferOutBookView.booksTypeItem = _booksTypeItem;
+    } else if (self.type == SSJBooksTransferViewTypeTransferIn) {
+        self.transferInBookView.booksTypeItem = _booksTypeItem;
+        self.transferInNameLab.text = _booksTypeItem.booksName;
+    }
+    
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)setChargeCount:(NSNumber *)chargeCount {
+    _chargeCount = chargeCount;
+    self.chargeCountLab.text = [NSString stringWithFormat:@"%@条",chargeCount];
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

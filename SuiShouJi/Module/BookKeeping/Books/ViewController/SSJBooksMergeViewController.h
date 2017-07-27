@@ -15,4 +15,5 @@
 
 @property (nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *transferOutBooksItem;
 
+
 @end
