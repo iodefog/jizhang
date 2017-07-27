@@ -249,10 +249,14 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
         _dateSelectView.datePickerMode = SSJDatePickerModeDate;
         __weak typeof(self) weakSelf = self;
         _dateSelectView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *selecteDate){
-//            if ([selecteDate isEarlierThan:[NSDate dateWithString:weakSelf.wishModel.startDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"]]) {
-//                [CDAutoHideMessageHUD showMessage:@"不能早于心愿开始日期哦"];
-//                return NO;
-//            }
+            
+            NSString *finalDateStr = [weakSelf.wishModel.startDate ssj_dateStringFromFormat:@"yyyy-MM-dd HH:mm:ss.SSS" toFormat:@"yyyy-MM-dd"];
+            NSDate *finalDate = [NSDate dateWithString:finalDateStr formatString:@"yyyy-MM-dd"];
+            if ([selecteDate isEarlierThan:finalDate]) {
+                [CDAutoHideMessageHUD showMessage:@"不能早于心愿开始日期哦"];
+                return NO;
+            }
+            
             if ([selecteDate isLaterThan:[NSDate date]]) {
                 [CDAutoHideMessageHUD showMessage:@"不能晚于当前日期哦"];
                 return NO;

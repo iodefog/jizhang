@@ -90,7 +90,7 @@
                               failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_wish set status = 2, cwritedate = ? where cuserid = ? and wishid = ?",writeDateStr,SSJUSERID(),wishModel.wishId]) {
+        if (![db executeUpdate:@"update bk_wish set status = 2, cwritedate = ? ,enddate = ? where cuserid = ? and wishid = ?",writeDateStr,writeDateStr,SSJUSERID(),wishModel.wishId]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -219,6 +219,35 @@
      }];
 }
 
+
+/**
+ 根据心愿ID完成某个心愿
+ 
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)finishWishWithWisId:(NSString *)wishId
+                    Success:(void(^)())success
+                    failure:(void(^)(NSError *error))failure {
+    NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 1,enddate = ? where wishid = ? and cuserid = ?",date,wishId,SSJUSERID()]) {
+            SSJDispatch_main_async_safe(^{
+                failure([db lastError]);
+            });
+            return ;
+        }
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+        
+    }];
+}
+
 /**
  根据心愿ID删除某个心愿
  
@@ -230,7 +259,7 @@
                     Success:(void(^)())success
                     failure:(void(^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeUpdate:@"update bk_wish set operatortype = 2 where cwishid = ? and cuserid = ?",wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 2 where wishid = ? and cuserid = ?",wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -256,8 +285,8 @@
                        Success:(void(^)())success
                        failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
-        
-        if (![db executeUpdate:@"update bk_wish set status = 2 where cwishid = ? and cuserid = ?",wishId,SSJUSERID()]) {
+        NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 2,enddate = ? where wishid = ? and cuserid = ?",date,wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });

@@ -389,12 +389,18 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         @weakify(self);
         [[_makeWishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            
+            if (self.wishNameTextF.text.length > 20) {
+                [CDAutoHideMessageHUD showMessage:@"心愿名称不能超过20个字哦"];
+                return ;
+            }
            //保存心愿
             self.wishModel.wishName = self.wishNameTextF.text;
             self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
+                wishProVC.showWishGuide = YES;
                 wishProVC.wishId = self.wishModel.wishId;
                 [self.navigationController pushViewController:wishProVC animated:YES];
                 self.wishModel = nil;
