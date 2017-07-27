@@ -12,9 +12,11 @@
 #import "SSJCaterotyMenuSelectionView.h"
 
 #import "SSJBillTypeCategoryModel.h"
+#import "SSJBillTypeLibraryModel.h"
+#import "SSJBillTypeManager.h"
 #import "SSJCategoryListHelper.h"
-#import "SSJCreateOrEditBillTypeHelper.h"
 #import "YYKeyboardManager.h"
+#import "SSJBooksTypeStore.h"
 
 static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
@@ -30,9 +32,11 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeColorSelectionView *colorSelectionView;
 
+@property (nonatomic) SSJBooksType booksType;
+
 @property (nonatomic, strong) NSArray<NSNumber *> *booksTypes;
 
-@property (nonatomic, strong) NSMutableDictionary<id<NSCopying>, NSArray<SSJBillTypeCategoryModel *> *> *catgegoriesInfo;
+@property (nonatomic, strong) SSJBillTypeLibraryModel *libraryModel;
 
 @end
 
@@ -41,8 +45,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.catgegoriesInfo = [NSMutableDictionary dictionary];
         [[YYKeyboardManager defaultManager] addObserver:self];
+        self.booksType = -1;
+        self.libraryModel = [[SSJBillTypeLibraryModel alloc] init];
     }
     return self;
 }
@@ -54,6 +59,15 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [self.view addSubview:self.colorSelectionView];
     
     [self loadColors];
+    
+    [[[self loadBooksTypeIfNeeded] then:^RACSignal *{
+        return [self loadSelectedIndexPath];
+    }] subscribeNext:^(SSJCaterotyMenuSelectionViewIndexPath *indexPath) {
+        [self.bodyView reloadAllData];
+        self.bodyView.selectedIndexPath = indexPath;
+    } error:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -128,19 +142,20 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
-    return [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    SSJBillTypeModel *model = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    return [SSJCaterotyMenuSelectionCellItem itemWithTitle:model.name icon:[UIImage imageNamed:model.icon] color:[UIColor ssj_colorWithHex:model.color]];
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDelegate
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectMenuAtIndex:(NSInteger)menuIndex {
-    
+    self.booksType = [[self.booksTypes objectAtIndex:menuIndex] integerValue];
 }
 
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
-    SSJCaterotyMenuSelectionCellItem *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
-    self.topView.billTypeIcon = item.icon;
-    self.topView.billTypeName = item.title;
+    SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    self.topView.billTypeIcon = [UIImage imageNamed:item.icon];
+    self.topView.billTypeName = item.name;
 }
 
 #pragma mark - YYKeyboardObserver
@@ -161,29 +176,67 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (NSArray<SSJBillTypeCategoryModel *> *)currentCategories {
     if (self.expended) {
-        NSNumber *booksTypeValue = [self.booksTypes ssj_safeObjectAtIndex:self.bodyView.selectedIndexPath.menuIndex];
-        NSArray *categories = self.catgegoriesInfo[booksTypeValue];
-        if (categories) {
-            return categories;
-        }
-        categories = [SSJCreateOrEditBillTypeHelper expenseCategoriesWithBooksType:[booksTypeValue integerValue]];
-        self.catgegoriesInfo[booksTypeValue] = categories;
-        return categories;
+        return [self.libraryModel expenseCategoriesWithBooksType:self.booksType];
     } else {
-        NSArray *categories = self.catgegoriesInfo[kCatgegoriesInfoIncomeKey];
-        if (categories) {
-            return categories;
-        }
-        categories = [SSJCreateOrEditBillTypeHelper incomeCategories];
-        self.catgegoriesInfo[kCatgegoriesInfoIncomeKey] = categories;
-        return categories;
+        return [self.libraryModel incomeCategories];
     }
+}
+
+- (RACSignal *)loadBooksTypeIfNeeded {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.expended) {
+            [SSJBooksTypeStore queryBooksItemWithID:self.booksId success:^(id<SSJBooksItemProtocol> booksItem) {
+                self.booksType = booksItem.booksParent;
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
+            }];
+        } else {
+            [subscriber sendCompleted];
+        }
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadSelectedIndexPath {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSInteger menuIndex = [self.booksTypes indexOfObject:@(self.booksType)];
+        if (self.icon.length) {
+            __block SSJCaterotyMenuSelectionViewIndexPath *indexPath = nil;
+            [[self currentCategories] enumerateObjectsUsingBlock:^(SSJBillTypeCategoryModel * _Nonnull categoryModel, NSUInteger categoryIdx, BOOL * _Nonnull stop) {
+                [categoryModel.items enumerateObjectsUsingBlock:^(SSJBillTypeModel * _Nonnull billModel, NSUInteger itemIdx, BOOL * _Nonnull stop) {
+                    if ([billModel.icon isEqualToString:self.icon]) {
+                        indexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:categoryIdx itemIndex:itemIdx];
+                        *stop = YES;
+                    }
+                }];
+                
+                if (indexPath) {
+                    *stop = YES;
+                }
+            }];
+            
+            if (!indexPath) {
+                indexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:-1 itemIndex:-1];
+            }
+            
+            [subscriber sendNext:indexPath];
+            [subscriber sendCompleted];
+        } else {
+            [subscriber sendNext:[SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:0 itemIndex:0]];
+            [subscriber sendCompleted];
+        }
+        return nil;
+    }];
 }
 
 #pragma mark - Lazyloading
 - (SSJCreateOrEditBillTypeTopView *)topView {
     if (!_topView) {
         _topView = [[SSJCreateOrEditBillTypeTopView alloc] init];
+        _topView.billTypeColor = [UIColor ssj_colorWithHex:self.color];
+        _topView.billTypeIcon = [UIImage imageNamed:self.icon];
+        _topView.billTypeName = self.name;
         __weak typeof(self) wself = self;
         _topView.tapColorAction = ^(SSJCreateOrEditBillTypeTopView *view){
             if (view.arrowDown) {
@@ -198,10 +251,10 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (SSJCaterotyMenuSelectionView *)bodyView {
     if (!_bodyView) {
-        _bodyView = [[SSJCaterotyMenuSelectionView alloc] init];
+        _bodyView = [[SSJCaterotyMenuSelectionView alloc] initWithFrame:CGRectZero style:(self.expended ? SSJCaterotyMenuSelectionViewMenuLeft : SSJCaterotyMenuSelectionViewNoMenu)];
         _bodyView.dataSource = self;
         _bodyView.delegate = self;
-        [_bodyView setSelectedIndexPath:[SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:0 categoryIndex:-1 itemIndex:-1]];
+        _bodyView.numberOfItemPerRow = self.expended ? 4 : 5;
     }
     return _bodyView;
 }

@@ -27,6 +27,17 @@ typedef enum : NSUInteger {
 + (void)queryCurrentBooksItemWithSuccess:(void(^)(id<SSJBooksItemProtocol> booksItem))success
                              failure:(void (^)(NSError *error))failure;
 
+/**
+ 查询账本详情
+
+ @param booksID 账本ID
+ @param success 查询成功的回调
+ @param failure 查询失败的回调
+ */
++ (void)queryBooksItemWithID:(NSString *)booksID
+                     success:(void(^)(id<SSJBooksItemProtocol> booksItem))success
+                     failure:(void (^)(NSError *error))failure;
+
 #pragma mark - 个人账本
 /**
  *  查询账本列表(个人账本)

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class SSJUserBillTypeTable;
 @class SSJRecordMakingBillTypeSelectionCellItem;
 @class SSJRecordMakingCategoryItem;
 @class SSJBillModel;
@@ -140,6 +141,7 @@
                                  booksId:(NSString *)booksId
                                  success:(void(^)(SSJBillModel *model))success
                                  failure:(void(^)(NSError *))failure;
+
 
 /**
  *  自定义支出类型颜色
