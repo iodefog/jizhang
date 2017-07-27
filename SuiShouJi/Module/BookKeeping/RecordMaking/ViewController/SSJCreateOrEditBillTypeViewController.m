@@ -77,6 +77,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
         self.icon = item.icon;
         self.name = item.name;
+        if (!self.color) {
+            self.color = item.color;
+        }
     }];
 }
 
@@ -167,6 +170,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
     self.icon = item.icon;
     self.name = item.name;
+    if (self.colorSelectionView.selectedIndex == NSNotFound) {
+        self.color = item.color;
+    }
 }
 
 #pragma mark - YYKeyboardObserver
@@ -201,10 +207,6 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
     }
     self.colorSelectionView.colors = colors;
-    
-    if (!self.color) {
-        self.color = [self.colors firstObject];
-    }
     self.colorSelectionView.selectedIndex = [self.colors indexOfObject:self.color];
 }
 

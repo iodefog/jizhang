@@ -152,6 +152,7 @@ static const NSTimeInterval kDuration = 0.25;
     _billTypeColor = billTypeColor;
     [UIView animateWithDuration:(animated ? kDuration : 0) animations:^{
         self.colorControl.colorView.backgroundColor = billTypeColor;
+        self.iconView.tintColor = billTypeColor;
     }];
 }
 
@@ -162,7 +163,7 @@ static const NSTimeInterval kDuration = 0.25;
 - (void)setBillTypeIcon:(UIImage *)billTypeIcon animated:(BOOL)animated {
     _billTypeIcon = billTypeIcon;
     [UIView transitionWithView:self duration:(animated ? kDuration : 0) options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        self.iconView.image = billTypeIcon;
+        self.iconView.image = [billTypeIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     } completion:NULL];
     [self setNeedsUpdateConstraints];
 }

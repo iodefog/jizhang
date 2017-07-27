@@ -88,7 +88,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
         self.hidden = YES;
-        self.selectedIndex = -1;
+        _selectedIndex = NSNotFound;
         
         [self addSubview:self.backView];
         [self addSubview:self.collectionView];
@@ -122,7 +122,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
-    if (selectedIndex >= 0 && selectedIndex >= self.colors.count) {
+    if (selectedIndex >= self.colors.count) {
         SSJPRINT(@"selectedIndex必须小于self.colors.count");
         return;
     }
@@ -132,12 +132,12 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     }
     
     _selectedIndex = selectedIndex;
-    if (selectedIndex >= 0) {
-        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
-    } else {
+    if (selectedIndex == NSNotFound) {
         for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
             [self.collectionView deselectItemAtIndexPath:indexPath animated:NO];
         }
+    } else {
+        [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndex inSection:0] animated:YES scrollPosition:UICollectionViewScrollPositionNone];
     }
 }
 
