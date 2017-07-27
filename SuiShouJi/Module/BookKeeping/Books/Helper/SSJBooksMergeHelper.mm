@@ -131,7 +131,7 @@
     return chargeCount;
 }
 
-- (NSArray *)getAllBooksItem {
+- (NSArray *)getAllBooksItemWithExceptionId:(NSString *)exceptionId {
     NSString *userId = SSJUSERID();
     
     NSMutableArray *booksItems = [NSMutableArray arrayWithCapacity:0];
@@ -149,7 +149,9 @@
         colorItem.startColor = startColor;
         colorItem.endColor = endColor;
         item.booksColor = colorItem;
-        [booksItems addObject:item];
+        if (![item.booksId isEqualToString:exceptionId]) {
+            [booksItems addObject:item];
+        }
     }
     
     NSArray *shareBooksArr = [self.db getObjectsOfClass:SSJShareBooksTable.class fromTable:@"BK_SHARE_BOOKS" where:SSJBooksTypeTable.booksId.in([self.db getOneDistinctColumnOnResult:SSJShareBooksMemberTable.booksId fromTable:@""
@@ -167,7 +169,9 @@
         colorItem.startColor = startColor;
         colorItem.endColor = endColor;
         item.booksColor = colorItem;
-        [booksItems addObject:item];
+        if (![item.booksId isEqualToString:exceptionId]) {
+            [booksItems addObject:item];
+        }
     }
 
     return booksItems;

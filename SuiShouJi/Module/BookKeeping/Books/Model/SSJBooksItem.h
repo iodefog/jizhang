@@ -32,5 +32,7 @@
 
 - (NSString *)parentIcon;
 
+- (NSString *)parentName;
+
 @end
 

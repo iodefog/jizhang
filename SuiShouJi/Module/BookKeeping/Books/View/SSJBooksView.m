@@ -9,6 +9,7 @@
 #import "SSJBooksView.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
+#import <YYText/YYText.h>
 
 static const CGFloat kBooksCornerRadius = 10.f;
 
@@ -16,9 +17,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
 
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
-@property (nonatomic, strong) CAShapeLayer *backLayer;
-
-@property (nonatomic, strong) UILabel *nameLab;
+@property (nonatomic, strong) YYLabel *nameLab;
 
 @end
 
@@ -29,12 +28,12 @@ static const CGFloat kBooksCornerRadius = 10.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self.layer addSublayer:self.gradientLayer];
-        [self.layer addSublayer:self.backLayer];
         [self addSubview:self.nameLab];
         [self setNeedsUpdateConstraints];
         self.layer.cornerRadius = kBooksCornerRadius;
         self.layer.masksToBounds = YES;
+        self.backgroundColor = [UIColor clearColor];
+        self.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
         [self clipsToBounds];
     }
     return self;
@@ -43,52 +42,32 @@ static const CGFloat kBooksCornerRadius = 10.f;
 - (void)setNeedsUpdateConstraints {
     [super setNeedsUpdateConstraints];
     [self.nameLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(-11);
+        make.right.mas_equalTo(self.mas_right).offset(-16);
         make.centerY.mas_equalTo(self);
-        make.width.mas_equalTo(20);
     }];
     
 }
 
 #pragma mark - Setter
-- (void)setBooksTypeItem:(__kindof SSJBaseCellItem *)booksTypeItem {
+- (void)setBooksTypeItem:(__kindof SSJBaseCellItem <SSJBooksItemProtocol> *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
-    if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
-        SSJBooksTypeItem *privateBookItem = (SSJBooksTypeItem *)booksTypeItem;
-        self.nameLab.text = privateBookItem.booksName;
-        
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:privateBookItem.booksColor.startColor].CGColor];
-        
-        if (!privateBookItem.booksId.length && [privateBookItem.booksName isEqualToString:@"添加账本"]) {
-            self.gradientLayer.hidden = YES;
-            self.backLayer.hidden = NO;
-            self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
-        } else {
-            self.gradientLayer.hidden = NO;
-            self.backLayer.hidden = YES;
-            self.nameLab.textColor = [UIColor whiteColor];
-        }
-        
-        [CATransaction commit];
-    } else if ([booksTypeItem isKindOfClass:[SSJShareBookItem class]]) {//共享账本
-        SSJShareBookItem *shareBookItem = (SSJShareBookItem *)booksTypeItem;
-        self.nameLab.text = shareBookItem.booksName;
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.startColor].CGColor];
-        if (!shareBookItem.booksId.length && [shareBookItem.booksName isEqualToString:@"添加账本"]) {
-            self.gradientLayer.hidden = YES;
-            self.backLayer.hidden = NO;
-            self.nameLab.textColor = [UIColor ssj_colorWithHex:@"666666"];
-        } else {
-            self.gradientLayer.hidden = NO;
-            self.backLayer.hidden = YES;
-            self.nameLab.textColor = [UIColor whiteColor];
-        }
-        [CATransaction commit];
+    self.nameLab.text = _booksTypeItem.booksName;
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    
+    if (!_booksTypeItem.booksId.length) {
+        self.gradientLayer.hidden = YES;
+        self.nameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        self.layer.borderWidth = 1;
+    } else {
+        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:_booksTypeItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:_booksTypeItem.booksColor.startColor].CGColor];
+        self.gradientLayer.hidden = NO;
+        self.nameLab.textColor = [UIColor whiteColor];
+        self.layer.borderWidth = 0;
     }
+    
+    [CATransaction commit];
 }
 
 
@@ -96,35 +75,20 @@ static const CGFloat kBooksCornerRadius = 10.f;
 #pragma mark - Lazy
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
-        CGRect itemRect = CGRectMake(0, 0, self.width, self.height);
         _gradientLayer = [CAGradientLayer layer];
-        _gradientLayer.frame = itemRect;
-        CAShapeLayer *sharpLayer = [CAShapeLayer layer];
-        sharpLayer.path = [UIBezierPath bezierPathWithRoundedRect:itemRect cornerRadius:kBooksCornerRadius].CGPath;
-        _gradientLayer.mask = sharpLayer;
+        _gradientLayer.frame = CGRectMake(0, 0, self.width, self.height);
+        _gradientLayer.cornerRadius = kBooksCornerRadius;
     }
     return _gradientLayer;
 }
 
-- (CAShapeLayer *)backLayer {
-    if (!_backLayer) {
-        CGRect itemRect = CGRectMake(0, 0, self.width, self.height);
-        _backLayer = [CAShapeLayer layer];
-        _backLayer.path = [UIBezierPath bezierPathWithRoundedRect:itemRect cornerRadius:kBooksCornerRadius].CGPath;
-        _backLayer.strokeColor = [UIColor ssj_colorWithHex:@"666666"].CGColor;
-        _backLayer.borderWidth = 1;
-        _backLayer.fillColor = [UIColor whiteColor].CGColor;
-    }
-    return _backLayer;
-}
 
-- (UILabel *)nameLab {
+- (YYLabel *)nameLab {
     if (!_nameLab) {
-        _nameLab = [[UILabel alloc] init];
-        _nameLab.backgroundColor = [UIColor clearColor];
-        _nameLab.numberOfLines = 0;
+        _nameLab = [[YYLabel alloc] init];
         _nameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _nameLab.textColor = [UIColor whiteColor];
+        _nameLab.verticalForm = YES;
     }
     return _nameLab;
 }

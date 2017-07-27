@@ -15,4 +15,8 @@
                             Success:(void(^)())success
                             failure:(void (^)(NSError *error))failure;
 
+- (NSArray *)getAllBooksItemWithExceptionId:(NSString *)exceptionId;
+
+- (NSNumber *)getChargeCountForBooksId:(NSString *)booksId;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJBooksItem.h"
 
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) void(^deleteHandler)();
 
 @property (nonatomic, copy) void(^transferHandler)();
+
+@property (nonatomic, strong) SSJBaseCellItem <SSJBooksItemProtocol> *booksItem;
 
 - (void)showWithBookCategory:(SSJBooksCategory)category;
 
