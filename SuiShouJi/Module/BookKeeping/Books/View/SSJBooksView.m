@@ -78,7 +78,6 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.endColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:shareBookItem.booksColor.startColor].CGColor];
-        
         if (!shareBookItem.booksId.length && [shareBookItem.booksName isEqualToString:@"添加账本"]) {
             self.gradientLayer.hidden = YES;
             self.backLayer.hidden = NO;
@@ -91,6 +90,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
         [CATransaction commit];
     }
 }
+
 
 
 #pragma mark - Lazy

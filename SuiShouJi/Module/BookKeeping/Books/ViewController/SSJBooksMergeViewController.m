@@ -14,10 +14,17 @@
 
 @property (nonatomic, strong) SSJBooksMergeProgressButton *mergeButton;
 
-@property (nonatomic, strong) UIView *transferInBookBackView;
-
 @property (nonatomic, strong) UIView *transferOutBookBackView;
 
+@property (nonatomic, strong) UIView *transferInBookBackView;
+
+@property (nonatomic, strong) UILabel *chargeCountTitleLab;
+
+@property (nonatomic, strong) UILabel *chargeCountLab;
+
+@property (nonatomic, strong) UILabel *bookTypeTitleLab;
+
+@property (nonatomic, strong) UILabel *bookTypeLab;
 
 @end
 

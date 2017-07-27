@@ -7,7 +7,12 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJBooksItem.h"
 
 @interface SSJBooksMergeViewController : SSJBaseViewController
+
+@property (nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *transferInBooksItem;
+
+@property (nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *transferOutBooksItem;
 
 @end
