@@ -160,8 +160,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
     SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
-    self.topView.billTypeIcon = [UIImage imageNamed:item.icon];
-    self.topView.billTypeName = item.name;
+    [self.topView setBillTypeIcon:[UIImage imageNamed:item.icon] animated:YES];
+    [self.topView setBillTypeName:item.name animated:YES];
 }
 
 #pragma mark - YYKeyboardObserver
@@ -272,9 +272,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         __weak typeof(self) wself = self;
         _colorSelectionView.selectColorAction = ^(SSJCreateOrEditBillTypeColorSelectionView *view) {
             [wself.topView setArrowDown:YES animated:YES];
-            [UIView animateWithDuration:0.25 animations:^{
-                wself.topView.billTypeColor = view.colors[view.selectedIndex];
-            }];
+            [wself.topView setBillTypeColor:view.colors[view.selectedIndex] animated:YES];
         };
     }
     return _colorSelectionView;

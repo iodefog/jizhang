@@ -10,6 +10,9 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
+
+static const NSTimeInterval kDuration = 0.25;
+
 #pragma mark - _SSJCreateOrEditBillTypeTopViewColorControl
 #pragma mark -
 @interface _SSJCreateOrEditBillTypeTopViewColorControl : UIControl
@@ -61,7 +64,7 @@
 
 - (void)setArrowDown:(BOOL)arrowDown animated:(BOOL)animated {
     _arrowDown = arrowDown;
-    [UIView animateWithDuration:(animated ? 0.25 : 0) animations:^{
+    [UIView animateWithDuration:(animated ? kDuration : 0) animations:^{
         self.arrowView.transform = CGAffineTransformMakeRotation(_arrowDown ? M_PI : 0);
     }];
 }
@@ -142,19 +145,37 @@
 }
 
 - (void)setBillTypeColor:(UIColor *)billTypeColor {
+    [self setBillTypeColor:billTypeColor animated:NO];
+}
+
+- (void)setBillTypeColor:(UIColor *)billTypeColor animated:(BOOL)animated {
     _billTypeColor = billTypeColor;
-    self.colorControl.colorView.backgroundColor = billTypeColor;
+    [UIView animateWithDuration:(animated ? kDuration : 0) animations:^{
+        self.colorControl.colorView.backgroundColor = billTypeColor;
+    }];
 }
 
 - (void)setBillTypeIcon:(UIImage *)billTypeIcon {
+    [self setBillTypeIcon:billTypeIcon animated:NO];
+}
+
+- (void)setBillTypeIcon:(UIImage *)billTypeIcon animated:(BOOL)animated {
     _billTypeIcon = billTypeIcon;
-    self.iconView.image = billTypeIcon;
+    [UIView transitionWithView:self duration:(animated ? kDuration : 0) options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        self.iconView.image = billTypeIcon;
+    } completion:NULL];
     [self setNeedsUpdateConstraints];
 }
 
 - (void)setBillTypeName:(NSString *)billTypeName {
+    [self setBillTypeName:billTypeName animated:NO];
+}
+
+- (void)setBillTypeName:(NSString *)billTypeName animated:(BOOL)animated {
     _billTypeName = billTypeName;
-    self.nameField.text = billTypeName;
+    [UIView transitionWithView:self duration:(animated ? kDuration : 0) options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        self.nameField.text = billTypeName;
+    } completion:NULL];
 }
 
 - (void)updateAppearanceAccordingToTheme {
