@@ -82,38 +82,43 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+}
+
 - (void)updateViewConstraints {
     [self.mergeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
         make.height.mas_equalTo(44);
         make.centerX.mas_equalTo(self.view);
         make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(57);
+        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
     }];
     
     [self.transferOutBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view.mas_top).offset(SSJ_NAVIBAR_BOTTOM);
+        make.top.mas_equalTo(self.scrollView.mas_top).offset(SSJ_NAVIBAR_BOTTOM);
         make.height.mas_equalTo(190);
-        make.width.mas_equalTo(self.view);
-        make.centerX.mas_equalTo(self.view);
+        make.width.mas_equalTo(self.scrollView);
+        make.centerX.mas_equalTo(self.scrollView);
     }];
     
     [self.transferInBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50);
         make.height.mas_equalTo(190);
-        make.width.mas_equalTo(self.view);
-        make.centerX.mas_equalTo(self.view);
+        make.width.mas_equalTo(self.scrollView);
+        make.centerX.mas_equalTo(self.scrollView);
     }];
     
     [self.transferInBookView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.transferInBookBackView.mas_top).offset(15);
         make.size.mas_equalTo(CGSizeMake(80, 110));
-        make.centerX.mas_equalTo(self.view);
+        make.centerX.mas_equalTo(self.scrollView);
     }];
     
     [self.transferOutBookView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.transferOutBookBackView.mas_top).offset(15);
         make.size.mas_equalTo(CGSizeMake(80, 110));
-        make.centerX.mas_equalTo(self.view);
+        make.centerX.mas_equalTo(self.scrollView);
     }];
     
     [self.chargeCountTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -140,10 +145,9 @@
     
     [self.transferInButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.transferInBookBackView.mas_bottom);
-        make.width.mas_equalTo(self.view);
+        make.width.mas_equalTo(self.scrollView);
         make.height.mas_equalTo(55);
-        make.right.mas_equalTo(self.view);
-        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
+        make.left.mas_equalTo(self.scrollView);
     }];
     
     [self.transferInLab mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -176,7 +180,7 @@
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
         make.left.equalTo(self.view);
-        make.top.equalTo(self.view).offset(SSJ_NAVIBAR_BOTTOM);
+        make.top.equalTo(self.view);
     }];
 
     [super updateViewConstraints];
