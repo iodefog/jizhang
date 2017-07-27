@@ -300,9 +300,21 @@
         }
         
     }];
-    
+}
 
-    
+
+/**
+ 根据心愿ID查询提醒信息
+ 
+ @param wishId 心愿id
+ @param success 成功
+ @param failure 失败
+ */
++ (void)queryWishRemindWithWishId:(NSString *)wishId Success:(void(^)(SSJReminderItem *remindItem))success
+                          failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        FMResultSet *result = [db executeQuery:@""];
+    }];
 }
 
 

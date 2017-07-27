@@ -72,4 +72,15 @@
  */
 + (BOOL)deleteReminderWithItem:(SSJReminderItem *)remindItem error:(NSError **)error;
 
+
+/**
+ *  删除心愿某个提醒
+ *
+ *  @param remindId 提醒的id
+ *  @param error
+ *
+ *  @return 是否删除成功
+ */
++ (BOOL)deleteWishReminderWithItem:(SSJReminderItem *)remindItem error:(NSError **)error;
+
 @end

@@ -20,6 +20,7 @@
         SSJWishDefItem *item = [[SSJWishDefItem alloc] init];
         item.wishName = [titleArr ssj_safeObjectAtIndex:i];
         item.wishMoney = [moneyArr ssj_safeObjectAtIndex:i];
+        item.wishType = i + 1;
         [defWishArr addObject:item];
     }
     return defWishArr;
