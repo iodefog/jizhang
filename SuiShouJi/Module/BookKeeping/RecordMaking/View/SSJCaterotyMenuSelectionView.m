@@ -9,6 +9,8 @@
 #import "SSJCaterotyMenuSelectionView.h"
 #import "SSJBaseTableViewCell.h"
 
+static const NSTimeInterval kDuration = 0.25;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSArray (SSJCaterotyMenuSelectionView)
@@ -109,13 +111,11 @@
     [super updateConstraints];
 }
 
-- (void)setSelected:(BOOL)selected {
-    [super setSelected:selected];
-}
-
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-    self.backgroundColor = selected ? [UIColor clearColor] : SSJ_MAIN_BACKGROUND_COLOR;
+    [UIView transitionWithView:self.contentView duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self updateAppearanceAccordingToTheme];
+    } completion:NULL];
 }
 
 - (UILabel *)titleLab {
@@ -215,11 +215,11 @@ static const CGFloat kBorderRadius = 20;
 - (void)updateConstraints {
     [self.icon mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.and.centerX.mas_equalTo(self.container).offset(0);
-        make.size.mas_equalTo(self.icon.image.size);
+        make.size.mas_equalTo(CGSizeMake(24, 24));
     }];
     
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.icon.mas_bottom).offset(5);
+        make.top.mas_equalTo(self.icon.mas_bottom).offset(10);
         make.bottom.and.centerX.mas_equalTo(self.container).offset(0);
     }];
     
@@ -236,7 +236,7 @@ static const CGFloat kBorderRadius = 20;
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:kDuration animations:^{
         self.borderView.alpha = selected ? 1 : 0;
     }];
 }
@@ -627,7 +627,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     self.selectedIndexPath.menuIndex = indexPath.row;
     self.selectedIndexPath.categoryIndex = -1;
     self.selectedIndexPath.itemIndex = -1;
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:kDuration animations:^{
         [self updateSubscriptLineConstraint];
         [self layoutIfNeeded];
     } completion:^(BOOL finished) {
