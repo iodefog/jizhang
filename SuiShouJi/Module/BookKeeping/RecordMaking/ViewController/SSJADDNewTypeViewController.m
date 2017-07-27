@@ -204,8 +204,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
         }
         
         [SSJCategoryListHelper querySameNameCategoryWithName:name
+                                             exceptForBillID:nil
                                                      booksId:self.booksId
-                                             incomeOrExpence:self.incomeOrExpence
+                                                    expended:self.incomeOrExpence
                                                      success:^(SSJBillModel *model) {
             if (model) {
                 if (model.operatorType == 2) {
@@ -595,8 +596,7 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
                                           image:image
                                           order:order
                                         booksId:self.booksId
-                                       billType:self.incomeOrExpence
-                                        Success:^(NSString *categoryId) {
+                                        success:^(NSString *categoryId) {
                                             
         [self.navigationController popViewControllerAnimated:YES];
         if (self.addNewCategoryAction) {

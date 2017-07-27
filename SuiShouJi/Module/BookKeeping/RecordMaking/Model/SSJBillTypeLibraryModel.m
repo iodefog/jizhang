@@ -125,6 +125,7 @@
                                                                                    SSJBillTypeModel(@"2008")]]];
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"人情收入" items:@[SSJBillTypeModel(@"2007"),
                                                                                    SSJBillTypeModel(@"2021"),
+                                                                                   SSJBillTypeModel(@"2005"),
                                                                                    SSJBillTypeModel(@"2012"),
                                                                                    SSJBillTypeModel(@"2051")]]];
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"生意收入" items:@[SSJBillTypeModel(@"2054"),

@@ -1025,8 +1025,13 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];*/
         
         SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
+        addBillTypeVC.title = @"添加类别图标";
+        addBillTypeVC.created = YES;
         addBillTypeVC.expended = wself.customNaviBar.selectedBillType;
         addBillTypeVC.booksId = wself.item.booksId;
+        addBillTypeVC.addNewCategoryAction = ^(NSString * _Nonnull billID) {
+            wself.addedBillId = billID;
+        };
         [wself.navigationController pushViewController:addBillTypeVC animated:YES];
     };
     

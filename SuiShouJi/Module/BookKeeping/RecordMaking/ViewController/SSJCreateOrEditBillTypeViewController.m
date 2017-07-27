@@ -13,10 +13,13 @@
 
 #import "SSJBillTypeCategoryModel.h"
 #import "SSJBillTypeLibraryModel.h"
+#import "SSJBillModel.h"
+
 #import "SSJBillTypeManager.h"
 #import "SSJCategoryListHelper.h"
 #import "YYKeyboardManager.h"
 #import "SSJBooksTypeStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
@@ -38,6 +41,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 @property (nonatomic, strong) SSJBillTypeLibraryModel *libraryModel;
 
+@property (nonatomic, strong) NSArray<NSString *> *colors;
+
 @end
 
 @implementation SSJCreateOrEditBillTypeViewController
@@ -48,6 +53,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         [[YYKeyboardManager defaultManager] addObserver:self];
         self.booksType = -1;
         self.libraryModel = [[SSJBillTypeLibraryModel alloc] init];
+        self.colors = [SSJCategoryListHelper billTypeLibraryColors];
     }
     return self;
 }
@@ -57,6 +63,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [self.view addSubview:self.bodyView];
     [self.view addSubview:self.topView];
     [self.view addSubview:self.colorSelectionView];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
     
     [self loadColors];
     
@@ -173,12 +181,12 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 #pragma mark - Private
 - (void)loadColors {
     NSMutableArray *colors = [NSMutableArray array];
-    for (NSString *colorValue in [SSJCategoryListHelper payOutColors]) {
+    for (NSString *colorValue in self.colors) {
         [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
     }
     self.colorSelectionView.colors = colors;
-    self.colorSelectionView.selectedIndex = 0;
-    self.topView.billTypeColor =  [colors firstObject];
+    self.colorSelectionView.selectedIndex = self.color ? [self.colors indexOfObject:self.color] : 0;
+    self.topView.billTypeColor = [colors firstObject];
 }
 
 - (NSArray<SSJBillTypeCategoryModel *> *)currentCategories {
@@ -234,6 +242,77 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
             [subscriber sendCompleted];
         }
         return nil;
+    }];
+}
+
+- (void)doneAction {
+    if (self.topView.billTypeName.length == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
+        return;
+    }
+    
+    if (self.topView.billTypeName.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+        return;
+    }
+    
+    SSJBillTypeCategoryModel *category = [[self currentCategories] ssj_safeObjectAtIndex:self.bodyView.selectedIndexPath.categoryIndex];
+    SSJBillTypeModel *billModel = [category.items ssj_safeObjectAtIndex:self.bodyView.selectedIndexPath.itemIndex];
+    NSString *image = billModel.icon;
+    NSString *name = self.topView.billTypeName;
+    NSString *color = [self.colors ssj_safeObjectAtIndex:self.colorSelectionView.selectedIndex];
+    
+    [SSJCategoryListHelper querySameNameCategoryWithName:name exceptForBillID:self.billId booksId:self.booksId expended:self.expended success:^(SSJBillModel *model) {
+        if (model && model.operatorType != 2) {
+            // 有同名称类别，不支持新建／修改
+            [CDAutoHideMessageHUD showMessage:@"已有同名称类别，换个名称吧"];
+        } else if (model && model.operatorType == 2 && self.created) {
+            // 恢复已删除的类别
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"该类别名称曾经使用过，是否将之前的流水合并过来？" action:[SSJAlertViewAction actionWithTitle:@"不合并" handler:^(SSJAlertViewAction *action) {
+                [self addNewCategoryWithName:name image:image color:color];
+            }], [SSJAlertViewAction actionWithTitle:@"合并" handler:^(SSJAlertViewAction *action) {
+                int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithType:model.type booksId:self.booksId] + 1;
+                [self updateBillTypeWithID:model.ID
+                                      name:model.name
+                                     color:color
+                                     image:image
+                                     order:order];
+            }], nil];
+        } else if (self.created) {
+            [self addNewCategoryWithName:name image:image color:color];
+        } else {
+            [self updateBillTypeWithID:self.billId
+                                  name:name
+                                 color:color
+                                 image:image
+                                 order:SSJImmovableOrder];
+        }
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
+- (void)addNewCategoryWithName:(NSString *)name image:(NSString *)image color:(NSString *)color {
+    [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:self.expended name:name icon:image color:color booksId:self.booksId success:^(NSString *categoryId){
+        [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        if (self.addNewCategoryAction) {
+            self.addNewCategoryAction(categoryId);
+        }
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
+- (void)updateBillTypeWithID:(NSString *)ID name:(NSString *)name color:(NSString *)color image:(NSString *)image order:(int)order {
+    [SSJCategoryListHelper updateCategoryWithID:ID name:name color:color image:image order:order booksId:self.booksId success:^(NSString *categoryId) {
+        [self.navigationController popViewControllerAnimated:YES];
+        if (self.addNewCategoryAction) {
+            self.addNewCategoryAction(categoryId);
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
     }];
 }
 

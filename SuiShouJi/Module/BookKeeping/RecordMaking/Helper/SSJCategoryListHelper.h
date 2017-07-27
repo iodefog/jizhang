@@ -36,6 +36,8 @@
 + (int)queryForBillTypeMaxOrderWithType:(SSJBillType)type
                                  booksId:(NSString *)booksId;
 
+extern const int SSJImmovableOrder;
+
 /**
  *  更改收支类型
  *
@@ -43,9 +45,8 @@
  *  @param name                 类别名称
  *  @param color                类别颜色
  *  @param image                类别图片
- *  @param order                类别序号
+ *  @param order                类别序号；如果传入SSJImmovableOrder就不改变类别序号
  *  @param state                0:关闭 1:开启
- *  @param incomeOrExpenture    0:收入 1:支出
  *  @param success              删除成功的回调
  *  @param failure              删除失败的回调
  */
@@ -55,8 +56,7 @@
                        image:(NSString *)image
                        order:(int)order
                      booksId:(NSString *)booksId
-                    billType:(SSJBillType)billType
-                     Success:(void(^)(NSString *categoryId))success
+                     success:(void(^)(NSString *categoryId))success
                      failure:(void (^)(NSError *error))failure;
 
 /**
@@ -131,8 +131,9 @@
  *  @param failure      查询失败的回调
  */
 + (void)querySameNameCategoryWithName:(NSString *)name
+                      exceptForBillID:(NSString *)billID
                               booksId:(NSString *)booksId
-                      incomeOrExpence:(BOOL)incomeOrExpence
+                             expended:(BOOL)expended
                               success:(void(^)(SSJBillModel *model))success
                               failure:(void(^)(NSError *))failure;
 
@@ -144,13 +145,8 @@
 
 
 /**
- *  自定义支出类型颜色
+ *  自定义类型颜色
  */
-+ (NSArray *)payOutColors;
-
-/**
- *  自定义收入类型颜色
- */
-+ (NSArray *)incomeColors;
++ (NSArray<NSString *> *)billTypeLibraryColors;
 
 @end
