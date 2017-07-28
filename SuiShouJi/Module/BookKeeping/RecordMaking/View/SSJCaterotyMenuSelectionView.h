@@ -100,10 +100,19 @@ typedef NS_ENUM(NSInteger, SSJCaterotyMenuSelectionViewStyle) {
 
 @interface SSJCaterotyMenuSelectionViewIndexPath : NSObject
 
+/**
+ 如果是正数或者不为NSNotFound，就会选中对应的下标；反之取消选中
+ */
 @property (nonatomic, readonly) NSInteger menuIndex;
 
+/**
+ 如果是正数或者不为NSNotFound，就会选中对应的下标；反之取消选中
+ */
 @property (nonatomic, readonly) NSInteger categoryIndex;
 
+/**
+ 如果是正数或者不为NSNotFound，就会选中对应的下标；反之取消选中
+ */
 @property (nonatomic, readonly) NSInteger itemIndex;
 
 + (instancetype)indexPathWithMenuIndex:(NSInteger)menuIndex categoryIndex:(NSInteger)categoryIndex itemIndex:(NSInteger)itemIndex;

@@ -145,7 +145,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (NSString *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView titleForCategoryAtIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:categoryIndex];
-    return category.title;
+    return [NSString stringWithFormat:@"【%@】", category.title];
 }
 
 - (NSUInteger)selectionView:(SSJCaterotyMenuSelectionView *)selectionView numberOfItemsAtCategoryIndex:(NSInteger)categoryIndex menuIndex:(NSInteger)menuIndex {
