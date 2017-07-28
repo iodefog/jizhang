@@ -98,7 +98,7 @@
 
  @param view <#view description#>
  @param point <#point description#>
- @param insets <#insets description#>
+ @param insets 只有left和right有效
  @param finishHandle <#finishHandle description#>
  @param dismissHandle <#dismissHandle description#>
  */

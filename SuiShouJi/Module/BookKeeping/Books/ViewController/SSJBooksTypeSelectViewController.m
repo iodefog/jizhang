@@ -123,7 +123,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     [super viewWillDisappear:animated];
     [self.header stopLoading];
     self.rightButton.selected = NO;
-    [self.collectionView endEditing];
 }
 
 -(void)viewDidLayoutSubviews{
@@ -303,11 +302,15 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 }
 
 #pragma mark - SSJEditableCollectionViewDelegate
-- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
     [SSJAnaliyticsManager event:@"fund_sort"];
     if ((indexPath.row == self.privateBooksDataitems.count - 1 && indexPath.section == 0) || (indexPath.section == 1 && indexPath.row == self.shareBooksDataItems.count - 1)) {
         return NO;
     }
+    
+    self.rightButton.selected = NO;
+    [self rightButtonClicked:self.rightButton];
+    
     return YES;
 }
 
@@ -325,21 +328,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     }
     return YES;
 }
-
-- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-    self.rightButton.selected = NO;
-    [self rightButtonClicked:self.rightButton];
-}
-
-- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-
-}
-
-//- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
-//    [self collectionViewEndEditing];
-//    return YES;
-//}
-
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
     if (fromIndexPath.section == 0) {
@@ -363,13 +351,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     }
 }
 
-- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
-    if ((indexPath.row == self.privateBooksDataitems.count - 1 && indexPath.section == 0) || (indexPath.section == 1 && indexPath.row == self.shareBooksDataItems.count - 1)) {
-        return NO;
-    }
-    return YES;
-}
-
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service{
     if (service == self.deleteBookService) {
@@ -381,7 +362,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
                 }
                 weakSelf.rightButton.selected = NO;
-                [weakSelf.collectionView endEditing];
                 for (SSJBooksTypeItem *item in weakSelf.privateBooksDataitems) {
                     item.editeModel = NO;
                 }
@@ -401,11 +381,8 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     if (self.rightButton.isSelected) {
 //        self.adView.hidden = YES;
         [SSJAnaliyticsManager event:@"accountbook_manage"];
-        [self.collectionView beginEditing];
-    }else{
-//        self.adView.hidden = NO;
-        [self.collectionView endEditing];
     }
+    
     for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
         if (item.booksId.length) {
             item.editeModel = self.rightButton.isSelected;
@@ -674,7 +651,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         [SSJBooksTypeStore deleteBooksTypeWithbooksItems:@[self.editBooksItem] deleteType:type Success:^(BOOL bookstypeHasChange){
             @strongify(self);
             self.rightButton.selected = NO;
-            [self.collectionView endEditing];
             for (SSJBooksTypeItem *item in self.privateBooksDataitems) {
                 item.editeModel = NO;
             }
@@ -693,9 +669,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         @strongify(self);
         [self.deleteBookService deleteShareBookWithBookId:bookId memberId:SSJUSERID() memberState:SSJShareBooksMemberStateQuitted];
     }
-    
-    [self.collectionView endEditing];
-    
 }
 
 - (void)updateCurrentBookWithBookId:(NSString *)bookId {

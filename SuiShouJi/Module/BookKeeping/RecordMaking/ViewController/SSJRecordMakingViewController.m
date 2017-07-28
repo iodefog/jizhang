@@ -79,9 +79,15 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic) NSInteger lastSelectedIndex;
 
-@property (nonatomic, strong) NSString *defaultBooksId;// 当前用户默认的账本id
+/**
+ 刚进入页面时用户默认的账本id；用于保存记一笔数据时判断有没有改变过账本id
+ */
+@property (nonatomic, strong) NSString *defaultBooksId;
 
-@property (nonatomic, strong) NSString *addedBillId;// 新增的类别id
+/**
+ 新增或编辑的类别id，由新建或者编辑类别页面返回
+ */
+@property (nonatomic, strong) NSString *addOrEditBillId;
 
 @property (nonatomic, strong) NSMutableArray<NSObject<SSJBooksItemProtocol> *> *booksItems;
 
@@ -752,13 +758,17 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
                 billTypeView = self.incomeTypeView;
             } else {
+#ifdef DEBUG
                 [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"未定义的控件行为，selectedBillType：%d", (int)self.customNaviBar.selectedBillType]}]];
+#endif
                 return;
             }
             
+            // 设置选中的类别；
+            // 优先级顺序：1.新增或者编辑的类别 2.用户自己选中的类别 3.从前一个页面带过来的类别 4.第一个类别
+            NSString *selectedId = self.addOrEditBillId ?: (billTypeView.selectedItem.ID ?: self.item.billId);
+            self.addOrEditBillId = nil;
             __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
-            NSString *selectedId = self.addedBillId ?: (billTypeView.selectedItem.ID ?: self.item.billId);
-            self.addedBillId = nil;
             [categoryList enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (selectedId && [obj.ID isEqualToString:selectedId]) {
                     obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
@@ -985,6 +995,22 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [SSJAnaliyticsManager event:@"bill_type_delete"];
     };
     
+    billTypeView.editAction = ^(SSJRecordMakingBillTypeSelectionView *view, SSJRecordMakingBillTypeSelectionCellItem *item) {
+        SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
+        addBillTypeVC.title = @"编辑类别图标";
+        addBillTypeVC.created = NO;
+        addBillTypeVC.expended = wself.customNaviBar.selectedBillType;
+        addBillTypeVC.booksId = wself.item.booksId;
+        addBillTypeVC.billId = item.ID;
+        addBillTypeVC.icon = item.imageName;
+        addBillTypeVC.name = item.title;
+        addBillTypeVC.color = item.colorValue;
+        addBillTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
+            wself.addOrEditBillId = billID;
+        };
+        [wself.navigationController pushViewController:addBillTypeVC animated:YES];
+    };
+    
     billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
         if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
@@ -1025,12 +1051,12 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [wself.navigationController pushViewController:addNewTypeVc animated:YES];*/
         
         SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
-        addBillTypeVC.title = @"添加类别图标";
+        addBillTypeVC.title = @"自定义类别图标";
         addBillTypeVC.created = YES;
         addBillTypeVC.expended = wself.customNaviBar.selectedBillType;
         addBillTypeVC.booksId = wself.item.booksId;
-        addBillTypeVC.addNewCategoryAction = ^(NSString * _Nonnull billID) {
-            wself.addedBillId = billID;
+        addBillTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
+            wself.addOrEditBillId = billID;
         };
         [wself.navigationController pushViewController:addBillTypeVC animated:YES];
     };

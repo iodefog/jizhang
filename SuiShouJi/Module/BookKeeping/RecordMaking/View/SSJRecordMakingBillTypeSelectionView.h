@@ -16,6 +16,8 @@
 
 @property (nonatomic, copy) BOOL (^shouldDeleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
 
+@property (nonatomic, copy) void (^editAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
+
 @property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);
 
 @property (nonatomic, copy) void (^selectAction)(SSJRecordMakingBillTypeSelectionView *, SSJRecordMakingBillTypeSelectionCellItem *);

@@ -21,7 +21,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) UIImageView *editingMask;
+@property (nonatomic, strong) UIImageView *pencil;
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeSelectionCellLabel *label;
 
@@ -34,7 +34,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [self.contentView addSubview:self.borderView];
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.label];
-        [self.contentView addSubview:self.editingMask];
+        [self.contentView addSubview:self.pencil];
     }
     return self;
 }
@@ -47,8 +47,9 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     self.borderView.center = CGPointMake(self.contentView.width * 0.5, self.imageView.centerY);
     self.label.bottom = self.contentView.height;
     self.label.centerX = self.contentView.width * 0.5;
-    self.editingMask.frame = self.borderView.frame;
-    self.editingMask.layer.cornerRadius = self.editingMask.width * 0.5;
+    self.pencil.size = CGSizeMake(17, 17);
+    self.pencil.layer.cornerRadius = self.pencil.width * 0.5;
+    self.pencil.center = CGPointMake(self.imageView.right + 8, self.imageView.top - 8);
 }
 
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
@@ -77,14 +78,27 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     [[[RACObserve(_item, state) takeUntil:self.rac_prepareForReuseSignal] skip:1] subscribeNext:^(id x) {
         @strongify(self);
-        self.editingMask.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+        self.pencil.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
         [self updateBorderAndTextColor:YES];
+    }];
+    
+    [[RACObserve(_item, pencilRotated) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *rotateValue) {
+        @strongify(self);
+        [UIView animateWithDuration:kDuration animations:^{
+            if ([rotateValue boolValue]) {
+                self.pencil.transform = CGAffineTransformMakeRotation(M_PI_4);
+                self.pencil.backgroundColor = SSJ_SECONDARY_COLOR;
+            } else {
+                self.pencil.transform = CGAffineTransformIdentity;
+                self.pencil.backgroundColor = SSJ_BORDER_COLOR;
+            }
+        }];
     }];
     
     if (_item.colorValue.length) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
     }
-    self.editingMask.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+    self.pencil.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
     [self updateBorderAndTextColor:NO];
 }
 
@@ -164,14 +178,14 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     return _imageView;
 }
 
-- (UIImageView *)editingMask {
-    if (!_editingMask) {
-        _editingMask = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bill_type_editing"]];
-        _editingMask.contentMode = UIViewContentModeCenter;
-        _editingMask.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-        _editingMask.clipsToBounds = YES;
+- (UIImageView *)pencil {
+    if (!_pencil) {
+        _pencil = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pencil"]];
+        _pencil.contentMode = UIViewContentModeCenter;
+        _pencil.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+        _pencil.clipsToBounds = YES;
     }
-    return _editingMask;
+    return _pencil;
 }
 
 - (SSJRecordMakingBillTypeSelectionCellLabel *)label {
