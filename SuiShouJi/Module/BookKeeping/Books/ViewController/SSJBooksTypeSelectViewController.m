@@ -248,6 +248,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     cell.editBookAction = ^(__kindof SSJBaseCellItem * _Nonnull booksTypeItem) {
         @strongify(self);
         self.editBooksItem = booksTypeItem;
+        self.editAlertView.booksItem = booksTypeItem;
         if ([booksTypeItem isKindOfClass:[SSJBooksTypeItem class]]) {
             [self.editAlertView showWithBookCategory: SSJBooksCategoryPersional];
             NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -505,6 +506,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         _editAlertView.transferHandler = ^{
             @strongify(self);
             SSJBooksMergeViewController *mergeVc = [[SSJBooksMergeViewController alloc] init];
+            mergeVc.transferOutBooksItem = self.editAlertView.booksItem;
             [self.navigationController pushViewController:mergeVc animated:YES];
         };
     }

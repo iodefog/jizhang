@@ -26,78 +26,105 @@
         NSString *booksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
         booksid = booksid.length > 0 ? booksid : SSJUSERID();
         
-        FMResultSet *rs;
-        id currentBooksItem;
-        if ([db boolForQuery:@"select count(1) from bk_books_type where cbooksid = ?",booksid]) {
-            rs = [db executeQuery:@"select * from bk_books_type where cbooksid = ?",booksid];
-            if (!rs) {
-                if (failure) {
-                    SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
-            }
-            while ([rs next]) {
-                SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
-                booksItem.booksId = [rs stringForColumn:@"cbooksid"];
-                booksItem.booksName = [rs stringForColumn:@"cbooksname"];
-                booksItem.booksOrder = [rs intForColumn:@"iorder"];
-                booksItem.booksParent = [rs intForColumn:@"iparenttype"];
-                SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-                NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
-                if (colorArray.count > 1) {
-                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
-                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
-                } else if (colorArray.count == 1) {
-                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
-                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
-                }
-                booksItem.booksColor = colorItem;
-                currentBooksItem = booksItem;
-
+        NSError *error = nil;
+        id booksItem = [self queryBooksItemWithID:booksid inDatabase:db error:&error];
+        if (error) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure(error);
+                });
             }
         } else {
-            rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 0",booksid];
-            if (!rs) {
-                if (failure) {
-                    SSJDispatch_main_async_safe(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success(booksItem);
+                });
             }
-            while ([rs next]) {
-                SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
-                shareBookItem.booksId = [rs stringForColumn:@"cbooksid"];
-                shareBookItem.booksName = [rs stringForColumn:@"cbooksname"];
-                shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
-                shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
-                shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
-                shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
-                //处理渐变色
-                SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-                NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
-                if (colorArray.count > 1) {
-                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
-                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
-                } else if (colorArray.count == 1) {
-                    colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
-                    colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
-                }
-                shareBookItem.booksColor = colorItem;
-                currentBooksItem = shareBookItem;
-            }
-        }
-        [rs close];
-        if (success) {
-            SSJDispatch_main_async_safe(^{
-                success(currentBooksItem);
-            });
         }
     }];
 }
 
++ (void)queryBooksItemWithID:(NSString *)booksID
+                     success:(void(^)(id<SSJBooksItemProtocol> booksItem))success
+                     failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSError *error = nil;
+        id booksItem = [self queryBooksItemWithID:booksID inDatabase:db error:&error];
+        if (error) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure(error);
+                });
+            }
+        } else {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success(booksItem);
+                });
+            }
+        }
+    }];
+}
+
++ (id<NSCopying>)queryBooksItemWithID:(NSString *)booksID inDatabase:(FMDatabase *)db error:(NSError **)error {
+    FMResultSet *rs;
+    id currentBooksItem;
+    if ([db boolForQuery:@"select count(1) from bk_books_type where cbooksid = ?", booksID]) {
+        rs = [db executeQuery:@"select * from bk_books_type where cbooksid = ?", booksID];
+        if (!rs) {
+            *error = [db lastError];
+            return nil;
+        }
+        while ([rs next]) {
+            SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
+            booksItem.booksId = [rs stringForColumn:@"cbooksid"];
+            booksItem.booksName = [rs stringForColumn:@"cbooksname"];
+            booksItem.booksOrder = [rs intForColumn:@"iorder"];
+            booksItem.booksParent = [rs intForColumn:@"iparenttype"];
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+            if (colorArray.count > 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+            } else if (colorArray.count == 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+            }
+            booksItem.booksColor = colorItem;
+            currentBooksItem = booksItem;
+            
+        }
+    } else {
+        rs = [db executeQuery:@"select sb.*, count(bm.cmemberid) as memberCount from bk_share_books sb, bk_share_books_member bm where sb.cbooksid = ? and sb.cbooksid = bm.cbooksid and bm.istate = 0", booksID];
+        if (!rs) {
+            *error = [db lastError];
+            return nil;
+        }
+        while ([rs next]) {
+            SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
+            shareBookItem.booksId = [rs stringForColumn:@"cbooksid"];
+            shareBookItem.booksName = [rs stringForColumn:@"cbooksname"];
+            shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
+            shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
+            shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
+            shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
+            //处理渐变色
+            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+            NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
+            if (colorArray.count > 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:1];
+            } else if (colorArray.count == 1) {
+                colorItem.startColor = [colorArray ssj_safeObjectAtIndex:0];
+                colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
+            }
+            shareBookItem.booksColor = colorItem;
+            currentBooksItem = shareBookItem;
+        }
+    }
+    [rs close];
+    return currentBooksItem;
+}
 
 #pragma mark - 个人账本
 + (void)queryForBooksListWithSuccess:(void(^)(NSMutableArray<SSJBooksTypeItem *> *result))success

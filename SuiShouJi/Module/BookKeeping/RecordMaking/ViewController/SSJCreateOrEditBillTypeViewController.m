@@ -12,9 +12,14 @@
 #import "SSJCaterotyMenuSelectionView.h"
 
 #import "SSJBillTypeCategoryModel.h"
+#import "SSJBillTypeLibraryModel.h"
+#import "SSJBillModel.h"
+
+#import "SSJBillTypeManager.h"
 #import "SSJCategoryListHelper.h"
-#import "SSJCreateOrEditBillTypeHelper.h"
 #import "YYKeyboardManager.h"
+#import "SSJBooksTypeStore.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
@@ -30,9 +35,13 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeColorSelectionView *colorSelectionView;
 
+@property (nonatomic) SSJBooksType booksType;
+
 @property (nonatomic, strong) NSArray<NSNumber *> *booksTypes;
 
-@property (nonatomic, strong) NSMutableDictionary<id<NSCopying>, NSArray<SSJBillTypeCategoryModel *> *> *catgegoriesInfo;
+@property (nonatomic, strong) SSJBillTypeLibraryModel *libraryModel;
+
+@property (nonatomic, strong) NSArray<NSString *> *colors;
 
 @end
 
@@ -41,19 +50,37 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        self.catgegoriesInfo = [NSMutableDictionary dictionary];
         [[YYKeyboardManager defaultManager] addObserver:self];
+        self.booksType = -1;
+        self.libraryModel = [[SSJBillTypeLibraryModel alloc] init];
+        self.colors = [SSJCategoryListHelper billTypeLibraryColors];
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.bodyView];
-    [self.view addSubview:self.topView];
-    [self.view addSubview:self.colorSelectionView];
     
-    [self loadColors];
+    [self setupViews];
+    [self setupBindings];
+    [self organiseColors];
+    
+    [[self loadBooksTypeIfNeeded] subscribeError:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    } completed:^{
+        SSJCaterotyMenuSelectionViewIndexPath *indexPath = [self selectedIndexPath];
+        
+        [self.bodyView reloadAllData];
+        self.bodyView.selectedIndexPath = indexPath;
+        
+        SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
+        SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+        self.icon = item.icon;
+        self.name = item.name;
+        if (!self.color) {
+            self.color = item.color;
+        }
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -128,19 +155,24 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (SSJCaterotyMenuSelectionCellItem *)selectionView:(SSJCaterotyMenuSelectionView *)selectionView itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
-    return [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    SSJBillTypeModel *model = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    return [SSJCaterotyMenuSelectionCellItem itemWithTitle:model.name icon:[UIImage imageNamed:model.icon] color:[UIColor ssj_colorWithHex:model.color]];
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDelegate
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectMenuAtIndex:(NSInteger)menuIndex {
-    
+    self.booksType = [[self.booksTypes objectAtIndex:menuIndex] integerValue];
+    selectionView.selectedIndexPath = [self selectedIndexPath];
 }
 
 - (void)selectionView:(SSJCaterotyMenuSelectionView *)selectionView didSelectItemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
-    SSJCaterotyMenuSelectionCellItem *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
-    self.topView.billTypeIcon = item.icon;
-    self.topView.billTypeName = item.title;
+    SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
+    self.icon = item.icon;
+    self.name = item.name;
+    if (self.colorSelectionView.selectedIndex == NSNotFound) {
+        self.color = item.color;
+    }
 }
 
 #pragma mark - YYKeyboardObserver
@@ -150,34 +182,147 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 }
 
 #pragma mark - Private
-- (void)loadColors {
+- (void)setupViews {
+    [self.view addSubview:self.bodyView];
+    [self.view addSubview:self.topView];
+    [self.view addSubview:self.colorSelectionView];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"完成", nil) style:UIBarButtonItemStylePlain target:self action:@selector(doneAction)];
+}
+
+- (void)setupBindings {
+    [RACObserve(self, icon) subscribeNext:^(NSString *icon) {
+        [self.topView setBillTypeIcon:[UIImage imageNamed:icon] animated:YES];
+    }];
+    [RACObserve(self, name) subscribeNext:^(NSString *name) {
+        [self.topView setBillTypeName:name animated:YES];
+    }];
+    [RACObserve(self, color) subscribeNext:^(NSString *color) {
+        [self.topView setBillTypeColor:[UIColor ssj_colorWithHex:color] animated:YES];
+    }];
+}
+
+- (void)organiseColors {
     NSMutableArray *colors = [NSMutableArray array];
-    for (NSString *colorValue in [SSJCategoryListHelper payOutColors]) {
+    for (NSString *colorValue in self.colors) {
         [colors addObject:[UIColor ssj_colorWithHex:colorValue]];
     }
     self.colorSelectionView.colors = colors;
-    self.topView.billTypeColor =  [colors firstObject];
+    self.colorSelectionView.selectedIndex = [self.colors indexOfObject:self.color];
 }
 
 - (NSArray<SSJBillTypeCategoryModel *> *)currentCategories {
     if (self.expended) {
-        NSNumber *booksTypeValue = [self.booksTypes ssj_safeObjectAtIndex:self.bodyView.selectedIndexPath.menuIndex];
-        NSArray *categories = self.catgegoriesInfo[booksTypeValue];
-        if (categories) {
-            return categories;
-        }
-        categories = [SSJCreateOrEditBillTypeHelper expenseCategoriesWithBooksType:[booksTypeValue integerValue]];
-        self.catgegoriesInfo[booksTypeValue] = categories;
-        return categories;
+        return [self.libraryModel expenseCategoriesWithBooksType:self.booksType];
     } else {
-        NSArray *categories = self.catgegoriesInfo[kCatgegoriesInfoIncomeKey];
-        if (categories) {
-            return categories;
-        }
-        categories = [SSJCreateOrEditBillTypeHelper incomeCategories];
-        self.catgegoriesInfo[kCatgegoriesInfoIncomeKey] = categories;
-        return categories;
+        return [self.libraryModel incomeCategories];
     }
+}
+
+- (RACSignal *)loadBooksTypeIfNeeded {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.expended) {
+            [SSJBooksTypeStore queryBooksItemWithID:self.booksId success:^(id<SSJBooksItemProtocol> booksItem) {
+                self.booksType = booksItem.booksParent;
+                [subscriber sendCompleted];
+            } failure:^(NSError *error) {
+                [subscriber sendError:error];
+            }];
+        } else {
+            [subscriber sendCompleted];
+        }
+        return nil;
+    }];
+}
+
+- (SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath {
+    NSInteger menuIndex = [self.booksTypes indexOfObject:@(self.booksType)];
+    if (self.icon.length) {
+        __block SSJCaterotyMenuSelectionViewIndexPath *indexPath = nil;
+        [[self currentCategories] enumerateObjectsUsingBlock:^(SSJBillTypeCategoryModel * _Nonnull categoryModel, NSUInteger categoryIdx, BOOL * _Nonnull stop) {
+            [categoryModel.items enumerateObjectsUsingBlock:^(SSJBillTypeModel * _Nonnull billModel, NSUInteger itemIdx, BOOL * _Nonnull stop) {
+                if ([billModel.icon isEqualToString:self.icon]) {
+                    indexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:categoryIdx itemIndex:itemIdx];
+                    *stop = YES;
+                }
+            }];
+            
+            if (indexPath) {
+                *stop = YES;
+            }
+        }];
+        
+        if (!indexPath) {
+            indexPath = [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:-1 itemIndex:-1];
+        }
+        return indexPath;
+    } else {
+        return [SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:menuIndex categoryIndex:0 itemIndex:0];
+    }
+}
+
+- (void)doneAction {
+    if (self.name.length == 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入类别名称"];
+        return;
+    }
+    
+    if (self.name.length > 5) {
+        [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+        return;
+    }
+    
+    [SSJCategoryListHelper querySameNameCategoryWithName:self.name exceptForBillID:self.billId booksId:self.booksId expended:self.expended success:^(SSJBillModel *model) {
+        if (model && model.operatorType != 2) {
+            // 有同名称类别，不支持新建／修改
+            [CDAutoHideMessageHUD showMessage:@"已有同名称类别，换个名称吧"];
+        } else if (model && model.operatorType == 2 && self.created) {
+            // 恢复已删除的类别
+            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"该类别名称曾经使用过，是否将之前的流水合并过来？" action:[SSJAlertViewAction actionWithTitle:@"不合并" handler:^(SSJAlertViewAction *action) {
+                [self addNewCategoryWithName:self.name image:self.icon color:self.color];
+            }], [SSJAlertViewAction actionWithTitle:@"合并" handler:^(SSJAlertViewAction *action) {
+                int order = [SSJCategoryListHelper queryForBillTypeMaxOrderWithType:model.type booksId:self.booksId] + 1;
+                [self updateBillTypeWithID:model.ID
+                                      name:model.name
+                                     color:self.color
+                                     image:self.icon
+                                     order:order];
+            }], nil];
+        } else if (self.created) {
+            [self addNewCategoryWithName:self.name image:self.icon color:self.color];
+        } else {
+            [self updateBillTypeWithID:self.billId
+                                  name:self.name
+                                 color:self.color
+                                 image:self.icon
+                                 order:SSJImmovableOrder];
+        }
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
+- (void)addNewCategoryWithName:(NSString *)name image:(NSString *)image color:(NSString *)color {
+    [SSJCategoryListHelper addNewCustomCategoryWithIncomeOrExpenture:self.expended name:name icon:image color:color booksId:self.booksId success:^(NSString *categoryId){
+        [self.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        if (self.addNewCategoryAction) {
+            self.addNewCategoryAction(categoryId);
+        }
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
+- (void)updateBillTypeWithID:(NSString *)ID name:(NSString *)name color:(NSString *)color image:(NSString *)image order:(int)order {
+    [SSJCategoryListHelper updateCategoryWithID:ID name:name color:color image:image order:order booksId:self.booksId success:^(NSString *categoryId) {
+        [self.navigationController popViewControllerAnimated:YES];
+        if (self.addNewCategoryAction) {
+            self.addNewCategoryAction(categoryId);
+        }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
 }
 
 #pragma mark - Lazyloading
@@ -198,24 +343,23 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (SSJCaterotyMenuSelectionView *)bodyView {
     if (!_bodyView) {
-        _bodyView = [[SSJCaterotyMenuSelectionView alloc] init];
+        _bodyView = [[SSJCaterotyMenuSelectionView alloc] initWithFrame:CGRectZero style:(self.expended ? SSJCaterotyMenuSelectionViewMenuLeft : SSJCaterotyMenuSelectionViewNoMenu)];
         _bodyView.dataSource = self;
         _bodyView.delegate = self;
-        [_bodyView setSelectedIndexPath:[SSJCaterotyMenuSelectionViewIndexPath indexPathWithMenuIndex:0 categoryIndex:-1 itemIndex:-1]];
+        _bodyView.numberOfItemPerRow = self.expended ? 4 : 5;
     }
     return _bodyView;
 }
 
 - (SSJCreateOrEditBillTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
-        _colorSelectionView = [[SSJCreateOrEditBillTypeColorSelectionView alloc] init];
         __weak typeof(self) wself = self;
+        _colorSelectionView = [[SSJCreateOrEditBillTypeColorSelectionView alloc] init];
         _colorSelectionView.selectColorAction = ^(SSJCreateOrEditBillTypeColorSelectionView *view) {
-            [view dismiss];
+            wself.color = wself.colors[view.selectedIndex];
+        };
+        _colorSelectionView.dismissHandler = ^(SSJCreateOrEditBillTypeColorSelectionView * _Nonnull view) {
             [wself.topView setArrowDown:YES animated:YES];
-            [UIView animateWithDuration:0.25 animations:^{
-                wself.topView.billTypeColor = view.colors[view.selectedIndex];
-            }];
         };
     }
     return _colorSelectionView;

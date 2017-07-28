@@ -38,6 +38,7 @@ def shared_pods
     pod 'YYWebImage'
     
     pod 'WCDB'
+    
 end
 
 target 'SuiShouJi'  do

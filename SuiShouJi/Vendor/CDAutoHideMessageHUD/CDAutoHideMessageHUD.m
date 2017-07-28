@@ -94,10 +94,16 @@ static void * CDAutoHideMessageHUDKey = (void *)@"CDAutoHideMessageHUDKey";
 
 + (void)showError:(NSError *)error {
     if ([error.domain isEqualToString:RACCommandErrorDomain]) {
-        return;
+        
+    } else if ([error.domain isEqualToString:SSJErrorDomain]) {
+        [self showMessage:error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE];
+    } else {
+#ifdef DEBUG
+        [self showMessage:error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE];
+#else
+        [self showMessage:SSJ_ERROR_MESSAGE];
+#endif
     }
-    
-    [self showMessage:error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE];
 }
 
 @end

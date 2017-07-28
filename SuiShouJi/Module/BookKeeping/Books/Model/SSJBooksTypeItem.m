@@ -151,4 +151,33 @@
     }
 }
 
+- (NSString *)parentName {
+    switch (self.booksParent) {
+        case SSJBooksTypeDaily:
+            return @"日常账本";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"生意账本";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"结婚账本";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"装修账本";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"旅行账本";
+            break;
+            
+        case SSJBooksTypeBaby:
+#warning TODO
+            return @"";
+            break;
+    }
+}
+
 @end

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJBooksItem.h"
 
 @interface SSJBooksView : UIView
 
-@property(nonatomic, strong) __kindof SSJBaseCellItem *booksTypeItem;
+@property(nonatomic, strong) __kindof SSJBaseCellItem <SSJBooksItemProtocol> *booksTypeItem;
 
 @end

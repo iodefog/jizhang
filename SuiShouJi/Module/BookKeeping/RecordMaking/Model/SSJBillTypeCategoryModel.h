@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
-@class SSJCaterotyMenuSelectionCellItem;
+@class SSJBillTypeModel;
 
 @interface SSJBillTypeCategoryModel : NSObject
 
 @property (nonatomic, copy) NSString *title;
 
-@property (nonatomic, strong) NSArray<SSJCaterotyMenuSelectionCellItem *> *items;
+@property (nonatomic, strong) NSArray<SSJBillTypeModel *> *items;
 
-+ (instancetype)modelWithTitle:(NSString *)title items:(NSArray<SSJCaterotyMenuSelectionCellItem *> *)items;
++ (instancetype)modelWithTitle:(NSString *)title items:(NSArray<SSJBillTypeModel *> *)items;
 
 @end

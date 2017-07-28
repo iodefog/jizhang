@@ -141,8 +141,7 @@
                                           image:_model.icon
                                           order:_model.order
                                         booksId:self.booksId
-                                       billType:_model.type
-                                        Success:^(NSString *categoryId) {
+                                        success:^(NSString *categoryId) {
                                             [self.navigationController popViewControllerAnimated:YES];
                                             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                                             if (_editSuccessHandle) {
