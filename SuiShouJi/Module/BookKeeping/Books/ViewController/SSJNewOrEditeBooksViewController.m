@@ -36,7 +36,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 @property (nonatomic, strong) SSJFinancingGradientColorItem *gradientColorItem;
 
 /**当前选择的账本类型indexPath.row*/
-@property (nonatomic, assign) NSInteger currentBookType;
+@property (nonatomic, assign) SSJBooksType currentBookType;
 
 /**记账场景*/
 @property (nonatomic, copy) NSString *bookParentStr;
@@ -114,9 +114,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         if (((SSJBooksTypeItem *)self.bookItem).booksId.length) {
             //编辑个人账本
 //            [self editeBookData];
-            self.currentBookType = [self bookParentWithCurrentBookType:((SSJBooksTypeItem *)self.bookItem).booksParent] ;
+            self.currentBookType = ((SSJBooksTypeItem *)self.bookItem).booksParent;
             self.gradientColorItem = ((SSJBooksTypeItem *)self.bookItem).booksColor;
-           self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
+           self.bookParentStr = [self bookParentStrWithKey:self.currentBookType];
             self.bookName = ((SSJBooksTypeItem *)self.bookItem).booksName;
         } else {
             //新建个人账本
@@ -126,9 +126,9 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     } else if([self.bookItem isKindOfClass:[SSJShareBookItem class]]) { //共享账本
         if (((SSJShareBookItem *)self.bookItem).booksId.length) {
             //编辑共享账本
-            self.currentBookType = [self bookParentWithCurrentBookType:((SSJShareBookItem *)self.bookItem).booksParent];//;
+            self.currentBookType = ((SSJShareBookItem *)self.bookItem).booksParent;//;
             self.gradientColorItem = ((SSJShareBookItem *)self.bookItem).booksColor;
-            self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
+            self.bookParentStr = [self bookParentStrWithKey:self.currentBookType];
             self.bookName = ((SSJShareBookItem *)self.bookItem).booksName;
         } else {
             //新建共享账本
@@ -139,8 +139,8 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
 }
 
 - (void)newBookData {
-    self.currentBookType = 0;
-    self.bookParentStr = [self bookParentStrWithKey:[NSString stringWithFormat:@"%ld",(long)self.currentBookType]];
+    self.currentBookType = SSJBooksTypeDaily;
+    self.bookParentStr = [self bookParentStrWithKey:self.currentBookType];
     self.gradientColorItem = [[SSJFinancingGradientColorItem defualtColors] firstObject];
     self.bookName = @"";
 }
@@ -167,13 +167,10 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     if (indexPath.row == 1 && self.editOrNew == YES) {
         //记账场景
         SSJBookTypeViewController *bookTypeVC = [[SSJBookTypeViewController alloc] init];
-        if (!self.currentBookType) {
-            self.currentBookType = 0;
-        }
-        bookTypeVC.lastSelectedIndex = self.currentBookType;
+        bookTypeVC.booksType = self.currentBookType;
         bookTypeVC.isShareBook = [self.bookItem isKindOfClass:[SSJShareBookItem class]];
-        bookTypeVC.saveBooksBlock = ^(NSInteger bookTypeIndex,NSString *bookName) {
-            weakSelf.currentBookType = bookTypeIndex;
+        bookTypeVC.saveBooksBlock = ^(SSJBooksType booksType, NSString *bookName) {
+            weakSelf.currentBookType = booksType;
             weakSelf.bookParentStr = bookName;
             //更新选中账本场景
             [weakSelf.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
@@ -306,7 +303,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     
     __weak typeof(self) weakSelf = self;
     self.bookItem.booksName = self.bookName;
-    self.bookItem.booksParent = [self bookParentWithCurrentBookType:self.currentBookType];
+    self.bookItem.booksParent = self.currentBookType;
     self.bookItem.booksColor = self.gradientColorItem;
     if ([self.bookItem isKindOfClass:[SSJBooksTypeItem class]]) {//个人账本
         [SSJBooksTypeStore saveBooksTypeItem:(SSJBooksTypeItem *)self.bookItem sucess:^{
@@ -364,32 +361,36 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     return _createBookService;
 }
 
-- (NSString *)bookParentStrWithKey:(NSString *)key {
-    NSDictionary *dic = @{
-                          @"0":@"日常",
-                          //@"1":@"育儿",
-                          @"1":@"生意",
-                          @"2":@"旅行",
-                          @"3":@"装修",
-                          @"4":@"结婚",
-                          };
-    if ([[dic allKeys] containsObject:key]) {
-        return [dic objectForKey:key];
-    } else {
-        return @"日常";
+- (NSString *)bookParentStrWithKey:(SSJBooksType)key {
+    switch (key) {
+        case SSJBooksTypeDaily:
+            return @"日常";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"生意";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"结婚";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"装修";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"旅行";
+            break;
+            
+        case SSJBooksTypeBaby:
+            return @"宝宝";
+            break;
+            
+        default:
+            return @"日常";
+            break;
     }
-}
-
-/**
- 获取父账本类型
- */
-- (NSInteger)bookParentWithCurrentBookType:(NSInteger)currentBookType {
-    if (currentBookType == 2) {
-        return 4;
-    } else if(currentBookType == 4){
-        return 2;
-    }
-    return currentBookType;
 }
 
 #pragma mark - Notice

@@ -10,9 +10,11 @@
 
 @interface SSJBookTypeViewController : SSJBaseViewController
 /**上一次选择的账本类型indexPath.row*/
-@property (nonatomic, assign) NSInteger lastSelectedIndex;
+//@property (nonatomic, assign) NSInteger lastSelectedIndex;
 
-@property (nonatomic, copy) void(^saveBooksBlock)(NSInteger bookTypeIndex,NSString *bookName);
+@property (nonatomic) SSJBooksType booksType;
+
+@property (nonatomic, copy) void(^saveBooksBlock)(SSJBooksType booksType, NSString *bookName);
 
 /**是否是共享账本进入,目的：友盟统计*/
 @property (nonatomic, assign ) BOOL isShareBook;
