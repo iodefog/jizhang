@@ -32,6 +32,7 @@
     if (self) {
         self.titleFont = [UIFont systemFontOfSize:SSJ_FONT_SIZE_2];
         self.titleColor = [UIColor whiteColor];
+        [self.layer addSublayer:self.fishImage];
         [self addSubview:self.titleLab];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
@@ -59,6 +60,7 @@
     if (!_fishImage) {
         _fishImage = [CALayer layer];
         _fishImage.contents = [UIImage imageNamed:@"book_transfer_fish"];
+        _fishImage.size = CGSizeMake(50, 29);
     }
     return _fishImage;
 }
@@ -80,7 +82,7 @@
         _fishAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
         _fishAnimation.path = self.animationPath.CGPath;
         _fishAnimation.calculationMode = kCAAnimationCubic;
-        _fishAnimation.duration = 10;
+        _fishAnimation.duration = 2;
         _fishAnimation.removedOnCompletion = YES;
         _fishAnimation.delegate = self;
     }
