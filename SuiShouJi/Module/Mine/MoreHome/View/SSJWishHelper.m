@@ -90,7 +90,7 @@
                               failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_wish set status = 2, cwritedate = ? ,enddate = ? where cuserid = ? and wishid = ?",writeDateStr,writeDateStr,SSJUSERID(),wishModel.wishId]) {
+        if (![db executeUpdate:@"update bk_wish set status = 2, cwritedate = ? ,enddate = ? ,iversion = ? where cuserid = ? and wishid = ?",writeDateStr,writeDateStr,@(SSJSyncVersion()),SSJUSERID(),wishModel.wishId]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -119,10 +119,10 @@
     NSMutableString *queryStr;
     
     if (state == SSJWishStateFinish || state == SSJWishStateTermination) {//已完成
-        queryStr = [NSMutableString stringWithFormat:@"select bw.* from bk_wish as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and bw.status <> 0 order by bw.startdate asc",SSJUSERID()];
+        queryStr = [NSMutableString stringWithFormat:@"select bw.* from bk_wish as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and bw.status <> 0 order by bw.startdate desc",SSJUSERID()];
 
     } else if (state == SSJWishStateNormalIng) {//未完成
-        queryStr = [NSMutableString stringWithFormat:@"select bw.* from bk_wish as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and status = 0 order by bw.startdate asc",SSJUSERID()];
+        queryStr = [NSMutableString stringWithFormat:@"select bw.* from bk_wish as bw where bw.cuserid = '%@' and bw.operatortype <> 2 and status = 0 order by bw.startdate desc",SSJUSERID()];
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -163,9 +163,7 @@
                 success(relultArray);
             });
         }
-        
     }];
-
 }
 
 /**
@@ -233,7 +231,7 @@
     NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 1,enddate = ? where wishid = ? and cuserid = ?",date,wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 1,enddate = ? ,iversion = ? where wishid = ? and cuserid = ?",date,@(SSJSyncVersion()),wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -259,7 +257,7 @@
                     Success:(void(^)())success
                     failure:(void(^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeUpdate:@"update bk_wish set operatortype = 2 where wishid = ? and cuserid = ?",wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 2,iversion = ? where wishid = ? and cuserid = ?",@(SSJSyncVersion()),wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -286,7 +284,7 @@
                        failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 2,enddate = ? where wishid = ? and cuserid = ?",date,wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1, status = 2, enddate = ?, iversion = ? where wishid = ? and cuserid = ?",date,@(SSJSyncVersion()),wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -301,22 +299,6 @@
         
     }];
 }
-
-
-/**
- 根据心愿ID查询提醒信息
- 
- @param wishId 心愿id
- @param success 成功
- @param failure 失败
- */
-+ (void)queryWishRemindWithWishId:(NSString *)wishId Success:(void(^)(SSJReminderItem *remindItem))success
-                          failure:(void(^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        FMResultSet *result = [db executeQuery:@""];
-    }];
-}
-
 
 #pragma mark - 流水操作
 /**
@@ -424,7 +406,7 @@
                                    failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *dateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_wish_charge set operatortype = 2, cwritedate = ? where cuserid = ? and chargeid = ? and wishid = ?",dateStr,SSJUSERID(),wishItem.chargeId,wishItem.wishId]) {
+        if (![db executeUpdate:@"update bk_wish_charge set operatortype = 2, cwritedate = ?, iversion =? where cuserid = ? and chargeid = ? and wishid = ?",dateStr,@(SSJSyncVersion()),SSJUSERID(),wishItem.chargeId,wishItem.wishId]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -440,37 +422,58 @@
     }];
 }
 
-/**
- 将图片保存到bk_wish表中
- 
- @param imageName 图片名称
- @param type 保存图片类型
- @param success 成功回调
- @param failure 失败回调
- */
-+ (void)saveImageToWishTable:(NSString *)imageName
-                    saveType:(SSJSaveImgType)type
-                     success:(void(^)(NSString *imageName))success
-                     failure:(void(^)(NSError *error))failure {
-    if (type == SSJSaveImgTypeLocal) {
-        
-    } else if (type == SSJSaveImgTypeCustom) {
-        
-    }
-}
 
+#pragma mark - 图片操作
 /**
  将图片保存到bk_img_sync表中
  
  @param imageName 图片名称
- @param success 成功回调
  @param failure 失败回调
  */
-+ (void)saveImageToImgSyncTable:(NSString *)imageName
-                        success:(void(^)(NSString *imageName))success
++ (BOOL)saveImageToImgSyncTable:(NSString *)imageName
+                            rId:(NSString *)rid
                         failure:(void(^)(NSError *error))failure {
+    __block BOOL success = NO;
+    NSString *dateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        if ([db boolForQuery:@"select count(1) from bk_img_sync where rid = ? and cimgname = ?",rid,imageName]) {
+            //更新
+           success = [db executeUpdate:@"update bk_img_sync set cwitedate = ?,operatortype = 1"];
+        } else {
+            //添加
+           success = [db executeUpdate:@"insert into bk_img_sync(rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values(?,?,?,0,2,0)",rid,imageName,dateStr];
+        }
+        
+        if (!success) {
+            if (failure) {
+                failure(db.lastError);
+            }
+        }
+        
+    }];
     
+    return success;
 }
+
+
+/**
+ 将图片从bk_img_sync表中删除
+ 
+ @param imageName 图片名称
+ @param failure 失败回调
+ */
++ (BOOL)deleteImageFromImgSyncTable:(NSString *)imageName
+                                rId:(NSString *)rid
+                            failure:(void(^)(NSError *error))failure {
+    __block BOOL success = NO;
+    NSString *dateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+       success = [db executeUpdate:@"update bk_img_sync set cwitedate = ?,operatortype = 2",dateStr];
+    }];
+    return success;
+}
+
+
 
 #pragma mark - Private
 

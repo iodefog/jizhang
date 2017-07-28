@@ -106,16 +106,6 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
 
 
 
-/**
- 根据心愿ID查询提醒信息
-
- @param wishId 心愿id
- @param success 成功
- @param failure 失败
- */
-+ (void)queryWishRemindWithWishId:(NSString *)wishId Success:(void(^)(SSJReminderItem *remindItem))success
-                          failure:(void(^)(NSError *error))failure;
-
 #pragma mark - 流水操作
 
 /**
@@ -156,33 +146,27 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
 
 
 #pragma mark - 心愿图片
-/**
- 将图片保存到bk_wish表中
- 
- @param imageName 图片名称
- @param type 保存图片类型
- @param success 成功回调
- @param failure 失败回调
- */
-+ (void)saveImageToWishTable:(NSString *)imageName
-                    saveType:(SSJSaveImgType)type
-                     success:(void(^)(NSString *imageName))success
-                     failure:(void(^)(NSError *error))failure;
-
 
 /**
  将图片保存到bk_img_sync表中
  
  @param imageName 图片名称
- @param success 成功回调
  @param failure 失败回调
  */
-+ (void)saveImageToImgSyncTable:(NSString *)imageName
-                        success:(void(^)(NSString *imageName))success
++ (BOOL)saveImageToImgSyncTable:(NSString *)imageName
+                            rId:(NSString *)rid
                         failure:(void(^)(NSError *error))failure;
 
 
-
+/**
+ 将图片从bk_img_sync表中删除
+ 
+ @param imageName 图片名称
+ @param failure 失败回调
+ */
++ (BOOL)deleteImageFromImgSyncTable:(NSString *)imageName
+                                rId:(NSString *)rid
+                            failure:(void(^)(NSError *error))failure;
 
 
 @end

@@ -83,21 +83,9 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
     @weakify(self);
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         @strongify(self);
-        //图片写进沙河
-#warning 未完成
-        NSString *imageName = SSJUUID();
-        if (SSJSaveImage(newImage, imageName)) {
-            //切换背景
-            if (self.changeTopImage) {
-               NSString *imgPath = SSJImagePath(imageName);
-                UIImage *seImg = [UIImage imageWithContentsOfFile:imgPath];
-                self.changeTopImage(seImg);
-            }
+        if (self.changeTopImage) {
+            self.changeTopImage(newImage,SSJWishCustomImageName);
         }
-        //在同步表中保存
-        //在心愿表中保存图片
-        
-        
     };
     [self presentViewController:imageClipVC animated:YES completion:NULL];
 }
@@ -118,11 +106,9 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
         [self openLocalPhoto];
         return;
     }
-    //保存图片
-    
     //切换背景
     if (self.changeTopImage) {
-        self.changeTopImage([UIImage imageNamed:[self.dataArray ssj_safeObjectAtIndex:indexPath.row]]);
+        self.changeTopImage([UIImage imageNamed:[self.dataArray ssj_safeObjectAtIndex:indexPath.row]],[self.dataArray ssj_safeObjectAtIndex:indexPath.row]);
     }
 }
 

@@ -70,7 +70,7 @@
 - (UIView *)coverView {
     if (!_coverView) {
         _coverView = [[UIView alloc] init];
-        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.5];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
         _coverView.layer.cornerRadius = 6;
         _coverView.layer.masksToBounds = YES;
     }
