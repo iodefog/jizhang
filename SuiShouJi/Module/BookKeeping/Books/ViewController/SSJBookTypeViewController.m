@@ -14,6 +14,8 @@
 
 @interface SSJBookTypeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property (nonatomic, strong) NSArray<NSNumber *> *booksTypes;
+
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
 /**上一次选择的cell*/
@@ -23,6 +25,18 @@
 
 @implementation SSJBookTypeViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.booksTypes = @[@(SSJBooksTypeDaily),
+                            @(SSJBooksTypeBaby),
+                            @(SSJBooksTypeBusiness),
+                            @(SSJBooksTypeTravel),
+                            @(SSJBooksTypeDecoration),
+                            @(SSJBooksTypeMarriage)];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setUpNav];
@@ -31,15 +45,15 @@
     [self updateAppearanceAfterThemeChanged];
 }
 
-- (void)setLastSelectedIndex:(NSInteger)lastSelectedIndex
-{
-    _lastSelectedIndex = lastSelectedIndex;
-    static dispatch_once_t onceToken;
-    __weak __typeof(self)weakSelf = self;
-    dispatch_once(&onceToken, ^{
-        [weakSelf.tableView reloadData];
-    });
-}
+//- (void)setLastSelectedIndex:(NSInteger)lastSelectedIndex
+//{
+//    _lastSelectedIndex = lastSelectedIndex;
+//    static dispatch_once_t onceToken;
+//    __weak __typeof(self)weakSelf = self;
+//    dispatch_once(&onceToken, ^{
+//        [weakSelf.tableView reloadData];
+//    });
+//}
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
@@ -71,11 +85,12 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (self.lastSelectedIndex != indexPath.row) {
+    SSJBooksType selectedType = [[self.booksTypes ssj_safeObjectAtIndex:indexPath.row] integerValue];
+    if (self.booksType != selectedType) {
         SSJBooksParentSelectCell *currentCell = [tableView cellForRowAtIndexPath:indexPath];
         self.lastSelectedCell.arrowImageView.hidden = YES;
         currentCell.arrowImageView.hidden = NO;
-        self.lastSelectedIndex = indexPath.row;
+        self.booksType = selectedType;
         self.lastSelectedCell = currentCell;
         //更新选择的账本类型就是lastSelectedIndex
     }
@@ -105,49 +120,27 @@
         cell = [[SSJBooksParentSelectCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kBookTypeChooseID];
     }
 
-    if (self.lastSelectedIndex == indexPath.row) {
+    if (self.booksType == [[self.booksTypes ssj_safeObjectAtIndex:indexPath.row] integerValue]) {
         self.lastSelectedCell = cell;
         cell.arrowImageView.hidden = NO;
     } else {
         cell.arrowImageView.hidden = YES;
     }
-    [cell setImage:[[self images] ssj_safeObjectAtIndex:indexPath.row] title:[[self titles] ssj_safeObjectAtIndex:indexPath.row]];
+    SSJBooksType type = [[self.booksTypes ssj_safeObjectAtIndex:indexPath.row] integerValue];
+    [cell setImage:[self imageNameForBooksType:type] title:[self titleForBooksType:type]];
     return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self titles].count;
+    return self.booksTypes.count;
 }
 
 #pragma mark - Event
 - (void)rightButtonClicked:(UIButton *)btn {
     if (self.saveBooksBlock) {
-        self.saveBooksBlock(self.lastSelectedIndex,[[self titles] ssj_safeObjectAtIndex:self.lastSelectedIndex]);
+        self.saveBooksBlock(self.booksType, [self titleForBooksType:self.booksType]);
     }
-        switch (self.lastSelectedIndex) {
-            case 0:
-                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_richang" : @"book_type_richang"];
-                break;
-    
-            case 1:
-                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_shengyi" : @"book_type_shengyi"];
-                break;
-    
-            case 2:
-                [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_jiehun" : @"book_type_jiehun"];
-                break;
-    
-            case 3:
-                [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_zhuangxiu" : @"book_type_zhuangxiu"];
-                break;
-    
-            case 4:
-                [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_lvxing" : @"book_type_lvxing"];
-                break;
-                
-            default:
-                break;
-        }
+    [self eventStatistics];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -168,12 +161,90 @@
 }
 
 #pragma mark - Private
-- (NSArray *)titles {
-    return @[@"日常",@"生意",@"旅行",@"装修",@"结婚"];//,@"育儿"
+- (NSString *)titleForBooksType:(SSJBooksType)type {
+    switch (type) {
+        case SSJBooksTypeDaily:
+            return @"日常";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"生意";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"结婚";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"装修";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"旅行";
+            break;
+            
+        case SSJBooksTypeBaby:
+            return @"宝宝";
+            break;
+    }
 }
 
-- (NSArray *)images {
-    return @[@"bk_moren",@"bk_shengyi",@"bk_lvxing",@"bk_zhuangxiu",@"bk_jiehun"];//,@"bk_yinger"
+- (NSString *)imageNameForBooksType:(SSJBooksType)type {
+    switch (type) {
+        case SSJBooksTypeDaily:
+            return @"bk_moren";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"bk_shengyi";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"bk_jiehun";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"bk_zhuangxiu";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"bk_lvxing";
+            break;
+            
+        case SSJBooksTypeBaby:
+#warning TODO
+            return @"";
+            break;
+    }
+}
+
+- (void)eventStatistics {
+    switch (self.booksType) {
+        case SSJBooksTypeDaily:
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_richang" : @"book_type_richang"];
+            break;
+            
+        case SSJBooksTypeBusiness:
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_shengyi" : @"book_type_shengyi"];
+            break;
+            
+        case SSJBooksTypeMarriage:
+            [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_jiehun" : @"book_type_jiehun"];
+            break;
+            
+        case SSJBooksTypeDecoration:
+            [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_zhuangxiu" : @"book_type_zhuangxiu"];
+            break;
+            
+        case SSJBooksTypeTravel:
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_lvxing" : @"book_type_lvxing"];
+            break;
+            
+        case SSJBooksTypeBaby:
+#warning TODO
+            
+            break;
+    }
 }
 
 @end

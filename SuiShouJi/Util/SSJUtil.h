@@ -110,6 +110,13 @@ FOUNDATION_EXPORT NSString *SSJDefaultSource();
 FOUNDATION_EXPORT NSString *SSJAppStoreUrl();
 
 /**
+ 苹果商店的ID
+
+ @return <#return value description#>
+ */
+FOUNDATION_EXPORT NSString *SSJAppleID();
+
+/**
  *  返回当前渠道具体配置
  *
  *  @param key 配置的key
