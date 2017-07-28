@@ -10,4 +10,12 @@
 
 @interface SSJBooksMergeProgressButton : UIView
 
+@property (nonatomic, strong) NSString *title;
+
+@property (nonatomic, strong) UILabel  *titleLab;
+
+@property (nonatomic, strong) UIFont *titleFont;
+
+@property (nonatomic, strong) UIColor *titleColor;
+
 @end

@@ -131,7 +131,8 @@
 - (SSJBooksMergeProgressButton *)mergeButton {
     if (!_mergeButton) {
         _mergeButton = [[SSJBooksMergeProgressButton alloc] init];
-        
+        _mergeButton.title = @"迁移";
+        _mergeButton.layer.cornerRadius = 6.f;
     }
     return _mergeButton;
 }
