@@ -33,7 +33,6 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJRecordMakingStore.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJDataSynchronizer.h"
 #import "SSJCategoryListHelper.h"
 
 
@@ -621,8 +620,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     if (_customNaviBar.managed) {
         [SSJAnaliyticsManager event:@"addRecord_manage"];
-    } else {
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     }
 }
 
@@ -916,7 +913,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         if (SSJSaveImage(_selectedImage, imageName) && SSJSaveThumbImage(_selectedImage, imageName)) {
             self.item.chargeImage = [NSString stringWithFormat:@"%@.jpg",imageName];
             self.item.chargeThumbImage = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
-
         }
     }
     
