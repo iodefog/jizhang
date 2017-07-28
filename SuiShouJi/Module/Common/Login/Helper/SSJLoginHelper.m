@@ -28,7 +28,7 @@
 }
 
 + (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error {
-//    NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+//    NSString *writedate = [[NSDate date] :@"yyyy-MM-dd HH:mm:ss.SSS"];
 //    for (SSJCustomCategoryItem *item in items) {
 //        if (![db intForQuery:@"select count(1) from bk_user_bill_type where cuserid = ? and cbillid = ? and cbooksid = ?",userId,item.ibillid,item.cbooksid]) {
 //            

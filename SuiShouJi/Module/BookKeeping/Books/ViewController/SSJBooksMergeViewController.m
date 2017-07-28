@@ -13,6 +13,7 @@
 
 #import "SSJBooksMergeProgressButton.h"
 #import "SSJBooksTransferSelectView.h"
+#import "SSJBooksSelectView.h"
 
 @interface SSJBooksMergeViewController ()
 
@@ -28,12 +29,17 @@
 
 @property (nonatomic, strong) SSJBooksMergeHelper *mergeHelper;
 
+@property (nonatomic, strong) NSArray *allBooksItem;
+
+@property (nonatomic, strong) SSJBooksSelectView *booksSelectView;
+
 @end
 
 @implementation SSJBooksMergeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"迁移账本数据";
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.mergeButton];
     [self.scrollView addSubview:self.transferOutBookBackView];
@@ -99,6 +105,17 @@
     if (!_transferInBookBackView) {
         _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
         _transferInBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        @weakify(self);
+        _transferInBookBackView.transferInSelectButtonClick = ^{
+            @strongify(self);
+            NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
+            if (!allBooks.count) {
+                [CDAutoHideMessageHUD showMessage:@""];
+            } else {
+                self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
+                [self.booksSelectView showWithSelectedItem:self.transferInBooksItem];
+            }
+        };
     }
     return _transferInBookBackView;
 }
@@ -134,6 +151,19 @@
         _scrollView = [[UIScrollView alloc] init];
     }
     return _scrollView;
+}
+
+- (SSJBooksSelectView *)booksSelectView {
+    if (!_booksSelectView) {
+        _booksSelectView = [[SSJBooksSelectView alloc] init];
+        @weakify(self);
+        _booksSelectView.booksTypeSelectBlock = ^(SSJBaseCellItem<SSJBooksItemProtocol> *item) {
+            @strongify(self);
+            self.transferInBooksItem = item;
+            [self updateWithBookData];
+        };
+    }
+    return _booksSelectView;
 }
 
 #pragma mark - Private

@@ -24,4 +24,7 @@ typedef NS_ENUM(NSInteger, SSJBooksTransferViewType) {
 
 - (instancetype)initWithFrame:(CGRect)frame type:(SSJBooksTransferViewType)type;
 
+@property (nonatomic, copy) void(^transferInSelectButtonClick)();
+
+
 @end
