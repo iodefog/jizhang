@@ -31,6 +31,12 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic) BOOL shouldCheckIntersection;
 
+/**
+ 用于在touchesEnded:withEvent:判断是否应该执行代理方法collectionView:didSelectItemAtIndexPath:
+ 如果longPressGesture已经识别长按手势，shouldPerformSelectAction置为NO；反之就是YES
+ */
+@property (nonatomic) BOOL shouldPerformSelectAction;
+
 @end
 
 @implementation SSJEditableCollectionView
@@ -43,6 +49,7 @@ static const CGFloat kMaxSpeed = 100;
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
         
         _shouldCheckIntersection = YES;
+        _shouldPerformSelectAction = YES;
         
         _movedCellScale = 1;
         
@@ -90,8 +97,13 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 #pragma mark - UIResponder
+// 重写此方法用于根据不同情况决定是否主动调用collectionView:didSelectItemAtIndexPath:
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-#warning ???
+    if (!_shouldPerformSelectAction) {
+        _shouldPerformSelectAction = YES;
+        return;
+    }
+    
     if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didSelectItemAtIndexPath:)]) {
         UITouch *touch = [touches anyObject];
         CGPoint touchPoint = [touch locationInView:self];
@@ -153,9 +165,7 @@ static const CGFloat kMaxSpeed = 100;
 #pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
     _longPressGesture.enabled = NO;
-//    if (_moving) {
-//        return;
-//    }
+    _shouldPerformSelectAction = NO;
     
     CGPoint touchPoint = [_longPressGesture locationInView:self];
     NSIndexPath *touchIndexPath = [self indexPathForItemAtPoint:touchPoint];
