@@ -85,6 +85,21 @@
 @property (nonatomic) UIControlContentHorizontalAlignment contentAlignment;
 
 /**
+ default 0.5
+ */
+@property (nonatomic) CGFloat shadowOpacity;
+
+/**
+ default CGSizeMake(0, 3)
+ */
+@property (nonatomic) CGSize shadowOffset;
+
+/**
+ 圆角半径，默认2
+ */
+@property (nonatomic) CGFloat cornerRadius;
+
+/**
  在view中的顶点显示；只是简便方法，内部还是调用showInView:atPoint:superViewInsets:finishHandle:dismissHandle:
 
  @param view <#view description#>

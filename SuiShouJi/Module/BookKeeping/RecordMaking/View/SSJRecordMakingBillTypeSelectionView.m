@@ -294,6 +294,8 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _listMenu.fillColor = SSJ_SECONDARY_COLOR;
         _listMenu.separatorColor = [UIColor whiteColor];
         _listMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _listMenu.shadowOpacity = 0;
+        _listMenu.cornerRadius = 4;
         _listMenu.items = @[[SSJListMenuItem itemWithImageName:nil
                                                          title:@"编辑类别"
                                               normalTitleColor:[UIColor whiteColor]
