@@ -44,7 +44,7 @@
         _moneyBtn = [[UILabel alloc] init];
         _moneyBtn.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _moneyBtn.textAlignment = NSTextAlignmentCenter;
-        _moneyBtn.layer.borderWidth = 1/SSJSCREENSCALE;
+        _moneyBtn.layer.borderWidth = 1;
         _moneyBtn.layer.cornerRadius = 6;
         _moneyBtn.layer.masksToBounds = YES;
         _moneyBtn.backgroundColor = [UIColor clearColor];

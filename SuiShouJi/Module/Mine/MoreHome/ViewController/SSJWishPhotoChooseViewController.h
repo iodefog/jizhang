@@ -13,7 +13,7 @@ static CGFloat defImageHeight = 302;
 #define kFinalImgHeight(width) ((width) * defImageHeight / defImageWidth)
 @interface SSJWishPhotoChooseViewController : SSJBaseViewController
 
-typedef void(^ChangeTopImage)(UIImage *seleImg);
+typedef void(^ChangeTopImage)(UIImage *seleImg,NSString *seleImgName);
 
 @property (nonatomic, copy) ChangeTopImage changeTopImage;
 @end

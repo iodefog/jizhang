@@ -140,7 +140,6 @@ static const CGFloat kCornerRadius = 2;
         _minDisplayRowCount = minDisplayRowCount;
         [self sizeToFit];
     }
-    
 }
 
 - (void)setMaxDisplayRowCount:(CGFloat)maxDisplayRowCount {

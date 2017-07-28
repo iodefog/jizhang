@@ -26,9 +26,9 @@ typedef NS_ENUM(NSInteger, SSJRecordMakingBillTypeSelectionCellState) {
 
 @property (nonatomic) int order;
 
-@property (nonatomic) SSJRecordMakingBillTypeSelectionCellState state;
+@property (nonatomic) BOOL pencilRotated;
 
-//@property (nonatomic) BOOL animated;
+@property (nonatomic) SSJRecordMakingBillTypeSelectionCellState state;
 
 + (instancetype)itemWithTitle:(NSString *)title
                     imageName:(NSString *)imageName

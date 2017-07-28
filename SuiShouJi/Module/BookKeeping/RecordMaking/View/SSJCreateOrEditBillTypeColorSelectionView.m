@@ -168,6 +168,10 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     } completion:^(BOOL finished) {
         self.hidden = YES;
     }];
+    
+    if (self.dismissHandler) {
+        self.dismissHandler(self);
+    }
 }
 
 - (void)setupCollectionViewConstraint {
@@ -209,6 +213,8 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         _backView = [[UIView alloc] init];
         _backView.backgroundColor = [UIColor blackColor];
         _backView.alpha = 0;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+        [_backView addGestureRecognizer:tap];
     }
     return _backView;
 }

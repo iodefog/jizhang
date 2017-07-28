@@ -142,7 +142,7 @@
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.stateLabel.backgroundColor = [UIColor lightGrayColor];
-
+    self.wishTitleL.textColor = SSJ_MAIN_COLOR;
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.bgView.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
     } else {

@@ -18,26 +18,6 @@
 
 @optional
 /**
- *  询问代理者是否应该进入编辑状态，只能由用户长按触发
- *
- *  @param collectionView
- *  @param indexPath 长按的cell的indexpath
- *
- *  @return (BOOL) 是否应该进入编辑状态
- */
-- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
-
-/**
- *  已经进入编辑状态，可由用户长按触发或调用beginEditing触发
- *
- *  @param collectionView 要保存的图片
- *  @param indexPath 如果由用户长按触发则传入用户长按的cell的indexpath，如果是调用beginEditing触发，则传nil
- *
- *  @return (void)
- */
-- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath;
-
-/**
  询问代理者是否开始移动指定位置的cell；在整个移动过程中只触发一次
 
  @param collectionView <#collectionView description#>
@@ -79,24 +59,6 @@
  */
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath;
 
-/**
- *  询问代理者是否应该结束编辑状态；在编辑状态下用户手动点击collectionView触发，调用endEditing不会触发此方法
- *
- *  @param collectionView
- *
- *  @return (BOOL) 是否应该结束编辑状态
- */
-- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView;
-
-/**
- *  已经结束编辑状态，此方法可能由用户手动点击collectionView触发，或者调用endEditing触发
- *
- *  @param collectionView
- *
- *  @return (void)
- */
-- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView;
-
 @end
 
 @interface SSJEditableCollectionView : UICollectionView
@@ -124,11 +86,6 @@
 @property (nonatomic) CGFloat movedCellScale;
 
 /**
- *  是否正在编辑状态
- */
-@property (nonatomic, readonly) BOOL editing;
-
-/**
  *  将当前移动的cell保持在屏幕可视范围内;editDelegate需要在scrollViewDidScroll方法中调用此方法
  */
 - (void)keepCurrentMovedCellVisible;
@@ -139,15 +96,5 @@
  *  collectionView:didExchangeCellsWithIndexPath:anotherIndexPath
  */
 - (void)checkIfHasIntersectantCells;
-
-/**
- *  开始编辑
- */
-- (void)beginEditing;
-
-/**
- *  结束编辑
- */
-- (void)endEditing;
 
 @end

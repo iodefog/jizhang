@@ -107,9 +107,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    if (self.collectionView.editing) {
-        [self collectionViewEndEditing];
-    }
+//    if (self.collectionView.editing) {
+//        [self collectionViewEndEditing];
+//    }
     SSJUserItem *item = [[SSJUserItem alloc] init];
     item.selectFundid = self.selectedFundids;
     item.userId = SSJUSERID();
@@ -209,7 +209,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 #pragma mark - SSJEditableCollectionViewDelegate
-- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
+- (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldBeginMovingCellAtIndexPath:(NSIndexPath *)indexPath {
     [SSJAnaliyticsManager event:@"fund_sort"];
     return YES;
 }
@@ -217,23 +217,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath{
     return YES;
 }
-
-- (void)collectionView:(SSJEditableCollectionView *)collectionView didBeginEditingWhenPressAtIndexPath:(NSIndexPath *)indexPath{
-//    _editeModel = YES;
-//    UIBarButtonItem *rightBarItem = [[UIBarButtonItem alloc]initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(collectionViewEndEditing)];
-//    self.navigationItem.rightBarButtonItem = rightBarItem;
-//    [self.collectionView reloadData];
-}
-
-- (void)collectionViewDidEndEditing:(SSJEditableCollectionView *)collectionView{
-    [SSJAnaliyticsManager event:@"account_book_sort"];
-    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
-}
-
-//- (BOOL)shouldCollectionViewEndEditingWhenUserTapped:(SSJEditableCollectionView *)collectionView{
-//    [self collectionViewEndEditing];
-//    return YES;
-//}
 
 - (void)collectionView:(SSJEditableCollectionView *)collectionView didEndMovingCellFromIndexPath:(NSIndexPath *)fromIndexPath toTargetIndexPath:(NSIndexPath *)toIndexPath{
     SSJFinancingHomeitem *currentItem = [self.items ssj_safeObjectAtIndex:fromIndexPath.row];
@@ -249,6 +232,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             cardItem.cardOder = i + 1;
         }
     }
+    
+    [SSJAnaliyticsManager event:@"account_book_sort"];
+    [SSJFinancingHomeHelper SaveFundingOderWithItems:self.items error:nil];
 }
 
 #pragma mark - Getter
@@ -390,7 +376,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     [self.collectionView reloadData];
     UIBarButtonItem *rightButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"founds_jia"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
     self.navigationItem.rightBarButtonItem = rightButton;
-    [self.collectionView endEditing];
 }
 
 -(void)transferButtonClicked{

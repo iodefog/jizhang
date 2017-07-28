@@ -12,10 +12,8 @@
 
 @interface SSJRecordMakingBillTypeSelectionCell : UICollectionViewCell
 
+@property (nonatomic, strong, readonly) UIImageView *pencil;
+
 @property (nonatomic, strong) SSJRecordMakingBillTypeSelectionCellItem *item;
-
-@property (nonatomic, copy) void (^deleteAction)(SSJRecordMakingBillTypeSelectionCell *);
-
-@property (nonatomic, copy) BOOL (^shouldDeleteAction)(SSJRecordMakingBillTypeSelectionCell *);
 
 @end

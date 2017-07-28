@@ -38,7 +38,7 @@ const int SSJImmovableOrder = INT_MAX;
             }
         }
         NSMutableArray *categoryList =[NSMutableArray array];
-        FMResultSet *result = [db executeQuery:@"select cname, ccolor, cicoin, cwritedate, cbillid, iorder from bk_user_bill_type where itype = ? and cuserid = ? and cbooksid = ? order by iorder, cwritedate, cbillid", @(billType), userId, booksID];
+        FMResultSet *result = [db executeQuery:@"select cname, ccolor, cicoin, cwritedate, cbillid, iorder from bk_user_bill_type where itype = ? and cuserid = ? and cbooksid = ? and operatortype <> 2 order by iorder, cwritedate, cbillid", @(billType), userId, booksID];
         while ([result next]) {
             NSString *categoryTitle = [result stringForColumn:@"cname"];
             NSString *categoryImage = [result stringForColumn:@"cicoin"];

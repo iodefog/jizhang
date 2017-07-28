@@ -23,7 +23,7 @@
         item.wishType = [[dic objectForKey:@"typeid"] integerValue];
         item.wishName = [dic objectForKey:@"typename"];
         item.wishMoney = [dic objectForKey:@"money"];
-        item.wishCount = [dic objectForKey:@"count"];
+        item.wishCount = [NSString stringWithFormat:@"%@",[dic objectForKey:@"count"]];
         [tempArr addObject:item];
     }
     self.wishDefoArray = tempArr;

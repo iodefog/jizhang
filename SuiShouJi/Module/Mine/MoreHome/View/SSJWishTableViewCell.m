@@ -40,7 +40,7 @@
 - (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
     if ([cellItem isKindOfClass:[SSJWishDefItem class]]) {
         SSJWishDefItem *item = cellItem;
-        if ([item.wishCount doubleValue] > 0) {
+        if (item.wishCount.length) {
             self.accessoryView = self.accessoryBtn;
             [self.accessoryBtn setTitle:item.wishCount forState:UIControlStateNormal];
             [self.accessoryBtn sizeToFit];

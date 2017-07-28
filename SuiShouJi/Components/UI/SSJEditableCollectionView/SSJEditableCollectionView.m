@@ -13,13 +13,9 @@ static const CGFloat kMaxSpeed = 100;
 
 @interface SSJEditableCollectionView () <UICollectionViewDataSource, UIGestureRecognizerDelegate>
 
-@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
-
 @property (nonatomic, strong) UILongPressGestureRecognizer *longPressGesture;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
-
-@property (nonatomic) BOOL editing;
 
 @property (nonatomic) BOOL moving;
 
@@ -35,6 +31,12 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic) BOOL shouldCheckIntersection;
 
+/**
+ 用于在touchesEnded:withEvent:判断是否应该执行代理方法collectionView:didSelectItemAtIndexPath:
+ 如果longPressGesture已经识别长按手势，shouldPerformSelectAction置为NO；反之就是YES
+ */
+@property (nonatomic) BOOL shouldPerformSelectAction;
+
 @end
 
 @implementation SSJEditableCollectionView
@@ -47,6 +49,7 @@ static const CGFloat kMaxSpeed = 100;
     if (self = [super initWithFrame:frame collectionViewLayout:layout]) {
         
         _shouldCheckIntersection = YES;
+        _shouldPerformSelectAction = YES;
         
         _movedCellScale = 1;
         
@@ -57,10 +60,6 @@ static const CGFloat kMaxSpeed = 100;
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(beginEditingWhenLongPressBegin)];
         _longPressGesture.delegate = self;
         [self addGestureRecognizer:_longPressGesture];
-        
-        _tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(endEditingWhenTapped)];
-        _tapGesture.delegate = self;
-        [self addGestureRecognizer:_tapGesture];
         
         _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(beginMoving)];
         _panGesture.delegate = self;
@@ -82,9 +81,7 @@ static const CGFloat kMaxSpeed = 100;
 
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer == _tapGesture) {
-        return _editing;
-    } else if (gestureRecognizer == _panGesture) {
+    if (gestureRecognizer == _panGesture) {
         return _moving;
     } /*else if (gestureRecognizer == _longPressGesture) {
         NSLog(@"state:%@", [self debugDescWithState:gestureRecognizer.state]);
@@ -100,8 +97,10 @@ static const CGFloat kMaxSpeed = 100;
 }
 
 #pragma mark - UIResponder
+// 重写此方法用于根据不同情况决定是否主动调用collectionView:didSelectItemAtIndexPath:
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
-    if (_editing) {
+    if (!_shouldPerformSelectAction) {
+        _shouldPerformSelectAction = YES;
         return;
     }
     
@@ -166,27 +165,11 @@ static const CGFloat kMaxSpeed = 100;
 #pragma mark - Event
 - (void)beginEditingWhenLongPressBegin {
     _longPressGesture.enabled = NO;
-//    if (_moving) {
-//        return;
-//    }
+    _shouldPerformSelectAction = NO;
     
     CGPoint touchPoint = [_longPressGesture locationInView:self];
     NSIndexPath *touchIndexPath = [self indexPathForItemAtPoint:touchPoint];
     UICollectionViewCell *touchedCell = [self cellForItemAtIndexPath:touchIndexPath];
-    
-    if (!_editing) {
-        BOOL couldBeginEdit = YES;
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:shouldBeginEditingWhenPressAtIndexPath:)]) {
-            couldBeginEdit = [_editDelegate collectionView:self shouldBeginEditingWhenPressAtIndexPath:touchIndexPath];
-        }
-        
-        if (couldBeginEdit) {
-            _editing = YES;
-            if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
-                [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:touchIndexPath];
-            }
-        }
-    }
     
     if (!_moving && touchedCell) {
         
@@ -216,16 +199,6 @@ static const CGFloat kMaxSpeed = 100;
     }
 }
 
-- (void)endEditingWhenTapped {
-    BOOL shouldEndEditing = YES;
-    if (_editDelegate && [_editDelegate respondsToSelector:@selector(shouldCollectionViewEndEditingWhenUserTapped:)]) {
-        shouldEndEditing = [_editDelegate shouldCollectionViewEndEditingWhenUserTapped:self];
-    }
-    if (shouldEndEditing) {
-        [self endEditing];
-    }
-}
-
 - (void)beginMoving {
     if (_moving) {
         CGPoint touchPoint = [_panGesture locationInView:self];
@@ -246,28 +219,6 @@ static const CGFloat kMaxSpeed = 100;
 - (void)setEditDelegate:(id<SSJEditableCollectionViewDelegate>)editDelegate {
     _editDelegate = editDelegate;
     self.delegate = _editDelegate;
-}
-
-- (void)beginEditing {
-    if (!_editing) {
-        _editing = YES;
-        
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionView:didBeginEditingWhenPressAtIndexPath:)]) {
-            [_editDelegate collectionView:self didBeginEditingWhenPressAtIndexPath:nil];
-        }
-    }
-}
-
-- (void)endEditing {
-    [self endMovingCell];
-    
-    if (_editing) {
-        _editing = NO;
-        
-        if (_editDelegate && [_editDelegate respondsToSelector:@selector(collectionViewDidEndEditing:)]) {
-            [_editDelegate collectionViewDidEndEditing:self];
-        }
-    }
 }
 
 // 将当前移动的cell保持在可视范围内
