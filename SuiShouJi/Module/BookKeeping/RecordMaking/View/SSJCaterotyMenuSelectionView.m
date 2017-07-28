@@ -585,6 +585,16 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 - (void)updateAppearanceAccordingToTheme {
     _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
     [_subscriptLine setLineColor:SSJ_BORDER_COLOR];
+    
+    NSArray *headerViews = [self.collectionView visibleSupplementaryViewsOfKind:UICollectionElementKindSectionHeader];
+    for (_SSJCaterotyMenuSelectionViewCollectionHeaderView *header in headerViews) {
+        header.titleLab.textColor = SSJ_SECONDARY_COLOR;
+    }
+    
+    NSArray *cells = [self.collectionView visibleCells];
+    for (_SSJCaterotyMenuSelectionViewCollectionCell *cell in cells) {
+        cell.titleLab.textColor = SSJ_MAIN_COLOR;
+    }
 }
 
 - (SSJCaterotyMenuSelectionCellItem *)itemAtIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)indexPath {
@@ -673,6 +683,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     _SSJCaterotyMenuSelectionViewCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCollectionViewCellID forIndexPath:indexPath];
+    cell.titleLab.textColor = SSJ_MAIN_COLOR;
     
     NSInteger selectedMenuIndex = self.tableView.indexPathForSelectedRow.row;
     SSJCaterotyMenuSelectionCellItem *item = [self.itemsSet itemAtMenuIndex:selectedMenuIndex categoryIndex:indexPath.section itemIndex:indexPath.item];
@@ -692,6 +703,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     _SSJCaterotyMenuSelectionViewCollectionHeaderView *header = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:kCollectionHeaderViewID forIndexPath:indexPath];
+    header.titleLab.textColor = SSJ_SECONDARY_COLOR;
     
     NSInteger selectedMenuIndex = self.tableView.indexPathForSelectedRow.row;
     _SSJCategoryItemSet *category = [self.itemsSet itemsAtMenuIndex:selectedMenuIndex categoryIndex:indexPath.section];
