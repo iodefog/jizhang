@@ -353,11 +353,13 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 - (SSJCreateOrEditBillTypeColorSelectionView *)colorSelectionView {
     if (!_colorSelectionView) {
-        _colorSelectionView = [[SSJCreateOrEditBillTypeColorSelectionView alloc] init];
         __weak typeof(self) wself = self;
+        _colorSelectionView = [[SSJCreateOrEditBillTypeColorSelectionView alloc] init];
         _colorSelectionView.selectColorAction = ^(SSJCreateOrEditBillTypeColorSelectionView *view) {
-            [wself.topView setArrowDown:YES animated:YES];
             wself.color = wself.colors[view.selectedIndex];
+        };
+        _colorSelectionView.dismissHandler = ^(SSJCreateOrEditBillTypeColorSelectionView * _Nonnull view) {
+            [wself.topView setArrowDown:YES animated:YES];
         };
     }
     return _colorSelectionView;

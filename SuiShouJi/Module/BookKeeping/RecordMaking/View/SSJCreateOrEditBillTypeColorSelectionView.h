@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) void(^selectColorAction)(SSJCreateOrEditBillTypeColorSelectionView *view);
 
+@property (nonatomic, copy) void(^dismissHandler)(SSJCreateOrEditBillTypeColorSelectionView *view);
+
 @property (nonatomic, readonly) BOOL showed;
 
 - (void)show;
