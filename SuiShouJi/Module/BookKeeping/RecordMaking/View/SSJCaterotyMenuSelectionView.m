@@ -552,12 +552,26 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 
 - (void)setSelectedIndexPath:(SSJCaterotyMenuSelectionViewIndexPath *)selectedIndexPath animated:(BOOL)animated {
     _selectedIndexPath = selectedIndexPath;
-    if (selectedIndexPath.menuIndex >= 0 && self.style == SSJCaterotyMenuSelectionViewMenuLeft) {
-        [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
+    
+    if (self.style == SSJCaterotyMenuSelectionViewMenuLeft) {
+        if (selectedIndexPath.menuIndex >= 0 && selectedIndexPath.menuIndex != NSNotFound) {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
+        } else {
+            for (NSIndexPath *indexPath in self.tableView.indexPathsForSelectedRows) {
+                [self.tableView deselectRowAtIndexPath:indexPath animated:animated];
+            }
+        }
     }
     
-    if (selectedIndexPath.itemIndex >= 0 && selectedIndexPath.categoryIndex >= 0) {
+    if (selectedIndexPath.itemIndex >= 0
+        && selectedIndexPath.itemIndex != NSNotFound
+        && selectedIndexPath.categoryIndex >= 0
+        && selectedIndexPath.categoryIndex != NSNotFound) {
         [self.collectionView selectItemAtIndexPath:[NSIndexPath indexPathForItem:selectedIndexPath.itemIndex inSection:selectedIndexPath.categoryIndex] animated:animated scrollPosition:UICollectionViewScrollPositionCenteredVertically];
+    } else {
+        for (NSIndexPath *indexPath in self.collectionView.indexPathsForSelectedItems) {
+            [self.collectionView deselectItemAtIndexPath:indexPath animated:animated];
+        }
     }
 }
 
@@ -645,6 +659,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     }];
     
     [self.collectionView reloadData];
+    self.collectionView.contentOffset = CGPointMake(0, 0);
+    
     if (self.delegate && [self.delegate respondsToSelector:@selector(selectionView:didSelectMenuAtIndex:)]) {
         [self.delegate selectionView:self didSelectMenuAtIndex:indexPath.row];
     }
