@@ -216,6 +216,7 @@
         [SSJWishHelper deleteWishWithWisId:self.wishId Success:^{
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [self.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"删除失败"];
@@ -399,6 +400,7 @@
         [[_finishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             [SSJWishHelper finishWishWithWisId:self.wishId Success:^{
                 [CDAutoHideMessageHUD showMessage:@"心愿完成"];
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                 [weakSelf getDataFromDatabase];
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];

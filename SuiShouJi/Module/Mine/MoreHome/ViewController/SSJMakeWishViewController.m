@@ -20,6 +20,7 @@
 #import "SSJWishDefItem.h"
 
 #import "SSJWishHelper.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 @interface SSJMakeWishViewController () <UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,SSJBaseNetworkServiceDelegate>
@@ -124,7 +125,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     self.moneyCollectionView.frame = CGRectMake(15, CGRectGetMaxY(self.wishAmountTextF.frame), self.wishAmountTextF.width, 67);
     self.makeWishBtn.frame = CGRectMake(15, SSJSCREENHEIGHT - 115, self.view.width - 30, 44);
 }
-//[self.iconView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(data.iconUrl)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+
 #pragma mark - Private
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
@@ -290,10 +291,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             @strongify(self);
             SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
             @weakify(self);
-            photoVC.changeTopImage = ^(UIImage *seleImg) {
+            photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
                 @strongify(self);
                 //切换背景
                 self.topImg.image = seleImg;
+                self.wishModel.wishImage = seleImgName;
                 [self.navigationController popViewControllerAnimated:YES];
             };
             
@@ -406,9 +408,17 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
                 [CDAutoHideMessageHUD showMessage:@"心愿名称不能超过20个字哦"];
                 return ;
             }
-           //保存心愿
+            
+            self.wishModel.wishId = SSJUUID();
             self.wishModel.wishName = self.wishNameTextF.text;
             self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];
+            
+            //保存心愿图片
+            if (![self saveWishImage]) {
+                [CDAutoHideMessageHUD showMessage:@"图片保存失败稍后再试"];
+                return;
+            }
+            
             [SSJWishHelper saveWishWithWishModel:self.wishModel success:^{
                 //进入许愿成功进度反馈页面
                 SSJWishProgressViewController *wishProVC = [[SSJWishProgressViewController alloc] init];
@@ -416,6 +426,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
                 wishProVC.wishId = self.wishModel.wishId;
                 [self.navigationController pushViewController:wishProVC animated:YES];
                 self.wishModel = nil;
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             } failure:^(NSError *error) {
                 [CDAutoHideMessageHUD showMessage:error.localizedDescription];
             }];
@@ -423,6 +434,20 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         }];
     }
     return _makeWishBtn;
+}
+
+- (BOOL)saveWishImage {
+    BOOL issuccess = NO;
+    //只有是自定义图片的时候才需要写入沙河
+    if ([self.wishModel.wishImage isEqualToString:SSJWishCustomImageName]) {
+        if (SSJSaveImage(self.topImg.image, SSJWishCustomImageName)) {//图片写进沙河
+            //在同步表中保存
+           issuccess = [SSJWishHelper saveImageToImgSyncTable:SSJWishCustomImageName rId:self.wishModel.wishId failure:nil];
+        }
+    } else {
+        issuccess = YES;
+    }
+    return issuccess;
 }
 
 - (SSJMakeWishDefoDataService *)defoWishDataService {

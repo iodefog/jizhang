@@ -217,6 +217,7 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
     @weakify(self);
     [SSJWishHelper saveWishChargeWithWishChargeModel:self.chargeItem type:self.chargeItem.itype success:^{
         @strongify(self);
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [self.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];

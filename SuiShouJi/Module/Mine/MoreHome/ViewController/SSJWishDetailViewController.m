@@ -101,6 +101,7 @@
         //终止
         [SSJWishHelper termWishWithWishModel:self.wishModel success:^{
             [CDAutoHideMessageHUD showMessage:@"终止成功"];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"终止失败"];
@@ -110,6 +111,7 @@
         //删除
         [SSJWishHelper deleteWishWithWisId:self.wishModel.wishId Success:^{
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
             if ([lastVc isKindOfClass:[SSJWishManageViewController class]]) {
                 if ([self.navigationController.viewControllers containsObject:lastVc]) {
@@ -268,9 +270,10 @@
         self.wishAmountTF = newReminderCell.textInput;
     } else if (indexPath.row == 2) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
-        newReminderCell.cellDetail = [self.reminderItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        if (self.reminderItem.remindState == 1) {
+            newReminderCell.cellDetail = [self.reminderItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
         newReminderCell.cellTitle = title;
-        self.remindSwitch.on = self.reminderItem.remindState;
         newReminderCell.accessoryView = self.remindSwitch;
         
     }
@@ -350,7 +353,17 @@
         _topImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kFinalImgHeight(SSJSCREENWITH))];
         _topImg.userInteractionEnabled = YES;
         _topImg.contentMode = UIViewContentModeScaleToFill;
-        _topImg.image = [UIImage imageNamed:self.wishModel.wishImage];
+        UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
+        if (!image) {
+            NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
+            image = [UIImage imageWithContentsOfFile:imgPath];
+        }
+        if (!image) {
+            [_topImg sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+        } else {
+            _topImg.image = image;
+        }
+        
     }
     return _topImg;
 }
@@ -358,7 +371,7 @@
 - (UIView *)coverView {
     if (!_coverView) {
         _coverView = [[UIView alloc] init];
-        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.7];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
     }
     return _coverView;
 }
@@ -383,10 +396,12 @@
             @strongify(self);
             SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
             @weakify(self);
-            photoVC.changeTopImage = ^(UIImage *seleImg) {
+            photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
                 @strongify(self);
                 //切换背景
                 self.topImg.image = seleImg;
+                self.wishModel.wishImage = seleImgName;
+                
                 [self.navigationController popViewControllerAnimated:YES];
             };
             
@@ -439,6 +454,7 @@
             weakSelf.wishModel.wishMoney = weakSelf.wishAmountTF.text;
             //保存愿望详情
             [SSJWishHelper saveWishWithWishModel:weakSelf.wishModel success:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                 [weakSelf ssj_backOffAction];
             } failure:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
