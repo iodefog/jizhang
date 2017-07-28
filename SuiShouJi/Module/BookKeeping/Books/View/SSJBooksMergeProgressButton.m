@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) UIColor *titleColor;
 
+@property (nonatomic, strong) UIBezierPath *animationPath;
+
 @end
 
 
@@ -38,21 +40,20 @@
     return _titleLab;
 }
 
+- (UIBezierPath *)animationPath {
+    if (!_animationPath) {
+        _animationPath = [UIBezierPath bezierPath];
+        [_animationPath moveToPoint:CGPointMake(0,self.height / 2)];
+        [_animationPath addCurveToPoint:CGPointMake(self.width, self.height / 2)
+                      controlPoint1:CGPointMake(self.width / 4, self.height / 2 - 30)
+                      controlPoint2:CGPointMake(self.width / 4 * 3, self.height / 2 + 30)];
+
+    }
+    return _animationPath;
+}
+
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
-    
-    
-    UIColor *color = [UIColor redColor];
-    [color set]; //设置线条颜色
-
-    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
-    [bezierPath moveToPoint:CGPointMake(0,self.height / 2)];
-    [bezierPath addCurveToPoint:CGPointMake(self.width, self.height / 2)
-                  controlPoint1:CGPointMake(self.width / 4, self.height / 2 - 30)
-                  controlPoint2:CGPointMake(self.width / 4 * 3, self.height / 2 + 30)];
-    bezierPath.lineCapStyle = kCGLineCapRound; //线条拐角
-    [bezierPath setLineWidth:3];
-    [bezierPath stroke];
     
 }
 

@@ -154,7 +154,7 @@
         }
     }
     
-    NSArray *shareBooksArr = [self.db getObjectsOfClass:SSJShareBooksTable.class fromTable:@"BK_SHARE_BOOKS" where:SSJBooksTypeTable.booksId.in([self.db getOneDistinctColumnOnResult:SSJShareBooksMemberTable.booksId fromTable:@""
+    NSArray *shareBooksArr = [self.db getObjectsOfClass:SSJShareBooksTable.class fromTable:@"BK_SHARE_BOOKS" where:SSJBooksTypeTable.booksId.in([self.db getOneDistinctColumnOnResult:SSJShareBooksMemberTable.booksId fromTable:@"BK_SHARE_BOOKS_MEMBER"
                                                                                                                                                                                 where:SSJShareBooksMemberTable.memberId == userId
                                                                                                                                                  && SSJShareBooksMemberTable.memberState == SSJShareBooksMemberStateNormal])];
     

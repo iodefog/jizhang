@@ -20,6 +20,8 @@
 
 @property (nonatomic, retain) NSString* memberIcon;
 
+@property (nonatomic, retain) NSString* memberColor;
+
 @property (nonatomic, retain) NSString* leaveDate;
 
 
@@ -28,6 +30,7 @@ WCDB_PROPERTY(booksId)
 WCDB_PROPERTY(joinDate)
 WCDB_PROPERTY(memberState)
 WCDB_PROPERTY(memberIcon)
+WCDB_PROPERTY(memberColor)
 WCDB_PROPERTY(leaveDate)
 
 @end
