@@ -133,13 +133,16 @@ static CGFloat imageScale = 0.8; //裁剪框和真实尺寸大小比例
     self.scrollview.contentSize = self.imageView.size;
     CGPoint conOfSet = self.scrollview.contentOffset;
     conOfSet.x = -self.normalClipSize.width * (1 - imageScale) * 0.5;
-    conOfSet.y = -self.normalClipSize.height * (1 - imageScale) * 0.5;
+    conOfSet.y = -(SSJSCREENHEIGHT - self.normalClipSize.height *imageScale) *0.5;
+    
     self.scrollview.contentOffset = conOfSet;
 }
 
 #pragma mark - Event
 - (void)chooseButtonClicked
 {
+    CGPoint conOfSet = self.scrollview.contentOffset;
+    
     //计算裁剪比例
     CGFloat imageClipScale = self.normalImagesize.width / self.imageView.width;
     CGSize clipSize = CGSizeMake(self.clipView.width * imageClipScale, self.clipView.height * imageClipScale);
