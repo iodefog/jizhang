@@ -11,7 +11,6 @@
 #import "SSJRecordMakingBillTypeSelectionCellLabel.h"
 
 static const NSTimeInterval kDuration = 0.25;
-static const CGFloat kIconScale = 0.7;
 
 static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
 static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
@@ -22,9 +21,9 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
 @property (nonatomic, strong) UIImageView *imageView;
 
-@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionCellLabel *label;
+@property (nonatomic, strong) UIImageView *editingMask;
 
-@property (nonatomic, strong) UIButton *deleteBtn;
+@property (nonatomic, strong) SSJRecordMakingBillTypeSelectionCellLabel *label;
 
 @end
 
@@ -35,22 +34,21 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         [self.contentView addSubview:self.borderView];
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.label];
-        [self.contentView addSubview:self.deleteBtn];
+        [self.contentView addSubview:self.editingMask];
     }
     return self;
 }
 
 - (void)layoutSubviews {
-    self.imageView.size = CGSizeMake(self.imageView.image.size.width * kIconScale, self.imageView.image.size.height * kIconScale);
+    self.imageView.size = CGSizeMake(24, 24);
     self.imageView.top = 24;
     self.imageView.centerX = self.contentView.width * 0.5;
+    self.borderView.size = CGSizeMake(40, 40);
     self.borderView.center = CGPointMake(self.contentView.width * 0.5, self.imageView.centerY);
     self.label.bottom = self.contentView.height;
     self.label.centerX = self.contentView.width * 0.5;
-    self.deleteBtn.size = CGSizeMake(32, 32);
-    self.deleteBtn.centerY = self.contentView.height * 0.5;
-    self.deleteBtn.right = self.contentView.width;
-    self.deleteBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 14, 0, 0);
+    self.editingMask.frame = self.borderView.frame;
+    self.editingMask.layer.cornerRadius = self.editingMask.width * 0.5;
 }
 
 - (void)setItem:(SSJRecordMakingBillTypeSelectionCellItem *)item {
@@ -79,14 +77,14 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     [[[RACObserve(_item, state) takeUntil:self.rac_prepareForReuseSignal] skip:1] subscribeNext:^(id x) {
         @strongify(self);
-        self.deleteBtn.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+        self.editingMask.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
         [self updateBorderAndTextColor:YES];
     }];
     
     if (_item.colorValue.length) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
     }
-    self.deleteBtn.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+    self.editingMask.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
     [self updateBorderAndTextColor:NO];
 }
 
@@ -152,7 +150,6 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 - (UIView *)borderView {
     if (!_borderView) {
         _borderView = [[UIView alloc] init];
-        _borderView.size = CGSizeMake(40, 40);
         _borderView.layer.borderWidth = 1;
         _borderView.layer.cornerRadius = 20;
         _borderView.layer.borderColor = [UIColor clearColor].CGColor;
@@ -167,6 +164,16 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     return _imageView;
 }
 
+- (UIImageView *)editingMask {
+    if (!_editingMask) {
+        _editingMask = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"bill_type_editing"]];
+        _editingMask.contentMode = UIViewContentModeCenter;
+        _editingMask.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+        _editingMask.clipsToBounds = YES;
+    }
+    return _editingMask;
+}
+
 - (SSJRecordMakingBillTypeSelectionCellLabel *)label {
     if (!_label) {
         _label = [[SSJRecordMakingBillTypeSelectionCellLabel alloc] init];
@@ -175,26 +182,6 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
         _label.textAlignment = NSTextAlignmentCenter;
     }
     return _label;
-}
-
-- (UIButton *)deleteBtn {
-    if (!_deleteBtn) {
-        _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn setImage:[UIImage imageNamed:@"record_making_remove"] forState:UIControlStateNormal];
-        @weakify(self);
-        [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            BOOL shouldDelete = YES;
-            if (self.shouldDeleteAction) {
-                shouldDelete = self.shouldDeleteAction(self);
-            }
-            
-            if (shouldDelete && self.deleteAction) {
-                self.deleteAction(self);
-            }
-        }];
-    }
-    return _deleteBtn;
 }
 
 @end

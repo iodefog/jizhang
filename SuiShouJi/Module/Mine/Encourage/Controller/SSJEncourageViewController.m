@@ -97,6 +97,9 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
                 [[UIApplication sharedApplication] openURL:url];
             }
         }
+        
+#warning TODO
+        //应用内跳转appstore
         return;
     }
     
