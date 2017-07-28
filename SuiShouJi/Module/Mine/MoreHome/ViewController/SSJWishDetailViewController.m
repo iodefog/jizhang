@@ -54,6 +54,9 @@
 /**<#注释#>*/
 @property (nonatomic, strong) UIButton *saveBtn;
 
+/*是否需要重新保存图片到沙河*/
+@property (nonatomic, assign) BOOL isNeedReSaveImage;
+
 @end
 
 @implementation SSJWishDetailViewController
@@ -177,7 +180,20 @@
 }
 
 #pragma mark - Private
-
+- (BOOL)saveWishImage {
+    BOOL issuccess = NO;
+    //只有是自定义图片的时候才需要写入沙河
+    if ([self.wishModel.wishImage isEqualToString:SSJWishCustomImageName] && self.isNeedReSaveImage == YES) {
+        if (SSJSaveImage(self.topImg.image, SSJWishCustomImageName)) {//图片写进沙河
+            //在同步表中保存
+            issuccess = [SSJWishHelper saveImageToImgSyncTable:SSJWishCustomImageName rId:self.wishModel.wishId failure:nil];
+        }
+    } else {
+        issuccess = YES;
+        
+    }
+    return issuccess;
+}
 
 - (BOOL)remindLocation {
     //如果已经弹出过授权弹框开启通知
@@ -401,7 +417,11 @@
                 //切换背景
                 self.topImg.image = seleImg;
                 self.wishModel.wishImage = seleImgName;
-                
+                if ([seleImgName isEqualToString:SSJWishCustomImageName]) {
+                    self.isNeedReSaveImage = YES;
+                } else {
+                    self.isNeedReSaveImage = NO;
+                }
                 [self.navigationController popViewControllerAnimated:YES];
             };
             
@@ -452,6 +472,11 @@
             
             weakSelf.wishModel.wishName = weakSelf.wishNameTF.text;
             weakSelf.wishModel.wishMoney = weakSelf.wishAmountTF.text;
+            //保存心愿图片
+            if (![self saveWishImage]) {
+                [CDAutoHideMessageHUD showMessage:@"图片保存失败稍后再试"];
+                return;
+            }
             //保存愿望详情
             [SSJWishHelper saveWishWithWishModel:weakSelf.wishModel success:^{
                 [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];

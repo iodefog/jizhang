@@ -29,7 +29,11 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 @property(nonatomic, strong) SSJEncourageHeaderView *header;
 
+@property (nonatomic, strong) UIView *footer;
+
 @property (nonatomic,strong) NSArray *titles;
+
+@property (nonatomic, strong) UIButton *rewardBtn;
 
 @property (nonatomic,strong) SSJEncourageService *service;
 
@@ -56,7 +60,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     [self organizeCellItems];
     [self.view addSubview:self.tableView];
-    // Do any additional setup after loading the view.
+    [self updateAppearanceAfterThemeChanged];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -146,8 +150,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _tableView.tableHeaderView = self.header;
+        _tableView.tableFooterView = self.footer;
         [_tableView registerClass:[SSJEncourageCell class] forCellReuseIdentifier:SSJEncourageCellIndetifer];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
@@ -169,6 +173,32 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _service = [[SSJEncourageService alloc] initWithDelegate:self];
     }
     return _service;
+}
+
+- (UIView *)footer {
+    if (!_footer) {
+        _footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 104)];
+        [_footer addSubview:self.rewardBtn];
+        self.rewardBtn.frame = CGRectMake(15, 30, _footer.width - 30, 44);
+    }
+    return _footer;
+}
+
+- (UIButton *)rewardBtn {
+    if (!_rewardBtn) {
+        _rewardBtn = [[UIButton alloc] init];
+        [_rewardBtn setTitle:@"打赏支持" forState:UIControlStateNormal];
+        _rewardBtn.layer.cornerRadius = 6;
+        _rewardBtn.layer.masksToBounds = YES;
+        _rewardBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        @weakify(self);
+        [[_rewardBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            
+            
+        }];
+    }
+    return _rewardBtn;
 }
 
 #pragma mark - Private
@@ -193,19 +223,12 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     [self.tableView reloadData];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Theme
+- (void)updateAppearanceAfterThemeChanged {
+    self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    [self.rewardBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+    [self.rewardBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 }
-*/
 
 @end

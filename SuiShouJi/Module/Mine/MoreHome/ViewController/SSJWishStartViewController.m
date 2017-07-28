@@ -24,24 +24,10 @@
     [super viewDidLoad];
     self.showNavigationBarBaseLine = NO;
     self.title = @"为心愿存钱";
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@""];
-    }
     [self setUpUI];
     [self appearanceWithTheme];
     [self updateViewConstraints];
-    
-//#warning test
-//    [self setUpNav];
 }
-//- (void)setUpNav {
-//    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"清单" style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
-//}
-//
-//- (void)navRightClick {
-//    SSJWishManageViewController *vc = [[SSJWishManageViewController alloc] init];
-//    [self.navigationController pushViewController:vc animated:YES];
-//}
 
 #pragma mark - Layout
 - (void)updateViewConstraints {
@@ -75,8 +61,8 @@
 - (void)appearanceWithTheme {
     self.tipLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.startBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.view.backgroundColor = [UIColor whiteColor];
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundView.image = [UIImage ssj_compatibleImageNamed:@"wish_start_bg"];
     }
 }
 

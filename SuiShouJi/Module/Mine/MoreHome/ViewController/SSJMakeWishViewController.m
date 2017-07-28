@@ -446,6 +446,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         }
     } else {
         issuccess = YES;
+        
     }
     return issuccess;
 }
