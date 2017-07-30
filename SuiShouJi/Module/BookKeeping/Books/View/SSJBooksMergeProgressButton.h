@@ -18,4 +18,8 @@
 
 @property (nonatomic, strong) UIColor *titleColor;
 
+@property (nonatomic) BOOL progressDidCompelete;
+
+@property (nonatomic, copy) void(^mergeButtonClickBlock)();
+
 @end

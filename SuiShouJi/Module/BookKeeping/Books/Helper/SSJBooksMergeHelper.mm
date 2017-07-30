@@ -81,7 +81,16 @@
         
         [userBillTypeArr removeObjectsAtIndexes:sameNameIndexs];
         
-        [self.db insertOrReplaceObjects:userBillTypeArr into:@"BK_USER_BILL_TYPE"];
+        if (userBillTypeArr.count) {
+            if ([self.db insertOrReplaceObjects:userBillTypeArr into:@"BK_USER_BILL_TYPE"]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并记账类型失败"}]);
+                    }
+                });
+                return NO;
+            };
+        }
 
         
         // 取出账本中所有的流水
@@ -98,7 +107,15 @@
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
             
-            [self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge];
+            if ([self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                    }
+                });
+                return NO;
+
+            };
         }
         
         // 取出账本中所有的流水
@@ -115,7 +132,19 @@
                 chargePeriod.billId = [sameNameDic objectForKey:chargePeriod.billId];
             }
             
-            [self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:chargePeriod];
+            
+            if ([self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:chargePeriod]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
+                    }
+                });
+                return NO;
+            }
+        }
+        
+        if (success) {
+            success();
         }
 
     }];

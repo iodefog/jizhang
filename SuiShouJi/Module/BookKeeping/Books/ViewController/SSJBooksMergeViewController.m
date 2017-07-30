@@ -132,6 +132,11 @@
     if (!_mergeButton) {
         _mergeButton = [[SSJBooksMergeProgressButton alloc] init];
         _mergeButton.title = @"迁移";
+        @weakify(self);
+        _mergeButton.mergeButtonClickBlock = ^(){
+            @strongify(self);
+            [self mergeBooks];
+        };
         _mergeButton.layer.cornerRadius = 6.f;
     }
     return _mergeButton;
@@ -181,6 +186,20 @@
     
     self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
     
+}
+
+- (void)mergeBooks {
+    if (!self.transferInBooksItem.booksId.length) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
+        return;
+    }
+    @weakify(self);
+    [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
+        @strongify(self);
+        self.mergeButton.progressDidCompelete = YES;
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
