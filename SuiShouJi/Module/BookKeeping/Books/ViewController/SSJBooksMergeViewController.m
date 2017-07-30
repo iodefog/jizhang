@@ -81,6 +81,10 @@
         make.centerX.mas_equalTo(self.scrollView);
     }];
     
+    [self.transferImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.scrollView);
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(16);
+    }];
     
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);

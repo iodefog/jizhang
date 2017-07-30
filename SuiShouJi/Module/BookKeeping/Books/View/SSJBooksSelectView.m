@@ -147,7 +147,7 @@ static NSString *kCellID = @"cellID";
     
     cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     
-    cell.textLabel.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+    cell.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
     
     cell.textLabel.text = item.booksName;
     
