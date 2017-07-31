@@ -212,8 +212,7 @@
             break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            return @"";
+            return @"bk_baby";
             break;
     }
 }
