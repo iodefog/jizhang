@@ -30,10 +30,6 @@
 
 @property (nonatomic, strong) UIImageView *arrowImage;
 
-@property (nonatomic, strong) SSJBooksView *transferInBookView;
-
-@property (nonatomic, strong) SSJBooksView *transferOutBookView;
-
 @property (nonatomic, strong) UIButton *transferInButton;
 
 @property (nonatomic) SSJBooksTransferViewType type;
@@ -48,8 +44,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.type = type;
+        [self addSubview:self.transferBooksView];
         if (type == SSJBooksTransferViewTypeTransferOut) {
-            [self addSubview:self.transferInBookView];
             [self addSubview:self.chargeCountTitleLab];
             [self addSubview:self.chargeCountLab];
             [self addSubview:self.bookTypeTitleLab];
@@ -64,14 +60,16 @@
     return self;
 }
 
+
 - (void)updateConstraints {
     
-    if (self.type == SSJBooksTransferViewTypeTransferOut) {        
-        [self.transferOutBookView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(80, 110));
-            make.top.mas_equalTo(self.mas_top).offset(15);
-            make.centerX.mas_equalTo(self);
-        }];
+    [self.transferBooksView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(80, 110));
+        make.top.mas_equalTo(self.mas_top).offset(15);
+        make.centerX.mas_equalTo(self);
+    }];
+    
+    if (self.type == SSJBooksTransferViewTypeTransferOut) {
 
         [self.chargeCountTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(self.mas_bottom).offset(-29);
@@ -95,11 +93,6 @@
         }];
 
     } else if (self.type == SSJBooksTransferViewTypeTransferIn) {
-        [self.transferInBookView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.mas_equalTo(self.mas_top).offset(15);
-            make.size.mas_equalTo(CGSizeMake(80, 110));
-            make.centerX.mas_equalTo(self);
-        }];
         
         [self.transferInButton mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(self.mas_bottom);
@@ -123,11 +116,6 @@
             make.right.mas_equalTo(self.transferInButton.mas_right).offset(-15);
         }];
 
-        [self.transferInBookView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(80, 110));
-            make.top.mas_equalTo(self.mas_top).offset(15);
-            make.centerX.mas_equalTo(self);
-        }];
     }
     
     [super updateConstraints];
@@ -136,7 +124,7 @@
 - (UILabel *)chargeCountTitleLab {
     if (!_chargeCountTitleLab) {
         _chargeCountTitleLab = [[UILabel alloc] init];
-        _chargeCountTitleLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_4];
+        _chargeCountTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _chargeCountTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _chargeCountTitleLab.text = @"账本流水：";
     }
@@ -146,7 +134,7 @@
 - (UILabel *)chargeCountLab {
     if (!_chargeCountLab) {
         _chargeCountLab = [[UILabel alloc] init];
-        _chargeCountLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _chargeCountLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _chargeCountLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _chargeCountLab;
@@ -155,7 +143,7 @@
 - (UILabel *)bookTypeLab {
     if (!_bookTypeLab) {
         _bookTypeLab = [[UILabel alloc] init];
-        _bookTypeLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _bookTypeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _bookTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _bookTypeLab;
@@ -164,7 +152,7 @@
 - (UILabel *)bookTypeTitleLab {
     if (!_bookTypeTitleLab) {
         _bookTypeTitleLab = [[UILabel alloc] init];
-        _bookTypeTitleLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_4];
+        _bookTypeTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _bookTypeTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bookTypeTitleLab.text = @"账本属性：";
     }
@@ -174,18 +162,25 @@
 - (UILabel *)transferInLab {
     if (!_transferInLab) {
         _transferInLab = [[UILabel alloc] init];
-        _transferInLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _transferInLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _transferInLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _transferInLab.text = @"请选择账本";
     }
     return _transferInLab;
 }
 
+- (SSJBooksView *)transferBooksView {
+    if (!_transferBooksView) {
+        _transferBooksView = [[SSJBooksView alloc] init];
+    }
+    return _transferBooksView;
+}
+
 
 - (UILabel *)transferInNameLab {
     if (!_transferInNameLab) {
         _transferInNameLab = [[UILabel alloc] init];
-        _transferInNameLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _transferInNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _transferInNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _transferInNameLab;
@@ -206,17 +201,23 @@
         [_transferInButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         [_transferInButton ssj_setBorderWidth:1];
         [_transferInButton ssj_setBorderStyle:SSJBorderStyleTop];
+        @weakify(self);
+        [[_transferInButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *sender) {
+            @strongify(self);
+            if (self.transferInSelectButtonClick) {
+                self.transferInSelectButtonClick();
+            }
+        }];
     }
     return _transferInButton;
 }
 
 - (void)setBooksTypeItem:(__kindof SSJBaseCellItem<SSJBooksItemProtocol> *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
+    self.transferBooksView.booksTypeItem = _booksTypeItem;
     if (self.type == SSJBooksTransferViewTypeTransferOut) {
         self.bookTypeLab.text = [_booksTypeItem parentName];
-        self.transferOutBookView.booksTypeItem = _booksTypeItem;
     } else if (self.type == SSJBooksTransferViewTypeTransferIn) {
-        self.transferInBookView.booksTypeItem = _booksTypeItem;
         self.transferInNameLab.text = _booksTypeItem.booksName;
     }
     

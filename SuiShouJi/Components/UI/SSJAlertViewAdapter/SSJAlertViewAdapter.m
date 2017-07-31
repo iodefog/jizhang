@@ -176,12 +176,16 @@
 }
 
 + (void)showError:(NSError *)error completion:(nullable void(^)())completion {
+    if ([error.domain isEqualToString:RACCommandErrorDomain]) {
+        return;
+    }
+    
     NSString *message = nil;
-    if ([[self errorCodesShowingDetail] containsObject:@(error.code)]) {
-        message = [error localizedDescription];
+    if ([error.domain isEqualToString:SSJErrorDomain]) {
+        message = error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE;
     } else {
 #ifdef DEBUG
-        message = [error localizedDescription];
+        message = error.localizedDescription.length ? error.localizedDescription : SSJ_ERROR_MESSAGE;
 #else
         message = SSJ_ERROR_MESSAGE;
 #endif

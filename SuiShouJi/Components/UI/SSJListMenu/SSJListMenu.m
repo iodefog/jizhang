@@ -13,8 +13,6 @@ static const NSTimeInterval kDuration = 0.2;
 
 static const CGFloat kTriangleHeight = 8;
 
-static const CGFloat kCornerRadius = 2;
-
 @interface SSJListMenu () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) UITableView *tableView;
@@ -49,6 +47,9 @@ static const CGFloat kCornerRadius = 2;
         _gapBetweenImageAndTitle = 10;
         _contentInsets = UIEdgeInsetsMake(0, 10, 0, 10);
         _contentAlignment = UIControlContentHorizontalAlignmentCenter;
+        _shadowOpacity = 0.5;
+        _shadowOffset = CGSizeMake(0, 3);
+        _cornerRadius = 2;
         
         self.backgroundColor = [UIColor clearColor];
         [self.layer addSublayer:self.outlineLayer];
@@ -140,7 +141,6 @@ static const CGFloat kCornerRadius = 2;
         _minDisplayRowCount = minDisplayRowCount;
         [self sizeToFit];
     }
-    
 }
 
 - (void)setMaxDisplayRowCount:(CGFloat)maxDisplayRowCount {
@@ -310,14 +310,14 @@ static const CGFloat kCornerRadius = 2;
     [path moveToPoint:CGPointMake(vertexX - kTriangleHeight * 0.8, kTriangleHeight)];
     [path addLineToPoint:CGPointMake(vertexX, 0)];
     [path addLineToPoint:CGPointMake(vertexX + kTriangleHeight * 0.8, kTriangleHeight)];
-    [path addLineToPoint:CGPointMake(self.width - kCornerRadius, kTriangleHeight)];
-    [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:-M_PI_2 endAngle:0 clockwise:YES];
-    [path addLineToPoint:CGPointMake(self.width, self.height - kCornerRadius)];
-    [path addArcWithCenter:CGPointMake(self.width - kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
-    [path addLineToPoint:CGPointMake(kCornerRadius, self.height)];
-    [path addArcWithCenter:CGPointMake(kCornerRadius, self.height - kCornerRadius) radius:kCornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
-    [path addLineToPoint:CGPointMake(0, kTriangleHeight + kCornerRadius)];
-    [path addArcWithCenter:CGPointMake(kCornerRadius, kTriangleHeight + kCornerRadius) radius:kCornerRadius startAngle:M_PI endAngle:M_PI * 1.5 clockwise:YES];
+    [path addLineToPoint:CGPointMake(self.width - _cornerRadius, kTriangleHeight)];
+    [path addArcWithCenter:CGPointMake(self.width - _cornerRadius, kTriangleHeight + _cornerRadius) radius:_cornerRadius startAngle:-M_PI_2 endAngle:0 clockwise:YES];
+    [path addLineToPoint:CGPointMake(self.width, self.height - _cornerRadius)];
+    [path addArcWithCenter:CGPointMake(self.width - _cornerRadius, self.height - _cornerRadius) radius:_cornerRadius startAngle:0 endAngle:M_PI_2 clockwise:YES];
+    [path addLineToPoint:CGPointMake(_cornerRadius, self.height)];
+    [path addArcWithCenter:CGPointMake(_cornerRadius, self.height - _cornerRadius) radius:_cornerRadius startAngle:M_PI_2 endAngle:M_PI clockwise:YES];
+    [path addLineToPoint:CGPointMake(0, kTriangleHeight + _cornerRadius)];
+    [path addArcWithCenter:CGPointMake(_cornerRadius, kTriangleHeight + _cornerRadius) radius:_cornerRadius startAngle:M_PI endAngle:M_PI * 1.5 clockwise:YES];
     [path closePath];
     
     return path;
@@ -400,11 +400,21 @@ static const CGFloat kCornerRadius = 2;
         _outlineLayer.fillColor = _fillColor.CGColor;
         _outlineLayer.strokeColor = _borderColor.CGColor;
         _outlineLayer.lineWidth = 1;
-        _outlineLayer.shadowOpacity = 0.5;
-        _outlineLayer.shadowOffset = CGSizeMake(0, 3);
+        _outlineLayer.shadowOpacity = _shadowOpacity;
+        _outlineLayer.shadowOffset = _shadowOffset;
         _outlineLayer.lineJoin = kCALineJoinRound;
     }
     return _outlineLayer;
+}
+
+- (void)setShadowOpacity:(CGFloat)shadowOpacity {
+    _shadowOpacity = shadowOpacity;
+    _outlineLayer.shadowOpacity = shadowOpacity;
+}
+
+- (void)setShadowOffset:(CGSize)shadowOffset {
+    _shadowOffset = shadowOffset;
+    _outlineLayer.shadowOffset = shadowOffset;
 }
 
 @end

@@ -28,6 +28,7 @@ static const CGFloat kBooksCornerRadius = 10.f;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self.layer addSublayer:self.gradientLayer];
         [self addSubview:self.nameLab];
         [self setNeedsUpdateConstraints];
         self.layer.cornerRadius = kBooksCornerRadius;
@@ -46,6 +47,11 @@ static const CGFloat kBooksCornerRadius = 10.f;
         make.centerY.mas_equalTo(self);
     }];
     
+}
+
+- (void)layoutSublayersOfLayer:(CALayer *)layer {
+    [super layoutSublayersOfLayer:layer];
+    self.gradientLayer.frame = self.bounds;
 }
 
 #pragma mark - Setter

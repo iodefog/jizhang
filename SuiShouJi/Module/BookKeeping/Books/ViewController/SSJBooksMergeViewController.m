@@ -13,6 +13,7 @@
 
 #import "SSJBooksMergeProgressButton.h"
 #import "SSJBooksTransferSelectView.h"
+#import "SSJBooksSelectView.h"
 
 @interface SSJBooksMergeViewController ()
 
@@ -28,12 +29,17 @@
 
 @property (nonatomic, strong) SSJBooksMergeHelper *mergeHelper;
 
+@property (nonatomic, strong) NSArray *allBooksItem;
+
+@property (nonatomic, strong) SSJBooksSelectView *booksSelectView;
+
 @end
 
 @implementation SSJBooksMergeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"迁移账本数据";
     [self.view addSubview:self.scrollView];
     [self.scrollView addSubview:self.mergeButton];
     [self.scrollView addSubview:self.transferOutBookBackView];
@@ -75,6 +81,10 @@
         make.centerX.mas_equalTo(self.scrollView);
     }];
     
+    [self.transferImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.scrollView);
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(16);
+    }];
     
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
@@ -99,6 +109,17 @@
     if (!_transferInBookBackView) {
         _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
         _transferInBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        @weakify(self);
+        _transferInBookBackView.transferInSelectButtonClick = ^{
+            @strongify(self);
+            NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
+            if (!allBooks.count) {
+                [CDAutoHideMessageHUD showMessage:@""];
+            } else {
+                self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
+                [self.booksSelectView showWithSelectedItem:self.transferInBooksItem];
+            }
+        };
     }
     return _transferInBookBackView;
 }
@@ -114,7 +135,13 @@
 - (SSJBooksMergeProgressButton *)mergeButton {
     if (!_mergeButton) {
         _mergeButton = [[SSJBooksMergeProgressButton alloc] init];
-        
+        _mergeButton.title = @"迁移";
+        @weakify(self);
+        _mergeButton.mergeButtonClickBlock = ^(){
+            @strongify(self);
+            [self mergeBooks];
+        };
+        _mergeButton.layer.cornerRadius = 6.f;
     }
     return _mergeButton;
 }
@@ -136,6 +163,19 @@
     return _scrollView;
 }
 
+- (SSJBooksSelectView *)booksSelectView {
+    if (!_booksSelectView) {
+        _booksSelectView = [[SSJBooksSelectView alloc] init];
+        @weakify(self);
+        _booksSelectView.booksTypeSelectBlock = ^(SSJBaseCellItem<SSJBooksItemProtocol> *item) {
+            @strongify(self);
+            self.transferInBooksItem = item;
+            [self updateWithBookData];
+        };
+    }
+    return _booksSelectView;
+}
+
 #pragma mark - Private
 - (void)updateWithBookData {
     if (!self.transferOutBooksItem) {
@@ -150,6 +190,20 @@
     
     self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
     
+}
+
+- (void)mergeBooks {
+    if (!self.transferInBooksItem.booksId.length) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
+        return;
+    }
+    @weakify(self);
+    [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
+        @strongify(self);
+        self.mergeButton.progressDidCompelete = YES;
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

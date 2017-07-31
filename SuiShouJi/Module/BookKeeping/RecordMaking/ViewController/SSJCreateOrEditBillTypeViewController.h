@@ -48,7 +48,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, copy, nullable) NSString *color;
 
-@property (nonatomic, copy) void (^addNewCategoryAction)(NSString *billID);
+/**
+ 保存成功后的回调
+ */
+@property (nonatomic, copy) void (^saveHandler)(NSString *billID);
 
 @end
 

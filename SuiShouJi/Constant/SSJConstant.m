@@ -29,6 +29,8 @@ const UIEdgeInsets UIEdgeInsetsEmpty = {CGFLOAT_MIN, CGFLOAT_MIN, CGFLOAT_MIN, C
 
 NSString *const SSJErrorDomain = @"com.9188.jizhang";
 
+NSString *const SSJErrorTestDomain = @"com.9188.jizhang.test";
+
 //NSString *const SSJAppStoreAddress = @"https://itunes.apple.com/us/app/li-cai-di/id1023600539?l=zh&ls=1&mt=8";
 
 NSString *const SSJSyncPrivateKey = @"accountbook";

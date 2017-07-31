@@ -283,8 +283,11 @@ extern const UIEdgeInsets UIEdgeInsetsEmpty;
 /// @name 字符串常量
 ///------------------------------------------
 #pragma mark - 字符串常量
-//
+// 错误域名，错误弹窗会显示error对象中的NSLocalizedDescriptionKey
 extern NSString *const SSJErrorDomain;
+
+// 错误域名，debug模式下错误弹窗会显示error对象中的NSLocalizedDescriptionKey，release模式不会提示具体错误
+extern NSString *const SSJErrorTestDomain;
 
 // 同步加密密钥字符串
 extern NSString *const SSJSyncPrivateKey;

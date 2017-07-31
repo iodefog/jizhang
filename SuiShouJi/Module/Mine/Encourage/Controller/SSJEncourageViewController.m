@@ -8,10 +8,11 @@
 
 #import "SSJEncourageViewController.h"
 #import "SSJNewAboutUsViewController.h"
-#import "SSJRewardViewController.h"
+#import <StoreKit/StoreKit.h>
 
 #import "SSJEncourageHeaderView.h"
 #import "SSJEncourageCell.h"
+#import "CDPointActivityIndicator.h"
 
 #import "SSJEncourageService.h"
 #import "SSJShareManager.h"
@@ -24,7 +25,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 
 
 
-@interface SSJEncourageViewController () <UITableViewDelegate,UITableViewDataSource>
+@interface SSJEncourageViewController () <UITableViewDelegate, UITableViewDataSource, SKStoreProductViewControllerDelegate>
 
 @property(nonatomic, strong) UITableView *tableView;
 
@@ -94,14 +95,18 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     }
     
     if ([title isEqualToString:ktitle2]) {
-        NSString *urlStr = SSJAppStoreUrl();
         [SSJAnaliyticsManager event:@"love_good"];
-        if (urlStr) {
-            NSURL *url = [NSURL URLWithString:urlStr];
-            if ([[UIApplication sharedApplication] canOpenURL:url]) {
-                [[UIApplication sharedApplication] openURL:url];
+        [CDPointActivityIndicator startAnimating];
+        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
+        storeProductVC.delegate = self;
+        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+            [CDPointActivityIndicator stopAnimating];
+            if (!error) {
+                [self presentViewController:storeProductVC animated:YES completion:nil];
+            } else {
+                [CDAutoHideMessageHUD showError:error];
             }
-        }
+        }];
         return;
     }
     
@@ -135,6 +140,11 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     cell.item = item;
     
     return cell;
+}
+
+#pragma mark - SKStoreProductViewControllerDelegate
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - SSJBaseNetworkService
@@ -195,8 +205,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         @weakify(self);
         [[_rewardBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            SSJRewardViewController *rewardVC = [[SSJRewardViewController alloc] init];
-            [self.navigationController pushViewController:rewardVC animated:YES];
+            
             
         }];
     }

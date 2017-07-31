@@ -26,8 +26,6 @@
 
 @property (nonatomic, assign) int billOrder;
 
-@property (nonatomic, retain) NSString* addDate;
-
 @property (nonatomic, retain) NSString* writeDate;
 
 @property (nonatomic, assign) int operatorType;
@@ -42,7 +40,6 @@ WCDB_PROPERTY(billName)
 WCDB_PROPERTY(billColor)
 WCDB_PROPERTY(billIcon)
 WCDB_PROPERTY(billOrder)
-WCDB_PROPERTY(addDate)
 WCDB_PROPERTY(writeDate)
 WCDB_PROPERTY(operatorType)
 WCDB_PROPERTY(version)

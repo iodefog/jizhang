@@ -244,6 +244,16 @@ NSString *SSJAppStoreUrl() {
     }
 }
 
+NSString *SSJAppleID() {
+    NSDictionary* dic = SSJProjectSettings();
+    if (dic){
+        NSDictionary *info = [dic objectForKey:SSJBundleID()];
+        return [info objectForKey:@"appleID"];
+    } else {
+        return nil;
+    }
+}
+
 NSString* SSJDetailSettingForSource(NSString *key){
     NSDictionary* dic = SSJProjectSettings();
     if (dic){
