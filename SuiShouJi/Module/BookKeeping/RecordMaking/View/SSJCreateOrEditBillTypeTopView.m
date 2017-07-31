@@ -122,7 +122,7 @@ static const NSTimeInterval kDuration = 0.25;
     [self.iconView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.colorControl.mas_right).offset(20).priorityHigh();
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(self.iconView.image.size).priorityHigh();
+        make.size.mas_equalTo(CGSizeMake(24, 24));
     }];
     [self.nameField mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.iconView.mas_right).offset(20).priorityHigh();

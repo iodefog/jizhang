@@ -15,6 +15,7 @@
 #import "SSJBillTypeLibraryModel.h"
 #import "SSJBillModel.h"
 
+#import "SSJUserTableManager.h"
 #import "SSJBillTypeManager.h"
 #import "SSJCategoryListHelper.h"
 #import "YYKeyboardManager.h"
@@ -65,7 +66,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [self setupBindings];
     [self organiseColors];
     
-    [[self loadBooksTypeIfNeeded] subscribeError:^(NSError *error) {
+    [[[self loadBooksIdIfNeeded] then:^RACSignal *{
+        return [self loadBooksTypeIfNeeded];
+    }] subscribeError:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     } completed:^{
         SSJCaterotyMenuSelectionViewIndexPath *indexPath = [self selectedIndexPath];
@@ -216,6 +219,22 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     } else {
         return [self.libraryModel incomeCategories];
     }
+}
+
+- (RACSignal *)loadBooksIdIfNeeded {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.booksId.length) {
+            [subscriber sendCompleted];
+        } else {
+            [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+                self.booksId = booksId;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
+        return nil;
+    }];
 }
 
 - (RACSignal *)loadBooksTypeIfNeeded {

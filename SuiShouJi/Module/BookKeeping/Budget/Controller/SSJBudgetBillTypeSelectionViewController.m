@@ -7,8 +7,8 @@
 //
 
 #import "SSJBudgetBillTypeSelectionViewController.h"
-#import "SSJADDNewTypeViewController.h"
 #import "SSJBudgetEditViewController.h"
+#import "SSJCreateOrEditBillTypeViewController.h"
 #import "SSJBudgetBillTypeSelectionCell.h"
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJBudgetModel.h"
@@ -116,16 +116,15 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     } else {
         // 添加类别
         __weak typeof(self) wself = self;
-        SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc] init];
-        addNewTypeVc.incomeOrExpence = 1;
-        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
-            if (incomeOrExpence) {
-                NSMutableArray *tmpBillIds = [wself.selectedTypeList mutableCopy];
-                [tmpBillIds addObject:categoryId];
-                wself.selectedTypeList = tmpBillIds;
-            }
+        SSJCreateOrEditBillTypeViewController *addTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
+        addTypeVC.created = YES;
+        addTypeVC.expended = YES;
+        addTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
+            NSMutableArray *tmpBillIds = [wself.selectedTypeList mutableCopy];
+            [tmpBillIds addObject:billID];
+            wself.selectedTypeList = tmpBillIds;
         };
-        [self.navigationController pushViewController:addNewTypeVc animated:YES];
+        [self.navigationController pushViewController:addTypeVC animated:YES];
     }
 }
 

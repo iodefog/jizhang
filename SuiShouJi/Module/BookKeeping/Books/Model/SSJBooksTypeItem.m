@@ -145,8 +145,7 @@
             break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            return @"";
+            return @"bk_baby";
             break;
     }
 }
@@ -174,8 +173,7 @@
             break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            return @"";
+            return @"宝宝账本";
             break;
     }
 }

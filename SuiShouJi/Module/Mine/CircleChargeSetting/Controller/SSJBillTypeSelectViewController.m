@@ -9,7 +9,7 @@
 #import "SSJBillTypeSelectViewController.h"
 #import "SSJCategoryListHelper.h"
 #import "SSJBillTypeSelectCell.h"
-#import "SSJADDNewTypeViewController.h"
+#import "SSJCreateOrEditBillTypeViewController.h"
 #import "SSJDatabaseQueue.h"
 
 static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifier";
@@ -64,14 +64,15 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJRecordMakingBillTypeSelectionCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     if ([item.title isEqualToString:@"添加"]) {
-        SSJADDNewTypeViewController *newTypeVc = [[SSJADDNewTypeViewController alloc]init];
-        __weak typeof(self) weakSelf = self;
-        newTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
-            weakSelf.selectedId = categoryId;
-            [weakSelf getdataFromDb];
+        __weak typeof(self) wself = self;
+        SSJCreateOrEditBillTypeViewController *addTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
+        addTypeVC.created = YES;
+        addTypeVC.expended = YES;
+        addTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
+            wself.selectedId = billID;
+            [wself getdataFromDb];
         };
-        newTypeVc.incomeOrExpence = self.incomeOrExpenture;
-        [self.navigationController pushViewController:newTypeVc animated:YES];
+        [self.navigationController pushViewController:addTypeVC animated:YES];
     }else{
         self.selectedId = item.ID;
         self.selectedItem = item;
