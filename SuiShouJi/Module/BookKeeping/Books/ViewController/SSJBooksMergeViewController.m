@@ -81,6 +81,10 @@
         make.centerX.mas_equalTo(self.scrollView);
     }];
     
+    [self.transferImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self.scrollView);
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(16);
+    }];
     
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
@@ -132,6 +136,11 @@
     if (!_mergeButton) {
         _mergeButton = [[SSJBooksMergeProgressButton alloc] init];
         _mergeButton.title = @"迁移";
+        @weakify(self);
+        _mergeButton.mergeButtonClickBlock = ^(){
+            @strongify(self);
+            [self mergeBooks];
+        };
         _mergeButton.layer.cornerRadius = 6.f;
     }
     return _mergeButton;
@@ -181,6 +190,24 @@
     
     self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
     
+}
+
+- (void)mergeBooks {
+    if (!self.transferInBooksItem.booksId.length) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
+        return;
+    }
+    @weakify(self);
+    [self.mergeButton startAnimating];
+    [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
+        @strongify(self);
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = YES;
+    } failure:^(NSError *error) {
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = NO;
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 - (void)didReceiveMemoryWarning {

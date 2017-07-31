@@ -585,12 +585,12 @@ static const void *kShowViewsIdentifier = &kShowViewsIdentifier;
 
 #ifdef DEBUG
 + (void)load {
-    SSJSwizzleSelector([self class], @selector(layoutSubviews), @selector(ssj_layoutSubviews));
-    SSJSwizzleSelector([self class], @selector(setNeedsLayout), @selector(ssj_setNeedsLayout));
-    SSJSwizzleSelector([self class], @selector(layoutIfNeeded), @selector(ssj_layoutIfNeeded));
-    SSJSwizzleSelector([self class], @selector(updateConstraints), @selector(ssj_updateConstraints));
-    SSJSwizzleSelector([self class], @selector(setNeedsUpdateConstraints), @selector(ssj_setNeedsUpdateConstraints));
-    SSJSwizzleSelector([self class], @selector(updateConstraintsIfNeeded), @selector(ssj_updateConstraintsIfNeeded));
+//    SSJSwizzleSelector([self class], @selector(layoutSubviews), @selector(ssj_layoutSubviews));
+//    SSJSwizzleSelector([self class], @selector(setNeedsLayout), @selector(ssj_setNeedsLayout));
+//    SSJSwizzleSelector([self class], @selector(layoutIfNeeded), @selector(ssj_layoutIfNeeded));
+//    SSJSwizzleSelector([self class], @selector(updateConstraints), @selector(ssj_updateConstraints));
+//    SSJSwizzleSelector([self class], @selector(setNeedsUpdateConstraints), @selector(ssj_setNeedsUpdateConstraints));
+//    SSJSwizzleSelector([self class], @selector(updateConstraintsIfNeeded), @selector(ssj_updateConstraintsIfNeeded));
 }
 #endif
 

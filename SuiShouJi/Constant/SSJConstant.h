@@ -249,6 +249,12 @@ typedef NS_ENUM(NSInteger, SSJWishChargeType) {
     SSJWishChargeTypeFinish           // 完成心愿
 };
 
+//支付方式
+typedef NS_ENUM(NSInteger, SSJMethodOfPayment) {
+    SSJMethodOfPaymentAlipay,          // 支付宝
+    SSJMethodOfPaymentWeChat,           // 微信
+};
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

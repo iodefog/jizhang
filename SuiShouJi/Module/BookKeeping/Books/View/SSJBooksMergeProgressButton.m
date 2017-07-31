@@ -18,7 +18,13 @@
 
 @property (nonatomic, strong) CAKeyframeAnimation *fishAnimation;
 
+@property (nonatomic, strong) NSTimer *animationTimer;
+
+@property (nonatomic, strong) UIView *backWhiteView;
+
 @property (nonatomic) BOOL isAnimating;
+
+@property (nonatomic) double currentTime;
 
 
 @end
@@ -32,8 +38,9 @@
     if (self) {
         self.titleFont = [UIFont systemFontOfSize:SSJ_FONT_SIZE_2];
         self.titleColor = [UIColor whiteColor];
-        [self.layer addSublayer:self.fishImage];
+        [self addSubview:self.backGroundImage];
         [self addSubview:self.titleLab];
+        [self addSubview:self.backWhiteView];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return self;
@@ -59,7 +66,7 @@
 - (CALayer *)fishImage {
     if (!_fishImage) {
         _fishImage = [CALayer layer];
-        _fishImage.contents = [UIImage imageNamed:@"book_transfer_fish"];
+        _fishImage.contents = (id)[UIImage imageNamed:@"book_transfer_fish"].CGImage;
         _fishImage.size = CGSizeMake(50, 29);
     }
     return _fishImage;
@@ -91,10 +98,29 @@
 
 - (UIImageView *)backGroundImage {
     if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, self.height)];
-        _backGroundImage.image = [UIImage imageNamed:@"book_transfer_fish"];
+        _backGroundImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _backGroundImage.image = [UIImage imageNamed:@"book_transfer_bg"];
+        _backGroundImage.hidden = YES;
     }
     return _backGroundImage;
+}
+
+
+- (NSTimer *)animationTimer {
+    if (!_animationTimer) {
+        _animationTimer = [NSTimer timerWithTimeInterval:0.01 target:self selector:@selector(updateTheFishPosition) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_animationTimer forMode:NSRunLoopCommonModes];
+    }
+    return _animationTimer;
+}
+
+- (UIView *)backWhiteView {
+    if (!_backWhiteView ) {
+        _backWhiteView = [[UIView alloc] init];
+        _backWhiteView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _backWhiteView.hidden = YES;
+    }
+    return _backWhiteView;
 }
 
 - (void)setTitle:(NSString *)title {
@@ -106,7 +132,23 @@
 {
     if (flag) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+        self.isAnimating = NO;
+        [self.animationTimer invalidate];
+        self.animationTimer = nil;
+        self.backGroundImage.hidden = YES;
+        self.backWhiteView.hidden = YES;
+        [self.fishImage removeFromSuperlayer];
+        if (self.isSuccess) {
+            self.title = @"迁移成功";
+        } else {
+            self.title = @"迁移失败";
+        }
     }
+}
+
+- (void)animationDidStart:(CAAnimation *)anim {
+    [self.animationTimer fire];
+    self.currentTime = 0;
 }
 
 
@@ -134,13 +176,39 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!self.isAnimating) {
-        self.isAnimating = !self.isAnimating;
-        self.backgroundColor = [UIColor whiteColor];
-        self.titleLab.text = @"";
-        [self.fishImage addAnimation:self.fishAnimation forKey:@"fishAnimation"];
+        if (self.mergeButtonClickBlock) {
+            self.mergeButtonClickBlock();
+        }
     }
 }
 
+- (void)startAnimating {
+    if ([self.title isEqualToString:@"迁移"] || [self.title isEqualToString:@"迁移失败"]) {
+        [self.fishImage addAnimation:self.fishAnimation forKey:@"fishAnimation"];
+        self.backGroundImage.frame = CGRectMake(0, 0, self.width, self.height);
+        self.isAnimating = !self.isAnimating;
+        self.titleLab.text = @"";
+        self.backGroundImage.hidden = NO;
+        self.backWhiteView.hidden = NO;
+        [self.layer addSublayer:self.fishImage];
+    }
+}
+
+- (void)updateTheFishPosition {
+    self.currentTime += 0.01;
+    self.backWhiteView.frame = CGRectMake(self.fishImage.presentationLayer.position.x + 20, 0, self.width - self.fishImage.presentationLayer.position.x - 20, self.height);
+    double currentPercent = self.backGroundImage.frame.size.width / self.width;
+    if (currentPercent >= 0.8 && !_progressDidCompelete) {
+        [self animationPause];
+    }
+}
+
+- (void)setProgressDidCompelete:(BOOL)progressDidCompelete {
+    _progressDidCompelete = progressDidCompelete;
+    if (progressDidCompelete && !_isAnimating) {
+        [self animationResume];
+    }
+}
 
 
 /*

@@ -124,7 +124,7 @@
 - (UILabel *)chargeCountTitleLab {
     if (!_chargeCountTitleLab) {
         _chargeCountTitleLab = [[UILabel alloc] init];
-        _chargeCountTitleLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_4];
+        _chargeCountTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _chargeCountTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _chargeCountTitleLab.text = @"账本流水：";
     }
@@ -134,7 +134,7 @@
 - (UILabel *)chargeCountLab {
     if (!_chargeCountLab) {
         _chargeCountLab = [[UILabel alloc] init];
-        _chargeCountLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _chargeCountLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _chargeCountLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _chargeCountLab;
@@ -143,7 +143,7 @@
 - (UILabel *)bookTypeLab {
     if (!_bookTypeLab) {
         _bookTypeLab = [[UILabel alloc] init];
-        _bookTypeLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _bookTypeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _bookTypeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _bookTypeLab;
@@ -152,7 +152,7 @@
 - (UILabel *)bookTypeTitleLab {
     if (!_bookTypeTitleLab) {
         _bookTypeTitleLab = [[UILabel alloc] init];
-        _bookTypeTitleLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_4];
+        _bookTypeTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _bookTypeTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _bookTypeTitleLab.text = @"账本属性：";
     }
@@ -162,7 +162,7 @@
 - (UILabel *)transferInLab {
     if (!_transferInLab) {
         _transferInLab = [[UILabel alloc] init];
-        _transferInLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _transferInLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _transferInLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _transferInLab.text = @"请选择账本";
     }
@@ -180,7 +180,7 @@
 - (UILabel *)transferInNameLab {
     if (!_transferInNameLab) {
         _transferInNameLab = [[UILabel alloc] init];
-        _transferInNameLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
+        _transferInNameLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _transferInNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
     return _transferInNameLab;

@@ -18,7 +18,6 @@
 @synthesize billColor;
 @synthesize billIcon;
 @synthesize billOrder;
-@synthesize addDate;
 @synthesize writeDate;
 @synthesize operatorType;
 @synthesize version;
@@ -36,7 +35,6 @@ WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, billName, "CNAME")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, billColor, "CCOLOR")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, billIcon, "CICOIN")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, billOrder, "IORDER")
-WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, addDate, "CADDDATE")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, writeDate, "CWRITEDATE")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, operatorType, "OPERATORTYPE")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBillTypeTable, version, "IVERSION")

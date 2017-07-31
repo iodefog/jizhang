@@ -34,7 +34,6 @@
 
 @property (nonatomic, strong) UILabel *slognL;
 
-
 @property (nonatomic, strong) UITextField *wishNameTF;
 
 @property (nonatomic, strong) UITextField *wishAmountTF;

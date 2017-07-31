@@ -93,4 +93,21 @@
     return nil;
 }
 
+- (NSError *)updateTheTransferTableInDataBase:(FMDatabase *)db {
+    NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
+    
+    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = '3' and operatortype <> 2"];
+    
+    while ([rs next]) {
+        NSMutableDictionary *userCharge = [NSMutableDictionary dictionaryWithCapacity:0];
+        [userCharge setObject:[rs stringForColumn:@"ifunsid"] forKey:@"ifunsid"];
+        [userCharge setObject:[rs stringForColumn:@"cwritedate"] forKey:@"cwritedate"];
+        [userCharge setObject:[rs stringForColumn:@"ichargeid"] forKey:@"ichargeid"];
+        [userCharge setObject:[rs stringForColumn:@"cuserid"] forKey:@"cuserid"];
+        [userCharge setObject:[rs stringForColumn:@"imoney"] forKey:@"imoney"];
+    }
+
+    return nil;
+}
+
 @end
