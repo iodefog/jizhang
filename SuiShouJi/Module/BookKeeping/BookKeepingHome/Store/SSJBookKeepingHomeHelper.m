@@ -41,7 +41,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         
         int section = 0;
         int row = 0;
-        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.cicoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? , bk_user_bill_type bt where uc.ibillid = bt.cbillid and uc.cbilldate <= ? and uc.cbooksid = ? and uc.operatortype <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid];
+        FMResultSet *chargeResult = [db executeQuery:@"select uc.* , uc.operatortype as chargeoperatortype, bt.cname, bt.cicoin, bt.ccolor, bt.itype, bf.cmark from bk_user_charge uc left join bk_share_books_friends_mark bf on bf.cfriendid = uc.cuserid and bf.cbooksid = uc.cbooksid and bf.cuserid = ? , bk_user_bill_type bt where uc.ibillid = bt.cbillid and bt.cuserid = uc.cuserid and bt.cbooksid = uc.cbooksid and uc.cbilldate <= ? and uc.cbooksid = ? and uc.operatortype <> 2 order by uc.cbilldate desc , uc.clientadddate desc , uc.cwritedate desc", SSJUSERID(), [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],booksid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
