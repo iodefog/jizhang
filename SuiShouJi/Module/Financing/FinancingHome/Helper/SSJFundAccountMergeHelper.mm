@@ -11,6 +11,7 @@
 #import "SSJFundInfoTable.h"
 #import "SSJUserChargeTable.h"
 #import "SSJTransferCycleTable.h"
+#import "SSJChargePeriodConfigTable.h"
 
 @interface SSJFundAccountMergeHelper()
 
@@ -53,7 +54,7 @@
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
             
-            if ([self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge]) {
+            if (![self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -82,7 +83,12 @@
             }
             
             if (![transfer.transferInId isEqualToString:transfer.transferOutId]) {
-                if ([self.db updateAllRowsInTable:@"BK_TRANSFER_CYCLE" onProperties:SSJTransferCycleTable.AllProperties withObject:transfer]) {
+                if (![self.db updateRowsInTable:@"BK_TRANSFER_CYCLE" onProperties:{
+                    SSJTransferCycleTable.writeDate,
+                    SSJTransferCycleTable.version,
+                    SSJTransferCycleTable.transferInId,
+                    SSJTransferCycleTable.transferOutId
+                } withObject:transfer where:SSJTransferCycleTable.cycleId == transfer.cycleId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并转账失败"}]);
@@ -93,7 +99,13 @@
 
             } else {
                 transfer.operatorType = 2;
-                if ([self.db updateAllRowsInTable:@"BK_TRANSFER_CYCLE" onProperties:SSJTransferCycleTable.AllProperties withObject:transfer]) {
+                if (![self.db updateRowsInTable:@"BK_TRANSFER_CYCLE" onProperties:{
+                    SSJTransferCycleTable.writeDate,
+                    SSJTransferCycleTable.version,
+                    SSJTransferCycleTable.transferInId,
+                    SSJTransferCycleTable.transferOutId,
+                    SSJTransferCycleTable.operatorType
+                } withObject:transfer where:SSJTransferCycleTable.cycleId == transfer.cycleId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并转账失败"}]);
@@ -104,9 +116,33 @@
             }
         }
         
+        // 取出所有的周期记账
+        NSArray *periodChargeArr = [self.db getObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"BK_CHARGE_PERIOD_CONFIG"
+                                                    where:SSJChargePeriodConfigTable.userId == userId
+                                && SSJChargePeriodConfigTable.fundId == sourceFundId
+                                && SSJChargePeriodConfigTable.operatorType != 2];
+        
+        for (SSJChargePeriodConfigTable *periodCharge in periodChargeArr) {
+            periodCharge.writeDate = writeDate;
+            periodCharge.version = SSJSyncVersion();
+            periodCharge.billId = targetFundId;
+            
+            if (![self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:periodCharge]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
+                    }
+                });
+                return NO;
+            };
+                    }
+
+        
         if (success) {
             success();
         }
+        
+        return YES;
         
     }];
 }
