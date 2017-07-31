@@ -49,8 +49,16 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 @property (nonatomic, strong) UILabel *targetL;
 
+/**
+ <#注释#>
+ */
+@property (nonatomic, weak) UIButton *saveButton;
+
 /**金币*/
 @property (nonatomic, strong) UIImageView *goldCoinsImageView;
+
+/**掉落金币*/
+@property (nonatomic, strong) NSArray *goldCoinsImageArr;
 
 /**存满后弹框*/
 @property (nonatomic, strong) SSJInviteCodeJoinSuccessView *fillWishSuccessView;
@@ -70,6 +78,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 - (void)initdata {
     self.chargeItem.remindDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
     self.titleArr = @[@[kTitle1],@[kTitle2,kTitle3]];
+    self.goldCoinsImageArr = @[@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4",@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4"];
 }
 
 #pragma mark - Theme
@@ -106,11 +115,53 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 - (void)goldCoinsAnim {
     __weak __typeof(self)weakSelf = self;
+    CGPoint goldPoint = self.saveButton.center;
+    NSMutableArray *goldArr = [NSMutableArray array];
+    for (NSInteger i=0; i<self.goldCoinsImageArr.count; i++) {
+        UIImageView *goldImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[self.goldCoinsImageArr ssj_safeObjectAtIndex:i]]];
+        [self.saveFooterView addSubview:goldImageView];
+        goldImageView.center = goldPoint;
+        [goldArr addObject:goldImageView];
+    }
+    
     [UIView animateWithDuration:1 animations:^{
-        CGFloat aa = self.saveFooterView.height -
+        CGFloat height = weakSelf.saveFooterView.height -
         weakSelf.goldCoinsImageView.height * (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]);
-        weakSelf.goldCoinsImageView.top = aa;
+        weakSelf.goldCoinsImageView.top = height;
         //掉金币
+        for (NSInteger i=0; i<goldArr.count; i++) {
+           UIImageView *goldImageView = [goldArr ssj_safeObjectAtIndex:i];
+            switch (i) {
+                case 0:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.25, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 1:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.3, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 2:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.4, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 3:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.5, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 4:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.6, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 5:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.7, weakSelf.saveFooterView.height - 30);
+                    break;
+                case 6:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.8, weakSelf.saveFooterView.height - 50);
+                    break;
+                case 7:
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.55, weakSelf.saveFooterView.height - 30);
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+        
     } completion:^(BOOL finished) {
         if (weakSelf.saveMoneyType == SSJSaveMoneyTypeNormal) {
             [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -289,6 +340,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         [saveButton addTarget:self action:@selector(saveMoneyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         saveButton.centerX = _saveFooterView.width * 0.5;
         saveButton.top = 70;
+        self.saveButton = saveButton;
         [_saveFooterView addSubview:self.goldCoinsImageView];
         _saveFooterView.layer.masksToBounds = YES;
 //        self.goldCoinsImageView.bottom = _saveFooterView.bottom + 50;
