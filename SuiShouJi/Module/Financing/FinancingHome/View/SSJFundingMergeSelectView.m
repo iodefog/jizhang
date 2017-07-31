@@ -42,7 +42,7 @@
     
     [self.fundingTypeLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self);
-        make.top.mas_equalTo(self.fundSelectView).offset(14);
+        make.top.mas_equalTo(self.fundSelectView.mas_bottom).offset(14);
     }];
     
     [super updateConstraints];
@@ -65,37 +65,45 @@
 - (void)setFundingItem:(SSJBaseCellItem *)fundingItem {
     _fundingItem = fundingItem;
     self.fundSelectView.fundingItem = fundingItem;
-    if ([_fundingItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_fundingItem;
-        
-        NSString *str = [NSString stringWithFormat:@"资金账户类型: %@",fundItem.fundingParent];
-        NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:str];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, 7)];
-        
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[str rangeOfString:fundItem.fundingParentName]];
-        
-        self.fundingTypeLab.attributedText = attributeStr;
-    } else if ([_fundingItem isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *carditem = (SSJCreditCardItem *)_fundingItem;
-        
-        NSString *parentName;
-        
-        if (carditem.cardType == SSJCrediteCardTypeAlipay) {
-            parentName = @"蚂蚁花呗";
-        } else {
-            parentName = @"信用卡";
+    if (fundingItem) {
+        if ([_fundingItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_fundingItem;
+            
+            NSString *str = [NSString stringWithFormat:@"资金账户类型: %@",fundItem.fundingParentName];
+            NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:str];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, 7)];
+            
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[str rangeOfString:fundItem.fundingParentName]];
+            
+            self.fundingTypeLab.attributedText = attributeStr;
+            
+        } else if ([_fundingItem isKindOfClass:[SSJCreditCardItem class]]) {
+            SSJCreditCardItem *carditem = (SSJCreditCardItem *)_fundingItem;
+            
+            NSString *parentName;
+            
+            if (carditem.cardType == SSJCrediteCardTypeAlipay) {
+                parentName = @"蚂蚁花呗";
+            } else {
+                parentName = @"信用卡";
+            }
+            
+            NSString *str = [NSString stringWithFormat:@"资金账户类型: %@",parentName];
+            
+            NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:str];
+            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, 7)];
+            
+            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[str rangeOfString:parentName]];
+            self.fundingTypeLab.attributedText = attributeStr;
         }
+
+    } else {
         
-        NSString *str = [NSString stringWithFormat:@"资金账户类型: %@",parentName];
-        
-        NSMutableAttributedString *attributeStr = [[NSMutableAttributedString alloc] initWithString:str];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor] range:NSMakeRange(0, 7)];
-        
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[str rangeOfString:parentName]];
-        self.fundingTypeLab.attributedText = attributeStr;
     }
+    
+    [self updateConstraintsIfNeeded];
 }
 
 

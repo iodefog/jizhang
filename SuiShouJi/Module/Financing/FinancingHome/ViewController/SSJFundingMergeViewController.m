@@ -54,6 +54,11 @@
     // Do any additional setup after loading the view.
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateTransferItem];
+}
+
 - (void)updateViewConstraints {
     
     [self.mergeButton mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -66,14 +71,14 @@
     
     [self.transferOutFundBackView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM).priorityHigh();
-        make.height.mas_equalTo(190);
+        make.height.mas_equalTo(160);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferInFundBackView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.transferOutFundBackView.mas_bottom).offset(50).priorityHigh();
-        make.height.mas_equalTo(190);
+        make.height.mas_equalTo(160);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
     }];
@@ -185,6 +190,11 @@
     return _containerView;
 }
 
+#pragma mark - Private
+- (void)updateTransferItem {
+    self.transferInFundBackView.fundingItem = self.transferInFundItem;
+    self.transferOutFundBackView.fundingItem = self.transferOutFundItem;
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

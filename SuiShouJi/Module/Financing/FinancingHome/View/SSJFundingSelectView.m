@@ -36,13 +36,15 @@ static const CGFloat kBooksCornerRadius = 8.f;
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.fundNameLab.center = CGPointMake(self.width / 2, self.height / 2);
+    self.gradientLayer.frame = CGRectMake(0, 0, self.width, self.height);
 }
 
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
         _gradientLayer = [CAGradientLayer layer];
-        _gradientLayer.frame = CGRectMake(0, 0, self.width, self.height);
         _gradientLayer.cornerRadius = kBooksCornerRadius;
+        _gradientLayer.startPoint = CGPointMake(0, 0.5);
+        _gradientLayer.endPoint = CGPointMake(1, 0.5);
     }
     return _gradientLayer;
 }

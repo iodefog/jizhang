@@ -259,6 +259,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         @strongify(self);
         SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
+        mergeVc.transferOutFundItem = self.item;
         [self.navigationController pushViewController:mergeVc animated:YES];
     }]];
     

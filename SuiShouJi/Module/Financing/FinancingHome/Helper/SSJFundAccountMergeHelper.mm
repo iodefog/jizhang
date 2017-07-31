@@ -12,6 +12,7 @@
 #import "SSJUserChargeTable.h"
 #import "SSJTransferCycleTable.h"
 #import "SSJChargePeriodConfigTable.h"
+#import "SSJLoanTable.h"
 
 @interface SSJFundAccountMergeHelper()
 
@@ -137,6 +138,39 @@
             };
             
         }
+        
+        // 取出所有的借贷
+        NSArray *loanArr = [self.db getObjectsOfClass:SSJLoanTable.class fromTable:@"BK_LOAN"
+                                                    where:SSJLoanTable.userId == userId
+                                && (SSJLoanTable.targetFundid == sourceFundId
+                                    || SSJLoanTable.endTargetFundid == sourceFundId
+                                    )
+                                && SSJLoanTable.operatorType != 2];
+        
+        for (SSJLoanTable *loan in transferArr) {
+            loan.writeDate = writeDate;
+            loan.version = SSJSyncVersion();
+            if ([loan.targetFundid isEqualToString:sourceFundId]) {
+                loan.targetFundid = targetFundId;
+            } else if ([loan.endTargetFundid isEqualToString:sourceFundId]) {
+                loan.endTargetFundid = targetFundId;
+            }
+            
+            if (![self.db updateRowsInTable:@"BK_LOAN" onProperties:{
+                SSJLoanTable.writeDate,
+                SSJLoanTable.version,
+                SSJLoanTable.targetFundid,
+                SSJLoanTable.endTargetFundid
+            } withObject:loan where:SSJLoanTable.loanId == loan.loanId]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并失败"}]);
+                    }
+                });
+                return NO;
+            };
+            }
+
 
         if (success) {
             success();
@@ -145,6 +179,25 @@
         return YES;
         
     }];
+}
+
+- (NSArray *)getFundingsWithType:(BOOL)fundType {
+    NSString *userId = SSJUSERID();
+    
+    NSArray *funsArr = [NSArray array];
+    
+    if (fundType) {
+        funsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
+                                                where:SSJFundInfoTable.userId == userId
+                            && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])];
+    } else {
+        funsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
+                                       where:SSJFundInfoTable.userId == userId
+                   && SSJFundInfoTable.fundParent.in(@[@"3",@"16"])
+                   && SSJFundInfoTable.fundParent != @"root"];
+    }
+    
+    return funsArr;
 }
 
 - (WCTDatabase *)db {
