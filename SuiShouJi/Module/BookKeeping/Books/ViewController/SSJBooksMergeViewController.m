@@ -33,6 +33,10 @@
 
 @property (nonatomic, strong) SSJBooksSelectView *booksSelectView;
 
+@property (nonatomic, strong) UIImageView *warningImage;
+
+@property (nonatomic, strong) UILabel *warningLab;
+
 @end
 
 @implementation SSJBooksMergeViewController
@@ -45,6 +49,8 @@
     [self.scrollView addSubview:self.transferOutBookBackView];
     [self.scrollView addSubview:self.transferInBookBackView];
     [self.scrollView addSubview:self.transferImage];
+    [self.scrollView addSubview:self.warningImage];
+    [self.scrollView addSubview:self.warningLab];
     
     [self.view updateConstraintsIfNeeded];
     // Do any additional setup after loading the view.
@@ -90,6 +96,17 @@
         make.size.equalTo(self.view);
         make.left.equalTo(self.view);
         make.top.equalTo(self.view);
+    }];
+    
+    [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(14);
+        make.left.mas_equalTo(15);
+    }];
+
+    [self.warningLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.warningImage);
+        make.left.mas_equalTo(self.warningImage.mas_right).offset(10);
+        make.right.mas_equalTo(self.scrollView.mas_right).offset(-10);
     }];
 
     [super updateViewConstraints];
@@ -174,6 +191,25 @@
         };
     }
     return _booksSelectView;
+}
+
+- (UILabel *)warningLab {
+    if (!_warningLab) {
+        _warningLab = [[UILabel alloc] init];
+        _warningLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _warningLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _warningLab.numberOfLines = 0;
+        _warningLab.text = @"迁移账本，账本名称、收支类别等属性将以目标账本为准。";
+    }
+    return _warningLab;
+}
+
+- (UIImageView *)warningImage {
+    if (!_warningImage) {
+        _warningImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
+        
+    }
+    return _warningImage;
 }
 
 #pragma mark - Private
