@@ -57,7 +57,7 @@
     [self.scrollView addSubview:self.containerView];
 
     
-    [self.view updateConstraintsIfNeeded];
+    [self.view setNeedsUpdateConstraints];
     // Do any additional setup after loading the view.
 }
 
@@ -80,18 +80,18 @@
         make.height.mas_equalTo(44);
         make.centerX.mas_equalTo(self.view);
         make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(57);
-        make.bottom.mas_equalTo(self.containerView.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self.containerView.mas_bottom).offset(-30).priorityHigh();
     }];
     
     [self.transferOutBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM);
+        make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM).priorityHigh();
         make.height.mas_equalTo(190);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferInBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50);
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50).priorityHigh();
         make.height.mas_equalTo(190);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
@@ -103,9 +103,7 @@
     }];
     
     [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.equalTo(self.view);
-        make.left.equalTo(self.view);
-        make.top.equalTo(self.view);
+        make.edges.mas_equalTo(self.scrollView);
     }];
     
     [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -120,8 +118,7 @@
     }];
     
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.top.width.mas_equalTo(self.view);
-        make.height.mas_equalTo(self.containerView);
+        make.edges.mas_equalTo(self.view);
     }];
 
     [super updateViewConstraints];
