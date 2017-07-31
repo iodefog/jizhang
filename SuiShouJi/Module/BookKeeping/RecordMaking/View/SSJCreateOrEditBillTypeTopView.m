@@ -40,15 +40,15 @@ static const NSTimeInterval kDuration = 0.25;
 
 - (void)updateConstraints {
     [self.colorView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self).offset(15);
+        make.left.mas_equalTo(self).offset(15).priorityHigh();
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(26, 13));
+        make.size.mas_equalTo(CGSizeMake(26, 13)).priorityHigh();
     }];
     [self.arrowView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.colorView.mas_right).offset(10);
+        make.left.mas_equalTo(self.colorView.mas_right).offset(10).priorityHigh();
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(12, 7));
-        make.right.mas_equalTo(self.mas_right).offset(-10);
+        make.size.mas_equalTo(CGSizeMake(12, 7)).priorityHigh();
+        make.right.mas_equalTo(self.mas_right).offset(-10).priorityHigh();
     }];
     [super updateConstraints];
 }
@@ -120,13 +120,13 @@ static const NSTimeInterval kDuration = 0.25;
         make.left.and.top.and.bottom.mas_equalTo(0);
     }];
     [self.iconView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.colorControl.mas_right).offset(20);
+        make.left.mas_equalTo(self.colorControl.mas_right).offset(20).priorityHigh();
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(self.iconView.image.size);
+        make.size.mas_equalTo(self.iconView.image.size).priorityHigh();
     }];
     [self.nameField mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.iconView.mas_right).offset(20);
-        make.right.mas_equalTo(self).offset(-10);
+        make.left.mas_equalTo(self.iconView.mas_right).offset(20).priorityHigh();
+        make.right.mas_equalTo(self).offset(-10).priorityHigh();
         make.top.and.bottom.mas_equalTo(self);
     }];
     [super updateConstraints];

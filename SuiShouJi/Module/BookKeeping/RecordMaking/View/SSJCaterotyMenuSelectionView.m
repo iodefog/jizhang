@@ -499,7 +499,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
         case SSJCaterotyMenuSelectionViewMenuLeft: {
             [self updateSubscriptLineConstraint];
             [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.width.mas_equalTo(50);
+                make.width.mas_equalTo(50).priorityHigh();
                 make.top.and.left.and.height.mas_equalTo(self);
             }];
             [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
