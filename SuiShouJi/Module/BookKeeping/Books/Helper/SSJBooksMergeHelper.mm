@@ -31,7 +31,7 @@
 {
     self = [super init];
     if (self) {
-        
+
     }
     return self;
 }
@@ -107,14 +107,21 @@
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
             
-            if ([self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge]) {
+            if (![self.db updateRowsInTable:@"BK_USER_CHARGE"
+                               onProperties:{
+                                   SSJUserChargeTable.booksId,
+                                   SSJUserChargeTable.writeDate,
+                                   SSJUserChargeTable.version,
+                                   SSJUserChargeTable.billId
+                               }
+                                 withObject:userCharge
+                                      where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
                     }
                 });
                 return NO;
-
             };
         }
         
@@ -124,7 +131,7 @@
                               && SSJChargePeriodConfigTable.booksId == sourceBooksId
                               && SSJChargePeriodConfigTable.operatorType != 2];
         
-        for (SSJChargePeriodConfigTable *chargePeriod in chargeArr) {
+        for (SSJChargePeriodConfigTable *chargePeriod in periodChargeArr) {
             chargePeriod.booksId = targetBooksId;
             chargePeriod.writeDate = writeDate;
             chargePeriod.version = SSJSyncVersion();
@@ -133,7 +140,7 @@
             }
             
             
-            if ([self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:chargePeriod]) {
+            if (![self.db insertOrReplaceObject:chargePeriod into:@"BK_CHARGE_PERIOD_CONFIG"]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
@@ -146,6 +153,8 @@
         if (success) {
             success();
         }
+        
+        return YES;
 
     }];
 }

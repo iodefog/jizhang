@@ -198,11 +198,15 @@
         return;
     }
     @weakify(self);
+    [self.mergeButton startAnimating];
     [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = YES;
     } failure:^(NSError *error) {
-        
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = NO;
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 

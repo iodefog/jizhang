@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) NSTimer *animationTimer;
 
+@property (nonatomic, strong) UIView *backWhiteView;
+
 @property (nonatomic) BOOL isAnimating;
 
 @property (nonatomic) double currentTime;
@@ -38,7 +40,7 @@
         self.titleColor = [UIColor whiteColor];
         [self addSubview:self.backGroundImage];
         [self addSubview:self.titleLab];
-        [self.layer addSublayer:self.fishImage];
+        [self addSubview:self.backWhiteView];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return self;
@@ -87,7 +89,7 @@
         _fishAnimation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
         _fishAnimation.path = self.animationPath.CGPath;
         _fishAnimation.calculationMode = kCAAnimationCubic;
-        _fishAnimation.duration = 4;
+        _fishAnimation.duration = 2;
         _fishAnimation.removedOnCompletion = YES;
         _fishAnimation.delegate = self;
     }
@@ -96,8 +98,9 @@
 
 - (UIImageView *)backGroundImage {
     if (!_backGroundImage) {
-        _backGroundImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, self.height)];
-        _backGroundImage.image = [UIImage ssj_imageWithColor:[UIColor orangeColor] size:CGSizeMake(self.width, self.height)];
+        _backGroundImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height)];
+        _backGroundImage.image = [UIImage imageNamed:@"book_transfer_bg"];
+        _backGroundImage.hidden = YES;
     }
     return _backGroundImage;
 }
@@ -109,6 +112,15 @@
         [[NSRunLoop currentRunLoop] addTimer:_animationTimer forMode:NSRunLoopCommonModes];
     }
     return _animationTimer;
+}
+
+- (UIView *)backWhiteView {
+    if (!_backWhiteView ) {
+        _backWhiteView = [[UIView alloc] init];
+        _backWhiteView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _backWhiteView.hidden = YES;
+    }
+    return _backWhiteView;
 }
 
 - (void)setTitle:(NSString *)title {
@@ -123,6 +135,14 @@
         self.isAnimating = NO;
         [self.animationTimer invalidate];
         self.animationTimer = nil;
+        self.backGroundImage.hidden = YES;
+        self.backWhiteView.hidden = YES;
+        [self.fishImage removeFromSuperlayer];
+        if (self.isSuccess) {
+            self.title = @"迁移成功";
+        } else {
+            self.title = @"迁移失败";
+        }
     }
 }
 
@@ -156,21 +176,27 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (!self.isAnimating) {
-        self.isAnimating = !self.isAnimating;
-        self.backgroundColor = [UIColor whiteColor];
-        self.titleLab.text = @"";
-        [self.fishImage addAnimation:self.fishAnimation forKey:@"fishAnimation"];
         if (self.mergeButtonClickBlock) {
             self.mergeButtonClickBlock();
         }
     }
 }
 
-
+- (void)startAnimating {
+    if ([self.title isEqualToString:@"迁移"] || [self.title isEqualToString:@"迁移失败"]) {
+        [self.fishImage addAnimation:self.fishAnimation forKey:@"fishAnimation"];
+        self.backGroundImage.frame = CGRectMake(0, 0, self.width, self.height);
+        self.isAnimating = !self.isAnimating;
+        self.titleLab.text = @"";
+        self.backGroundImage.hidden = NO;
+        self.backWhiteView.hidden = NO;
+        [self.layer addSublayer:self.fishImage];
+    }
+}
 
 - (void)updateTheFishPosition {
     self.currentTime += 0.01;
-    self.backGroundImage.frame = CGRectMake(0, 0, self.fishImage.presentationLayer.position.x + 20, self.height);
+    self.backWhiteView.frame = CGRectMake(self.fishImage.presentationLayer.position.x + 20, 0, self.width - self.fishImage.presentationLayer.position.x - 20, self.height);
     double currentPercent = self.backGroundImage.frame.size.width / self.width;
     if (currentPercent >= 0.8 && !_progressDidCompelete) {
         [self animationPause];
