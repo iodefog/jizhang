@@ -104,6 +104,7 @@
     
     [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.edges.mas_equalTo(self.scrollView);
+        make.width.mas_equalTo(self.view);
     }];
     
     [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
