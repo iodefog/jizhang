@@ -82,7 +82,7 @@
         [userBillTypeArr removeObjectsAtIndexes:sameNameIndexs];
         
         if (userBillTypeArr.count) {
-            if ([self.db insertOrReplaceObjects:userBillTypeArr into:@"BK_USER_BILL_TYPE"]) {
+            if (![self.db insertOrReplaceObjects:userBillTypeArr into:@"BK_USER_BILL_TYPE"]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并记账类型失败"}]);
