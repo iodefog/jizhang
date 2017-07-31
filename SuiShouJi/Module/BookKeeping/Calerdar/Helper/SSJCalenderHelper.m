@@ -124,7 +124,7 @@
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db){
-        FMResultSet *rs = [db executeQuery:@"select a.* , b.* from bk_user_charge a , bk_user_bill_type b where a.ichargeid = ? and a.ibillid = b.cbillid", chargeId];
+        FMResultSet *rs = [db executeQuery:@"select a.* , b.* from bk_user_charge a , bk_user_bill_type b where a.ichargeid = ? and a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid", chargeId];
         if (!rs) {
             if (failure) {
                 SSJDispatchMainAsync(^{
