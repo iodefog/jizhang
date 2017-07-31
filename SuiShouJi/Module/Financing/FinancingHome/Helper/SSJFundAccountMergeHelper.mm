@@ -189,11 +189,14 @@
     if (fundType) {
         funsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                                 where:SSJFundInfoTable.userId == userId
-                            && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])];
+                   && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])
+                   && SSJFundInfoTable.operatorType != 2
+                   && SSJFundInfoTable.fundParent != @"root"];
     } else {
         funsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                        where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.in(@[@"3",@"16"])
+                   && SSJFundInfoTable.operatorType != 2
                    && SSJFundInfoTable.fundParent != @"root"];
     }
     
