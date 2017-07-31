@@ -10,4 +10,8 @@
 
 @interface SSJFundingMergeViewController : SSJBaseViewController
 
+@property (nonatomic, strong) SSJBaseCellItem *transferInFundItem;
+
+@property (nonatomic, strong) SSJBaseCellItem *transferOutFundItem;
+
 @end

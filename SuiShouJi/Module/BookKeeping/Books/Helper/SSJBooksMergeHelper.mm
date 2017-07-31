@@ -71,7 +71,7 @@
             userBill.version = SSJSyncVersion();
             SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE"
                                                                         where:SSJUserBillTypeTable.billName == userBill.billName
-                                                  && SSJUserBillTypeTable.booksId == sourceBooksId];
+                                                  && SSJUserBillTypeTable.booksId == targetBooksId];
             if (sameNameBill) {
                 [sameNameDic setObject:userBill.billId forKey:sameNameBill.billId];
                 [sameNameIndexs addIndex:currentIndex];
