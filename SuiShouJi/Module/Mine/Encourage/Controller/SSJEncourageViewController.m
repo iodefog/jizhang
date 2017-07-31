@@ -8,6 +8,7 @@
 
 #import "SSJEncourageViewController.h"
 #import "SSJNewAboutUsViewController.h"
+#import "SSJRewardViewController.h"
 
 #import "SSJEncourageHeaderView.h"
 #import "SSJEncourageCell.h"
@@ -194,7 +195,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         @weakify(self);
         [[_rewardBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            
+            SSJRewardViewController *rewardVC = [[SSJRewardViewController alloc] init];
+            [self.navigationController pushViewController:rewardVC animated:YES];
             
         }];
     }
