@@ -266,7 +266,7 @@
                 SSJFundInfoTable.operatorType,
                 SSJFundInfoTable.writeDate,
                 SSJFundInfoTable.version
-            } withObject:fund where:SSJFundInfoTable.fundId == fund.fundId]) {
+            } withObject:fund where:SSJFundInfoTable.fundId == sourceFundId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"删除提醒表失败失败"}]);
