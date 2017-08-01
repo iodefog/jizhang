@@ -40,14 +40,14 @@ static const NSTimeInterval kDuration = 0.25;
 
 - (void)updateConstraints {
     [self.colorView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self).offset(15).priorityHigh();
+        make.left.mas_equalTo(self).offset(15);
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(26, 13)).priorityHigh();
+        make.size.mas_equalTo(CGSizeMake(26, 13));
     }];
     [self.arrowView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.colorView.mas_right).offset(10).priorityHigh();
+        make.left.mas_equalTo(self.colorView.mas_right).offset(10);
         make.centerY.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(12, 7)).priorityHigh();
+        make.size.mas_equalTo(CGSizeMake(12, 7));
         make.right.mas_equalTo(self.mas_right).offset(-10).priorityHigh();
     }];
     [super updateConstraints];
