@@ -286,7 +286,7 @@
     } else if (indexPath.row == 2) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         if (self.reminderItem.remindState == 1) {
-            newReminderCell.cellDetail = [self.reminderItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            newReminderCell.cellDetail = @"";
         }
         newReminderCell.cellTitle = title;
         newReminderCell.accessoryView = self.remindSwitch;

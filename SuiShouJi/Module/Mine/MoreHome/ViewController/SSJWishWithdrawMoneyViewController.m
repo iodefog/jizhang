@@ -99,6 +99,11 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         [CDAutoHideMessageHUD showMessage:@"请输入心愿金额"];
         return;
     }
+    
+    if (self.sigItem.signature.length > 20) {
+        [CDAutoHideMessageHUD showMessage:@"备注不能超过20个字哦"];
+        return;
+    }
 
     self.chargeItem.wishId = self.wishModel.wishId;
     self.chargeItem.money = _moneyInput.text;

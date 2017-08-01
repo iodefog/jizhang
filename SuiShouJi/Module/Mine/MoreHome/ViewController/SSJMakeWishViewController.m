@@ -186,6 +186,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (item.wishName.length) {
         self.wishNameTextF.text = item.wishName;
     }
+    [self.wishNameTextF resignFirstResponder];
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -196,6 +197,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSString *amount = [self.wishMoneyDataArray ssj_safeObjectAtIndex:indexPath.row];
     self.wishAmountTextF.text = amount;
+    [self.wishAmountTextF resignFirstResponder];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
