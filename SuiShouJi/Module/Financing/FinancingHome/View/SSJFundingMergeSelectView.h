@@ -12,4 +12,14 @@
 
 @property (nonatomic,strong) SSJBaseCellItem *fundingItem;
 
+@property (nonatomic) BOOL selectable;
+
+@property (nonatomic, copy) void(^fundSelectBlock)();
+
+// 类型,1是转入.0是转出
+typedef NS_ENUM(NSInteger, SSJFundTransferViewType) {
+    SSJFundTransferViewTypeTransferOut = 0,
+    SSJFundTransferViewTyperTransferIn = 1
+};
+
 @end

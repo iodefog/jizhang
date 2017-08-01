@@ -108,6 +108,7 @@
     }];
     
     [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(16, 14));
         make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(14);
         make.left.mas_equalTo(15);
     }];

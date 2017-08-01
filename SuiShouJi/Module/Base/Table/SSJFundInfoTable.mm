@@ -11,7 +11,7 @@
 @implementation SSJFundInfoTable
 
 @synthesize fundId;
-@synthesize fudName;
+@synthesize fundName;
 @synthesize fundIcon;
 @synthesize fundParent;
 @synthesize fundColor;
@@ -33,7 +33,7 @@ WCDB_IMPLEMENTATION(SSJFundInfoTable)
 
 
 WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fundId, "CFUNDID")
-WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fudName, "CACCTNAME")
+WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fundName, "CACCTNAME")
 WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fundIcon, "CICOIN")
 WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fundParent, "CPARENT")
 WCDB_SYNTHESIZE_COLUMN(SSJFundInfoTable, fundColor, "CCOLOR")
