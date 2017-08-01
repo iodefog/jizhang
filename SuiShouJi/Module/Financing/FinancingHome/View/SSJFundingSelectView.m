@@ -61,6 +61,7 @@ static const CGFloat kBooksCornerRadius = 8.f;
 - (void)setFundingItem:(SSJBaseCellItem *)fundingItem {
     _fundingItem = fundingItem;
     if (_fundingItem) {
+        self.fundNameLab.textColor = [UIColor whiteColor];
         if ([_fundingItem isKindOfClass:[SSJFinancingHomeitem class]]) {
             SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_fundingItem;
             self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:fundItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:fundItem.endColor].CGColor];

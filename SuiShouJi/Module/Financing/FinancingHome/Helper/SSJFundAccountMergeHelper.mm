@@ -14,6 +14,7 @@
 #import "SSJChargePeriodConfigTable.h"
 #import "SSJLoanTable.h"
 #import "SSJFinancingHomeitem.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJFundAccountMergeHelper()
 
@@ -182,28 +183,38 @@
     }];
 }
 
-- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundId:(NSString *)exceptFundId{
+- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundItem:(SSJBaseCellItem *)fundItem{
     NSString *userId = SSJUSERID();
+    
+    NSString *fundId;
+    
+    if ([fundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)fundItem;
+        fundId = fundingItem.fundingID;
+    } else if ([fundItem isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)fundItem;
+        fundId = cardItem.cardId;
+    }
     
     NSArray *tempFunsArr = [NSArray array];
     
     NSMutableArray *funsArr = [NSMutableArray arrayWithCapacity:0];
 
     
-    if (fundType) {
+    if (! fundType) {
         tempFunsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                                 where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])
                    && SSJFundInfoTable.operatorType != 2
                    && SSJFundInfoTable.fundParent != @"root"
-                   && SSJFundInfoTable.fundId != exceptFundId];
+                   && SSJFundInfoTable.fundId != fundId];
     } else {
         tempFunsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                        where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.in(@[@"3",@"16"])
                    && SSJFundInfoTable.operatorType != 2
                    && SSJFundInfoTable.fundParent != @"root"
-                   && SSJFundInfoTable.fundId != exceptFundId];
+                   && SSJFundInfoTable.fundId != fundId];
     }
     
     
@@ -212,9 +223,10 @@
         item.fundingID = fund.fundId;
         item.fundingName = fund.fundName;
         item.fundingIcon = fund.fundIcon;
-        item.fundingParentName = [[self.db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"BK_FUND_INFO"]
-                                  where:SSJFundInfoTable.fundParent == @"root"
-                                  && SSJFundInfoTable.fundId == fund.fundParent];
+        item.startColor = fund.startColor;
+        item.endColor = fund.endColor;
+        item.fundingParentName = [self.db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"BK_FUND_INFO" where:SSJFundInfoTable.fundParent == @"root"
+                                   && SSJFundInfoTable.fundId == fund.fundParent];
         item.fundingColor = fund.fundColor;
         [funsArr addObject:item];
     }

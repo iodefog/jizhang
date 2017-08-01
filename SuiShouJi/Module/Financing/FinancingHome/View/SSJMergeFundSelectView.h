@@ -13,5 +13,12 @@
 
 @property (nonatomic, strong) NSArray *fundsArr;
 
+- (void)showWithSelectedItem:(SSJBaseCellItem *)item;
+
+- (void)dismiss;
+
+@property (nonatomic, copy) void(^didSelectFundItem)(SSJBaseCellItem *fundItem);
+
+@property (nonatomic, copy) void(^dismissBlock)();
 
 @end

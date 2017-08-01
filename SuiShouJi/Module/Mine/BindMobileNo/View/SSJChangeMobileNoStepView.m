@@ -112,12 +112,12 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
         case SSJChangeMobileNoStepSingleViewStyleBody: {
             [self.lab mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(16, 16));
-                make.top.and.left.and.bottom.mas_equalTo(self);
+                make.top.and.left.and.bottom.mas_equalTo(self).priorityHigh();
             }];
             [self.dash mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(36, 2));
                 make.left.mas_equalTo(self.lab.mas_right).offset(4);
-                make.right.mas_equalTo(self);
+                make.right.mas_equalTo(self).priorityHigh();
                 make.centerY.mas_equalTo(self.lab);
             }];
         }
@@ -126,7 +126,7 @@ typedef NS_ENUM(NSInteger, SSJChangeMobileNoStepSingleViewStyle) {
         case SSJChangeMobileNoStepSingleViewStyleFooter: {
             [self.lab mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.size.mas_equalTo(CGSizeMake(16, 16));
-                make.edges.mas_equalTo(self);
+                make.edges.mas_equalTo(self).priorityHigh();
             }];
         }
             break;

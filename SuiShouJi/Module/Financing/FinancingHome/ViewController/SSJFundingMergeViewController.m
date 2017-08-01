@@ -8,10 +8,11 @@
 
 #import "SSJFundingMergeViewController.h"
 
-#import "SSJBooksMergeHelper.h"
+#import "SSJFundAccountMergeHelper.h"
 
 #import "SSJBooksMergeProgressButton.h"
 #import "SSJFundingMergeSelectView.h"
+#import "SSJMergeFundSelectView.h"
 
 @interface SSJFundingMergeViewController ()
 
@@ -25,7 +26,7 @@
 
 @property (nonatomic, strong) UIImageView *transferImage;
 
-@property (nonatomic, strong) SSJBooksMergeHelper *mergeHelper;
+@property (nonatomic, strong) SSJFundAccountMergeHelper *mergeHelper;
 
 @property (nonatomic, strong) NSArray *allFundsItem;
 
@@ -34,6 +35,10 @@
 @property (nonatomic, strong) UILabel *warningLab;
 
 @property (nonatomic, strong) UIView *containerView;
+
+@property (nonatomic, strong) SSJMergeFundSelectView *transferInFundSelectView;
+
+@property (nonatomic, strong) SSJMergeFundSelectView *transferOutFundSelectView;
 
 @end
 
@@ -113,9 +118,9 @@
 }
 
 #pragma mark - Getter
-- (SSJBooksMergeHelper *)mergeHelper {
+- (SSJFundAccountMergeHelper *)mergeHelper {
     if (!_mergeHelper) {
-        _mergeHelper = [[SSJBooksMergeHelper alloc] init];
+        _mergeHelper = [[SSJFundAccountMergeHelper alloc] init];
     }
     return _mergeHelper;
 }
@@ -125,6 +130,12 @@
         _transferInFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferInFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _transferInFundBackView.selectable = self.transferInSelectable;
+        @weakify(self);
+        _transferInFundBackView.fundSelectBlock = ^{
+            @strongify(self);
+            self.transferInFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.isCreditCardOrNot exceptFundItem:self.transferOutFundItem];
+            [self.transferInFundSelectView showWithSelectedItem:self.transferInFundItem];
+        };
     }
     return _transferInFundBackView;
 }
@@ -134,6 +145,12 @@
         _transferOutFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferOutFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         _transferOutFundBackView.selectable = self.transferOutSelectable;
+        @weakify(self);
+        _transferOutFundBackView.fundSelectBlock = ^{
+            @strongify(self);
+            self.transferOutFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.isCreditCardOrNot exceptFundItem:self.transferInFundItem];
+            [self.transferOutFundSelectView showWithSelectedItem:self.transferOutFundItem];
+        };
     }
     return _transferOutFundBackView;
 }
@@ -191,6 +208,32 @@
         _containerView = [[UIView alloc] init];
     }
     return _containerView;
+}
+
+- (SSJMergeFundSelectView *)transferInFundSelectView {
+    if (!_transferInFundSelectView) {
+        _transferInFundSelectView = [[SSJMergeFundSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 250)];
+        @weakify(self);
+        _transferInFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem) {
+            @strongify(self);
+            self.transferInFundItem = fundItem;
+            [self updateTransferItem];
+        };
+    }
+    return _transferInFundSelectView;
+}
+
+- (SSJMergeFundSelectView *)transferOutFundSelectView {
+    if (!_transferOutFundSelectView) {
+        _transferOutFundSelectView = [[SSJMergeFundSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 250)];
+        @weakify(self);
+        _transferOutFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem) {
+            @strongify(self);
+            self.transferOutFundItem = fundItem;
+            [self updateTransferItem];
+        };
+    }
+    return _transferOutFundSelectView;
 }
 
 #pragma mark - Private
