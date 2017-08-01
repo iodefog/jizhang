@@ -16,7 +16,7 @@
 typedef void (^weiXinLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
 //微信登陆成功的回调
-typedef void (^weiXinLoginFailBlock)();
+typedef void (^weiXinLoginFailBlock)(NSError *error);
 
 //微信登录的方法
 - (void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock failBlock:(weiXinLoginFailBlock)failBlock ;

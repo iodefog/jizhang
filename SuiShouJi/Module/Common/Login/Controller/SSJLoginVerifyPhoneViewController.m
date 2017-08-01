@@ -322,7 +322,7 @@
             [SSJAnaliyticsManager event:@"login_qq"];
             [self.view endEditing:YES];
             [[self.verifyPhoneViewModel.qqLoginCommand execute:nil] subscribeError:^(NSError *error) {
-                if (error.code != SSJErrorCodeUserCancelLogin) {
+                if (error.code != SSJErrorCodeLoginCanceled) {
                     [CDAutoHideMessageHUD showError:error];
                 }
             } completed:^{
@@ -347,7 +347,7 @@
             [SSJAnaliyticsManager event:@"login_weixin"];
             [self.view endEditing:YES];
             [[self.verifyPhoneViewModel.wxLoginCommand execute:nil] subscribeError:^(NSError *error) {
-                if (error.code != SSJErrorCodeUserCancelLogin) {
+                if (error.code != SSJErrorCodeLoginCanceled) {
                     [CDAutoHideMessageHUD showError:error];
                 }
             } completed:^{

@@ -356,10 +356,6 @@
     }];
     _userItem = [SSJUserItem mj_objectWithKeyValues:result[@"user"]];
     self.userItem.loginType = [NSString stringWithFormat:@"%d", (int)self.loginType];
-    if (self.loginType != SSJLoginTypeNormal) {
-        self.userItem.mobileNo = @"";
-    }
-    self.userItem.loginPWD = @"";
     self.userItem.openId = self.openId;
     
     self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBill"]];
@@ -716,8 +712,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeWeiXin;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
-                } failBlock:^{
-                    [subscriber sendError:nil];
+                } failBlock:^(NSError *error){
+                    [subscriber sendError:error];
                 }];
                 return nil;
             }] flattenMap:^RACStream *(NSDictionary *result) {
@@ -740,8 +736,8 @@
                     [SSJThirdPartyLoginManger shareInstance].weixinLogin = nil;
                     self.loginType = SSJLoginTypeQQ;
                     [self thirdLoginWithLoginItem:item subscriber:subscriber];
-                } failBlock:^{
-                    [subscriber sendError:nil];
+                } failBlock:^(NSError *error){
+                    [subscriber sendError:error];
                 }];
                 return nil;
             }] flattenMap:^RACStream *(NSDictionary *result) {
@@ -784,7 +780,7 @@
                     [subscriber sendError:error];
                 }];
             } else {
-                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUserCancelLogin userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]];
+                [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]];
             }
         }];
         return nil;

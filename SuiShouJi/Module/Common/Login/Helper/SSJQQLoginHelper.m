@@ -42,7 +42,7 @@
 -(void)applicationDidBecomeActive:(NSNotification *)notification
 {
     if (self.failBlock) {
-        self.failBlock();
+        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
     }
     self.failBlock = nil;
 }
@@ -64,14 +64,8 @@
 //非网络错误导致登录失败：
 -(void)tencentDidNotLogin:(BOOL)cancelled
 {
-    if (cancelled)
-    {
-        [CDAutoHideMessageHUD showMessage:@"登录取消"];
-    }else{
-        [CDAutoHideMessageHUD showMessage:@"登录失败"];
-    }
     if (self.failBlock) {
-        self.failBlock();
+        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:(cancelled ? SSJErrorCodeLoginCanceled : SSJErrorCodeLoginFailed) userInfo:@{NSLocalizedDescriptionKey:[TencentOAuth getLastErrorMsg] ?: SSJ_ERROR_MESSAGE}]);
     }
 }
 
@@ -80,7 +74,7 @@
 {
     [CDAutoHideMessageHUD showMessage:@"无网络连接，请设置网络"];
     if (self.failBlock) {
-        self.failBlock();
+        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginFailed userInfo:@{NSLocalizedDescriptionKey:@"无网络连接，请设置网络"}]);
     }
 }
 

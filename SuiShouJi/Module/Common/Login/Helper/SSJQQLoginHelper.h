@@ -15,7 +15,7 @@
 typedef void (^qqLoginSuccessBlock)(SSJThirdPartLoginItem *item);
 
 //QQ登陆失败的回调
-typedef void (^qqLoginFailBlock)();
+typedef void (^qqLoginFailBlock)(NSError *error);
 
 //QQ登录的方法
 -(void)qqLoginWithSucessBlock:(qqLoginSuccessBlock)sucessBlock failBlock:(qqLoginFailBlock)failBlock;

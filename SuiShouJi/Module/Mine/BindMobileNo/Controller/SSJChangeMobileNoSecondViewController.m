@@ -138,7 +138,9 @@
             thirdVC.mobileNo = self.mobileNoField.text;
             [self.navigationController pushViewController:thirdVC animated:YES];
         }
-    } error:NULL];
+    } error:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
     
     RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
     RAC(self.viewModel, phoneNum) = [RACSignal merge:@[[self.mobileNoField rac_textSignal], RACObserve(self.mobileNoField, text)]];
