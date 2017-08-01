@@ -18,5 +18,7 @@
 
 @property (nonatomic) BOOL transferOutSelectable;
 
+@property (nonatomic) BOOL isCreditCardOrNot;
+
 
 @end

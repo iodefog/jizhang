@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJColorSelectCollectionViewCell : UICollectionViewCell
+
 @property (nonatomic,strong) NSString *itemColor;
+
 @property (nonatomic) BOOL isSelected;
+
 @end
