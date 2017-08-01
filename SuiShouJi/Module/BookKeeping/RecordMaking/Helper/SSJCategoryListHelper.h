@@ -98,6 +98,7 @@ extern const int SSJImmovableOrder;
  *  @param failure      查询失败的回调
  */
 + (void)updateCategoryOrderWithItems:(NSArray <SSJRecordMakingBillTypeSelectionCellItem *>*)items
+                             booksID:(NSString *)booksID
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure;
 
