@@ -205,6 +205,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     CGFloat top = 0;
     if (btn.selected) {
         top = 0;
+        btn.imageView.transform = CGAffineTransformMakeRotation(M_PI_2);
     } else {
         top = SSJSCREENHEIGHT - btn.height;
     }
