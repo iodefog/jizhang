@@ -8,6 +8,7 @@
 
 #import "SSJMergeFundSelectView.h"
 #import "SSJBaseTableViewCell.h"
+#import "SSJCreditCardItem.h"
 
 static NSString *cellId = @"SSJFundingTypeCell";
 
@@ -21,6 +22,10 @@ static NSString *cellId = @"SSJFundingTypeCell";
 
 @property (nonatomic,strong) UITableView *tableView;
 
+@property (nonatomic,strong) SSJBaseCellItem *selectItem;
+
+@property (nonatomic, strong) UIImageView *accessoryView;
+
 @end
 
 @implementation SSJMergeFundSelectView
@@ -31,38 +36,39 @@ static NSString *cellId = @"SSJFundingTypeCell";
     if (self) {
         [self sizeToFit];
         
-        [self addSubview:self.tableview];
-        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        [self addSubview:self.tableView];
         [self addSubview:self.titleView];
+        self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+        [self layoutIfNeeded];
     }
     return self;
 }
 
 -(void)layoutSubviews{
     self.titleView.leftTop = CGPointMake(0, 0);
-    self.tableview.top = self.titleView.bottom;
+    self.tableView.top = self.titleView.bottom;
+    self.tableView.size = CGSizeMake(self.width, self.height - self.titleView.height);
     self.titleLabel.center = CGPointMake(self.titleView.width / 2, self.titleView.height / 2);
     self.closeButton.centerY = self.titleView.height / 2;
     self.closeButton.left = 10;
 }
 
-- (void)show {
+- (void)showWithSelectedItem:(SSJBaseCellItem *)item {
     if (self.superview) {
         return;
     }
     
     
-    
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+
+    self.selectItem = item;
+    
+    [self.tableView reloadData];
     
     self.top = keyWindow.height;
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
         self.bottom = keyWindow.height;
     } timeInterval:0.25 fininshed:NULL];
-}
-
--(CGSize)sizeThatFits:(CGSize)size{
-    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 245);
 }
 
 - (void)dismiss {
@@ -75,7 +81,9 @@ static NSString *cellId = @"SSJFundingTypeCell";
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
     } timeInterval:0.25 fininshed:^(BOOL complation) {
-
+        if (self.dismissBlock) {
+            self.dismissBlock();
+        }
     }];
 }
 
@@ -87,7 +95,14 @@ static NSString *cellId = @"SSJFundingTypeCell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+    
+    SSJFinancingHomeitem *item = [self.fundsArr ssj_safeObjectAtIndex:indexPath.row];
+    
+    if (self.didSelectFundItem) {
+        self.didSelectFundItem(item);
+    }
+    
+    [self dismiss];
 }
 
 #pragma mark - UITableViewDataSource
@@ -97,9 +112,23 @@ static NSString *cellId = @"SSJFundingTypeCell";
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    NSString *selectFundid;
+
+    if ([self.selectItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        selectFundid = ((SSJFinancingHomeitem *)self.selectItem).fundingID;
+    } else if ([self.selectItem isKindOfClass:[SSJCreditCardItem class]]) {
+        selectFundid = ((SSJCreditCardItem *)self.selectItem).cardId;
+    }
+    
     SSJFinancingHomeitem *item = [self.fundsArr ssj_safeObjectAtIndex:indexPath.row];
     
-    SSJBaseTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellId];
+    SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    
+    if (!cell) {
+        cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell.backgroundColor = [UIColor clearColor];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    }
     
     cell.imageView.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
@@ -109,17 +138,29 @@ static NSString *cellId = @"SSJFundingTypeCell";
     
     cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     
-    return nil;
+    self.accessoryView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
+    
+    cell.accessoryView = [item.fundingID isEqualToString:selectFundid] ? self.accessoryView : nil;
+    
+    return cell;
 }
 
 #pragma mark - getter
--(UITableView *)tableview{
+- (UITableView *)tableView{
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, self.width, 200)];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+        _tableView.rowHeight = 55;
+        _tableView.dataSource = self;
+        _tableView.delegate = self;
+        _tableView.backgroundView = nil;
+        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
+        [_tableView ssj_clearExtendSeparator];
+        if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
+            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+        }
     }
     return _tableView;
 }
@@ -147,11 +188,21 @@ static NSString *cellId = @"SSJFundingTypeCell";
     return _titleView;
 }
 
-
+- (UIImageView *)accessoryView {
+    if (!_accessoryView) {
+        _accessoryView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+    }
+    return _accessoryView;
+}
 
 #pragma mark - private
 -(void)closeButtonClicked:(UIButton*)button{
     [self dismiss];
+}
+
+- (void)setFundsArr:(NSArray *)fundsArr {
+    _fundsArr = fundsArr;
+    [self.tableView reloadData];
 }
 
 
