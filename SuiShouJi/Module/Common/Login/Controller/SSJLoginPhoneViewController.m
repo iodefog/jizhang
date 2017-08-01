@@ -175,7 +175,7 @@
             [wSelf.view endEditing:YES];
             
             [[[wSelf.viewModel.normalLoginCommand execute:nil] takeUntil:wSelf.rac_willDeallocSignal] subscribeError:^(NSError *error) {
-                if (error.code != SSJErrorCodeUserCancelLogin) {
+                if (error.code != SSJErrorCodeLoginCanceled) {
                     [CDAutoHideMessageHUD showError:error];
                 }
             } completed:^{

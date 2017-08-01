@@ -44,7 +44,7 @@
 -(void)applicationDidBecomeActive:(NSNotification *)notification
 {
     if (self.failBlock) {
-        self.failBlock();
+        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
     }
     self.failBlock = nil;
 }
@@ -61,22 +61,16 @@
 //授权后回调 WXApiDelegate
 -(void)onResp:(BaseResp *)resp
 {
-    
-    if (resp.errCode == 0)
-    {
+    if (resp.errCode == WXSuccess) {
         SSJPRINT(@"用户同意");
         if([resp isKindOfClass:[SendAuthResp class]]) {
             SendAuthResp *aresp=(SendAuthResp *)resp;
             [self getAccessTokenWithCode:aresp.code];
         }
-        return;
-    }else if (resp.errCode == -4){
-        SSJPRINT(@"用户拒绝");
-    }else if (resp.errCode == -2){
-        SSJPRINT(@"用户取消");;
-    }
-    if (self.failBlock) {
-        self.failBlock();
+    } else {
+        if (self.failBlock) {
+            self.failBlock([NSError errorWithDomain:SSJErrorDomain code:(resp.errCode == WXErrCodeUserCancel ? SSJErrorCodeLoginCanceled : SSJErrorCodeLoginFailed) userInfo:@{NSLocalizedDescriptionKey:resp.errStr ?: SSJ_ERROR_MESSAGE}]);
+        }
     }
 }
 

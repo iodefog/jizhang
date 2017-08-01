@@ -214,6 +214,7 @@ const int SSJImmovableOrder = INT_MAX;
 }
 
 + (void)updateCategoryOrderWithItems:(NSArray <SSJRecordMakingBillTypeSelectionCellItem *>*)items
+                             booksID:(NSString *)booksID
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
@@ -235,7 +236,7 @@ const int SSJImmovableOrder = INT_MAX;
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ?", @(i + firstOrder), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID]) {
+            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ? and cbooksid = ?", @(i + firstOrder), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID, SSJUSERID(), booksID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{
@@ -248,10 +249,16 @@ const int SSJImmovableOrder = INT_MAX;
     }];
 }
 
-+ (SSJRecordMakingCategoryItem *)queryfirstCategoryItemWithIncomeOrExpence:(BOOL)incomeOrExpenture{
++ (SSJRecordMakingCategoryItem *)queryfirstCategoryItemWithIncomeOrExpence:(BOOL)incomeOrExpenture {
     SSJRecordMakingCategoryItem *item = [[SSJRecordMakingCategoryItem alloc]init];
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"select * from bk_user_bill_type where itype = ? and cuserid = ? and operatortype <> 2 order by iorder limit 1"];
+        NSString *userID = SSJUSERID();
+        NSString *booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?", userID];
+        if (!booksID.length) {
+            booksID = userID;
+        }
+        
+        FMResultSet *rs = [db executeQuery:@"select * from bk_user_bill_type where itype = ? and cuserid = ? and cbooksid = ? and operatortype <> 2 order by iorder limit 1", @(incomeOrExpenture), userID, booksID];
         while ([rs next]) {
             item.categoryTitle = [rs stringForColumn:@"CNAME"];
             item.categoryImage = [rs stringForColumn:@"CCOIN"];

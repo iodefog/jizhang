@@ -260,6 +260,8 @@
         @strongify(self);
         SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
         mergeVc.transferOutFundItem = self.item;
+        mergeVc.transferInSelectable = YES;
+        mergeVc.transferOutSelectable = NO;
         [self.navigationController pushViewController:mergeVc animated:YES];
     }]];
     

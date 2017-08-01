@@ -12,7 +12,7 @@
 
 @property (nonatomic, retain) NSString* fundId;
 
-@property (nonatomic, retain) NSString* fudName;
+@property (nonatomic, retain) NSString* fundName;
 
 @property (nonatomic, retain) NSString* fundIcon;
 
@@ -43,7 +43,7 @@
 @property (nonatomic, assign) int fundType;
 
 WCDB_PROPERTY(fundId)
-WCDB_PROPERTY(fudName)
+WCDB_PROPERTY(fundName)
 WCDB_PROPERTY(fundIcon)
 WCDB_PROPERTY(fundParent)
 WCDB_PROPERTY(fundColor)

@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJMergeFundSelectView : UIView
 
 @property (nonatomic, strong) NSArray *fundsArr;
+
 
 @end

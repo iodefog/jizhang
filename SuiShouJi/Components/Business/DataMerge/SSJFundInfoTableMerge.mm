@@ -96,7 +96,7 @@
         
         SSJFundInfoTable *sameNameFund = [db getOneObjectOfClass:SSJFundInfoTable.class
                                                          fromTable:[self mergeTableName]
-                                           where:SSJFundInfoTable.fudName == currentFund.fudName
+                                           where:SSJFundInfoTable.fundName == currentFund.fundName
                                           && SSJBooksTypeTable.userId == targetUserId];
         
         if (sameNameFund) {

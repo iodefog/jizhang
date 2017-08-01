@@ -32,7 +32,7 @@
         if (!currentBookId.length) {
             currentBookId = userId;
         }
-        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.cicoin, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b where a.operatortype <> 2 and a.cbooksid = '%@' and a.ibillid = b.cbillid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and a.cbilldate <= '%@' and a.cbooksid = '%@'", currentBookId, content, content, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"], booksId];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select a.*, b.cname, b.cicoin, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b where a.operatortype <> 2 and a.cbooksid = '%@' and a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and (a.cmemo like '%%%@%%' or b.cname like '%%%@%%') and a.cbilldate <= '%@' and a.cbooksid = '%@'", currentBookId, content, content, [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"], booksId];
         switch (order) {
             case SSJChargeListOrderMoneyAscending:{
                 [sql appendString:@" order by cast(a.imoney as double) asc , a.cbilldate desc"];

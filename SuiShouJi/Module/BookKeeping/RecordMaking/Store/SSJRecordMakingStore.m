@@ -94,7 +94,7 @@
             editeItem = item;
             editeItem.operatorType = 1;
             //修改流水
-            FMResultSet *originResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate , a.ifunsid , a.cuserid , a.cmemo ,  a.cimgurl , a.thumburl , a.cid, a.ichargetype , a.operatortype , a.cbooksid , b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.ichargeid = ? and a.cuserid = ?",item.ID,userId];
+            FMResultSet *originResult = [db executeQuery:@"select a.cbilldate , a.imoney , a.ichargeid , a.ibillid , a.cwritedate , a.ifunsid , a.cuserid , a.cmemo ,  a.cimgurl , a.thumburl , a.cid, a.ichargetype , a.operatortype , a.cbooksid , b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.ichargeid = ? and a.cuserid = ?",item.ID,userId];
             SSJBillingChargeCellItem *originItem = [[SSJBillingChargeCellItem alloc]init];
             while ([originResult next]) {
                 originItem.money = [originResult stringForColumn:@"IMONEY"];

@@ -10630,6 +10630,7 @@
 		9CBFB67A1F301E3B00604F37 /* SSJMergeFundSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB66D1F301E3B00604F37 /* SSJMergeFundSelectView.m */; };
 		9CBFB67C1F301E3B00604F37 /* SSJMergeFundSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB66D1F301E3B00604F37 /* SSJMergeFundSelectView.m */; };
 		9CBFB67D1F30268900604F37 /* buildConfig.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9C111F9D1E84FDB900D87EA8 /* buildConfig.txt */; };
+		9CBFB67E1F30307C00604F37 /* SSJMergeFundSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB66D1F301E3B00604F37 /* SSJMergeFundSelectView.m */; };
 		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0B7EC1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
 		9CC0B7ED1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
@@ -23586,6 +23587,7 @@
 				7DFB172D1EB0341E00292DD3 /* SSJFundingItem.m in Sources */,
 				910AEE761F0230D6000E433C /* SSJVerifCodeField.m in Sources */,
 				7DFB172E1EB0341E00292DD3 /* SSJLoginHelper.m in Sources */,
+				9CBFB67E1F30307C00604F37 /* SSJMergeFundSelectView.m in Sources */,
 				9C1EC12B1F1CA780008FE4F1 /* SSJFundInfoTable.mm in Sources */,
 				7DFB172F1EB0341E00292DD3 /* SimulateIDFA.m in Sources */,
 				913E2BE51ECE89FE008242CD /* SSJBookColorSelectedViewController.m in Sources */,

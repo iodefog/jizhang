@@ -1029,23 +1029,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     };
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
-        /*SSJADDNewTypeViewController *addNewTypeVc = [[SSJADDNewTypeViewController alloc]init];
-        addNewTypeVc.booksId = wself.item.booksId;
-        addNewTypeVc.incomeOrExpence = wself.customNaviBar.selectedBillType;
-        addNewTypeVc.addNewCategoryAction = ^(NSString *categoryId, BOOL incomeOrExpence){
-            wself.addedBillId = categoryId;
-            wself.customNaviBar.selectedBillType = incomeOrExpence;
-            
-            if (wself.customNaviBar.selectedBillType == SSJBillTypePay) {
-                [wself.scrollView setContentOffset:CGPointMake(0, 0) animated:YES];
-            } else if (wself.customNaviBar.selectedBillType == SSJBillTypeIncome) {
-                [wself.scrollView setContentOffset:CGPointMake(wself.scrollView.width, 0) animated:YES];
-            }
-            
-            [wself updateNavigationRightItem];
-        };
-        [wself.navigationController pushViewController:addNewTypeVc animated:YES];*/
-        
         SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
         addBillTypeVC.title = @"自定义类别图标";
         addBillTypeVC.created = YES;
@@ -1071,7 +1054,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     billTypeView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         [wself.currentInput becomeFirstResponder];
         wself.customNaviBar.managed = NO;
-        [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items success:NULL failure:^(NSError *error) {
+        [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items booksID:(NSString *)wself.item.booksId success:NULL failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
         }];
         

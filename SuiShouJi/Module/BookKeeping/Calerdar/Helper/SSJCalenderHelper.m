@@ -33,9 +33,9 @@
         FMResultSet *resultSet = nil;
         BOOL isShareBook = [db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", booksid];
         if (isShareBook) {
-            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CICOIN, b.CCOLOR, b.ITYPE, c.CMARK from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b, BK_SHARE_BOOKS_FRIENDS_MARK as c where a.IBILLID = b.CBILLID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and a.CBOOKSID = ? and a.CBOOKSID = c.CBOOKSID and c.CFRIENDID = a.CUSERID and c.CUSERID = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid, userid];
+            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CICOIN, b.CCOLOR, b.ITYPE, c.CMARK from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b, BK_SHARE_BOOKS_FRIENDS_MARK as c where a.IBILLID = b.CBILLID and a.CUSERID = b.CUSERID and a.CBOOKSID = b.CBOOKSID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and a.CBOOKSID = ? and a.CBOOKSID = c.CBOOKSID and c.CFRIENDID = a.CUSERID and c.CUSERID = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid, userid];
         } else {
-            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CICOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b where a.IBILLID = b.CBILLID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid];
+            resultSet = [db executeQuery:@"select a.*, b.CNAME, b.CICOIN, b.CCOLOR, b.ITYPE from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b where a.IBILLID = b.CBILLID and a.CUSERID = b.CUSERID and a.CBOOKSID = b.CBOOKSID and a.CBILLDATE like ? and a.OPERATORTYPE <> 2 and a.cbooksid = ? order by a.CBILLDATE desc, a.cdetaildate desc, a.cwritedate desc", dateStr,booksid];
         }
         
         if (!resultSet) {
@@ -101,9 +101,9 @@
             booksid = SSJUSERID();
         }
         
-        income = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.cbillid and bt.itype = ? and uc.operatortype <> 2",date,booksid,@(SSJBillTypeIncome)];
+        income = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and bt.itype = ? and uc.operatortype <> 2",date,booksid,@(SSJBillTypeIncome)];
         
-        expence = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.cbillid and bt.itype = ? and uc.operatortype <> 2",date,booksid,@(SSJBillTypePay)];
+        expence = [db doubleForQuery:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbilldate = ? and uc.cbooksid = ? and uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and bt.itype = ? and uc.operatortype <> 2",date,booksid,@(SSJBillTypePay)];
 
         SSJDispatch_main_async_safe(^{
             success(income,expence);
