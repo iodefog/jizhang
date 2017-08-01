@@ -24,7 +24,7 @@
 
 static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIdentifier";
 
-@interface SSJNewOrEditeBooksViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface SSJNewOrEditeBooksViewController ()<UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -236,6 +236,7 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
         cell.textInput.text = self.bookName;
         cell.textInput.clearButtonMode = UITextFieldViewModeAlways;
         cell.textInput.returnKeyType = UIReturnKeyDone;
+        cell.textInput.delegate = self;
         self.bookNameTextField = cell.textInput;
     } else if (indexPath.row == 1) {
         cell.type = SSJCreditCardCellTypeDetail;
@@ -258,6 +259,11 @@ static NSString *SSJNewOrEditeBooksCellIdentifier = @"SSJNewOrEditeBooksCellIden
     return self.titleArray.count;
 }
 
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
 
 #pragma mark - SSJBaseNetworkServiceDelegate
 - (void)serverDidFinished:(SSJBaseNetworkService *)service
