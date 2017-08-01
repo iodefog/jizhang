@@ -94,6 +94,7 @@
     }];
     
     [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(16, 14));
         make.top.mas_equalTo(self.transferInFundBackView.mas_bottom).offset(14);
         make.left.mas_equalTo(15);
     }];
@@ -123,6 +124,7 @@
     if (!_transferInFundBackView) {
         _transferInFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferInFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _transferInFundBackView.selectable = self.transferInSelectable;
     }
     return _transferInFundBackView;
 }
@@ -131,6 +133,7 @@
     if (!_transferOutFundBackView) {
         _transferOutFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferOutFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _transferOutFundBackView.selectable = self.transferOutSelectable;
     }
     return _transferOutFundBackView;
 }
@@ -171,7 +174,7 @@
         _warningLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _warningLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _warningLab.numberOfLines = 0;
-        _warningLab.text = @"迁移账本，账本名称、收支类别等属性将以目标账本为准。";
+        _warningLab.text = @"资金账户数据迁移，账户属性将以目标资金账户为准。";
     }
     return _warningLab;
 }

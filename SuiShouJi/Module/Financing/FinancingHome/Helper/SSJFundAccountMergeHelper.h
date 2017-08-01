@@ -17,6 +17,6 @@
  @param fundType 资金账户类型,0为普通资金帐户,1为信用卡或者蚂蚁花呗
  @return 所有得资金帐户
  */
-- (NSArray *)getFundingsWithType:(BOOL)fundType;
+- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundId:(NSString *)exceptFundId;
 
 @end

@@ -14,4 +14,9 @@
 
 @property (nonatomic, strong) SSJBaseCellItem *transferOutFundItem;
 
+@property (nonatomic) BOOL transferInSelectable;
+
+@property (nonatomic) BOOL transferOutSelectable;
+
+
 @end

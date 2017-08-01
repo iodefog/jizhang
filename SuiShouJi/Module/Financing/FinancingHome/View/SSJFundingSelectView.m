@@ -60,16 +60,26 @@ static const CGFloat kBooksCornerRadius = 8.f;
 
 - (void)setFundingItem:(SSJBaseCellItem *)fundingItem {
     _fundingItem = fundingItem;
-    if ([_fundingItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_fundingItem;
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:fundItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:fundItem.endColor].CGColor];
-        self.fundNameLab.text = fundItem.fundingName;
-
-    } else if ([_fundingItem isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *carditem = (SSJCreditCardItem *)_fundingItem;
-        self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:carditem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:carditem.endColor].CGColor];
-        self.fundNameLab.text = carditem.cardName;
+    if (_fundingItem) {
+        if ([_fundingItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_fundingItem;
+            self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:fundItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:fundItem.endColor].CGColor];
+            self.fundNameLab.text = fundItem.fundingName;
+            
+        } else if ([_fundingItem isKindOfClass:[SSJCreditCardItem class]]) {
+            SSJCreditCardItem *carditem = (SSJCreditCardItem *)_fundingItem;
+            self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:carditem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:carditem.endColor].CGColor];
+            self.fundNameLab.text = carditem.cardName;
+        }
+        self.gradientLayer.borderWidth = 0.f;
+    } else {
+        self.gradientLayer.colors = nil;
+        self.gradientLayer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor].CGColor;
+        self.gradientLayer.borderWidth = 1.f;
+        self.fundNameLab.text = @"账户名称";
+        self.fundNameLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
+    
     [self.fundNameLab sizeToFit];
 }
 

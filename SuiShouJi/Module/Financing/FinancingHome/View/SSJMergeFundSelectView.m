@@ -7,8 +7,11 @@
 //
 
 #import "SSJMergeFundSelectView.h"
+#import "SSJBaseTableViewCell.h"
 
-@interface SSJMergeFundSelectView()
+static NSString *cellId = @"SSJFundingTypeCell";
+
+@interface SSJMergeFundSelectView()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic,strong) UIView *titleView;
 
@@ -30,7 +33,6 @@
         
         [self addSubview:self.tableview];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-        //        [self addSubview:self.addNewTypeButtonView];
         [self addSubview:self.titleView];
     }
     return self;
@@ -94,7 +96,19 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellId = @"SSJFundingTypeCell";
+    
+    SSJFinancingHomeitem *item = [self.fundsArr ssj_safeObjectAtIndex:indexPath.row];
+    
+    SSJBaseTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:cellId];
+    
+    cell.imageView.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
+    cell.imageView.tintColor = [UIColor ssj_colorWithHex:item.fundingColor];
+    
+    cell.textLabel.text = item.fundingName;
+    
+    cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    
     return nil;
 }
 
