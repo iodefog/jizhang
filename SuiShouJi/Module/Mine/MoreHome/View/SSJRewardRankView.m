@@ -72,7 +72,11 @@ static CGFloat btnHeight = 64;
     [self.bottomBtn setBackgroundImage:[UIImage ssj_imageWithColor:backgroundColor size:CGSizeZero] forState:UIControlStateNormal];
     UIColor *titleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTitleColor];
     [self.bottomBtn setTitleColor:titleColor forState:UIControlStateNormal];
-    
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backgroundColor = SSJ_DEFAULT_BACKGROUND_COLOR;
+    } else {
+        self.backgroundColor = [UIColor clearColor];
+    }
 }
 
 
@@ -225,7 +229,7 @@ static CGFloat btnHeight = 64;
         [_bottomBtn setTitleEdgeInsets:UIEdgeInsetsMake(16, 8, 0, 35)];
         [_bottomBtn setImageEdgeInsets:UIEdgeInsetsMake(16, 70, 0, -35)];
         [_bottomBtn ssj_setBorderWidth:1];
-        [_bottomBtn ssj_setBorderStyle:SSJBorderStyleTop];
+        [_bottomBtn ssj_setBorderStyle:SSJBorderStyleTop|SSJBorderStyleBottom];
         
         UIPanGestureRecognizer *panReg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
         [_bottomBtn addGestureRecognizer:panReg];

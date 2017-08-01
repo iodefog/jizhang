@@ -215,7 +215,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 }
 
 - (void)appearanceWithTheme {
-    self.rewarkAmountTextF.textColor = self.rewarkNoteTextL.textColor = self.rewarkNotetTextF.textColor = self.rewarkAmountTextF.textColor = self.rewarkAmountTextL.textColor = SSJ_MAIN_COLOR;
+    self.rewarkAmountTextF.textColor = self.rewarkNoteTextL.textColor = self.rewarkNotetTextF.textColor = self.rewarkAmountTextF.textColor = self.rewarkAmountTextL.textColor = self.slognL.textColor = SSJ_MAIN_COLOR;
 
     [self.moneyCollectionView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 
@@ -226,8 +226,6 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.goRewarkBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [self.goRewarkBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.goRewarkBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:SSJButtonDisableAlpha] forState:UIControlStateSelected];
-    
-    
     
     UIColor *backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
 
