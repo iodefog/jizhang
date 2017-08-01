@@ -8,6 +8,7 @@
 
 #import "SSJRewardViewController.h"
 #import "SSJRewardRankView.h"
+#import "SSJPopView.h"
 
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMakeWishMoneyCollectionViewCell.h"
@@ -23,6 +24,9 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 /**排行榜*/
 @property (nonatomic, strong) SSJRewardRankView *rewardRankView;
+
+/**支付方式popview*/
+@property (nonatomic, strong) SSJPopView *payMethodPopView;
 
 @property (nonatomic, strong) UIImageView *topImg;
 
@@ -454,7 +458,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         @weakify(self);
         [[_changePayMethodBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            
+            [self.payMethodPopView showWithSelectedIndex:self.payMethod];
         }];
     }
     return _changePayMethodBtn;
@@ -488,6 +492,26 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _closeImgView.size = CGSizeMake(18, 18);
     }
     return _closeImgView;
+}
+
+- (SSJPopView *)payMethodPopView {
+    if (!_payMethodPopView) {
+        _payMethodPopView = [[SSJPopView alloc] initWithFrame:CGRectMake(0, 0, 280, 165)];
+        _payMethodPopView.title = @"请选择支付方式";
+        [_payMethodPopView setTitles:@[@"支付宝",@"微信"] andImages:@[@"pay_method_alipay",@"pay_method_weixin"]];
+        @weakify(self);
+        _payMethodPopView.didSelectAtIndexBlock = ^(NSInteger selectIndex) {
+            @strongify(self);
+            self.payMethod = selectIndex;
+            //更新文字
+            NSString *oldStr = selectIndex == SSJMethodOfPaymentAlipay ? @"使用微信付款，更换" : @"使用支付宝付款，更换";
+            NSString *tarStr = @"更换";
+            NSMutableAttributedString *attStr = [oldStr attributeStrWithTargetStr:oldStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]];
+            [attStr addAttribute:NSForegroundColorAttributeName value:SSJ_MAIN_COLOR range:[oldStr rangeOfString:tarStr]];
+            [self.changePayMethodBtn setAttributedTitle:attStr forState:UIControlStateNormal];
+        };
+    }
+    return _payMethodPopView;
 }
 
 @end
