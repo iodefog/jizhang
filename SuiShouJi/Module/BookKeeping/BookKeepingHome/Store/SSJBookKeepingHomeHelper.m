@@ -143,9 +143,9 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
         booksid = booksid.length > 0 ? booksid : userid;
         NSMutableDictionary *SumDic = [NSMutableDictionary dictionary];
         
-        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];
+        double incomeSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypeIncome]];
         
-        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypePay]];
+        double expentureSum = [db doubleForQuery:[NSString stringWithFormat:@"select sum(imoney) from bk_user_charge uc, bk_user_bill_type bt where uc.cbooksid = '%@' and uc.cbilldate like '%04ld-%02ld-__' AND uc.cbilldate <= '%@' and uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and bt.itype = %d and uc.operatortype <> 2", booksid, year, month,[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"], (int)SSJBillTypePay]];
         
         [SumDic setObject:@(incomeSum) forKey:SSJIncomeSumlKey];
         
@@ -161,7 +161,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
 
 }
 
-+ (NSString *)queryBillNameForBillIds:(NSArray *)billIds {
++ (NSString *)queryBillNameForBillIds:(NSArray *)billIds booksID:(NSString *)booksID userID:(NSString *)userID {
     __block NSString *billName = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
@@ -170,8 +170,8 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
         }
         
-        NSString *sql = [NSString stringWithFormat:@"select cname from bk_user_bill_type where cbillid in (%@)", [tmpBillIds componentsJoinedByString:@","]];
-        FMResultSet *resultSet = [db executeQuery:sql];
+        NSString *sql = [NSString stringWithFormat:@"select cname from bk_user_bill_type where cbillid in (%@) and cbooksid = ? and cuserid = ?", [tmpBillIds componentsJoinedByString:@","]];
+        FMResultSet *resultSet = [db executeQuery:sql, booksID, userID];
         
         NSMutableArray *tmpBillNames = [NSMutableArray arrayWithCapacity:billIds.count];
         while ([resultSet next]) {

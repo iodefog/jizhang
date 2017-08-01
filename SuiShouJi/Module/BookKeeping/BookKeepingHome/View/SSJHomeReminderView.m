@@ -150,10 +150,10 @@
         
         NSString *billNames = nil;
         if (_model.billIds.count > 2) {
-            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:[_model.billIds subarrayWithRange:NSMakeRange(0, 2)]];
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:[_model.billIds subarrayWithRange:NSMakeRange(0, 2)] booksID:_model.booksId userID:_model.userId];
             billNames = [NSString stringWithFormat:@"%@等", billNames];
         } else {
-            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:_model.billIds];
+            billNames = [SSJBookKeepingHomeHelper queryBillNameForBillIds:_model.billIds booksID:_model.booksId userID:_model.userId];
         }
         
         NSString *moneyStr = nil;

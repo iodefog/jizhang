@@ -53,6 +53,9 @@ extern NSString *const SSJNewAddChargeSectionArrKey;
                               Success:(void(^)(NSDictionary *result))success
                               failure:(void (^)(NSError *error))failure;
 
-+ (NSString *)queryBillNameForBillIds:(NSArray *)billIds;
+
++ (NSString *)queryBillNameForBillIds:(NSArray *)billIds
+                              booksID:(NSString *)booksID
+                               userID:(NSString *)userID;
 
 @end
