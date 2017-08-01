@@ -356,10 +356,6 @@
     }];
     _userItem = [SSJUserItem mj_objectWithKeyValues:result[@"user"]];
     self.userItem.loginType = [NSString stringWithFormat:@"%d", (int)self.loginType];
-    if (self.loginType != SSJLoginTypeNormal) {
-        self.userItem.mobileNo = @"";
-    }
-    self.userItem.loginPWD = @"";
     self.userItem.openId = self.openId;
     
     self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBill"]];
