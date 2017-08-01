@@ -16,6 +16,8 @@
 
 @property (nonatomic, strong) NSString *title;
 
+- (void)showWithSelectedIndex:(NSInteger)index;
+
 - (void)updateCellAppearanceAfterThemeChanged;
 
 

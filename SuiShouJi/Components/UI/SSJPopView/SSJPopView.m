@@ -42,6 +42,8 @@ static NSString *kCellID = @"cellID";
         self.layer.cornerRadius = 12;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
+        
+        [self setNeedsUpdateConstraints];
     }
     return self;
 }
@@ -77,8 +79,9 @@ static NSString *kCellID = @"cellID";
     if (self.superview) {
         return;
     }
-    
+
     self.selectIndex = index;
+    [self.tableView reloadData];
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
     
@@ -197,6 +200,7 @@ static NSString *kCellID = @"cellID";
 }
 
 - (void)setTitle:(NSString *)title {
+    _title = title;
     self.titleLab.text = title;
 }
 
