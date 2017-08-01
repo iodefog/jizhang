@@ -35,7 +35,7 @@ def shared_pods
     # 集成QQ
     pod 'UMengUShare/Social/QQ', '~> 6.3.0'
     
-#    pod 'YYWebImage'
+    pod 'YYWebImage'
     
     pod 'WCDB'
     
