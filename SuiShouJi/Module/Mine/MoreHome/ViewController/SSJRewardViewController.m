@@ -7,7 +7,6 @@
 //
 
 #import "SSJRewardViewController.h"
-#import "SSJRewardRankViewController.h"
 #import "SSJRewardRankView.h"
 
 #import "TPKeyboardAvoidingScrollView.h"
@@ -451,10 +450,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [_changePayMethodBtn setAttributedTitle:attStr forState:UIControlStateNormal];
         _changePayMethodBtn.layer.cornerRadius = 6;
         _changePayMethodBtn.layer.masksToBounds = YES;
+        
         @weakify(self);
         [[_changePayMethodBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [_changePayMethodBtn setTitle:@"使用支付宝付款，更换" forState:UIControlStateNormal];
+            
         }];
     }
     return _changePayMethodBtn;
