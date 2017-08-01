@@ -48,8 +48,15 @@
     if (!cell) {
         cell = [[SSJRewardRankViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
-    
     return cell;
+}
+
+- (void)isNotShowSelfRank:(BOOL)isNotShow {
+    if (isNotShow) {
+        self.rankL.hidden = YES;
+    } else {
+        self.rankL.hidden = NO;
+    }
 }
 
 #pragma mark - Layout
@@ -127,6 +134,7 @@
     } else {
         self.markImageView.hidden = YES;
     }
+
 }
 
 #pragma mark - Theme
