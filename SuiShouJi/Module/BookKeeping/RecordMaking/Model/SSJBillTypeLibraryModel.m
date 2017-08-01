@@ -158,7 +158,9 @@
                                                                                  SSJBillTypeModel(@"1173"),
                                                                                  SSJBillTypeModel(@"1172"),
                                                                                  SSJBillTypeModel(@"1013"),
-                                                                                 SSJBillTypeModel(@"1012")]]];
+                                                                                 SSJBillTypeModel(@"1012"),
+                                                                                 SSJBillTypeModel(@"1036"),
+                                                                                 SSJBillTypeModel(@"1001")]]];
     
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"购物" items:@[SSJBillTypeModel(@"1003"),
                                                                                  SSJBillTypeModel(@"1035"),
@@ -331,7 +333,7 @@
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"装修人工" items:@[SSJBillTypeModel(@"1105"),
                                                                                    SSJBillTypeModel(@"1000"),
                                                                                    SSJBillTypeModel(@"1002"),
-                                                                                   SSJBillTypeModel(@"1009")]]];
+                                                                                   SSJBillTypeModel(@"1193")]]];
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"装修其它" items:@[SSJBillTypeModel(@"1195"),
                                                                                    SSJBillTypeModel(@"1103"),
                                                                                    SSJBillTypeModel(@"1106"),
@@ -355,7 +357,7 @@
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"度蜜月" items:@[SSJBillTypeModel(@"1140"),
                                                                                   SSJBillTypeModel(@"1000"),
                                                                                   SSJBillTypeModel(@"1002"),
-                                                                                  SSJBillTypeModel(@"1009")]]];
+                                                                                  SSJBillTypeModel(@"1193")]]];
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"结婚其它" items:@[SSJBillTypeModel(@"1147"),
                                                                                    SSJBillTypeModel(@"1080"),
                                                                                    SSJBillTypeModel(@"1034")]]];
