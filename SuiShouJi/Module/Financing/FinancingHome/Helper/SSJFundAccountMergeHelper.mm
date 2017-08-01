@@ -181,7 +181,7 @@
     }];
 }
 
-- (NSArray *)getFundingsWithType:(BOOL)fundType {
+- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundId:(NSString *)exceptFundId{
     NSString *userId = SSJUSERID();
     
     NSArray *funsArr = [NSArray array];
@@ -191,13 +191,15 @@
                                                 where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])
                    && SSJFundInfoTable.operatorType != 2
-                   && SSJFundInfoTable.fundParent != @"root"];
+                   && SSJFundInfoTable.fundParent != @"root"
+                   && SSJFundInfoTable.fundId != exceptFundId];
     } else {
         funsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                        where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.in(@[@"3",@"16"])
                    && SSJFundInfoTable.operatorType != 2
-                   && SSJFundInfoTable.fundParent != @"root"];
+                   && SSJFundInfoTable.fundParent != @"root"
+                   && SSJFundInfoTable.fundId != exceptFundId];
     }
     
     return funsArr;
