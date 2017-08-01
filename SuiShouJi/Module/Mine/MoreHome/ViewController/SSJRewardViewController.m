@@ -7,7 +7,7 @@
 //
 
 #import "SSJRewardViewController.h"
-#import "SSJRewardRankViewController.h"
+#import "SSJRewardRankView.h"
 
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMakeWishMoneyCollectionViewCell.h"
@@ -15,11 +15,14 @@
 #import "NSString+MoneyDisplayFormat.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
-@interface SSJRewardViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITextFieldDelegate>
+@interface SSJRewardViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
 @property (nonatomic, strong) UICollectionView *moneyCollectionView;
+
+/**排行榜*/
+@property (nonatomic, strong) SSJRewardRankView *rewardRankView;
 
 @property (nonatomic, strong) UIImageView *topImg;
 
@@ -41,7 +44,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 @property (nonatomic, strong) UIButton *changePayMethodBtn;
 
-@property (nonatomic, strong) UIButton *bottomView;
+@property (nonatomic, strong) UIButton *bottomBtn;
 
 @property (nonatomic, strong) UIImageView *closeImgView;
 
@@ -58,6 +61,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"打赏支持";
+
     [self setUpUI];
     [self initNormalData];
     [self.view setNeedsUpdateConstraints];
@@ -81,15 +85,32 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.scrollView addSubview:self.goRewarkBtn];
     [self.scrollView addSubview:self.changePayMethodBtn];
     
-    [self.view addSubview:self.bottomView];
-    [self.bottomView addSubview:self.closeImgView];
+//    [self.view addSubview:self.bottomBtn];
+//    [self.bottomBtn addSubview:self.closeImgView];
+//
+//    [self.view addSubview:self.rewardRankView];
+    
+    [SSJ_KEYWINDOW addSubview:self.rewardRankView];
+    [SSJ_KEYWINDOW addSubview:self.bottomBtn];
+    [self.bottomBtn addSubview:self.closeImgView];
+    self.bottomBtn.top = SSJSCREENHEIGHT - SSJ_NAVIBAR_BOTTOM;
+    self.bottomBtn.size = CGSizeMake(SSJSCREENWITH, SSJ_NAVIBAR_BOTTOM);
+    self.bottomBtn.left = 0;
+    self.closeImgView.centerY = self.bottomBtn.height * 0.5 + 10;
+    self.closeImgView.left = 15;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.bottomBtn removeFromSuperview];
+    [self.rewardRankView removeFromSuperview];
 }
 #pragma mark - Layout
 - (void)updateViewConstraints {
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
         make.left.right.mas_equalTo(0);
-        make.bottom.mas_equalTo(self.bottomView.mas_top);
+        make.bottom.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
     }];
     
     [self.topImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -158,17 +179,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         make.centerX.mas_equalTo(self.scrollView);
         make.width.greaterThanOrEqualTo(0);
     }];
-    
-    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.left.right.mas_equalTo(0);
-        make.height.mas_equalTo(50);
-    }];
-    
-    [self.closeImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
-        make.centerY.mas_equalTo(self.bottomView);
-    }];
-    
+  
     [super updateViewConstraints];
 }
 
@@ -184,6 +195,50 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     RAC(self.goRewarkBtn,enabled) = signal;
 }
 
+#pragma mark - Event
+- (void)bottomBtnClicked:(UIButton *)btn {
+    btn.selected = !btn.selected;
+    CGFloat top = 0;
+    if (btn.selected) {
+        top = 0;
+    } else {
+        top = SSJSCREENHEIGHT - btn.height;
+    }
+    
+    @weakify(self);
+    [UIView animateWithDuration:0.3 animations:^{
+        @strongify(self);
+        btn.top = top;
+        self.rewardRankView.top = CGRectGetMaxY(btn.frame);
+    }];
+}
+
+- (void)handlePanGesture:(UIPanGestureRecognizer *)recognizer {
+    CGPoint translation = [recognizer translationInView:self.view];
+    
+    CGFloat centerX = SSJSCREENWITH * 0.5;
+    CGFloat centerY = recognizer.view.centerY + translation.y;
+    recognizer.view.center = CGPointMake(centerX,centerY);
+    [recognizer setTranslation:CGPointZero inView:self.view];
+    CGFloat top = 0;
+//    ((UIButton *)recognizer.view).selected = !((UIButton *)recognizer.view).selected;
+    if(recognizer.state == UIGestureRecognizerStateEnded || recognizer.state == UIGestureRecognizerStateCancelled) {
+        if(centerY >= SSJSCREENHEIGHT * 0.5) {
+            top = SSJSCREENHEIGHT - recognizer.view.height;
+        }else{
+            top = 0;
+        }
+        @weakify(self);
+        [UIView animateWithDuration:0.3 animations:^{
+            @strongify(self);
+            recognizer.view.top = top;
+            self.rewardRankView.top = CGRectGetMaxY(recognizer.view.frame);
+            
+        }];
+    }
+    self.rewardRankView.top = CGRectGetMaxY(recognizer.view.frame);
+}
+
 #pragma mark - Theme
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
@@ -195,7 +250,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
     [self.moneyCollectionView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 
-    self.closeImgView.tintColor = self.bottomView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+    self.closeImgView.tintColor = self.bottomBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
     
     self.rewarkAmountTextF.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入打赏金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     
@@ -203,8 +258,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.goRewarkBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.goRewarkBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor alpha:SSJButtonDisableAlpha] forState:UIControlStateSelected];
     
-    [self.bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [self.bottomBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
+    UIColor *backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarBackgroundColor];
+
+    [self.bottomBtn setBackgroundImage:[UIImage ssj_imageWithColor:backgroundColor size:CGSizeZero] forState:UIControlStateNormal];
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.bottomBg.backgroundColor = self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
         self.view.backgroundColor = [UIColor whiteColor];
@@ -247,6 +305,14 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     return YES;
 }
 
+#pragma mark - UIGestureRecognizerDelegate
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
+    if ([touch.view isKindOfClass:[UIButton class]]) {
+        return NO;
+    }else{
+        return YES;
+    }
+}
 
 #pragma mark - Lazy
 - (TPKeyboardAvoidingScrollView *)scrollView {
@@ -254,6 +320,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
     }
     return _scrollView;
+}
+
+- (SSJRewardRankView *)rewardRankView {
+    if (!_rewardRankView) {
+        _rewardRankView = [[SSJRewardRankView alloc] initWithFrame:CGRectMake(0, SSJSCREENHEIGHT - SSJ_NAVIBAR_BOTTOM, SSJSCREENWITH, SSJSCREENHEIGHT - SSJ_NAVIBAR_BOTTOM) backgroundView:self.backgroundView.image];
+    }
+    return _rewardRankView;
 }
 
 - (UIImageView *)topImg {
@@ -377,33 +450,42 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [_changePayMethodBtn setAttributedTitle:attStr forState:UIControlStateNormal];
         _changePayMethodBtn.layer.cornerRadius = 6;
         _changePayMethodBtn.layer.masksToBounds = YES;
+        
         @weakify(self);
         [[_changePayMethodBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-            [_changePayMethodBtn setTitle:@"使用支付宝付款，更换" forState:UIControlStateNormal];
+            
         }];
     }
     return _changePayMethodBtn;
 }
 
-- (UIButton *)bottomView {
-    if (!_bottomView) {
-        _bottomView = [[UIButton alloc] init];
-        _bottomView.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        [_bottomView setTitle:@"打赏榜" forState:UIControlStateNormal];
-        [_bottomView setImage:[[UIImage imageNamed:@"founds_selectbutton"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+- (UIButton *)bottomBtn {
+    if (!_bottomBtn) {
+        _bottomBtn = [[UIButton alloc] init];
+        _bottomBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_bottomBtn setTitle:@"打赏榜" forState:UIControlStateNormal];
+        [_bottomBtn setImage:[[UIImage imageNamed:@"founds_selectbutton"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         
-        [_bottomView setTitleEdgeInsets:UIEdgeInsetsMake(0, -40, 0, 40)];
-        [_bottomView setImageEdgeInsets:UIEdgeInsetsMake(0, 40, 0, -40)];
-        [_bottomView ssj_setBorderWidth:1];
-        [_bottomView ssj_setBorderStyle:SSJBorderStyleTop];
+        [_bottomBtn setTitleEdgeInsets:UIEdgeInsetsMake(16, 8, 0, 35)];
+        [_bottomBtn setImageEdgeInsets:UIEdgeInsetsMake(16, 70, 0, -35)];
+        [_bottomBtn ssj_setBorderWidth:1];
+        [_bottomBtn ssj_setBorderStyle:SSJBorderStyleTop];
+        
+        UIPanGestureRecognizer *panReg = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+        [_bottomBtn addGestureRecognizer:panReg];
+        
+        [_bottomBtn addTarget:self action:@selector(bottomBtnClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
     }
-    return _bottomView;
+    return _bottomBtn;
 }
 
 - (UIImageView *)closeImgView {
     if (!_closeImgView) {
-        _closeImgView = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _closeImgView = [[UIImageView alloc] init];
+        _closeImgView.image = [[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _closeImgView.size = CGSizeMake(18, 18);
     }
     return _closeImgView;
 }

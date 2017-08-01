@@ -79,10 +79,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
         SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
         self.icon = item.icon;
-        self.name = item.name;
-        if (!self.color) {
-            self.color = item.color;
-        }
+        self.name = self.name ?: item.name;
+        self.color = self.color ?: item.color;
     }];
 }
 
@@ -196,12 +194,14 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [RACObserve(self, icon) subscribeNext:^(NSString *icon) {
         [self.topView setBillTypeIcon:[UIImage imageNamed:icon] animated:YES];
     }];
-    [RACObserve(self, name) subscribeNext:^(NSString *name) {
-        [self.topView setBillTypeName:name animated:YES];
-    }];
+//    [RACObserve(self, name) subscribeNext:^(NSString *name) {
+//        [self.topView setBillTypeName:name animated:YES];
+//    }];
     [RACObserve(self, color) subscribeNext:^(NSString *color) {
         [self.topView setBillTypeColor:[UIColor ssj_colorWithHex:color] animated:YES];
     }];
+    
+    RACChannelTo(self.topView, billTypeName) = RACChannelTo(self, name);
 }
 
 - (void)organiseColors {
