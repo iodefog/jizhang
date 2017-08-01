@@ -172,7 +172,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         if (!booksId.length) {
             booksId = SSJUSERID();
         }
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select ibid, cuserid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -225,19 +225,6 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         [budgetList addObjectsFromArray:weekList];
         [budgetList addObjectsFromArray:monthList];
         [budgetList addObjectsFromArray:yearList];
-        
-        //        //  按照周、月、年的顺序排序
-        //        [budgetList sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        //            SSJBudgetModel *model1 = obj1;
-        //            SSJBudgetModel *model2 = obj2;
-        //            if (model1.type < model2.type) {
-        //                return NSOrderedAscending;
-        //            } else if (model1.type > model2.type) {
-        //                return NSOrderedDescending;
-        //            } else {
-        //                return NSOrderedSame;
-        //            }
-        //        }];
         
         if (success) {
             SSJDispatch_main_async_safe(^{
@@ -742,6 +729,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (SSJBudgetModel *)budgetModelWithResultSet:(FMResultSet *)set inDatabase:(FMDatabase *)db {
     SSJBudgetModel *budgetModel = [[SSJBudgetModel alloc] init];
     budgetModel.ID = [set stringForColumn:@"ibid"];
+    budgetModel.userId = [set stringForColumn:@"cuserid"];
     budgetModel.type = [set intForColumn:@"itype"];
     budgetModel.booksId = [set stringForColumn:@"cbooksid"];
     budgetModel.billIds = [[set stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];

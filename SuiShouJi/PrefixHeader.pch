@@ -54,28 +54,4 @@
 #import <YYWebImage/YYWebImage.h>
 
 
-// 和orm有关的类
-#import "SSJBooksTypeTable.h"
-#import "SSJUserChargeTable.h"
-#import "SSJChargePeriodConfigTable.h"
-#import "SSJCreditRepaymentTable.h"
-#import "SSJDbVersionTable.h"
-#import "SSJFundInfoTable.h"
-#import "SSJImageSyncTable.h"
-#import "SSJLoanTable.h"
-#import "SSJMembereChargeTable.h"
-#import "SSJMemberTable.h"
-#import "SSJSearchHistoryTable.h"
-#import "SSJShareBooksFriendMarkTable.h"
-#import "SSJShareBooksMemberTable.h"
-#import "SSJShareBooksTable.h"
-#import "SSJSyncBaseTable.h"
-#import "SSJTransferCycleTable.h"
-#import "SSJUserBillTypeTable.h"
-#import "SSJUserBudgetTable.h"
-#import "SSJUserChargeTable.h"
-#import "SSJUserCreditTable.h"
-#import "SSJUserRemindTable.h"
-#import "SSJUserTreeTable.h"
-
 #endif

@@ -11,6 +11,6 @@
 
 @interface SSJMergeFundSelectView : UIView
 
-@property (nonatomic, strong) NSArray <SSJFundInfoTable *> *fundsArr;
+@property (nonatomic, strong) NSArray *fundsArr;
 
 @end
