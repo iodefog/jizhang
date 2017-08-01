@@ -12,4 +12,7 @@
 
 + (SSJRewardRankViewCell *)cellWithTableView:(UITableView *)tableView;
 
+//第一行排序是否显示
+- (void)isNotShowSelfRank:(BOOL)isNotShow;
+
 @end

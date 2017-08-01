@@ -10,4 +10,6 @@
 
 @interface SSJRewardRankView : UIView
 - (instancetype)initWithFrame:(CGRect)frame backgroundView:(UIImage *)bgImage;
+
+- (void)updateAppearance;
 @end

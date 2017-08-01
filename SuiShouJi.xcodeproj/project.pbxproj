@@ -17249,8 +17249,8 @@
 				91E272041F287F66001A6643 /* SSJMakeWishGuideView.h */,
 				91E272051F287F66001A6643 /* SSJMakeWishGuideView.m */,
 				9150CACA1F2F16DF00A37AF9 /* SSJRewardRankViewCell.h */,
-				9150CACB1F2F16DF00A37AF9 /* SSJRewardRankViewCell.m */,
 				9150CADB1F2F3C7500A37AF9 /* SSJRewardRankView.h */,
+				9150CACB1F2F16DF00A37AF9 /* SSJRewardRankViewCell.m */,
 				9150CADC1F2F3C7500A37AF9 /* SSJRewardRankView.m */,
 			);
 			path = View;
