@@ -227,7 +227,7 @@
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self ssj_backOffAction];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"删除失败"];
         }];
