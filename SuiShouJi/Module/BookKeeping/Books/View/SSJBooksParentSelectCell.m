@@ -15,6 +15,7 @@
         self.contentView.backgroundColor = [UIColor clearColor];
         [self.contentView addSubview:self.arrowImageView];
         self.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        self.textLabel.backgroundColor = [UIColor clearColor];
         [self themeUpdate];
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(themeUpdate) name:SSJThemeDidChangeNotification object:nil];
