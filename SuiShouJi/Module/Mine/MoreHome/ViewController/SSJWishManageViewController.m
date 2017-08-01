@@ -119,6 +119,9 @@
     _topScrollView.backgroundColor = [UIColor clearColor];
 }
 
+-(void)ssj_backOffAction {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 #pragma mark - UIPageViewController
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController

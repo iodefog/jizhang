@@ -10,6 +10,7 @@
 #import "SSJWishDetailViewController.h"
 #import "SSJWishChargeDetailViewController.h"
 #import "SSJWishWithdrawMoneyViewController.h"
+#import "SSJWishManageViewController.h"
 
 #import "SSJWishChargeCell.h"
 #import "SSJWishProgressView.h"
@@ -186,16 +187,25 @@
         [self.saveBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
-        
+        self.withdrawBtn.hidden = NO;
     }else if (self.wishModel.status == SSJWishStateNormalIng) {//进行
-        self.bottomView.hidden = NO;
-        [self.bottomView ssj_setBorderWidth:0];
-        [self.saveBtn ssj_setBorderWidth:1];
-        [self.saveBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
+        if ([self.wishModel.wishSaveMoney doubleValue] == 0) {//未存钱
+            [self.saveBtn ssj_setBorderWidth:0];
+            self.saveBtn.left = 0;
+            self.saveBtn.width = self.view.width;
+            self.withdrawBtn.hidden = YES;
+        } else {//已存钱
+            [self.bottomView ssj_setBorderWidth:0];
+            [self.saveBtn ssj_setBorderWidth:1];
+            [self.saveBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
+            self.withdrawBtn.hidden = NO;
+            [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+            [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        }
         [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
         [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
+        self.bottomView.hidden = NO;
+        
        
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
         self.bottomView.hidden = YES;
@@ -217,13 +227,27 @@
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [self.navigationController popViewControllerAnimated:YES];
+            [self ssj_backOffAction];
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"删除失败"];
         }];
     }
 }
 
+-(void)ssj_backOffAction {
+    BOOL isExistProgressVC = NO;
+    for (UIViewController *vc in self.navigationController.viewControllers) {
+        if ([vc isKindOfClass:[SSJWishManageViewController class]]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            isExistProgressVC = YES;
+            break;
+        }
+    }
+    if (isExistProgressVC == NO) {
+        SSJWishManageViewController *manageVC = [[SSJWishManageViewController alloc] init];
+        [self.navigationController pushViewController:manageVC animated:YES];
+    }
+}
 
 #pragma mark - Layout
 - (void)updateViewConstraints {
