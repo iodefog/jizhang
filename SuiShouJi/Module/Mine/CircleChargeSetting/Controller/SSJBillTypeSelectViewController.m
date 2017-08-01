@@ -11,6 +11,7 @@
 #import "SSJBillTypeSelectCell.h"
 #import "SSJCreateOrEditBillTypeViewController.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJUserTableManager.h"
 
 static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifier";
 
@@ -105,19 +106,15 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 #pragma mark - Event
 -(void)comfirmButtonClicked:(id)sender{
     if (!self.selectedItem.ID.length) {
-        __weak typeof(self) weakSelf = self;
-        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-            SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc]init];
-            item.ID = weakSelf.selectedId;
-            item.title = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ?",item.ID];
-            item.imageName = [db stringForQuery:@"select cicoin from bk_user_bill_type where cbillid = ?",item.ID];
-            item.colorValue = [db stringForQuery:@"select ccolor from bk_user_bill_type where cbillid = ?",item.ID];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (self.typeSelectBlock) {
-                    self.typeSelectBlock(item);
-                }
-                [self.navigationController popViewControllerAnimated:YES];
-            });
+        [[[self queryBooksID] flattenMap:^RACStream *(NSString *booksID) {
+            return [self queryBillTypeDetailWithBooksID:booksID];
+        }] subscribeNext:^(SSJRecordMakingBillTypeSelectionCellItem *item) {
+            if (self.typeSelectBlock) {
+                self.typeSelectBlock(item);
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        } error:^(NSError *error) {
+            [CDAutoHideMessageHUD showError:error];
         }];
     }else{
         if (self.typeSelectBlock) {
@@ -125,6 +122,39 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
         }
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (RACSignal *)queryBooksID {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+            [subscriber sendNext:booksId];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)queryBillTypeDetailWithBooksID:(NSString *)booksID {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+            SSJRecordMakingBillTypeSelectionCellItem *item = [[SSJRecordMakingBillTypeSelectionCellItem alloc]init];
+            item.ID = self.selectedId;
+            FMResultSet *rs = [db executeQuery:@"select cname, cicoin, ccolor from bk_user_bill_type where cbillid = ? and cbooksid = ? and cuserid = ?", item.ID, booksID, SSJUSERID()];
+            while ([rs next]) {
+                item.title = [rs stringForColumn:@"cname"];
+                item.imageName = [rs stringForColumn:@"cicoin"];
+                item.colorValue = [rs stringForColumn:@"ccolor"];
+            }
+            [rs close];
+            SSJDispatchMainAsync(^{
+                [subscriber sendNext:item];
+                [subscriber sendCompleted];
+            });
+        }];
+        return nil;
+    }];
 }
 
 #pragma mark - Private
