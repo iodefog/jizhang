@@ -188,7 +188,7 @@
         }
 
         // 取出所有的信用卡还款
-        NSArray *repayMentArr = [self.db getObjectsOfClass:SSJCreditRepaymentTable.class fromTable:@"BK_LOAN"
+        NSArray *repayMentArr = [self.db getObjectsOfClass:SSJCreditRepaymentTable.class fromTable:@"BK_CREDIT_REPAYMENT"
                                                 where:SSJCreditRepaymentTable.userId == userId
                             && SSJCreditRepaymentTable.cardId == sourceFundId
                             && SSJCreditRepaymentTable.operatorType != 2];
@@ -198,7 +198,7 @@
             repayment.version = SSJSyncVersion();
             repayment.cardId = targetFundId;
             
-            if (![self.db updateRowsInTable:@"BK_LOAN" onProperties:{
+            if (![self.db updateRowsInTable:@"BK_CREDIT_REPAYMENT" onProperties:{
                 SSJCreditRepaymentTable.writeDate,
                 SSJCreditRepaymentTable.version,
                 SSJCreditRepaymentTable.cardId
@@ -266,7 +266,7 @@
                 SSJFundInfoTable.operatorType,
                 SSJFundInfoTable.writeDate,
                 SSJFundInfoTable.version
-            } withObject:fund where:SSJUserRemindTable.remindId == card.remindId]) {
+            } withObject:fund where:SSJFundInfoTable.fundId == fund.fundId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"删除提醒表失败失败"}]);

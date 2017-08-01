@@ -276,6 +276,9 @@
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;
+        if (self.needToDelete) {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
     } failure:^(NSError *error) {
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = NO;
