@@ -111,6 +111,12 @@ static const NSTimeInterval kDuration = 0.25;
         [self addSubview:self.nameField];
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self updateAppearanceAccordingToTheme];
+        
+        [[self.nameField rac_textSignal] subscribeNext:^(NSString *text) {
+            [self willChangeValueForKey:@"billTypeName"];
+            _billTypeName = text;
+            [self didChangeValueForKey:@"billTypeName"];
+        }];
     }
     return self;
 }
@@ -186,11 +192,6 @@ static const NSTimeInterval kDuration = 0.25;
 }
 
 #pragma mark - UITextFieldDelegate
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-    _billTypeName = nil;
-    return YES;
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [self.nameField resignFirstResponder];
     return YES;
