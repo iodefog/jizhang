@@ -131,7 +131,8 @@
             pwdSetttingVC.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
-    } error:^(NSError *error) {
+    }];
+    [self.nextBtn.rac_command.errors subscribeNext:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     }];
     

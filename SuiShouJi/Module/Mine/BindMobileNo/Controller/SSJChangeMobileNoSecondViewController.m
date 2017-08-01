@@ -138,7 +138,8 @@
             thirdVC.mobileNo = self.mobileNoField.text;
             [self.navigationController pushViewController:thirdVC animated:YES];
         }
-    } error:^(NSError *error) {
+    }];
+    [self.nextBtn.rac_command.errors subscribeNext:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     }];
     
