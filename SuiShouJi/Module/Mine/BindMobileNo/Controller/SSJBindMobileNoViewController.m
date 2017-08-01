@@ -131,7 +131,9 @@
             pwdSetttingVC.finishHandle = self.finishHandle;
             [self.navigationController pushViewController:pwdSetttingVC animated:YES];
         }
-    } error:NULL];
+    } error:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
     
     RAC(self.nextBtn, enabled) = self.viewModel.enableVerifySignal;
     RAC(self.viewModel, phoneNum) = [RACSignal merge:@[self.phoneNoField.rac_textSignal, RACObserve(self.phoneNoField, text)]];
