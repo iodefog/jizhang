@@ -33,8 +33,8 @@
     return self;
 }
 
-- (void)startMergeWithSourceBooksId:(NSString *)sourceFundId
-                      targetBooksId:(NSString *)targetFundId
+- (void)startMergeWithSourceFundId:(NSString *)sourceFundId
+                      targetFundId:(NSString *)targetFundId
                             Success:(void(^)())success
                             failure:(void (^)(NSError *error))failure {
     @weakify(self);
@@ -57,7 +57,12 @@
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
             
-            if (![self.db updateAllRowsInTable:@"BK_USER_CHARGE" onProperties:SSJUserChargeTable.AllProperties withObject:userCharge]) {
+            if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
+                SSJUserChargeTable.fundId,
+                SSJUserChargeTable.writeDate,
+                SSJUserChargeTable.version
+            } withObject:userCharge
+                                      where:SSJUserChargeTable.userId == userId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -130,7 +135,12 @@
             periodCharge.version = SSJSyncVersion();
             periodCharge.billId = targetFundId;
             
-            if (![self.db updateAllRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:SSJChargePeriodConfigTable.AllProperties withObject:periodCharge]) {
+            if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:{
+                SSJChargePeriodConfigTable.writeDate,
+                SSJChargePeriodConfigTable.version,
+                SSJChargePeriodConfigTable.billId
+            } withObject:periodCharge
+                                      where:SSJChargePeriodConfigTable.configId == periodCharge.configId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);

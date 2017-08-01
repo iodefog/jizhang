@@ -12,6 +12,7 @@
 
 #import "SSJBooksMergeProgressButton.h"
 #import "SSJFundingMergeSelectView.h"
+#import "SSJCreditCardItem.h"
 #import "SSJMergeFundSelectView.h"
 
 @interface SSJFundingMergeViewController ()
@@ -162,6 +163,7 @@
         @weakify(self);
         _mergeButton.mergeButtonClickBlock = ^(){
             @strongify(self);
+            [self mergeFunds];
         };
         _mergeButton.layer.cornerRadius = 6.f;
     }
@@ -234,6 +236,51 @@
         };
     }
     return _transferOutFundSelectView;
+}
+
+#pragma mark - Event
+- (void)mergeFunds {
+    NSString *sourceFundId;
+    
+    NSString *targetFundId;
+
+    
+    if ([_transferInFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)_transferOutFundItem;
+        sourceFundId = fundingItem.fundingID;
+    } else if ([_transferInFundItem isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferOutFundItem;
+        sourceFundId = cardItem.cardId;
+    }
+    
+    if ([_transferOutFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)_transferInFundItem;
+        targetFundId = fundingItem.fundingID;
+    } else if ([_transferInFundItem isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferInFundItem;
+        targetFundId = cardItem.cardId;
+    }
+    
+    if (!self.transferInFundItem) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
+        return;
+    }
+    
+    if (!self.transferOutFundItem) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转出账本"];
+        return;
+    }
+    @weakify(self);
+    [self.mergeButton startAnimating];
+    [self.mergeHelper startMergeWithSourceFundId:sourceFundId targetFundId:targetFundId Success:^{
+        @strongify(self);
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = YES;
+    } failure:^(NSError *error) {
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = NO;
+        [SSJAlertViewAdapter showError:error];
+    }];
 }
 
 #pragma mark - Private

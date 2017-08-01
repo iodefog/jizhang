@@ -11,6 +11,10 @@
 
 @interface SSJFundAccountMergeHelper : NSObject
 
+- (void)startMergeWithSourceFundId:(NSString *)sourceFundId
+                      targetFundId:(NSString *)targetFundId
+                           Success:(void(^)())success
+                           failure:(void (^)(NSError *error))failure;
 
 /**
  获取所有的资金帐户
