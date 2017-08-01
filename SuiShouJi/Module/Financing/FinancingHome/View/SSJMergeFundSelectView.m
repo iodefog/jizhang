@@ -31,7 +31,6 @@
         [self addSubview:self.tableview];
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
         //        [self addSubview:self.addNewTypeButtonView];
-        self.needCreditOrNot = YES;
         [self addSubview:self.titleView];
     }
     return self;
@@ -50,7 +49,6 @@
         return;
     }
     
-    [self getDateFromDb];
     
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
@@ -75,9 +73,7 @@
     [self.superview ssj_hideBackViewForView:self animation:^{
         self.top = keyWindow.bottom;
     } timeInterval:0.25 fininshed:^(BOOL complation) {
-        if (_dismissBlock) {
-            _dismissBlock();
-        }
+
     }];
 }
 
@@ -89,40 +85,17 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    if (indexPath.row != [self.tableView numberOfRowsInSection:0]) {
-        [self reloadSelectedStatusexceptIndexPath:indexPath];
-    }
-    if (_fundingTypeSelectBlock) {
-        self.fundingTypeSelectBlock(((SSJFundingTypeTableViewCell*)[tableView cellForRowAtIndexPath:indexPath]).item);
-    }
+
 }
 
 #pragma mark - UITableViewDataSource
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _items.count;
+    return self.fundsArr.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJFundingTypeCell";
-    SSJFundingTypeTableViewCell *FundingTypeCell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    if (!FundingTypeCell) {
-        FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-    }
-    FundingTypeCell.item = [_items ssj_safeObjectAtIndex:indexPath.row];
-    if (!self.selectFundID || self.selectFundID.length == 0) {
-        if (indexPath.row == 0) {
-            FundingTypeCell.selectedOrNot = YES;
-        }else{
-            FundingTypeCell.selectedOrNot = NO;
-        }
-    }else{
-        if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
-            FundingTypeCell.selectedOrNot = YES;
-        }else{
-            FundingTypeCell.selectedOrNot = NO;
-        }
-    }
-    return FundingTypeCell;
+    return nil;
 }
 
 #pragma mark - getter
@@ -165,52 +138,6 @@
 #pragma mark - private
 -(void)closeButtonClicked:(UIButton*)button{
     [self dismiss];
-}
-
--(void)reloadSelectedStatusexceptIndexPath:(NSIndexPath*)selectedIndexpath{
-    for (int i = 0; i < [self.tableview numberOfRowsInSection:0]; i ++) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-        if ([indexPath compare:selectedIndexpath] == NSOrderedSame) {
-            ((SSJFundingTypeTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath]).selectedOrNot = YES;
-        }else{
-            ((SSJFundingTypeTableViewCell*)[self.tableView cellForRowAtIndexPath:indexPath]).selectedOrNot = NO;
-        }
-    }
-}
-
--(void)getDateFromDb{
-    [_items removeAllObjects];
-    __weak typeof(self) weakSelf = self;
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        FMResultSet * rs = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent <> 11 and a.cparent <> 10 order by a.iorder",SSJUSERID()];
-        _items = [[NSMutableArray alloc]init];
-        while ([rs next]) {
-            SSJFundingItem *item = [[SSJFundingItem alloc]init];
-            item.fundingColor = [rs stringForColumn:@"CCOLOR"];
-            item.fundingIcon = [rs stringForColumn:@"CICOIN"];
-            item.fundingID = [rs stringForColumn:@"CFUNDID"];
-            item.fundingName = [rs stringForColumn:@"CACCTNAME"];
-            item.fundingParent = [rs stringForColumn:@"CPARENT"];
-            if (!(!self.needCreditOrNot && ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]))) {
-                [_items addObject:item];
-            }
-        }
-        SSJFundingItem *item = [[SSJFundingItem alloc]init];
-        item.fundingName = @"添加新的资金账户";
-        item.fundingIcon = @"add";
-        [_items addObject:item];
-        SSJDispatch_main_async_safe(^(){
-            [weakSelf.tableView reloadData];
-        });
-    }];
-}
-
-- (void)setNeedCreditOrNot:(BOOL)needCreditOrNot {
-    _needCreditOrNot = needCreditOrNot;
-}
-
--(void)reloadDate{
-    [self getDateFromDb];
 }
 
 
