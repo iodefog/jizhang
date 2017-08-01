@@ -509,7 +509,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         @strongify(self);
         SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
         mergeVc.transferOutFundItem = self.item;
-        mergeVc.isCreditCardOrNot = NO;
+        mergeVc.isCreditCardOrNot = YES;
         mergeVc.transferInSelectable = YES;
         mergeVc.transferOutSelectable = NO;
         mergeVc.needToDelete = YES;
@@ -517,7 +517,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }]];
     
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
     [self presentViewController:alert animated:YES completion:NULL];
 }
 
