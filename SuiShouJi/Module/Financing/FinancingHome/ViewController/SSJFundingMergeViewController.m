@@ -272,7 +272,7 @@
     }
     @weakify(self);
     [self.mergeButton startAnimating];
-    [self.mergeHelper startMergeWithSourceFundId:sourceFundId targetFundId:targetFundId Success:^{
+    [self.mergeHelper startMergeWithSourceFundId:sourceFundId targetFundId:targetFundId needToDelete:self.needToDelete Success:^{
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;

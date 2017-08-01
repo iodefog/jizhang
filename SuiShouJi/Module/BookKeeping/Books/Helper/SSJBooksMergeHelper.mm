@@ -31,7 +31,9 @@
 {
     self = [super init];
     if (self) {
+        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
 
+        }];
     }
     return self;
 }
@@ -62,7 +64,8 @@
                                     && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
                                                                                                          where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
                                                                                                                                                                                                                                                      && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
-                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.booksId == targetBooksId])] mutableCopy];
+                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.booksId == targetBooksId])
+                                            && SSJUserChargeTable.booksId == sourceBooksId] mutableCopy];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
             NSInteger currentIndex = [userBillTypeArr indexOfObject:userBill];
@@ -73,7 +76,7 @@
                                                                         where:SSJUserBillTypeTable.billName == userBill.billName
                                                   && SSJUserBillTypeTable.booksId == targetBooksId];
             if (sameNameBill) {
-                [sameNameDic setObject:userBill.billId forKey:sameNameBill.billId];
+                [sameNameDic setObject:sameNameBill.billId forKey:userBill.billId];
                 [sameNameIndexs addIndex:currentIndex];
             }
             

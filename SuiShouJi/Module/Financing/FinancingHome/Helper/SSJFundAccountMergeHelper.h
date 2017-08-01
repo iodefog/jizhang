@@ -13,6 +13,7 @@
 
 - (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
+                      needToDelete:(BOOL)needToDelete
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure;
 

@@ -15,6 +15,9 @@
 #import "SSJLoanTable.h"
 #import "SSJFinancingHomeitem.h"
 #import "SSJCreditCardItem.h"
+#import "SSJCreditRepaymentTable.h"
+#import "SSJUserRemindTable.h"
+#import "SSJUserCreditTable.h"
 
 @interface SSJFundAccountMergeHelper()
 
@@ -35,6 +38,7 @@
 
 - (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
+                      needToDelete:(BOOL)needToDelete
                             Success:(void(^)())success
                             failure:(void (^)(NSError *error))failure {
     @weakify(self);
@@ -176,17 +180,108 @@
             } withObject:loan where:SSJLoanTable.loanId == loan.loanId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
-                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并失败"}]);
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并借贷失败"}]);
                     }
                 });
                 return NO;
             };
+        }
+
+        // 取出所有的信用卡还款
+        NSArray *repayMentArr = [self.db getObjectsOfClass:SSJCreditRepaymentTable.class fromTable:@"BK_LOAN"
+                                                where:SSJCreditRepaymentTable.userId == userId
+                            && SSJCreditRepaymentTable.cardId == sourceFundId
+                            && SSJCreditRepaymentTable.operatorType != 2];
+        
+        for (SSJCreditRepaymentTable *repayment in repayMentArr) {
+            repayment.writeDate = writeDate;
+            repayment.version = SSJSyncVersion();
+            repayment.cardId = targetFundId;
+            
+            if (![self.db updateRowsInTable:@"BK_LOAN" onProperties:{
+                SSJCreditRepaymentTable.writeDate,
+                SSJCreditRepaymentTable.version,
+                SSJCreditRepaymentTable.cardId
+            } withObject:repayment where:SSJCreditRepaymentTable.repaymentId == repayment.repaymentId]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并还款失败"}]);
+                    }
+                });
+                return NO;
+            };
+        }
+
+
+        // 如果需要删除资金帐户,则要因为数据都转移了,删掉提醒,删掉还款
+        if (needToDelete) {
+            SSJUserCreditTable *card = [[self.db getOneObjectOfClass:SSJUserCreditTable.class fromTable:@"BK_USER_CREDIT"]
+                                        where:SSJUserCreditTable.cardId == sourceFundId];
+            
+            if (card) {
+                // 如果是信用卡,那要处理提醒和信用卡表
+                card.operatorType = 2;
+                card.writeDate = writeDate;
+                card.version = SSJSyncVersion();
+                if (![self.db updateRowsInTable:@"BK_USER_CREDIT" onProperties:{
+                    SSJUserCreditTable.operatorType,
+                    SSJUserCreditTable.writeDate,
+                    SSJUserCreditTable.version
+                } withObject:card where:SSJUserCreditTable.cardId == card.cardId]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"删除信用卡表失败失败"}]);
+                        }
+                    });
+                    return NO;
+
+                }
+            
+                if (card.remindId) {
+                    SSJUserRemindTable *remind = [[SSJUserRemindTable alloc] init];
+                    remind.operatorType = 2;
+                    remind.writeDate = writeDate;
+                    remind.version = SSJSyncVersion();
+                    if (![self.db updateRowsInTable:@"BK_USER_REMIND" onProperties:{
+                        SSJUserRemindTable.operatorType,
+                        SSJUserRemindTable.writeDate,
+                        SSJUserRemindTable.version
+                    } withObject:remind where:SSJUserRemindTable.remindId == card.remindId]) {
+                        dispatch_main_async_safe(^{
+                            if (failure) {
+                                failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"删除提醒表失败失败"}]);
+                            }
+                        });
+                        return NO;
+                        
+                    }
+                }
+            }
+            
+            SSJFundInfoTable *fund = [[SSJFundInfoTable alloc] init];
+            fund.operatorType = 2;
+            fund.writeDate = writeDate;
+            fund.version = SSJSyncVersion();
+            if (![self.db updateRowsInTable:@"BK_FUND_INFO" onProperties:{
+                SSJFundInfoTable.operatorType,
+                SSJFundInfoTable.writeDate,
+                SSJFundInfoTable.version
+            } withObject:fund where:SSJUserRemindTable.remindId == card.remindId]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"删除提醒表失败失败"}]);
+                    }
+                });
+                return NO;
+                
             }
 
-
+        }
+        
         if (success) {
             success();
         }
+        
         
         return YES;
         
