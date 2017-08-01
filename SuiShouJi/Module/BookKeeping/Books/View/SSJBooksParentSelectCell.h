@@ -6,9 +6,9 @@
 //  Copyright © 2016年 ___9188___. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "SSJBaseTableViewCell.h"
 
-@interface SSJBooksParentSelectCell : UITableViewCell
+@interface SSJBooksParentSelectCell : SSJBaseTableViewCell
 
 
 @property(nonatomic, strong) UIImageView *arrowImageView;

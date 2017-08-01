@@ -109,28 +109,27 @@
 - (NSString *)parentIcon {
     switch (self.booksParent) {
         case SSJBooksTypeDaily:
-        return @"bk_moren";
-        break;
-        
+            return @"bk_moren";
+            break;
+            
         case SSJBooksTypeBusiness:
-        return @"bk_shengyi";
-        break;
-        
+            return @"bk_shengyi";
+            break;
+            
         case SSJBooksTypeMarriage:
-        return @"bk_jiehun";
-        break;
-        
+            return @"bk_jiehun";
+            break;
+            
         case SSJBooksTypeDecoration:
-        return @"bk_zhuangxiu";
-        break;
-        
+            return @"bk_zhuangxiu";
+            break;
+            
         case SSJBooksTypeTravel:
-        return @"bk_lvxing";
-        break;
+            return @"bk_lvxing";
+            break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            return @"";
+            return @"bk_baby";
             break;
     }
 }
@@ -158,8 +157,7 @@
             break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            return @"";
+            return @"宝宝账本";
             break;
     }
 }

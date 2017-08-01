@@ -39,7 +39,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         // 查询有数据的月份
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [@"select distinct strftime('%Y-%m', uc.cbilldate) from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2" mutableCopy];
+        NSMutableString *sql = [@"select distinct strftime('%Y-%m', uc.cbilldate) from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.cbilldate <= datetime('now', 'localtime') and uc.operatortype <> 2" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -219,7 +219,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                            @"endDateStr":endDateStr,
                                            @"type":@(type)} mutableCopy];
         
-        NSMutableString *sql_2 = [@"select sum(a.imoney), b.cbillid, b.cname, b.cicoin, b.ccolor from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type" mutableCopy];
+        NSMutableString *sql_2 = [@"select sum(a.imoney), b.cbillid, b.cname, b.cicoin, b.ccolor from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -336,7 +336,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                      @"startDate":beginDateStr,
                                      @"endDate":endDateStr};
             
-            FMResultSet *rs = [db executeQuery:@"select sum(uc.imoney) as amount, sm.cmemberid, sm.ccolor, sf.cmark from bk_user_charge as uc, bk_share_books_member as sm, bk_share_books_friends_mark as sf, bk_user_bill_type as bt where uc.cuserid = sm.cmemberid and sm.cbooksid = uc.cbooksid and sf.cuserid = :userId and sf.cbooksid = uc.cbooksid and sf.cfriendid = uc.cuserid and bt.cbillid = uc.ibillid and bt.itype = :type and uc.cbooksid = :booksId and uc.operatortype <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by sm.cmemberid" withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:@"select sum(uc.imoney) as amount, sm.cmemberid, sm.ccolor, sf.cmark from bk_user_charge as uc, bk_share_books_member as sm, bk_share_books_friends_mark as sf, bk_user_bill_type as bt where uc.cuserid = sm.cmemberid and sm.cbooksid = uc.cbooksid and sf.cuserid = :userId and sf.cbooksid = uc.cbooksid and sf.cfriendid = uc.cuserid and bt.cbillid = uc.ibillid and bt.cuserid = uc.cuserid and bt.cbooksid = uc.cbooksid and bt.itype = :type and uc.cbooksid = :booksId and uc.operatortype <> 2 and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by sm.cmemberid" withParameterDictionary:params];
             if (!rs) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -365,7 +365,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
                                      @"startDate":beginDateStr,
                                      @"endDate":endDateStr};
             
-            FMResultSet *rs = [db executeQuery:@"select sum(mc.imoney), mc.cmemberid from bk_member_charge as mc, bk_user_charge as uc, bk_user_bill_type as bt where mc.ichargeid = uc.ichargeid and uc.ibillid = bt.cbillid and uc.cuserid = :userId and uc.operatortype <> 2 and uc.cbooksid = :booksId and bt.itype = :type and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by mc.cmemberid" withParameterDictionary:params];
+            FMResultSet *rs = [db executeQuery:@"select sum(mc.imoney), mc.cmemberid from bk_member_charge as mc, bk_user_charge as uc, bk_user_bill_type as bt where mc.ichargeid = uc.ichargeid and uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.cuserid = :userId and uc.operatortype <> 2 and uc.cbooksid = :booksId and bt.itype = :type and uc.cbilldate >= :startDate and uc.cbilldate <= :endDate and uc.cbilldate <= datetime('now', 'localtime') group by mc.cmemberid" withParameterDictionary:params];
             if (!rs) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -419,7 +419,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         NSMutableDictionary *params = [@{@"beginDateStr":beginDateStr,
                                          @"endDateStr":endDateStr} mutableCopy];
         
-        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2" mutableCopy];
+        NSMutableString *sql = [@"select sum(a.imoney), b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -474,7 +474,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
 }
 
 + (double)queryAmountForChargesInDatabse:(FMDatabase *)db booksId:(NSString *)booksId beginDate:(NSString *)beginDate endDate:(NSString *)endDate type:(SSJBillType)type error:(NSError **)error {
-    NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b where a.IBILLID = b.CBILLID and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type" mutableCopy];
+    NSMutableString *sql_1 = [@"select sum(a.IMONEY) from BK_USER_CHARGE as a, BK_USER_BILL_TYPE as b where a.ibillid = b.cbillid and b.cuserid = a.cuserid and b.cbooksid = a.cbooksid and a.cbilldate >= :beginDateStr and a.cbilldate <= :endDateStr and a.cbilldate <= datetime('now', 'localtime') and a.operatortype <> 2 and b.itype = :type" mutableCopy];
     
     NSMutableDictionary *params_1 = [@{@"beginDateStr":beginDate,
                                        @"endDateStr":endDate,
@@ -539,7 +539,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [NSMutableString stringWithFormat:@"select max(uc.cbilldate) as maxBillDate, min(uc.cbilldate) as minBillDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')"];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select max(uc.cbilldate) as maxBillDate, min(uc.cbilldate) as minBillDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')"];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -631,7 +631,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [NSMutableString stringWithFormat:@"select max(uc.cbilldate) as maxBillDate, min(uc.cbilldate) as minBillDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')"];
+        NSMutableString *sql = [NSMutableString stringWithFormat:@"select max(uc.cbilldate) as maxBillDate, min(uc.cbilldate) as minBillDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')"];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -749,7 +749,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [@"select uc.imoney, uc.cbilldate, bt.itype from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')" mutableCopy];
+        NSMutableString *sql = [@"select uc.imoney, uc.cbilldate, bt.itype from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime')" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件
@@ -833,7 +833,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
         }
         
         NSMutableDictionary *params = [@{} mutableCopy];
-        NSMutableString *sql = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
+        NSMutableString *sql = [@"select a.imoney, a.cbilldate, b.itype from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.operatortype <> 2 and a.cbilldate <= datetime('now', 'localtime')" mutableCopy];
         
         if ([tBooksId isEqualToString:SSJAllBooksIds]) {
             // 因为所有账本中可能包括共享账本，要加两个限制流水的条件

@@ -24,9 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL expended;
 
 /**
- 当前账本id（编辑、新建都要传）
+ 当前账本id；如果不传默认用户当前账本
  */
-@property (nonatomic, copy) NSString *booksId;
+@property (nonatomic, copy, nullable) NSString *booksId;
 
 /**
  收支类别id（编辑必传，新建不用）

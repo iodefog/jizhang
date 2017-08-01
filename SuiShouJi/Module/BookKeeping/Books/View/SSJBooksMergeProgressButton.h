@@ -20,6 +20,10 @@
 
 @property (nonatomic) BOOL progressDidCompelete;
 
+@property (nonatomic) BOOL isSuccess;
+
 @property (nonatomic, copy) void(^mergeButtonClickBlock)();
+
+- (void)startAnimating;
 
 @end

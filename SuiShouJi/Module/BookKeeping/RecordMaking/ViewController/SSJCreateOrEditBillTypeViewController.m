@@ -15,6 +15,7 @@
 #import "SSJBillTypeLibraryModel.h"
 #import "SSJBillModel.h"
 
+#import "SSJUserTableManager.h"
 #import "SSJBillTypeManager.h"
 #import "SSJCategoryListHelper.h"
 #import "YYKeyboardManager.h"
@@ -65,7 +66,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [self setupBindings];
     [self organiseColors];
     
-    [[self loadBooksTypeIfNeeded] subscribeError:^(NSError *error) {
+    [[[self loadBooksIdIfNeeded] then:^RACSignal *{
+        return [self loadBooksTypeIfNeeded];
+    }] subscribeError:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     } completed:^{
         SSJCaterotyMenuSelectionViewIndexPath *indexPath = [self selectedIndexPath];
@@ -76,10 +79,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
         SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
         self.icon = item.icon;
-        self.name = item.name;
-        if (!self.color) {
-            self.color = item.color;
-        }
+        self.name = self.name ?: item.name;
+        self.color = self.color ?: item.color;
     }];
 }
 
@@ -193,12 +194,14 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     [RACObserve(self, icon) subscribeNext:^(NSString *icon) {
         [self.topView setBillTypeIcon:[UIImage imageNamed:icon] animated:YES];
     }];
-    [RACObserve(self, name) subscribeNext:^(NSString *name) {
-        [self.topView setBillTypeName:name animated:YES];
-    }];
+//    [RACObserve(self, name) subscribeNext:^(NSString *name) {
+//        [self.topView setBillTypeName:name animated:YES];
+//    }];
     [RACObserve(self, color) subscribeNext:^(NSString *color) {
         [self.topView setBillTypeColor:[UIColor ssj_colorWithHex:color] animated:YES];
     }];
+    
+    RACChannelTo(self.topView, billTypeName) = RACChannelTo(self, name);
 }
 
 - (void)organiseColors {
@@ -216,6 +219,22 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     } else {
         return [self.libraryModel incomeCategories];
     }
+}
+
+- (RACSignal *)loadBooksIdIfNeeded {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.booksId.length) {
+            [subscriber sendCompleted];
+        } else {
+            [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+                self.booksId = booksId;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
+        return nil;
+    }];
 }
 
 - (RACSignal *)loadBooksTypeIfNeeded {

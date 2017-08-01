@@ -29,6 +29,12 @@
 
 @property (nonatomic, strong) NSArray *allFundsItem;
 
+@property (nonatomic, strong) UIImageView *warningImage;
+
+@property (nonatomic, strong) UILabel *warningLab;
+
+@property (nonatomic, strong) UIView *containerView;
+
 @end
 
 @implementation SSJFundingMergeViewController
@@ -37,12 +43,20 @@
     [super viewDidLoad];
     self.title = @"资金账本数据";
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.mergeButton];
-    [self.scrollView addSubview:self.transferInFundBackView];
-    [self.scrollView addSubview:self.transferOutFundBackView];
-    [self.scrollView addSubview:self.transferImage];
+    [self.containerView addSubview:self.mergeButton];
+    [self.containerView addSubview:self.transferInFundBackView];
+    [self.containerView addSubview:self.transferOutFundBackView];
+    [self.containerView addSubview:self.transferImage];
+    [self.containerView addSubview:self.warningImage];
+    [self.containerView addSubview:self.warningLab];
+    [self.scrollView addSubview:self.containerView];
 
     // Do any additional setup after loading the view.
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateTransferItem];
 }
 
 - (void)updateViewConstraints {
@@ -52,32 +66,46 @@
         make.height.mas_equalTo(44);
         make.centerX.mas_equalTo(self.view);
         make.top.mas_equalTo(self.transferInFundBackView.mas_bottom).offset(57);
-        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self.containerView.mas_bottom).offset(-30).priorityHigh();
     }];
     
     [self.transferOutFundBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.scrollView.mas_top).offset(SSJ_NAVIBAR_BOTTOM);
-        make.height.mas_equalTo(150);
-        make.width.mas_equalTo(self.scrollView);
-        make.centerX.mas_equalTo(self.scrollView);
+        make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM).priorityHigh();
+        make.height.mas_equalTo(160);
+        make.width.mas_equalTo(self.containerView);
+        make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferInFundBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.transferOutFundBackView.mas_bottom).offset(50);
-        make.height.mas_equalTo(150);
-        make.width.mas_equalTo(self.scrollView);
-        make.centerX.mas_equalTo(self.scrollView);
+        make.top.mas_equalTo(self.transferOutFundBackView.mas_bottom).offset(50).priorityHigh();
+        make.height.mas_equalTo(160);
+        make.width.mas_equalTo(self.containerView);
+        make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferImage mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.scrollView);
+        make.centerX.mas_equalTo(self.containerView);
         make.top.mas_equalTo(self.transferOutFundBackView.mas_bottom).offset(16);
     }];
     
+    [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(self.scrollView);
+        make.width.mas_equalTo(self.view);
+    }];
+    
+    [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.transferInFundBackView.mas_bottom).offset(14);
+        make.left.mas_equalTo(15);
+    }];
+    
+    [self.warningLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.warningImage);
+        make.left.mas_equalTo(self.warningImage.mas_right).offset(10);
+        make.right.mas_equalTo(self.containerView.mas_right).offset(-10);
+    }];
+    
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.equalTo(self.view);
-        make.left.equalTo(self.view);
-        make.top.equalTo(self.view);
+        make.edges.mas_equalTo(self.view);
     }];
     
     [super updateViewConstraints];
@@ -91,7 +119,7 @@
     return _mergeHelper;
 }
 
-- (SSJFundingMergeSelectView *)transferInBookBackView {
+- (SSJFundingMergeSelectView *)transferInFundBackView {
     if (!_transferInFundBackView) {
         _transferInFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferInFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -99,7 +127,7 @@
     return _transferInFundBackView;
 }
 
-- (SSJFundingMergeSelectView *)transferOutBookBackView {
+- (SSJFundingMergeSelectView *)transferOutFundBackView {
     if (!_transferOutFundBackView) {
         _transferOutFundBackView = [[SSJFundingMergeSelectView alloc] init];
         _transferOutFundBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -135,6 +163,37 @@
         _scrollView = [[UIScrollView alloc] init];
     }
     return _scrollView;
+}
+
+- (UILabel *)warningLab {
+    if (!_warningLab) {
+        _warningLab = [[UILabel alloc] init];
+        _warningLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _warningLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _warningLab.numberOfLines = 0;
+        _warningLab.text = @"迁移账本，账本名称、收支类别等属性将以目标账本为准。";
+    }
+    return _warningLab;
+}
+
+- (UIImageView *)warningImage {
+    if (!_warningImage) {
+        _warningImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
+    }
+    return _warningImage;
+}
+
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [[UIView alloc] init];
+    }
+    return _containerView;
+}
+
+#pragma mark - Private
+- (void)updateTransferItem {
+    self.transferInFundBackView.fundingItem = self.transferInFundItem;
+    self.transferOutFundBackView.fundingItem = self.transferOutFundItem;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -499,7 +499,7 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
         case SSJCaterotyMenuSelectionViewMenuLeft: {
             [self updateSubscriptLineConstraint];
             [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.width.mas_equalTo(50);
+                make.width.mas_equalTo(50).priorityHigh();
                 make.top.and.left.and.height.mas_equalTo(self);
             }];
             [self.collectionView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -600,9 +600,11 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
     [_subscriptLine setLineColor:SSJ_BORDER_COLOR];
     
-    NSArray *headerViews = [self.collectionView visibleSupplementaryViewsOfKind:UICollectionElementKindSectionHeader];
-    for (_SSJCaterotyMenuSelectionViewCollectionHeaderView *header in headerViews) {
-        header.titleLab.textColor = SSJ_SECONDARY_COLOR;
+    if (SSJSystemVersion() >= 9) {
+        NSArray *headerViews = [self.collectionView visibleSupplementaryViewsOfKind:UICollectionElementKindSectionHeader];
+        for (_SSJCaterotyMenuSelectionViewCollectionHeaderView *header in headerViews) {
+            header.titleLab.textColor = SSJ_SECONDARY_COLOR;
+        }
     }
     
     NSArray *cells = [self.collectionView visibleCells];

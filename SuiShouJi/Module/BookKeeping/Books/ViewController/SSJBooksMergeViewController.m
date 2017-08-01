@@ -33,6 +33,12 @@
 
 @property (nonatomic, strong) SSJBooksSelectView *booksSelectView;
 
+@property (nonatomic, strong) UIImageView *warningImage;
+
+@property (nonatomic, strong) UILabel *warningLab;
+
+@property (nonatomic, strong) UIView *containerView;
+
 @end
 
 @implementation SSJBooksMergeViewController
@@ -41,12 +47,17 @@
     [super viewDidLoad];
     self.title = @"迁移账本数据";
     [self.view addSubview:self.scrollView];
-    [self.scrollView addSubview:self.mergeButton];
-    [self.scrollView addSubview:self.transferOutBookBackView];
-    [self.scrollView addSubview:self.transferInBookBackView];
-    [self.scrollView addSubview:self.transferImage];
+//    [self.view addSubview:self.containerView];
+    [self.containerView addSubview:self.mergeButton];
+    [self.containerView addSubview:self.transferOutBookBackView];
+    [self.containerView addSubview:self.transferInBookBackView];
+    [self.containerView addSubview:self.transferImage];
+    [self.containerView addSubview:self.warningImage];
+    [self.containerView addSubview:self.warningLab];
+    [self.scrollView addSubview:self.containerView];
+
     
-    [self.view updateConstraintsIfNeeded];
+    [self.view setNeedsUpdateConstraints];
     // Do any additional setup after loading the view.
 }
 
@@ -58,38 +69,57 @@
     [self.mm_drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeNone];
 }
 
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+}
+
 - (void)updateViewConstraints {
     [self.mergeButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self.view.mas_width).offset(-30);
         make.height.mas_equalTo(44);
         make.centerX.mas_equalTo(self.view);
         make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(57);
-        make.bottom.mas_equalTo(self.scrollView.mas_bottom).offset(-30);
+        make.bottom.mas_equalTo(self.containerView.mas_bottom).offset(-30).priorityHigh();
     }];
     
     [self.transferOutBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.scrollView.mas_top).offset(SSJ_NAVIBAR_BOTTOM);
+        make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM).priorityHigh();
         make.height.mas_equalTo(190);
-        make.width.mas_equalTo(self.scrollView);
-        make.centerX.mas_equalTo(self.scrollView);
+        make.width.mas_equalTo(self.containerView);
+        make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferInBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50);
+        make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50).priorityHigh();
         make.height.mas_equalTo(190);
-        make.width.mas_equalTo(self.scrollView);
-        make.centerX.mas_equalTo(self.scrollView);
+        make.width.mas_equalTo(self.containerView);
+        make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferImage mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.centerX.mas_equalTo(self.scrollView);
+        make.centerX.mas_equalTo(self.containerView);
         make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(16);
     }];
     
+    [self.containerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(self.scrollView);
+        make.width.mas_equalTo(self.view);
+    }];
+    
+    [self.warningImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.transferInBookBackView.mas_bottom).offset(14);
+        make.left.mas_equalTo(15);
+    }];
+
+    [self.warningLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.warningImage);
+        make.left.mas_equalTo(self.warningImage.mas_right).offset(10);
+        make.right.mas_equalTo(self.containerView.mas_right).offset(-10);
+    }];
+    
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.equalTo(self.view);
-        make.left.equalTo(self.view);
-        make.top.equalTo(self.view);
+        make.edges.mas_equalTo(self.view);
     }];
 
     [super updateViewConstraints];
@@ -114,7 +144,7 @@
             @strongify(self);
             NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
             if (!allBooks.count) {
-                [CDAutoHideMessageHUD showMessage:@""];
+                [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
             } else {
                 self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
                 [self.booksSelectView showWithSelectedItem:self.transferInBooksItem];
@@ -176,6 +206,31 @@
     return _booksSelectView;
 }
 
+- (UILabel *)warningLab {
+    if (!_warningLab) {
+        _warningLab = [[UILabel alloc] init];
+        _warningLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _warningLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _warningLab.numberOfLines = 0;
+        _warningLab.text = @"迁移账本，账本名称、收支类别等属性将以目标账本为准。";
+    }
+    return _warningLab;
+}
+
+- (UIImageView *)warningImage {
+    if (!_warningImage) {
+        _warningImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
+    }
+    return _warningImage;
+}
+
+- (UIView *)containerView {
+    if (!_containerView) {
+        _containerView = [[UIView alloc] init];
+    }
+    return _containerView;
+}
+
 #pragma mark - Private
 - (void)updateWithBookData {
     if (!self.transferOutBooksItem) {
@@ -198,11 +253,15 @@
         return;
     }
     @weakify(self);
+    [self.mergeButton startAnimating];
     [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = YES;
     } failure:^(NSError *error) {
-        
+        self.mergeButton.progressDidCompelete = YES;
+        self.mergeButton.isSuccess = NO;
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 
