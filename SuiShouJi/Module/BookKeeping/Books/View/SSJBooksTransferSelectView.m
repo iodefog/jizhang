@@ -22,6 +22,8 @@
 
 @property (nonatomic, strong) UILabel *bookTypeLab;
 
+@property (nonatomic, strong) UILabel *booksSelectLab;
+
 @property (nonatomic, strong) UIImageView *transferImage;
 
 @property (nonatomic, strong) UIImageView *arrowImage;
@@ -44,47 +46,56 @@
         [self addSubview:self.bookTypeTitleLab];
         [self addSubview:self.bookTypeLab];
         [self addSubview:self.arrowImage];
+        [self addSubview:self.booksSelectLab];
+        if (type == SSJBooksTransferViewTypeTransferIn) {
+            self.booksSelectLab.text = @"请选择迁入账本";
+        } else {
+            self.booksSelectLab.text = @"请选择迁出账本";
+        }
     }
     return self;
 }
-
 
 - (void)updateConstraints {
     
     [self.transferBooksView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(80, 110));
-        make.top.mas_equalTo(self.mas_top).offset(15);
-        make.centerX.mas_equalTo(self);
+        make.left.mas_equalTo(self).offset(24);
+        make.centerY.mas_equalTo(self);
     }];
     
     
     [self.chargeCountTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.mas_bottom).offset(-29);
-        make.left.mas_equalTo(32);
+        make.left.mas_equalTo(self.transferBooksView.mas_right).offset(26);
+        make.bottom.mas_equalTo(self.mas_centerY).offset(-12);
     }];
     
     [self.chargeCountLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.chargeCountTitleLab.mas_centerY);
-        make.left.mas_equalTo(self.chargeCountTitleLab.mas_right).offset(5);
+        make.left.mas_equalTo(self.chargeCountTitleLab.mas_right).offset(4);
     }];
     
     
     [self.bookTypeTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.mas_bottom).offset(-29);
-        make.right.mas_equalTo(self.bookTypeLab.mas_left).offset(-5);
+        make.left.mas_equalTo(self.transferBooksView.mas_right).offset(26);
+        make.top.mas_equalTo(self.mas_centerY).offset(12);
     }];
     
     [self.bookTypeLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.bookTypeTitleLab.mas_centerY);
-        make.right.mas_equalTo(self.mas_right).offset(-32);
+        make.left.mas_equalTo(self.bookTypeTitleLab.mas_right).offset(4);
     }];
     
     
     [self.arrowImage mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.mas_centerY);
-        make.right.mas_equalTo(self.mas_left).offset(-15);
+        make.right.mas_equalTo(self.mas_right).offset(-15);
     }];
 
+    [self.booksSelectLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.mas_centerY);
+        make.left.mas_equalTo(self.transferBooksView.mas_right).offset(25);
+    }];
     
     [super updateConstraints];
 }
@@ -145,11 +156,33 @@
     return _arrowImage;
 }
 
+- (UILabel *)booksSelectLab {
+    if (!_booksSelectLab) {
+        _booksSelectLab = [[UILabel alloc] init];
+        _booksSelectLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _booksSelectLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _booksSelectLab;
+}
+
 - (void)setBooksTypeItem:(__kindof SSJBaseCellItem<SSJBooksItemProtocol> *)booksTypeItem {
     _booksTypeItem = booksTypeItem;
-    self.transferBooksView.booksTypeItem = _booksTypeItem;
-    self.bookTypeLab.text = [_booksTypeItem parentName];
-
+    if (_booksTypeItem) {
+        self.transferBooksView.booksTypeItem = _booksTypeItem;
+        self.bookTypeLab.text = [_booksTypeItem parentName];
+        self.bookTypeLab.hidden = NO;
+        self.bookTypeTitleLab.hidden = NO;
+        self.chargeCountLab.hidden = NO;
+        self.chargeCountTitleLab.hidden = NO;
+        self.booksSelectLab.hidden = YES;
+    } else {
+        self.transferBooksView.booksTypeItem = _booksTypeItem;
+        self.bookTypeLab.hidden = YES;
+        self.bookTypeTitleLab.hidden = YES;
+        self.chargeCountLab.hidden = YES;
+        self.chargeCountTitleLab.hidden = YES;
+        self.booksSelectLab.hidden = NO;
+    }
     
     [self setNeedsUpdateConstraints];
 }

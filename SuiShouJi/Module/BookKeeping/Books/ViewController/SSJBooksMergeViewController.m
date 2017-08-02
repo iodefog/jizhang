@@ -85,14 +85,14 @@
     
     [self.transferOutBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.containerView.mas_top).offset(SSJ_NAVIBAR_BOTTOM).priorityHigh();
-        make.height.mas_equalTo(190);
+        make.height.mas_equalTo(150);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
     }];
     
     [self.transferInBookBackView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.transferOutBookBackView.mas_bottom).offset(50).priorityHigh();
-        make.height.mas_equalTo(190);
+        make.height.mas_equalTo(150);
         make.width.mas_equalTo(self.containerView);
         make.centerX.mas_equalTo(self.containerView);
     }];
