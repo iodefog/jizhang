@@ -11,6 +11,7 @@
 #import "SSJWishChargeDetailViewController.h"
 #import "SSJWishWithdrawMoneyViewController.h"
 #import "SSJWishManageViewController.h"
+#import "SSJWishStartViewController.h"
 
 #import "SSJWishChargeCell.h"
 #import "SSJWishProgressView.h"
@@ -262,7 +263,15 @@ static CGFloat defImageHeight = 402;
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            [self ssj_backOffAction];
+            //判断是不是最后一个心愿
+            if ([SSJWishHelper queryHasWishsWithError:nil]) {
+                [self ssj_backOffAction];
+            } else {
+                //跳转到心愿开启页面
+                SSJWishStartViewController *wishStartVC = [[SSJWishStartViewController alloc] init];
+                [self.navigationController pushViewController:wishStartVC animated:YES];
+                
+            }
         } failure:^(NSError *error) {
             [CDAutoHideMessageHUD showMessage:@"删除失败"];
         }];
