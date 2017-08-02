@@ -20,5 +20,6 @@
 
 @property (nonatomic) BOOL isCreditCardOrNot;
 
+@property (nonatomic) BOOL needToDelete;
 
 @end

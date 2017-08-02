@@ -50,8 +50,8 @@
             self.noDataRemindView.hidden = NO;
         } else {
             self.noDataRemindView.hidden = YES;
-            [self.tableView reloadData];
         }
+        [self.tableView reloadData];
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
