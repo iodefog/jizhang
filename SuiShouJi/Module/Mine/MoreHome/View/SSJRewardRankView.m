@@ -40,7 +40,7 @@ static CGFloat btnHeight = 64;
         [self addSubview:self.tableView];
         [self addSubview:self.bottomBtn];
         [self.bottomBtn addSubview:self.closeImgView];
-        [self updateAppearance];
+        [self setNeedsUpdateConstraints];
         [self.rankService requestRankList];
     }
     return self;
@@ -82,6 +82,7 @@ static CGFloat btnHeight = 64;
 
 #pragma mark - Event
 - (void)bottomBtnClicked:(UIButton *)btn {
+    [self.rankService requestRankList];
     btn.selected = !btn.selected;
     CGAffineTransform transform = CGAffineTransformIdentity;
     CGFloat top = 0;
@@ -119,6 +120,7 @@ static CGFloat btnHeight = 64;
             transform = CGAffineTransformIdentity;
             self.closeImgView.hidden = YES;
         }else{
+            [self.rankService requestRankList];
             top = 0;
             self.bottomBtn.selected = YES;
             transform = CGAffineTransformMakeRotation(M_PI);
@@ -191,7 +193,8 @@ static CGFloat btnHeight = 64;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
-        _tableView.rowHeight = 80;
+        _tableView.estimatedRowHeight = 80;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
         _tableView.backgroundColor = [UIColor clearColor];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
