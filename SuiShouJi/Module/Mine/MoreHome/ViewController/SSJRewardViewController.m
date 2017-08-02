@@ -413,12 +413,16 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_goRewarkBtn) {
         _goRewarkBtn = [[UIButton alloc] init];
         _goRewarkBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
-        [_goRewarkBtn setTitle:@"许下心愿" forState:UIControlStateNormal];
+        [_goRewarkBtn setTitle:@"确认支付" forState:UIControlStateNormal];
         _goRewarkBtn.layer.cornerRadius = 6;
         _goRewarkBtn.layer.masksToBounds = YES;
         @weakify(self);
         [[_goRewarkBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
+            if (self.rewarkNotetTextF.text.length > 50) {
+                [CDAutoHideMessageHUD showMessage:@"留言不要超过50个字哦"];
+                return ;
+            }
             [self.view endEditing:YES];
             [self.rewarkService payWithMethod:self.payMethod payMoney:self.rewarkAmountTextF.text memo:self.rewarkNotetTextF.text];
         }];

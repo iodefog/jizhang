@@ -16,6 +16,11 @@
 /**bg*/
 @property (nonatomic, strong) UIView *bgView;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIImageView *bgImageView;
+
+@property (nonatomic, strong) UIView *coverView;
+
 @property (nonatomic, strong) UILabel *wishTitleL;
 
 @property (nonatomic, strong) SSJWishProgressView *wishProgressView;
@@ -34,10 +39,13 @@
 @end
 
 
+
 @implementation SSJWishListTableViewCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.bgView];
+        [self.bgView addSubview:self.bgImageView];
+        [self.bgImageView addSubview:self.coverView];
         [self.bgView addSubview:self.wishTitleL];
         [self.bgView addSubview:self.wishProgressView];
         [self.bgView addSubview:self.saveAmountL];
@@ -77,6 +85,18 @@
         }
         
         [self.wishProgressView setProgress:[item.wishSaveMoney doubleValue] / [item.wishMoney doubleValue] withAnimation:self.isShowAnimation];
+        
+        UIImage *image = [UIImage imageNamed:item.wishImage];
+        if (!image) {
+            NSString *imgPath = SSJImagePath(item.wishImage);
+            image = [UIImage imageWithContentsOfFile:imgPath];
+        }
+        if (!image) {
+            [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+        } else {
+            self.bgImageView.image = image;
+        }
+
         [self updateStateBtnAppearance];
     }
     
@@ -85,17 +105,23 @@
 #pragma mark - Layout
 - (void)updateConstraints {
     [self.bgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(10);
-        make.left.mas_equalTo(15);
-        make.right.mas_equalTo(-15);
-        make.bottom.mas_equalTo(0);
+        make.top.left.right.mas_equalTo(0);
+        make.height.mas_equalTo(kFinalImgHeight(SSJSCREENWITH));
+    }];
+    
+    [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_offset(0);
+    }];
+    
+    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
     }];
     
     [self.wishTitleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leftMargin.mas_equalTo(15);
+        make.right.mas_equalTo(self.stateBtn.mas_left).offset(-5);
         make.height.lessThanOrEqualTo(@50);
-        make.top.mas_equalTo(15);
-        make.rightMargin.mas_equalTo(-15);
+        make.centerY.mas_equalTo(self.wishProgressView.mas_top).multipliedBy(0.5);
         make.height.greaterThanOrEqualTo(@22);
     }];
     
@@ -103,19 +129,21 @@
         make.left.mas_equalTo(18);
         make.height.mas_equalTo(37);
         make.right.mas_equalTo(-18);
-        make.top.mas_equalTo(self.wishTitleL.mas_bottom).offset(52);
+        make.centerY.mas_equalTo(kFinalImgHeight(SSJSCREENWITH)*0.5).offset(7);
     }];
     
     [self.saveAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.wishTitleL);
-        make.width.mas_equalTo(self.wishTitleL.mas_width).multipliedBy(0.5);
+        make.width.mas_equalTo(self.targetAmountL.mas_width);
         make.top.mas_equalTo(self.wishProgressView.mas_bottom).offset(15);
-        make.bottom.mas_equalTo(self.bgView.mas_bottom).offset(-25);
+        make.height.greaterThanOrEqualTo(0);
     }];
     
     [self.targetAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.saveAmountL.mas_right);
-        make.width.top.bottom.mas_equalTo(self.saveAmountL);
+        make.right.mas_equalTo(-15);
+        make.top.mas_equalTo(self.saveAmountL);
+        make.height.greaterThanOrEqualTo(0);
     }];
 
     [self.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -135,24 +163,19 @@
 }
 
 #pragma mark - Theme
-- (void)updateCellAppearanceAfterThemeChanged {
-    [super updateCellAppearanceAfterThemeChanged];
-    [self updateAppearance];
-}
+//- (void)updateCellAppearanceAfterThemeChanged {
+//    [super updateCellAppearanceAfterThemeChanged];
+//    [self updateAppearance];
+//}
 
 - (void)updateAppearance {
-    self.stateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
-        self.contentView.backgroundColor = [UIColor clearColor];
-    self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
-    self.stateLabel.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.wishTitleL.textColor = SSJ_MAIN_COLOR;
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.bgView.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
-    } else {
-        self.bgView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
-    }
+    self.stateLabel.textColor = [UIColor whiteColor];
+    self.stateLabel.backgroundColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor];
+    self.textLabel.textColor = [UIColor whiteColor];
+    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor whiteColor];
+    self.wishTitleL.textColor = [UIColor whiteColor];
+    
+    self.bgView.backgroundColor =[UIColor clearColor];
     [self updateStateBtnAppearance];
 }
 
@@ -173,12 +196,12 @@
         }
         self.stateBtn.hidden = YES;
         self.stateLabel.hidden = NO;
-        self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor alpha:0.5];
+        self.stateLabel.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
     } else {//进行中
         [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
-        self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+        [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
+        self.stateLabel.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor];
         [self.stateBtn setTitle:@"存" forState:UIControlStateNormal];
         self.stateLabel.hidden = YES;
         self.stateBtn.hidden = NO;
@@ -190,11 +213,28 @@
 - (UIView *)bgView {
     if (!_bgView) {
         _bgView = [[UIView alloc] init];
-        _bgView.layer.cornerRadius = 8;
         _bgView.layer.masksToBounds = YES;
     }
     return _bgView;
 }
+
+- (UIImageView *)bgImageView {
+    if (!_bgImageView) {
+        _bgImageView = [[UIImageView alloc] init];
+        _bgImageView.userInteractionEnabled = YES;
+    }
+    return _bgImageView;
+}
+
+- (UIView *)coverView {
+    if (!_coverView) {
+        _coverView = [[UIView alloc] init];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
+        _coverView.layer.cornerRadius = 6;
+    }
+    return _coverView;
+}
+
 
 - (SSJWishProgressView *)wishProgressView {
     if (!_wishProgressView) {
@@ -247,7 +287,6 @@
         _stateBtn = [[UIButton alloc] init];
         _stateBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _stateBtn.layer.cornerRadius = 11;
-        _stateBtn.layer.borderWidth = 1;
         _stateBtn.layer.masksToBounds = YES;
         
         [_stateBtn addTarget:self action:@selector(stateBtnClicked:) forControlEvents:UIControlEventTouchUpInside];

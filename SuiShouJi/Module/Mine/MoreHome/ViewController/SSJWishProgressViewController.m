@@ -136,7 +136,7 @@ static CGFloat defImageHeight = 402;
         
         if (self.wishModel.endDate.length && self.wishModel.status == SSJWishStateFinish) {
             SSJWishChargeItem *endItem = [[SSJWishChargeItem alloc] init];
-            endItem.money = @"完成心愿";
+            endItem.money = @"已完成";
             endItem.cbillDate = self.wishModel.endDate;
             [chargeArray insertObject:endItem atIndex:0];
         } else if (self.wishModel.endDate.length && self.wishModel.status == SSJWishStateTermination) {
@@ -195,25 +195,29 @@ static CGFloat defImageHeight = 402;
         self.stateBtn.enabled = YES;
 
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
-        [self.stateBtn setTitle:@"完成心愿" forState:UIControlStateNormal];
-        self.stateBtn.enabled = NO;
+        if ([self.wishModel.wishSaveMoney doubleValue] > [self.wishModel.wishMoney doubleValue]) {
+            [self.stateBtn setTitle:@"超额完成" forState:UIControlStateNormal];
+        } else {
+            [self.stateBtn setTitle:@"已完成" forState:UIControlStateNormal];
+        }
+        self.stateBtn.enabled = YES;
 
     } else if (self.wishModel.status == SSJWishStateTermination) {//终止
-        self.wishProgressView.progressColor = [UIColor lightGrayColor];
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor alpha:0.5];
         [self.stateBtn setTitle:@"终止" forState:UIControlStateNormal];
         self.stateBtn.enabled = NO;
     }
 }
 
 - (void)updateBottomView {
-    if ([self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue] && self.wishModel.status == SSJWishStateNormalIng) {
+    if ([self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue] && self.wishModel.status == SSJWishStateNormalIng) {//超额
         [self.bottomView ssj_setBorderWidth:1];
         [self.saveBtn ssj_setBorderWidth:1];
         [self.bottomView ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
         [self.saveBtn ssj_setBorderStyle:SSJBorderStyleLeft];
-        [self.saveBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
+        [self.saveBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
         [self.saveBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
-        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
+        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];
         [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         self.withdrawBtn.hidden = NO;
         self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
@@ -228,17 +232,17 @@ static CGFloat defImageHeight = 402;
             [self.saveBtn ssj_setBorderWidth:1];
             [self.saveBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
             self.withdrawBtn.hidden = NO;
-            [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+            [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
             [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         }
         [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
-        [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
         self.bottomView.hidden = NO;
         self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
        
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
         self.bottomView.hidden = YES;
-        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor alpha:0.5] ;
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
     } else if (self.wishModel.status == SSJWishStateTermination) {//终止
         self.bottomView.hidden = YES;
         self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor alpha:0.5];
@@ -472,7 +476,7 @@ static CGFloat defImageHeight = 402;
         layer.path= path.CGPath;
         _finishBtn.layer.mask = layer;
         _finishBtn.hidden = YES;
-        [_finishBtn setTitle:@"完成心愿" forState:UIControlStateNormal];
+        [_finishBtn setTitle:@"已完成" forState:UIControlStateNormal];
         __weak typeof(self) weakSelf = self;
         //完成心愿
         [[_finishBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
