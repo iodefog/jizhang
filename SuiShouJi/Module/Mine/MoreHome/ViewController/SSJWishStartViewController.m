@@ -66,6 +66,10 @@
     }
 }
 
+- (void)ssj_backOffAction {
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
 #pragma mark - Lazy
 - (UILabel *)tipLabel {
     if (!_tipLabel) {

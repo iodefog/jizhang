@@ -133,8 +133,9 @@
         _tableView.showsVerticalScrollIndicator = NO;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.estimatedRowHeight = 170;
-        _tableView.rowHeight = UITableViewAutomaticDimension;
+//        _tableView.estimatedRowHeight = 170;
+//        _tableView.rowHeight = UITableViewAutomaticDimension;
+        _tableView.rowHeight = kFinalImgHeight(SSJSCREENWITH) + 10;
     }
     return _tableView;
 }

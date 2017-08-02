@@ -8,6 +8,12 @@
 
 #import "SSJBaseTableViewCell.h"
 @class SSJWishModel;
+
+static CGFloat defImageWidth = 750;
+static CGFloat defImageHeight = 402;
+#define kFinalImgHeight(width) ((width) * defImageHeight / defImageWidth)
+
+
 @interface SSJWishListTableViewCell : SSJBaseTableViewCell
 
 
