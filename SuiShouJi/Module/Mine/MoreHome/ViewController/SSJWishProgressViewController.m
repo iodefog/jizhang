@@ -22,6 +22,9 @@
 #import "SSJWishHelper.h"
 #import "SSJDataSynchronizer.h"
 
+
+#define kFinalImgHeight(width) ((width) * defImageHeight / defImageWidth)
+
 @interface SSJWishProgressViewController ()<UITableViewDelegate,UITableViewDataSource>
 /**topBg*/
 @property (nonatomic, strong) UIView *topBg;
@@ -31,6 +34,12 @@
 @property (nonatomic, strong) UILabel *saveAmountL;
 
 @property (nonatomic, strong) UILabel *targetAmountL;
+
+/**<#注释#>*/
+@property (nonatomic, strong) UIImageView *wishImageView;
+
+/**图片蒙层*/
+@property (nonatomic, strong) UIView *coverView;
 
 /**状态*/
 @property (nonatomic, strong) UIButton *stateBtn;
@@ -65,6 +74,8 @@
 @property (nonatomic, strong) NSMutableArray <SSJWishChargeItem *> *wishChargeListArr;
 
 @end
+static CGFloat defImageWidth = 750;
+static CGFloat defImageHeight = 402;
 
 @implementation SSJWishProgressViewController
 
@@ -73,6 +84,8 @@
     self.title = @"心愿进度";
     
     [self.view addSubview:self.topBg];
+    [self.topBg addSubview:self.wishImageView];
+    [self.wishImageView addSubview:self.coverView];
     [self.topBg addSubview:self.wishTitleL];
     [self.topBg addSubview:self.wishProgressView];
     [self.topBg addSubview:self.saveAmountL];
@@ -164,16 +177,30 @@
     } else {
         self.finishBtn.hidden = YES;
     }
+
+    UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
+    if (!image) {
+        NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
+        image = [UIImage imageWithContentsOfFile:imgPath];
+    }
+    if (!image) {
+        [self.wishImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+    } else {
+        self.wishImageView.image = image;
+    }
     
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
+        self.stateBtn.enabled = YES;
 
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
         [self.stateBtn setTitle:@"完成心愿" forState:UIControlStateNormal];
+        self.stateBtn.enabled = NO;
 
     } else if (self.wishModel.status == SSJWishStateTermination) {//终止
         self.wishProgressView.progressColor = [UIColor lightGrayColor];
         [self.stateBtn setTitle:@"终止" forState:UIControlStateNormal];
+        self.stateBtn.enabled = NO;
     }
 }
 
@@ -252,37 +279,45 @@
 #pragma mark - Layout
 - (void)updateViewConstraints {
     [self.topBg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
-        make.right.mas_equalTo(-15);
-        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 13);
-        make.bottom.mas_equalTo(self.targetAmountL.mas_bottom).offset(35);
+        make.left.right.mas_equalTo(0);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.height.mas_equalTo(kFinalImgHeight(SSJSCREENWITH));
+    }];
+    
+    [self.wishImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
+    }];
+    
+    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
     }];
     
     [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
-        make.centerX.mas_equalTo(self.topBg.mas_right).offset(-20);
-        make.centerY.mas_equalTo(self.topBg.mas_top).offset(20);
-    }];
-    
-    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(71, 24));
-        make.right.mas_equalTo(self.stateBtn.mas_left);
-        make.top.mas_equalTo(15);
+        make.centerX.mas_equalTo(self.topBg.mas_right).offset(-25);
+        make.centerY.mas_equalTo(self.topBg.mas_top).offset(25);
     }];
     
     [self.wishTitleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.leftMargin.mas_equalTo(15);
         make.right.mas_equalTo(self.finishBtn.mas_left).offset(-5);
         make.height.lessThanOrEqualTo(@50);
-        make.top.mas_equalTo(15);
+        make.centerY.mas_equalTo(self.wishProgressView.mas_top).multipliedBy(0.5);
         make.height.greaterThanOrEqualTo(@22);
     }];
     
+    [self.finishBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(71, 24));
+        make.right.mas_equalTo(self.stateBtn.mas_left);
+        make.centerY.mas_equalTo(self.wishTitleL);
+    }];
+    
     [self.wishProgressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
+        make.left.mas_equalTo(18);
         make.height.mas_equalTo(37);
-        make.right.mas_equalTo(-15);
-        make.top.mas_equalTo(self.wishTitleL.mas_bottom).offset(25);
+        make.right.mas_equalTo(-18);
+//        make.top.mas_equalTo(self.wishTitleL.mas_bottom).offset(25);
+        make.centerY.mas_equalTo(kFinalImgHeight(SSJSCREENWITH)*0.5).offset(7);
     }];
     
     [self.saveAmountL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -319,18 +354,19 @@
 }
 
 - (void)updateAppearanceWithTheme {
-    self.wishTitleL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.tableHeaderView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+    self.wishTitleL.textColor = [UIColor whiteColor];
+    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor whiteColor];
     
     [self.bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.saveBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.withdrawBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"999999"] forState:UIControlStateNormal];
+
     [self.finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [self.finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+    [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor] forState:UIControlStateDisabled];
+    
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
@@ -383,10 +419,23 @@
 - (UIView *)topBg {
     if (!_topBg) {
         _topBg = [[UIView alloc] init];
-        _topBg.layer.cornerRadius = 8;
-        _topBg.layer.masksToBounds = YES;
     }
     return _topBg;
+}
+
+- (UIImageView *)wishImageView {
+    if (!_wishImageView) {
+        _wishImageView = [[UIImageView alloc] init];
+    }
+    return _wishImageView;
+}
+
+- (UIView *)coverView {
+    if (!_coverView) {
+        _coverView = [[UIView alloc] init];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
+    }
+    return _coverView;
 }
 
 - (UILabel *)wishTitleL {
@@ -404,6 +453,7 @@
         _stateBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _stateBtn.transform = CGAffineTransformMakeRotation(M_PI_4);
         _stateBtn.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        _stateBtn.backgroundColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor];
     }
     return _stateBtn;
 }

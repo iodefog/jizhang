@@ -94,6 +94,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 #pragma mark - Event
 - (void)saveMoneyButtonClicked {
+    [self.view endEditing:YES];
     if (!self.wishModel.wishId) return;
     if (!_moneyInput.text.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入心愿金额"];
@@ -130,12 +131,13 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     }
     
     [UIView animateWithDuration:1 animations:^{
+        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ?: 1;
         CGFloat height = weakSelf.saveFooterView.height -
-        weakSelf.goldCoinsImageView.height * (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]);
+        weakSelf.goldCoinsImageView.height * scale;
         weakSelf.goldCoinsImageView.top = height;
         //掉金币
         for (NSInteger i=0; i<goldArr.count; i++) {
-           UIImageView *goldImageView = [goldArr ssj_safeObjectAtIndex:i];
+            UIImageView *goldImageView = [goldArr ssj_safeObjectAtIndex:i];
             switch (i) {
                 case 0:
                     goldImageView.center = CGPointMake(weakSelf.view.width * 0.25, weakSelf.saveFooterView.height - 30);
@@ -348,9 +350,9 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         self.saveButton = saveButton;
         [_saveFooterView addSubview:self.goldCoinsImageView];
         _saveFooterView.layer.masksToBounds = YES;
-//        self.goldCoinsImageView.bottom = _saveFooterView.bottom + 50;
+        double scale = ([self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue] <=1 ? [self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue] : 1);
         self.goldCoinsImageView.top = _saveFooterView.bottom -
-        self.goldCoinsImageView.height * ([self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue]);
+        self.goldCoinsImageView.height * scale;
         [_saveFooterView addSubview:saveButton];
     }
     return _saveFooterView;
@@ -381,8 +383,15 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 - (UILabel *)targetL {
     if (!_targetL) {
         _targetL = [[UILabel alloc] initWithFrame:CGRectMake(SSJSCREENWITH * 0.5, 0, SSJSCREENWITH * 0.5 - 15, 30)];
+        _targetL.textAlignment = NSTextAlignmentRight;
         _targetL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        _targetL.text = [NSString stringWithFormat:@"离实现心愿还有：%.2lf元",[self.wishModel.wishMoney doubleValue]-[self.wishModel.wishSaveMoney doubleValue]];
+        double shenyu = [self.wishModel.wishMoney doubleValue]-[self.wishModel.wishSaveMoney doubleValue];
+        if (shenyu >0 ) {
+            _targetL.text = [NSString stringWithFormat:@"离实现心愿还有：%.2lf元",shenyu];
+        } else {
+            _targetL.text = @"已超出目标金额";
+        }
+        
     }
     return _targetL;
 }

@@ -95,9 +95,9 @@
     }];
     
     [self.wishProgressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
+        make.left.mas_equalTo(18);
         make.height.mas_equalTo(37);
-        make.right.mas_equalTo(-15);
+        make.right.mas_equalTo(-18);
         make.top.mas_equalTo(self.wishTitleL.mas_bottom).offset(52);
     }];
     
@@ -115,8 +115,8 @@
 
     [self.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(100, 20));
-        make.centerX.mas_equalTo(self.bgView.mas_right).offset(-20);
-        make.centerY.mas_equalTo(self.bgView.mas_top).offset(20);
+        make.centerX.mas_equalTo(self.bgView.mas_right).offset(-25);
+        make.centerY.mas_equalTo(self.bgView.mas_top).offset(25);
     }];
     
     [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -139,9 +139,9 @@
     self.stateBtn.layer.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor].CGColor;
         self.contentView.backgroundColor = [UIColor clearColor];
     self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
+    self.stateLabel.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.stateLabel.backgroundColor = [UIColor lightGrayColor];
     self.wishTitleL.textColor = SSJ_MAIN_COLOR;
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.bgView.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
@@ -158,6 +158,7 @@
         self.stateLabel.hidden = NO;
         self.stateLabel.text = @"终止";
         self.stateBtn.hidden = YES;
+        self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     } else if (item.status == SSJWishStateFinish) {//完成
         if ([item.wishSaveMoney doubleValue] > [item.wishMoney doubleValue]) {
             self.stateLabel.text = @"超额完成";
@@ -166,9 +167,11 @@
         }
         self.stateBtn.hidden = YES;
         self.stateLabel.hidden = NO;
+        self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     } else {//进行中
         [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+        self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
         [self.stateBtn setTitle:@"存" forState:UIControlStateNormal];
         self.stateLabel.hidden = YES;
         self.stateBtn.hidden = NO;

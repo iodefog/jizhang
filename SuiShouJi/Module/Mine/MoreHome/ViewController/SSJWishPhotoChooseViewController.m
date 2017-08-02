@@ -79,7 +79,7 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
     UIImage *image = [info objectForKey:UIImagePickerControllerOriginalImage];
     if (!image) return;
     //图片编辑
-    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] initWithNormalImage:image normalClipSize:CGSizeMake(SSJSCREENWITH, 150)];
+    SSJThemBgImageClipViewController *imageClipVC = [[SSJThemBgImageClipViewController alloc] initWithNormalImage:image normalClipSize:CGSizeMake(SSJSCREENWITH, kFinalImgHeight(SSJSCREENWITH))];
     @weakify(self);
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         @strongify(self);
@@ -114,7 +114,7 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake((SSJSCREENWITH - 50) * 0.5, 50);
+    return CGSizeMake((SSJSCREENWITH - 50) * 0.5, kFinalImgHeight((SSJSCREENWITH - 50) * 0.5));
 }
 
 #pragma mark - Lazy
