@@ -14,6 +14,10 @@
 
 @interface SSJBillTypeManager : NSObject
 
+@property (nonatomic, strong, readonly) NSDictionary<NSString *, NSDictionary *> *specialBillTypes;
+
++ (instancetype)sharedManager;
+
 + (SSJBillTypeModel *)modelForBillId:(NSString *)billId;
 
 @end

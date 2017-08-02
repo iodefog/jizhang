@@ -9,6 +9,7 @@
 //
 
 #import "SSJNewCreditCardViewController.h"
+#import "SSJFundingMergeViewController.h"
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJCreditCardEditeCell.h"
 #import "SSJCreditCardItem.h"
@@ -498,10 +499,25 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf.authCodeAlertView show];
+    @weakify(self);
+    [alert addAction:[UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self.authCodeAlertView show];
     }]];
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
+        mergeVc.transferOutFundItem = self.item;
+        mergeVc.isCreditCardOrNot = YES;
+        mergeVc.transferInSelectable = YES;
+        mergeVc.transferOutSelectable = NO;
+        mergeVc.needToDelete = YES;
+        [self.navigationController pushViewController:mergeVc animated:YES];
+    }]];
+    
+    
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
     [self presentViewController:alert animated:YES completion:NULL];
 }
 

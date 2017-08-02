@@ -263,6 +263,7 @@
         mergeVc.isCreditCardOrNot = NO;
         mergeVc.transferInSelectable = YES;
         mergeVc.transferOutSelectable = NO;
+        mergeVc.needToDelete = YES;
         [self.navigationController pushViewController:mergeVc animated:YES];
     }]];
     
