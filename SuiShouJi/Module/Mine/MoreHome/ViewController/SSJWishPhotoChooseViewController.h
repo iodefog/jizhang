@@ -8,7 +8,7 @@
 
 #import "SSJBaseViewController.h"
 static CGFloat defImageWidth = 750;
-static CGFloat defImageHeight = 302;
+static CGFloat defImageHeight = 402;
 
 #define kFinalImgHeight(width) ((width) * defImageHeight / defImageWidth)
 @interface SSJWishPhotoChooseViewController : SSJBaseViewController
