@@ -188,29 +188,27 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 #pragma mark - Private
 - (void)updateAppearance {
+    self.headerView.separatorColor = [SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] ? [UIColor whiteColor] : SSJ_CELL_SEPARATOR_COLOR;
+    self.headerView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     
-    _headerView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-    
-    _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
     [_changeSectionHeaderView updateAppearance];
     [_changeChargeSelectionView updateAppearance];
     
-    _closeOutBtn.backgroundColor = _deleteBtn.backgroundColor  = _changeBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    _closeOutBtn.backgroundColor = _deleteBtn.backgroundColor  = _changeBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
     
     if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
         [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
         [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
     } else {
-        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [_closeOutBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+        [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     }
     
-    [_changeBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
-    
-    
-    [_changeBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    [_closeOutBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-    [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    [_changeBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+    [_changeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [_closeOutBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [_deleteBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
 }
 
 - (void)organiseHeaderItems {
@@ -289,47 +287,62 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             break;
     }
     
+    UIColor *topTitleColor = nil;
+    UIColor *bottomTitleColor = nil;
+    
+    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
+        topTitleColor = [UIColor whiteColor];
+        bottomTitleColor = [UIColor whiteColor];
+    } else {
+        topTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        bottomTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+    }
+    
+    UIFont *topTitleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
+    UIFont *bottomTitleFont1 = [UIFont ssj_pingFangRegularFontOfSize:24];
+    UIFont *bottomTitleFont2 = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+    
     SSJFinancingDetailHeadeViewCellItem *surplusItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:surplusTitle
-                                                                                   bottomTitle:surplusValue
-                                                                                 topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha]
-                                                                              bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha]
-                                                                                                topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6]
-                                                                               bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:24] contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                                                 bottomTitle:surplusValue
+                                                                                               topTitleColor:topTitleColor
+                                                                                            bottomTitleColor:bottomTitleColor
+                                                                                                topTitleFont:topTitleFont
+                                                                                             bottomTitleFont:bottomTitleFont1 contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *sumItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:sumTitle
-                                                                               bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
-                                                                             topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha]
-                                                                          bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha]
-                                                                              topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6]
-                                                                           bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]
-                                                                             contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                                             bottomTitle:[NSString stringWithFormat:@"%.2f", loanSum]
+                                                                                           topTitleColor:topTitleColor
+                                                                                        bottomTitleColor:bottomTitleColor
+                                                                                            topTitleFont:topTitleFont
+                                                                                         bottomTitleFont:bottomTitleFont2
+                                                                                           contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *interestItem = nil;
     if (interest > 0) {
         interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:interestTitle
-                                                          bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
-                                                        topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha]
-                                                     bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha]
-                                                         topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6]
-                                                      bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]
-                                                        contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
+                                                               topTitleColor:topTitleColor
+                                                            bottomTitleColor:bottomTitleColor
+                                                                topTitleFont:topTitleFont
+                                                             bottomTitleFont:bottomTitleFont2
+                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     } else {
         interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
-                                                          bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
-                                                          topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha]
-                                                          bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha]
-                                                         topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6]
-                                                      bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]
-                                                        contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
+                                                               topTitleColor:topTitleColor
+                                                            bottomTitleColor:bottomTitleColor
+                                                                topTitleFont:topTitleFont
+                                                             bottomTitleFont:bottomTitleFont2
+                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     }
     
     SSJFinancingDetailHeadeViewCellItem *lenderItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:lenderTitle
-                                                                                  bottomTitle:self.loanModel.lender
-                                                                                topTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha]
-                                                                             bottomTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha]
-                                                                                 topTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6]
-                                                                              bottomTitleFont:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3]
-                                                                                contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+                                                                                                bottomTitle:self.loanModel.lender
+                                                                                              topTitleColor:topTitleColor
+                                                                                           bottomTitleColor:bottomTitleColor
+                                                                                               topTitleFont:topTitleFont
+                                                                                            bottomTitleFont:bottomTitleFont2
+                                                                                              contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     _headerItems = @[@[surplusItem], @[sumItem, interestItem, lenderItem]];
 }
@@ -719,7 +732,6 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     if (!_headerView) {
         _headerView = [[SSJFinancingDetailHeadeView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 174)];
         _headerView.backgroundColor = [UIColor clearColor];
-        _headerView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
         _headerView.verticalSeparatorInset = UIEdgeInsetsMake(22, 0, 22, 0);
         _headerView.dataSource = self;
