@@ -87,7 +87,7 @@
                 make.bottom.mas_equalTo(self.rankL.mas_centerY).offset(-2);
                 make.left.mas_equalTo(self.iconImageView.mas_right).offset(10);
                 make.height.greaterThanOrEqualTo(0);
-                make.right.mas_equalTo(self.moneyL.mas_left);
+                make.right.mas_equalTo(self.moneyL.mas_left).offset(-5);
             }];
             
             [self.memoL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -100,7 +100,7 @@
         } else {
             [self.nameL mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.mas_equalTo(self.rankL);
-                make.left.mas_equalTo(self.iconImageView.mas_right).offset(10);
+                make.left.mas_equalTo(self.iconImageView.mas_right).offset(10).offset(5);
                 make.bottom.mas_equalTo(self.contentView.mas_bottom).offset(-32);
                 make.right.mas_equalTo(self.moneyL.mas_left);
             }];
@@ -165,6 +165,10 @@
 - (UIImageView *)iconImageView {
     if (!_iconImageView) {
         _iconImageView = [[UIImageView alloc] init];
+        CAShapeLayer *layer = [CAShapeLayer layer];
+        UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 40, 40) cornerRadius:20];
+        layer.path = path.CGPath;
+        _iconImageView.layer.mask = layer;
     }
     return _iconImageView;
 }

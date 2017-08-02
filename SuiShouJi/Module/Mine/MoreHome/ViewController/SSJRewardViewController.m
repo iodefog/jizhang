@@ -403,8 +403,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _rewarkNotetTextF = [[SSJCustomTextView alloc] init];
         _rewarkNotetTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _rewarkNotetTextF.text = @"谢谢你的爱，小鱼会继续努力哒~谢谢你的爱，小鱼会继续努力哒~";
-        _rewarkAmountTextF.placeholder = @"请输入50字以内的留言哦";
-//        _rewarkNotetTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _rewarkNotetTextF.placeholder = @"请输入50字以内的留言哦";
         _rewarkNotetTextF.delegate = self;
     }
     return _rewarkNotetTextF;
@@ -431,7 +430,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_changePayMethodBtn) {
         _changePayMethodBtn = [[UIButton alloc] init];
         _changePayMethodBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        NSString *oldStr = @"使用微信付款，更换";
+        NSString *oldStr = @"使用支付宝付款，更换";
         NSString *tarStr = @"更换";
         NSMutableAttributedString *attStr = [oldStr attributeStrWithTargetStr:oldStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]];
         [attStr addAttribute:NSForegroundColorAttributeName value:SSJ_MAIN_COLOR range:[oldStr rangeOfString:tarStr]];
@@ -459,7 +458,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             @strongify(self);
             self.payMethod = selectIndex;
             //更新文字
-            NSString *oldStr = selectIndex == SSJMethodOfPaymentAlipay ? @"使用微信付款，更换" : @"使用支付宝付款，更换";
+            NSString *oldStr = selectIndex == SSJMethodOfPaymentWeChat ? @"使用微信付款，更换" : @"使用支付宝付款，更换";
             NSString *tarStr = @"更换";
             NSMutableAttributedString *attStr = [oldStr attributeStrWithTargetStr:oldStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]];
             [attStr addAttribute:NSForegroundColorAttributeName value:SSJ_MAIN_COLOR range:[oldStr rangeOfString:tarStr]];
