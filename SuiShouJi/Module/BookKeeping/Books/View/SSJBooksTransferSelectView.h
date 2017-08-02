@@ -26,5 +26,7 @@ typedef NS_ENUM(NSInteger, SSJBooksTransferViewType) {
 
 @property (nonatomic, copy) void(^transferInSelectButtonClick)();
 
+@property (nonatomic) BOOL selectable; 
+
 
 @end

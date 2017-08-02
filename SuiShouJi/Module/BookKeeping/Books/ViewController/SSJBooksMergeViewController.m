@@ -139,6 +139,7 @@
 - (SSJBooksTransferSelectView *)transferInBookBackView {
     if (!_transferInBookBackView) {
         _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
+        _transferInBookBackView.selectable = YES;
         _transferInBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         @weakify(self);
         _transferInBookBackView.transferInSelectButtonClick = ^{
@@ -158,6 +159,7 @@
 - (SSJBooksTransferSelectView *)transferOutBookBackView {
     if (!_transferOutBookBackView) {
         _transferOutBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferOut];
+        _transferOutBookBackView.selectable = NO;
         _transferOutBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
     return _transferOutBookBackView;
@@ -238,9 +240,13 @@
         SSJPRINT(@"转出账户不能为空");
     }
     
-    NSNumber *chargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferOutBooksItem.booksId];
+    NSNumber *transfeOutChargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferOutBooksItem.booksId];
     
-    self.transferOutBookBackView.chargeCount = chargeCount;
+    NSNumber *transfeInChargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferInBooksItem.booksId];
+    
+    self.transferOutBookBackView.chargeCount = transfeOutChargeCount;
+    
+    self.transferInBookBackView.chargeCount = transfeInChargeCount;
     
     self.transferOutBookBackView.booksTypeItem = self.transferOutBooksItem;
     
@@ -259,6 +265,7 @@
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;
+        [self updateWithBookData];
     } failure:^(NSError *error) {
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = NO;

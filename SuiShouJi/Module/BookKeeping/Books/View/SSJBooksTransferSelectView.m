@@ -182,9 +182,22 @@
         self.chargeCountLab.hidden = YES;
         self.chargeCountTitleLab.hidden = YES;
         self.booksSelectLab.hidden = NO;
-    }
+    } 
     
     [self setNeedsUpdateConstraints];
+}
+
+- (void)setSelectable:(BOOL)selectable {
+    _selectable = selectable;
+    self.arrowImage.hidden = !_selectable;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (_selectable) {
+        if (self.transferInSelectButtonClick) {
+            self.transferInSelectButtonClick();
+        }
+    }
 }
 
 - (void)setChargeCount:(NSNumber *)chargeCount {
