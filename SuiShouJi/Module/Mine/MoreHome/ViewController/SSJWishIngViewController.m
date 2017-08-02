@@ -32,7 +32,6 @@
 @end
 
 @implementation SSJWishIngViewController
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.stateL];
@@ -59,6 +58,11 @@
     } failure:^(NSError *error) {
         [SSJAlertViewAdapter showError:error];
     }];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.showAnimation = YES;
 }
 
 - (void)updateViewConstraints {
@@ -103,7 +107,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
+    SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView animation:self.showAnimation];
     cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     cell.wishSaveMoneyBlock = ^(SSJWishModel *item) {
         if (item.status == SSJWishStateTermination) {//终止

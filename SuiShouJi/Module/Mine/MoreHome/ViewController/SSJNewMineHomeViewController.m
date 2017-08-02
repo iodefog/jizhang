@@ -167,6 +167,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     if ([item.title isEqualToString:kTitle0]) {
         if ([SSJWishHelper queryHasWishsWithError:nil]) {
             SSJWishManageViewController *wishManageVC = [[SSJWishManageViewController alloc] init];
+            wishManageVC.showAnimation = NO;
             [self.navigationController pushViewController:wishManageVC animated:YES];
             return;
         }

@@ -11,7 +11,7 @@
 @interface SSJWishListTableViewCell : SSJBaseTableViewCell
 
 
-+ (SSJWishListTableViewCell *)cellWithTableView:(UITableView *)tableView;
++ (SSJWishListTableViewCell *)cellWithTableView:(UITableView *)tableView animation:(BOOL)animation;
 
 typedef void(^SSJWishSaveMoneyBlock)(SSJWishModel *item);
 @property (nonatomic, copy) SSJWishSaveMoneyBlock wishSaveMoneyBlock;

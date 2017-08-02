@@ -8,6 +8,9 @@
 
 #import "SSJWishManageViewController.h"
 #import "SSJMakeWishViewController.h"
+#import "SSJWishIngViewController.h"
+#import "SSJWishFinishedViewController.h"
+
 #define kbtnSpace 0
 #define kbtnHeigh 43
 @interface SSJWishManageViewController ()<UIPageViewControllerDataSource,UIPageViewControllerDelegate,UIScrollViewDelegate>
@@ -18,7 +21,12 @@
     NSInteger _curPage;
     UIView *_inidicatorView;//按钮下面的横线
 }
+/**
+ <#注释#>
+ */
+@property (nonatomic, weak) SSJWishIngViewController *wishIngVC;
 
+@property (nonatomic, weak) SSJWishFinishedViewController *wishFinishedVC;
 @end
 
 @implementation SSJWishManageViewController
@@ -90,12 +98,27 @@
 - (void)createVCArray
 {
     _vcArray = [NSMutableArray array];
-    NSArray *vcArray = @[@"SSJWishIngViewController",@"SSJWishFinishedViewController"];
-    for (NSInteger i=0; i<vcArray.count; i++) {
-        Class cls = NSClassFromString(vcArray[i]);
-        UIViewController *vc = [[cls alloc] init];
-        [_vcArray addObject:vc];
-    }
+//    NSArray *vcArray = @[@"SSJWishIngViewController",@"SSJWishFinishedViewController"];
+//    for (NSInteger i=0; i<vcArray.count; i++) {
+//        Class cls = NSClassFromString(vcArray[i]);
+//        UIViewController *vc = [[cls alloc] init];
+//        if (i == 0) {
+//            self.wishIngVC = vc;
+//        }else if (i==1) {
+//            self.wishFinishedVC = vc;
+//        }
+//        [_vcArray addObject:vc];
+//    }
+    
+    SSJWishIngViewController *wishIngVC = [[SSJWishIngViewController alloc] init];
+    SSJWishFinishedViewController *wishFinishedVC = [[SSJWishFinishedViewController alloc] init];
+    wishIngVC.showAnimation = wishFinishedVC.showAnimation = self.isShowAnimation;
+    self.wishIngVC = wishIngVC;
+    self.wishFinishedVC = wishFinishedVC;
+    
+    [_vcArray addObject:self.wishIngVC];
+    [_vcArray addObject:self.wishFinishedVC];
+    self.showAnimation = YES;
 }
 
 - (void)createPageVC
@@ -112,6 +135,7 @@
         }
     }
 }
+
 
 #pragma mark - Private
 - (void)updateAppearanceAfterThemeChanged {

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "SSJBaseViewController.h"
 @interface SSJWishManageViewController : SSJBaseViewController
-
+/**是否显示动画*/
+@property (nonatomic, assign, getter=isShowAnimation) BOOL showAnimation;
 @end

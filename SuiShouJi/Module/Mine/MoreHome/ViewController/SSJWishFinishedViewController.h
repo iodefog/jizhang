@@ -9,5 +9,6 @@
 #import "SSJBaseViewController.h"
 
 @interface SSJWishFinishedViewController : SSJBaseViewController
-
+/**是否显示动画*/
+@property (nonatomic, assign) BOOL showAnimation;
 @end
