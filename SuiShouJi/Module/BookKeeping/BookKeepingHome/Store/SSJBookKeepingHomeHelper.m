@@ -71,6 +71,7 @@ NSString *const SSJMonthSumDicKey = @"SSJMonthSumDicKey";
             item.billDetailDate = [chargeResult stringForColumn:@"cdetaildate"];
             item.memberNickname = [chargeResult stringForColumn:@"cmark"];
             item.idType = [chargeResult intForColumn:@"ichargetype"];
+            item.sundryId = [chargeResult stringForColumn:@"cid"];
             
             if (![item.billDate isEqualToString:lastDate]) {
                 SSJBookKeepingHomeListItem *listItem = [[SSJBookKeepingHomeListItem alloc]init];

@@ -206,18 +206,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             [SSJAnaliyticsManager event:@"addRecord_changeBooks"];//记一笔-切换账本
             NSObject<SSJBooksItemProtocol> *bookItem = [wself.booksItems ssj_safeObjectAtIndex:naviBar.selectedTitleIndex];
             wself.item.booksId = bookItem.booksId;
-            if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
-                wself.item.sundryId = nil;
-                wself.item.idType = SSJChargeIdTypeNormal;
-            } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
-                wself.item.sundryId = bookItem.booksId;
-                wself.item.idType = SSJChargeIdTypeShareBooks;
-            }
             [wself.currentInput becomeFirstResponder];
             [[wself loadBillTypeSignal] subscribeError:^(NSError *error) {
                 [SSJAlertViewAdapter showError:error];
             } completed:NULL];
-            wself.accessoryView.memberBtn.hidden = (wself.item.idType == SSJChargeIdTypeShareBooks);
+            wself.accessoryView.memberBtn.hidden = [bookItem isKindOfClass:[SSJShareBookItem class]];
         };
         _customNaviBar.selectBillTypeHandle = ^(SSJRecordMakingCustomNavigationBar *naviBar) {
             [wself segmentPressed];
@@ -704,7 +697,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         } completed:^{
             NSInteger selectedIndex = -1;
             NSMutableArray *bookItems = [[NSMutableArray alloc] initWithCapacity:self.booksItems.count];
-            
+            BOOL isSharedBook = NO;
             for (int i = 0; i < self.booksItems.count; i ++) {
                 NSObject<SSJBooksItemProtocol> *item = self.booksItems[i];
                 NSString *iconName = nil;
@@ -716,20 +709,14 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 [bookItems addObject:[SSJRecordMakingCustomNavigationBarBookItem itemWithTitle:item.booksName iconName:iconName]];
                 if ([item.booksId isEqualToString:self.item.booksId]) {
                     selectedIndex = i;
-                    if ([item isKindOfClass:[SSJBooksTypeItem class]]) {
-                        self.item.sundryId = nil;
-                        self.item.idType = SSJChargeIdTypeNormal;
-                    } else if ([item isKindOfClass:[SSJShareBookItem class]]) {
-                        self.item.sundryId = self.item.booksId;
-                        self.item.idType = SSJChargeIdTypeShareBooks;
-                    }
+                    isSharedBook = [item isKindOfClass:[SSJShareBookItem class]];
                 }
             }
             
-            self.accessoryView.memberBtn.hidden = (self.item.idType == SSJChargeIdTypeShareBooks);
+            self.accessoryView.memberBtn.hidden = isSharedBook;
             self.customNaviBar.bookItems = bookItems;
             self.customNaviBar.selectedTitleIndex = selectedIndex;
-            if ((self.item.idType == SSJChargeIdTypeShareBooks && self.edited)
+            if ((isSharedBook && self.edited)
                 || bookItems.count <= 1) {
                 self.customNaviBar.canSelectTitle = NO;
             } else {
@@ -899,6 +886,18 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     self.item.money = _billTypeInputView.moneyInput.text;
     self.item.chargeMemo = _accessoryView.memoView.text;
     self.item.membersItem = self.memberSelectView.selectedMemberItems;
+    
+    NSObject<SSJBooksItemProtocol> *bookItem = [self.booksItems ssj_safeObjectAtIndex:self.customNaviBar.selectedTitleIndex];
+    if ([bookItem isKindOfClass:[SSJBooksTypeItem class]]) {
+        // 如果是编辑周期记账流水，不改变原有的流水类型，如果改变了，又会生成一笔周期流水
+        if (self.item.idType != SSJChargeIdTypeCircleConfig) {
+            self.item.sundryId = nil;
+            self.item.idType = SSJChargeIdTypeNormal;
+        }
+    } else if ([bookItem isKindOfClass:[SSJShareBookItem class]]) {
+        self.item.sundryId = bookItem.booksId;
+        self.item.idType = SSJChargeIdTypeShareBooks;
+    }
     
     if (![self verifyItem]) {
         return;

@@ -152,6 +152,7 @@
             item.booksId = [rs stringForColumn:@"cbooksid"];
             item.booksId = item.booksId.length ? item.booksId : SSJUSERID();
             item.idType = [rs intForColumn:@"ichargetype"];
+            item.sundryId = [rs stringForColumn:@"cid"];
         }
         [rs close];
         
