@@ -16,6 +16,7 @@
 #import "SSJMobileNoBindingDetailViewController.h"
 #import "SSJSettingPasswordViewController.h"
 #import "SSJNavigationController.h"
+#import "SSJDataMergeSettingViewController.h"
 
 #import "SSJMineHomeTabelviewCell.h"
 
@@ -131,8 +132,8 @@ static NSString *const kClearDataTitle = @"清理数据";
         SSJClearDataViewController *clearDataVC = [[SSJClearDataViewController alloc] init];
         [self.navigationController pushViewController:clearDataVC animated:YES];
     } else if ([title isEqualToString:kDataMergeTitle]) {// 数据
-        SSJClearDataViewController *clearDataVC = [[SSJClearDataViewController alloc] init];
-        [self.navigationController pushViewController:clearDataVC animated:YES];
+        SSJDataMergeSettingViewController *mergeVC = [[SSJDataMergeSettingViewController alloc] init];
+        [self.navigationController pushViewController:mergeVC animated:YES];
     }
 }
 

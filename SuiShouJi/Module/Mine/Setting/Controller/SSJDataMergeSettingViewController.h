@@ -6,8 +6,8 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJBaseViewController.h"
+#import "SSJNewBaseTableViewController.h"
 
-@interface SSJDataMergeSettingViewController : SSJBaseViewController
+@interface SSJDataMergeSettingViewController : SSJNewBaseTableViewController
 
 @end

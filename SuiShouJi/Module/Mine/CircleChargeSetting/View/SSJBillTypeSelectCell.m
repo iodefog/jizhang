@@ -30,15 +30,14 @@
 
 -(void)layoutSubviews{
     [super layoutSubviews];
-    self.cellImageView.size = CGSizeMake(33, 33);
-    self.cellImageView.left = 10;
+    self.cellImageView.size = CGSizeMake(20, 20);
+    self.cellImageView.left = 15;
     self.cellImageView.centerY = self.contentView.height / 2;
-    self.titleLabel.left = self.cellImageView.right + 10;
+    self.titleLabel.left = self.cellImageView.right + 15;
     self.titleLabel.centerY = self.contentView.height / 2;
     self.checkMarkImageView.size = CGSizeMake(24, 24);
     self.checkMarkImageView.right = self.contentView.width - 10;
     self.checkMarkImageView.centerY = self.contentView.height / 2;
-
 }
 
 -(UILabel *)titleLabel{

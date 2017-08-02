@@ -31,7 +31,9 @@
 
 @property (nonatomic, strong) NSArray *allBooksItem;
 
-@property (nonatomic, strong) SSJBooksSelectView *booksSelectView;
+@property (nonatomic, strong) SSJBooksSelectView *transferInBooksSelectView;
+
+@property (nonatomic, strong) SSJBooksSelectView *transferOutBooksSelectView;
 
 @property (nonatomic, strong) UIImageView *warningImage;
 
@@ -148,8 +150,8 @@
             if (!allBooks.count) {
                 [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
             } else {
-                self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
-                [self.booksSelectView showWithSelectedItem:self.transferInBooksItem];
+                self.transferInBooksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
+                [self.transferInBooksSelectView showWithSelectedItem:self.transferInBooksItem];
             }
         };
     }
@@ -168,8 +170,8 @@
             if (!allBooks.count) {
                 [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
             } else {
-                self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
-                [self.booksSelectView showWithSelectedItem:self.transferOutBooksItem];
+                self.transferOutBooksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
+                [self.transferOutBooksSelectView showWithSelectedItem:self.transferOutBooksItem];
             }
         };
     }
@@ -207,18 +209,33 @@
     return _scrollView;
 }
 
-- (SSJBooksSelectView *)booksSelectView {
-    if (!_booksSelectView) {
-        _booksSelectView = [[SSJBooksSelectView alloc] init];
+- (SSJBooksSelectView *)transferInBooksSelectView {
+    if (!_transferInBooksSelectView) {
+        _transferInBooksSelectView = [[SSJBooksSelectView alloc] init];
         @weakify(self);
-        _booksSelectView.booksTypeSelectBlock = ^(SSJBaseCellItem<SSJBooksItemProtocol> *item) {
+        _transferInBooksSelectView.booksTypeSelectBlock = ^(SSJBaseCellItem<SSJBooksItemProtocol> *item) {
             @strongify(self);
             self.transferInBooksItem = item;
             [self updateWithBookData];
         };
     }
-    return _booksSelectView;
+    return _transferInBooksSelectView;
 }
+
+- (SSJBooksSelectView *)transferOutBooksSelectView {
+    if (!_transferOutBooksSelectView) {
+        _transferOutBooksSelectView = [[SSJBooksSelectView alloc] init];
+        @weakify(self);
+        _transferOutBooksSelectView.booksTypeSelectBlock = ^(SSJBaseCellItem<SSJBooksItemProtocol> *item) {
+            @strongify(self);
+            self.transferOutBooksItem = item;
+            [self updateWithBookData];
+        };
+    }
+    return _transferOutBooksSelectView;
+}
+
+
 
 - (UILabel *)warningLab {
     if (!_warningLab) {
