@@ -22,7 +22,7 @@
 #define NUM @"+-.0123456789"
 
 
-@interface SSJNewFundingViewController ()
+@interface SSJNewFundingViewController () <UITextFieldDelegate>
 
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableview;
 
@@ -159,6 +159,7 @@
     if (!NewFundingCell) {
         NewFundingCell = [[SSJModifyFundingTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         NewFundingCell.cellDetail.returnKeyType = UIReturnKeyDone;
+        NewFundingCell.cellDetail.delegate = self;
     }
     NewFundingCell.cellTitle = [self.titles ssj_objectAtIndexPath:indexPath];
     NewFundingCell.cellImage = [self.images ssj_objectAtIndexPath:indexPath];
@@ -169,22 +170,18 @@
         NewFundingCell.cellDetail.text = self.item.fundingName;
         NewFundingCell.cellDetail.tag = 100;
         _nameTextField = NewFundingCell.cellDetail;
-        _nameTextField.delegate = self;
-
     } else if ([title isEqualToString:@"账户余额"]) {
         _amountTextField = NewFundingCell.cellDetail;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入账户余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         NewFundingCell.cellDetail.text = self.item.fundingAmount != 0 ? [[NSString stringWithFormat:@"%f",self.item.fundingAmount]ssj_moneyDecimalDisplayWithDigits:2] :@"";
         NewFundingCell.cellDetail.tag = 101;
         NewFundingCell.cellDetail.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-        _amountTextField.delegate = self;
     } else if ([title isEqualToString:@"备注"]) {
         NewFundingCell.selectionStyle = UITableViewCellSelectionStyleNone;
         NewFundingCell.cellDetail.text = self.item.fundingMemo;
         NewFundingCell.cellDetail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         NewFundingCell.cellDetail.tag = 102;
         _memoTextField = NewFundingCell.cellDetail;
-        _memoTextField.delegate = self;
     } else if ([title isEqualToString:@"账户类型"]) {
         NewFundingCell.typeImage.image = [UIImage imageNamed:self.item.fundingIcon];
         NewFundingCell.typeTitle.text = self.item.fundingParentName;
@@ -245,6 +242,11 @@
             self.item.fundingMemo = textField.text;
         }
     }
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
 }
 
 #pragma mark - Event
