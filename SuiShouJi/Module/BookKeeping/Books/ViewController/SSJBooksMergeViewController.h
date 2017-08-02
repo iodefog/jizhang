@@ -15,5 +15,8 @@
 
 @property (nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *transferOutBooksItem;
 
+@property (nonatomic) BOOL transferInSelectable;
+
+@property (nonatomic) BOOL transferOutSelectable;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "SSJWishProgressView.h"
 
-static NSTimeInterval animationTime = 1;
+static NSTimeInterval animationTime = 0.7;
 @interface SSJWishProgressView ()
 
 @property(nonatomic, strong, nullable) UIColor *progressTintColor;
@@ -20,6 +20,9 @@ static NSTimeInterval animationTime = 1;
 @property (nonatomic, strong) UIView *trackView;
 
 @property (nonatomic, strong) UIButton *progressBtn;
+
+/**进度*/
+@property (nonatomic, assign) float progress;
 @end
 
 @implementation SSJWishProgressView
@@ -42,7 +45,7 @@ static NSTimeInterval animationTime = 1;
     self.progressView.frame = CGRectMake(0, 0, self.progress * self.width, self.trackView.height);
     self.progressBtn.centerX = self.progressView.width;
 }
-- (void)setProgress:(float)progress {
+- (void)setProgress:(double)progress withAnimation:(BOOL)isAnimation{
     if (progress > 1) {
         progress = 1;
     }
@@ -50,7 +53,12 @@ static NSTimeInterval animationTime = 1;
     [self.progressBtn setTitle:[NSString stringWithFormat:@"%.f%@",progress * 100,@"%"] forState:UIControlStateNormal];
     
     @weakify(self);
-    [UIView animateWithDuration:progress * animationTime animations:^{
+    NSTimeInterval animTime = 0;
+    if (isAnimation == YES) {
+        animTime = (progress * animationTime) < 0.4 ? 0.4 : (progress * animationTime);
+    }
+    
+    [UIView animateWithDuration:animTime animations:^{
         @strongify(self);
         self.progressView.width = progress * self.width;
         self.progressBtn.centerX = self.progressView.width;

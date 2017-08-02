@@ -131,7 +131,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     }
     
     [UIView animateWithDuration:1 animations:^{
-        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ?: 1;
+        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
         CGFloat height = weakSelf.saveFooterView.height -
         weakSelf.goldCoinsImageView.height * scale;
         weakSelf.goldCoinsImageView.top = height;

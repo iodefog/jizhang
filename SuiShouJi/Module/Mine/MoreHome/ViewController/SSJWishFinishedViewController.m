@@ -57,6 +57,11 @@
     }];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.showAnimation = YES;
+}
+
 - (void)updateViewConstraints {
     [self.stateL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.mas_equalTo(0);
@@ -102,7 +107,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView];
+    SSJWishListTableViewCell *cell = [SSJWishListTableViewCell cellWithTableView:tableView animation:self.showAnimation];
     cell.cellItem = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     return cell;
 }

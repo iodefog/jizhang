@@ -28,6 +28,9 @@
 @property (nonatomic, strong) UILabel *stateLabel;
 
 @property (nonatomic, strong) UIButton *stateBtn;
+
+/**是否显示动画*/
+@property (nonatomic, assign, getter=isShowAnimation) BOOL showAnimation;
 @end
 
 
@@ -50,13 +53,14 @@
     return self;
 }
 
-+ (SSJWishListTableViewCell *)cellWithTableView:(UITableView *)tableView {
++ (SSJWishListTableViewCell *)cellWithTableView:(UITableView *)tableView animation:(BOOL)animation{
     static NSString *cellId = @"SSJWishListTableViewCellId";
     SSJWishListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
         cell = [[SSJWishListTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
+    cell.showAnimation = animation;
     return cell;
 }
 
@@ -71,7 +75,8 @@
             self.wishProgressView.width = self.width - 30;
             self.wishProgressView.height = 37;
         }
-        self.wishProgressView.progress = [item.wishSaveMoney floatValue] / [item.wishMoney floatValue];
+        
+        [self.wishProgressView setProgress:[item.wishSaveMoney doubleValue] / [item.wishMoney doubleValue] withAnimation:self.isShowAnimation];
         [self updateStateBtnAppearance];
     }
     
@@ -159,6 +164,7 @@
         self.stateLabel.text = @"终止";
         self.stateBtn.hidden = YES;
         self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor alpha:0.5];
     } else if (item.status == SSJWishStateFinish) {//完成
         if ([item.wishSaveMoney doubleValue] > [item.wishMoney doubleValue]) {
             self.stateLabel.text = @"超额完成";
@@ -168,6 +174,7 @@
         self.stateBtn.hidden = YES;
         self.stateLabel.hidden = NO;
         self.stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor alpha:0.5];
     } else {//进行中
         [self.stateBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.stateBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
@@ -175,6 +182,7 @@
         [self.stateBtn setTitle:@"存" forState:UIControlStateNormal];
         self.stateLabel.hidden = YES;
         self.stateBtn.hidden = NO;
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
     }
 }
 

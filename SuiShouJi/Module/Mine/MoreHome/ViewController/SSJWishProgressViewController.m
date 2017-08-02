@@ -168,7 +168,8 @@ static CGFloat defImageHeight = 402;
     [self setUpNav];
     [self updateBottomView];
     self.wishTitleL.text = self.wishModel.wishName;
-    self.wishProgressView.progress = [self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue];
+//    self.wishProgressView.progress = [self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue];
+    [self.wishProgressView setProgress:[self.wishModel.wishSaveMoney doubleValue] / [self.wishModel.wishMoney doubleValue] withAnimation:YES];
     self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%.2lf",[self.wishModel.wishSaveMoney doubleValue]];
     self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%.2lf",[self.wishModel.wishMoney doubleValue]];
     
@@ -215,6 +216,7 @@ static CGFloat defImageHeight = 402;
         [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] forState:UIControlStateNormal];
         [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         self.withdrawBtn.hidden = NO;
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
     }else if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         if ([self.wishModel.wishSaveMoney doubleValue] == 0) {//未存钱
             [self.saveBtn ssj_setBorderWidth:0];
@@ -232,12 +234,14 @@ static CGFloat defImageHeight = 402;
         [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
         [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         self.bottomView.hidden = NO;
-        
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
        
     } else if (self.wishModel.status == SSJWishStateFinish) {//完成
         self.bottomView.hidden = YES;
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor alpha:0.5] ;
     } else if (self.wishModel.status == SSJWishStateTermination) {//终止
         self.bottomView.hidden = YES;
+        self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor alpha:0.5];
     }
 
 }
@@ -364,9 +368,8 @@ static CGFloat defImageHeight = 402;
     [self.finishBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
     [self.finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
 
-    [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
+    [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor] forState:UIControlStateDisabled];
-    
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
@@ -419,6 +422,7 @@ static CGFloat defImageHeight = 402;
 - (UIView *)topBg {
     if (!_topBg) {
         _topBg = [[UIView alloc] init];
+        _topBg.layer.masksToBounds = YES;
     }
     return _topBg;
 }

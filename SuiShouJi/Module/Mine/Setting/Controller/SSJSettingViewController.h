@@ -8,7 +8,6 @@
 
 #import "SSJNewBaseTableViewController.h"
 
-
 @interface SSJSettingViewController : SSJNewBaseTableViewController
 
 @end
