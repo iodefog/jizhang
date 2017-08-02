@@ -715,6 +715,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             calendarVC.billType = SSJBillTypeSurplus;
             break;
     }
+    calendarVC.userId = SSJAllMembersId;
     calendarVC.booksId = self.currentBooksItem.booksId;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];

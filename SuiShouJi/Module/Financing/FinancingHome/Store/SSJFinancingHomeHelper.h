@@ -18,14 +18,6 @@
  */
 + (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure;
 
-/**
- *  查询所有资金的总额
- *
- *  @param success 查询成功的回调
- *  @param failure 查询失败的回调
- */
-+ (void)queryForFundingSumMoney:(void(^)(double result))success failure:(void (^)(NSError *error))failure;
-
 + (void)SaveFundingOderWithItems:(NSArray <SSJFinancingHomeitem *> *)items error:(NSError **)error;
 
 

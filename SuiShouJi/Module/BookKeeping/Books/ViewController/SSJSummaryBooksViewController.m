@@ -453,6 +453,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     calendarVC.title = @"自定义时间";
     calendarVC.billType = SSJBillTypeSurplus;
     calendarVC.booksId = SSJAllBooksIds;
+    calendarVC.userId = SSJUSERID();
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         wself.header.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
     };

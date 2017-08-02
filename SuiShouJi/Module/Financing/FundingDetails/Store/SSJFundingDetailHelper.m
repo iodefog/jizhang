@@ -27,7 +27,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         SSJFinancingHomeitem *fundingItem = [[SSJFinancingHomeitem alloc]init];
         NSString *userid = SSJUSERID();
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,1,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.*, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_USER_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.CBILLID and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan, (int)SSJShareBooksMemberStateNormal];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,1,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.cicoin, b.cname, b.ccolor, b.itype, c.lender, c.itype as loantype from BK_USER_CHARGE a, BK_USER_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan, (int)SSJShareBooksMemberStateNormal];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -56,7 +56,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.loanSource = [resultSet stringForColumn:@"lender"];
             item.loanType = [resultSet intForColumn:@"loantype"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
-            item.fundParent = [resultSet stringForColumn:@"CPARENT"];
             double money = [item.money doubleValue];
             item.sundryId = [resultSet stringForColumn:@"sundryid"];
             if (item.incomeOrExpence) {
@@ -196,7 +195,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.*  from BK_USER_CHARGE a, BK_USER_BILL_TYPE b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.IBILLID = b.CBILLID and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.IFUNSID = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.cicoin, b.cname, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.ifunsid = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
@@ -425,7 +424,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                      failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
-        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,1,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.* from BK_USER_CHARGE a, BK_USER_BILL_TYPE b where a.IBILLID = b.CBILLID and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbooksid  = '%@' and a.cbilldate <= '%@' and a.ibillid <> '13' and a.ibillid <> '14' order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID, booksId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
+        NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,1,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.cicoin, b.cname, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbooksid  = '%@' and a.cbilldate <= '%@' and a.ibillid <> '13' and a.ibillid <> '14' order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc", ID, booksId, [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
         if (!resultSet) {
             if (failure) {
@@ -452,7 +451,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.booksId = [resultSet stringForColumn:@"cbooksid"];
             item.money = [resultSet stringForColumn:@"IMONEY"];
             item.idType = [resultSet intForColumn:@"ichargetype"];
-            item.fundParent = [resultSet stringForColumn:@"CPARENT"];
             double money = [item.money doubleValue];
             item.sundryId = [resultSet stringForColumn:@"sundryid"];
             if (item.incomeOrExpence) {

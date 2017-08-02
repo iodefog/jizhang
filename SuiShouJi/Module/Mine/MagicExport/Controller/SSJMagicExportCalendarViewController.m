@@ -39,7 +39,7 @@
     [super viewDidLoad];
     
     [self.view ssj_showLoadingIndicator];
-    [SSJMagicExportStore queryAllBillDateWithBillId:self.billTypeId billName:self.billName billType:self.billType booksId:self.booksId containOtherMembers:self.containsOtherMember success:^(NSArray<NSDate *> * _Nonnull result) {
+    [SSJMagicExportStore queryAllBillDateWithBillId:self.billTypeId billName:self.billName billType:self.billType booksId:self.booksId userId:self.userId containsSpecialCharges:self.containsSpecialCharges success:^(NSArray<NSDate *> * _Nonnull result) {
         [self.view ssj_hideLoadingIndicator];
         if (result.count) {
             _billDates = result;

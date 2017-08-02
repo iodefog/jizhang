@@ -386,6 +386,8 @@ static NSString *const kSegmentTitleIncome = @"收入";
     [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
         SSJMagicExportCalendarViewController *calendarVC = [[SSJMagicExportCalendarViewController alloc] init];
         calendarVC.title = @"自定义时间";
+        calendarVC.billType = SSJBillTypeSurplus;
+        calendarVC.userId = self.memberId;
         calendarVC.booksId = booksId;
         calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
             wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
