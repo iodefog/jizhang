@@ -26,9 +26,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (SSJIsUserLogined()) {
-        self.titles = @[@"数据合并",@"账本合并",@"资金合并"];
+        self.titles = @[@[@"账本数据迁移",@"资金数据迁移"],@[@"账户数据合并"]];
     } else {
-        self.titles = @[@"账本合并",@"资金合并"];
+        self.titles = @[@[@"账本数据迁移",@"资金数据迁移"]];
     }
 
     // Do any additional setup after loading the view.
@@ -50,18 +50,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
-    if ([title isEqualToString:@"数据合并"]) {
+    if ([title isEqualToString:@"账户数据合并"]) {
         
-    } else if ([title isEqualToString:@"资金合并"]) {
+    } else if ([title isEqualToString:@"资金数据迁移"]) {
         SSJFundingMergeViewController *accountMerge = [[SSJFundingMergeViewController alloc] init];
         accountMerge.transferOutSelectable = YES;
         accountMerge.transferInSelectable = YES;
         accountMerge.transferType = SSJFundsTransferTypeAll;
         [self.navigationController pushViewController:accountMerge animated:YES];
 
-    } else if ([title isEqualToString:@"账本合并"]) {
+    } else if ([title isEqualToString:@"账本数据迁移"]) {
         SSJBooksMergeViewController *booksMergeVC = [[SSJBooksMergeViewController alloc] init];
         booksMergeVC.transferOutSelectable = YES;
         booksMergeVC.transferInSelectable = YES;
@@ -73,11 +73,11 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return self.titles.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.titles.count;
+    return [self.titles[section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -87,7 +87,7 @@
         mineHomeCell = [[SSJMineHomeTabelviewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     
-    NSString *title = [self.titles ssj_safeObjectAtIndex:indexPath.row];
+    NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     mineHomeCell.cellTitle = title;
     
