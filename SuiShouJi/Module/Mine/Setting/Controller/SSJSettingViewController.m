@@ -29,6 +29,7 @@ static const CGFloat kLogoutButtonHeight = 44;
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
+static NSString *const kDataMergeTitle = @"数据合并";
 static NSString *const kModifyPwdTitle = @"修改密码";
 static NSString *const kFingerPrintPwdTitle = @"指纹密码";
 static NSString *const kMotionPwdTitle = @"手势密码";
@@ -102,7 +103,7 @@ static NSString *const kClearDataTitle = @"清理数据";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     // 只有清除数据不需要用户登录，其他操作均要求登录
-    if (![title isEqualToString:kClearDataTitle]
+    if (![title isEqualToString:kClearDataTitle] && ![title isEqualToString:kDataMergeTitle]
         && !SSJIsUserLogined()) {
         [SSJAnaliyticsManager event:@"sync_setup_tologin"];
         [self login];
@@ -127,6 +128,9 @@ static NSString *const kClearDataTitle = @"清理数据";
         SSJSyncSettingViewController *syncSettingVC = [[SSJSyncSettingViewController alloc] init];
         [self.navigationController pushViewController:syncSettingVC animated:YES];
     } else if ([title isEqualToString:kClearDataTitle]) {// 清除数据
+        SSJClearDataViewController *clearDataVC = [[SSJClearDataViewController alloc] init];
+        [self.navigationController pushViewController:clearDataVC animated:YES];
+    } else if ([title isEqualToString:kDataMergeTitle]) {// 数据
         SSJClearDataViewController *clearDataVC = [[SSJClearDataViewController alloc] init];
         [self.navigationController pushViewController:clearDataVC animated:YES];
     }
@@ -228,7 +232,7 @@ static NSString *const kClearDataTitle = @"清理数据";
             }
         }
         
-        NSArray *section3 = @[kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
+        NSArray *section3 = @[kDataMergeTitle, kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
         self.titles = @[section1, section2, section3];
         [self.tableView reloadData];
         

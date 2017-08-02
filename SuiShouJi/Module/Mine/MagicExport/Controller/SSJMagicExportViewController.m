@@ -233,7 +233,7 @@
     calendarVC.selectedBeginDate = beginDate;
     calendarVC.selectedEndDate = endDate;
     calendarVC.booksId = SSJAllBooksIds;
-    calendarVC.containsOtherMember = YES;
+    calendarVC.userId = SSJUSERID();
     __weak typeof(self) weakSelf = self;
     calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
         weakSelf.beginDate = selectedBeginDate;

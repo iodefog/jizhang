@@ -483,6 +483,8 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         _editAlertView.transferHandler = ^{
             @strongify(self);
             SSJBooksMergeViewController *mergeVc = [[SSJBooksMergeViewController alloc] init];
+            mergeVc.transferInSelectable = YES;
+            mergeVc.transferOutSelectable = NO;
             mergeVc.transferOutBooksItem = self.editAlertView.booksItem;
             [self.navigationController pushViewController:mergeVc animated:YES];
         };

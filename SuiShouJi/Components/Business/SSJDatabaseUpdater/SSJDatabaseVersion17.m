@@ -73,12 +73,9 @@
                                 @"itype":billTypeInfo[@"expended"],
                                 @"cname":billTypeInfo[@"name"],
                                 @"ccolor":billTypeInfo[@"color"],
-                                @"cicoin":billTypeInfo[@"icon"],
-                                @"cwritedate":writeDateStr,
-                                @"operatortype":@0,
-                                @"iversion":@(SSJSyncVersion())};
+                                @"cicoin":billTypeInfo[@"icon"]};
         
-        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) values (:cbillid, :itype, :cname, :ccolor, :cicoin, :cwritedate, :operatortype, :iversion)" withParameterDictionary:param]) {
+        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, itype, cname, ccolor, cicoin) values (:cbillid, :itype, :cname, :ccolor, :cicoin)" withParameterDictionary:param]) {
             return db.lastError;
         }
     }

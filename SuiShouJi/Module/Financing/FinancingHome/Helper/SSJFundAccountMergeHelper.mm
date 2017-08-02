@@ -66,7 +66,7 @@
                 SSJUserChargeTable.writeDate,
                 SSJUserChargeTable.version
             } withObject:userCharge
-                                      where:SSJUserChargeTable.userId == userId]) {
+                                      where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
                         failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);

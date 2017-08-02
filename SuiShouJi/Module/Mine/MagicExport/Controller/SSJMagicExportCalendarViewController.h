@@ -35,14 +35,19 @@ NS_ASSUME_NONNULL_BEGIN
 // --------------------------------------------------------------------------------------------------------
 
 /**
+ 查询制定用户的流水日期；如果为nil就查询当前用户；如果为SSJAllMembersId就查询所有用户
+ */
+@property (nonatomic, copy) NSString *userId;
+
+/**
  账本类型id,不传则查询当前账本数据，传SSJAllBooksIds则查询所有账本数据
  */
 @property (nonatomic, copy) NSString *booksId;
 
 /**
- 是否包含其他成员流水；当booksId为SSJAllBooksIds时有效
+ 是否包含特殊流水日期（例如：平账、借贷、转账等等）；默认NO
  */
-@property (nonatomic) BOOL containsOtherMember;
+@property (nonatomic) BOOL containsSpecialCharges;
 
 /**
  默认选中的起始导出日期

@@ -365,6 +365,7 @@ static NSString *const kSSJReportFormCanYinChartCellId = @"kSSJReportFormCanYinC
         calendarVC.billType = self.billType;
         calendarVC.billName = self.billName;
         calendarVC.billTypeId = wself.billTypeID;
+        calendarVC.userId = SSJAllMembersId;
         calendarVC.completion = ^(NSDate *selectedBeginDate, NSDate *selectedEndDate) {
             wself.periodControl.customPeriod = [SSJDatePeriod datePeriodWithStartDate:selectedBeginDate endDate:selectedEndDate];
         };

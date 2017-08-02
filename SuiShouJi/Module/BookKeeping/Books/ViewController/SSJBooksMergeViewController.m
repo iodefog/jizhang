@@ -139,7 +139,7 @@
 - (SSJBooksTransferSelectView *)transferInBookBackView {
     if (!_transferInBookBackView) {
         _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
-        _transferInBookBackView.selectable = YES;
+        _transferInBookBackView.selectable = self.transferInSelectable;
         _transferInBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
         @weakify(self);
         _transferInBookBackView.transferInSelectButtonClick = ^{
@@ -159,8 +159,19 @@
 - (SSJBooksTransferSelectView *)transferOutBookBackView {
     if (!_transferOutBookBackView) {
         _transferOutBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferOut];
-        _transferOutBookBackView.selectable = NO;
+        _transferOutBookBackView.selectable = self.transferOutSelectable;
         _transferOutBookBackView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        @weakify(self);
+        _transferOutBookBackView.transferInSelectButtonClick = ^{
+            @strongify(self);
+            NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
+            if (!allBooks.count) {
+                [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
+            } else {
+                self.booksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
+                [self.booksSelectView showWithSelectedItem:self.transferOutBooksItem];
+            }
+        };
     }
     return _transferOutBookBackView;
 }

@@ -37,7 +37,6 @@
 #import "SSJInstalmentEditeViewController.h"
 #import "SSJInstalmentDetailViewController.h"
 #import "SSJBalenceChangeDetailViewController.h"
-#import "SSJNewFundingViewController.h"
 
 #import "FMDB.h"
 

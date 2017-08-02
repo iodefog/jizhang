@@ -10,6 +10,7 @@
 #import "SSJThemeAndAdviceDotItem.h"
 #import "SSJUserTableManager.h"
 @implementation SSJNewDotNetworkService
+
 - (void)requestThemeAndAdviceUpdate
 {
     self.showLodingIndicator = NO;

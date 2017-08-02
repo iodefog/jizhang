@@ -358,7 +358,7 @@
     self.userItem.loginType = [NSString stringWithFormat:@"%d", (int)self.loginType];
     self.userItem.openId = self.openId;
     
-    self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBill"]];
+    self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBillType"]];
     self.fundInfoArray = [NSArray arrayWithArray:[result objectForKey:@"fundInfo"]];
     self.booksTypeArray = [NSArray arrayWithArray:[result objectForKey:@"bookType"]];
     self.membersArray = [NSArray arrayWithArray:[result objectForKey:@"bk_member"]];
