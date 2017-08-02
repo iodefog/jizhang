@@ -32,6 +32,12 @@
 
 @property (nonatomic, strong) UILabel *targetAmountL;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIImageView *wishImageView;
+
+/**图片蒙层*/
+@property (nonatomic, strong) UIView *coverView;
+
 /**状态*/
 @property (nonatomic, strong) UIButton *stateBtn;
 
@@ -73,6 +79,8 @@
     self.title = @"心愿进度";
     
     [self.view addSubview:self.topBg];
+    [self.topBg addSubview:self.wishImageView];
+    [self.wishImageView addSubview:self.coverView];
     [self.topBg addSubview:self.wishTitleL];
     [self.topBg addSubview:self.wishProgressView];
     [self.topBg addSubview:self.saveAmountL];
@@ -164,6 +172,17 @@
     } else {
         self.finishBtn.hidden = YES;
     }
+
+    UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
+    if (!image) {
+        NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
+        image = [UIImage imageWithContentsOfFile:imgPath];
+    }
+    if (!image) {
+        [self.wishImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+    } else {
+        self.wishImageView.image = image;
+    }
     
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
@@ -252,10 +271,17 @@
 #pragma mark - Layout
 - (void)updateViewConstraints {
     [self.topBg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
-        make.right.mas_equalTo(-15);
-        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM + 13);
-        make.bottom.mas_equalTo(self.targetAmountL.mas_bottom).offset(35);
+        make.left.right.mas_equalTo(0);
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.height.mas_equalTo(200);
+    }];
+    
+    [self.wishImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
+    }];
+    
+    [self.coverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.mas_equalTo(0);
     }];
     
     [self.stateBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -319,9 +345,8 @@
 }
 
 - (void)updateAppearanceWithTheme {
-    self.wishTitleL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-    self.tableHeaderView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+    self.wishTitleL.textColor = [UIColor whiteColor];
+    self.saveAmountL.textColor = self.targetAmountL.textColor = [UIColor whiteColor];
     
     [self.bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     [self.saveBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -383,10 +408,23 @@
 - (UIView *)topBg {
     if (!_topBg) {
         _topBg = [[UIView alloc] init];
-        _topBg.layer.cornerRadius = 8;
-        _topBg.layer.masksToBounds = YES;
     }
     return _topBg;
+}
+
+- (UIImageView *)wishImageView {
+    if (!_wishImageView) {
+        _wishImageView = [[UIImageView alloc] init];
+    }
+    return _wishImageView;
+}
+
+- (UIView *)coverView {
+    if (!_coverView) {
+        _coverView = [[UIView alloc] init];
+        _coverView.backgroundColor = [UIColor ssj_colorWithHex:@"000000" alpha:0.3];
+    }
+    return _coverView;
 }
 
 - (UILabel *)wishTitleL {

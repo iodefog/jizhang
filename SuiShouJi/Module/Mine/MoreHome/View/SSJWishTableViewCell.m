@@ -30,8 +30,11 @@
     if (!cell) {
         cell = [[SSJWishTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
         cell.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        
+        UIImage *selectedImage = [UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha] size:CGSizeZero];
+        cell.selectedBackgroundView = [[UIImageView alloc] initWithImage:selectedImage];
     }
     return cell;
 

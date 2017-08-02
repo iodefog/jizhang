@@ -9,6 +9,7 @@
 #import "SSJRewardViewController.h"
 #import "SSJRewardRankView.h"
 #import "SSJPopView.h"
+#import "SSJCustomTextView.h"
 
 #import "TPKeyboardAvoidingScrollView.h"
 #import "SSJMakeWishMoneyCollectionViewCell.h"
@@ -18,7 +19,7 @@
 #import "SSJRewardRankService.h"
 
 static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
-@interface SSJRewardViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate,SSJBaseNetworkServiceDelegate>
+@interface SSJRewardViewController ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource,UITextFieldDelegate,UIGestureRecognizerDelegate,SSJBaseNetworkServiceDelegate,UITextViewDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingScrollView *scrollView;
 
@@ -44,13 +45,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 @property (nonatomic, strong) UILabel *rewarkNoteTextL;
 
-@property (nonatomic, strong) UITextField *rewarkNotetTextF;
+@property (nonatomic, strong) SSJCustomTextView *rewarkNotetTextF;
 
 @property (nonatomic, strong) UIButton *goRewarkBtn;
 
 @property (nonatomic, strong) UIButton *changePayMethodBtn;
 
-/**心愿列表数据源*/
+/**打赏列表数据源*/
 @property (nonatomic, strong) NSArray *rewarkMoneyDataArray;
 
 /**支付方式*/
@@ -351,6 +352,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (UITextField *)rewarkAmountTextF {
     if (!_rewarkAmountTextF) {
         _rewarkAmountTextF = [[UITextField alloc] init];
+        _rewarkAmountTextF.text = @"5.20";
         _rewarkAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _rewarkAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _rewarkAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
@@ -396,11 +398,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     return _rewarkNoteTextL;
 }
 
-- (UITextField *)rewarkNotetTextF {
+- (SSJCustomTextView *)rewarkNotetTextF {
     if (!_rewarkNotetTextF) {
-        _rewarkNotetTextF = [[UITextField alloc] init];
+        _rewarkNotetTextF = [[SSJCustomTextView alloc] init];
         _rewarkNotetTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        _rewarkNotetTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _rewarkNotetTextF.text = @"谢谢你的爱，小鱼会继续努力哒~谢谢你的爱，小鱼会继续努力哒~";
+        _rewarkAmountTextF.placeholder = @"请输入50字以内的留言哦";
+//        _rewarkNotetTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _rewarkNotetTextF.delegate = self;
     }
     return _rewarkNotetTextF;

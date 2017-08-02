@@ -186,7 +186,9 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (item.wishName.length) {
         self.wishNameTextF.text = item.wishName;
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self.wishNameTextF resignFirstResponder];
+    
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
@@ -198,6 +200,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     NSString *amount = [self.wishMoneyDataArray ssj_safeObjectAtIndex:indexPath.row];
     self.wishAmountTextF.text = amount;
     [self.wishAmountTextF resignFirstResponder];
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
