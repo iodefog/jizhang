@@ -43,6 +43,7 @@
             item.chargeMemo = [chargeResult stringForColumn:@"CMEMO"];
             item.sundryId = [chargeResult stringForColumn:@"ICONFIGID"];
             item.billDate = [chargeResult stringForColumn:@"CBILLDATE"];
+            item.billDetailDate = @"00:00";
             item.booksName = [chargeResult stringForColumn:@"CBOOKSNAME"];
             item.isOnOrNot = [chargeResult boolForColumn:@"ISTATE"];
             item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
@@ -83,6 +84,7 @@
         }
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
+        item.billDetailDate = @"00:00";
         item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? order by iorder limit 1", userid, @(incomeOrExpence), booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
@@ -188,7 +190,7 @@
                 }else{
                     NSString *chargeId = SSJUUID();
                     //修改流水表
-                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
+                    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, cdetaildate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,item.billDetailDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                         if (failure) {
                             SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
@@ -211,7 +213,7 @@
             }else{
                 NSString *chargeId = SSJUUID();
                 //修改流水表
-                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
+                if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cid, ichargetype, imoney, cimgurl, thumburl, cmemo, cbilldate, cdetaildate, iversion, cwritedate, operatortype, cbooksid) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",chargeId,userid,item.billId,item.fundId,item.sundryId,@(SSJChargeIdTypeCircleConfig),@([item.money doubleValue]),item.chargeImage,item.chargeThumbImage,item.chargeMemo,item.billDate,item.billDetailDate,@(SSJSyncVersion()),cwriteDate,item.booksId]) {
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
