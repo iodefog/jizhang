@@ -41,6 +41,7 @@
         [self addSubview:self.backGroundImage];
         [self addSubview:self.titleLab];
         [self addSubview:self.backWhiteView];
+        self.clipsToBounds = YES;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
     return self;
