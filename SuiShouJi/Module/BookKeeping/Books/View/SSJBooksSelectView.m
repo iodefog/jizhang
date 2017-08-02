@@ -19,6 +19,8 @@ static NSString *kCellID = @"cellID";
 
 @property (nonatomic, strong) UIImageView *accessoryView;
 
+@property (nonatomic, strong) UIView *seperatorView;
+
 @property (nonatomic, strong) SSJBaseCellItem <SSJBooksItemProtocol> *selectItem;
 
 @end
@@ -31,6 +33,7 @@ static NSString *kCellID = @"cellID";
     if (self) {
         [self addSubview:self.tableView];
         [self addSubview:self.titleLab];
+        [self addSubview:self.seperatorView];
         self.layer.cornerRadius = 12;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
     }
@@ -57,6 +60,13 @@ static NSString *kCellID = @"cellID";
         make.left.mas_equalTo(self);
         make.top.mas_equalTo(self).offset(55);
         make.bottom.mas_equalTo(self);
+    }];
+    
+    [self.seperatorView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.tableView);
+        make.centerX.mas_equalTo(self);
+        make.width.mas_equalTo(self);
+        make.height.mas_equalTo(1);
     }];
     
     [super updateConstraints];
@@ -112,16 +122,21 @@ static NSString *kCellID = @"cellID";
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
-        [_tableView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
-        [_tableView ssj_setBorderStyle:SSJBorderStyleTop];
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsZero];
         }
     }
     return _tableView;
+}
+
+- (UIView *)seperatorView {
+    if (!_seperatorView) {
+        _seperatorView = [[UIView alloc] init];
+        _seperatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+    }
+    return _seperatorView;
 }
 
 - (UIImageView *)accessoryView {
