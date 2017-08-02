@@ -297,14 +297,19 @@
             self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
             self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
-            if (billid == 1 || billid == 2) {
-                self.typeLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
-            }else if (billid == 3) {
-                self.typeLabel.text = [NSString stringWithFormat:@"由%@转入",item.transferSource];
-            }else if (billid == 4) {
-                self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
-            } else if (billid == 13 || billid == 14) {
-                self.typeLabel.text = [NSString stringWithFormat:@"%@",item.chargeMemo];
+            if (item.billId.length <= 4) {
+                if (billid == 1 || billid == 2) {
+                    self.typeLabel.text = [NSString stringWithFormat:@"余额变更(%@)",item.typeName];
+                }else if (billid == 3) {
+                    self.typeLabel.text = [NSString stringWithFormat:@"由%@转入",item.transferSource];
+                }else if (billid == 4) {
+                    self.typeLabel.text = [NSString stringWithFormat:@"转出至%@",item.transferSource];
+                } else if (billid == 13 || billid == 14) {
+                    self.typeLabel.text = [NSString stringWithFormat:@"%@",item.chargeMemo];
+                } else {
+                    self.typeLabel.text = item.typeName;
+                }
+
             } else {
                 self.typeLabel.text = item.typeName;
             }

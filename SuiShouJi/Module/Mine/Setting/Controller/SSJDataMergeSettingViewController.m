@@ -58,12 +58,14 @@
         SSJFundingMergeViewController *accountMerge = [[SSJFundingMergeViewController alloc] init];
         accountMerge.transferOutSelectable = YES;
         accountMerge.transferInSelectable = YES;
+        accountMerge.transferType = SSJFundsTransferTypeAll;
         [self.navigationController pushViewController:accountMerge animated:YES];
 
     } else if ([title isEqualToString:@"账本合并"]) {
         SSJBooksMergeViewController *booksMergeVC = [[SSJBooksMergeViewController alloc] init];
         booksMergeVC.transferOutSelectable = YES;
         booksMergeVC.transferInSelectable = YES;
+        
         [self.navigationController pushViewController:booksMergeVC animated:YES];
     }
     

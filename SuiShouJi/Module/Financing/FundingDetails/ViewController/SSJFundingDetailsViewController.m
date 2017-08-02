@@ -300,7 +300,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     editController.chargeId = cellItem.ID;
                     [self.navigationController pushViewController:editController animated:YES];
                 }
-            } else if(cellItem.idType == SSJChargeIdTypeRepayment) {
+            } else if(cellItem.idType == SSJChargeIdTypeRepayment) { 
                 if (billId == 3 || billId == 4) {
                     // 如果是转账,则是还款,跳转到还款页面
                     SSJCreditCardRepaymentViewController *repaymentVc = [[SSJCreditCardRepaymentViewController alloc]init];

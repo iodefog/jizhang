@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJFundAccountMergeHelper.h"
 
 @interface SSJFundingMergeViewController : SSJBaseViewController
 
@@ -18,8 +19,8 @@
 
 @property (nonatomic) BOOL transferOutSelectable;
 
-@property (nonatomic) BOOL isCreditCardOrNot;
-
 @property (nonatomic) BOOL needToDelete;
+
+@property (nonatomic) SSJFundsTransferType transferType;
 
 @end
