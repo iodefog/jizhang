@@ -68,7 +68,7 @@
 
 + (NSError *)insertSpecialBillTypeWithDatabase:(FMDatabase *)db {
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    for (NSDictionary *billTypeInfo in [SSJBillTypeManager sharedManager].specialBillTypes) {
+    for (NSDictionary *billTypeInfo in [[SSJBillTypeManager sharedManager].specialBillTypes allValues]) {
         NSDictionary *param = @{@"cbillid":billTypeInfo[@"ID"],
                                 @"itype":billTypeInfo[@"expended"],
                                 @"cname":billTypeInfo[@"name"],

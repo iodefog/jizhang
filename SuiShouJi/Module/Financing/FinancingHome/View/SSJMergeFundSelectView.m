@@ -99,7 +99,7 @@ static NSString *cellId = @"SSJFundingTypeCell";
     SSJFinancingHomeitem *item = [self.fundsArr ssj_safeObjectAtIndex:indexPath.row];
     
     if (self.didSelectFundItem) {
-        self.didSelectFundItem(item);
+        self.didSelectFundItem(item,item.fundingParent);
     }
     
     [self dismiss];
@@ -113,6 +113,8 @@ static NSString *cellId = @"SSJFundingTypeCell";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     NSString *selectFundid;
+    
+    NSString *selectParent;
 
     if ([self.selectItem isKindOfClass:[SSJFinancingHomeitem class]]) {
         selectFundid = ((SSJFinancingHomeitem *)self.selectItem).fundingID;

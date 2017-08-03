@@ -16,7 +16,7 @@
 #import "SSJShareBooksMemberTable.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJShareBookItem.h"
-
+#import "SSJShareBooksTable.h"
 
 
 @interface SSJBooksMergeHelper()
@@ -47,6 +47,11 @@
         @strongify(self);
         
         NSString *userId = SSJUSERID();
+
+        NSNumber *targetSharebookCount = [self.db getOneValueOnResult:SSJShareBooksTable.AnyProperty.count() fromTable:@"BK_SHARE_BOOKS"
+                                                       where:SSJShareBooksTable.booksId == targetBooksId
+                                 && SSJShareBooksTable.operatorType != 2];
+
         
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -106,6 +111,12 @@
             userCharge.booksId = targetBooksId;
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
+            if ([targetSharebookCount integerValue] > 0) {
+                userCharge.chargeType = SSJChargeIdTypeShareBooks;
+                userCharge.cid = targetBooksId;
+            } else {
+                userCharge.chargeType = SSJChargeIdTypeNormal;
+            }
             if ([sameNameDic objectForKey:userCharge.billId]) {
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
@@ -115,7 +126,8 @@
                                    SSJUserChargeTable.booksId,
                                    SSJUserChargeTable.writeDate,
                                    SSJUserChargeTable.version,
-                                   SSJUserChargeTable.billId
+                                   SSJUserChargeTable.billId,
+                                   SSJUserChargeTable.chargeType
                                }
                                  withObject:userCharge
                                       where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
@@ -135,23 +147,46 @@
                               && SSJChargePeriodConfigTable.operatorType != 2];
         
         for (SSJChargePeriodConfigTable *chargePeriod in periodChargeArr) {
-            chargePeriod.booksId = targetBooksId;
-            chargePeriod.writeDate = writeDate;
-            chargePeriod.version = SSJSyncVersion();
-            if ([sameNameDic objectForKey:chargePeriod.billId]) {
-                chargePeriod.billId = [sameNameDic objectForKey:chargePeriod.billId];
-            }
-            
-            
-            if (![self.db insertOrReplaceObject:chargePeriod into:@"BK_CHARGE_PERIOD_CONFIG"]) {
-                dispatch_main_async_safe(^{
-                    if (failure) {
-                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
-                    }
-                });
-                return NO;
+
+            // 如果转入共享账本则把这个周期记账关掉把留在原来的账本中
+            if ([targetSharebookCount integerValue] > 0) {
+                chargePeriod.writeDate = writeDate;
+                chargePeriod.version = SSJSyncVersion();
+                chargePeriod.state = 0;
+                if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG"
+                                   onProperties:{
+                                       SSJChargePeriodConfigTable.writeDate,
+                                       SSJChargePeriodConfigTable.version,
+                                       SSJChargePeriodConfigTable.state
+                                   }
+                                     withObject:chargePeriod
+                                          where:SSJChargePeriodConfigTable.configId == chargePeriod.configId]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
+                        }
+                    });
+                    return NO;
+                }
+            } else {
+                chargePeriod.booksId = targetBooksId;
+                chargePeriod.writeDate = writeDate;
+                chargePeriod.version = SSJSyncVersion();
+                if ([sameNameDic objectForKey:chargePeriod.billId]) {
+                    chargePeriod.billId = [sameNameDic objectForKey:chargePeriod.billId];
+                }
+                if (![self.db insertOrReplaceObject:chargePeriod into:@"BK_CHARGE_PERIOD_CONFIG"]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并周期记账失败"}]);
+                        }
+                    });
+                    return NO;
+                }
+
             }
         }
+        
         
         if (success) {
             success();

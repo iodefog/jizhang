@@ -48,7 +48,7 @@ PODS:
   - libwebp/utils (0.6.0):
     - libwebp/core
   - libwebp/webp (0.6.0)
-  - lottie-ios (1.5.2)
+  - lottie-ios (2.0.1)
   - Masonry (1.0.2)
   - Meiqia (3.3.8):
     - Meiqia/MeiqiaSDK (= 3.3.8)
@@ -77,11 +77,11 @@ PODS:
   - ReactiveCocoa/Core (2.1.8):
     - ReactiveCocoa/no-arc
   - ReactiveCocoa/no-arc (2.1.8)
-  - SDWebImage/Core (4.0.0)
-  - SDWebImage/WebP (4.0.0):
+  - SDWebImage/Core (4.1.0)
+  - SDWebImage/WebP (4.1.0):
     - libwebp
     - SDWebImage/Core
-  - SSZipArchive (2.0.1)
+  - SSZipArchive (2.0.3)
   - UMengAnalytics (4.2.4)
   - UMengUShare/Core (6.3.0):
     - UMengUShare/Network
@@ -138,15 +138,15 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GTSDK: b27e433447371587c823353d37af981e4682c008
   libwebp: 1d5a07c2eb97f9c31bd5f154bb82efc0ea67c6a2
-  lottie-ios: 255a0e95973a5c4424e809d7a5c19f7384c73e84
+  lottie-ios: eebbfc38fb4259235270f28a843b978c76b2a878
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   Meiqia: 454438d87dad9c125eb561d9309a67b2d838b1fd
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MLeaksFinder: '0850e2f2abc7227adc4d4e2d1992b431264eb4d5'
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   ReactiveCocoa: f89f2e009a87951b50321bf9feb958823fcc617e
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
-  SSZipArchive: 6678776f378494909195d3f1b3f00d91e76084f9
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+  SSZipArchive: b6648b70a36303ca5be9f0351174b347e1886236
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
   UMengUShare: b208ac3bcf1f63d11a100b359990e9d77a0f2085
   WCDB: 1f32cb4d3fa59ec36afdf827614e9f014fa5bce4
