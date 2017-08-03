@@ -160,7 +160,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.bottomBg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topBg.mas_bottom).offset(10);
         make.left.right.mas_equalTo(self.topBg);
-        make.bottom.mas_equalTo(self.rewarkNotetTextF).offset(28);
+        make.bottom.mas_equalTo(self.rewarkNotetTextF).offset(13);
     }];
     
     [self.rewarkNoteTextL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -303,6 +303,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _scrollView.contentSize = CGSizeMake(0, 660);
     }
     return _scrollView;
 }
@@ -344,7 +345,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkAmountTextL) {
         _rewarkAmountTextL = [[UILabel alloc] init];
         _rewarkAmountTextL.text = @"金额";
-        _rewarkAmountTextL.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_2];
+        _rewarkAmountTextL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     }
     return _rewarkAmountTextL;
 }
@@ -353,7 +354,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkAmountTextF) {
         _rewarkAmountTextF = [[UITextField alloc] init];
         _rewarkAmountTextF.text = @"5.20";
-        _rewarkAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _rewarkAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         _rewarkAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _rewarkAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _rewarkAmountTextF.textAlignment = NSTextAlignmentRight;
