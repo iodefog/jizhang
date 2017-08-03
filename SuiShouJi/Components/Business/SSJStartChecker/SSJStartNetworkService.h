@@ -29,13 +29,13 @@
 @property (readonly, nonatomic, copy) NSString *remindMassage;
 
 //  启动页图片
-@property (readonly, nonatomic, copy) NSString *startImage;
-
-//  lottie的地址
-@property (readonly, nonatomic, copy) NSString *lottieUrl;
-
-//  动态的动画
-@property (readonly, nonatomic, copy) NSString *animImage;
+//@property (readonly, nonatomic, copy) NSString *startImage;
+//
+////  lottie的地址
+//@property (readonly, nonatomic, copy) NSString *lottieUrl;
+//
+////  动态的动画
+//@property (readonly, nonatomic, copy) NSString *animImage;
 
 //  美恰的用户组
 @property (readonly, nonatomic, copy) NSString *mqGroupId;

@@ -182,7 +182,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 - (void)synchronizeTaskQueue:(SSJSynchronizeTaskQueue *)queue successToFinishTask:(SSJSynchronizeTask *)task {
     //  数据同步成功
     if (self.dataSyncQueue == queue) {
-        SSJDispatch_main_async_safe(^{
+        SSJDispatchMainAsync(^{
             void (^success)() = [self.dataSuccessBlocks block];
             if (success) {
                 success(SSJDataSynchronizeTypeData);
@@ -201,7 +201,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
     
     //  图片同步成功
     if (self.imageSyncQueue == queue) {
-        SSJDispatch_main_async_safe(^{
+        SSJDispatchMainAsync(^{
             void (^success)() = [self.imageSuccessBlocks block];
             if (success) {
                 success(SSJDataSynchronizeTypeImage);

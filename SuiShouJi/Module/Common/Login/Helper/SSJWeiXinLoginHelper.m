@@ -9,8 +9,13 @@
 #import "SSJWeiXinLoginHelper.h"
 
 @interface SSJWeiXinLoginHelper()
+
 @property (nonatomic, copy) weiXinLoginSuccessBlock sucessBlock;
+
 @property (nonatomic, copy) weiXinLoginFailBlock failBlock;
+
+@property (nonatomic) BOOL loading;
+
 @end
 
 
@@ -21,6 +26,7 @@
 }
 
 -(void)weixinLoginWithSucessBlock:(weiXinLoginSuccessBlock)sucessBlock failBlock:(weiXinLoginFailBlock)failBlock{
+    self.loading = YES;
     SendAuthReq* req =[[SendAuthReq alloc ]init];
     req.scope = @"snsapi_userinfo";
     req.state = SSJWeiXinDescription;
@@ -33,20 +39,15 @@
     
 }
 
-//-(void)applicationWillResignActive:(NSNotification *)notification
-//{
-//    if (self.failBlock) {
-//        self.failBlock();
-//    }
-//    self.failBlock = nil;
-//}
-
 -(void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    if (self.failBlock) {
-        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
+    if (self.loading) {
+        self.loading = NO;
+        if (self.failBlock) {
+            self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
+            self.failBlock = nil;
+        }
     }
-    self.failBlock = nil;
 }
 
 
@@ -61,6 +62,7 @@
 //授权后回调 WXApiDelegate
 -(void)onResp:(BaseResp *)resp
 {
+    self.loading = NO;
     if (resp.errCode == WXSuccess) {
         SSJPRINT(@"用户同意");
         if([resp isKindOfClass:[SendAuthResp class]]) {
@@ -70,6 +72,7 @@
     } else {
         if (self.failBlock) {
             self.failBlock([NSError errorWithDomain:SSJErrorDomain code:(resp.errCode == WXErrCodeUserCancel ? SSJErrorCodeLoginCanceled : SSJErrorCodeLoginFailed) userInfo:@{NSLocalizedDescriptionKey:resp.errStr ?: SSJ_ERROR_MESSAGE}]);
+            self.failBlock = nil;
         }
     }
 }
@@ -114,6 +117,7 @@
                     item.openID = openId;
                     if (self.sucessBlock) {
                         self.sucessBlock(item);
+                        self.sucessBlock = nil;
                     }
                 }
             }
