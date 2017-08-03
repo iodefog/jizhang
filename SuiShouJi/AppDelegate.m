@@ -33,7 +33,6 @@
 #import "SSJLocalNotificationHelper.h"
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "SSJStartViewManager.h"
-#import "SSJStartViewManager.h"
 #import <UShareUI/UMSocialUIManager.h>
 #import "SSJShareBooksUrlHandle.h"
 
@@ -149,10 +148,11 @@ NSDate *SCYEnterBackgroundTime() {
         [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified) {
             UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
             UINavigationController *navi = [tabVC.viewControllers firstObject];
-            SSJBookKeepingHomeViewController *homeVC = [navi.viewControllers firstObject];
-            if (![homeVC isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+            UIViewController *vc = [navi.viewControllers firstObject];
+            if (![vc isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
                 return;
             }
+            SSJBookKeepingHomeViewController *homeVC = (SSJBookKeepingHomeViewController *)vc;
             if (isVerified) {
                 homeVC.allowRefresh = YES;
                 homeVC.hasLoad = NO;
