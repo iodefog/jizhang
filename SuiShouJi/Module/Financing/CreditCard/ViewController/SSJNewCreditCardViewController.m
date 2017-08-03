@@ -509,7 +509,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         @strongify(self);
         SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
         mergeVc.transferOutFundItem = self.item;
-        mergeVc.isCreditCardOrNot = YES;
+        mergeVc.transferType = SSJFundsTransferTypeCreditCard;
         mergeVc.transferInSelectable = YES;
         mergeVc.transferOutSelectable = NO;
         mergeVc.needToDelete = YES;

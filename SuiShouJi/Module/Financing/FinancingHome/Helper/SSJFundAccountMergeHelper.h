@@ -10,6 +10,12 @@
 #import "SSJBaseCellItem.h"
 
 @interface SSJFundAccountMergeHelper : NSObject
+// 类型,1是转入.0是转出
+typedef NS_ENUM(NSInteger, SSJFundsTransferType) {
+    SSJFundsTransferTypeNormal = 0,
+    SSJFundsTransferTypeCreditCard = 1,
+    SSJFundsTransferTypeAll = 2
+};
 
 - (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
@@ -23,6 +29,6 @@
  @param fundType 资金账户类型,0为普通资金帐户,1为信用卡或者蚂蚁花呗
  @return 所有得资金帐户
  */
-- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundItem:(SSJBaseCellItem *)fundItem;
+- (NSArray *)getFundingsWithType:(SSJFundsTransferType)fundType exceptFundItem:(SSJBaseCellItem *)fundItem;
 
 @end

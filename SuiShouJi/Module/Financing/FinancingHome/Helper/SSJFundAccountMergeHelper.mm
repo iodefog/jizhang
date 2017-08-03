@@ -288,7 +288,7 @@
     }];
 }
 
-- (NSArray *)getFundingsWithType:(BOOL)fundType exceptFundItem:(SSJBaseCellItem *)fundItem{
+- (NSArray *)getFundingsWithType:(SSJFundsTransferType)fundType exceptFundItem:(SSJBaseCellItem *)fundItem{
     NSString *userId = SSJUSERID();
     
     NSString *fundId;
@@ -306,20 +306,26 @@
     NSMutableArray *funsArr = [NSMutableArray arrayWithCapacity:0];
 
     
-    if (! fundType) {
+    if (fundType == SSJFundsTransferTypeNormal) {
         tempFunsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                                 where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"9",@"16"])
                    && SSJFundInfoTable.operatorType != 2
                    && SSJFundInfoTable.fundParent != @"root"
                    && SSJFundInfoTable.fundId != fundId];
-    } else {
+    } else if (fundType == SSJFundsTransferTypeCreditCard) {
         tempFunsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
                                        where:SSJFundInfoTable.userId == userId
                    && SSJFundInfoTable.fundParent.in(@[@"3",@"16"])
                    && SSJFundInfoTable.operatorType != 2
                    && SSJFundInfoTable.fundParent != @"root"
                    && SSJFundInfoTable.fundId != fundId];
+    } else if (fundType == SSJFundsTransferTypeAll) {
+        tempFunsArr = [self.db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"BK_FUND_INFO"
+                                           where:SSJFundInfoTable.userId == userId
+                       && SSJFundInfoTable.fundParent.notIn(@[@"10",@"11",@"9"])
+                       && SSJFundInfoTable.operatorType != 2
+                       && SSJFundInfoTable.fundParent != @"root"];
     }
     
     
@@ -330,6 +336,7 @@
         item.fundingIcon = fund.fundIcon;
         item.startColor = fund.startColor;
         item.endColor = fund.endColor;
+        item.fundingParent = fund.fundParent;
         item.fundingParentName = [self.db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"BK_FUND_INFO" where:SSJFundInfoTable.fundParent == @"root"
                                    && SSJFundInfoTable.fundId == fund.fundParent];
         item.fundingColor = fund.fundColor;

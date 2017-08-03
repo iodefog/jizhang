@@ -456,7 +456,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_payMethodPopView) {
         _payMethodPopView = [[SSJPopView alloc] initWithFrame:CGRectMake(0, 0, 280, 165)];
         _payMethodPopView.title = @"请选择支付方式";
-        [_payMethodPopView setTitles:@[@"支付宝",@"微信"] andImages:@[@"pay_method_alipay",@"pay_method_weixin"]];
+        [_payMethodPopView setTitles:@[@"支付宝",@"微信"] andImages:@[@"ft_zhifubao",@"ft_weixin"]];
         @weakify(self);
         _payMethodPopView.didSelectAtIndexBlock = ^(NSInteger selectIndex) {
             @strongify(self);
