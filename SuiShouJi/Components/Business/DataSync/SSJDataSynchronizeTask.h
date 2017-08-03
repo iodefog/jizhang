@@ -27,16 +27,16 @@
                         /         \       \
                        /           \       \
                       v             \       \
- (3)           period_charge        loan      \
-             (transfer_cycle)        |\        \
-              /       \              | \        \
-             /         \             |  \        \
-            v           v            v   \        \
- (2)  fund(credit) user_bill_type  fund   \        \            budget
-          |             |                  \        \            /  \
-          |             |                   \        \          /    \
-          v             v                    v        v        v      v
- (1)    remind        books                remind  member   books   remind
+ (3)           period_charge        loan     \                             wish_charge
+             (transfer_cycle)        |\       \                                 |
+              /       \              | \       \                                |
+             /         \             |  \       \                               |
+            v           v            v   \       \                              V
+ (2)  fund(credit) user_bill_type  fund   \       \            budget         wish
+          |             |                  \       \            /  \            |
+          |             |                   \       \          /    \           |
+          v             v                    v       v        v      v          V
+ (1)    remind        books                remind  member   books   remind    remind
  
  */
 @interface SSJDataSynchronizeTask : SSJSynchronizeTask

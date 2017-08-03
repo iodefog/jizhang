@@ -25,6 +25,8 @@
 #import "SSJShareBooksSyncTable.h"
 #import "SSJShareBooksFriendMarkSyncTable.h"
 #import "SSJUserDefaultBillTypesCreater.h"
+#import "SSJWishSyncTable.h"
+#import "SSJWishChargeSyncTable.h"
 
 #import "SSJSyncTable.h"
 
@@ -76,14 +78,16 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                                                    [SSJUserCreditSyncTable class],
                                                    [SSJCreditRepaymentSyncTable class],
                                                    [SSJUserBillTypeSyncTable class],
-                                                   [SSJUserBudgetSyncTable class], nil];
+                                                   [SSJUserBudgetSyncTable class],
+                                                   [SSJWishSyncTable class], nil];
         
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
                                                   [SSJTransferCycleSyncTable class],
                                                   [SSJLoanSyncTable class],
                                                   [SSJShareBooksSyncTable class],
                                                   [SSJShareBooksMemberSyncTable class],
-                                                  [SSJShareBooksFriendMarkSyncTable class], nil];
+                                                  [SSJShareBooksFriendMarkSyncTable class],
+                                                  [SSJWishChargeSyncTable class], nil];
         
         NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
         
