@@ -196,36 +196,31 @@
 -(void)setItem:(SSJUserItem *)item{
     _item = item;
     if (SSJIsUserLogined()) {
-        NSString *iconStr;
-        if ([item.icon hasPrefix:@"http"]) {
-            iconStr = item.icon;
-        }else{
-            iconStr = SSJImageURLWithAPI(item.icon);
+        switch ([item.loginType integerValue]) {
+            case SSJLoginTypeNormal:
+                if (item.mobileNo.length == 11) {
+                    NSString *phoneNum = [item.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+                    self.nicknameLabel.text = phoneNum;
+                }
+                break;
+                
+            case SSJLoginTypeQQ:
+            case SSJLoginTypeWeiXin:
+                self.nicknameLabel.text = item.nickName;
+                break;
         }
-        if (item.nickName == nil || [item.nickName isEqualToString:@""]) {
-            //手机号登陆
-            if (item.mobileNo.length == 11) {
-                NSString *phoneNum = [item.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-                self.nicknameLabel.text = phoneNum;
-            }
-        }else{
-            //三方登录
-            self.nicknameLabel.text = item.nickName;
-        }
-        [self.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
-
         [self.nicknameLabel sizeToFit];
         
+        NSString *iconStr = [item.icon hasPrefix:@"http"] ? item.icon : SSJImageURLWithAPI(item.icon);
+        [self.headPotraitImage sd_setImageWithURL:[NSURL URLWithString:iconStr] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+        
         _geXingSignLabel.text = item.signature ? : @"";
-        
         [_geXingSignLabel sizeToFit];
-        
         if (!_geXingSignLabel.text.length) {
             _geXingSignLabel.text = @"啥也不留";
         }
         
         [self setNeedsDisplay];
-
     } else {
         self.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
@@ -233,7 +228,6 @@
         [self.nicknameLabel sizeToFit];
     }
 }
-
 
 -(void)setCheckInLevel:(SSJBookkeepingTreeLevel)checkInLevel{
     _checkInLevel = checkInLevel;

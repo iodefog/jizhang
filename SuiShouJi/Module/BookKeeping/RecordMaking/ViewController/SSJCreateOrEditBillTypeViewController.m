@@ -22,6 +22,8 @@
 #import "SSJBooksTypeStore.h"
 #import "SSJDataSynchronizer.h"
 
+static const int kBillNameLimit = 4;
+
 static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -78,7 +80,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         
         SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
         SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
-        self.icon = item.icon;
+        self.icon = self.icon ?: item.icon;
         self.name = self.name ?: item.name;
         self.color = self.color ?: item.color;
     }];
@@ -285,8 +287,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         return;
     }
     
-    if (self.name.length > 5) {
-        [CDAutoHideMessageHUD showMessage:@"类别名称不能超过5个字符"];
+    if (self.name.length > kBillNameLimit) {
+        [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"类别名称不能超过%d个字符", kBillNameLimit]];
         return;
     }
     

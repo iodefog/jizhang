@@ -260,10 +260,10 @@ const int SSJImmovableOrder = INT_MAX;
         
         FMResultSet *rs = [db executeQuery:@"select * from bk_user_bill_type where itype = ? and cuserid = ? and cbooksid = ? and operatortype <> 2 order by iorder limit 1", @(incomeOrExpenture), userID, booksID];
         while ([rs next]) {
-            item.categoryTitle = [rs stringForColumn:@"CNAME"];
-            item.categoryImage = [rs stringForColumn:@"CCOIN"];
-            item.categoryColor = [rs stringForColumn:@"CCOLOR"];
-            item.categoryID = [rs stringForColumn:@"ID"];
+            item.categoryTitle = [rs stringForColumn:@"cname"];
+            item.categoryImage = [rs stringForColumn:@"cicoin"];
+            item.categoryColor = [rs stringForColumn:@"ccolor"];
+            item.categoryID = [rs stringForColumn:@"cbillid"];
         }
         [rs close];
     }];
