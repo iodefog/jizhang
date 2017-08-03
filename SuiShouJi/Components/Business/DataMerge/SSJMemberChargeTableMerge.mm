@@ -142,7 +142,7 @@
         NSString *oldChargeId = [[obj componentsSeparatedByString:@","] lastObject];
         
         
-        // 删除同名的成员
+        // 删除同样的成员流水
         success = [db deleteObjectsFromTable:@"temp_member_charge"
                                        where:SSJMembereChargeTable.memberId == oldMemberId
                                              && SSJMembereChargeTable.chargeId == oldChargeId];

@@ -122,47 +122,56 @@
     
     __block BOOL success = NO;
     
-    // 和账本有关的表:流水,周期记账
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
-        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_books_type"]) {
+    NSArray *allconfigs = [db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:[self tempTableName]];
+    
+    // 和周期记账有关的表:流水
+    for (SSJChargePeriodConfigTable *period in allconfigs) {
+        NSString *oldId = period.configId;
+        NSString *newId = [datas objectForKey:period.configId];
+
+        if (!newId) {
+            newId = SSJUUID();
+        }
+        
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"]) {
             SSJPRINT(@">>>>>>>>账本所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新流水表
         SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
-        userCharge.booksId = newId;
+        userCharge.cid = newId;
         success = [db updateRowsInTable:@"temp_user_charge"
                            onProperties:SSJUserChargeTable.booksId
                              withObject:userCharge
                                   where:SSJUserChargeTable.booksId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期记账表
         SSJChargePeriodConfigTable *periodConfig = [[SSJChargePeriodConfigTable alloc] init];
-        periodConfig.booksId = newId;
+        periodConfig.configId = newId;
         success = [db updateRowsInTable:@"temp_charge_period_config"
                            onProperties:SSJChargePeriodConfigTable.booksId
                              withObject:periodConfig
                                   where:SSJChargePeriodConfigTable.booksId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 删除账本中同名的账本
-        success = [db deleteObjectsFromTable:@"temp_charge_period_config"
-                                       where:SSJBooksTypeTable.booksId == oldId];
-        
-        if (!success) {
-            *stop = YES;
+        if ([datas objectForKey:period.configId]) {
+            success = [db deleteObjectsFromTable:@"temp_charge_period_config"
+                                           where:SSJBooksTypeTable.booksId == oldId];
         }
         
-    }];
+        if (!success) {
+            break;
+        }
+
+    }
     
     // 将所有的周期记账的userid更新为目标userid
     SSJChargePeriodConfigTable *chargePeriod = [[SSJChargePeriodConfigTable alloc] init];
