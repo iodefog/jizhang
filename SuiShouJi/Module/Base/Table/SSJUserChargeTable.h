@@ -44,7 +44,7 @@
 
 @property (nonatomic, retain) NSString* clintAddDate;
 
-@property (nonatomic, assign) int chargeType;
+@property (nonatomic, assign) SSJChargeIdType chargeType;
 
 @property (nonatomic, retain) NSString* cid;
 
