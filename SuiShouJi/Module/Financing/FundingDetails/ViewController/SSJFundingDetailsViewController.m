@@ -300,6 +300,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     editController.chargeId = cellItem.ID;
                     [self.navigationController pushViewController:editController animated:YES];
                 }
+                
             } else if(cellItem.idType == SSJChargeIdTypeRepayment) { 
                 if (billId == 3 || billId == 4) {
                     // 如果是转账,则是还款,跳转到还款页面
@@ -311,7 +312,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     instalmentDetailVc.chargeItem = cellItem;
                     [self.navigationController pushViewController:instalmentDetailVc animated:YES];
                 }
-            } else {
+            } else if (cellItem.billId.length < 4) {
                 if (billId == 3 || billId == 4) {
                     SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
@@ -322,19 +323,20 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     deleteBooksVc.fundId = ((SSJBillingChargeCellItem*)item).fundId;
                     deleteBooksVc.booksName = ((SSJBillingChargeCellItem*)item).chargeMemo;
                     [self.navigationController pushViewController:deleteBooksVc animated:YES];
+                } else if (billId == 1 && billId == 2) {
+                    SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                    balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
+                    balanceChangeVc.fundItem = self.item;
+                    [self.navigationController pushViewController:balanceChangeVc animated:YES];
                 } else {
-                    if (billId != 1 && billId != 2) {
-                        SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                        calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
-                        [self.navigationController pushViewController:calenderDetailVC animated:YES];
-
-                    } else {
-                        SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                        balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
-                        balanceChangeVc.fundItem = self.item;
-                        [self.navigationController pushViewController:balanceChangeVc animated:YES];
-                    }
+                    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                    calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+                    [self.navigationController pushViewController:calenderDetailVC animated:YES];
                 }
+            } else {
+                SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+                [self.navigationController pushViewController:calenderDetailVC animated:YES];
             }
         }
     }
