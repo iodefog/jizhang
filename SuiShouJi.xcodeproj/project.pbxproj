@@ -10646,6 +10646,7 @@
 		9CBFB6A01F31ADCD00604F37 /* SSJDataMergeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6931F31ADCD00604F37 /* SSJDataMergeSettingViewController.m */; };
 		9CBFB6A11F31ADCD00604F37 /* SSJDataMergeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6931F31ADCD00604F37 /* SSJDataMergeSettingViewController.m */; };
 		9CBFB6A21F31ADCD00604F37 /* SSJDataMergeSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6931F31ADCD00604F37 /* SSJDataMergeSettingViewController.m */; };
+		9CBFB6A51F32FF6000604F37 /* SSJAccountMergeTask.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6A41F32FF6000604F37 /* SSJAccountMergeTask.mm */; };
 		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0B7EC1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
 		9CC0B7ED1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
@@ -13586,6 +13587,8 @@
 		9CBFB66D1F301E3B00604F37 /* SSJMergeFundSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJMergeFundSelectView.m; sourceTree = "<group>"; };
 		9CBFB6921F31ADCD00604F37 /* SSJDataMergeSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataMergeSettingViewController.h; sourceTree = "<group>"; };
 		9CBFB6931F31ADCD00604F37 /* SSJDataMergeSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataMergeSettingViewController.m; sourceTree = "<group>"; };
+		9CBFB6A31F32FF6000604F37 /* SSJAccountMergeTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountMergeTask.h; sourceTree = "<group>"; };
+		9CBFB6A41F32FF6000604F37 /* SSJAccountMergeTask.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSJAccountMergeTask.mm; sourceTree = "<group>"; };
 		9CC0B7EA1F21E9BE006DD748 /* SSJMemberChargeTableMerge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberChargeTableMerge.h; sourceTree = "<group>"; };
 		9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSJMemberChargeTableMerge.mm; sourceTree = "<group>"; };
 		9CC0B7FD1F2201A4006DD748 /* SSJUserChargePeriodConfigMergeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigMergeTable.h; sourceTree = "<group>"; };
@@ -17898,6 +17901,8 @@
 				9C9274D01F27205C008A7594 /* SSJUserBillTypeTableMerge.mm */,
 				9C6A6B5B1F1DAABD00F96BD1 /* SSJAccountMergeManager.h */,
 				9C6A6B5C1F1DAABD00F96BD1 /* SSJAccountMergeManager.mm */,
+				9CBFB6A31F32FF6000604F37 /* SSJAccountMergeTask.h */,
+				9CBFB6A41F32FF6000604F37 /* SSJAccountMergeTask.mm */,
 			);
 			path = DataMerge;
 			sourceTree = "<group>";
@@ -31337,6 +31342,7 @@
 				9CC97D6D1DA9F8260055B3BD /* SSJBookKeepingHomeDateView.m in Sources */,
 				7D738A8E1DAB267F000CD629 /* SSJDatabaseVersion9.m in Sources */,
 				7DE31FDA1E4C9AA70011AD57 /* SSJThemeAndAdviceDotItem.m in Sources */,
+				9CBFB6A51F32FF6000604F37 /* SSJAccountMergeTask.mm in Sources */,
 				7DC318821E2882A300932644 /* FMDatabaseQueue.m in Sources */,
 				7D5F33871CEAE6C10086B67E /* SSJSmallCalendarView.m in Sources */,
 				BD33FD2F1C4B2E4C006A6942 /* SSJAlertViewDelegator.m in Sources */,

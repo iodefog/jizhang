@@ -113,6 +113,7 @@
             userCharge.version = SSJSyncVersion();
             if ([targetSharebookCount integerValue] > 0) {
                 userCharge.chargeType = SSJChargeIdTypeShareBooks;
+                userCharge.cid = targetBooksId;
             } else {
                 userCharge.chargeType = SSJChargeIdTypeNormal;
             }
