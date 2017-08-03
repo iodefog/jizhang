@@ -12,6 +12,9 @@
 @property (nonatomic, strong) qqLoginSuccessBlock sucessBlock;
 @property (nonatomic, strong) qqLoginFailBlock failBlock;
 @property (nonatomic,strong)TencentOAuth *tencentOAuth;
+
+@property (nonatomic) BOOL loading;
+
 @end
 
 @implementation SSJQQLoginHelper
@@ -20,6 +23,7 @@
 }
 
 -(void)qqLoginWithSucessBlock:(qqLoginSuccessBlock)sucessBlock failBlock:(qqLoginFailBlock)failBlock {
+    self.loading = YES;
     self.tencentOAuth=[[TencentOAuth alloc]initWithAppId:SSJDetailSettingForSource(@"QQAppId") andDelegate:self];
     NSArray *permissions = [NSArray arrayWithObjects:kOPEN_PERMISSION_GET_INFO, kOPEN_PERMISSION_GET_USER_INFO, kOPEN_PERMISSION_GET_SIMPLE_USER_INFO, nil];
 //    NSArray *permissions= [NSArray arrayWithObjects:@"get_user_info",@"get_simple_userinfo",@"add_t",nil];
@@ -41,15 +45,19 @@
 
 -(void)applicationDidBecomeActive:(NSNotification *)notification
 {
-    if (self.failBlock) {
-        self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
+    if (self.loading) {
+        self.loading = NO;
+        if (self.failBlock) {
+            self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginCanceled userInfo:@{NSLocalizedDescriptionKey:@"用户取消登录"}]);
+            self.failBlock = nil;
+        }
     }
-    self.failBlock = nil;
 }
 
 //登陆完成调用
 - (void)tencentDidLogin
 {
+    self.loading = NO;
     if (self.tencentOAuth.accessToken && 0 != [self.tencentOAuth.accessToken length])
     {
         //  记录登录用户的OpenID、Token以及过期时间
@@ -64,17 +72,20 @@
 //非网络错误导致登录失败：
 -(void)tencentDidNotLogin:(BOOL)cancelled
 {
+    self.loading = NO;
     if (self.failBlock) {
         self.failBlock([NSError errorWithDomain:SSJErrorDomain code:(cancelled ? SSJErrorCodeLoginCanceled : SSJErrorCodeLoginFailed) userInfo:@{NSLocalizedDescriptionKey:[TencentOAuth getLastErrorMsg] ?: SSJ_ERROR_MESSAGE}]);
+        self.failBlock = nil;
     }
 }
 
 // 网络错误导致登录失败：
 -(void)tencentDidNotNetWork
 {
-    [CDAutoHideMessageHUD showMessage:@"无网络连接，请设置网络"];
+    self.loading = NO;
     if (self.failBlock) {
         self.failBlock([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeLoginFailed userInfo:@{NSLocalizedDescriptionKey:@"无网络连接，请设置网络"}]);
+        self.failBlock = nil;
     }
 }
 
