@@ -80,7 +80,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         
         SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
         SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
-        self.icon = item.icon;
+        self.icon = self.icon ?: item.icon;
         self.name = self.name ?: item.name;
         self.color = self.color ?: item.color;
     }];
