@@ -85,30 +85,21 @@
 // 将bk_bill_type和bk_user_bill的数据迁移到bk_user_bill_type
 + (NSError *)migrateBillTypeRecordsToNewTableWithDatabase:(FMDatabase *)db {
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    FMResultSet *rs = [db executeQuery:@"select cuserid from bk_user"];
-    if (!rs) {
+    NSDictionary *info = @{@"cwritedate":writeDateStr,
+                           @"iversion":@(SSJSyncVersion())};
+    
+    // 将流水依赖的收支类别迁移到新表中
+    if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub, bk_user_charge as uc where bt.id = ub.cbillid and ub.cuserid = uc.cuserid and ub.cbillid = uc.ibillid and ub.cbooksid = uc.cbooksid and uc.operatortype <> 2 group by ub.cbillid, ub.cbooksid, ub.cuserid" withParameterDictionary:info]) {
         return [db lastError];
     }
     
-    while ([rs next]) {
-        NSDictionary *info = @{@"cwritedate":writeDateStr,
-                               @"iversion":@(SSJSyncVersion()),
-                               @"cuserid":[rs stringForColumn:@"cuserid"]};
-        
-        // 将流水依赖的收支类别迁移到新表中
-        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub where bt.id = ub.cbillid and ub.cuserid = :cuserid and ub.cbillid in (select distinct ibillid from bk_user_charge where operatortype <> 2 and cuserid = :cuserid)" withParameterDictionary:info]) {
-            return [db lastError];
-        }
-        
-        // 将周期记账依赖的收支类别迁移到新表中
-        if (![db executeUpdate:@"replace into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub where bt.id = ub.cbillid and ub.cuserid = :cuserid and ub.cbillid in (select distinct ibillid from bk_charge_period_config where operatortype <> 2 and istate = 1 and cuserid = :cuserid)" withParameterDictionary:info]) {
-            return [db lastError];
-        }
+    // 将周期记账依赖的收支类别迁移到新表中
+    if (![db executeUpdate:@"replace into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub, bk_charge_period_config as pc where bt.id = ub.cbillid and ub.cuserid = pc.cuserid and ub.cbillid = pc.ibillid and ub.cbooksid = pc.cbooksid and pc.operatortype <> 2 and pc.istate = 1 group by ub.cbillid, ub.cbooksid, ub.cuserid" withParameterDictionary:info]) {
+        return [db lastError];
     }
-    [rs close];
     
     // 将自定义类别迁移到新表中
-    if (![db executeUpdate:@"replace into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, ?, ub.operatortype, ? from bk_bill_type as bt, bk_user_bill as ub where bt.id = ub.cbillid and ub.operatortype <> 2 and bt.icustom = 1", writeDateStr, @(SSJSyncVersion())]) {
+    if (![db executeUpdate:@"replace into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub where bt.id = ub.cbillid and ub.operatortype <> 2 and bt.icustom = 1" withParameterDictionary:info]) {
         return [db lastError];
     }
     
