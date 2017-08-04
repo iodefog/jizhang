@@ -335,7 +335,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_slognL) {
         _slognL = [[UILabel alloc] init];
         _slognL.text = @"谢谢你的爱，小鱼会继续努力哒~";
-        _slognL.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
+        _slognL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _slognL.textColor = [UIColor whiteColor];
     }
     return _slognL;
@@ -403,7 +403,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkNotetTextF) {
         _rewarkNotetTextF = [[SSJCustomTextView alloc] init];
         _rewarkNotetTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        _rewarkNotetTextF.text = @"谢谢你的爱，小鱼会继续努力哒~谢谢你的爱，小鱼会继续努力哒~";
+        _rewarkNotetTextF.text = @"默默的爱";
         _rewarkNotetTextF.placeholder = @"请输入50字以内的留言哦";
         _rewarkNotetTextF.delegate = self;
     }

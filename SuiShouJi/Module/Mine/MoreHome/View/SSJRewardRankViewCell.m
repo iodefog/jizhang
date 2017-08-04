@@ -124,7 +124,7 @@
     self.rankL.text = item.ranking;
     [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
     self.memoL.text = item.memo;
-    self.moneyL.text = item.summoney;
+    self.moneyL.text = [NSString stringWithFormat:@"%.2f",[item.summoney doubleValue] / 100];
     self.nameL.text = item.crealname;
     if ([item.ranking isEqualToString:@"1"]) {
         self.markImageView.hidden = NO;

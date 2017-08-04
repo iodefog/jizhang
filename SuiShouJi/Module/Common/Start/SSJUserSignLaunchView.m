@@ -70,7 +70,7 @@
     self.authorL.text = [NSString stringWithFormat:@"—%@",textItem.textAuthor];
     
     NSMutableParagraphStyle  *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    // 行间距设置为30
+    // 行间距设置为20
     [paragraphStyle  setLineSpacing:10];
     
     NSMutableAttributedString  *setString = [[NSMutableAttributedString alloc] initWithString:textItem.textContent];
