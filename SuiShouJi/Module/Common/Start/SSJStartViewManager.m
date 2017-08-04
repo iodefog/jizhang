@@ -171,8 +171,8 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             if (self.launchView.superview) {
                 [self.launchView removeFromSuperview];
             }
-            
             [window addSubview:self.userSignLaunchView];
+            
             [self.userSignLaunchView showWith:self.startLunchItem timeout:kLoadStartImgTimeout completion:^{
                 [self showGuideViewIfNeededWithFirstView:self.userSignLaunchView];
             }];
