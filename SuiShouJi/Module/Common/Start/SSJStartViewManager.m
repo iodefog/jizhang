@@ -79,7 +79,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     [window addSubview:self.launchView];
     
     [self requestStartAPI];
-    [self.startLunchService requestUserSignWithStartVer:0];
+    [self.startLunchService requestUserSign];
     
     // 如果没有本地签到表（升级新版本，数据库还没升级完成的情况下），不能请求签到接口
     // 如果没有userid，就不调用签到接口，签到接口需要userid（第一次启动初始化数据库未完成前，userid为空）
@@ -154,6 +154,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         }
     } else if (service == self.startLunchService) {
         if (![self.startLunchService.returnCode isEqualToString:@"1"]) return;
+
         self.startLunchItem = self.startLunchService.statrLunchItem;
         __weak typeof(self) wself = self;
         if ([self.startLunchItem.open isEqualToString:@"0"]) {//是否下发 0 调用本地图片 1 使用下发type判断
