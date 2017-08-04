@@ -438,7 +438,7 @@
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
         if ([db boolForQuery:@"select count(1) from bk_img_sync where rid = ? and cimgname = ?",rid,imageName]) {
             //更新
-           success = [db executeUpdate:@"update bk_img_sync set cwitedate = ?,operatortype = 1"];
+           success = [db executeUpdate:@"update bk_img_sync set cwritedate = ?,operatortype = 1"];
         } else {
             //添加
            success = [db executeUpdate:@"insert into bk_img_sync(rid,cimgname,cwritedate,operatortype,isynctype,isyncstate) values(?,?,?,0,2,0)",rid,imageName,dateStr];
