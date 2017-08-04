@@ -192,6 +192,7 @@
                        onProperties:SSJMemberTable.userId
                          withObject:userMember
                               where:SSJMemberTable.userId == sourceUserid];
+    
     return success;
 }
 

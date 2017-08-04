@@ -19,9 +19,9 @@
 #import "SSJCreditRepaymentTableMerge.h"
 #import "SSJImageSyncTableMerge.h"
 #import "SSJTrasferCycleTableMerge.h"
-#import "SSJBaseTableMerge.h"
 #import "SSJUserChargePeriodConfigMergeTable.h"
 #import "SSJUserBillTypeTableMerge.h"
+
 
 @interface SSJAccountMergeManager()
 
@@ -65,6 +65,7 @@
                       targetUserId:(NSString *)targetUserId
                          startDate:(NSDate *)startDate
                            endDate:(NSDate *)endDate
+                         mergeType:(SSJMergeDataType)type
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure {
     @weakify(self);
@@ -92,7 +93,7 @@
         // 首先将所有数据取出存入临时表
         for (NSSet *layer in self.mergeTableClasses) {
             for (Class mergeTable in layer) {
-                NSDictionary *result = [mergeTable queryDatasWithSourceUserId:sourceUserId TargetUserId:targetUserId mergeType:SSJMergeDataTypeByWriteDate FromDate:startDate ToDate:endDate inDataBase:self.db];
+                NSDictionary *result = [mergeTable queryDatasWithSourceUserId:sourceUserId TargetUserId:targetUserId mergeType:type FromDate:startDate ToDate:endDate inDataBase:self.db];
                 
                 NSError *error = [result objectForKey:@"error"];
                 
@@ -142,25 +143,24 @@
             }
         }
     
-        if (![self copyAllValuesFromTempDbInDataBase:self.db]) {
-            dispatch_main_async_safe(^{
-                if (failure) {
-                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"从临时表拷贝数据失败"}]);
-                }
-            });
-            return NO;
-        }
-        
-        if ([self dropAllTempleTableInDataBase:self.db]) {
-            dispatch_main_async_safe(^{
-                if (failure) {
-                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"或合并结束删除临时表失败"}]);
-                }
-            });
-            return NO;
-        };
-        
-        
+//        if (![self copyAllValuesFromTempDbInDataBase:self.db]) {
+//            dispatch_main_async_safe(^{
+//                if (failure) {
+//                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"从临时表拷贝数据失败"}]);
+//                }
+//            });
+//            return NO;
+//        }
+//        
+//        if (![self dropAllTempleTableInDataBase:self.db]) {
+//            dispatch_main_async_safe(^{
+//                if (failure) {
+//                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"或合并结束删除临时表失败"}]);
+//                }
+//            });
+//            return NO;
+//        };
+//        
         return YES;
     }];
     
@@ -222,6 +222,10 @@
         return NO;
     };
     
+    if (![db createTableAndIndexesOfName:@"temp_user_bill_type" withClass:SSJUserBillTypeTable.class]) {
+        return NO;
+    };
+    
     return YES;
 }
 
@@ -274,65 +278,137 @@
         return NO;
     };
     
+    if (![db dropTableOfName:@"temp_user_bill_type"]) {
+        return NO;
+    };
+    
     return YES;
 }
 
 - (BOOL)copyAllValuesFromTempDbInDataBase:(WCTDatabase *)db {
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"] into:@"BK_BOOKS_TYPE"]) {
-        return NO;
-    };
+    if ([db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"] into:@"BK_BOOKS_TYPE"]) {
+            return NO;
+        };
+    }
     
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_books_type"] into:@"BK_CHARGE_PERIOD_CONFIG"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"] into:@"BK_USER_CHARGE"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"] into:@"BK_USER_REMIND"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"] into:@"BK_FUND_INFO"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"] into:@"BK_LOAN"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"] into:@"BK_MEMBER"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"] into:@"BK_MEMBER_CHARGE"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"] into:@"BK_USER_CREDIT"]) {
-        return NO;
-    };
-    
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
-        return NO;
-    };
+    if ([db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_charge_period_config"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_books_type"] into:@"BK_CHARGE_PERIOD_CONFIG"]) {
+            return NO;
+        };
 
+    }
     
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
-        return NO;
-    };
-
+    if ([db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"] into:@"BK_USER_CHARGE"]) {
+            return NO;
+        };
+    }
     
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
-        return NO;
-    };
+    if ([db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"] into:@"BK_USER_REMIND"]) {
+            return NO;
+        };
+    }
+    
+    if ([db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"] into:@"BK_FUND_INFO"]) {
+            return NO;
+        };
+    }
+    
+    if ([db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"] into:@"BK_LOAN"]) {
+            return NO;
+        };
+    }
+    
+    if ([db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"] into:@"BK_MEMBER"]) {
+            return NO;
+        };
 
-    if ([db insertObjects:[db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"] into:@"BK_USER_BILL_TYPE"]) {
-        return NO;
-    };
+    }
+    
+    if ([db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"] into:@"BK_MEMBER_CHARGE"]) {
+            return NO;
+        };
+
+    }
+    
+    if ([db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"] into:@"BK_USER_CREDIT"]) {
+            return NO;
+        };
+
+    }
+
+    if ([db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_transfer_cycle"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_transfer_cycle"] into:@"BK_TRANSFER_CYCLE"]) {
+            return NO;
+        };
+
+    }
+
+    if ([db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
+            return NO;
+        };
+    }
+
+    if ([db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"].count) {
+        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"] into:@"BK_USER_BILL_TYPE"]) {
+            return NO;
+        };
+
+    }
     
     return YES;
+}
+
+- (NSString *)getCurrentUnloggedUserId {
+    NSString *unLoggedUserId;
+    SSJUserBaseTable *unloggedUser = [self.db getOneObjectOfClass:SSJUserBaseTable.class fromTable:@"BK_USER" where:SSJUserBaseTable.registerState == 0];
+    unLoggedUserId = unloggedUser.userId;
+    return unLoggedUserId;
+}
+
+- (BOOL)needToMergeOrNot {
+    NSString *unloggedUserid = [self getCurrentUnloggedUserId];
+    
+    SSJUserBaseTable *currentUser = [self.db getOneObjectOfClass:SSJUserBaseTable.class fromTable:@"BK_USER" where:SSJUserBaseTable.userId == SSJUSERID()];
+    
+    // 取出未登录账户上最后一次流水修改的时间
+    
+    NSString *maxDateStr = [self.db getOneValueOnResult:SSJUserChargeTable.writeDate.max()
+                                              fromTable:@"BK_USER_CHARGE"
+                                                  where:SSJUserChargeTable.userId == unloggedUserid
+                            && SSJUserChargeTable.operatorType != 2];
+    
+    NSDate *maxDate = [NSDate dateWithString:maxDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    NSDate *lastMergeDate = [NSDate dateWithString:currentUser.lastMergeTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    if ((!currentUser.lastMergeTime || [maxDate isLaterThan:lastMergeDate]) && SSJIsUserLogined()) {
+        return YES;
+    } else {
+        return NO;
+    }
+    
+}
+
+- (SSJUserBaseTable *)getCurrentUser {
+    SSJUserBaseTable *currentUser = [self.db getOneObjectOfClass:SSJUserBaseTable.class fromTable:@"BK_USER" where:SSJUserBaseTable.userId == SSJUSERID()];
+
+    return currentUser;
+}
+
+- (void)saveLastMergeTime {
+    NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    [self.db updateRowsInTable:@"BK_USER" onProperty:SSJUserBaseTable.lastMergeTime withValue:currentDate
+                         where:SSJUserBaseTable.userId == SSJUSERID()];
 }
 
 

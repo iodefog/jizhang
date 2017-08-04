@@ -8,10 +8,15 @@
 
 #import "SSJAccountMergeTask.h"
 #import <WCDB/WCDB.h>
+#import "SSJAccountMergeManager.h"
+#import "SSJDataMergeQueue.h"
+#import "SSJUserBaseTable.h"
 
 @interface SSJAccountMergeTask()
 
-@property (nonatomic, strong) WCTDatabase *db;
+@property (nonatomic, strong) SSJAccountMergeManager *mergeManager;
+
+@property (nonatomic, strong) NSString *unloggedUserId;
 
 @end
 
@@ -21,15 +26,66 @@
 //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
 }
 
-- (void)mergeDataIfNeeded {
-    
++ (void)mergeDataWithManager:(SSJAccountMergeManager *)manager {
+    dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
+        NSString *unloggedUserid = [manager getCurrentUnloggedUserId];
+        
+        SSJUserBaseTable *currentUser = [manager getCurrentUser];
+        
+        if (!currentUser.lastMergeTime) {
+            currentUser.lastMergeTime = @"1970-01-01 00:00:00.000";
+        }
+        
+        NSDate *lastMergeDate = [NSDate dateWithString:currentUser.lastMergeTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        [manager startMergeWithSourceUserId:unloggedUserid targetUserId:currentUser.userId startDate:lastMergeDate endDate:[NSDate date] mergeType:SSJMergeDataTypeByWriteDate Success:^{
+            [CDAutoHideMessageHUD showMessage:@"合并成功"];
+        } failure:^(NSError *error) {
+            
+        }];
+        
+    });
 }
 
-- (WCTDatabase *)db {
-    if (!_db) {
-        _db = [[WCTDatabase alloc] initWithPath:SSJSQLitePath()];
++ (void)mergeDataIfNeeded {
+    SSJAccountMergeManager *mergeManager = [[SSJAccountMergeManager alloc] init];
+    
+    SSJUserBaseTable *currentUser = [mergeManager getCurrentUser];
+    
+    NSString *title;
+    
+    if (currentUser.loginType == SSJLoginTypeNormal) {
+        NSString *screteMobileNo = currentUser.mobileNo;
+        
+        if (screteMobileNo.length == 11) {
+            screteMobileNo = [screteMobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        }
+        title = [NSString stringWithFormat:@"是否要将未登录记的账同步到当前登录的手机号:%@账户上",screteMobileNo];
+    } else if (currentUser.loginType == SSJLoginTypeQQ) {
+        title = [NSString stringWithFormat:@"是否要将未登录记的账同步到当前登录的QQ:%@账户上",currentUser.nickName];
+    } else if (currentUser.loginType == SSJLoginTypeWeiXin) {
+        title = [NSString stringWithFormat:@"是否要将未登录记的账同步到当前登录的手机号:%@账户上",currentUser.nickName];
     }
-    return _db;
+    
+    if ([mergeManager needToMergeOrNot]) {
+        UIViewController *currentController = SSJVisibalController();
+        UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"立即合并" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self mergeDataWithManager:mergeManager];
+        }];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"放弃数据" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [mergeManager saveLastMergeTime];
+        }];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:title preferredStyle:UIAlertControllerStyleAlert];
+        
+        [alert addAction:comfirm];
+        
+        [alert addAction:cancel];
+
+        
+        [currentController.navigationController presentViewController:alert animated:YES completion:NULL];
+    }
 }
+
 
 @end

@@ -102,14 +102,18 @@
     
     __block BOOL success = NO;
     
+    NSArray *allCharges = [db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:[self tempTableName]];
+
+    
     // 和流水有关的表:成员流水,图片同步表
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
+    for (SSJUserChargeTable *charge in allCharges) {
+        NSString *oldId = charge.chargeId;
+        NSString *newId = [datas objectForKey:charge.chargeId];
+    
         if (![db isTableExists:@"temp_member_charge"] || ![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");
-            *stop = NO;
             success = NO;
+            break;
         }
         
         // 更新成员流水
@@ -120,7 +124,7 @@
                              withObject:memberCharge
                                   where:SSJMembereChargeTable.memberId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新图片同步表
@@ -131,17 +135,18 @@
                              withObject:memberCharge
                                   where:SSJImageSyncTable.imageSourceId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
-
+        
         // 删除同一条流水
         success = [db deleteObjectsFromTable:@"temp_user_charge"
                                        where:SSJUserChargeTable.chargeId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
-        
-    }];
+
+    }
+    
     // 将所有的流水的userid更新为目标userid
     SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
     userCharge.userId = targetUserId;

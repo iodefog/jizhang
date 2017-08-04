@@ -160,10 +160,11 @@
     // 将所有的周期转账的userid更新为目标userid
     SSJTransferCycleTable *userCycleTransfer = [[SSJTransferCycleTable alloc] init];
     userCycleTransfer.userId = targetUserId;
-    success = [db updateRowsInTable:@"temp_loan"
+    success = [db updateRowsInTable:@"temp_transfer_cycle"
                        onProperties:SSJTransferCycleTable.userId
                          withObject:userCycleTransfer
                               where:SSJTransferCycleTable.userId == sourceUserid];
+    
     
     return success;
 }
