@@ -19,5 +19,5 @@
  请求启动页
  @param startVer 	客户端配置版本
  */
-- (void)requestUserSignWithStartVer:(NSInteger)startVer;
+- (void)requestUserSign;
 @end

@@ -40,7 +40,8 @@
         NSSet *firstLayer = [NSSet setWithObjects:[SSJUserReminderTableMerge class],
                              [SSJBooksTypeTableMerge class],
                              [SSJUserBillTypeTableMerge class],
-                             [SSJMemberTableMerge class], nil];
+                             [SSJMemberTableMerge class],
+                             [SSJImageSyncTableMerge class], nil];
         
         NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoTableMerge class],
                               [SSJUserCreditTableMerge class],
@@ -71,7 +72,7 @@
     @weakify(self);
     [self.db runTransaction:^BOOL{
         @strongify(self);
-        if ([self dropAllTempleTableInDataBase:self.db]) {
+        if (![self dropAllTempleTableInDataBase:self.db]) {
             dispatch_main_async_safe(^{
                 if (failure) {
                     failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并开始删除临时表失败"}]);
@@ -79,7 +80,7 @@
             });
         };
         
-        if ([self creatAllTempleTableInDataBase:self.db]) {
+        if (![self creatAllTempleTableInDataBase:self.db]) {
             dispatch_main_async_safe(^{
                 if (failure) {
                     failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并开始创建临时表失败"}]);
@@ -161,16 +162,22 @@
             return NO;
         };
         
-        if (type == SSJMergeDataTypeByWriteDate) {
-            if ([self.db updateRowsInTable:@"BK_USER" onProperty:SSJUserBaseTable.lastMergeTime withValue:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] where:SSJUserBaseTable.userId == targetUserId]) {
-                dispatch_main_async_safe(^{
-                    if (failure) {
-                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"修改资金用户最后合并时间失败"}]);
-                    }
-                });
-                return NO;
+//        if (type == SSJMergeDataTypeByWriteDate) {
+//            if (![self.db updateRowsInTable:@"BK_USER" onProperty:SSJUserBaseTable.lastMergeTime withValue:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] where:SSJUserBaseTable.userId == targetUserId]) {
+//                dispatch_main_async_safe(^{
+//                    if (failure) {
+//                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"修改资金用户最后合并时间失败"}]);
+//                    }
+//                });
+//                return NO;
+//            }
+//        }
+        
+        dispatch_main_async_safe(^{
+            if (success) {
+                success();
             }
-        }
+        });
         
         return YES;
     }];
@@ -298,78 +305,78 @@
 
 - (BOOL)copyAllValuesFromTempDbInDataBase:(WCTDatabase *)db {
     if ([db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"] into:@"BK_BOOKS_TYPE"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:@"temp_books_type"] into:@"BK_BOOKS_TYPE"]) {
             return NO;
         };
     }
     
     if ([db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_charge_period_config"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_books_type"] into:@"BK_CHARGE_PERIOD_CONFIG"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"temp_charge_period_config"] into:@"BK_CHARGE_PERIOD_CONFIG"]) {
             return NO;
         };
 
     }
     
     if ([db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"] into:@"BK_USER_CHARGE"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge"] into:@"BK_USER_CHARGE"]) {
             return NO;
         };
     }
     
     if ([db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"] into:@"BK_USER_REMIND"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:@"temp_user_remind"] into:@"BK_USER_REMIND"]) {
             return NO;
         };
     }
     
     if ([db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"] into:@"BK_FUND_INFO"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:@"temp_fund_info"] into:@"BK_FUND_INFO"]) {
             return NO;
         };
     }
     
     if ([db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"] into:@"BK_LOAN"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"] into:@"BK_LOAN"]) {
             return NO;
         };
     }
     
     if ([db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"] into:@"BK_MEMBER"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJMemberTable.class fromTable:@"temp_member"] into:@"BK_MEMBER"]) {
             return NO;
         };
 
     }
     
     if ([db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"] into:@"BK_MEMBER_CHARGE"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJMembereChargeTable.class fromTable:@"temp_member_charge"] into:@"BK_MEMBER_CHARGE"]) {
             return NO;
         };
 
     }
     
     if ([db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"] into:@"BK_USER_CREDIT"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJUserCreditTable.class fromTable:@"temp_user_credit"] into:@"BK_USER_CREDIT"]) {
             return NO;
         };
 
     }
 
     if ([db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_transfer_cycle"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_transfer_cycle"] into:@"BK_TRANSFER_CYCLE"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:@"temp_transfer_cycle"] into:@"BK_TRANSFER_CYCLE"]) {
             return NO;
         };
 
     }
 
     if ([db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJImageSyncTable.class fromTable:@"temp_img_sync"] into:@"BK_IMG_SYNC"]) {
             return NO;
         };
     }
 
     if ([db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"].count) {
-        if (![db insertObjects:[db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"] into:@"BK_USER_BILL_TYPE"]) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"temp_user_bill_type"] into:@"BK_USER_BILL_TYPE"]) {
             return NO;
         };
 

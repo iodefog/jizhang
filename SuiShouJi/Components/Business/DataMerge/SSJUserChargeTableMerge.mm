@@ -34,9 +34,9 @@
     NSString *endDate;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -102,13 +102,17 @@
     
     BOOL success = NO;
     
-    NSArray *allCharges = [db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:[self tempTableName]];
+    NSArray *allCharges = [db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:[self tempTableName]];
 
     
     // 和流水有关的表:成员流水,图片同步表
     for (SSJUserChargeTable *charge in allCharges) {
         NSString *oldId = charge.chargeId;
         NSString *newId = [datas objectForKey:charge.chargeId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
     
         if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");

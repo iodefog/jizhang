@@ -59,6 +59,10 @@ NSString *const SSJBookCategoryKey = @"SSJBookCategoryKey";
 
 NSString *const SSJNoticeAlertKey = @"SSJNoticeAlertKey";
 
+NSString *const SSJLunchStartVerKey = @"SSJLunchStartVerKey";
+
+NSString *const SSJLunchUserSignItemKey = @"SSJLunchUserSignItemKey";
+
 NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";

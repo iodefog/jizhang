@@ -26,6 +26,9 @@
 //0:静态图片,1:动态图片,2:图文
 @property (nonatomic, assign) NSInteger type;
 
+/**startVer	当前配置版本号*/
+@property (nonatomic, copy) NSString *startVer;
+
 @property (nonatomic, strong) SSJStartTextImgItem *textImgItem;
 
 @end

@@ -39,9 +39,9 @@
     NSString *endDate;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -118,6 +118,7 @@
     
     NSArray *allReminds = [db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:[self tempTableName]];
 
+    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
     for (SSJFundInfoTable *fund in allReminds) {
         NSString *oldId = fund.fundId;
         NSString *newId = [datas objectForKey:oldId];
@@ -248,14 +249,6 @@
         }
 
     }
-    
-    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
-        
-        
-    }];
     
     // 将所有的资金账户的userid更新为目标userid
     SSJFundInfoTable *userfund = [[SSJFundInfoTable alloc] init];

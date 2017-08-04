@@ -244,13 +244,13 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (![service.returnCode isEqualToString:@"1"]) return;
     if (service == self.rewarkService) {
         if (self.rewarkService.payUrl.length) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.rewarkService.payUrl] options:@{} completionHandler:nil];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.rewarkService.payUrl]];
         }
     } else if (service == self.rewarkResultService) {
         if ([self.rewarkResultService.payResultStatus isEqualToString:@"1"]) {
-            [CDAutoHideMessageHUD showMessage:@"支付成功"];
+            [CDAutoHideMessageHUD showMessage:@"打赏成功"];
         } else {
-            [CDAutoHideMessageHUD showMessage:@"未支付成功"];
+            [CDAutoHideMessageHUD showMessage:@"未完成打赏"];
         }
     }
     
