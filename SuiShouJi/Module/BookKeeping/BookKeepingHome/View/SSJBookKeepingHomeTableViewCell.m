@@ -9,6 +9,21 @@
 #import "SSJBookKeepingHomeTableViewCell.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJCalenderHelper.h"
+#import <objc/runtime.h>
+
+static const void *kExpandedKey = &kExpandedKey;
+
+@implementation SSJBillingChargeCellItem (SSJBookKeepingHomeTableViewCell)
+
+- (void)setExpanded:(BOOL)expanded {
+    objc_setAssociatedObject(self, kExpandedKey, @(expanded), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)expanded {
+    return [objc_getAssociatedObject(self, kExpandedKey) boolValue];
+}
+
+@end
 
 static const CGFloat kCategoryImageButtonRadius = 16;
 
@@ -182,7 +197,13 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     }
     
     [self setNeedsUpdateConstraints];
-    [self showEditAndDeleteBtn:NO animated:NO];
+    
+    @weakify(self);
+    [[[RACObserve(_item, expanded) skip:1] takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *expandedValue) {
+        @strongify(self);
+        [self showEditAndDeleteBtn:[expandedValue boolValue] animated:YES];
+    }];
+    [self showEditAndDeleteBtn:_item.expanded animated:NO];
 }
 
 - (void)setIsLastRow:(BOOL)isLastRow {
