@@ -145,7 +145,7 @@
                                           && SSJUserRemindTable.userId = targetUserId];
         
         if (sameRemind) {
-            [newAndOldIdDic setObject:currentRemind.remindName forKey:sameRemind.remindName];
+            [newAndOldIdDic setObject:sameRemind.remindName forKey:currentRemind.remindName];
         }
         
     }];
@@ -158,16 +158,22 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
     
-    // 和流水有关的表:信用卡,借贷
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
+    NSArray *allReminds = [db getAllObjectsOfClass:SSJUserRemindTable.class fromTable:[self tempTableName]];
+
+    for (SSJUserRemindTable *remind in allReminds) {
+        NSString *oldId = remind.remindId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+
         if (![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_loan"]) {
             SSJPRINT(@">>>>>>>>提醒所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新信用卡表
@@ -178,7 +184,7 @@
                              withObject:credit
                                   where:SSJUserCreditTable.remindId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新借贷
@@ -190,18 +196,25 @@
                                   where:SSJLoanTable.remindId == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
-        // 删除同名的提醒
-        success = [db deleteObjectsFromTable:@"temp_user_remind"
-                                       where:SSJUserRemindTable.remindId == oldId];
+        // 如果有同名的则删除当前提醒,如果没有则吧提醒id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_user_remind"
+                                           where:SSJUserRemindTable.remindId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_user_charge" onProperty:SSJUserRemindTable.remindId withValue:newId
+                                      where:SSJUserRemindTable.remindId == oldId];
+        }
+        
         if (!success) {
-            *stop = YES;
+            break;
         }
         
+    }
+    
 
-    }];
     
     // 将所有的提醒的userid更新为目标userid
     SSJUserRemindTable *userRemind = [[SSJUserRemindTable alloc] init];

@@ -113,7 +113,7 @@
                                           && SSJMemberTable.userId == targetUserId];
         
         if (sameNameMember) {
-            [newAndOldIdDic setObject:currentMember.memberId forKey:sameNameMember.memberId];
+            [newAndOldIdDic setObject:sameNameMember.memberId forKey:currentMember.memberId];
         }
         
     }];
@@ -127,16 +127,22 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
     
-    // 和成员有关的表:成员流水,周期记账,
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
+    NSArray *allLoans = [db getAllObjectsOfClass:SSJMemberTable.class fromTable:[self tempTableName]];
+    
+    for (SSJMemberTable *member in allLoans) {
+        NSString *oldId = member.memberId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+        
         if (![db isTableExists:@"temp_charge_period_config"] && ![db isTableExists:@"temp_member_charge"]) {
             SSJPRINT(@">>>>>>>>成员所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新成员流水表
@@ -147,22 +153,23 @@
                              withObject:memberCharge
                                   where:SSJMembereChargeTable.memberId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期记账表
         WCTSelect *chargePeriodSelect = [db prepareSelectObjectsOfClass:SSJChargePeriodConfigTable.class
-                                                  fromTable:@"temp_charge_period_config"];
+                                                              fromTable:@"temp_charge_period_config"];
         
         if (chargePeriodSelect.error) {
-            *stop = YES;
             success = NO;
+            break;
+
         }
         
         // 首先查出所有用到这个成员的周期记账
         NSArray <SSJChargePeriodConfigTable *> *periodCharges = [chargePeriodSelect
                                                                  where:SSJChargePeriodConfigTable.memberIds.like([NSString stringWithFormat:@"%%%@%%",oldId])                                                                 && SSJChargePeriodConfigTable.operatorType != 2].allObjects;
-    
+        
         // 然后将周期记账中的成员id改成新的id
         for (SSJChargePeriodConfigTable *periodCharge in periodCharges) {
             NSString *newMembers = [periodCharge.memberIds stringByReplacingOccurrencesOfString:oldId withString:newId];
@@ -173,14 +180,27 @@
                                       where:SSJChargePeriodConfigTable.configId == periodCharge.configId];
         }
         
-        // 删除同名的成员
-        success = [db deleteObjectsFromTable:@"temp_member"
-                                       where:SSJMemberTable.memberId == oldId];
-        
+        // 如果有同名的则删除当前成员,如果没有则吧成员id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_member"
+                                           where:SSJMemberTable.memberId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_member" onProperty:SSJMemberTable.memberId withValue:newId
+                                      where:SSJMemberTable.memberId == oldId];
+        }
+                
         
         if (!success) {
-            *stop = YES;
+            break;
         }
+
+        
+    }
+    
+    // 和成员有关的表:成员流水,周期记账,
+    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *oldId = obj;
+        NSString *newId = key;
         
         
     }];

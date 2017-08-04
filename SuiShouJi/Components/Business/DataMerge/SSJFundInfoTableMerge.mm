@@ -100,7 +100,7 @@
                                           && SSJBooksTypeTable.userId == targetUserId];
         
         if (sameNameFund) {
-            [newAndOldIdDic setObject:currentFund.fundId forKey:sameNameFund.fundId];
+            [newAndOldIdDic setObject:sameNameFund.fundId forKey:currentFund.fundId];
         }
         
     }];
@@ -114,16 +114,22 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
     
-    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
+    NSArray *allReminds = [db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:[self tempTableName]];
+
+    for (SSJFundInfoTable *fund in allReminds) {
+        NSString *oldId = fund.fundId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+        
         if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_credit_repayment"] || ![db isTableExists:@"temp_loan"] || ![db isTableExists:@"temp_fund_info"] || ![db isTableExists:@"temp_transfer_cycle"]) {
             SSJPRINT(@">>>>>>>>资金账户所关联的表不存在<<<<<<<<");
-            *stop = NO;
             success = NO;
+            break;
         }
         
         // 更新流水表
@@ -134,7 +140,7 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.fundId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期记账表
@@ -146,7 +152,7 @@
                                   where:SSJChargePeriodConfigTable.fundId == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新信用卡表
@@ -158,7 +164,7 @@
                                   where:SSJUserCreditTable.cardId == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新信用卡还款表
@@ -170,7 +176,7 @@
                                   where:SSJCreditRepaymentTable.cardId == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新借贷表,分别更新来源和目标账户,结清账户
@@ -196,7 +202,7 @@
                                   where:SSJLoanTable.endTargetFundid == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期转账
@@ -216,20 +222,38 @@
                                   where:SSJTransferCycleTable.transferOutId == oldId];
         
         if (!success) {
-            *stop = YES;
+            break;
         }
         
-        // 删除同名的资金账户
-        success = [db deleteObjectsFromTable:@"temp_fund_info"
-                                       where:SSJFundInfoTable.fundId == oldId];
-        
-        // 要删除相应的信用卡,信用卡还款
-        success = [db deleteObjectsFromTable:@"temp_user_credit"
-                                       where:SSJUserCreditTable.cardId == oldId];
-        
-        success = [db deleteObjectsFromTable:@"temp_credit_repayment"
-                                       where:SSJCreditRepaymentTable.cardId == oldId];
+        // 如果有同名的则删除当前资金账户,如果没有则吧资金账户id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_fund_info"
+                                           where:SSJFundInfoTable.fundId == oldId];
+            
+            success = [db deleteObjectsFromTable:@"temp_user_credit"
+                                           where:SSJUserCreditTable.cardId == oldId];
+            
+            success = [db deleteObjectsFromTable:@"temp_credit_repayment"
+                                           where:SSJCreditRepaymentTable.cardId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_fund_info" onProperty:SSJFundInfoTable.fundId withValue:newId
+                                      where:SSJFundInfoTable.fundId == oldId];
+            
+            success = [db updateRowsInTable:@"temp_user_credit" onProperty:SSJUserCreditTable.cardId withValue:newId
+                                      where:SSJUserCreditTable.cardId == oldId];
+            
+            success = [db updateRowsInTable:@"temp_credit_repayment" onProperty:SSJCreditRepaymentTable.cardId withValue:newId
+                                      where:SSJCreditRepaymentTable.cardId == oldId];
+            
+        }
 
+    }
+    
+    // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
+    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *oldId = obj;
+        NSString *newId = key;
+        
         
     }];
     
