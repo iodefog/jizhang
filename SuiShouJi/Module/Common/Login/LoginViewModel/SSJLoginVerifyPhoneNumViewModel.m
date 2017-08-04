@@ -358,10 +358,13 @@
     self.userItem.loginType = [NSString stringWithFormat:@"%d", (int)self.loginType];
     self.userItem.openId = self.openId;
     
-    self.userBillArray = [NSArray arrayWithArray:[result objectForKey:@"userBillType"]];
-    self.fundInfoArray = [NSArray arrayWithArray:[result objectForKey:@"fundInfo"]];
-    self.booksTypeArray = [NSArray arrayWithArray:[result objectForKey:@"bookType"]];
-    self.membersArray = [NSArray arrayWithArray:[result objectForKey:@"bk_member"]];
+    self.bookBillsArray = [result objectForKey:@"bookBills"];
+    self.userBillArray = [result objectForKey:@"userBill"];
+    self.userBillTypeArray = [result objectForKey:@"userBillType"];
+    self.fundInfoArray = [result objectForKey:@"fundInfo"];
+    self.booksTypeArray = [result objectForKey:@"bookType"];
+    self.membersArray = [result objectForKey:@"bk_member"];
+    
     self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[result objectForKey:@"userTree"]];
     self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[result objectForKey:@"bookBillArray"]];
 }
