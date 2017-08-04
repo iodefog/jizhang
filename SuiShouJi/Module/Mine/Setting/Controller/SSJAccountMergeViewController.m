@@ -10,14 +10,35 @@
 
 @interface SSJAccountMergeViewController ()
 
+@property (nonatomic, strong) UIView *backView;
+
+@property (nonatomic, strong) UILabel *startLab;
+
+@property (nonatomic, strong) UILabel *endLab;
+
+@property (nonatomic, strong) UIButton *startButton;
+
+@property (nonatomic, strong) UIButton *endButton;
+
+@property (nonatomic, strong) UILabel *mergeTitleLab;
+
+@property (nonatomic, strong) UILabel *hintLab;
+
+@property (nonatomic, strong) UIImageView *warningImage;
+
 @end
 
 @implementation SSJAccountMergeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = @"数据合并";
     // Do any additional setup after loading the view.
 }
+
+
+#pragma mark - Getter
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

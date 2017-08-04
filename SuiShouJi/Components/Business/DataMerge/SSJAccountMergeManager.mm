@@ -38,8 +38,8 @@
     self = [super init];
     if (self) {
         NSSet *firstLayer = [NSSet setWithObjects:[SSJUserReminderTableMerge class],
-                             [SSJBooksTypeTableMerge class],
                              [SSJUserBillTypeTableMerge class],
+                             [SSJBooksTypeTableMerge class],
                              [SSJMemberTableMerge class],
                              [SSJImageSyncTableMerge class], nil];
         

@@ -129,14 +129,20 @@
     
     __block BOOL success = NO;
     
-    // 和周期转账有关的表:流水表
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = key;
-        NSString *oldId = obj;
+    NSArray *allBills = [db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:[self tempTableName]];
+    
+    for (SSJUserBillTypeTable *userBill in allBills) {
+        NSString *oldId = userBill.billId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+
         if (![db isTableExists:@"temp_user_charge"] && ![db isTableExists:@"temp_charge_period_config"]) {
             SSJPRINT(@">>>>>>>>周期转账所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新流水表
@@ -147,7 +153,7 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.billId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期记账
@@ -155,22 +161,28 @@
         chargePeriodConfig.billId = newId;
         success = [db updateRowsInTable:@"temp_charge_period_config"
                            onProperties:SSJChargePeriodConfigTable.billId
-                             withObject:userCharge
+                             withObject:chargePeriodConfig
                                   where:SSJChargePeriodConfigTable.billId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
-        // 删除同名的记账类型
-        success = [db deleteObjectsFromTable:@"temp_user_bill_type"
-                                       where:SSJUserBillTypeTable.billId == oldId];
         
+        // 如果有同名的则删除当前记账类型,如果没有则吧记账类型id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_user_bill_type"
+                                           where:SSJUserBillTypeTable.billId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_user_bill_type" onProperty:SSJUserBillTypeTable.billId withValue:newId
+                                      where:SSJUserBillTypeTable.billId == oldId];
+        }
         
         if (!success) {
-            *stop = YES;
+            break;
         }
-        
-    }];
+
+    }
+    
     
     // 将所有的记账类型的userid更新为目标userid
     SSJUserBillTypeTable *userBillType = [[SSJUserBillTypeTable alloc] init];
