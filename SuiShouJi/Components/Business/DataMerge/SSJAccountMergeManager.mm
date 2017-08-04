@@ -40,7 +40,8 @@
         NSSet *firstLayer = [NSSet setWithObjects:[SSJUserReminderTableMerge class],
                              [SSJBooksTypeTableMerge class],
                              [SSJUserBillTypeTableMerge class],
-                             [SSJMemberTableMerge class], nil];
+                             [SSJMemberTableMerge class],
+                             [SSJImageSyncTableMerge class], nil];
         
         NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoTableMerge class],
                               [SSJUserCreditTableMerge class],

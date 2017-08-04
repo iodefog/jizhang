@@ -78,6 +78,10 @@
 // 注意：时间格式：yyyy-MM-dd HH:mm
 @property (nonatomic, copy) NSString *lastSyncTime;
 
+// 用户上一次合并的时间
+// 注意：时间格式：yyyy-MM-dd HH:mm:ss.SSS
+@property (nonatomic, copy) NSString *lastMergeTime;
+
 + (NSDictionary *)propertyMapping;
 
 @end
