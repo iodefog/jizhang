@@ -60,9 +60,8 @@
 }
 
 - (void)showWith:(SSJStartLunchItem *)item timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
-//    if (item.textImgItem.imgUrl.length) {
-        [self downloadTextBgImgWithUrl:item.textImgItem.imgUrl timeout:timeout completion:completion];
-//    }
+    
+    [self downloadTextBgImgWithUrl:item.textImgItem.imgUrl timeout:timeout completion:completion];
     //随机显示内容文字
     NSArray <SSJStartTextItem *> *arr = item.textImgItem.texts;
     if (arr.count == 0) return;
@@ -72,7 +71,7 @@
     
     NSMutableParagraphStyle  *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     // 行间距设置为30
-    [paragraphStyle  setLineSpacing:15];
+    [paragraphStyle  setLineSpacing:10];
     
     NSMutableAttributedString  *setString = [[NSMutableAttributedString alloc] initWithString:textItem.textContent];
     [setString  addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [textItem.textContent length])];
@@ -85,24 +84,25 @@
 
 //背景图片
 - (void)downloadTextBgImgWithUrl:(NSString *)imgUrl timeout:(NSTimeInterval)timeout completion:(void (^)())completion {
-    
+    if (imgUrl.length) {
 #ifdef DEBUG
-    [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发图文图文启动页"];
+        [CDAutoHideMessageHUD showMessage:@"开始下载服务端下发图文图文启动页"];
 #endif
-    SDWebImageManager *manager = [[SDWebImageManager alloc] init];
-    //    manager.imageDownloader.downloadTimeout = timeout;
-    NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
-    [manager.imageDownloader downloadImageWithURL:url options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
-        if (!image || error) {
+        SDWebImageManager *manager = [[SDWebImageManager alloc] init];
+        //    manager.imageDownloader.downloadTimeout = timeout;
+        NSURL *url = [NSURL URLWithString:SSJImageURLWithAPI(imgUrl)];
+        [manager.imageDownloader downloadImageWithURL:url options:(SDWebImageContinueInBackground | SDWebImageAllowInvalidSSLCertificates) progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, BOOL finished) {
+            if (!image || error) {
 #ifdef DEBUG
-            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];
+                [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"下载服务端下发启动页失败，error:%@", [error localizedDescription]]];
 #endif
-        }
-        self.bgImageView.image = image;
+            }
+            self.bgImageView.image = image;
 #ifdef DEBUG
-        [CDAutoHideMessageHUD showMessage:@"下载服务端下发图文启动页成功"];
+            [CDAutoHideMessageHUD showMessage:@"下载服务端下发图文启动页成功"];
 #endif
-    }];
+        }];
+    }
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!_isCompleted) {

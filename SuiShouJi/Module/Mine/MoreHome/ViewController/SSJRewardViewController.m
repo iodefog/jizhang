@@ -424,6 +424,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
                 [CDAutoHideMessageHUD showMessage:@"留言不要超过50个字哦"];
                 return ;
             }
+            
+            if ([self.rewarkAmountTextF.text doubleValue] < 1) {
+                [CDAutoHideMessageHUD showMessage:@"试试输入1元钱以上"];
+                return;
+            }
             [self.view endEditing:YES];
             [self.rewarkService payWithMethod:self.payMethod payMoney:self.rewarkAmountTextF.text memo:self.rewarkNotetTextF.text];
         }];
