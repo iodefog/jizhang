@@ -427,7 +427,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             }
             
             if ([self.rewarkAmountTextF.text doubleValue] < 1) {
-                [CDAutoHideMessageHUD showMessage:@"试试输入1元钱以上"];
+                [CDAutoHideMessageHUD showMessage:@"输入一元钱试试"];
                 return;
             }
             [self.view endEditing:YES];

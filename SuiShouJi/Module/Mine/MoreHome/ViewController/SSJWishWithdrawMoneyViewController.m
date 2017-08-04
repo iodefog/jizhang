@@ -264,7 +264,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     if (section == 0) {
         return 10;
     }
-    return 0.1f;
+    return 0.01f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -368,13 +368,13 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 - (UIView *)saveFooterView {
     if (_saveFooterView == nil) {
-        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 400)];
+        CGFloat height = SSJSCREENHEIGHT - 220 - SSJ_NAVIBAR_BOTTOM;
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, height < 350 ? 350 : height)];
         [_saveFooterView ssj_setBorderWidth:1];
         [_saveFooterView ssj_setBorderStyle:SSJBorderStyleBottom];
 
         [_saveFooterView addSubview:self.saveL];
         [_saveFooterView addSubview:self.targetL];
-        
         UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [saveButton setBackgroundImage:[UIImage imageNamed:@"wish_withdraw_btn_image"] forState:UIControlStateNormal];
         saveButton.size = CGSizeMake(83, 83);
