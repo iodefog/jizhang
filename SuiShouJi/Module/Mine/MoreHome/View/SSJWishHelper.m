@@ -366,7 +366,7 @@
     NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithObjects:objectsArr forKeys:keysArr];
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSString *sqlStr;
-        if ([db boolForQuery:@"select count(1) from bk_wish_charge where cuserid = ? and wishid = ? and chargeid = ?",SSJUSERID(),wishModel.wishId],chargeId) {
+        if ([db boolForQuery:@"select count(1) from bk_wish_charge where cuserid = ? and wishid = ? and chargeid = ?",SSJUSERID(),wishModel.wishId,chargeId]) {
             //更新
             [dict setObject:@(1) forKey:@"operatortype"];
             sqlStr = [self updateChargeSQLStatementWithTypeInfo:dict tableName:@"bk_wish_charge"];
