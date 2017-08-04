@@ -36,7 +36,8 @@
                     @"email":@"cemail",
                     @"adviceTime":@"cadvicetime",
                     @"selectFundid":@"ccurrentselectfundid",
-                    @"lastSyncTime":@"clastsynctime"};
+                    @"lastSyncTime":@"clastsynctime",
+                    @"lastMergeTime":@"clastmergetime"};
     }
     return mapping;
 }
