@@ -110,10 +110,19 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         [CDAutoHideMessageHUD showMessage:@"备注不能超过20个字哦"];
         return;
     }
+    
+    double money = [_moneyInput.text doubleValue];
+    if (self.chargeItem.itype == SSJWishChargeBillTypeWithdraw) {
+        if (money > [self.wishModel.wishSaveMoney doubleValue]) {
+            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"取出金额不能超过存入金额哦"]];
+            return;
+        }
+    }
 
     self.chargeItem.wishId = self.wishModel.wishId;
-    self.chargeItem.money = _moneyInput.text;
+    self.chargeItem.money = [NSString stringWithFormat:@"%.2lf",money];
     self.chargeItem.memo = self.sigItem.signature;
+    self.chargeItem.itype = self.itype;
     
     @weakify(self);
     [SSJWishHelper saveWishChargeWithWishChargeModel:self.chargeItem type:self.itype success:^{
@@ -134,8 +143,8 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 //取钱动画
 - (void)withdrawAnim {
     __weak __typeof(self)weakSelf = self;
-    [UIView animateWithDuration:10 animations:^{
-        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
+    [UIView animateWithDuration:1 animations:^{
+        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
         CGFloat height = weakSelf.saveFooterView.height -
         weakSelf.goldCoinsImageView.height * scale;
         weakSelf.goldCoinsImageView.top = height;
