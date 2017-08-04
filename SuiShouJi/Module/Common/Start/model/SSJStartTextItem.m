@@ -8,6 +8,25 @@
 
 #import "SSJStartTextItem.h"
 @implementation SSJStartTextItem
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [self mj_encode:aCoder];
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        [self mj_decode:aDecoder];
+    }
+    return self;
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
+
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
+
 @end
 
 @implementation SSJStartTextImgItem
@@ -16,6 +35,24 @@
              @"texts" : @"SSJStartTextItem"
              };
 }
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [self mj_encode:aCoder];
+}
 
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        [self mj_decode:aDecoder];
+    }
+    return self;
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
+
+
+- (void)setValue:(id)value forUndefinedKey:(NSString *)key {}
 
 @end
+
+

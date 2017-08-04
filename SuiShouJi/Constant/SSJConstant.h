@@ -396,6 +396,12 @@ extern NSString *const SSJBookCategoryKey;
 //是否弹出过通知授权弹框key
 extern NSString *const SSJNoticeAlertKey;
 
+//下发启动页当前配置版本号
+extern NSString *const SSJLunchStartVerKey;
+
+//启动页模型
+extern NSString *const SSJLunchUserSignItemKey;
+
 /** --------------- Notification --------------- */
 #pragma mark - Notification
 //  数据同步成功通知
