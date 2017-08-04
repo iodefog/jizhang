@@ -123,7 +123,7 @@
     
     NSArray *allBooks = [db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:[self tempTableName]];
     
-    // 和账本有关的表:流水,周期记账
+    // 和账本有关的表:流水,周期记账,记账类型
     for (SSJBooksTypeTable *book in allBooks) {
         NSString *oldId = book.booksId;
         NSString *newId = [datas objectForKey:book.booksId];
@@ -148,6 +148,20 @@
         if (!success) {
             break;
         }
+        
+        
+        // 更新记账类型表
+        SSJUserBillTypeTable *userBill = [[SSJUserBillTypeTable alloc] init];
+        userBill.booksId = newId;
+        success = [db updateRowsInTable:@"temp_user_bill_type"
+                           onProperties:SSJUserBillTypeTable.booksId
+                             withObject:userBill
+                                  where:SSJUserBillTypeTable.booksId == oldId];
+        
+        if (!success) {
+            break;
+        }
+        
         
         // 更新周期记账表
         SSJChargePeriodConfigTable *periodConfig = [[SSJChargePeriodConfigTable alloc] init];
