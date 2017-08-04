@@ -63,8 +63,8 @@
     }
 }
 
--(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    [super touchesBegan:touches withEvent:event];
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(nullable UIEvent *)event {
+    [super touchesEnded:touches withEvent:event];
     if (self.tableViewClickBlock) {
         self.tableViewClickBlock();
     }

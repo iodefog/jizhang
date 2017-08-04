@@ -264,6 +264,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSString *amount = [self.rewarkMoneyDataArray ssj_safeObjectAtIndex:indexPath.row];
     self.rewarkAmountTextF.text = amount;
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -426,7 +427,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             }
             
             if ([self.rewarkAmountTextF.text doubleValue] < 1) {
-                [CDAutoHideMessageHUD showMessage:@"试试输入1元钱以上"];
+                [CDAutoHideMessageHUD showMessage:@"输入一元钱试试"];
                 return;
             }
             [self.view endEditing:YES];

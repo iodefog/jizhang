@@ -250,6 +250,11 @@ typedef NS_ENUM(NSInteger, SSJWishChargeType) {
     SSJWishChargeTypeFinish           // 完成心愿
 };
 
+typedef enum : NSInteger {
+    SSJWishChargeBillTypeSave,          //存钱
+    SSJWishChargeBillTypeWithdraw       //取钱
+} SSJWishChargeBillType;
+
 //支付方式
 typedef NS_ENUM(NSInteger, SSJMethodOfPayment) {
     SSJMethodOfPaymentAlipay,          // 支付宝

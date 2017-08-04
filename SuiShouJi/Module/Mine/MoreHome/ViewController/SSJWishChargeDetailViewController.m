@@ -20,7 +20,7 @@
 #import "SSJWishHelper.h"
 #import "SSJDataSynchronizer.h"
 
-static NSString *const kTitle0 = @"取钱";
+
 static NSString *const kTitle1 = @"存钱";
 static NSString *const kTitle2 = @"日期";
 static NSString *const kTitle3 = @"备注";
@@ -50,7 +50,7 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.chargeItem ? @"心愿流水详情" : @"取钱";
+    self.title = @"心愿流水详情";
     [self updateAppearanceTheme];
     [self initdata];
     [self.view addSubview:self.tableView];
@@ -59,9 +59,7 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
 
 #pragma mark - Private
 - (void)setUpNav {
-    if (self.chargeItem) {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"wish_charge_detail_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
-    }
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"wish_charge_detail_delete"] style:UIBarButtonItemStylePlain target:self action:@selector(navRightClick)];
 }
 
 - (void)navRightClick {
@@ -77,17 +75,16 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
 
 - (void)initdata {
     // 如果是新建一套默认的数据
-    if (self.chargeItem == nil) {
-        self.chargeItem = [[SSJWishChargeItem alloc] init];
-        self.chargeItem.cbillDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        self.titleArr = @[@[kTitle0],@[kTitle2,kTitle3]];
-        self.chargeItem.itype = SSJWishChargeBillTypeWithdraw;//取钱
-        self.chargeItem.wishId = self.wishModel.wishId;
-    } else {
-        self.titleArr = @[@[kTitle1],@[kTitle2,kTitle3]];
-        self.chargeItem.itype = SSJWishChargeBillTypeSave;//存钱
-    }
-    
+    //    if (!self.chargeItem.chargeId.length) {
+    //        self.chargeItem = [[SSJWishChargeItem alloc] init];
+    //        self.chargeItem.cbillDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    //        self.titleArr = @[@[kTitle0],@[kTitle2,kTitle3]];
+    //        self.chargeItem.itype = SSJWishChargeBillTypeWithdraw;//取钱
+    //        self.chargeItem.wishId = self.wishModel.wishId;
+    //    } else {
+    self.titleArr = @[@[kTitle1],@[kTitle2,kTitle3]];
+    self.chargeItem.itype = SSJWishChargeBillTypeSave;//存钱
+    //    }
 }
 
 #pragma mark - Theme
@@ -164,7 +161,7 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
 
     newReminderCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     
-    if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle0]) {
+    if ([title isEqualToString:kTitle1]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入心愿金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -204,13 +201,6 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
         return;
     }
     double money = [_moneyInput.text doubleValue];
-    if (self.chargeItem.itype == SSJWishChargeBillTypeWithdraw) {
-        if (money > [self.wishModel.wishSaveMoney doubleValue]) {
-            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"取出金额不能超过存入金额哦"]];
-            return;
-        }
-    }
-    
     self.chargeItem.money = [NSString stringWithFormat:@"%.2lf",money];
     self.chargeItem.memo = self.sigItem.signature;
     //取钱，修改

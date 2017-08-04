@@ -21,6 +21,7 @@
 
 #import "SSJWishHelper.h"
 
+static NSString *const kTitle0 = @"取钱";
 static NSString *const kTitle1 = @"存钱";
 static NSString *const kTitle2 = @"日期";
 static NSString *const kTitle3 = @"备注";
@@ -68,7 +69,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"存钱";
+    self.title = self.itype == SSJWishChargeBillTypeSave ? @"存钱" : @"取钱";
     [self updateAppearanceTheme];
     [self initdata];
     [self.view addSubview:self.tableView];
@@ -77,8 +78,12 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 - (void)initdata {
     self.chargeItem.remindDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-    self.titleArr = @[@[kTitle1],@[kTitle2,kTitle3]];
-    self.goldCoinsImageArr = @[@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4",@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4"];
+    if (self.itype == SSJWishChargeBillTypeSave) {
+        self.titleArr = @[@[kTitle1],@[kTitle2,kTitle3]];
+        self.goldCoinsImageArr = @[@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4",@"make_wish_gold_1",@"make_wish_gold_2",@"make_wish_gold_3",@"make_wish_gold_4"];
+    } else {
+        self.titleArr = @[@[kTitle0],@[kTitle2,kTitle3]];
+    }
 }
 
 #pragma mark - Theme
@@ -105,20 +110,50 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         [CDAutoHideMessageHUD showMessage:@"备注不能超过20个字哦"];
         return;
     }
+    
+    double money = [_moneyInput.text doubleValue];
+    if (self.chargeItem.itype == SSJWishChargeBillTypeWithdraw) {
+        if (money > [self.wishModel.wishSaveMoney doubleValue]) {
+            [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"取出金额不能超过存入金额哦"]];
+            return;
+        }
+    }
 
     self.chargeItem.wishId = self.wishModel.wishId;
-    self.chargeItem.money = _moneyInput.text;
+    self.chargeItem.money = [NSString stringWithFormat:@"%.2lf",money];
     self.chargeItem.memo = self.sigItem.signature;
+    self.chargeItem.itype = self.itype;
+    
     @weakify(self);
-    [SSJWishHelper saveWishChargeWithWishChargeModel:self.chargeItem type:SSJWishChargeBillTypeSave success:^{
-        //金币动画
-        [self goldCoinsAnim];
+    [SSJWishHelper saveWishChargeWithWishChargeModel:self.chargeItem type:self.itype success:^{
+        if (self.itype == SSJWishChargeBillTypeWithdraw) {
+            //取钱
+            [self withdrawAnim];
+        } else if (self.itype == SSJWishChargeBillTypeSave){
+            //金币动画
+            [self goldCoinsAnim];
+        }
+        
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:@"操作失败"];
     }];
     
 }
 
+//取钱动画
+- (void)withdrawAnim {
+    __weak __typeof(self)weakSelf = self;
+    [UIView animateWithDuration:1 animations:^{
+        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
+        CGFloat height = weakSelf.saveFooterView.height -
+        weakSelf.goldCoinsImageView.height * scale;
+        weakSelf.goldCoinsImageView.top = height;
+    } completion:^(BOOL finished) {
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    }];
+}
+
+//存钱动画
 - (void)goldCoinsAnim {
     __weak __typeof(self)weakSelf = self;
     CGPoint goldPoint = self.saveButton.center;
@@ -229,7 +264,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     if (section == 0) {
         return 10;
     }
-    return 0.1f;
+    return 0.01f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -255,7 +290,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     
     newReminderCell.separatorInset = UIEdgeInsetsMake(0, 10, 0, 10);
     
-    if ([title isEqualToString:kTitle1]) {
+    if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle0]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入心愿金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
@@ -277,7 +312,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     
     if ([title isEqualToString:kTitle3]) {
         SSJPersonalDetailUserSignatureCell *signatureCell = [tableView dequeueReusableCellWithIdentifier:SSJWishWithdrawMemoId forIndexPath:indexPath];
-        self.sigItem = [SSJPersonalDetailUserSignatureCellItem itemWithSignatureLimit:20 signature:self.chargeItem.memo title:@"备注" placeholder:@"输入记账小目标，更有利于小目标实现20字"];
+        self.sigItem = [SSJPersonalDetailUserSignatureCellItem itemWithSignatureLimit:20 signature:self.chargeItem.memo title:@"备注" placeholder:@"备注说明"];
         signatureCell.cellItem = self.sigItem;
         return signatureCell;
     }
@@ -333,18 +368,23 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 
 - (UIView *)saveFooterView {
     if (_saveFooterView == nil) {
-        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 400)];
+        CGFloat height = SSJSCREENHEIGHT - 220 - SSJ_NAVIBAR_BOTTOM;
+        _saveFooterView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, height < 350 ? 350 : height)];
         [_saveFooterView ssj_setBorderWidth:1];
         [_saveFooterView ssj_setBorderStyle:SSJBorderStyleBottom];
 
         [_saveFooterView addSubview:self.saveL];
         [_saveFooterView addSubview:self.targetL];
-        
         UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectZero];
         [saveButton setBackgroundImage:[UIImage imageNamed:@"wish_withdraw_btn_image"] forState:UIControlStateNormal];
         saveButton.size = CGSizeMake(83, 83);
         saveButton.titleLabel.font = [UIFont ssj_pingFangMediumFontOfSize:24];
-        [saveButton setTitle:@"投入" forState:UIControlStateNormal];
+        if (self.itype == SSJWishChargeBillTypeSave) {
+            [saveButton setTitle:@"投入" forState:UIControlStateNormal];
+        } else {
+            [saveButton setTitle:@"取钱" forState:UIControlStateNormal];
+        }
+        
         [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [saveButton addTarget:self action:@selector(saveMoneyButtonClicked) forControlEvents:UIControlEventTouchUpInside];
         saveButton.centerX = _saveFooterView.width * 0.5;

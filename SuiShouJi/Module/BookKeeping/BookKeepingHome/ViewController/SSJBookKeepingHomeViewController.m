@@ -204,7 +204,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
-    self.selectIndex = nil;
+    [self clearSelectedIndexPath];
     [self getCurrentDate];
     [self.floatingDateView dismiss];
     [self.mutiFunctionButton dismiss];
@@ -372,7 +372,21 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         };
         bookKeepingCell.enterChargeDetailBlock = ^(SSJBookKeepingHomeTableViewCell *cell) {
             if ([cell.item.userId isEqualToString:SSJUSERID()]) {
-                [cell showEditAndDeleteBtn:!cell.editAndDeleteBtnShowed animated:YES];
+                NSIndexPath *indexPath = [weakSelf.tableView indexPathForCell:cell];
+                if (!weakSelf.selectIndex) {
+                    cell.item.expanded = YES;
+                    weakSelf.selectIndex = indexPath;
+                } else if ([weakSelf.selectIndex compare:indexPath] == NSOrderedSame) {
+                    cell.item.expanded = NO;
+                    weakSelf.selectIndex = nil;
+                } else if ([weakSelf.selectIndex compare:indexPath] != NSOrderedSame) {
+                    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:weakSelf.selectIndex.section];
+                    SSJBillingChargeCellItem *item = [listItem.chargeItems ssj_safeObjectAtIndex:weakSelf.selectIndex.row];
+                    item.expanded = NO;
+                    
+                    cell.item.expanded = YES;
+                    weakSelf.selectIndex = indexPath;
+                }
             } else {
                 SSJCalenderDetailViewController *detailVc = [[SSJCalenderDetailViewController alloc] init];
                 [SSJAnaliyticsManager event:@"home_liushui_detail"];
@@ -387,7 +401,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         };
         bookKeepingCell.deleteBlock = ^(SSJBookKeepingHomeTableViewCell * _Nonnull cell) {
             [SSJAnaliyticsManager event:@"main_record_edit"];
-            weakSelf.selectIndex = nil;
+            [weakSelf clearSelectedIndexPath];
             [weakSelf getDataFromDataBase];
             [weakSelf updateNavigationBar];
         };
@@ -536,8 +550,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _tableView.showsVerticalScrollIndicator = NO;
         __weak typeof(self) weakSelf = self;
         _tableView.tableViewClickBlock = ^(){
-            weakSelf.selectIndex = nil;
-            [weakSelf.tableView reloadData];
+            [weakSelf clearSelectedIndexPath];
         };
     }
     return _tableView;
@@ -1097,6 +1110,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
+}
+
+- (void)clearSelectedIndexPath {
+    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:self.selectIndex.section];
+    SSJBillingChargeCellItem *item = [listItem.chargeItems ssj_safeObjectAtIndex:self.selectIndex.row];
+    item.expanded = NO;
+    self.selectIndex = nil;
 }
 
 @end
