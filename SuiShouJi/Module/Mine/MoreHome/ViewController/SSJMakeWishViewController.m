@@ -89,6 +89,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.topImg addSubview:self.cameraImg];
     
     [self.scrollView addSubview:self.wishAmountL];
+    [self.scrollView addSubview:self.makeWishBtn];
     [self.scrollView addSubview:self.bottomBg];
     [self.bottomBg addSubview:self.wishAmountTextF];
     [self.bottomBg addSubview:self.moneyCollectionView];
@@ -98,7 +99,6 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.topBg addSubview:self.wishNameTextF];
     [self.topBg addSubview:self.wishListTableView];
     
-    [self.scrollView addSubview:self.makeWishBtn];
 }
 
 - (void)initNormalData {
@@ -194,7 +194,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    return CGSizeMake((collectionView.width - 120)/4, 25);
+    return CGSizeMake((collectionView.width - 70)/4, 25);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -380,7 +380,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [flowLayout setScrollDirection:UICollectionViewScrollDirectionVertical];
         flowLayout.minimumInteritemSpacing = 15;
         flowLayout.minimumLineSpacing = 15;
-        flowLayout.sectionInset = UIEdgeInsetsMake(15, 15, 15, 15);
+        flowLayout.sectionInset = UIEdgeInsetsMake(15, 10, 15, 10);
         _moneyCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:flowLayout];
         _moneyCollectionView.delegate = self;
         _moneyCollectionView.dataSource = self;
