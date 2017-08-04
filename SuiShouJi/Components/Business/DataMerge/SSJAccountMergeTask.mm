@@ -27,6 +27,7 @@
 }
 
 + (void)mergeDataWithManager:(SSJAccountMergeManager *)manager {
+    [SVProgressHUD showWithStatus:@"正在合并中"];
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         NSString *unloggedUserid = [manager getCurrentUnloggedUserId];
         
@@ -38,10 +39,14 @@
         
         NSDate *lastMergeDate = [NSDate dateWithString:currentUser.lastMergeTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
+        UIViewController *currentController = SSJVisibalController();
+
+
         [manager startMergeWithSourceUserId:unloggedUserid targetUserId:currentUser.userId startDate:lastMergeDate endDate:[NSDate date] mergeType:SSJMergeDataTypeByWriteDate Success:^{
-            [CDAutoHideMessageHUD showMessage:@"合并成功"];
+            [SVProgressHUD showSuccessWithStatus:@"合并成功"];
         } failure:^(NSError *error) {
-            
+            [SVProgressHUD showErrorWithStatus:@"合并失败"];
+            [SSJAlertViewAdapter showError:error];
         }];
         
     });

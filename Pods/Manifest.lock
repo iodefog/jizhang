@@ -82,6 +82,7 @@ PODS:
     - libwebp
     - SDWebImage/Core
   - SSZipArchive (2.0.3)
+  - SVProgressHUD (2.1.2)
   - UMengAnalytics (4.2.4)
   - UMengUShare/Core (6.3.0):
     - UMengUShare/Network
@@ -120,6 +121,7 @@ DEPENDENCIES:
   - ReactiveCocoa (~> 2.1.2)
   - SDWebImage/WebP
   - SSZipArchive
+  - SVProgressHUD
   - UMengAnalytics
   - UMengUShare/Social/QQ (~> 6.3.0)
   - UMengUShare/Social/Sina
@@ -147,6 +149,7 @@ SPEC CHECKSUMS:
   ReactiveCocoa: f89f2e009a87951b50321bf9feb958823fcc617e
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   SSZipArchive: b6648b70a36303ca5be9f0351174b347e1886236
+  SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
   UMengUShare: b208ac3bcf1f63d11a100b359990e9d77a0f2085
   WCDB: 1f32cb4d3fa59ec36afdf827614e9f014fa5bce4
@@ -157,6 +160,6 @@ SPEC CHECKSUMS:
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 74cf5600e045857d4f012cbc8d1b206ef9154249
+PODFILE CHECKSUM: bd3f7a5c0dee050adfe113495c1fe5e7a3584c9f
 
 COCOAPODS: 1.2.1

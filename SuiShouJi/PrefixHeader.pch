@@ -53,5 +53,7 @@
 
 #import <YYWebImage/YYWebImage.h>
 
+#import "SVProgressHUD.h"
+
 
 #endif
