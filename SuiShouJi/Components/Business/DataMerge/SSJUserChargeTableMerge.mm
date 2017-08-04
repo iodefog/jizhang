@@ -102,13 +102,17 @@
     
     BOOL success = NO;
     
-    NSArray *allCharges = [db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:[self tempTableName]];
+    NSArray *allCharges = [db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:[self tempTableName]];
 
     
     // 和流水有关的表:成员流水,图片同步表
     for (SSJUserChargeTable *charge in allCharges) {
         NSString *oldId = charge.chargeId;
         NSString *newId = [datas objectForKey:charge.chargeId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
     
         if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");
