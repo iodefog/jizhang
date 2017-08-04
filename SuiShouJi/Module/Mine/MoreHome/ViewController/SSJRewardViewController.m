@@ -244,7 +244,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (![service.returnCode isEqualToString:@"1"]) return;
     if (service == self.rewarkService) {
         if (self.rewarkService.payUrl.length) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.rewarkService.payUrl] options:@{} completionHandler:nil];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.rewarkService.payUrl]];
         }
     } else if (service == self.rewarkResultService) {
         if ([self.rewarkResultService.payResultStatus isEqualToString:@"1"]) {
