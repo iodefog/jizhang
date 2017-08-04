@@ -36,7 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 // 执行新增或者编辑流水的动画
 - (void)performAddOrEditAnimation;
 
-- (void)showEditAndDeleteBtn:(BOOL)showed animated:(BOOL)animated;
+@end
+
+
+@interface SSJBillingChargeCellItem (SSJBookKeepingHomeTableViewCell)
+
+/**
+ 展开状态
+ */
+@property (nonatomic) BOOL expanded;
 
 @end
 
