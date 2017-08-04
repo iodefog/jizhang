@@ -246,6 +246,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 - (SSJUserSignNetworkService *)startLunchService {
     if (!_startLunchService) {
         _startLunchService = [[SSJUserSignNetworkService alloc] initWithDelegate:self];
+        _startLunchService.timeoutInterval = 1;
     }
     return _startLunchService;
 }

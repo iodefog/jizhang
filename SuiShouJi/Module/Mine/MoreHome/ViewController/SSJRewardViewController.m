@@ -248,9 +248,9 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         }
     } else if (service == self.rewarkResultService) {
         if ([self.rewarkResultService.payResultStatus isEqualToString:@"1"]) {
-            [CDAutoHideMessageHUD showMessage:@"支付成功"];
+            [CDAutoHideMessageHUD showMessage:@"打赏成功"];
         } else {
-            [CDAutoHideMessageHUD showMessage:@"未支付成功"];
+            [CDAutoHideMessageHUD showMessage:@"未完成打赏"];
         }
     }
     
