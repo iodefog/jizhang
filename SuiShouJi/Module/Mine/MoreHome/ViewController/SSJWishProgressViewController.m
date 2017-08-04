@@ -559,6 +559,7 @@ static CGFloat defImageHeight = 402;
             @strongify(self);
             SSJWishWithdrawMoneyViewController *saveVC = [[SSJWishWithdrawMoneyViewController alloc] init];
             saveVC.wishModel = [self.wishModel copy];
+            saveVC.itype = SSJWishChargeBillTypeSave;
             saveVC.saveMoneyType = SSJSaveImgTypeCustom;
             [SSJVisibalController().navigationController pushViewController:saveVC animated:YES];
         }];
@@ -577,8 +578,9 @@ static CGFloat defImageHeight = 402;
         //取钱
         [[_withdrawBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
-             SSJWishChargeDetailViewController *withdrawVC = [[SSJWishChargeDetailViewController alloc] init];
+             SSJWishWithdrawMoneyViewController *withdrawVC = [[SSJWishWithdrawMoneyViewController alloc] init];
             withdrawVC.wishModel = [self.wishModel copy];
+            withdrawVC.itype = SSJWishChargeBillTypeWithdraw;
             [SSJVisibalController().navigationController pushViewController:withdrawVC animated:YES];
         }];
     }
