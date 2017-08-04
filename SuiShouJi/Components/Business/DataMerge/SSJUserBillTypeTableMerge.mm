@@ -31,7 +31,7 @@
     
     WCTPropertyList multiProperties;
     
-    for (const WCTProperty& property : SSJTransferCycleTable.AllProperties) {
+    for (const WCTProperty& property : SSJUserBillTypeTable.AllProperties) {
         multiProperties.push_back(property.inTable([self mergeTableName]));
     }
     
@@ -85,8 +85,8 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJTransferCycleTable *transfers = (SSJTransferCycleTable *)[multiObject objectForKey:[self mergeTableName]];
-        [tempArr addObject:transfers];
+        SSJUserBillTypeTable *userbills = (SSJUserBillTypeTable *)[multiObject objectForKey:[self mergeTableName]];
+        [tempArr addObject:userbills];
     }
     
     [dict setObject:tempArr forKey:@"results"];
@@ -112,7 +112,7 @@
                                                       && SSJUserBillTypeTable.userId == targetUserId];
         
         if (sameNameUserBillType) {
-            [newAndOldIdDic setObject:currentUserBillType.billId forKey:sameNameUserBillType.billId];
+            [newAndOldIdDic setObject:sameNameUserBillType.billId forKey:currentUserBillType.billId];
         }
         
     }];
@@ -171,13 +171,14 @@
         
     }];
     
-    // 将所有的周期转账的userid更新为目标userid
+    // 将所有的记账类型的userid更新为目标userid
     SSJUserBillTypeTable *userBillType = [[SSJUserBillTypeTable alloc] init];
     userBillType.userId = targetUserId;
-    success = [db updateRowsInTable:@"temp_loan"
+    success = [db updateRowsInTable:@"temp_user_bill_type"
                        onProperties:SSJUserBillTypeTable.userId
                          withObject:userBillType
                               where:SSJUserBillTypeTable.userId == sourceUserid];
+    
     
     return success;
 }

@@ -42,9 +42,9 @@
     NSString *endDate;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -105,7 +105,7 @@
                                            && SSJBooksTypeTable.userId == targetUserId];
 
         if (sameNameBook) {
-            [newAndOldIdDic setObject:currentBooks.booksId forKey:sameNameBook.booksId];
+            [newAndOldIdDic setObject:sameNameBook.booksId forKey:currentBooks.booksId];
         }
         
     }];
@@ -119,16 +119,23 @@
                                        withDatas:(NSDictionary *)datas
                                       inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
+    
+    NSArray *allBooks = [db getAllObjectsOfClass:SSJBooksTypeTable.class fromTable:[self tempTableName]];
     
     // 和账本有关的表:流水,周期记账
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
-        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_books_type"] || ![db isTableExists:@"temp_user_bill_type"]) {
+    for (SSJBooksTypeTable *book in allBooks) {
+        NSString *oldId = book.booksId;
+        NSString *newId = [datas objectForKey:book.booksId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+        
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_bill_type"]) {
             SSJPRINT(@">>>>>>>>账本所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新流水表
@@ -139,7 +146,7 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.booksId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新周期记账表
@@ -150,19 +157,23 @@
                              withObject:periodConfig
                                   where:SSJChargePeriodConfigTable.booksId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
-
+        
         
         // 删除账本中同名的账本
-        success = [db deleteObjectsFromTable:@"temp_books_type"
-                                       where:SSJBooksTypeTable.booksId == oldId];
-
-        if (!success) {
-            *stop = YES;
+        if ([datas objectForKey:book.booksId]) {
+            success = [db deleteObjectsFromTable:@"temp_books_type"
+                                           where:SSJBooksTypeTable.booksId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_books_type" onProperty:SSJBooksTypeTable.booksId withValue:newId
+                                      where:SSJBooksTypeTable.booksId == oldId];
         }
         
-    }];
+        if (!success) {
+            break;
+        }
+    };
     
     // 将所有的账本的userid更新为目标userid
     SSJBooksTypeTable *booksType = [[SSJBooksTypeTable alloc] init];
@@ -173,6 +184,7 @@
                               where:SSJBooksTypeTable.userId == sourceUserid];
     
     return success;
+    
 }
 
 @end

@@ -42,7 +42,7 @@
 
 @property (nonatomic, retain) NSString* currentBooksId;
 
-@property (nonatomic, assign) int loginType;
+@property (nonatomic, assign) SSJLoginType loginType;
 
 @property (nonatomic, retain) NSString* openId;
 

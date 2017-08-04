@@ -87,7 +87,7 @@
                                           && SSJUserChargeTable.userId == targetUserId];
 
         if (sameCharge) {
-            [newAndOldIdDic setObject:currentCharge.chargeId forKey:sameCharge.chargeId];
+            [newAndOldIdDic setObject:sameCharge.chargeId forKey:currentCharge.chargeId];
         }
         
     }];
@@ -100,48 +100,59 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
+    
+    NSArray *allCharges = [db getAllObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:[self tempTableName]];
+
     
     // 和流水有关的表:成员流水,图片同步表
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
-        if (![db isTableExists:@"temp_member_charge"] || ![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
+    for (SSJUserChargeTable *charge in allCharges) {
+        NSString *oldId = charge.chargeId;
+        NSString *newId = [datas objectForKey:charge.chargeId];
+    
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_img_sync"]) {
             SSJPRINT(@">>>>>>>>流水所关联的表不存在<<<<<<<<");
-            *stop = NO;
             success = NO;
+            break;
         }
         
         // 更新成员流水
         SSJMembereChargeTable *memberCharge = [[SSJMembereChargeTable alloc] init];
         memberCharge.memberId = newId;
         success = [db updateRowsInTable:@"temp_member_charge"
-                           onProperties:SSJMembereChargeTable.memberId
+                           onProperties:SSJMembereChargeTable.chargeId
                              withObject:memberCharge
-                                  where:SSJMembereChargeTable.memberId == oldId];
+                                  where:SSJMembereChargeTable.chargeId == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
         // 更新图片同步表
         SSJImageSyncTable *syncImage = [[SSJImageSyncTable alloc] init];
         syncImage.imageSourceId = newId;
-        success = [db updateRowsInTable:@"temp_member_charge"
+        success = [db updateRowsInTable:@"temp_img_sync"
                            onProperties:SSJImageSyncTable.imageSourceId
                              withObject:memberCharge
                                   where:SSJImageSyncTable.imageSourceId == oldId];
         if (!success) {
-            *stop = YES;
-        }
-
-        // 删除同一条流水
-        success = [db deleteObjectsFromTable:@"temp_user_charge"
-                                       where:SSJUserChargeTable.chargeId == oldId];
-        if (!success) {
-            *stop = YES;
+            break;
         }
         
-    }];
+        // 如果有同名的则删除当前流水,如果没有则吧流水id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_user_charge"
+                                           where:SSJUserChargeTable.chargeId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_user_charge" onProperty:SSJUserChargeTable.chargeId withValue:newId
+                                      where:SSJUserChargeTable.chargeId == oldId];
+        }
+        
+        if (!success) {
+            break;
+        }
+
+    }
+    
     // 将所有的流水的userid更新为目标userid
     SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
     userCharge.userId = targetUserId;

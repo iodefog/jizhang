@@ -8,11 +8,6 @@
 
 #import "SSJBaseCellItem.h"
 
-typedef enum : NSInteger {
-    SSJWishChargeBillTypeSave,          //存钱
-    SSJWishChargeBillTypeWithdraw       //取钱
-} SSJWishChargeBillType;
-
 @interface SSJWishChargeItem : SSJBaseCellItem<NSCopying>
 
 @property (nonatomic, copy) NSString *chargeId;

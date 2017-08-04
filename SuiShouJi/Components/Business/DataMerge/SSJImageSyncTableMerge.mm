@@ -80,7 +80,7 @@
     WCTMultiObject *multiObject;
     
     while ((multiObject = [select nextMultiObject])) {
-        SSJMemberTable *members = (SSJMemberTable *)[multiObject objectForKey:[self mergeTableName]];
+        SSJImageSyncTable *members = (SSJImageSyncTable *)[multiObject objectForKey:[self mergeTableName]];
         [tempArr addObject:members];
     }
     

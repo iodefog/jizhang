@@ -160,7 +160,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     [self.bottomBg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.topBg.mas_bottom).offset(10);
         make.left.right.mas_equalTo(self.topBg);
-        make.bottom.mas_equalTo(self.rewarkNotetTextF).offset(28);
+        make.bottom.mas_equalTo(self.rewarkNotetTextF).offset(13);
     }];
     
     [self.rewarkNoteTextL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -264,6 +264,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     NSString *amount = [self.rewarkMoneyDataArray ssj_safeObjectAtIndex:indexPath.row];
     self.rewarkAmountTextF.text = amount;
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -303,6 +304,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (TPKeyboardAvoidingScrollView *)scrollView {
     if (!_scrollView) {
         _scrollView = [[TPKeyboardAvoidingScrollView alloc] init];
+        _scrollView.contentSize = CGSizeMake(0, 660);
     }
     return _scrollView;
 }
@@ -334,7 +336,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_slognL) {
         _slognL = [[UILabel alloc] init];
         _slognL.text = @"谢谢你的爱，小鱼会继续努力哒~";
-        _slognL.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
+        _slognL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _slognL.textColor = [UIColor whiteColor];
     }
     return _slognL;
@@ -344,7 +346,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkAmountTextL) {
         _rewarkAmountTextL = [[UILabel alloc] init];
         _rewarkAmountTextL.text = @"金额";
-        _rewarkAmountTextL.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_2];
+        _rewarkAmountTextL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     }
     return _rewarkAmountTextL;
 }
@@ -353,7 +355,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkAmountTextF) {
         _rewarkAmountTextF = [[UITextField alloc] init];
         _rewarkAmountTextF.text = @"5.20";
-        _rewarkAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _rewarkAmountTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         _rewarkAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _rewarkAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _rewarkAmountTextF.textAlignment = NSTextAlignmentRight;
@@ -402,7 +404,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_rewarkNotetTextF) {
         _rewarkNotetTextF = [[SSJCustomTextView alloc] init];
         _rewarkNotetTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        _rewarkNotetTextF.text = @"谢谢你的爱，小鱼会继续努力哒~谢谢你的爱，小鱼会继续努力哒~";
+        _rewarkNotetTextF.text = @"默默的爱";
         _rewarkNotetTextF.placeholder = @"请输入50字以内的留言哦";
         _rewarkNotetTextF.delegate = self;
     }
@@ -422,6 +424,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
             if (self.rewarkNotetTextF.text.length > 50) {
                 [CDAutoHideMessageHUD showMessage:@"留言不要超过50个字哦"];
                 return ;
+            }
+            
+            if ([self.rewarkAmountTextF.text doubleValue] < 1) {
+                [CDAutoHideMessageHUD showMessage:@"试试输入1元钱以上"];
+                return;
             }
             [self.view endEditing:YES];
             [self.rewarkService payWithMethod:self.payMethod payMoney:self.rewarkAmountTextF.text memo:self.rewarkNotetTextF.text];
