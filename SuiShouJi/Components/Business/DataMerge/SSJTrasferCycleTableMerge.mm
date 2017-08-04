@@ -108,7 +108,7 @@
                                                    && SSJTransferCycleTable.userId == targetUserId];
         
         if (sameNameTransfer) {
-            [newAndOldIdDic setObject:currentTransfer.cycleId forKey:sameNameTransfer.cycleId];
+            [newAndOldIdDic setObject:sameNameTransfer.cycleId forKey:currentTransfer.cycleId];
         }
         
     }];
@@ -122,19 +122,25 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
     
-    // 和周期转账有关的表:流水表
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *newId = key;
-        NSString *oldId = obj;
+    NSArray *allLoans = [db getAllObjectsOfClass:SSJTransferCycleTable.class fromTable:[self tempTableName]];
+    
+    for (SSJTransferCycleTable *transfer in allLoans) {
+        NSString *oldId = transfer.cycleId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+    
         if (![db isTableExists:@"temp_user_charge"]) {
             SSJPRINT(@">>>>>>>>周期转账所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
-        // 更新成员流水表
+        // 更新流水表
         SSJUserChargeTable *userCharge = [[SSJUserChargeTable alloc] init];
         userCharge.cid = newId;
         success = [db updateRowsInTable:@"temp_user_charge"
@@ -142,20 +148,27 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.cid == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
-        // 删除周期转账的成员
-        success = [db deleteObjectsFromTable:@"temp_transfer_cycle"
-                                       where:SSJTransferCycleTable.cycleId == oldId];
+        // 如果有同名的则删除当前周期转账,如果没有则吧周期转账id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_transfer_cycle"
+                                           where:SSJTransferCycleTable.cycleId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_transfer_cycle" onProperty:SSJTransferCycleTable.cycleId withValue:newId
+                                      where:SSJTransferCycleTable.cycleId == oldId];
+        }
+        
         
         
         
         if (!success) {
-            *stop = YES;
+            break;
         }
-        
-    }];
+
+    }
+    
     
     // 将所有的周期转账的userid更新为目标userid
     SSJTransferCycleTable *userCycleTransfer = [[SSJTransferCycleTable alloc] init];

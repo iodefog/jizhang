@@ -112,7 +112,7 @@
                                                       && SSJUserBillTypeTable.userId == targetUserId];
         
         if (sameNameUserBillType) {
-            [newAndOldIdDic setObject:currentUserBillType.billId forKey:sameNameUserBillType.billId];
+            [newAndOldIdDic setObject:sameNameUserBillType.billId forKey:currentUserBillType.billId];
         }
         
     }];

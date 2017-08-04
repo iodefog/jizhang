@@ -143,24 +143,35 @@
             }
         }
     
-//        if (![self copyAllValuesFromTempDbInDataBase:self.db]) {
-//            dispatch_main_async_safe(^{
-//                if (failure) {
-//                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"从临时表拷贝数据失败"}]);
-//                }
-//            });
-//            return NO;
-//        }
-//        
-//        if (![self dropAllTempleTableInDataBase:self.db]) {
-//            dispatch_main_async_safe(^{
-//                if (failure) {
-//                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"或合并结束删除临时表失败"}]);
-//                }
-//            });
-//            return NO;
-//        };
-//        
+        if (![self copyAllValuesFromTempDbInDataBase:self.db]) {
+            dispatch_main_async_safe(^{
+                if (failure) {
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"从临时表拷贝数据失败"}]);
+                }
+            });
+            return NO;
+        }
+        
+        if (![self dropAllTempleTableInDataBase:self.db]) {
+            dispatch_main_async_safe(^{
+                if (failure) {
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"或合并结束删除临时表失败"}]);
+                }
+            });
+            return NO;
+        };
+        
+        if (type == SSJMergeDataTypeByWriteDate) {
+            if ([self.db updateRowsInTable:@"BK_USER" onProperty:SSJUserBaseTable.lastMergeTime withValue:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] where:SSJUserBaseTable.userId == targetUserId]) {
+                dispatch_main_async_safe(^{
+                    if (failure) {
+                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"修改资金用户最后合并时间失败"}]);
+                    }
+                });
+                return NO;
+            }
+        }
+        
         return YES;
     }];
     

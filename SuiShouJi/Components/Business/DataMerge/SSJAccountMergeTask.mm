@@ -23,7 +23,7 @@
 @implementation SSJAccountMergeTask
 
 + (void)load {
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(mergeDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
 }
 
 + (void)mergeDataWithManager:(SSJAccountMergeManager *)manager {

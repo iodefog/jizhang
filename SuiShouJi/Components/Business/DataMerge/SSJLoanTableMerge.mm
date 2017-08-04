@@ -103,7 +103,7 @@
                                       && SSJLoanTable.userId == targetUserId];
         
         if (sameNameLoan) {
-            [newAndOldIdDic setObject:currentLoan.loanId forKey:sameNameLoan.loanId];
+            [newAndOldIdDic setObject:sameNameLoan.loanId forKey:currentLoan.loanId];
         }
         
     }];
@@ -117,16 +117,22 @@
                                  withDatas:(NSDictionary *)datas
                                 inDataBase:(WCTDatabase *)db {
     
-    __block BOOL success = NO;
+    BOOL success = NO;
     
-    // 和借贷有关的表:流水
-    [datas enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *oldId = obj;
-        NSString *newId = key;
+    NSArray *allLoans = [db getAllObjectsOfClass:SSJLoanTable.class fromTable:[self tempTableName]];
+    
+    for (SSJLoanTable *loan in allLoans) {
+        NSString *oldId = loan.loanId;
+        NSString *newId = [datas objectForKey:oldId];
+        
+        if (!newId) {
+            newId = SSJUUID();
+        }
+        
         if (![db isTableExists:@"temp_user_charge"]) {
             SSJPRINT(@">>>>>>>>借贷所关联的表不存在<<<<<<<<");
-            *stop = YES;
             success = NO;
+            break;
         }
         
         // 更新流水表
@@ -137,15 +143,21 @@
                              withObject:userCharge
                                   where:SSJUserChargeTable.cid == oldId];
         if (!success) {
-            *stop = YES;
+            break;
         }
         
-        // 删除同名的借贷
-        success = [db deleteObjectsFromTable:@"temp_loan"
-                                       where:SSJLoanTable.loanId == oldId];
-        
+        // 如果有同名的则删除当前借贷,如果没有则吧借贷id更新为新的id
+        if ([datas objectForKey:oldId]) {
+            success = [db deleteObjectsFromTable:@"temp_loan"
+                                           where:SSJLoanTable.loanId == oldId];
+        } else {
+            success = [db updateRowsInTable:@"temp_loan" onProperty:SSJLoanTable.loanId withValue:newId
+                                      where:SSJLoanTable.loanId == oldId];
+        }
 
-    }];
+        
+        
+    };
     
     // 将所有的借贷的userid更新为目标userid
     SSJLoanTable *userLoan = [[SSJLoanTable alloc] init];
@@ -158,6 +170,8 @@
     
     
     return success;
+    
+    
 }
 
 
