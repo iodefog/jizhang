@@ -33,7 +33,8 @@
         
         SSJUserBaseTable *currentUser = [manager getCurrentUser];
         
-        if (!currentUser.lastMergeTime) {
+        
+        if (!currentUser.lastMergeTime.length || currentUser.lastMergeTime) {
             currentUser.lastMergeTime = @"1970-01-01 00:00:00.000";
         }
         
