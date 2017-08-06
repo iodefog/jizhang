@@ -29,6 +29,8 @@
 
 @property (nonatomic,strong) UIButton *mergeButton;
 
+@property (nonatomic,strong) SSJDataMergeHelper *helper;
+
 @end
 
 @implementation SSJAccountMergeViewController
@@ -175,6 +177,13 @@
         _warningImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"warning"]];
     }
     return _warningImage;
+}
+
+- (SSJDataMergeHelper *)helper {
+    if (!_helper) {
+        _helper = [[SSJDataMergeHelper alloc] init];
+    }
+    return _helper;
 }
 
 - (void)didReceiveMemoryWarning {
