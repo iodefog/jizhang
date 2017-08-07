@@ -16,11 +16,11 @@
 
 @property (nonatomic, retain) NSString* fPassword;
 
-@property (nonatomic, retain) NSString* nickId;
+@property (nonatomic, retain) NSString* nickName;
 
 @property (nonatomic, retain) NSString* mobileNo;
 
-@property (nonatomic, retain) NSString* nickName;
+@property (nonatomic, retain) NSString* realName;
 
 @property (nonatomic, retain) NSString* idCardNo;
 

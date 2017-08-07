@@ -13,9 +13,9 @@
 @synthesize userId;
 @synthesize password;
 @synthesize fPassword;
-@synthesize nickId;
-@synthesize mobileNo;
 @synthesize nickName;
+@synthesize mobileNo;
+@synthesize realName;
 @synthesize idCardNo;
 @synthesize userIcon;
 @synthesize registerState;
@@ -42,9 +42,9 @@ WCDB_IMPLEMENTATION(SSJUserBaseTable)
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, userId, "CUSERID")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, password, "CPWD")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, fPassword, "CFPWD")
-WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, nickId, "CNICKID")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, nickName, "CNICKID")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, mobileNo, "CMOBILENO")
-WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, nickName, "CREALNAME")
+WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, realName, "CREALNAME")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, idCardNo, "CIDCARD")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, userIcon, "CICONS")
 WCDB_SYNTHESIZE_COLUMN(SSJUserBaseTable, registerState, "CREGISTERSTATE")
