@@ -438,6 +438,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
                 [CDAutoHideMessageHUD showMessage:@"输入一元钱试试"];
                 return;
             }
+            
+            if ([self.rewarkAmountTextF.text doubleValue] > 10000) {
+                [CDAutoHideMessageHUD showMessage:@"打赏虽好，可不要过万哦"];
+                return;
+            }
             [self.view endEditing:YES];
             [self.rewarkService payWithMethod:self.payMethod payMoney:self.rewarkAmountTextF.text memo:self.rewarkNotetTextF.text];
         }];
