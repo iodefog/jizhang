@@ -429,6 +429,30 @@
                          where:SSJUserBaseTable.userId == SSJUSERID()];
 }
 
+- (NSDictionary *)getStartAndEndChargeDataForUnloggedUser {
+    NSMutableDictionary *dateDic = [NSMutableDictionary dictionaryWithCapacity:0];
+    
+    NSString *unLoggedUserId = [self getCurrentUnloggedUserId];
+    
+    NSString *maxDate = [self.db getOneValueOnResult:SSJUserChargeTable.billDate.max() fromTable:@"BK_USER_CHARGE"
+                                               where:SSJUserChargeTable.operatorType != 2
+                         && SSJUserChargeTable.userId == unLoggedUserId
+                         && SSJUserChargeTable.writeDate <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    
+    NSString *minDate = [self.db getOneValueOnResult:SSJUserChargeTable.billDate.min() fromTable:@"BK_USER_CHARGE"
+                                               where:SSJUserChargeTable.operatorType != 2
+                         && SSJUserChargeTable.userId == unLoggedUserId
+                         && SSJUserChargeTable.writeDate <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    
+    [dateDic setObject:maxDate forKey:@"maxDate"];
+    
+    [dateDic setObject:minDate forKey:@"minDate"];
+    
+    return dateDic;
+    
+}
+
+
 
 @end
 
