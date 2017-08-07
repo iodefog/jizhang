@@ -27,6 +27,10 @@
 }
 
 + (void)mergeDataWithManager:(SSJAccountMergeManager *)manager {
+    UIViewController *currentController = SSJVisibalController();
+
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:currentController.navigationController.view animated:YES];
+    hud.label.text = @"数据合并中";
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         NSString *unloggedUserid = [manager getCurrentUnloggedUserId];
         
@@ -38,13 +42,14 @@
         }
         
         NSDate *lastMergeDate = [NSDate dateWithString:currentUser.lastMergeTime formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        
-        UIViewController *currentController = SSJVisibalController();
-
 
         [manager startMergeWithSourceUserId:unloggedUserid targetUserId:currentUser.userId startDate:lastMergeDate endDate:[NSDate date] mergeType:SSJMergeDataTypeByWriteDate Success:^{
+            [hud hideAnimated:YES afterDelay:1];
+            [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
+            [hud hideAnimated:YES afterDelay:1];
+            [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
         }];
         
     });
