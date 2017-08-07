@@ -77,8 +77,14 @@
 //用户账户类型数据
 @property (nonatomic,strong) NSArray *fundInfoArray;
 
-//用户记账类型数据
+//用户用过的收支类别对应的账本id；用于对数据进行迁移；结构：@[@{booksid:账本id,cbillid:类别id}]
+@property (nonatomic,strong) NSArray *bookBillsArray;
+
+//用户收支类别数据（老版本）
 @property (nonatomic,strong) NSArray *userBillArray;
+
+//用户收支类别数据（新版本）
+@property (nonatomic,strong) NSArray *userBillTypeArray;
 
 //用户账本类型数据
 @property (nonatomic,strong) NSArray *booksTypeArray;
