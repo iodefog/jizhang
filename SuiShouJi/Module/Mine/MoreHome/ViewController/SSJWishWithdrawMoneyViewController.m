@@ -107,6 +107,11 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         return;
     }
     
+    if ([_moneyInput.text doubleValue] <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入0元以上金额"];
+        return;
+    }
+    
     if (self.sigItem.signature.length > 20) {
         [CDAutoHideMessageHUD showMessage:@"备注不能超过20个字哦"];
         return;
