@@ -253,8 +253,7 @@
 
         // 如果需要删除资金帐户,则要因为数据都转移了,删掉提醒,删掉还款
         if (needToDelete) {
-            SSJUserCreditTable *card = [[self.db getOneObjectOfClass:SSJUserCreditTable.class fromTable:@"BK_USER_CREDIT"]
-                                        where:SSJUserCreditTable.cardId == sourceFundId];
+            SSJUserCreditTable *card = [self.db getOneObjectOfClass:SSJUserCreditTable.class fromTable:@"BK_USER_CREDIT" where:SSJUserCreditTable.cardId == sourceFundId];
             
             if (card) {
                 // 如果是信用卡,那要处理提醒和信用卡表

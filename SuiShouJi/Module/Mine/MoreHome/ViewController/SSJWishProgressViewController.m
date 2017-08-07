@@ -26,7 +26,7 @@
 
 #define kFinalImgHeight(width) ((width) * defImageHeight / defImageWidth)
 
-@interface SSJWishProgressViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface SSJWishProgressViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 /**topBg*/
 @property (nonatomic, strong) UIView *topBg;
 
@@ -65,6 +65,9 @@
 /**头*/
 @property (nonatomic, strong) UIView *tableHeaderView;
 
+/**竖线*/
+@property (nonatomic, strong) UIView *vLine;
+
 /**guild*/
 @property (nonatomic, strong) SSJMakeWishGuideView *guideView;
 
@@ -97,6 +100,7 @@ static CGFloat defImageHeight = 402;
     [self.view addSubview:self.tableView];
     [self.view addSubview:self.bottomView];
     
+    [self.view addSubview:self.vLine];
     [self updateAppearanceWithTheme];
     [self updateViewConstraints];
 }
@@ -383,6 +387,7 @@ static CGFloat defImageHeight = 402;
 
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor] forState:UIControlStateDisabled];
+    self.vLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
         self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
@@ -427,6 +432,16 @@ static CGFloat defImageHeight = 402;
     };
     
     return cell;
+}
+
+#pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    CGFloat ofsety = scrollView.contentOffset.y;
+    if (ofsety > 0) {
+        self.vLine.height = 0;
+    } else {
+        self.vLine.height = fabs(ofsety);
+    }
 }
 
 
@@ -527,7 +542,7 @@ static CGFloat defImageHeight = 402;
 
 - (UITableView *)tableView{
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] init];
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
@@ -600,11 +615,21 @@ static CGFloat defImageHeight = 402;
     if (!_tableHeaderView) {
         _tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, 30)];
         UIView *vLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 1, _tableHeaderView.height)];
-        vLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        vLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
         vLine.centerX = SSJSCREENWITH * 0.5;
         [_tableHeaderView addSubview:vLine];
     }
     return _tableHeaderView;
+}
+
+- (UIView *)vLine {
+    if (!_vLine) {
+        _vLine = [[UIView alloc] init];
+        _vLine.centerX = (SSJSCREENWITH - 1) * 0.5;
+        _vLine.width = 1;
+        _vLine.top = kFinalImgHeight(SSJSCREENWITH) + SSJ_NAVIBAR_BOTTOM;
+    }
+    return _vLine;
 }
 
 - (NSMutableArray<SSJWishChargeItem *> *)wishChargeListArr {

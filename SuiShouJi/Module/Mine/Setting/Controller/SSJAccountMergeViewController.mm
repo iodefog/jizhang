@@ -7,7 +7,10 @@
 //
 
 #import "SSJAccountMergeViewController.h"
+#import "SSJMagicExportCalendarViewController.h"
+
 #import "SSJAccountMergeManager.h"
+#import "SSJDataMergeQueue.h"
 
 @interface SSJAccountMergeViewController ()
 
@@ -143,6 +146,7 @@
         [_startButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_startButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         [_startButton ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_startButton addTarget:self action:@selector(dateButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startButton;
 }
@@ -154,6 +158,7 @@
         [_endButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_endButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         [_endButton ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_endButton addTarget:self action:@selector(dateButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _endButton;
 }
@@ -176,6 +181,7 @@
         _mergeButton.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         [_mergeButton setTitle:@"合并数据" forState:UIControlStateNormal];
         _mergeButton.layer.cornerRadius = 6.f;
+        [_mergeButton addTarget:self action:@selector(mergeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _mergeButton;
 }
@@ -195,12 +201,39 @@
     return _manager;
 }
 
+#pragma mark - Event
+- (void)dateButtonClicked:(UIButton *)sender {
+    SSJMagicExportCalendarViewController *calendarVc = [[SSJMagicExportCalendarViewController alloc] init];
+    calendarVc.userId = [self.manager getCurrentUnloggedUserId];
+    calendarVc.booksId = SSJAllBooksIds;
+    calendarVc.selectedEndDate = self.startDate;
+    calendarVc.selectedEndDate = self.endDate;
+    calendarVc.completion = ^(NSDate * _Nonnull selectedBeginDate, NSDate * _Nonnull selectedEndDate) {
+        self.startDate = selectedBeginDate;
+        self.endDate = selectedEndDate;
+    };
+    [self.navigationController pushViewController:calendarVc animated:YES];
+}
+
+- (void)mergeButtonClick:(id)sender {
+    NSString *unloggedUserId = [self.manager getCurrentUnloggedUserId];
+    dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
+        [self.manager startMergeWithSourceUserId:unloggedUserId targetUserId:SSJUSERID() startDate:self.startDate endDate:self.endDate mergeType:SSJMergeDataTypeByBillDate Success:^{
+            
+        } failure:^(NSError *error) {
+            
+        }];
+    });
+}
+
 #pragma mark - Private
 - (void)getStartAndEndDate {
     NSDictionary *dateDic = [self.manager getStartAndEndChargeDataForUnloggedUser];
     
     if (![dateDic objectForKey:@"maxDate"] && ![dateDic objectForKey:@"minDate"]) {
         [CDAutoHideMessageHUD showMessage:@"未登录账户上还没有流水,不用合并啦"];
+        self.startButton.enabled = NO;
+        self.endButton.enabled = NO;
     }
     
     NSString *startDateStr = [dateDic objectForKey:@"minDate"];
