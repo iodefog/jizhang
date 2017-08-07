@@ -24,6 +24,8 @@
 #import "MMDrawerController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJLoanDetailViewController.h"
+#import "SSJWishProgressViewController.h"
+
 #import "UIViewController+SSJMotionPassword.h"
 
 #import "SSJBookKeepingHomeEvaluatePopView.h"
@@ -48,6 +50,7 @@
 #import "SSJLoanHelper.h"
 #import "SSJAnaliyticsManager.h"
 #import "SSJCustomThemeManager.h"
+#import "SSJWishHelper.h"
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -382,6 +385,12 @@ NSDate *SCYEnterBackgroundTime() {
                     loanVc.fundColor = color;
                     [currentVc.navigationController pushViewController:loanVc animated:YES];
                 }];
+            } else if (remindItem.remindType == SSJReminderTypeWish) {//愿望
+                if (remindItem.remindId.length) {
+                    SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
+                    wishProgressVC.wishId = remindItem.remindId;
+                    [currentVc.navigationController pushViewController:wishProgressVC animated:YES];
+                }
             }
         }
     }
