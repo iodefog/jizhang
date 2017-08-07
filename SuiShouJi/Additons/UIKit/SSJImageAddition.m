@@ -95,9 +95,8 @@
 - (UIImage *)ssj_compressWithinSize:(CGSize)size {
     if (self.size.width > size.width || self.size.height > size.height) {
         CGFloat scale = MAX(self.size.width / size.width, self.size.height / size.height);
-        scale = scale * [UIScreen mainScreen].scale;
-        UIImage *compressImage = [UIImage imageWithCGImage:self.CGImage scale:scale orientation:UIImageOrientationUp];
-        return compressImage;
+        CGSize scaledSize = CGSizeMake(self.size.width / scale, self.size.height / scale);
+        return [self ssj_scaleImageWithSize:scaledSize];
     }
     return self;
 }
