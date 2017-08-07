@@ -456,7 +456,7 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
         [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
     NSString *fullImageName = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
-    NSData *imageData = UIImageJPEGRepresentation([image ssj_scaleImageWithSize:CGSizeMake(50, 50)], 0.5);
+    NSData *imageData = UIImageJPEGRepresentation([image ssj_compressWithinSize:CGSizeMake(50, 50)], 0.5);
     NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 }
