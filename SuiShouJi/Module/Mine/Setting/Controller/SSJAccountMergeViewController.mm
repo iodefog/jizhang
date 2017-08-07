@@ -53,6 +53,7 @@
     [self.view addSubview:self.mergeTitleLab];
     [self.view addSubview:self.warningImage];
     [self.view addSubview:self.mergeButton];
+    [self.view addSubview:self.hintLab];
     [self getStartAndEndDate];
     // Do any additional setup after loading the view.
 }
@@ -100,6 +101,11 @@
         make.top.mas_equalTo(self.backView.mas_bottom).offset(136);
         make.width.mas_equalTo(self.view).offset(-30);
         make.height.mas_equalTo(44);
+    }];
+    
+    [self.hintLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.warningImage.mas_right).offset(10);
+        make.top.mas_equalTo(self.warningImage.mas_top);
     }];
     
     [super updateViewConstraints];
@@ -197,6 +203,18 @@
     return _manager;
 }
 
+- (UILabel *)hintLab {
+    if (!_hintLab) {
+        _hintLab = [[UILabel alloc] init];
+        _hintLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _hintLab.numberOfLines = 0;
+        _hintLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _hintLab.text = @"1. 时间范围指的是流水日期\
+        \n2. 仅合并于已记录的流水相关的数据";
+    }
+    return _hintLab;
+}
+
 #pragma mark - Event
 - (void)dateButtonClicked:(UIButton *)sender {
     SSJMagicExportCalendarViewController *calendarVc = [[SSJMagicExportCalendarViewController alloc] init];
@@ -219,9 +237,9 @@
     NSString *unloggedUserId = [self.manager getCurrentUnloggedUserId];
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         [self.manager startMergeWithSourceUserId:unloggedUserId targetUserId:SSJUSERID() startDate:self.startDate endDate:self.endDate mergeType:SSJMergeDataTypeByBillDate Success:^{
-            
+            [CDAutoHideMessageHUD showMessage:@"合并成功"];
         } failure:^(NSError *error) {
-            
+            [CDAutoHideMessageHUD showMessage:@"合并失败"];
         }];
     });
 }

@@ -90,10 +90,10 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         loanRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
-                                                           fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_user_credit" ]]
+                                                           fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_loan" ]]
                                where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
                                && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                             && SSJUserCreditTable.cardId.inTable(@"bk_user_credit") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
+                             && SSJLoanTable.loanId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
                              && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                               groupBy:{SSJUserRemindTable.remindId.inTable([self mergeTableName])}];
@@ -103,7 +103,7 @@
                                                            fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_loan" ]]
                                where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJLoanTable.remindId.inTable(@"bk_loan")
                                && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                             && SSJUserCreditTable.cardId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
+                             && SSJLoanTable.loanId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
                              && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2]
                             groupBy:{SSJUserRemindTable.remindId.inTable([self mergeTableName])}];

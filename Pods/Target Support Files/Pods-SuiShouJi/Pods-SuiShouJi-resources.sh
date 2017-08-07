@@ -82,7 +82,6 @@ EOM
 if [[ "$CONFIGURATION" == "Debug-test" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
-  install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/Sina/WeiboSDK.bundle"
@@ -91,7 +90,6 @@ fi
 if [[ "$CONFIGURATION" == "Debug-production" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
-  install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/Sina/WeiboSDK.bundle"
@@ -100,7 +98,6 @@ fi
 if [[ "$CONFIGURATION" == "Release-test" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
-  install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/Sina/WeiboSDK.bundle"
@@ -109,7 +106,6 @@ fi
 if [[ "$CONFIGURATION" == "Release-production" ]]; then
   install_resource "DateTools/DateTools/DateTools/DateTools.bundle"
   install_resource "Meiqia/Meiqia-SDK-files/MQChatViewController/Assets/MQChatViewAsset.bundle"
-  install_resource "SVProgressHUD/SVProgressHUD/SVProgressHUD.bundle"
   install_resource "UMengUShare/UShareSDK/UMSocialSDK/UMSocialSDKPromptResources.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/QQ/TencentOpenApi_IOS_Bundle.bundle"
   install_resource "UMengUShare/UShareSDK/SocialLibraries/Sina/WeiboSDK.bundle"

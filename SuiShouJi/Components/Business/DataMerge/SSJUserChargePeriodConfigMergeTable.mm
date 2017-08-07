@@ -99,9 +99,9 @@
         
         SSJChargePeriodConfigTable *sameNameConfig = [db getOneObjectOfClass:SSJChargePeriodConfigTable.class
                                                          fromTable:[self mergeTableName]
-                                                    where:SSJChargePeriodConfigTable.fundId == currentConfig.fundId
-                                                    && SSJChargePeriodConfigTable.billDate == currentConfig.billDate
-                                                    && SSJChargePeriodConfigTable.booksId == currentConfig.booksId
+                                                    where:SSJChargePeriodConfigTable.billDate == currentConfig.billDate
+                                                      && SSJChargePeriodConfigTable.money == currentConfig.money
+                                                      && SSJChargePeriodConfigTable.type == currentConfig.type
                                                     && SSJChargePeriodConfigTable.userId == targetUserId];
         
         if (sameNameConfig) {
