@@ -61,7 +61,7 @@
     SSJUserItem *lastUserItem = [NSKeyedUnarchiver unarchiveObjectWithData:lastUserData];
     NSString *userName = lastUserItem.mobileNo;
     self.numTextF.text = userName;
-    self.titleL.text = @"登录/注册";
+    self.titleL.text = @"登录  |  注册";
 }
 
 - (void)dealloc {
