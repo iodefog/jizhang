@@ -422,6 +422,11 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
                 return ;
             }
             
+            if ([self.wishAmountTextF.text doubleValue] <= 0) {
+                [CDAutoHideMessageHUD showMessage:@"请输入0元以上金额"];
+                return;
+            }
+            
             self.wishModel.wishId = SSJUUID();
             self.wishModel.wishName = self.wishNameTextF.text;
             self.wishModel.wishMoney = [NSString stringWithFormat:@"%.2f",[self.wishAmountTextF.text doubleValue]];

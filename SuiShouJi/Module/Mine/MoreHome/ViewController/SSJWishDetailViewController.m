@@ -382,7 +382,6 @@
         };
         remindEditeVc.needToSave = YES;
         [self.navigationController pushViewController:remindEditeVc animated:YES];
-
     }
 }
 

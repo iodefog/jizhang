@@ -14,6 +14,7 @@
 #import "SSJHomeDatePickerView.h"
 #import "SSJFundingTransferDetailItem.h"
 #import "SSJCreditCardItem.h"
+#import "SSJFinancingHomeitem.h"
 #import "SSJFundingTransferStore.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJTextFieldToolbarManager.h"
@@ -361,9 +362,15 @@ static const NSInteger kMemoTag = 1002;
                         weakSelf.item.transferInId = cardItem.cardId;
                         weakSelf.item.transferInName = cardItem.cardName;
                         weakSelf.item.transferInImage = @"ft_creditcard";
+                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+                        SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
+                        weakSelf.item.transferInId = homeItem.fundingID;
+                        weakSelf.item.transferInName = homeItem.fundingName;
+                        weakSelf.item.transferInImage = homeItem.fundingIcon;
                     } else {
-                        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
+                        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
                     }
+                    [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:newFundingVC animated:YES];
             } else {
@@ -399,9 +406,15 @@ static const NSInteger kMemoTag = 1002;
                         weakSelf.item.transferOutId = cardItem.cardId;
                         weakSelf.item.transferOutName = cardItem.cardName;
                         weakSelf.item.transferOutImage = @"ft_creditcard";
+                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+                        SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
+                        weakSelf.item.transferOutId = homeItem.fundingID;
+                        weakSelf.item.transferOutName = homeItem.fundingName;
+                        weakSelf.item.transferOutImage = homeItem.fundingIcon;
                     } else {
-                        [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
+                        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
                     }
+                    [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:newFundingVC animated:YES];
             } else {

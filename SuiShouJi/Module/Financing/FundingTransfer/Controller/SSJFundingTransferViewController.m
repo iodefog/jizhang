@@ -22,6 +22,7 @@
 #import "SSJFundingTransferStore.h"
 #import "SSJAnaliyticsManager.h"
 #import "SSJTextFieldToolbarManager.h"
+#import "SSJFinancingHomeitem.h"
 
 static NSString *const kTransOutAcctName = @"转出账户";
 static NSString *const kTransInAcctName = @"转入账户";
@@ -66,11 +67,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
 
 @property (nonatomic) BOOL alertShowed;
 
+@property (nonatomic, strong) SSJBaseCellItem *transferInItem;
+
+@property (nonatomic, strong) SSJBaseCellItem *transferOutItem;
+
 @end
 
 @implementation SSJFundingTransferViewController{
-    SSJBaseCellItem *_transferInItem;
-    SSJBaseCellItem *_transferOutItem;
     UITextField *_moneyInput;
     UITextField *_memoInput;
 }
@@ -164,16 +167,22 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if ([title isEqualToString:kTransOutAcctName]) {
         if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
-        } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+        } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
+        } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJFinancingHomeitem *)_transferOutItem).fundingID;
         }
+        
         [self.transferOutFundingTypeSelect show];
     } else if ([title isEqualToString:kTransInAcctName]) {
         if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferInItem).fundingID;
-        }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+        } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).cardId;
+        } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            self.transferInFundingTypeSelect.selectFundID = ((SSJFinancingHomeitem *)_transferInItem).fundingID;
         }
+        
         [self.transferInFundingTypeSelect show];
     } else if ([title isEqualToString:kTransDate]) {
         self.transferDateSelectionView.date = [NSDate dateWithString:self.item.transferDate formatString:@"yyyy-MM-dd"];
@@ -215,11 +224,15 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
                 circleModifyCell.cellDetail = ((SSJFundingItem *)_transferOutItem).fundingName;
                 circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferOutItem).fundingIcon;
-            }else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
+            } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
                 circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).cardName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
+            } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+                circleModifyCell.cellDetail = ((SSJFinancingHomeitem *)_transferOutItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFinancingHomeitem *)_transferOutItem).fundingIcon;
+            } else {
+                [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorTestDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"未定义的_transferOutItem类型"}]];
             }
-
         }
 //        _moneyInput = circleModifyCell.cellInput;
     }else if ([title isEqualToString:kTransInAcctName]) {
@@ -231,9 +244,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
                 circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
                 circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
-            }else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
+            } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
                 circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
+            } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+                circleModifyCell.cellDetail = ((SSJFinancingHomeitem *)_transferInItem).fundingName;
+                circleModifyCell.cellTypeImageName = ((SSJFinancingHomeitem *)_transferInItem).fundingIcon;
+            } else {
+                [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorTestDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"未定义的_transferInItem类型"}]];
             }
         }
     }else if ([title isEqualToString:kMoney]) {
@@ -340,18 +358,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
-                _transferInItem = fundingItem;
+                weakSelf.transferInItem = fundingItem;
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        _transferInItem = fundItem;
-                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        _transferInItem = cardItem;
-                    }
+                    weakSelf.transferInItem = item;
+                    [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -372,18 +385,13 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
             {
-                _transferOutItem = fundingItem;
+                weakSelf.transferOutItem = fundingItem;
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        _transferOutItem = fundItem;
-                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        _transferOutItem = cardItem;
-                    }
+                    weakSelf.transferOutItem = item;
+                    [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }
@@ -552,18 +560,30 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
     if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
         transferInId = ((SSJFundingItem *)_transferInItem).fundingID;
         transferInName = ((SSJFundingItem *)_transferInItem).fundingName;
-    }else{
+    } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]){
         transferInId = ((SSJCreditCardItem *)_transferInItem).cardId;
         transferInName = ((SSJCreditCardItem *)_transferInItem).cardName;
+    } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]){
+        transferInId = ((SSJFinancingHomeitem *)_transferInItem).fundingID;
+        transferInName = ((SSJFinancingHomeitem *)_transferInItem).fundingName;
+    } else {
+        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorTestDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"未定义的_transferInItem类型"}]];
+        return;
     }
     
     if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
         transferOutId = ((SSJFundingItem *)_transferOutItem).fundingID;
         transferOutName = ((SSJFundingItem *)_transferOutItem).fundingName
         ;
-    }else{
+    } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
         transferOutId = ((SSJCreditCardItem *)_transferOutItem).cardId;
         transferOutName = ((SSJCreditCardItem *)_transferOutItem).cardName;
+    } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        transferOutId = ((SSJFinancingHomeitem *)_transferOutItem).fundingID;
+        transferOutName = ((SSJFinancingHomeitem *)_transferOutItem).fundingName;
+    } else {
+        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorTestDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"未定义的_transferOutItem类型"}]];
+        return;
     }
     
     if ([transferInId isEqualToString:transferOutId]) {
