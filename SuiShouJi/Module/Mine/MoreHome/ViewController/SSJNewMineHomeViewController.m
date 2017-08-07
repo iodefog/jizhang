@@ -349,7 +349,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 }
 
 - (void)login {
+    __weak typeof(self) wself = self;
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+    loginVc.finishHandle = ^(UIViewController *controller) {
+        wself.tabBarController.selectedIndex = 0;
+    };
     SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
     [self presentViewController:naviVC animated:YES completion:NULL];
 }
