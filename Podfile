@@ -37,7 +37,7 @@ def shared_pods
     
     pod 'YYWebImage'
     
-    pod 'SVProgressHUD'
+    pod 'MBProgressHUD'
     
     pod 'WCDB'
     

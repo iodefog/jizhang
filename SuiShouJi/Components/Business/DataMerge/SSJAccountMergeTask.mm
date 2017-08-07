@@ -27,7 +27,6 @@
 }
 
 + (void)mergeDataWithManager:(SSJAccountMergeManager *)manager {
-    [SVProgressHUD showWithStatus:@"正在合并中"];
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         NSString *unloggedUserid = [manager getCurrentUnloggedUserId];
         
@@ -44,9 +43,7 @@
 
 
         [manager startMergeWithSourceUserId:unloggedUserid targetUserId:currentUser.userId startDate:lastMergeDate endDate:[NSDate date] mergeType:SSJMergeDataTypeByWriteDate Success:^{
-            [SVProgressHUD showSuccessWithStatus:@"合并成功"];
         } failure:^(NSError *error) {
-            [SVProgressHUD showErrorWithStatus:@"合并失败"];
             [SSJAlertViewAdapter showError:error];
         }];
         
