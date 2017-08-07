@@ -376,6 +376,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishAmountTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _wishAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _wishAmountTextF.delegate = self;
+        [_wishAmountTextF ssj_installToolbar];
     }
     return _wishAmountTextF;
 }

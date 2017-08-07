@@ -15,6 +15,7 @@
 #import "SSJMakeWishMoneyCollectionViewCell.h"
 
 #import "NSString+MoneyDisplayFormat.h"
+#import "SSJTextFieldToolbarManager.h"
 
 #import "SSJRewardRankService.h"
 
@@ -366,6 +367,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _rewarkAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _rewarkAmountTextF.textAlignment = NSTextAlignmentRight;
         _rewarkAmountTextF.delegate = self;
+        [_rewarkAmountTextF ssj_installToolbar];
     }
     return _rewarkAmountTextF;
 }
