@@ -58,6 +58,7 @@
     [self initialBind];
     [self initialUI];
     [self setUpConst];
+    [self initNormalData];
     [self.tfRegYanZhenF getVerifCode];//请求验证码
 }
 
@@ -120,6 +121,10 @@
     [self.scrollView addSubview:self.registerAndLoginButton];
     [self.scrollView addSubview:self.rightBtn];
     [self.scrollView addSubview:self.changeWayBtn];
+}
+
+- (void)initNormalData {
+    self.titleL.text = @"注册";
 }
 
 - (void)initialBind {
