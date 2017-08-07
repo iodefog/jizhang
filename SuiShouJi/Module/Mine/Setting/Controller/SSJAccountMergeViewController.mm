@@ -53,12 +53,8 @@
     [self.view addSubview:self.mergeTitleLab];
     [self.view addSubview:self.warningImage];
     [self.view addSubview:self.mergeButton];
-    // Do any additional setup after loading the view.
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
     [self getStartAndEndDate];
+    // Do any additional setup after loading the view.
 }
 
 - (void)updateViewConstraints {
@@ -206,11 +202,15 @@
     SSJMagicExportCalendarViewController *calendarVc = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVc.userId = [self.manager getCurrentUnloggedUserId];
     calendarVc.booksId = SSJAllBooksIds;
-    calendarVc.selectedEndDate = self.startDate;
+    calendarVc.selectedBeginDate = self.startDate;
     calendarVc.selectedEndDate = self.endDate;
+    calendarVc.containsSpecialCharges = YES;
+    @weakify(self);
     calendarVc.completion = ^(NSDate * _Nonnull selectedBeginDate, NSDate * _Nonnull selectedEndDate) {
+        @strongify(self);
         self.startDate = selectedBeginDate;
         self.endDate = selectedEndDate;
+        [self updateDates];
     };
     [self.navigationController pushViewController:calendarVc animated:YES];
 }
@@ -247,10 +247,19 @@
     self.startDate = startDate;
     self.endDate = endDate;
     
+    [self updateDates];
+    
+}
+
+- (void)updateDates {
+    NSString *startDateStr = [self.startDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *endDateStr = [self.endDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    
     [self.startButton setTitle:startDateStr forState:UIControlStateNormal];
     [self.endButton setTitle:endDateStr forState:UIControlStateNormal];
     
     [self.view setNeedsUpdateConstraints];
+
 }
 
 - (void)didReceiveMemoryWarning {
