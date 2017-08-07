@@ -292,7 +292,7 @@ NSDate *SCYEnterBackgroundTime() {
     SSJNavigationController *financingNavi = [[SSJNavigationController alloc] initWithRootViewController:financingVC];
     financingNavi.tabBarItem.title = @"资金";
     
-    SSJNewMineHomeViewController *moreVC = [[SSJNewMineHomeViewController alloc] initWithNibName:nil bundle:nil];
+    SSJNewMineHomeViewController *moreVC = [[SSJNewMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
     moreNavi.tabBarItem.title = @"我的";
     
