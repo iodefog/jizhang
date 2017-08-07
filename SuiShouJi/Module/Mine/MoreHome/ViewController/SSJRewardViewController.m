@@ -15,6 +15,7 @@
 #import "SSJMakeWishMoneyCollectionViewCell.h"
 
 #import "NSString+MoneyDisplayFormat.h"
+#import "SSJTextFieldToolbarManager.h"
 
 #import "SSJRewardRankService.h"
 
@@ -291,6 +292,12 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     return YES;
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch{
     if ([touch.view isKindOfClass:[UIButton class]]) {
@@ -360,6 +367,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _rewarkAmountTextF.keyboardType = UIKeyboardTypeDecimalPad;
         _rewarkAmountTextF.textAlignment = NSTextAlignmentRight;
         _rewarkAmountTextF.delegate = self;
+        [_rewarkAmountTextF ssj_installToolbar];
     }
     return _rewarkAmountTextF;
 }

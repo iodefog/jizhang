@@ -28,4 +28,6 @@
 
 - (SSJUserBaseTable *)getCurrentUser;
 
+- (NSDictionary *)getStartAndEndChargeDataForUnloggedUser;
+
 @end

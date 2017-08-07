@@ -19,6 +19,7 @@
 
 #import "SSJWishHelper.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJTextFieldToolbarManager.h"
 
 
 static NSString *const kTitle1 = @"存钱";
@@ -166,6 +167,7 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入心愿金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.chargeItem.money;
+        [newReminderCell.textInput ssj_installToolbar];
         _moneyInput = newReminderCell.textInput;
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
         newReminderCell.textInput.delegate = self;

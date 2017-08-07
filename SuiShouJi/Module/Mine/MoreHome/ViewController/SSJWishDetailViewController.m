@@ -272,16 +272,16 @@
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入心愿名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.wishModel.wishName;
+        newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
         newReminderCell.textInput.delegate = self;
         self.wishNameTF = newReminderCell.textInput;
     } else if (indexPath.row == 1) {
-        newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"完成心愿所需金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.wishModel.wishMoney;
         newReminderCell.textInput.delegate = self;
-        newReminderCell.textInput.keyboardType = UIKeyboardTypePhonePad;
+        newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
         self.wishAmountTF = newReminderCell.textInput;
     } else if (indexPath.row == 2) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
@@ -295,6 +295,23 @@
     
     return newReminderCell;
 }
+
+#pragma mark - UITextFieldDelegate
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (self.wishAmountTF == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
+    }
+    return YES;
+}
+
 
 #pragma mark - Lazy
 
@@ -317,6 +334,7 @@
         _wishNameTF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_wishNameTF ssj_setBorderWidth:1/SSJSCREENSCALE];
         [_wishNameTF ssj_setBorderStyle:SSJBorderStyleBottom];
+        _wishNameTF.returnKeyType = UIReturnKeyDone;
     }
     return _wishNameTF;
 }
