@@ -60,7 +60,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         [resultSet close];
         
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -172,7 +172,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         if (!booksId.length) {
             booksId = SSJUSERID();
         }
-        FMResultSet *budgetResult = [db executeQuery:@"select ibid, cuserid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
+        FMResultSet *budgetResult = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
         if (!budgetResult) {
             if (failure) {
@@ -237,7 +237,6 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
 + (void)queryForBudgetDetailWithID:(NSString *)ID success:(void(^)(NSDictionary *result))success failure:(void (^)(NSError *error))failure {
     
     if (!ID || !ID.length) {
-        SSJPRINT(@">>> SSJ warning:budget is nil or empty");
         NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"budget is nil or empty"}];
         if (failure) {
             failure(error);
@@ -276,7 +275,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         [resultSet close];
         
         // 查询用户的预算详情
-        resultSet = [db executeQuery:@"select ibid, itype, cbilltype, imoney, iremindmoney, csdate, cedate, istate, iremind, ihasremind, cbooksid, islastday from bk_user_budget where ibid = ? and operatortype <> 2", ID];
+        resultSet = [db executeQuery:@"select * from bk_user_budget where ibid = ? and operatortype <> 2", ID];
         if (!resultSet) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
@@ -815,6 +814,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         
         NSMutableArray *list = [NSMutableArray array];
+        BOOL isAllSelected = [typeList containsObject:SSJAllBillTypeId];
         
         while ([resultSet next]) {
             SSJBudgetBillTypeSelectionCellItem *item = [[SSJBudgetBillTypeSelectionCellItem alloc] init];
@@ -823,7 +823,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             item.billTypeName = [resultSet stringForColumn:@"cname"];
             item.billTypeColor = [resultSet stringForColumn:@"ccolor"];
             item.canSelect = YES;
-            item.selected = [typeList containsObject:item.billID] || [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
+            item.selected = isAllSelected || [typeList containsObject:item.billID];
             [list addObject:item];
         }
         [resultSet close];
@@ -833,7 +833,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             selectAllItem.billID = SSJAllBillTypeId;
             selectAllItem.billTypeName = @"全选";
             selectAllItem.canSelect = YES;
-            selectAllItem.selected = [[typeList firstObject] isEqualToString:SSJAllBillTypeId];
+            selectAllItem.selected = isAllSelected;
             [list insertObject:selectAllItem atIndex:0];
         }
         

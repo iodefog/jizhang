@@ -321,21 +321,14 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
         [self updateSaveButtonState:NO];
         
         if (code == 0) {
-
             [self saveBudget:@[self.model]];
-            
         } else if (code == 1) {
-            
             SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictedBudgetPeriod] action:action, nil];
-            
         } else if (code == 2) {
-            
             SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:[self alertMessageForConflictBillTypeWithAdditionalInfo:additionalInfo[SSJBudgetConflictBillIdsKey]] action:action, nil];
-            
         } else if (code == 3) {
-            
             double majorAmount = [additionalInfo[SSJBudgetConflictMajorBudgetMoneyKey] doubleValue];
             double secondaryAmount = [additionalInfo[SSJBudgetConflictSecondaryBudgetMoneyKey] doubleValue];
             NSString *message = [NSString stringWithFormat:@"您设置的总预算金额低于各分预算之和¥%.2f。是否将低于的¥%.2f计入总预算，或更改分预算金额？", secondaryAmount, (secondaryAmount - majorAmount)];
@@ -360,14 +353,12 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
             }], nil];
             
         } else if (code == 4) {
-            
-            __weak typeof(self) wself = self;
-            
             double majorAmount = [additionalInfo[SSJBudgetConflictMajorBudgetMoneyKey] doubleValue];
             double secondaryAmount = [additionalInfo[SSJBudgetConflictSecondaryBudgetMoneyKey] doubleValue];
             SSJBudgetModel *majorBudget = additionalInfo[SSJBudgetConflictBudgetModelKey];
-            
             NSString *message = [NSString stringWithFormat:@"您设置的分预算总金额超过总预算金额¥%.2f。是否将超额的¥%.2f计入总预算，或更改分预算金额？", majorAmount, (secondaryAmount - majorAmount)];
+            
+            __weak typeof(self) wself = self;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:message action:[SSJAlertViewAction actionWithTitle:@"计入总预算" handler:^(SSJAlertViewAction *action) {
                 
                 majorBudget.budgetMoney = secondaryAmount;
@@ -382,15 +373,11 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 [budgetMoneyCell.textField becomeFirstResponder];
                 
             }], nil];
-            
         }
-        
     } failure:^(NSError * _Nonnull error) {
-        
         [self updateSaveButtonState:NO];
         SSJAlertViewAction *action = [SSJAlertViewAction actionWithTitle:@"确认" handler:NULL];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
-        
     }];
 }
 
