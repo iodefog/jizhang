@@ -565,9 +565,9 @@ const int kMemoMaxLength = 15;
                 }
             }
             
-            if (!_edited && self.loanModel.remindID.length) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-            }
+//            if (!_edited && self.loanModel.remindID.length) {
+//                [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"添加成功，提醒详情请在“更多-提醒”查看" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//            }
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             
