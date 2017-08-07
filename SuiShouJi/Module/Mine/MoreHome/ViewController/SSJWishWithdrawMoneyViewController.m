@@ -113,7 +113,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     }
     
     double money = [_moneyInput.text doubleValue];
-    if (self.chargeItem.itype == SSJWishChargeBillTypeWithdraw) {
+    if (self.itype == SSJWishChargeBillTypeWithdraw) {
         if (money > [self.wishModel.wishSaveMoney doubleValue]) {
             [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"取出金额不能超过存入金额哦"]];
             return;
