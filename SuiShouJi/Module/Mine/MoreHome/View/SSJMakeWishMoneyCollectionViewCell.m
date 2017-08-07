@@ -46,7 +46,6 @@
         _moneyBtn.textAlignment = NSTextAlignmentCenter;
         _moneyBtn.layer.borderWidth = 1;
         _moneyBtn.layer.cornerRadius = 6;
-        _moneyBtn.layer.masksToBounds = YES;
         _moneyBtn.backgroundColor = [UIColor clearColor];
     }
     return _moneyBtn;

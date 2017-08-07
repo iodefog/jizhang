@@ -18,6 +18,7 @@
 
 #import "SSJWishModel.h"
 #import "SSJWishDefItem.h"
+#import "SSJTextFieldToolbarManager.h"
 
 #import "SSJWishHelper.h"
 #import "SSJDataSynchronizer.h"
@@ -243,6 +244,12 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     }
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (self.wishAmountTextF == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
@@ -292,17 +299,15 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
     if (!_cameraImg) {
         _cameraImg = [[UIButton alloc] init];
         [_cameraImg setImage:[UIImage imageNamed:@"wish_bg_camera"] forState:UIControlStateNormal];
-        @weakify(self);
+        __weak __typeof(self)weakSelf = self;
         [[_cameraImg rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
             SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
-            @weakify(self);
             photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
-                @strongify(self);
+
                 //切换背景
-                self.topImg.image = seleImg;
-                self.wishModel.wishImage = seleImgName;
-                [self.navigationController popViewControllerAnimated:YES];
+                weakSelf.topImg.image = seleImg;
+                weakSelf.wishModel.wishImage = seleImgName;
+                [weakSelf.navigationController popViewControllerAnimated:YES];
             };
             
             [self.navigationController pushViewController:photoVC animated:YES];
@@ -328,6 +333,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         _wishNameTextF.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _wishNameTextF.clearButtonMode = UITextFieldViewModeWhileEditing;
         _wishNameTextF.delegate = self;
+        _wishNameTextF.returnKeyType = UIReturnKeyDone;
     }
     return _wishNameTextF;
 }
