@@ -26,6 +26,7 @@ static const void *kExpandedKey = &kExpandedKey;
 @end
 
 static const CGFloat kCategoryImageButtonRadius = 16;
+static const CGFloat kChargeImgWidth = 30;
 
 @interface SSJBookKeepingHomeTableViewCell()
 
@@ -94,7 +95,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.categoryImageButton.mas_left).offset(-16);
             make.centerY.mas_equalTo(self.contentView);
-            make.size.mas_equalTo(CGSizeMake(30, 30));
+            make.size.mas_equalTo(CGSizeMake(kChargeImgWidth, kChargeImgWidth));
         }];
     } else {
         [self.labelContainer mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -105,7 +106,7 @@ static const CGFloat kCategoryImageButtonRadius = 16;
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.categoryImageButton.mas_right).offset(16);
             make.centerY.mas_equalTo(self.contentView);
-            make.size.mas_equalTo(CGSizeMake(30, 30));
+            make.size.mas_equalTo(CGSizeMake(kChargeImgWidth, kChargeImgWidth));
         }];
     }
   
@@ -185,11 +186,19 @@ static const CGFloat kCategoryImageButtonRadius = 16;
     _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
     if (self.item.chargeImage.length) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeThumbImage)]) {
-            [self.chargeImage sd_setImageWithURL:[NSURL fileURLWithPath:SSJImagePath(_item.chargeThumbImage)]];
-        } else {
-            [self.chargeImage sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)]];
-        }
+        NSURL *imgURL = [[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeThumbImage)] ? [NSURL fileURLWithPath:SSJImagePath(_item.chargeThumbImage)] : [NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)];
+        [UIImage ssj_loadUrl:imgURL compeltion:^(NSError *error, UIImage *image) {
+            if (!image) {
+                return;
+            }  
+            if (image.size.width > image.size.height) {
+                CGFloat x = (image.size.width - image.size.height) * 0.5;
+                self.chargeImage.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(0, x, 0, x) toSize:CGSizeMake(kChargeImgWidth, kChargeImgWidth)];
+            } else {
+                CGFloat x = (image.size.height - image.size.width) * 0.5;
+                self.chargeImage.image = [image ssj_imageWithClipInsets:UIEdgeInsetsMake(x, 0, x, 0) toSize:CGSizeMake(kChargeImgWidth, kChargeImgWidth)];
+            }
+        }];
         self.chargeImage.userInteractionEnabled = YES;
     } else {
         self.chargeImage.image = nil;

@@ -91,7 +91,7 @@
             for (NSDictionary *bookBillRecord in viewModel.bookBillsArray) {
                 for (NSDictionary *userBillRecord in viewModel.userBillArray) {
                     if ([bookBillRecord[@"cbillid"] isEqualToString:userBillRecord[@"cbillid"]]
-                        && [bookBillRecord[@"booksid"] isEqualToString:userBillRecord[@"cbooksid"]]) {
+                        && [bookBillRecord[@"cbooksid"] isEqualToString:userBillRecord[@"cbooksid"]]) {
                         [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
                                                        @"cuserid":SSJUSERID(),
                                                        @"cbooksid":userBillRecord[@"cbooksid"],
