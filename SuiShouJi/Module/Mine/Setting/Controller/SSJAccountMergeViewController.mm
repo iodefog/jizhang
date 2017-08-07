@@ -235,11 +235,15 @@
 
 - (void)mergeButtonClick:(id)sender {
     NSString *unloggedUserId = [self.manager getCurrentUnloggedUserId];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    hud.label.text = @"数据合并中";
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         [self.manager startMergeWithSourceUserId:unloggedUserId targetUserId:SSJUSERID() startDate:self.startDate endDate:self.endDate mergeType:SSJMergeDataTypeByBillDate Success:^{
-            [CDAutoHideMessageHUD showMessage:@"合并成功"];
+            [hud hideAnimated:YES afterDelay:1];
+            [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
         } failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:@"合并失败"];
+            [hud hideAnimated:YES afterDelay:1];
+            [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
         }];
     });
 }
