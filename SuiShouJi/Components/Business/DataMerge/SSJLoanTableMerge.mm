@@ -98,8 +98,6 @@
                                           where:SSJLoanTable.lender == currentLoan.lender
                                       && SSJLoanTable.money == currentLoan.money
                                       && SSJLoanTable.borrowDate == currentLoan.borrowDate
-                                      && SSJLoanTable.fundId == currentLoan.fundId
-                                      && SSJLoanTable.targetFundid == currentLoan.targetFundid
                                       && SSJLoanTable.userId == targetUserId];
         
         if (sameNameLoan) {
