@@ -108,6 +108,7 @@
                                                   && SSJUserChargeTable.operatorType != 2];
         
         for (SSJUserChargeTable *userCharge in chargeArr) {
+            NSString *currentWriteDate = userCharge.writeDate;
             userCharge.booksId = targetBooksId;
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
@@ -119,6 +120,18 @@
             }
             if ([sameNameDic objectForKey:userCharge.billId]) {
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
+            }
+            
+            NSString *otherBillId;
+            
+            if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanInterestEarning) {
+                
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanBalanceRollIn) {
+                
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanInterestEarning) {
+                
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanInterestEarning) {
+                
             }
             
             if (![self.db updateRowsInTable:@"BK_USER_CHARGE"

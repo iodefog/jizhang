@@ -9,6 +9,7 @@
 #import "SSJDataMergeSettingViewController.h"
 #import "SSJBooksMergeViewController.h"
 #import "SSJFundingMergeViewController.h"
+#import "SSJAccountMergeViewController.h"
 
 #import "SSJMineHomeTabelviewCell.h"
 
@@ -53,7 +54,8 @@
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     if ([title isEqualToString:@"账户数据合并"]) {
-        
+        SSJAccountMergeViewController *mergeVc = [[SSJAccountMergeViewController alloc] init];
+        [self.navigationController pushViewController:mergeVc animated:YES];
     } else if ([title isEqualToString:@"资金数据迁移"]) {
         SSJFundingMergeViewController *accountMerge = [[SSJFundingMergeViewController alloc] init];
         accountMerge.transferOutSelectable = YES;

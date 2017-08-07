@@ -10705,21 +10705,21 @@
 		9CBFB6B41F33186F00604F37 /* SSJDataMergeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6A71F33186E00604F37 /* SSJDataMergeQueue.m */; };
 		9CBFB6B51F33186F00604F37 /* SSJDataMergeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6A71F33186E00604F37 /* SSJDataMergeQueue.m */; };
 		9CBFB6B61F33186F00604F37 /* SSJDataMergeQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6A71F33186E00604F37 /* SSJDataMergeQueue.m */; };
-		9CBFB6B91F34274700604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6BA1F34274D00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6BC1F34275100604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6BD1F34275300604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6BE1F34275600604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6BF1F34275600604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C01F34275700604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C11F34275800604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C21F34275900604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C31F34275900604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C51F34275C00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C61F34275C00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C71F34275D00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C81F34275D00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
-		9CBFB6C91F34275E00604F37 /* SSJAccountMergeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */; };
+		9CBFB6B91F34274700604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6BA1F34274D00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6BC1F34275100604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6BD1F34275300604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6BE1F34275600604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6BF1F34275600604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C01F34275700604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C11F34275800604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C21F34275900604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C31F34275900604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C51F34275C00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C61F34275C00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C71F34275D00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C81F34275D00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
+		9CBFB6C91F34275E00604F37 /* SSJAccountMergeViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */; };
 		9CC0AED01DEEE12F0085AC65 /* 9188.cer in Resources */ = {isa = PBXBuildFile; fileRef = 9C23EA4C1DDAD4FE0003C5AB /* 9188.cer */; };
 		9CC0B7EC1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
 		9CC0B7ED1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */; };
@@ -13682,7 +13682,7 @@
 		9CBFB6A61F33186E00604F37 /* SSJDataMergeQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJDataMergeQueue.h; sourceTree = "<group>"; };
 		9CBFB6A71F33186E00604F37 /* SSJDataMergeQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJDataMergeQueue.m; sourceTree = "<group>"; };
 		9CBFB6B71F34274700604F37 /* SSJAccountMergeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountMergeViewController.h; sourceTree = "<group>"; };
-		9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJAccountMergeViewController.m; sourceTree = "<group>"; };
+		9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSJAccountMergeViewController.mm; sourceTree = "<group>"; };
 		9CC0B7EA1F21E9BE006DD748 /* SSJMemberChargeTableMerge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJMemberChargeTableMerge.h; sourceTree = "<group>"; };
 		9CC0B7EB1F21E9BE006DD748 /* SSJMemberChargeTableMerge.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSJMemberChargeTableMerge.mm; sourceTree = "<group>"; };
 		9CC0B7FD1F2201A4006DD748 /* SSJUserChargePeriodConfigMergeTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargePeriodConfigMergeTable.h; sourceTree = "<group>"; };
@@ -15645,7 +15645,7 @@
 				9CBFB6921F31ADCD00604F37 /* SSJDataMergeSettingViewController.h */,
 				9CBFB6931F31ADCD00604F37 /* SSJDataMergeSettingViewController.m */,
 				9CBFB6B71F34274700604F37 /* SSJAccountMergeViewController.h */,
-				9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.m */,
+				9CBFB6B81F34274700604F37 /* SSJAccountMergeViewController.mm */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -20390,7 +20390,7 @@
 				7D08A0A51E4999D30085A8FB /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				7D08A0A61E4999D30085A8FB /* SRSlimeView.m in Sources */,
 				7D08A0A71E4999D30085A8FB /* SSJStartNetworkService.m in Sources */,
-				9CBFB6C01F34275700604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C01F34275700604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A0D41F050E3A001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
 				91EE66591F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				9CB1224F1EF273800074BAA4 /* SSJLottieDownloader.m in Sources */,
@@ -21154,7 +21154,7 @@
 				7DA139FC1E35AED7000490A4 /* SSJBookkeepingTreeRuleDescView.m in Sources */,
 				7DA139FD1E35AED7000490A4 /* SRSlimeView.m in Sources */,
 				7DA139FE1E35AED7000490A4 /* SSJStartNetworkService.m in Sources */,
-				9CBFB6BF1F34275600604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6BF1F34275600604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A0D31F050E3A001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
 				91EE66581F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				9CB1224E1EF2737F0074BAA4 /* SSJLottieDownloader.m in Sources */,
@@ -21918,7 +21918,7 @@
 				7DBB3A841E55C2EE0075E638 /* SRSlimeView.m in Sources */,
 				7DBB3A851E55C2EE0075E638 /* SSJStartNetworkService.m in Sources */,
 				7DBB3A861E55C2EE0075E638 /* SSJHeaderBannerCollectionViewCell.m in Sources */,
-				9CBFB6C11F34275800604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C11F34275800604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A0D51F050E3C001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
 				91EE665A1F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				9CB122501EF273810074BAA4 /* SSJLottieDownloader.m in Sources */,
@@ -22682,7 +22682,7 @@
 				7DBB3F1F1E55C4E00075E638 /* SRSlimeView.m in Sources */,
 				7DBB3F201E55C4E00075E638 /* SSJStartNetworkService.m in Sources */,
 				7DBB3F211E55C4E00075E638 /* SSJHeaderBannerCollectionViewCell.m in Sources */,
-				9CBFB6BD1F34275300604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6BD1F34275300604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A0D11F050E38001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
 				91EE66551F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				9CB1224C1EF2737E0074BAA4 /* SSJLottieDownloader.m in Sources */,
@@ -23849,7 +23849,7 @@
 				914DE0FE1F32D5DA00CAF86E /* SSJStartLunchItem.m in Sources */,
 				914545711F1DB05600EC0694 /* SSJWishModel.m in Sources */,
 				7DFB17941EB0341E00292DD3 /* FMResultSet.m in Sources */,
-				9CBFB6C81F34275D00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C81F34275D00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				7DFB17951EB0341E00292DD3 /* MJRefreshComponent.m in Sources */,
 				7DFB17961EB0341E00292DD3 /* MJRefreshAutoGifFooter.m in Sources */,
 				7DFB17971EB0341E00292DD3 /* SSJHistoryHeader.m in Sources */,
@@ -24212,7 +24212,7 @@
 				9C13F4E91E8267D300AC5FA9 /* SSJStartNetworkService.m in Sources */,
 				9C13F4EA1E8267D300AC5FA9 /* SSJHeaderBannerCollectionViewCell.m in Sources */,
 				9C13F4EB1E8267D300AC5FA9 /* SSJReportFormsItem.m in Sources */,
-				9CBFB6C21F34275900604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C21F34275900604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A0D61F050E3D001CDAD8 /* SSJFundingHomeSelectCell.m in Sources */,
 				91EE665B1F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				9C13F4EC1E8267D300AC5FA9 /* SSJLoanCloseOutViewController.m in Sources */,
@@ -25587,7 +25587,7 @@
 				9C23D2041F209D8A008C7500 /* UIImageView+SSJTheme.m in Sources */,
 				9C23D2051F209D8A008C7500 /* SSJAddOrEditLoanMultiLabelCell.m in Sources */,
 				9C23D2061F209D8A008C7500 /* SSJShareBooksUrlHandle.m in Sources */,
-				9CBFB6BC1F34275100604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6BC1F34275100604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9C23D2071F209D8A008C7500 /* SSJRegistCompleteViewController.m in Sources */,
 				9C23D2081F209D8A008C7500 /* SSJUserCreditSyncTable.m in Sources */,
 				9C23D2091F209D8A008C7500 /* SSJUserBillTypeTable.mm in Sources */,
@@ -26138,7 +26138,7 @@
 				914DE0FC1F32D5DA00CAF86E /* SSJStartLunchItem.m in Sources */,
 				9145456F1F1DB05600EC0694 /* SSJWishModel.m in Sources */,
 				9C4C213A1E9E30C8000C5F15 /* SSJMagicExportViewController.m in Sources */,
-				9CBFB6C61F34275C00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C61F34275C00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9C4C213B1E9E30C8000C5F15 /* FMResultSet.m in Sources */,
 				9C4C213C1E9E30C8000C5F15 /* MJRefreshComponent.m in Sources */,
 				9C4C213D1E9E30C8000C5F15 /* MJRefreshAutoGifFooter.m in Sources */,
@@ -27060,7 +27060,7 @@
 				9C7D2EA21E8DF8A80093001F /* SSJAnnoucementService.m in Sources */,
 				9C7D2EA31E8DF8A80093001F /* SSJPasswordModifyViewController.m in Sources */,
 				9C7D2EA41E8DF8A80093001F /* SSJCreditCardStore.m in Sources */,
-				9CBFB6BA1F34274D00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6BA1F34274D00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9C1EC0DA1F1C85C7008FE4F1 /* SSJBooksTypeTable.mm in Sources */,
 				9C7D2EA51E8DF8A80093001F /* SSJDatabaseUpgrader.m in Sources */,
 				9C7D2EA61E8DF8A80093001F /* SSJBillingChargeCellItem.m in Sources */,
@@ -27827,7 +27827,7 @@
 				9C7D31191E8DF96B0093001F /* SSJAnnoucementService.m in Sources */,
 				9C7D311A1E8DF96B0093001F /* SSJPasswordModifyViewController.m in Sources */,
 				9C7D311B1E8DF96B0093001F /* SSJCreditCardStore.m in Sources */,
-				9CBFB6C31F34275900604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C31F34275900604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9C1EC0E21F1C85CC008FE4F1 /* SSJBooksTypeTable.mm in Sources */,
 				9C7D311C1E8DF96B0093001F /* SSJDatabaseUpgrader.m in Sources */,
 				9C7D311D1E8DF96B0093001F /* SSJBillingChargeCellItem.m in Sources */,
@@ -28438,7 +28438,7 @@
 				914DE0FB1F32D5DA00CAF86E /* SSJStartLunchItem.m in Sources */,
 				9145456E1F1DB05600EC0694 /* SSJWishModel.m in Sources */,
 				9C80FDDA1E95E88E00B1BAAC /* FMResultSet.m in Sources */,
-				9CBFB6C51F34275C00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C51F34275C00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9C80FDDB1E95E88E00B1BAAC /* MJRefreshComponent.m in Sources */,
 				9C80FDDC1E95E88E00B1BAAC /* MJRefreshAutoGifFooter.m in Sources */,
 				9C80FDDD1E95E88E00B1BAAC /* SSJHistoryHeader.m in Sources */,
@@ -29024,7 +29024,7 @@
 				9C277FBF1F1CB8AC000EAB83 /* SSJUserRemindTable.mm in Sources */,
 				9C9CEF1F1EA5F73A007657FE /* SSJLoanDetailViewController.m in Sources */,
 				9C9CEF201EA5F73A007657FE /* SSJBalenceChangeDetailViewController.m in Sources */,
-				9CBFB6C71F34275D00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C71F34275D00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CB4A1211F064741001CDAD8 /* SSJAppUpdateModel.m in Sources */,
 				BDF927701EEA8AED00F0C80F /* SSJShareBooksHintViewController.m in Sources */,
 				9C9CEF221EA5F73A007657FE /* SSJBillTypeSyncTable.m in Sources */,
@@ -30073,7 +30073,7 @@
 				7DA643841F21B08700D2B9E9 /* SSJCreateOrEditBillTypeColorSelectionView.m in Sources */,
 				9CDB4B591EF3ABBC0097E09D /* SSJFinancingHomeCell.m in Sources */,
 				9CDB4B5A1EF3ABBC0097E09D /* SSJScrollTextLayer.m in Sources */,
-				9CBFB6C91F34275E00604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6C91F34275E00604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				9CDB4B5B1EF3ABBC0097E09D /* SSJFundingDailySumCell.m in Sources */,
 				BD672A9E1F2DAA3500FBA872 /* SSJFundingSelectView.m in Sources */,
 				9CDB4B5C1EF3ABBC0097E09D /* SSJLoanDetailCellItem.m in Sources */,
@@ -30319,7 +30319,7 @@
 				9C41219D1D7EC9B700F29428 /* SSJReminderCircleSelectView.m in Sources */,
 				9CECFB271D6D41A700DB2C8B /* SSJReportFormsItem.m in Sources */,
 				9C71B8EF1EFCEA0B00C63A27 /* SSJNewMineHomeViewController.m in Sources */,
-				9CBFB6BE1F34275600604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6BE1F34275600604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				915A1AFA1E10F53500F73C7B /* SSJLoginPopView.m in Sources */,
 				91EE66571F20BDE0002931B7 /* SSJWishDefItem.m in Sources */,
 				7D22A37E1E4F16AC00190CEB /* SSJViewControllerAddition.m in Sources */,
@@ -31170,7 +31170,7 @@
 				9C6CA7F11DCADACA0013A499 /* SSJThemeUpdate.m in Sources */,
 				9C53A3BA1D420A01003BA2F0 /* SSJNewMemberViewController.m in Sources */,
 				7DE4A7E51D20DC7000F05BF0 /* NSString+SSJTheme.m in Sources */,
-				9CBFB6B91F34274700604F37 /* SSJAccountMergeViewController.m in Sources */,
+				9CBFB6B91F34274700604F37 /* SSJAccountMergeViewController.mm in Sources */,
 				7DB7E44A1EB98821002383C5 /* SSJSegmentedControl.m in Sources */,
 				7D2B24271C3E098F009A74A8 /* SSJFundInfoSyncTable.m in Sources */,
 				9CB4A1181F064741001CDAD8 /* SSJAppUpdateModel.m in Sources */,

@@ -22,6 +22,7 @@
     if (self) {
         [self addSubview:self.banner];
         [self addSubview:self.closeButton];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
