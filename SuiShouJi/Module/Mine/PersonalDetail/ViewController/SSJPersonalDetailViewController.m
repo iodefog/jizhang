@@ -166,7 +166,7 @@ static NSString *const kSSJPersonalDetailUserSignatureCellId = @"SSJPersonalDeta
     NSString *iconUrlStr = [userItem.icon hasPrefix:@"http"] ? userItem.icon : SSJImageURLWithAPI(userItem.icon);
     self.iconItem = [SSJPersonalDetailUserIconCellItem itemWithIconUrl:[NSURL URLWithString:iconUrlStr]];
     self.nicknameItem = [SSJPersonalDetailUserNicknameCellItem itemWithNickname:userItem.nickName];
-    self.signatureItem = [SSJPersonalDetailUserSignatureCellItem itemWithSignatureLimit:kUserSignatureLimit signature:userItem.signature title:@"" placeholder:@""];
+    self.signatureItem = [SSJPersonalDetailUserSignatureCellItem itemWithSignatureLimit:kUserSignatureLimit signature:userItem.signature title:@"备注" placeholder:@"输入记账小目标，更有利于小目标实现哦"];
     self.cellItems = @[@[self.iconItem, self.nicknameItem], @[self.signatureItem]];
 }
 
