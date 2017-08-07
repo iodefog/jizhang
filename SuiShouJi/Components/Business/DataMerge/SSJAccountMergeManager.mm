@@ -173,14 +173,14 @@
             }
         }
         
-        return YES;
-        
         dispatch_main_async_safe(^{
             if (success) {
                 success();
             }
         });
         
+        return YES;
+
     }];
     
 }
