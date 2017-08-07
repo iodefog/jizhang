@@ -103,6 +103,11 @@
         //终止
         [SSJWishHelper termWishWithWishModel:self.wishModel success:^{
             [CDAutoHideMessageHUD showMessage:@"终止成功"];
+            //如果有提醒则删除提醒
+            if (weakSelf.wishModel.remindId.length) {
+                [SSJLocalNotificationStore deleteWishReminderWithItem:weakSelf.reminderItem error:nil];//删除提醒
+            }
+            weakSelf.wishModel.remindId = @"";
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         } failure:^(NSError *error) {
