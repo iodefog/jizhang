@@ -442,6 +442,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
+    [self.view endEditing:YES];
     self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];

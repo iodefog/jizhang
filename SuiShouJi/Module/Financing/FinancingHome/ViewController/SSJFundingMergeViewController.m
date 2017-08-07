@@ -269,14 +269,6 @@
 
     
     if ([_transferInFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)_transferOutFundItem;
-        sourceFundId = fundingItem.fundingID;
-    } else if ([_transferInFundItem isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferOutFundItem;
-        sourceFundId = cardItem.cardId;
-    }
-    
-    if ([_transferOutFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
         SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)_transferInFundItem;
         targetFundId = fundingItem.fundingID;
     } else if ([_transferInFundItem isKindOfClass:[SSJCreditCardItem class]]) {
@@ -284,13 +276,21 @@
         targetFundId = cardItem.cardId;
     }
     
+    if ([_transferOutFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)_transferOutFundItem;
+        sourceFundId = fundingItem.fundingID;
+    } else if ([_transferOutFundItem isKindOfClass:[SSJCreditCardItem class]]) {
+        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferOutFundItem;
+        sourceFundId = cardItem.cardId;
+    }
+    
     if (!self.transferInFundItem) {
-        [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
+        [CDAutoHideMessageHUD showMessage:@"请选择转入账户"];
         return;
     }
     
     if (!self.transferOutFundItem) {
-        [CDAutoHideMessageHUD showMessage:@"请选择转出账本"];
+        [CDAutoHideMessageHUD showMessage:@"请选择转出账户"];
         return;
     }
     @weakify(self);
