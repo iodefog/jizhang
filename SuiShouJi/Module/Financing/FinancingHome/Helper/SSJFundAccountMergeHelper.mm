@@ -57,9 +57,34 @@
                               && SSJUserChargeTable.operatorType != 2];
         
         for (SSJUserChargeTable *userCharge in chargeArr) {
+            NSString *originWriteDate = userCharge.writeDate;
+            NSString *now = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             userCharge.fundId = targetFundId;
-            userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
+            
+            NSString *otherBillId;
+            
+            if ([userCharge.billId integerValue] == SSJSpecialBillIdBalanceRollIn) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdBalanceRollOut];
+                userCharge.writeDate = now;
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanChangeEarning) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdLoanChangeExpense];
+                userCharge.writeDate = now;
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanBalanceRollIn) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdLoanBalanceRollOut];
+                userCharge.writeDate = now;
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdBalanceRollOut) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdBalanceRollIn];
+                userCharge.writeDate = now;
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanChangeExpense) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdLoanChangeEarning];
+                userCharge.writeDate = now;
+            } else if ([userCharge.billId integerValue] == SSJSpecialBillIdLoanBalanceRollOut) {
+                otherBillId = [NSString stringWithFormat:@"%ld",SSJSpecialBillIdLoanBalanceRollIn];
+                userCharge.writeDate = now;
+            }  else {
+                userCharge.writeDate = writeDate;
+            }
             
             if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
                 SSJUserChargeTable.fundId,
@@ -74,6 +99,19 @@
                 });
                 return NO;
             };
+            
+            if (otherBillId.length) {
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperty:SSJUserChargeTable.writeDate withValue:now
+                                          where:SSJUserChargeTable.writeDate == originWriteDate
+                      && SSJUserChargeTable.billId == otherBillId]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                    return NO;
+                }
+            }
         }
         
         
