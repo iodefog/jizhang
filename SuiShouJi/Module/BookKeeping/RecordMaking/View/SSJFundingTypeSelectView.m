@@ -87,9 +87,9 @@
     return 50;
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     if (indexPath.row != [self.tableView numberOfRowsInSection:0]) {
         [self reloadSelectedStatusexceptIndexPath:indexPath];
     }
@@ -201,7 +201,17 @@
         item.fundingIcon = @"add";
         [_items addObject:item];
         SSJDispatch_main_async_safe(^(){
-            [weakSelf.tableView reloadData];
+            [_tableView reloadData];
+            if (!self.selectFundID || self.selectFundID.length == 0) {
+                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+            } else {
+                [_items enumerateObjectsUsingBlock:^(SSJFundingItem *item, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if ([item.fundingID isEqualToString:self.selectFundID]) {
+                        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
+                        *stop = YES;
+                    }
+                }];
+            }
         });
     }];
 }
