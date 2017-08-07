@@ -68,7 +68,7 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
         __weak typeof(self) wself = self;
         SSJCreateOrEditBillTypeViewController *addTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
         addTypeVC.created = YES;
-        addTypeVC.expended = YES;
+        addTypeVC.expended = self.incomeOrExpenture;
         addTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
             wself.selectedId = billID;
             [wself getdataFromDb];
