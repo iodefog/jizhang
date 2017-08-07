@@ -213,6 +213,7 @@
 - (UIView *)bgView {
     if (!_bgView) {
         _bgView = [[UIView alloc] init];
+        _bgView.layer.masksToBounds = YES;
     }
     return _bgView;
 }
