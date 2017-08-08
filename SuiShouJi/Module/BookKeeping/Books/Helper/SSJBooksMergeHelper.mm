@@ -126,7 +126,11 @@
             // 如果是从共享账本迁入个人账本,那吧共享账本中的那条流水删除,然后拷一份到目标账本
             if ([sourceShareBookCount integerValue] > 0 && ![targetSharebookCount integerValue]) {
                 userCharge.operatorType = 2;
-                if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperty:SSJUserChargeTable.operatorType withObject:userCharge
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
+                    SSJUserChargeTable.operatorType,
+                    SSJUserChargeTable.writeDate,
+                    SSJUserChargeTable.version
+                } withObject:userCharge
                                           where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
