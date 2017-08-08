@@ -85,11 +85,12 @@
             }  else {
                 userCharge.writeDate = writeDate;
             }
-            
+            userCharge.operatorType = 1;
             if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
                 SSJUserChargeTable.fundId,
                 SSJUserChargeTable.writeDate,
-                SSJUserChargeTable.version
+                SSJUserChargeTable.version,
+                SSJUserChargeTable.operatorType
             } withObject:userCharge
                                       where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                 dispatch_main_async_safe(^{
@@ -131,13 +132,14 @@
             } else if ([transfer.transferOutId isEqualToString:sourceFundId]) {
                 transfer.transferOutId = targetFundId;
             }
-            
+            transfer.operatorType = 1;
             if (![transfer.transferInId isEqualToString:transfer.transferOutId]) {
                 if (![self.db updateRowsInTable:@"BK_TRANSFER_CYCLE" onProperties:{
                     SSJTransferCycleTable.writeDate,
                     SSJTransferCycleTable.version,
                     SSJTransferCycleTable.transferInId,
-                    SSJTransferCycleTable.transferOutId
+                    SSJTransferCycleTable.transferOutId,
+                    SSJTransferCycleTable.operatorType
                 } withObject:transfer where:SSJTransferCycleTable.cycleId == transfer.cycleId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
@@ -176,11 +178,12 @@
             periodCharge.writeDate = writeDate;
             periodCharge.version = SSJSyncVersion();
             periodCharge.fundId = targetFundId;
-            
+            periodCharge.operatorType = 1;
             if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:{
                 SSJChargePeriodConfigTable.writeDate,
                 SSJChargePeriodConfigTable.version,
-                SSJChargePeriodConfigTable.fundId
+                SSJChargePeriodConfigTable.fundId,
+                SSJChargePeriodConfigTable.operatorType
             } withObject:periodCharge
                                       where:SSJChargePeriodConfigTable.configId == periodCharge.configId]) {
                 dispatch_main_async_safe(^{
@@ -209,12 +212,13 @@
             } else if ([loan.endTargetFundid isEqualToString:sourceFundId]) {
                 loan.endTargetFundid = targetFundId;
             }
-            
+            loan.operatorType = 1;
             if (![self.db updateRowsInTable:@"BK_LOAN" onProperties:{
                 SSJLoanTable.writeDate,
                 SSJLoanTable.version,
                 SSJLoanTable.targetFundid,
-                SSJLoanTable.endTargetFundid
+                SSJLoanTable.endTargetFundid,
+                SSJLoanTable.operatorType
             } withObject:loan where:SSJLoanTable.loanId == loan.loanId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
@@ -235,11 +239,12 @@
             repayment.writeDate = writeDate;
             repayment.version = SSJSyncVersion();
             repayment.cardId = targetFundId;
-            
+            repayment.operatorType = 1;
             if (![self.db updateRowsInTable:@"BK_CREDIT_REPAYMENT" onProperties:{
                 SSJCreditRepaymentTable.writeDate,
                 SSJCreditRepaymentTable.version,
-                SSJCreditRepaymentTable.cardId
+                SSJCreditRepaymentTable.cardId,
+                SSJCreditRepaymentTable.operatorType
             } withObject:repayment where:SSJCreditRepaymentTable.repaymentId == repayment.repaymentId]) {
                 dispatch_main_async_safe(^{
                     if (failure) {
