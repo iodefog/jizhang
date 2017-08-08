@@ -337,7 +337,7 @@
             [weakSelf.view endEditing:YES];
             RACCommand *command = weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist ? weakSelf.viewModel.registerCommand : weakSelf.viewModel.forgetPwdCommand;
             
-            [[[command execute:nil] takeUntil:weakSelf.rac_willDeallocSignal] subscribeError:^(NSError *error) {
+            [[command execute:nil] subscribeError:^(NSError *error) {
                 [CDAutoHideMessageHUD showError:error];
             } completed:^{
                 if (weakSelf.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist) {
