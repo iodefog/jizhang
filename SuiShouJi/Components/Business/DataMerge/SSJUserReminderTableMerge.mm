@@ -91,7 +91,7 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         loanRemindSelect = [[[db prepareSelectMultiObjectsOnResults:multiProperties
                                                            fromTables:@[ [self mergeTableName], @"bk_user_charge", @"bk_loan" ]]
-                               where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJUserCreditTable.remindId.inTable(@"bk_user_credit")
+                               where:SSJUserRemindTable.remindId.inTable([self mergeTableName]) == SSJLoanTable.remindId.inTable(@"bk_loan")
                                && SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                              && SSJLoanTable.loanId.inTable(@"bk_loan") == SSJUserChargeTable.fundId.inTable(@"bk_user_charge")
                              && SSJUserRemindTable.userId.inTable([self mergeTableName]) == sourceUserid
