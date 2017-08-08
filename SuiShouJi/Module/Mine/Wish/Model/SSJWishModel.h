@@ -49,4 +49,6 @@
 @property (nonatomic, copy) NSString *wishSaveMoney;
 
 + (NSDictionary *)propertyMapping;
+
++ (NSArray *)defaultWishImage;
 @end

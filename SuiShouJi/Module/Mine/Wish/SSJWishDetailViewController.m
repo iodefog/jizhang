@@ -187,10 +187,11 @@
 - (BOOL)saveWishImage {
     BOOL issuccess = NO;
     //只有是自定义图片的时候才需要写入沙河
-    if ([self.wishModel.wishImage isEqualToString:SSJWishCustomImageName] && self.isNeedReSaveImage == YES) {
-        if (SSJSaveImage(self.topImg.image, SSJWishCustomImageName)) {//图片写进沙河
+    
+    if (![[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage] && self.isNeedReSaveImage == YES) {
+        if (SSJSaveImage(self.topImg.image, self.wishModel.wishImage)) {//图片写进沙河
             //在同步表中保存
-            issuccess = [SSJWishHelper saveImageToImgSyncTable:SSJWishCustomImageName rId:self.wishModel.wishId failure:nil];
+            issuccess = [SSJWishHelper saveImageToImgSyncTable:self.wishModel.wishImage rId:self.wishModel.wishId failure:nil];
         }
     } else {
         issuccess = YES;
@@ -447,7 +448,7 @@
                 //切换背景
                 self.topImg.image = seleImg;
                 self.wishModel.wishImage = seleImgName;
-                if ([seleImgName isEqualToString:SSJWishCustomImageName]) {
+                if (![[SSJWishModel defaultWishImage] containsObject:seleImgName]) {
                     self.isNeedReSaveImage = YES;
                 } else {
                     self.isNeedReSaveImage = NO;
