@@ -12,11 +12,12 @@
 
 + (NSDictionary *)replacedKeyFromPropertyName{
     return @{
-             @"bannerImageUrl" : @"image",
-             @"bannerName" : @"title",
-             @"bannerUrl" : @"url",
-             @"bannerType" : @"url",
-             @"bannerType" : @"url"
+             @"bannerImageUrl" : @"bannerImageUrl",
+             @"bannerName" : @"bannerName",
+             @"bannerId" : @"id",
+             @"bannerTarget" : @"iosTarget",
+             @"needLogin" : @"isLogin",
+             @"bannerType" : @"targetType"
              };
 }
 

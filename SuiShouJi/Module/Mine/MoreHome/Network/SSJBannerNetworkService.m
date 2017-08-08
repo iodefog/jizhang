@@ -14,7 +14,6 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
-
     [self request:SSJURLWithAPI(@"/chargebook/config/get_banner.go") params:nil];
 }
 
@@ -22,6 +21,7 @@
     [super handleResult:rootElement];
     NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
     self.item = [SSJAdItem mj_objectWithKeyValues:result];
+    
 }
 
 

@@ -13,16 +13,19 @@
 // 图片url
 @property(nonatomic, strong) NSString *bannerImageUrl;
 
-// 跳转地址
-@property(nonatomic, strong) NSString *bannerUrl;
-
 // 名称
 @property(nonatomic, strong) NSString *bannerName;
 
 // banner的id
 @property(nonatomic, strong) NSString *bannerId;
 
+// banner的id
+@property(nonatomic, strong) NSString *bannerTarget;
+
 // 是否需要登录
 @property (nonatomic) BOOL needLogin;
+
+// banner的类型 0跳转到外部页面 1打开app内部页面
+@property (nonatomic) int bannerType;
 
 @end
