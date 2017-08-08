@@ -297,7 +297,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
         _listMenu.shadowOpacity = 0;
         _listMenu.cornerRadius = 4;
         _listMenu.items = @[[SSJListMenuItem itemWithImageName:nil
-                                                         title:@"编辑类别"
+                                                         title:NSLocalizedString(@"修改类别", nil)
                                               normalTitleColor:[UIColor whiteColor]
                                             selectedTitleColor:[UIColor whiteColor]
                                               normalImageColor:nil
@@ -305,7 +305,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
                                                backgroundColor:nil
                                                 attributedText:nil],
                             [SSJListMenuItem itemWithImageName:nil
-                                                         title:@"删除类别"
+                                                         title:NSLocalizedString(@"删除类别", nil)
                                               normalTitleColor:[UIColor whiteColor]
                                             selectedTitleColor:[UIColor whiteColor]
                                               normalImageColor:nil

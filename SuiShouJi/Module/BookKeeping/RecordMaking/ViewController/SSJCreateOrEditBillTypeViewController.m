@@ -68,6 +68,7 @@ static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedK
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self updateTitle];
     [self setupViews];
     [self setupBindings];
     [self organiseColors];
@@ -192,6 +193,14 @@ static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedK
 }
 
 #pragma mark - Private
+- (void)updateTitle {
+    if (self.created) {
+        self.title = self.expended ? @"添加支出类别" : @"添加收入类别";
+    } else {
+        self.title = [NSString stringWithFormat:@"修改“%@”", self.name];
+    }
+}
+
 - (void)setupViews {
     [self.view addSubview:self.bodyView];
     [self.view addSubview:self.topView];
