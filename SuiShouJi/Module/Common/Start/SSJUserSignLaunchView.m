@@ -32,6 +32,9 @@
 
 @property (nonatomic, strong) UILabel *appSubDetailL;
 
+/**skipBtn*/
+@property (nonatomic, strong) UIButton *skipBtn;
+
 @property (nonatomic) BOOL isCompleted;
 
 @end
@@ -45,6 +48,7 @@
         [self addSubview:self.signL];
         [self addSubview:self.rightImgView];
         [self addSubview:self.authorL];
+        [self addSubview:self.skipBtn];
         
         [self addSubview:self.bottomView];
         [self.bottomView addSubview:self.iconImgView];
@@ -104,7 +108,7 @@
         }];
     }
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (!_isCompleted) {
             _isCompleted = YES;
             if (completion) {
@@ -143,6 +147,12 @@
     [self.authorL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.rightImgView);
         make.top.mas_equalTo(self.signL.mas_bottom).offset(10);
+    }];
+    
+    [self.skipBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(60);
+        make.right.mas_equalTo(-30);
+        make.size.mas_equalTo(CGSizeMake(40, 30));
     }];
     
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -244,6 +254,22 @@
         _iconImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:SSJAppIcon()]];
     }
     return _iconImgView;
+}
+
+- (UIButton *)skipBtn {
+    if (!_skipBtn) {
+        _skipBtn = [[UIButton alloc] init];
+        [_skipBtn setTitle:@"跳过" forState:UIControlStateNormal];
+        _skipBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:12];
+        [_skipBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
+        MJWeakSelf;
+        [[_skipBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            if (weakSelf.skipBtnBlock) {
+                weakSelf.skipBtnBlock(btn);
+            }
+        }];
+    }
+    return _skipBtn;
 }
 
 @end
