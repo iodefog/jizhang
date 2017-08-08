@@ -255,6 +255,10 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 - (SSJUserSignLaunchView *)userSignLaunchView {
     if (!_userSignLaunchView) {
         _userSignLaunchView = [[SSJUserSignLaunchView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        MJWeakSelf;
+        _userSignLaunchView.skipBtnBlock = ^(UIButton *btn) {
+            [weakSelf showGuideViewIfNeededWithFirstView:weakSelf.userSignLaunchView];
+        };
     }
     return _userSignLaunchView;
 }
