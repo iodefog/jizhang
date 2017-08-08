@@ -106,6 +106,8 @@
 - (UILabel *)titleL {
     if (!_titleL) {
         _titleL = [[UILabel alloc] init];
+        _titleL.numberOfLines = 0;
+        _titleL.textAlignment = NSTextAlignmentCenter;
         _titleL.text = @"开启记账\n小鱼会根据你的设定来提醒记账";
         _titleL.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
         _titleL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];

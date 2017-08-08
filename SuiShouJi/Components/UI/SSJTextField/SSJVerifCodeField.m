@@ -93,6 +93,9 @@ static const NSInteger kCountdownLimit = 60;
 - (void)getVerifCode {
     __weak typeof(self) wself = self;
     wself.getAuthCodeState = SSJGetVerifCodeStateLoading;
+    if ([self.getAuthCodeBtn.titleLabel.text isEqualToString:@"重新获取"]) {
+        wself.viewModel.graphNum = @"";
+    }
     [[[wself.viewModel.getVerificationCodeCommand execute:nil] takeUntil:wself.rac_willDeallocSignal] subscribeNext:^(NSDictionary *value) {
         [wself dealVerifCodeDataWithDic:value];
     } error:^(NSError *error) {
