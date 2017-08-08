@@ -992,7 +992,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.editAction = ^(SSJRecordMakingBillTypeSelectionView *view, SSJRecordMakingBillTypeSelectionCellItem *item) {
         SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
-        addBillTypeVC.title = @"编辑类别图标";
         addBillTypeVC.created = NO;
         addBillTypeVC.expended = wself.customNaviBar.selectedBillType;
         addBillTypeVC.booksId = wself.item.booksId;
@@ -1029,7 +1028,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     
     billTypeView.addAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         SSJCreateOrEditBillTypeViewController *addBillTypeVC = [[SSJCreateOrEditBillTypeViewController alloc] init];
-        addBillTypeVC.title = @"自定义类别图标";
         addBillTypeVC.created = YES;
         addBillTypeVC.expended = wself.customNaviBar.selectedBillType;
         addBillTypeVC.booksId = wself.item.booksId;
