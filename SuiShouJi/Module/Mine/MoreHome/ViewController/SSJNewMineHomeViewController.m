@@ -25,6 +25,7 @@
 #import "SSJWishStartViewController.h"
 #import "SSJMakeWishViewController.h"
 #import "SSJWishManageViewController.h"
+#import "SSJAnnouncementWebViewController.h"
 
 #import "SSJMineHomeTableViewHeader.h"
 #import "SSJNewMineHomeTabelviewCell.h"
@@ -225,13 +226,15 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
             @strongify(self);
             SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
-//            if (item.bannerType == SSJBanneerTypeNormal) {
-//                SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerUrl]];
-//                [self.navigationController pushViewController:webVc animated:YES];
-//            } else if (item.bannerType == SSJBanneerTypeQiuCheng){
-//                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
-//                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
-//            }
+            if ([item.bannerId isEqualToString:@"10000"]) {
+                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
+                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
+            } else {
+                if (item.bannerType == 0) {
+                    SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
+                    [self.navigationController pushViewController:webVc animated:YES];
+                }
+            }
         };
         headerView.items = self.bannerItems;
         return headerView;

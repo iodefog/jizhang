@@ -123,29 +123,15 @@
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
             
-            if (![self.db updateRowsInTable:@"BK_USER_CHARGE"
-                               onProperties:{
-                                   SSJUserChargeTable.booksId,
-                                   SSJUserChargeTable.writeDate,
-                                   SSJUserChargeTable.version,
-                                   SSJUserChargeTable.billId,
-                                   SSJUserChargeTable.chargeType
-                               }
-                                 withObject:userCharge
-                                      where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
-                dispatch_main_async_safe(^{
-                    if (failure) {
-                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
-                    }
-                });
-                return NO;
-            };
-            
-            // 如果是从共享账本转出,那吧共享账本中的那条流水删除
+            // 如果是从共享账本迁入个人账本,那吧共享账本中的那条流水删除,然后拷一份到目标账本
             if ([sourceShareBookCount integerValue] > 0 && ![targetSharebookCount integerValue]) {
-                userCharge.booksId = sourceBooksId;
                 userCharge.operatorType = 2;
-                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
+                    SSJUserChargeTable.operatorType,
+                    SSJUserChargeTable.writeDate,
+                    SSJUserChargeTable.version
+                } withObject:userCharge
+                                          where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -153,7 +139,37 @@
                     });
                     return NO;
                 }
+                userCharge.chargeId = SSJUUID();
+                userCharge.operatorType = 0;
+                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                }
+            } else {
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE"
+                                   onProperties:{
+                                       SSJUserChargeTable.booksId,
+                                       SSJUserChargeTable.writeDate,
+                                       SSJUserChargeTable.version,
+                                       SSJUserChargeTable.billId,
+                                       SSJUserChargeTable.chargeType
+                                   }
+                                     withObject:userCharge
+                                          where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                    return NO;
+                };
+                
+
             }
+            
         }
         
         // 取出账本中所有的流水
