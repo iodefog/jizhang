@@ -197,7 +197,7 @@ static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedK
     if (self.created) {
         self.title = self.expended ? @"添加支出类别" : @"添加收入类别";
     } else {
-        self.title = [NSString stringWithFormat:@"修改“%@”", self.name];
+        self.title = [NSString stringWithFormat:@"修改“%@”为", self.name];
     }
 }
 
