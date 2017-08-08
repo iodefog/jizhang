@@ -40,9 +40,9 @@
         __weak typeof(self) weakSelf = self;
         _banner.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex){
             SSJBannerItem *item = [weakSelf.items ssj_safeObjectAtIndex:tapIndex];
-            [SSJAnaliyticsManager event:@"mine_banner" extra:item.bannerUrl];
+            [SSJAnaliyticsManager event:@"mine_banner" extra:item.bannerTarget];
             if (weakSelf.bannerClickedBlock) {
-                weakSelf.bannerClickedBlock(item.bannerUrl,item.bannerName);
+                weakSelf.bannerClickedBlock(item.bannerTarget,item.bannerName);
             }
         };
     }

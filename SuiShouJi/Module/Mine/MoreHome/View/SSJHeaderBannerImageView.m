@@ -131,7 +131,7 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 {
     SSJBannerItem *item = [self.bannerItemArray ssj_safeObjectAtIndex:indexPath.row];
     //是账单
-    if ([item.bannerUrl containsString:@"http://jz.youyuwo.com/5/zd"]) {
+    if ([item.bannerTarget containsString:@"http://jz.youyuwo.com/5/zd"]) {
         if (!SSJIsUserLogined()) {
             __weak typeof(self) weakSelf = self;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
@@ -144,11 +144,11 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
             return;
         }
         if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:title:)]) {
-            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserId=%@",item.bannerUrl,SSJUSERID()] title:item.bannerName];
+            [self.delegate pushToViewControllerWithUrl:[NSString stringWithFormat:@"%@?cuserId=%@",item.bannerTarget,SSJUSERID()] title:item.bannerName];
         }
     }else{
         if (self.delegate && [self.delegate respondsToSelector:@selector(pushToViewControllerWithUrl:title:)]) {
-            [self.delegate pushToViewControllerWithUrl:item.bannerUrl title:item.bannerName];
+            [self.delegate pushToViewControllerWithUrl:item.bannerTarget title:item.bannerName];
         }
 
     }

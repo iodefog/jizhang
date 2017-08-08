@@ -142,7 +142,7 @@
             };
             
             // 如果是从共享账本转出,那吧共享账本中的那条流水删除
-            if ([sourceShareBookCount integerValue] > 0) {
+            if ([sourceShareBookCount integerValue] > 0 && ![targetSharebookCount integerValue]) {
                 userCharge.booksId = sourceBooksId;
                 userCharge.operatorType = 2;
                 if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
