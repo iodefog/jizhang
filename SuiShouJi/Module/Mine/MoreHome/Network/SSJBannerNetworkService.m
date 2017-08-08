@@ -14,27 +14,14 @@
 @implementation SSJBannerNetworkService
 
 - (void)requestBannersList{
-    self.httpMethod = SSJBaseNetworkServiceHttpMethodGET;
-    
-//#ifdef DEBUG
-//    NSString *api = @"/app/banner_test.json";
-//#else
-    NSString *api = @"http://jz.youyuwo.com/app/banner_2.0.json";
-//#endif
-    
-    NSString *urlStr = [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager formalDomain]]] absoluteString];
 
-    [self request:urlStr params:nil];
+    [self request:SSJURLWithAPI(@"/chargebook/config/get_banner.go") params:nil];
 }
 
 - (void)handleResult:(NSDictionary *)rootElement{
     [super handleResult:rootElement];
     NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
     self.item = [SSJAdItem mj_objectWithKeyValues:result];
-    SSJBannerItem *banner = [[SSJBannerItem alloc] init];
-    banner.bannerImageUrl = @"http://download.youyuwo.com/jz/260/qiucheng.png";
-    banner.bannerType = SSJBanneerTypeQiuCheng;
-    self.item.bannerItems = [NSArray arrayWithObjects:banner, nil];
 }
 
 
