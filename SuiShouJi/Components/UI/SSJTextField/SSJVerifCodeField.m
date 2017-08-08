@@ -105,7 +105,6 @@ static const NSInteger kCountdownLimit = 60;
 
 //处理发送验证码返回的数据
 - (void)dealVerifCodeDataWithDic:(NSDictionary *)value {
-    self.viewModel.graphNum = @"";
     __weak typeof(self) wself = self;
     NSString *code = [NSString stringWithFormat:@"%@",[value objectForKey:@"code"]];
     NSString *image = [NSString stringWithFormat:@"%@",[[value objectForKey:@"results"] objectForKey:@"image"]];
@@ -127,6 +126,7 @@ static const NSInteger kCountdownLimit = 60;
     } else if ([code isEqualToString:@"3"]) {//图片验证码错误
         [CDAutoHideMessageHUD showMessage:desc];
         //清空之前输入的验证码
+        wself.viewModel.graphNum = @"";
         wself.graphVerView.verNumTextF.text = @"";
         //重新获取图形验证码
         [[[wself.viewModel.reGetVerificationCodeCommand execute:nil] takeUntil:wself.rac_willDeallocSignal] subscribeNext:^(UIImage *image) {
