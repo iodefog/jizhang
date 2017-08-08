@@ -63,7 +63,7 @@
         NSMutableDictionary *sameNameDic = [NSMutableDictionary dictionaryWithCapacity:0];
         
         // 取出所有用到的记账类型
-        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
+        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:(SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
                                                                                                                                                                                          fromTable:@"BK_USER_CHARGE"
                                                                                                                                                                                              where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
                                                                                                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
@@ -71,7 +71,11 @@
                                     && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
                                                                                                          where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
                                                                                                                                                                                                                                                      && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
-                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.booksId == targetBooksId])
+                                                                          && SSJUserBillTypeTable.booksId == targetBooksId]))
+                                            || SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJChargePeriodConfigTable.billId fromTable:@"BK_USER_BILL_TYPE"
+                                                                                                                                                                                                where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
+                                                                                                                                                                 && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
+                                                                                                                                                                 && SSJUserBillTypeTable.booksId == targetBooksId])
                                             && SSJUserChargeTable.booksId == sourceBooksId] mutableCopy];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
@@ -123,29 +127,15 @@
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
             }
             
-            if (![self.db updateRowsInTable:@"BK_USER_CHARGE"
-                               onProperties:{
-                                   SSJUserChargeTable.booksId,
-                                   SSJUserChargeTable.writeDate,
-                                   SSJUserChargeTable.version,
-                                   SSJUserChargeTable.billId,
-                                   SSJUserChargeTable.chargeType
-                               }
-                                 withObject:userCharge
-                                      where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
-                dispatch_main_async_safe(^{
-                    if (failure) {
-                        failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
-                    }
-                });
-                return NO;
-            };
-            
-            // 如果是从共享账本转出,那吧共享账本中的那条流水删除
+            // 如果是从共享账本迁入个人账本,那吧共享账本中的那条流水删除,然后拷一份到目标账本
             if ([sourceShareBookCount integerValue] > 0 && ![targetSharebookCount integerValue]) {
-                userCharge.booksId = sourceBooksId;
                 userCharge.operatorType = 2;
-                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE" onProperties:{
+                    SSJUserChargeTable.operatorType,
+                    SSJUserChargeTable.writeDate,
+                    SSJUserChargeTable.version
+                } withObject:userCharge
+                                          where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -153,7 +143,37 @@
                     });
                     return NO;
                 }
+                userCharge.chargeId = SSJUUID();
+                userCharge.operatorType = 0;
+                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                }
+            } else {
+                if (![self.db updateRowsInTable:@"BK_USER_CHARGE"
+                                   onProperties:{
+                                       SSJUserChargeTable.booksId,
+                                       SSJUserChargeTable.writeDate,
+                                       SSJUserChargeTable.version,
+                                       SSJUserChargeTable.billId,
+                                       SSJUserChargeTable.chargeType
+                                   }
+                                     withObject:userCharge
+                                          where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                    return NO;
+                };
+                
+
             }
+            
         }
         
         // 取出账本中所有的流水

@@ -23,8 +23,10 @@
 #import "SSJDataSynchronizer.h"
 
 static const int kBillNameLimit = 4;
+static const NSTimeInterval kDuration = 0.25;
 
 static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
+static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedKey";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,6 +39,8 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 @property (nonatomic, strong) SSJCaterotyMenuSelectionView *bodyView;
 
 @property (nonatomic, strong) SSJCreateOrEditBillTypeColorSelectionView *colorSelectionView;
+
+@property (nonatomic, strong) UIImageView *guideView;
 
 @property (nonatomic) SSJBooksType booksType;
 
@@ -64,6 +68,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self updateTitle];
     [self setupViews];
     [self setupBindings];
     [self organiseColors];
@@ -84,6 +89,7 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         self.name = self.name ?: item.name;
         self.color = self.color ?: item.color;
     }];
+    [self showGuideViewIfNeeded];
 }
 
 - (void)updateViewConstraints {
@@ -172,7 +178,9 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     SSJBillTypeCategoryModel *category = [self.currentCategories ssj_safeObjectAtIndex:indexPath.categoryIndex];
     SSJBillTypeModel *item = [category.items ssj_safeObjectAtIndex:indexPath.itemIndex];
     self.icon = item.icon;
-    self.name = item.name;
+    if (!self.topView.userTypeInBillName) {
+        self.name = item.name;
+    }
     if (self.colorSelectionView.selectedIndex == NSNotFound) {
         self.color = item.color;
     }
@@ -185,6 +193,14 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 }
 
 #pragma mark - Private
+- (void)updateTitle {
+    if (self.created) {
+        self.title = self.expended ? @"添加支出类别" : @"添加收入类别";
+    } else {
+        self.title = [NSString stringWithFormat:@"修改“%@”为", self.name];
+    }
+}
+
 - (void)setupViews {
     [self.view addSubview:self.bodyView];
     [self.view addSubview:self.topView];
@@ -193,16 +209,15 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
 }
 
 - (void)setupBindings {
+    @weakify(self);
     [RACObserve(self, icon) subscribeNext:^(NSString *icon) {
+        @strongify(self);
         [self.topView setBillTypeIcon:[UIImage imageNamed:icon] animated:YES];
     }];
-//    [RACObserve(self, name) subscribeNext:^(NSString *name) {
-//        [self.topView setBillTypeName:name animated:YES];
-//    }];
     [RACObserve(self, color) subscribeNext:^(NSString *color) {
+        @strongify(self);
         [self.topView setBillTypeColor:[UIColor ssj_colorWithHex:color] animated:YES];
     }];
-    
     RACChannelTo(self.topView, billTypeName) = RACChannelTo(self, name);
 }
 
@@ -346,6 +361,30 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
     }];
 }
 
+- (BOOL)showGuideViewIfNeeded {
+    BOOL isEverEntered = [[NSUserDefaults standardUserDefaults] boolForKey:kIsCustomBillGuideShowedKey];
+    if (!isEverEntered) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsCustomBillGuideShowedKey];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+        
+        UIWindow *window = [UIApplication sharedApplication].keyWindow;
+        self.guideView.frame = window.bounds;
+        [UIView transitionWithView:window duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [window addSubview:self.guideView];
+        } completion:NULL];
+    }
+    return !isEverEntered;
+}
+
+- (void)hideGuideView {
+    if (self.guideView.superview) {
+        [UIView transitionWithView:self.guideView.superview duration:kDuration options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [self.guideView removeFromSuperview];
+            self.guideView = nil;
+        } completion:NULL];
+    }
+}
+
 #pragma mark - Lazyloading
 - (SSJCreateOrEditBillTypeTopView *)topView {
     if (!_topView) {
@@ -384,6 +423,16 @@ static NSString *const kCatgegoriesInfoIncomeKey = @"kCatgegoriesInfoIncomeKey";
         };
     }
     return _colorSelectionView;
+}
+
+- (UIImageView *)guideView {
+    if (!_guideView) {
+        _guideView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"record_making_guide_1"]];
+        _guideView.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideGuideView)];
+        [_guideView addGestureRecognizer:tap];
+    }
+    return _guideView;
 }
 
 - (NSArray<NSNumber *> *)booksTypes {

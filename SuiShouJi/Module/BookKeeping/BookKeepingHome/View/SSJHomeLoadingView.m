@@ -37,6 +37,7 @@
         [self addSubview:self.loadingView];
         [self addSubview:self.statusLab];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncCompleteHandler) name:SSJSyncDataSuccessNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncCompleteHandler) name:SSJSyncDataFailureNotification object:nil];
     }
     return self;
 }

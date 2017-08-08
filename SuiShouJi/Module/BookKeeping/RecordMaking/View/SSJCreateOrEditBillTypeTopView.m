@@ -100,6 +100,8 @@ static const NSTimeInterval kDuration = 0.25;
 
 @property (nonatomic, strong) UITextField *nameField;
 
+@property (nonatomic) BOOL userTypeInBillName;
+
 @end
 
 @implementation SSJCreateOrEditBillTypeTopView
@@ -112,10 +114,13 @@ static const NSTimeInterval kDuration = 0.25;
         [self ssj_setBorderStyle:SSJBorderStyleBottom];
         [self updateAppearanceAccordingToTheme];
         
-        [[self.nameField rac_textSignal] subscribeNext:^(NSString *text) {
+        @weakify(self);
+        [[[self.nameField rac_textSignal] skip:1] subscribeNext:^(NSString *text) {
+            @strongify(self);
             [self willChangeValueForKey:@"billTypeName"];
-            _billTypeName = text;
+            self -> _billTypeName = text;
             [self didChangeValueForKey:@"billTypeName"];
+            self.userTypeInBillName = YES;
         }];
     }
     return self;

@@ -137,7 +137,7 @@
             SSJThemeHomeViewController *themeVc = [[SSJThemeHomeViewController alloc] init];
             [currentVc.navigationController pushViewController:themeVc animated:YES];
         } else if ([pushItem.pushTarget isEqualToString:@"SSJReminderViewController"]) {
-            SSJReminderViewController *reminderVc = [[SSJReminderViewController alloc] init];
+            SSJReminderViewController *reminderVc = [[SSJReminderViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
             [currentVc.navigationController pushViewController:reminderVc animated:YES];
         }
 
