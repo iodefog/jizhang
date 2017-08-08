@@ -63,7 +63,7 @@
         NSMutableDictionary *sameNameDic = [NSMutableDictionary dictionaryWithCapacity:0];
         
         // 取出所有用到的记账类型
-        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
+        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:(SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
                                                                                                                                                                                          fromTable:@"BK_USER_CHARGE"
                                                                                                                                                                                              where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
                                                                                                                                                               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
@@ -71,7 +71,11 @@
                                     && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
                                                                                                          where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
                                                                                                                                                                                                                                                      && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
-                                                                                                                                                                                                                                                     && SSJUserBillTypeTable.booksId == targetBooksId])
+                                                                          && SSJUserBillTypeTable.booksId == targetBooksId]))
+                                            || SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJChargePeriodConfigTable.billId fromTable:@"BK_USER_BILL_TYPE"
+                                                                                                                                                                                                where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
+                                                                                                                                                                 && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
+                                                                                                                                                                 && SSJUserBillTypeTable.booksId == targetBooksId])
                                             && SSJUserChargeTable.booksId == sourceBooksId] mutableCopy];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {

@@ -179,7 +179,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     
     //记账提醒
     if ([item.title isEqualToString:kTitle1]) {
-        SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc]init];
+        SSJReminderViewController *BookkeepingReminderVC = [[SSJReminderViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:BookkeepingReminderVC animated:YES];
         return;
     }
@@ -362,7 +362,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 }
 
 - (void)leftButtonClicked:(id)sender {
-    SSJSettingViewController *settingVC = [[SSJSettingViewController alloc] init];
+    SSJSettingViewController *settingVC = [[SSJSettingViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:settingVC animated:YES];
 }
 
