@@ -45,11 +45,15 @@
 
         [manager startMergeWithSourceUserId:unloggedUserid targetUserId:currentUser.userId startDate:lastMergeDate endDate:[NSDate date] mergeType:SSJMergeDataTypeByWriteDate Success:^{
             [hud hideAnimated:YES afterDelay:1];
-            [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
+            hud.completionBlock = ^{
+                [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
+            };
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
             [hud hideAnimated:YES afterDelay:1];
-            [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
+            hud.completionBlock = ^{
+                [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
+            };
         }];
         
     });

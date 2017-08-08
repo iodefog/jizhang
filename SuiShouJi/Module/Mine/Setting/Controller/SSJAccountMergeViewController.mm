@@ -240,10 +240,14 @@
     dispatch_async([SSJDataMergeQueue sharedInstance].dataMergeQueue, ^{
         [self.manager startMergeWithSourceUserId:unloggedUserId targetUserId:SSJUSERID() startDate:self.startDate endDate:self.endDate mergeType:SSJMergeDataTypeByBillDate Success:^{
             [hud hideAnimated:YES afterDelay:1];
-            [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
+            hud.completionBlock = ^{
+                [CDAutoHideMessageHUD showMessage:@"数据合并成功"];
+            };
         } failure:^(NSError *error) {
             [hud hideAnimated:YES afterDelay:1];
-            [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
+            hud.completionBlock = ^{
+                [CDAutoHideMessageHUD showMessage:@"数据合并失败"];
+            };
         }];
     });
 }
