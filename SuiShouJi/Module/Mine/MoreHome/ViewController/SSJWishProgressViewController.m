@@ -102,7 +102,7 @@ static CGFloat defImageHeight = 402;
     
     [self.view addSubview:self.vLine];
     [self updateAppearanceWithTheme];
-    [self updateViewConstraints];
+    [self.view setNeedsUpdateConstraints];
 }
 
 
@@ -388,13 +388,6 @@ static CGFloat defImageHeight = 402;
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
     [self.stateBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].secondaryColor] forState:UIControlStateDisabled];
     self.vLine.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor];
-    
-    if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        self.topBg.backgroundColor =SSJ_DEFAULT_BACKGROUND_COLOR;
-        self.view.backgroundColor = [UIColor whiteColor];
-    } else {
-        self.topBg.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha];
-    }
     [self.guideView updateAppearance];
 }
 

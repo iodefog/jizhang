@@ -362,12 +362,21 @@
     return _remindSwitch;
 }
 
+- (SSJReminderItem *)reminderItem {
+    if (!_reminderItem) {
+        _reminderItem = [[SSJReminderItem alloc] init];
+    }
+    return _reminderItem;
+}
+
 #pragma mark - Action
 - (void)switchValueChanged:(UISwitch *)switchc {
     if (!switchc.isOn) return;
     //判断有没有授权
     if ([self remindLocation]) {
-        SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
+        SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc] init];
+        self.reminderItem.remindName = @"为心愿存钱";
+        remindEditeVc.item = self.reminderItem;
         remindEditeVc.needToSave = YES;
         
         __weak typeof(self) weakSelf = self;
@@ -378,7 +387,7 @@
         };
         
         remindEditeVc.notSaveReminderAction = ^{
-            weakSelf.remindSwitch.on= NO;
+            weakSelf.remindSwitch.on = NO;
         };
         remindEditeVc.needToSave = YES;
         [self.navigationController pushViewController:remindEditeVc animated:YES];
