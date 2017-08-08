@@ -25,6 +25,20 @@
     return hasWish;
 }
 
+/**
+ 通过提醒id查找心愿id
+ 
+ @param remindId 提醒id
+ @return 心愿id
+ */
++ (NSString *)queryWishIdWithRemindId:(NSString *)remindId {
+    __block NSString *wishId = @"";
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+       wishId = [db stringForQuery:@"select wishid from bk_wish where remindid = ? and cuserid = ?",remindId,SSJUSERID()];
+    }];
+    return wishId;
+}
+
 
 /**
  保存心愿

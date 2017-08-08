@@ -388,7 +388,7 @@ NSDate *SCYEnterBackgroundTime() {
             } else if (remindItem.remindType == SSJReminderTypeWish) {//愿望
                 if (remindItem.remindId.length) {
                     SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
-                    wishProgressVC.wishId = remindItem.remindId;
+                    wishProgressVC.wishId = [SSJWishHelper queryWishIdWithRemindId:remindItem.remindId];
                     [currentVc.navigationController pushViewController:wishProgressVC animated:YES];
                 }
             }

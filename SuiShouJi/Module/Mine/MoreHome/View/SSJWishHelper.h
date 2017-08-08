@@ -25,6 +25,15 @@ typedef NS_ENUM(NSInteger, SSJSaveImgType) {
  */
 + (BOOL)queryHasWishsWithError:(NSError **)error;
 
+
+/**
+ 通过提醒id查找心愿id
+
+ @param remindId 提醒id
+ @return 心愿id
+ */
++ (NSString *)queryWishIdWithRemindId:(NSString *)remindId;
+
 /**
  保存心愿
 
