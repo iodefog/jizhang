@@ -52,7 +52,9 @@
                                                        where:SSJShareBooksTable.booksId == targetBooksId
                                  && SSJShareBooksTable.operatorType != 2];
 
-        
+        NSNumber *sourceShareBookCount = [self.db getOneValueOnResult:SSJShareBooksTable.AnyProperty.count() fromTable:@"BK_SHARE_BOOKS"
+                                                                where:SSJShareBooksTable.booksId == sourceBooksId
+                                          && SSJShareBooksTable.operatorType != 2];
         
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
@@ -138,6 +140,20 @@
                 });
                 return NO;
             };
+            
+            // 如果是从共享账本转出,那吧共享账本中的那条流水删除
+            if ([sourceShareBookCount integerValue] > 0) {
+                userCharge.booksId = sourceBooksId;
+                userCharge.operatorType = 2;
+                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                    dispatch_main_async_safe(^{
+                        if (failure) {
+                            failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
+                        }
+                    });
+                    return NO;
+                }
+            }
         }
         
         // 取出账本中所有的流水
