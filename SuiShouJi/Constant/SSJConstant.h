@@ -352,9 +352,6 @@ extern NSString *const SSJAllBillTypeId;
 // 所有成员id
 extern NSString *const SSJAllMembersId;
 
-//心愿图片名称(自定义)
-extern NSString *const SSJWishCustomImageName;
-
 /** -------------------- KEY -------------------- */
 #pragma mark - KEY
 //保存上次弹窗的时间

@@ -61,4 +61,8 @@
     return model;
 }
 
++ (NSArray *)defaultWishImage {
+    return @[@"wish_image_def",@"wish_image_def_one",@"wish_image_def_two",@"wish_image_def_three",@"wish_image_def_four",@"wish_image_def_five"];
+}
+
 @end

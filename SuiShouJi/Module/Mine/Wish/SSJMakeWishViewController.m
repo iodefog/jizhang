@@ -303,7 +303,6 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
         [[_cameraImg rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             SSJWishPhotoChooseViewController *photoVC = [[SSJWishPhotoChooseViewController alloc] init];
             photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
-
                 //切换背景
                 weakSelf.topImg.image = seleImg;
                 weakSelf.wishModel.wishImage = seleImgName;
@@ -457,10 +456,10 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (BOOL)saveWishImage {
     BOOL issuccess = NO;
     //只有是自定义图片的时候才需要写入沙河
-    if ([self.wishModel.wishImage isEqualToString:SSJWishCustomImageName]) {
-        if (SSJSaveImage(self.topImg.image, SSJWishCustomImageName)) {//图片写进沙河
+    if (![[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage]) {
+        if (SSJSaveImage(self.topImg.image, self.wishModel.wishImage)) {//图片写进沙河
             //在同步表中保存
-           issuccess = [SSJWishHelper saveImageToImgSyncTable:SSJWishCustomImageName rId:self.wishModel.wishId failure:nil];
+           issuccess = [SSJWishHelper saveImageToImgSyncTable:self.wishModel.wishImage rId:self.wishModel.wishId failure:nil];
         }
     } else {
         issuccess = YES;
