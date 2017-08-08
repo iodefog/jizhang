@@ -102,7 +102,8 @@
         SSJBooksTypeTable *sameNameBook = [db getOneObjectOfClass:SSJBooksTypeTable.class
                                                           fromTable:[self mergeTableName]
                                                             where:SSJBooksTypeTable.booksName == currentBooks.booksName
-                                           && SSJBooksTypeTable.userId == targetUserId];
+                                           && SSJBooksTypeTable.userId == targetUserId
+                                           && SSJBooksTypeTable.operatorType != 2];
 
         if (sameNameBook) {
             [newAndOldIdDic setObject:sameNameBook.booksId forKey:currentBooks.booksId];

@@ -83,7 +83,8 @@
                                            where:SSJUserChargeTable.money == currentCharge.money
                                             && SSJUserChargeTable.billDate == currentCharge.billDate
                                           && SSJUserChargeTable.chargeType == currentCharge.chargeType
-                                          && SSJUserChargeTable.userId == targetUserId];
+                                          && SSJUserChargeTable.userId == targetUserId
+                                          && SSJUserChargeTable.operatorType != 2];
 
         if (sameCharge) {
             [newAndOldIdDic setObject:sameCharge.chargeId forKey:currentCharge.chargeId];
