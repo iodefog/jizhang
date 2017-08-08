@@ -80,9 +80,8 @@
         SSJUserChargeTable *sameCharge = [db getOneObjectOfClass:SSJUserChargeTable.class
                                                          fromTable:[self mergeTableName]
                                             
-                                           where:SSJUserChargeTable.fundId == currentCharge.fundId
+                                           where:SSJUserChargeTable.money == currentCharge.money
                                             && SSJUserChargeTable.billDate == currentCharge.billDate
-                                            && SSJUserChargeTable.booksId == currentCharge.booksId
                                           && SSJUserChargeTable.chargeType == currentCharge.chargeType
                                           && SSJUserChargeTable.userId == targetUserId];
 

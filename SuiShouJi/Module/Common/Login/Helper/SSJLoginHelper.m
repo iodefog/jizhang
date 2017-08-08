@@ -89,22 +89,35 @@
             NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSMutableArray *userBillTypeArray = [NSMutableArray array];
             for (NSDictionary *bookBillRecord in viewModel.bookBillsArray) {
-                for (NSDictionary *userBillRecord in viewModel.userBillArray) {
-                    if ([bookBillRecord[@"cbillid"] isEqualToString:userBillRecord[@"cbillid"]]
-                        && [bookBillRecord[@"cbooksid"] isEqualToString:userBillRecord[@"cbooksid"]]) {
-                        [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
-                                                       @"cuserid":SSJUSERID(),
-                                                       @"cbooksid":userBillRecord[@"cbooksid"],
-                                                       @"itype":@(SSJBillTypeModel(userBillRecord[@"cbillid"]).expended),
-                                                       @"cname":SSJBillTypeModel(userBillRecord[@"cbillid"]).name,
-                                                       @"ccolor":SSJBillTypeModel(userBillRecord[@"cbillid"]).color,
-                                                       @"cicoin":SSJBillTypeModel(userBillRecord[@"cbillid"]).icon,
-                                                       @"iorder":userBillRecord[@"iorder"],
-                                                       @"cwritedate":writeDate,
-                                                       @"operatortype":userBillRecord[@"operatortype"],
-                                                       @"iversion":@(SSJSyncVersion())}];
-                        break;
-                    }
+                NSString *ID = [NSString stringWithFormat:@"%@_%@", bookBillRecord[@"cbillid"], bookBillRecord[@"cbooksid"]];
+                NSDictionary *userBillRecord = viewModel.userBillInfo[ID];
+                SSJBillTypeModel *billTypeModel = SSJBillTypeModel(userBillRecord[@"cbillid"]);
+                // 如果本地文件中没有对应的类别，说明是自定义类别，从服务端返回的类别中找
+                if (billTypeModel) {
+                    [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
+                                                   @"cuserid":SSJUSERID(),
+                                                   @"cbooksid":userBillRecord[@"cbooksid"],
+                                                   @"itype":@(billTypeModel.expended),
+                                                   @"cname":billTypeModel.name,
+                                                   @"ccolor":billTypeModel.color,
+                                                   @"cicoin":billTypeModel.icon,
+                                                   @"iorder":userBillRecord[@"iorder"],
+                                                   @"cwritedate":writeDate,
+                                                   @"operatortype":userBillRecord[@"operatortype"],
+                                                   @"iversion":@(SSJSyncVersion())}];
+                } else {
+                    NSDictionary *billTypeInfo = viewModel.billTypeInfo[bookBillRecord[@"cbillid"]];
+                    [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
+                                                   @"cuserid":SSJUSERID(),
+                                                   @"cbooksid":userBillRecord[@"cbooksid"],
+                                                   @"itype":billTypeInfo[@"itype"],
+                                                   @"cname":billTypeInfo[@"cname"],
+                                                   @"ccolor":billTypeInfo[@"ccolor"],
+                                                   @"cicoin":billTypeInfo[@"ccoin"],
+                                                   @"iorder":userBillRecord[@"iorder"],
+                                                   @"cwritedate":writeDate,
+                                                   @"operatortype":userBillRecord[@"operatortype"],
+                                                   @"iversion":@(SSJSyncVersion())}];
                 }
             }
             

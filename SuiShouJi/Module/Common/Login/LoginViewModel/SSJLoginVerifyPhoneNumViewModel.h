@@ -77,14 +77,23 @@
 //用户账户类型数据
 @property (nonatomic,strong) NSArray *fundInfoArray;
 
-//用户用过的收支类别对应的账本id；用于对数据进行迁移；结构：@[@{booksid:账本id,cbillid:类别id}]
-@property (nonatomic,strong) NSArray *bookBillsArray;
+//-----------------------------------------------------------------
+// 注意：
+// bookBillsArray、billType、userBillArray是用来把收支类别数据迁移到新表中
+// 如果返回了userBillTypeArray就不会返回bookBillsArray、billType、userBillArray；反之一样
+//-----------------------------------------------------------------
+//用户用过的收支类别数据（包含自定义类别）；用于对数据进行迁移；结构：@[@{booksid:账本id,cbillid:类别id}]
+@property (nonatomic, copy) NSArray *bookBillsArray;
 
-//用户收支类别数据（老版本）
-@property (nonatomic,strong) NSArray *userBillArray;
+//自定义类别数据（对应老表bk_bill_type）；结构：@{@"ID":@{...}, ...}，ID即billId
+@property (nonatomic, copy) NSDictionary<NSString *, NSDictionary *> *billTypeInfo;
 
-//用户收支类别数据（新版本）
-@property (nonatomic,strong) NSArray *userBillTypeArray;
+//用户收支类别数据（对应老表bk_user_bill结构）；结构：@{@"ID":@{...},...}，ID是cbillid_cbooksid拼接结果
+@property (nonatomic, copy) NSDictionary<NSString *, NSDictionary *> *userBillInfo;
+
+//用户收支类别数据（对应新表bk_user_bill_type结构）
+@property (nonatomic, copy) NSArray *userBillTypeArray;
+//-----------------------------------------------------------------
 
 //用户账本类型数据
 @property (nonatomic,strong) NSArray *booksTypeArray;
@@ -92,7 +101,7 @@
 //用户成员类型数据
 @property (nonatomic,strong) NSArray *membersArray;
 
-//用户成员类型数据
+//???
 @property (nonatomic,strong) NSArray *customCategoryArray;
 
 //登录用户的accesstoken

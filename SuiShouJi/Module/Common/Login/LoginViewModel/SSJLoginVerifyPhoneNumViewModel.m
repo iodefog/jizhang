@@ -359,11 +359,24 @@
     self.userItem.openId = self.openId;
     
     self.bookBillsArray = [result objectForKey:@"bookBills"];
-    self.userBillArray = [result objectForKey:@"userBill"];
     self.userBillTypeArray = [result objectForKey:@"userBillType"];
     self.fundInfoArray = [result objectForKey:@"fundInfo"];
     self.booksTypeArray = [result objectForKey:@"bookType"];
     self.membersArray = [result objectForKey:@"bk_member"];
+    
+    NSArray *billType = [result objectForKey:@"billType"];
+    NSMutableDictionary *tmpBillTypeInfo = [NSMutableDictionary dictionaryWithCapacity:billType.count];
+    for (NSDictionary *record in billType) {
+        tmpBillTypeInfo[record[@"id"]] = record;
+    }
+    self.billTypeInfo = tmpBillTypeInfo;
+    
+    NSArray *userBill = [result objectForKey:@"userBill"];
+    NSMutableDictionary *tmpUserBillInfo = [NSMutableDictionary dictionaryWithCapacity:userBill.count];
+    for (NSDictionary *record in userBill) {
+        tmpUserBillInfo[[NSString stringWithFormat:@"%@_%@", record[@"cbillid"], record[@"cbooksid"]]] = record;
+    }
+    self.userBillInfo = tmpUserBillInfo;
     
     self.checkInModel = [SSJBookkeepingTreeCheckInModel mj_objectWithKeyValues:[result objectForKey:@"userTree"]];
     self.customCategoryArray = [SSJCustomCategoryItem mj_objectArrayWithKeyValuesArray:[result objectForKey:@"bookBillArray"]];

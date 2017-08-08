@@ -225,13 +225,13 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
             @strongify(self);
             SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
-            if (item.bannerType == SSJBanneerTypeNormal) {
-                SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerUrl]];
-                [self.navigationController pushViewController:webVc animated:YES];
-            } else if (item.bannerType == SSJBanneerTypeQiuCheng){
-                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
-                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
-            }
+//            if (item.bannerType == SSJBanneerTypeNormal) {
+//                SSJAdWebViewController *webVc = [SSJAdWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerUrl]];
+//                [self.navigationController pushViewController:webVc animated:YES];
+//            } else if (item.bannerType == SSJBanneerTypeQiuCheng){
+//                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
+//                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
+//            }
         };
         headerView.items = self.bannerItems;
         return headerView;
@@ -349,7 +349,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 }
 
 - (void)login {
+    __weak typeof(self) wself = self;
     SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+    loginVc.finishHandle = ^(UIViewController *controller) {
+        wself.tabBarController.selectedIndex = 0;
+    };
     SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
     [self presentViewController:naviVC animated:YES completion:NULL];
 }

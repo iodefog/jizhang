@@ -10,11 +10,6 @@
 
 @interface SSJBannerItem : SSJBaseCellItem
 
-typedef NS_ENUM(NSUInteger, SSJBanneerType) {
-    SSJBanneerTypeNormal,  //普通的banner
-    SSJBanneerTypeQiuCheng //跳转邱成的banner
-};
-
 // 图片url
 @property(nonatomic, strong) NSString *bannerImageUrl;
 
@@ -24,7 +19,10 @@ typedef NS_ENUM(NSUInteger, SSJBanneerType) {
 // 名称
 @property(nonatomic, strong) NSString *bannerName;
 
-// banner的类型
-@property(nonatomic) SSJBanneerType bannerType;
+// banner的id
+@property(nonatomic, strong) NSString *bannerId;
+
+// 是否需要登录
+@property (nonatomic) BOOL needLogin;
 
 @end

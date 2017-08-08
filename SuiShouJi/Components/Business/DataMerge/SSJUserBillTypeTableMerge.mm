@@ -107,8 +107,7 @@
         SSJUserBillTypeTable *currentUserBillType = (SSJUserBillTypeTable *)obj;
         
         SSJUserBillTypeTable *sameNameUserBillType = [db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:[self mergeTableName]
-                                                                       where:SSJUserBillTypeTable.booksId == currentUserBillType.booksId
-                                                      && SSJUserBillTypeTable.billName == currentUserBillType.billName
+                                                                       where:SSJUserBillTypeTable.billName == currentUserBillType.billName
                                                       
                                                       && SSJUserBillTypeTable.userId == targetUserId];
         

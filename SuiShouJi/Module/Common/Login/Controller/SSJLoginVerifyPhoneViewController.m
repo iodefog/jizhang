@@ -70,8 +70,8 @@
 
 - (void)goBackAction {
     [super goBackAction];
-    if (self.finishHandle) {
-        self.finishHandle(self);
+    if (self.cancelHandle) {
+        self.cancelHandle(self);
     }
 }
 

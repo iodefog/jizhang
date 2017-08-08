@@ -120,9 +120,11 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         addTypeVC.created = YES;
         addTypeVC.expended = YES;
         addTypeVC.saveHandler = ^(NSString * _Nonnull billID) {
-            NSMutableArray *tmpBillIds = [wself.selectedTypeList mutableCopy];
-            [tmpBillIds addObject:billID];
-            wself.selectedTypeList = tmpBillIds;
+            if (![wself.selectedTypeList containsObject:SSJAllBillTypeId]) {
+                NSMutableArray *tmpBillIds = [wself.selectedTypeList mutableCopy];
+                [tmpBillIds addObject:billID];
+                wself.selectedTypeList = tmpBillIds;
+            }
         };
         [self.navigationController pushViewController:addTypeVC animated:YES];
     }
@@ -217,6 +219,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
     for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
         if (item.selected) {
             if ([item.billID isEqualToString:SSJAllBillTypeId]) {
+                [billIds removeAllObjects];
                 [billIds addObject:SSJAllBillTypeId];
                 break;
             }

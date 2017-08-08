@@ -99,23 +99,12 @@
         
         NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
         
-        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
-        
+        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];\
         while ([quitBooksResult next]) {
             NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
             [quitBooksArr addObject:quitBookId];
         }
-
-        
-        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
-        
-        if (!resultSet) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return NO;
-        }
-        
+        [quitBooksResult close];
         
         if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
             if (error && *error) {
@@ -124,21 +113,27 @@
             continue;
         }
         
-        // 0添加  1修改  2删除
-        int opertoryValue = [recordInfo[@"operatortype"] intValue];
-
-        NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
-        
         BOOL isExisted = NO;
-        
         int localOperatorType = 0;
         
-        NSString *statement = nil;
+        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
+        if (!resultSet) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
         
         while ([resultSet next]) {
             isExisted = YES;
             localOperatorType = [resultSet intForColumn:@"operatortype"];
         }
+        [resultSet close];
+        
+        // 0添加  1修改  2删除
+        int opertoryValue = [recordInfo[@"operatortype"] intValue];
+        NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
+        NSString *statement = nil;
         
         if (isExisted) {
             if (localOperatorType == 2) {

@@ -99,9 +99,7 @@
         SSJTransferCycleTable *currentTransfer = (SSJTransferCycleTable *)obj;
         
         SSJTransferCycleTable *sameNameTransfer = [db getOneObjectOfClass:SSJTransferCycleTable.class fromTable:[self mergeTableName]
-                                          where:SSJTransferCycleTable.transferOutId == currentTransfer.transferOutId
-                                                   && SSJTransferCycleTable.transferInId == currentTransfer.transferInId
-                                                   && SSJTransferCycleTable.money == currentTransfer.money
+                                          where:SSJTransferCycleTable.money == currentTransfer.money
                                                    && SSJTransferCycleTable.endDate == currentTransfer.endDate
                                                    && SSJTransferCycleTable.beginDate == currentTransfer.beginDate
                                                    && SSJTransferCycleTable.cycleType == currentTransfer.cycleType

@@ -13,7 +13,7 @@
 
 - (void)requestUserInfo{
     self.showLodingIndicator = YES;
-    NSMutableDictionary *dict=[[NSMutableDictionary alloc]init];
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
     [dict setObject:SSJUSERID() forKey:@"cuserid"];
     [self request:SSJURLWithAPI(@"/user/queryUserInfo.go") params:dict];
 }

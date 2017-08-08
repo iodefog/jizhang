@@ -8,6 +8,7 @@
 
 #import "SSJBaseViewController.h"
 #import "SSJLoginCommonViewController.h"
+#import "UIViewController+SSJPageFlow.h"
 
 @interface SSJLoginVerifyPhoneViewController : SSJLoginCommonViewController
 /**用于忘记手势密码后*/
