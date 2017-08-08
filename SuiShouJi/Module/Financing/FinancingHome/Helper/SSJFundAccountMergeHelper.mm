@@ -328,13 +328,17 @@
     NSString *userId = SSJUSERID();
     
     NSString *fundId;
-    
-    if ([fundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)fundItem;
-        fundId = fundingItem.fundingID;
-    } else if ([fundItem isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)fundItem;
-        fundId = cardItem.cardId;
+
+    if (fundItem) {
+        if ([fundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
+            SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)fundItem;
+            fundId = fundingItem.fundingID;
+        } else if ([fundItem isKindOfClass:[SSJCreditCardItem class]]) {
+            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)fundItem;
+            fundId = cardItem.cardId;
+        }
+    } else {
+        fundId = @"";
     }
     
     NSArray *tempFunsArr = [NSArray array];

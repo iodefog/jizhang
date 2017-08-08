@@ -103,7 +103,8 @@
                                                    && SSJTransferCycleTable.endDate == currentTransfer.endDate
                                                    && SSJTransferCycleTable.beginDate == currentTransfer.beginDate
                                                    && SSJTransferCycleTable.cycleType == currentTransfer.cycleType
-                                                   && SSJTransferCycleTable.userId == targetUserId];
+                                                   && SSJTransferCycleTable.userId == targetUserId
+                                                   && SSJTransferCycleTable.operatorType != 2];
         
         if (sameNameTransfer) {
             [newAndOldIdDic setObject:sameNameTransfer.cycleId forKey:currentTransfer.cycleId];

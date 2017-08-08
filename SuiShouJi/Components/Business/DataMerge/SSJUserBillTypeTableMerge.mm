@@ -109,7 +109,8 @@
         SSJUserBillTypeTable *sameNameUserBillType = [db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:[self mergeTableName]
                                                                        where:SSJUserBillTypeTable.billName == currentUserBillType.billName
                                                       
-                                                      && SSJUserBillTypeTable.userId == targetUserId];
+                                                      && SSJUserBillTypeTable.userId == targetUserId
+                                                      && SSJUserBillTypeTable.operatorType != 2];
         
         if (sameNameUserBillType) {
             [newAndOldIdDic setObject:sameNameUserBillType.billId forKey:currentUserBillType.billId];

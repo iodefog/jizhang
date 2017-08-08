@@ -97,7 +97,8 @@
         SSJFundInfoTable *sameNameFund = [db getOneObjectOfClass:SSJFundInfoTable.class
                                                          fromTable:[self mergeTableName]
                                            where:SSJFundInfoTable.fundName == currentFund.fundName
-                                          && SSJBooksTypeTable.userId == targetUserId];
+                                          && SSJFundInfoTable.userId == targetUserId
+                                          && SSJFundInfoTable.operatorType != 2];
         
         if (sameNameFund) {
             [newAndOldIdDic setObject:sameNameFund.fundId forKey:currentFund.fundId];
