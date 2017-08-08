@@ -175,12 +175,12 @@
         for (SSJChargePeriodConfigTable *periodCharge in periodChargeArr) {
             periodCharge.writeDate = writeDate;
             periodCharge.version = SSJSyncVersion();
-            periodCharge.billId = targetFundId;
+            periodCharge.fundId = targetFundId;
             
             if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG" onProperties:{
                 SSJChargePeriodConfigTable.writeDate,
                 SSJChargePeriodConfigTable.version,
-                SSJChargePeriodConfigTable.billId
+                SSJChargePeriodConfigTable.fundId
             } withObject:periodCharge
                                       where:SSJChargePeriodConfigTable.configId == periodCharge.configId]) {
                 dispatch_main_async_safe(^{
@@ -201,7 +201,7 @@
                                     )
                                 && SSJLoanTable.operatorType != 2];
         
-        for (SSJLoanTable *loan in transferArr) {
+        for (SSJLoanTable *loan in loanArr) {
             loan.writeDate = writeDate;
             loan.version = SSJSyncVersion();
             if ([loan.targetFundid isEqualToString:sourceFundId]) {
