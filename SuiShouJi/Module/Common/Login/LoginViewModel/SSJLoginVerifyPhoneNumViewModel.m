@@ -141,7 +141,6 @@
         }else {
             [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
-        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:service.error];
     }];
@@ -194,7 +193,6 @@
         } else {
             [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
-        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:service.error];
     }];
@@ -247,7 +245,6 @@
     }];
 }
 
-
 /**
  重新获取图形验证码
  */
@@ -262,7 +259,6 @@
         } else {
             [subscriber sendError:[NSError errorWithDomain:SSJErrorDomain code:[service.returnCode integerValue] userInfo:@{NSLocalizedDescriptionKey:service.desc}]];
         }
-        
     } failure:^(SSJBaseNetworkService * _Nonnull service) {
         [subscriber sendError:service.error];
     }];
