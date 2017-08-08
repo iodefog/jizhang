@@ -142,7 +142,8 @@
                                                         fromTable:[self mergeTableName]
                                           
                                           where:SSJUserRemindTable.remindName == currentRemind.remindName
-                                          && SSJUserRemindTable.userId = targetUserId];
+                                          && SSJUserRemindTable.userId == targetUserId
+                                          && SSJUserRemindTable.operatorType != 2];
         
         if (sameRemind) {
             [newAndOldIdDic setObject:sameRemind.remindName forKey:currentRemind.remindName];

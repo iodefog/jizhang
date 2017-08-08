@@ -102,7 +102,8 @@
                                                     where:SSJChargePeriodConfigTable.billDate == currentConfig.billDate
                                                       && SSJChargePeriodConfigTable.money == currentConfig.money
                                                       && SSJChargePeriodConfigTable.type == currentConfig.type
-                                                    && SSJChargePeriodConfigTable.userId == targetUserId];
+                                                      && SSJChargePeriodConfigTable.userId == targetUserId
+                                                      && SSJChargePeriodConfigTable.operatorType != 2];
         
         if (sameNameConfig) {
             [newAndOldIdDic setObject:sameNameConfig.configId forKey:currentConfig.configId];

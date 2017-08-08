@@ -98,7 +98,8 @@
                                           where:SSJLoanTable.lender == currentLoan.lender
                                       && SSJLoanTable.money == currentLoan.money
                                       && SSJLoanTable.borrowDate == currentLoan.borrowDate
-                                      && SSJLoanTable.userId == targetUserId];
+                                      && SSJLoanTable.userId == targetUserId
+                                      && SSJLoanTable.operatorType != 2];
         
         if (sameNameLoan) {
             [newAndOldIdDic setObject:sameNameLoan.loanId forKey:currentLoan.loanId];

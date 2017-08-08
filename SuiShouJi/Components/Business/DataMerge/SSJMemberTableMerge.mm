@@ -110,7 +110,8 @@
         SSJMemberTable *sameNameMember = [db getOneObjectOfClass:SSJMemberTable.class
                                                     fromTable:[self mergeTableName]
                                       where:SSJMemberTable.memberName == currentMember.memberName
-                                          && SSJMemberTable.userId == targetUserId];
+                                          && SSJMemberTable.userId == targetUserId
+                                          && SSJMemberTable.operatorType != 2];
         
         if (sameNameMember) {
             [newAndOldIdDic setObject:sameNameMember.memberId forKey:currentMember.memberId];
