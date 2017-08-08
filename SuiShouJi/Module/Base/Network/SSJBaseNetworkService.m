@@ -50,6 +50,72 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - _SSJBaseNetworkServiceHandlerManager
+#pragma mark -
+
+@interface _SSJBaseNetworkServiceHandlerManager : NSObject
+
+@property (nonatomic, weak) SSJBaseNetworkService *service;
+
+@property (nonatomic, strong) NSMutableDictionary *successHandlers;
+
+@property (nonatomic, strong) NSMutableDictionary *failureHandlers;
+
+- (void)addSuccessHandler:(SSJNetworkServiceHandler)success forIdentifier:(NSUInteger)identifier;
+
+- (void)addFailureHandler:(SSJNetworkServiceHandler)failure forIdentifier:(NSUInteger)identifier;
+
+- (void)performSuccessHandlerForIdentifier:(NSUInteger)identifier;
+
+- (void)performFailureHandlerForIdentifier:(NSUInteger)identifier;
+
+@end
+
+@implementation _SSJBaseNetworkServiceHandlerManager
+
+- (instancetype)initWithService:(SSJBaseNetworkService *)service {
+    if (self = [super init]) {
+        self.service = service;
+        self.successHandlers = [NSMutableDictionary dictionary];
+        self.failureHandlers = [NSMutableDictionary dictionary];
+    }
+    return self;
+}
+
+- (void)addSuccessHandler:(SSJNetworkServiceHandler)success forIdentifier:(NSUInteger)identifier {
+    self.successHandlers[@(identifier)] = success;
+}
+
+- (void)addFailureHandler:(SSJNetworkServiceHandler)failure forIdentifier:(NSUInteger)identifier {
+    self.failureHandlers[@(identifier)] = failure;
+}
+
+- (void)performSuccessHandlerForIdentifier:(NSUInteger)identifier {
+    SSJNetworkServiceHandler success = self.successHandlers[@(identifier)];
+    if (success) {
+        success(self.service);
+        self.successHandlers[@(identifier)] = nil;
+    }
+    self.failureHandlers[@(identifier)] = nil;
+}
+
+- (void)performFailureHandlerForIdentifier:(NSUInteger)identifier {
+    SSJNetworkServiceHandler failure = self.failureHandlers[@(identifier)];
+    if (failure) {
+        failure(self.service);
+        self.failureHandlers[@(identifier)] = nil;
+    }
+    self.successHandlers[@(identifier)] = nil;
+}
+
+@end
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - SSJBaseNetworkService
+#pragma mark -
 
 @interface SSJBaseNetworkService ()
 
@@ -61,9 +127,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
 
 @property (nonatomic, strong) NSDateFormatter *formatter;
 
-@property (nonatomic, copy, nullable) SSJNetworkServiceHandler success;
-
-@property (nonatomic, copy, nullable) SSJNetworkServiceHandler failure;
+@property (nonatomic, strong) _SSJBaseNetworkServiceHandlerManager *handlerManager;
 
 @end
 
@@ -86,6 +150,8 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         self.formatter = [[NSDateFormatter alloc] init];
         [self.formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
         [self.formatter setDateFormat:@"EEE, d MMM yyyy HH:mm:ss"];
+        
+        self.handlerManager = [[_SSJBaseNetworkServiceHandlerManager alloc] initWithService:self];
     }
     return self;
 }
@@ -100,9 +166,6 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
     self.error = nil;
     self.state = SSJNetworkServiceStateLoading;
     [SSJGlobalServiceManager removeService:self];
-    
-    self.success = success;
-    self.failure = failure;
     
     SSJGlobalServiceManager *manager = [self p_customManager];
     NSDictionary *paramsDic = [self p_packParameters:params];
@@ -147,6 +210,9 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
                      ", fullUrlString, self.task.currentRequest.allHTTPHeaderFields, paramsDic);
         }   break;
     }
+    
+    [self.handlerManager addSuccessHandler:success forIdentifier:self.task.taskIdentifier];
+    [self.handlerManager addFailureHandler:failure forIdentifier:self.task.taskIdentifier];
     
     [SSJGlobalServiceManager addService:self];
     if (_delegate && [_delegate respondsToSelector:@selector(serverDidStart:)]) {
@@ -256,21 +322,13 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
             if (self.delegate && [self.delegate respondsToSelector:@selector(serverDidFinished:)]) {
                 [self.delegate serverDidFinished:self];
             }
-            
-            if (self.success) {
-                self.success(self);
-                self.success = nil;
-            }
+            [self.handlerManager performSuccessHandlerForIdentifier:task.taskIdentifier];
         } else {
             self.error = [NSError errorWithDomain:SSJErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey:self.desc}];
             if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
                 [self.delegate server:self didFailLoadWithError:self.error];
             }
-            
-            if (self.failure) {
-                self.failure(self);
-                self.failure = nil;
-            }
+            [self.handlerManager performFailureHandlerForIdentifier:task.taskIdentifier];
         }
     }
 }
@@ -305,11 +363,7 @@ static inline AFHTTPResponseSerializer *SSJResponseSerializer(SSJResponseSeriali
         if (self.delegate && [self.delegate respondsToSelector:@selector(server:didFailLoadWithError:)]) {
             [self.delegate server:self didFailLoadWithError:error];
         }
-        
-        if (self.failure) {
-            self.failure(self);
-            self.failure = nil;
-        }
+        [self.handlerManager performFailureHandlerForIdentifier:task.taskIdentifier];
     }
 }
 
