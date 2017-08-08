@@ -120,5 +120,3 @@ NSString *const SSJAllBillTypeId = @"all";
 NSString *const SSJAllMembersId = @"all_members_id";
 
 NSString *const SSJNoticeRemindKey = @"SSJNoticeRemindKey";
-
-NSString *const SSJWishCustomImageName = @"wish_image_def_custom";

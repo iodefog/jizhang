@@ -84,7 +84,7 @@ static NSString *wishChoosePhotoCellId = @"SSJWishPhotoChooseCollectionViewCellI
     imageClipVC.clipImageBlock = ^(UIImage *newImage) {
         @strongify(self);
         if (self.changeTopImage) {
-            self.changeTopImage(newImage,SSJWishCustomImageName);
+            self.changeTopImage(newImage,SSJUUID());
         }
     };
     [self presentViewController:imageClipVC animated:YES completion:NULL];

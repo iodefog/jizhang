@@ -90,7 +90,7 @@
         _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
-            [_tableView setSeparatorInset:UIEdgeInsetsZero];
+            [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];
         }
     }
     return _tableView;
