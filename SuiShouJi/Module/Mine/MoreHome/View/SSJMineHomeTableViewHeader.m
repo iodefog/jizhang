@@ -198,7 +198,9 @@
     if (SSJIsUserLogined()) {
         switch ([item.loginType integerValue]) {
             case SSJLoginTypeNormal:
-                if (item.mobileNo.length == 11) {
+                if (item.nickName.length) {
+                    self.nicknameLabel.text = item.nickName;
+                } else if (item.mobileNo.length == 11) {
                     NSString *phoneNum = [item.mobileNo stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
                     self.nicknameLabel.text = phoneNum;
                 }
