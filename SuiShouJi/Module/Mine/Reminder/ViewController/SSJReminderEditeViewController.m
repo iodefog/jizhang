@@ -291,6 +291,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if (!self.item.remindId.length) {
         self.item.remindId = SSJUUID();
     }
+    [self.view endEditing:YES];
     
     if (self.needToSave == YES) {
         if (self.addNewReminderAction) {
@@ -302,6 +303,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             self.addNewReminderAction(self.item);
         }
     }
+
     
     [self.navigationController popViewControllerAnimated:YES];
     
