@@ -112,6 +112,7 @@ static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedK
     [super updateAppearanceAfterThemeChanged];
     [self.topView updateAppearanceAccordingToTheme];
     [self.bodyView updateAppearanceAccordingToTheme];
+    [self.colorSelectionView updateAppearanceAccordingToTheme];
 }
 
 #pragma mark - SSJCaterotyMenuSelectionViewDataSource

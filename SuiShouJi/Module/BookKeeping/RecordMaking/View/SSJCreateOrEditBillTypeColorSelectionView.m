@@ -92,6 +92,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         
         [self addSubview:self.backView];
         [self addSubview:self.collectionView];
+        [self updateAppearanceAccordingToTheme];
     }
     return self;
 }
@@ -174,6 +175,10 @@ static const NSUInteger kColorLumpCountPerRow = 5;
     }
 }
 
+- (void)updateAppearanceAccordingToTheme {
+    self.collectionView.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
+}
+
 - (void)setupCollectionViewConstraint {
     [self.collectionView mas_remakeConstraints:^(MASConstraintMaker *make) {
         if (self.showed) {
@@ -225,7 +230,6 @@ static const NSUInteger kColorLumpCountPerRow = 5;
         _collectionView.dataSource = self;
         _collectionView.delegate = self;
         [_collectionView registerClass:[SSJCreateOrEditBillTypeColorSelectionCell class] forCellWithReuseIdentifier:kCellId];
-        _collectionView.backgroundColor = [UIColor whiteColor];
     }
     return _collectionView;
 }
