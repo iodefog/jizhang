@@ -20,8 +20,10 @@
     NSDictionary *results = [rootElement objectForKey:@"results"];
     if (!results.count) {
         NSData *startLunchData = [[NSUserDefaults standardUserDefaults] objectForKey:SSJLunchUserSignItemKey];
-        SSJStartLunchItem *startLunchItem = [NSKeyedUnarchiver unarchiveObjectWithData:startLunchData];
-        self.statrLunchItem = startLunchItem;
+        if (startLunchData) {
+            SSJStartLunchItem *startLunchItem = [NSKeyedUnarchiver unarchiveObjectWithData:startLunchData];
+            self.statrLunchItem = startLunchItem;
+        }
         return;
     }
     NSDictionary *resultDic = rootElement[@"results"][@"startupParameter"];

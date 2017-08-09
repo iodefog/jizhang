@@ -243,7 +243,10 @@ NSDate *SCYEnterBackgroundTime() {
                 });
                 return;
             }
-            
+        }
+        
+        if (!SSJUSERID()) {
+            NSError *error = nil;
             [SSJUserTableManager reloadUserIdWithError:&error];
             if (error) {
                 SSJDispatchMainAsync(^{

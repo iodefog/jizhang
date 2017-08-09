@@ -124,7 +124,11 @@
 }
 
 - (void)initNormalData {
-    self.titleL.text = @"注册";
+    if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeRegist) {
+        self.titleL.text = @"注册";
+    } else if (self.regOrForgetType == SSJRegistAndForgetPasswordTypeForgetPassword) {
+        self.titleL.text = @"忘记密码";
+    }
 }
 
 - (void)initialBind {
