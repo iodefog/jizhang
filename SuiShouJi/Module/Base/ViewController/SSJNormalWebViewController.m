@@ -224,15 +224,17 @@
     self.titleLabel.leftTop = CGPointMake((self.webView.width - self.titleLabel.width) * 0.5, (44 - self.titleLabel.height) * 0.5);
 }
 
+
 #pragma mark - UIWebViewDelegate
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     if(webView == self.webView) {
         self.webViewCurrentURL = request.URL;
-        if(![self isJumpToExternalAppWithURL:request.URL]) {
-            return YES;
+        if([self isJumpToExternalAppWithURL:request.URL]) {
+            [[UIApplication sharedApplication] openURL:request.URL];
+            return NO;
         }
     }
-    return NO;
+    return YES;
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView{

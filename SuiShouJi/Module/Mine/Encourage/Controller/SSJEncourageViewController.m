@@ -97,18 +97,21 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     
     if ([title isEqualToString:ktitle2]) {
         [SSJAnaliyticsManager event:@"love_good"];
-        [CDPointActivityIndicator startAnimating];
-        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
-        storeProductVC.delegate = self;
-        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
-            [CDPointActivityIndicator stopAnimating];
-            if (!error) {
-                [self presentViewController:storeProductVC animated:YES completion:nil];
-            } else {
-                [CDAutoHideMessageHUD showError:error];
-            }
-        }];
-        return;
+        if ([SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
+            [SKStoreReviewController requestReview];
+        } else {
+            [CDPointActivityIndicator startAnimating];
+            SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
+            storeProductVC.delegate = self;
+            [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+                [CDPointActivityIndicator stopAnimating];
+                if (!error) {
+                    [self presentViewController:storeProductVC animated:YES completion:nil];
+                } else {
+                    [CDAutoHideMessageHUD showError:error];
+                }
+            }];
+        }
     }
     
     if ([title isEqualToString:ktitle3]) {
@@ -118,7 +121,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         } else {
             [SSJShareManager shareWithType:SSJShareTypeUrl image:nil UrlStr:SSJDetailSettingForSource(@"ShareUrl") title:SSJDetailSettingForSource(@"ShareTitle") content:@"在这里，记录消费生活是件有趣简单的事儿，管家更有窍门。" PlatformType:@[@(UMSocialPlatformType_Sina),@(UMSocialPlatformType_WechatSession),@(UMSocialPlatformType_WechatTimeLine),@(UMSocialPlatformType_QQ)] inController:self ShareSuccess:NULL];
         }
-        return;
     }
 }
 

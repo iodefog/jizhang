@@ -1075,7 +1075,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     if ([SSJLoginPopView popIfNeededWithNav:self.navigationController backController:self] == YES) return;
     //4.评分
     if (self.isBudgetOverrunsPopViewShow == NO) {
-        if ([self.appEvaluatePopView showEvaluatePopView] == YES) return;
+        if ([self.appEvaluatePopView showEvaluatePopViewWithController:self] == YES) return;
     }
 }
 

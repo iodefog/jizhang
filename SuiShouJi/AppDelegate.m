@@ -28,7 +28,7 @@
 
 #import "UIViewController+SSJMotionPassword.h"
 
-#import "SSJBookKeepingHomeEvaluatePopView.h"
+#import "SSJAPPEvaluatePopView.h"
 #import "SSJGradientMaskView.h"
 #import "SSJCreditCardItem.h"
 
@@ -170,7 +170,7 @@ NSDate *SCYEnterBackgroundTime() {
     // 美恰sdk设置
     [MQManager initWithAppkey:SSJMQAppKey completion:NULL];
     //保存app启动时间，判断是否为新用户
-    [SSJBookKeepingHomeEvaluatePopView evaluatePopViewConfiguration];
+    [SSJAPPEvaluatePopView evaluatePopViewConfiguration];
     
     return YES;
 }
