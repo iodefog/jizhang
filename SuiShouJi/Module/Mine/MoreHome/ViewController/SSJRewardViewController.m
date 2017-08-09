@@ -73,7 +73,7 @@ static NSString *wishMoneyCellId = @"SSJMakeWishMoneyCollectionViewCellId";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"打赏支持";
-
+   
     [self setUpUI];
     [self initNormalData];
     [self.view setNeedsUpdateConstraints];

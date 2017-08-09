@@ -376,8 +376,6 @@
     //判断有没有授权
     if ([self remindLocation]) {
         SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc] init];
-        self.reminderItem.remindName = @"为心愿存钱";
-        remindEditeVc.item = self.reminderItem;
         remindEditeVc.needToSave = YES;
         
         __weak typeof(self) weakSelf = self;
