@@ -81,7 +81,11 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
             [SSJAlertViewAdapter showError:error];
         }];
     } else if (indexPath.section == 1 && indexPath.row == 0) {
+#ifdef DEBUG
+        [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+#else
         [self.alert show];
+#endif
     }
 }
 
