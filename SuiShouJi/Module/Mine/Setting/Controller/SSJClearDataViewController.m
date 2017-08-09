@@ -82,7 +82,14 @@ static NSString *const kSSJClearDataCellId = @"SSJClearDataCell";
         }];
     } else if (indexPath.section == 1 && indexPath.row == 0) {
 #ifdef DEBUG
-        [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+        [SSJDataClearHelper clearAllDataWithSuccess:^{
+            [CDAutoHideMessageHUD showMessage:@"数据初始化成功"];
+            if (SSJIsUserLogined()) {
+                [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
+            }
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showMessage:@"数据初始化失败"];
+        }];
 #else
         [self.alert show];
 #endif

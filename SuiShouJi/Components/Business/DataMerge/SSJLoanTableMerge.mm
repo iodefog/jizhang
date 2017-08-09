@@ -163,8 +163,10 @@
                        onProperties:SSJLoanTable.userId
                          withObject:userLoan
                               where:SSJLoanTable.userId == sourceUserid];
-    
-    
+
+    if (![db getOneValueOnResult:SSJLoanTable.AnyProperty.count() fromTable:@"temp_loan" where:SSJLoanTable.type == 0]) {
+        
+    }
     
     return success;
     

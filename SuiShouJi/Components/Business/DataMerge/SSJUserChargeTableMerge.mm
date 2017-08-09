@@ -84,6 +84,7 @@
                                             && SSJUserChargeTable.billDate == currentCharge.billDate
                                           && SSJUserChargeTable.chargeType == currentCharge.chargeType
                                           && SSJUserChargeTable.userId == targetUserId
+                                          && (SSJUserChargeTable.cid.isNull() || SSJUserChargeTable.cid == currentCharge.cid)
                                           && SSJUserChargeTable.operatorType != 2];
 
         if (sameCharge) {
