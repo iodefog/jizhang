@@ -262,7 +262,7 @@
         @strongify(self);
         SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
         mergeVc.transferOutFundItem = self.item;
-        mergeVc.transferType = SSJFundsTransferTypeNormal;
+        mergeVc.transferOutType = SSJFundsTransferTypeNormal;
         mergeVc.transferInSelectable = YES;
         mergeVc.transferOutSelectable = NO;
         mergeVc.needToDelete = YES;
