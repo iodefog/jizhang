@@ -59,7 +59,7 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         booksIds = [db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
                                           fromTable:@"bk_user_charge"
-                                              where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                              where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                     && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                     && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2];
         
@@ -165,8 +165,10 @@
             success = [db deleteObjectsFromTable:@"temp_user_bill_type"
                                            where:SSJUserBillTypeTable.billId == oldId];
         } else {
-            success = [db updateRowsInTable:@"temp_user_bill_type" onProperty:SSJUserBillTypeTable.billId withValue:newId
-                                      where:SSJUserBillTypeTable.billId == oldId];
+            if (oldId.length > 4) {
+                success = [db updateRowsInTable:@"temp_user_bill_type" onProperty:SSJUserBillTypeTable.billId withValue:newId
+                                          where:SSJUserBillTypeTable.billId == oldId];
+            }
         }
         
         if (!success) {

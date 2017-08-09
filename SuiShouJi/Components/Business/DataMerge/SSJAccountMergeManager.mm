@@ -58,6 +58,9 @@
         
         self.mergeTableClasses = @[firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer];
         
+        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+
+        }];
     }
     return self;
 }
