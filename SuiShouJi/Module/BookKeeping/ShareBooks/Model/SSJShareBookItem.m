@@ -16,6 +16,7 @@
 @synthesize booksOrder;
 @synthesize booksParent;
 @synthesize cwriteDate;
+@synthesize booksCategory;
 
 + (NSDictionary *)propertyMapping {
     static NSDictionary *mapping = nil;

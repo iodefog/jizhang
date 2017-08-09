@@ -158,7 +158,7 @@
                 colorItem.endColor = [colorArray ssj_safeObjectAtIndex:0];
             }
             item.booksColor = colorItem;
-            
+            item.booksCategory = SSJBooksCategoryPersional;
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
             item.booksParent = [booksResult intForColumn:@"iparenttype"];
@@ -422,6 +422,7 @@
             shareBookItem.booksParent = [result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
             shareBookItem.memberCount = [result intForColumn:@"memberCount"];
+            shareBookItem.booksCategory = SSJBooksCategoryPublic;
             //处理渐变色
             SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
             NSArray *colorArray = [[result stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
