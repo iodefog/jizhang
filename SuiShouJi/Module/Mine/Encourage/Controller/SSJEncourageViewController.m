@@ -97,21 +97,17 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
     
     if ([title isEqualToString:ktitle2]) {
         [SSJAnaliyticsManager event:@"love_good"];
-        if ([SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
-            [SKStoreReviewController requestReview];
-        } else {
-            [CDPointActivityIndicator startAnimating];
-            SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
-            storeProductVC.delegate = self;
-            [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
-                [CDPointActivityIndicator stopAnimating];
-                if (!error) {
-                    [self presentViewController:storeProductVC animated:YES completion:nil];
-                } else {
-                    [CDAutoHideMessageHUD showError:error];
-                }
-            }];
-        }
+        [CDPointActivityIndicator startAnimating];
+        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
+        storeProductVC.delegate = self;
+        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+            [CDPointActivityIndicator stopAnimating];
+            if (!error) {
+                [self presentViewController:storeProductVC animated:YES completion:nil];
+            } else {
+                [CDAutoHideMessageHUD showError:error];
+            }
+        }];
     }
     
     if ([title isEqualToString:ktitle3]) {
