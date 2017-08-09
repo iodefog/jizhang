@@ -122,7 +122,13 @@
     if (![cellItem isKindOfClass:[SSJRankListItem class]]) return;
     SSJRankListItem *item = cellItem;
     self.rankL.text = item.ranking;
-    [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    SSJImageURLWithAPI(item.cicon);
+    [NSURL URLWithString:item.cicon];
+    if ([item.cicon hasPrefix:@"http"]) {
+        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:item.cicon] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    }else{
+        [self.iconImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.cicon)] placeholderImage:[UIImage imageNamed:@"defualt_portrait"]];
+    }
     self.memoL.text = item.memo.length ? item.memo : @"默默的爱";
     self.moneyL.text = [NSString stringWithFormat:@"%.2f",[item.summoney doubleValue] / 100];
     self.nameL.text = item.crealname.length ? item.crealname : @"神秘用户";
