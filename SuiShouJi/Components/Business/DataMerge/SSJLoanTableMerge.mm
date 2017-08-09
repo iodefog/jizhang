@@ -153,8 +153,6 @@
             success = [db updateRowsInTable:@"temp_loan" onProperty:SSJLoanTable.loanId withValue:newId
                                       where:SSJLoanTable.loanId == oldId];
         }
-
-        
         
     };
     
