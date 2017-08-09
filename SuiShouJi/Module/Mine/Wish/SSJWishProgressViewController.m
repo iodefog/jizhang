@@ -266,6 +266,16 @@ static CGFloat defImageHeight = 402;
         [SSJWishHelper deleteWishWithWisId:self.wishId Success:^{
             @strongify(self);
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
+            //删除图片(没有网络未同步成功之后)
+            if (![[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage]) {//仅自定义图片
+                if ([UIImage imageWithContentsOfFile:SSJImagePath(self.wishModel.wishImage)]) {//如果图存在
+                    //根据路径删除图片
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.wishModel.wishImage)]) {
+                        [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(self.wishModel.wishImage) error:nil];
+                    }
+                }
+            }
+            
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             //判断是不是最后一个心愿
             if ([SSJWishHelper queryHasWishsWithError:nil]) {
