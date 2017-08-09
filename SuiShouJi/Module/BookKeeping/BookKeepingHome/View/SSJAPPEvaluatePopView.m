@@ -7,11 +7,14 @@
 //
 
 #import "SSJAPPEvaluatePopView.h"
+#import "CDPointActivityIndicator.h"
+#import <StoreKit/StoreKit.h>
+
 NSString *const SSJAppApplicationLunchTimeKey = @"SSJAppApplicationLunchTimeKey";
 NSString *const SSJAppNewUserKey = @"SSJAppNewUserKey";
 NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
-@interface SSJAPPEvaluatePopView()
+@interface SSJAPPEvaluatePopView() <SKStoreProductViewControllerDelegate>
 /**topImageView*/
 @property (nonatomic, strong) UIImageView *topImageView;
 @property (nonatomic, strong) UILabel *titleL;
@@ -20,6 +23,9 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 @property (nonatomic, strong) UIButton *tuCaoButton;
 /**背景*/
 @property (nonatomic, strong) UIView *bgView;
+
+@property (nonatomic, weak) UIViewController *controller;
+
 @end
 
 @implementation SSJAPPEvaluatePopView
@@ -70,6 +76,11 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
     [super updateConstraints];
 }
 
+#pragma mark - SKStoreProductViewControllerDelegate
+- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController {
+    [self.controller dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Private
 - (void)dismiss
 {
@@ -89,11 +100,20 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 }
 
 #pragma mark - Action
-- (BOOL)showEvaluatePopView
+- (BOOL)showEvaluatePopViewWithController:(UIViewController *)controller
 {
+    self.controller = controller;
+    
     //    //当前版本是否显示过弹框()
     int type = [[[NSUserDefaults standardUserDefaults] objectForKey:SSJAppEvaluateSelecatedKey] intValue];
-    if (SSJLaunchTimesForCurrentVersion() > 10) {//当前版本不是第一次启动
+    
+#ifdef PRODUCTION
+    int times = 10;
+#else
+    int times = 0;
+#endif
+    
+    if (SSJLaunchTimesForCurrentVersion() > times) {//当前版本不是第一次启动
         switch (type) {
             case SSJAPPEvaluateSelecatedTypeUnKnow:
             {
@@ -244,20 +264,29 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
 - (void)favorableButtonClicked
 {
+    if ([SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
+        [SKStoreReviewController requestReview];
+        self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
+        [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
+        [self dismiss];
+    } else {
+        [CDPointActivityIndicator startAnimating];
+        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
+        storeProductVC.delegate = self;
+        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+            [CDPointActivityIndicator stopAnimating];
+            if (!error) {
+                [self.controller presentViewController:storeProductVC animated:YES completion:nil];
+                self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
+                [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
+                [self dismiss];
+            } else {
+                [CDAutoHideMessageHUD showError:error];
+            }
+        }];
+    }
+    
     [SSJAnaliyticsManager event:@"favorite_good"];
-    
-    NSString *urlStr = SSJAppStoreUrl();
-    if (!urlStr) {
-        return;
-    }
-    
-    NSURL *url = [NSURL URLWithString:SSJAppStoreUrl()];
-    if ([[UIApplication sharedApplication] canOpenURL:url]) {
-        [[UIApplication sharedApplication] openURL:url];
-    }
-    self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
-    [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
-    [self dismiss];
 }
 
 - (void)tuCaoButtonClicked {

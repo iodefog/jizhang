@@ -29,7 +29,7 @@ typedef NS_ENUM(NSUInteger, SSJAPPEvaluateSelecatedType) {
 /**
  *  显示
  */
-- (BOOL)showEvaluatePopView;
+- (BOOL)showEvaluatePopViewWithController:(UIViewController *)controller;
 
 /**
  *  设置启动时间，判断是否为新用户
