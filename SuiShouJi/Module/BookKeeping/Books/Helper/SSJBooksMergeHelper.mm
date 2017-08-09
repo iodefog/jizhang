@@ -303,6 +303,17 @@
     return booksItems;
 }
 
+- (BOOL)isShareBooksOrNotWithBooksId:(NSString *)booksId {
+    NSNumber *count = [self.db getOneValueOnResult:SSJShareBooksTable.AnyProperty.count() fromTable:@"BK_SHARE_BOOKS"
+                                             where:SSJShareBooksTable.booksId == booksId];
+    
+    if (![count integerValue]) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
 - (WCTDatabase *)db {
     if (!_db) {
         _db = [[WCTDatabase alloc] initWithPath:SSJSQLitePath()];

@@ -28,20 +28,18 @@
     }
 }
 
-+ (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error {
-//    NSString *writedate = [[NSDate date] :@"yyyy-MM-dd HH:mm:ss.SSS"];
+//+ (void)updateCustomUserBillNeededForUserId:(NSString *)userId billTypeItems:(NSArray *)items inDatabase:(FMDatabase *)db error:(NSError **)error {
+//    NSString *writedate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
 //    for (SSJCustomCategoryItem *item in items) {
-//        if (![db intForQuery:@"select count(1) from bk_user_bill_type where cuserid = ? and cbillid = ? and cbooksid = ?",userId,item.ibillid,item.cbooksid]) {
-//            
-//            NSDictionary *recordInfo = @{};
-//            if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) values (:cbillid, :cuserid, :cbooksid, :itype, :cname, :ccolor, :cicoin, :cwritedate, :operatortype, :iversion)", userId, item.ibillid, writedate, @(SSJSyncVersion()), item.cbooksid]) {
+//        if (![db intForQuery:@"select count(1) from bk_user_bill where cuserid = ? and cbillid = ? and cbooksid = ?",userId,item.ibillid,item.cbooksid]) {
+//            if (![db executeUpdate:@"insert into bk_user_bill values (?,?,1,?,?,1,0,?)",userId,item.ibillid,writedate,@(SSJSyncVersion()),item.cbooksid]) {
 //                if (error) {
 //                    *error = [db lastError];
 //                }
 //            }
 //        }
 //    }
-}
+//}
 
 + (void)updateFundColorForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root'"];
@@ -82,6 +80,7 @@
         //  更新父类型为空的账本
         [self updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
         [SSJFundInfoSyncTable mergeRecords:viewModel.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        
         if (viewModel.userBillTypeArray.count) {
             [SSJUserBillTypeSyncTable mergeRecords:viewModel.userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         } else {
@@ -124,9 +123,8 @@
             [SSJUserBillTypeSyncTable mergeRecords:userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         }
         
-#warning 懵逼
         // ??? 啥玩意 懵逼
-        [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:viewModel.customCategoryArray inDatabase:db error:nil];
+//        [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:viewModel.customCategoryArray inDatabase:db error:nil];
         
         [self updateFundColorForUserId:SSJUSERID() inDatabase:db error:nil];
         

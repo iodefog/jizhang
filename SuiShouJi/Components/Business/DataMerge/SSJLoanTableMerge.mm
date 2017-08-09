@@ -98,6 +98,7 @@
                                           where:SSJLoanTable.lender == currentLoan.lender
                                       && SSJLoanTable.money == currentLoan.money
                                       && SSJLoanTable.borrowDate == currentLoan.borrowDate
+                                      && SSJLoanTable.writeDate == currentLoan.writeDate 
                                       && SSJLoanTable.userId == targetUserId
                                       && SSJLoanTable.operatorType != 2];
         
