@@ -153,9 +153,14 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             }];
         }
     } else if (service == self.startLunchService) {
+        if (SSJLaunchTimesForCurrentVersion() == 1) {
+            [self showGuideViewIfNeededWithFirstView:self.launchView];
+            return;
+        };
         if (![self.startLunchService.returnCode isEqualToString:@"1"]) return;
-
         self.startLunchItem = self.startLunchService.statrLunchItem;
+        if (!self.startLunchItem) return;
+        
         __weak typeof(self) wself = self;
         if ([self.startLunchItem.open isEqualToString:@"0"]) {//是否下发 0 调用本地图片 1 使用下发type判断
         //本地图片

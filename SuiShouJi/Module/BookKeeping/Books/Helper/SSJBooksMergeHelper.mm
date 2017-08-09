@@ -92,6 +92,7 @@
             userBill.booksId = targetBooksId;
             userBill.writeDate = writeDate;
             userBill.version = SSJSyncVersion();
+            userBill.operatorType = 1;
             SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE"
                                                                         where:SSJUserBillTypeTable.billName == userBill.billName
                                                   && SSJUserBillTypeTable.booksId == targetBooksId];
@@ -126,6 +127,7 @@
             userCharge.booksId = targetBooksId;
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
+            userCharge.operatorType = 1;
             if ([targetSharebookCount integerValue] > 0) {
                 userCharge.chargeType = SSJChargeIdTypeShareBooks;
                 userCharge.cid = targetBooksId;
@@ -153,8 +155,8 @@
                     return NO;
                 }
                 userCharge.chargeId = SSJUUID();
-                userCharge.operatorType = 0;
-                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                userCharge.operatorType = 1;
+                 if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -168,7 +170,8 @@
                                        SSJUserChargeTable.writeDate,
                                        SSJUserChargeTable.version,
                                        SSJUserChargeTable.billId,
-                                       SSJUserChargeTable.chargeType
+                                       SSJUserChargeTable.chargeType,
+                                       SSJUserChargeTable.operatorType
                                    }
                                      withObject:userCharge
                                           where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
@@ -198,11 +201,13 @@
                 chargePeriod.writeDate = writeDate;
                 chargePeriod.version = SSJSyncVersion();
                 chargePeriod.state = 0;
+                chargePeriod.operatorType = 1;
                 if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG"
                                    onProperties:{
                                        SSJChargePeriodConfigTable.writeDate,
                                        SSJChargePeriodConfigTable.version,
-                                       SSJChargePeriodConfigTable.state
+                                       SSJChargePeriodConfigTable.state,
+                                       SSJChargePeriodConfigTable.operatorType
                                    }
                                      withObject:chargePeriod
                                           where:SSJChargePeriodConfigTable.configId == chargePeriod.configId]) {
