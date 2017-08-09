@@ -194,6 +194,7 @@ static const NSTimeInterval kDuration = 0.25;
     [self ssj_setBorderColor:SSJ_BORDER_COLOR];
     self.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     [self.colorControl ssj_setBorderColor:SSJ_BORDER_COLOR];
+    self.nameField.textColor = SSJ_MAIN_COLOR;
 }
 
 #pragma mark - UITextFieldDelegate
