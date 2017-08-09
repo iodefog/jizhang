@@ -647,9 +647,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
  加载收支类别和账本数据
  */
 - (RACSignal *)loadCurrentBooksIdSignal {
-    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
         [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
             self.defaultBooksId = booksId;
             if (!self.item.booksId) {
@@ -665,9 +663,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (RACSignal *)loadBooksListSignal {
-    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
         RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
                 [subscriber sendNext:bookList];
@@ -728,9 +724,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (RACSignal *)loadBillTypeSignal {
-    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
         [SSJCategoryListHelper queryForCategoryListWithIncomeOrExpenture:self.customNaviBar.selectedBillType booksId:self.item.booksId Success:^(NSMutableArray<SSJRecordMakingBillTypeSelectionCellItem *> *categoryList) {
             
             SSJRecordMakingBillTypeSelectionView *billTypeView = nil;
@@ -916,9 +910,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     
-    @weakify(self);
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        @strongify(self);
         [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
             [subscriber sendNext:editeItem];
             [subscriber sendCompleted];
@@ -927,7 +919,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }];
         return nil;
     }] flattenMap:^RACStream *(SSJBillingChargeCellItem *editeItem) {
-        @strongify(self);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
             if (hasChangeBooksType) {
@@ -951,7 +942,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             return nil;
         }];
     }] subscribeNext:^(SSJBillingChargeCellItem *editeItem) {
-        @strongify(self);
         BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
         if (self.addNewChargeBlock) {
             self.addNewChargeBlock(@[editeItem],hasChangeBooksType);
