@@ -15,7 +15,7 @@
     for (NSDictionary *record in [self datasWithUserId:userId]) {
         NSString *fundId = record[@"cfundid"];
         NSString *fundName = record[@"cacctname"];
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where (cfundid = ?) or (cacctname = ? and cuserid = ?)", fundId, fundName, userId];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where (cfundid = ?) or (cacctname = ? and cuserid = ? and operatortype <> 2)", fundId, fundName, userId];
         if (!existed) {
             BOOL successfull = [db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cparent, ccolor, cwritedate, operatortype, iversion, cuserid, cicoin, iorder, cstartcolor, cendcolor) values (:cfundid, :cacctname, :cparent, :ccolor, :cwritedate, :operatortype, :iversion, :cuserid, :cicoin, :iorder, :cstartcolor, :cendcolor)" withParameterDictionary:record];
             if (!successfull) {

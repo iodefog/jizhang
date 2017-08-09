@@ -71,7 +71,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
                                 @"cname":model.name,
                                 @"itype":@(model.expended)};
         // 注意：重名并且同是收入／支出的类别也算相同类别
-        FMResultSet *rs = [db executeQuery:@"select count(1) from bk_user_bill_type where (cbillid = :cbillid and cuserid = :cuserid and cbooksid = :cbooksid) or (cname = :cname and itype = :itype and cuserid = :cuserid and cbooksid = :cbooksid)" withParameterDictionary:param];
+        FMResultSet *rs = [db executeQuery:@"select count(1) from bk_user_bill_type where (cbillid = :cbillid and cuserid = :cuserid and cbooksid = :cbooksid) or (cname = :cname and itype = :itype and cuserid = :cuserid and cbooksid = :cbooksid and operatortype <> 2)" withParameterDictionary:param];
         while (!rs) {
             if (error) {
                 *error = [db lastError];
