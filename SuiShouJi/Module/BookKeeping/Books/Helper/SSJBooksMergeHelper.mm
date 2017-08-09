@@ -62,20 +62,29 @@
         
         NSMutableDictionary *sameNameDic = [NSMutableDictionary dictionaryWithCapacity:0];
         
+        NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:0];
+        
+        NSArray *userChargeBillIds = [self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE")
+                                                                 fromTable:@"BK_USER_CHARGE"
+                                                                     where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
+                                      && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+                                      && SSJUserChargeTable.booksId == sourceBooksId];
+        
+        NSArray *periodConfigBillIds = [self.db getOneDistinctColumnOnResult:SSJChargePeriodConfigTable.billId fromTable:@"BK_CHARGE_PERIOD_CONFIG"
+                                                                       where:SSJChargePeriodConfigTable.userId.inTable(@"BK_CHARGE_PERIOD_CONFIG") == userId
+                                        && SSJChargePeriodConfigTable.operatorType.inTable(@"BK_CHARGE_PERIOD_CONFIG") != 2
+                                        && SSJChargePeriodConfigTable.booksId == sourceBooksId];
+        
+        [billIds addObjectsFromArray:userChargeBillIds];
+        
+        [billIds addObjectsFromArray:periodConfigBillIds];
+
         // 取出所有用到的记账类型
-        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:(SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJUserChargeTable.billId
-                                                                                                                                                                                         fromTable:@"BK_USER_CHARGE"
-                                                                                                                                                                                             where:SSJUserChargeTable.userId.inTable(@"bk_user_charge") == userId
-                                                                                                                                                              && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
-                                                                                                                                                              && SSJUserChargeTable.booksId == sourceBooksId])
-                                    && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
+        NSMutableArray *userBillTypeArr = [[self.db getObjectsOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE" where:SSJUserBillTypeTable.billId.in(billIds)
+                                    && SSJUserBillTypeTable.billId.notIn([self.db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") fromTable:@"BK_USER_BILL_TYPE"
                                                                                                          where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
                                                                                                                                                                                                                                                      && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
-                                                                          && SSJUserBillTypeTable.booksId == targetBooksId]))
-                                            || SSJUserBillTypeTable.billId.in([self.db getOneDistinctColumnOnResult:SSJChargePeriodConfigTable.billId fromTable:@"BK_USER_BILL_TYPE"
-                                                                                                                                                                                                where:SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE") == userId
-                                                                                                                                                                 && SSJUserBillTypeTable.operatorType.inTable(@"BK_USER_BILL_TYPE") != 2
-                                                                                                                                                                 && SSJUserBillTypeTable.booksId == targetBooksId])
+                                                                          && SSJUserBillTypeTable.booksId == targetBooksId])
                                             && SSJUserChargeTable.booksId == sourceBooksId] mutableCopy];
         
         for (SSJUserBillTypeTable *userBill in userBillTypeArr) {
@@ -83,6 +92,7 @@
             userBill.booksId = targetBooksId;
             userBill.writeDate = writeDate;
             userBill.version = SSJSyncVersion();
+            userBill.operatorType = 1;
             SSJUserBillTypeTable *sameNameBill = [self.db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:@"BK_USER_BILL_TYPE"
                                                                         where:SSJUserBillTypeTable.billName == userBill.billName
                                                   && SSJUserBillTypeTable.booksId == targetBooksId];
@@ -117,6 +127,7 @@
             userCharge.booksId = targetBooksId;
             userCharge.writeDate = writeDate;
             userCharge.version = SSJSyncVersion();
+            userCharge.operatorType = 1;
             if ([targetSharebookCount integerValue] > 0) {
                 userCharge.chargeType = SSJChargeIdTypeShareBooks;
                 userCharge.cid = targetBooksId;
@@ -144,8 +155,8 @@
                     return NO;
                 }
                 userCharge.chargeId = SSJUUID();
-                userCharge.operatorType = 0;
-                if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
+                userCharge.operatorType = 1;
+                 if (![self.db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
                     dispatch_main_async_safe(^{
                         if (failure) {
                             failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"合并流水失败"}]);
@@ -159,7 +170,8 @@
                                        SSJUserChargeTable.writeDate,
                                        SSJUserChargeTable.version,
                                        SSJUserChargeTable.billId,
-                                       SSJUserChargeTable.chargeType
+                                       SSJUserChargeTable.chargeType,
+                                       SSJUserChargeTable.operatorType
                                    }
                                      withObject:userCharge
                                           where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
@@ -189,11 +201,13 @@
                 chargePeriod.writeDate = writeDate;
                 chargePeriod.version = SSJSyncVersion();
                 chargePeriod.state = 0;
+                chargePeriod.operatorType = 1;
                 if (![self.db updateRowsInTable:@"BK_CHARGE_PERIOD_CONFIG"
                                    onProperties:{
                                        SSJChargePeriodConfigTable.writeDate,
                                        SSJChargePeriodConfigTable.version,
-                                       SSJChargePeriodConfigTable.state
+                                       SSJChargePeriodConfigTable.state,
+                                       SSJChargePeriodConfigTable.operatorType
                                    }
                                      withObject:chargePeriod
                                           where:SSJChargePeriodConfigTable.configId == chargePeriod.configId]) {

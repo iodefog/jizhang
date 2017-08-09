@@ -17,6 +17,7 @@
     return @[@"wishid",
              @"cuserid",
              @"wishname",
+             @"wishmoney",
              @"wishimage",
              @"iversion",
              @"cwritedate",
