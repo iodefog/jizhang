@@ -164,9 +164,17 @@
                          withObject:userLoan
                               where:SSJLoanTable.userId == sourceUserid];
 
-    if (![db getOneValueOnResult:SSJLoanTable.AnyProperty.count() fromTable:@"temp_loan" where:SSJLoanTable.type == 0]) {
-        
+    // 如果有借款,则将原来的借款打开
+    if ([db getOneValueOnResult:SSJLoanTable.AnyProperty.count() fromTable:@"temp_loan" where:SSJLoanTable.type == 1]) {
+        [db updateRowsInTable:@"BK_FUND_INFO" onProperty:SSJFundInfoTable.display withValue:@(1) where:SSJFundInfoTable.fundParent == @"11" && SSJFundInfoTable.userId == targetUserId];
     }
+    
+    // 如果有借出款,则将原来的借出款打开
+    if ([db getOneValueOnResult:SSJLoanTable.AnyProperty.count() fromTable:@"temp_loan" where:SSJLoanTable.type == 0]) {
+        [db updateRowsInTable:@"BK_FUND_INFO" onProperty:SSJFundInfoTable.display withValue:@(1) where:SSJFundInfoTable.fundParent == @"10" && SSJFundInfoTable.userId == targetUserId];
+
+    }
+    
     
     return success;
     
