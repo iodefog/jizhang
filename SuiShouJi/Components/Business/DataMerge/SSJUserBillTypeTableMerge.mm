@@ -41,9 +41,9 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm.ss.SSS"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm.ss.SSS"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         
@@ -165,10 +165,8 @@
             success = [db deleteObjectsFromTable:@"temp_user_bill_type"
                                            where:SSJUserBillTypeTable.billId == oldId];
         } else {
-            if (oldId.length > 4) {
-                success = [db updateRowsInTable:@"temp_user_bill_type" onProperty:SSJUserBillTypeTable.billId withValue:newId
-                                          where:SSJUserBillTypeTable.billId == oldId];
-            }
+            success = [db updateRowsInTable:@"temp_user_bill_type" onProperty:SSJUserBillTypeTable.billId withValue:newId
+                                      where:SSJUserBillTypeTable.billId == oldId];
         }
         
         if (!success) {

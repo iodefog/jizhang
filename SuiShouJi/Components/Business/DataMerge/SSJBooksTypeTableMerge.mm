@@ -44,9 +44,9 @@
     NSArray *allBooks;
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm.ss.SSS"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm.ss.SSS"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
         allBooks = [db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
                                           fromTable:@"bk_user_charge"
