@@ -54,6 +54,7 @@
     }
     self.subtitleLabel.right = self.width - 10;
 }
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     

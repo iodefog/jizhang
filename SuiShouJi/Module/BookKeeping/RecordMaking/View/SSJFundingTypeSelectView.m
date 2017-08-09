@@ -110,18 +110,11 @@
         FundingTypeCell = [[SSJFundingTypeTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
     }
     FundingTypeCell.item = [_items ssj_safeObjectAtIndex:indexPath.row];
-    if (!self.selectFundID || self.selectFundID.length == 0) {
-        if (indexPath.row == 0) {
-            FundingTypeCell.selectedOrNot = YES;
-        }else{
-            FundingTypeCell.selectedOrNot = NO;
-        }
+    
+    if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
+        FundingTypeCell.selectedOrNot = YES;
     }else{
-        if ([FundingTypeCell.item.fundingID isEqualToString:self.selectFundID]) {
-            FundingTypeCell.selectedOrNot = YES;
-        }else{
-            FundingTypeCell.selectedOrNot = NO; 
-        }
+        FundingTypeCell.selectedOrNot = NO;
     }
     return FundingTypeCell;
 }

@@ -226,14 +226,21 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
             @strongify(self);
             SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
-            if ([item.bannerId isEqualToString:@"10000"]) {
-                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
-                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
+            if (item.needLogin && !SSJIsUserLogined()) {
+                SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
+                SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
+                [self presentViewController:naviVC animated:YES completion:NULL];
             } else {
-                if (item.bannerType == 0) {
-                    SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
-                    [self.navigationController pushViewController:webVc animated:YES];
+                if ([item.bannerId isEqualToString:@"10000"]) {
+                    SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
+                    [self.navigationController pushViewController:qiuchengWebVc animated:YES];
+                } else {
+                    if (item.bannerType == 0) {
+                        SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
+                        [self.navigationController pushViewController:webVc animated:YES];
+                    }
                 }
+
             }
         };
         headerView.items = self.bannerItems;

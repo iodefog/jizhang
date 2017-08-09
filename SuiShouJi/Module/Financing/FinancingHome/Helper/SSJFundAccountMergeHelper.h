@@ -12,9 +12,9 @@
 @interface SSJFundAccountMergeHelper : NSObject
 // 类型,1是转入.0是转出
 typedef NS_ENUM(NSInteger, SSJFundsTransferType) {
-    SSJFundsTransferTypeNormal = 0,
-    SSJFundsTransferTypeCreditCard = 1,
-    SSJFundsTransferTypeAll = 2
+    SSJFundsTransferTypeAll = 0,
+    SSJFundsTransferTypeNormal = 1,
+    SSJFundsTransferTypeCreditCard = 2,
 };
 
 - (void)startMergeWithSourceFundId:(NSString *)sourceFundId

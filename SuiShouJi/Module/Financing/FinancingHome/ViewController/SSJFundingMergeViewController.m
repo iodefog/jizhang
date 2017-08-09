@@ -133,7 +133,7 @@
         @weakify(self);
         _transferInFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            self.transferInFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferType exceptFundItem:self.transferOutFundItem];
+            self.transferInFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferOutType exceptFundItem:self.transferOutFundItem];
             if (!self.transferInFundSelectView.fundsArr.count) {
                 [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
                 return;
@@ -152,7 +152,7 @@
         @weakify(self);
         _transferOutFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            self.transferOutFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferType exceptFundItem:self.transferInFundItem];
+            self.transferOutFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferInType exceptFundItem:self.transferInFundItem];
             if (!self.transferOutFundSelectView.fundsArr.count) {
                 [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
                 return;
@@ -226,11 +226,11 @@
         _transferInFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferInFundItem = fundItem;
-            if (self.transferType == SSJFundsTransferTypeAll) {
+            if (self.transferInType == SSJFundsTransferTypeAll) {
                 if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
-                    self.transferType = SSJFundsTransferTypeCreditCard;
+                    self.transferInType = SSJFundsTransferTypeCreditCard;
                 } else {
-                    self.transferType = SSJFundsTransferTypeNormal;
+                    self.transferInType = SSJFundsTransferTypeNormal;
 
                 }
             }
@@ -247,11 +247,11 @@
         _transferOutFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferOutFundItem = fundItem;
-            if (self.transferType == SSJFundsTransferTypeAll) {
+            if (self.transferOutType == SSJFundsTransferTypeAll) {
                 if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
-                    self.transferType = SSJFundsTransferTypeCreditCard;
+                    self.transferOutType = SSJFundsTransferTypeCreditCard;
                 } else {
-                    self.transferType = SSJFundsTransferTypeNormal;
+                    self.transferOutType = SSJFundsTransferTypeNormal;
                     
                 }
             }

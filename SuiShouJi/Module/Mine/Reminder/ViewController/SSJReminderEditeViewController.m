@@ -271,7 +271,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }else if (textField.tag == 101){
         self.item.remindMemo = text;
     }
-    
     return YES;
 }
 

@@ -60,7 +60,8 @@
         SSJFundingMergeViewController *accountMerge = [[SSJFundingMergeViewController alloc] init];
         accountMerge.transferOutSelectable = YES;
         accountMerge.transferInSelectable = YES;
-        accountMerge.transferType = SSJFundsTransferTypeAll;
+        accountMerge.transferOutType = SSJFundsTransferTypeAll;
+        accountMerge.transferInType = SSJFundsTransferTypeAll;
         [self.navigationController pushViewController:accountMerge animated:YES];
 
     } else if ([title isEqualToString:@"账本数据迁移"]) {
