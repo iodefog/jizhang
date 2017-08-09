@@ -21,6 +21,8 @@
 
 @property (nonatomic) BOOL needToDelete;
 
-@property (nonatomic) SSJFundsTransferType transferType;
+@property (nonatomic) SSJFundsTransferType transferInType;
+
+@property (nonatomic) SSJFundsTransferType transferOutType;
 
 @end
