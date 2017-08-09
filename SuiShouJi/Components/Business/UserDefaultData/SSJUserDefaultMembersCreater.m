@@ -14,7 +14,9 @@
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSArray *datas = [self datasWithUserId:userId];
     for (NSDictionary *dataInfo in datas) {
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_member where cmemberid = ?", dataInfo[@"cmemberid"]];
+        NSString *memberID = dataInfo[@"cmemberid"];
+        NSString *memberName = dataInfo[@"cname"];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_member where (cmemberid = ? and cuserid = ?) or (cname = ? and cuserid = ?)", memberID, userId, memberName, userId];
         if (!existed) {
             BOOL successfull = [db executeUpdate:@"insert into bk_member (cmemberid, cuserid, cname, ccolor, istate, iorder, cadddate, iversion, cwritedate, operatortype) values (:cmemberid, :cuserid, :cname, :ccolor, :istate, :iorder, :cadddate, :iversion, :cwritedate, :operatortype)" withParameterDictionary:dataInfo];
             if (!successfull) {

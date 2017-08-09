@@ -14,7 +14,8 @@
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *record in [self datasWithUserId:userId]) {
         NSString *fundId = record[@"cfundid"];
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where cfundid = ?", fundId];
+        NSString *fundName = record[@"cacctname"];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where (cfundid = ?) or (cacctname = ? and cuserid = ?)", fundId, fundName, userId];
         if (!existed) {
             BOOL successfull = [db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cparent, ccolor, cwritedate, operatortype, iversion, cuserid, cicoin, iorder, cstartcolor, cendcolor) values (:cfundid, :cacctname, :cparent, :ccolor, :cwritedate, :operatortype, :iversion, :cuserid, :cicoin, :iorder, :cstartcolor, :cendcolor)" withParameterDictionary:record];
             if (!successfull) {

@@ -16,8 +16,26 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
 @implementation SSJUserDefaultBillTypesCreater
 
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    NSString *booksId = userId;
-    [self createDefaultDataTypeForUserId:userId booksId:booksId booksType:SSJBooksTypeDaily inDatabase:db error:error];
+    FMResultSet *rs = [db executeQuery:@"select cbooksid, iparenttype from bk_books_type where cuserid = ? and operatortype <> 2", userId];
+    if (!rs) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    NSMutableArray *booksTypeArr = [NSMutableArray array];
+    while ([rs next]) {
+        [booksTypeArr addObject:@{@"cbooksid":[rs stringForColumn:@"cbooksid"],
+                                  @"iparenttype":[rs stringForColumn:@"iparenttype"]}];
+    }
+    [rs close];
+    
+    for (NSDictionary *booksTypeInfo in booksTypeArr) {
+        NSString *booksId = booksTypeInfo[@"cbooksid"];
+        SSJBooksType booksType = [booksTypeInfo[@"iparenttype"] integerValue];
+        [self createDefaultDataTypeForUserId:userId booksId:booksId booksType:booksType inDatabase:db error:error];
+    }
 }
 
 + (void)createDefaultDataTypeForUserId:(NSString *)userId
@@ -47,22 +65,37 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
 + (void)createBillTypeWithIDs:(NSArray *)IDs userId:(NSString *)userId booksId:(NSString *)booksId writeDate:(NSString *)writeDate database:(FMDatabase *)db error:(NSError **)error {
     [IDs enumerateObjectsUsingBlock:^(NSString *billId, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJBillTypeModel *model = SSJBillTypeModel(billId);
+        NSDictionary *param = @{@"cbillid":model.ID,
+                                @"cuserid":userId,
+                                @"cbooksid":booksId,
+                                @"cname":model.name,
+                                @"itype":@(model.expended)};
+        // 注意：重名并且同是收入／支出的类别也算相同类别
+        FMResultSet *rs = [db executeQuery:@"select count(1) from bk_user_bill_type where (cbillid = :cbillid and cuserid = :cuserid and cbooksid = :cbooksid) or (cname = :cname and itype = :itype and cuserid = :cuserid and cbooksid = :cbooksid)" withParameterDictionary:param];
+        while (!rs) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return;
+        }
+        [rs next];
+        BOOL existed = [rs boolForColumn:@"count(1)"];
+        [rs close];
         
-        NSMutableDictionary *tmpRecord = [NSMutableDictionary dictionary];
-        tmpRecord[@"cbillid"] = model.ID;
-        tmpRecord[@"cuserid"] = userId;
-        tmpRecord[@"cbooksid"] = booksId;
-        tmpRecord[@"itype"] = @(model.expended);
-        tmpRecord[@"cname"] = model.name;
-        tmpRecord[@"ccolor"] = model.color;
-        tmpRecord[@"cicoin"] = model.icon;
-        tmpRecord[@"iorder"] = @(idx);
-        tmpRecord[@"cwritedate"] = writeDate;
-        tmpRecord[@"operatortype"] = @0;
-        tmpRecord[@"iversion"] = @(SSJSyncVersion());
-        
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", model.ID, userId, booksId];
         if (!existed) {
+            NSMutableDictionary *tmpRecord = [NSMutableDictionary dictionary];
+            tmpRecord[@"cbillid"] = model.ID;
+            tmpRecord[@"cuserid"] = userId;
+            tmpRecord[@"cbooksid"] = booksId;
+            tmpRecord[@"itype"] = @(model.expended);
+            tmpRecord[@"cname"] = model.name;
+            tmpRecord[@"ccolor"] = model.color;
+            tmpRecord[@"cicoin"] = model.icon;
+            tmpRecord[@"iorder"] = @(idx);
+            tmpRecord[@"cwritedate"] = writeDate;
+            tmpRecord[@"operatortype"] = @0;
+            tmpRecord[@"iversion"] = @(SSJSyncVersion());
+            
             BOOL successful = [db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, itype, cname, ccolor, cicoin, iorder, cwritedate, operatortype, iversion) values (:cbillid, :cuserid, :cbooksid, :itype, :cname, :ccolor, :cicoin, :iorder, :cwritedate, :operatortype, :iversion)" withParameterDictionary:tmpRecord];
             if (!successful) {
                 if (error) {
@@ -110,7 +143,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
                             @"1009",// 居住
                             @"1004",// 娱乐
                             @"1008",// 医疗
-                            @"1022",// 学习
+                            @"1022",// 教育
                             @"1160",// 人情
                             @"1033" // 其它
                             ];
