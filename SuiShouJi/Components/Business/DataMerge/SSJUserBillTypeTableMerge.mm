@@ -41,9 +41,9 @@
     
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         
@@ -59,7 +59,7 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         booksIds = [db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
                                           fromTable:@"bk_user_charge"
-                                              where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                                              where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
                     && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
                     && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2];
         
@@ -100,26 +100,7 @@
                                        withDatas:(NSArray *)datas
                                       inDataBase:(WCTDatabase *)db {
     
-    // 建立一个新老id对照的字典,key是老的id,value是新的id
-    NSMutableDictionary *newAndOldIdDic = [NSMutableDictionary dictionaryWithCapacity:0];
-    
-    [datas enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        SSJUserBillTypeTable *currentUserBillType = (SSJUserBillTypeTable *)obj;
-        
-        SSJUserBillTypeTable *sameNameUserBillType = [db getOneObjectOfClass:SSJUserBillTypeTable.class fromTable:[self mergeTableName]
-                                                                       where:SSJUserBillTypeTable.billName == currentUserBillType.billName
-                                                      
-                                                      && SSJUserBillTypeTable.userId == targetUserId
-                                                      && SSJUserBillTypeTable.operatorType != 2];
-        
-        if (sameNameUserBillType) {
-            [newAndOldIdDic setObject:sameNameUserBillType.billId forKey:currentUserBillType.billId];
-        }
-        
-    }];
-    
-    
-    return newAndOldIdDic;
+    return nil;
 }
 
 + (BOOL)updateRelatedTableWithSourceUserId:(NSString *)sourceUserid
@@ -132,11 +113,22 @@
     NSArray *allBills = [db getAllObjectsOfClass:SSJUserBillTypeTable.class fromTable:[self tempTableName]];
     
     for (SSJUserBillTypeTable *userBill in allBills) {
+        
+        NSString *sameNameId = [db getOneValueOnResult:SSJUserBillTypeTable.billId fromTable:@"BK_USER_BILL_TYPE"
+                                                 where:SSJUserBillTypeTable.userId == targetUserId
+                                && SSJUserBillTypeTable.billName == userBill.billName
+                                && SSJUserBillTypeTable.booksId == userBill.booksId
+                                && SSJUserBillTypeTable.operatorType != 2];
+        
         NSString *oldId = userBill.billId;
-        NSString *newId = [datas objectForKey:oldId];
+        NSString *newId = sameNameId;
         
         if (!newId) {
-            newId = SSJUUID();
+            if (oldId.length > 4) {
+                newId = SSJUUID();
+            } else {
+                newId = oldId;
+            }
         }
 
         if (![db isTableExists:@"temp_user_charge"] && ![db isTableExists:@"temp_charge_period_config"]) {
@@ -169,7 +161,7 @@
         
         
         // 如果有同名的则删除当前记账类型,如果没有则吧记账类型id更新为新的id
-        if ([datas objectForKey:oldId]) {
+        if (sameNameId.length) {
             success = [db deleteObjectsFromTable:@"temp_user_bill_type"
                                            where:SSJUserBillTypeTable.billId == oldId];
         } else {

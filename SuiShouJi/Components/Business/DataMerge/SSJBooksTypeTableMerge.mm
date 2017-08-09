@@ -41,13 +41,29 @@
     
     NSString *endDate;
     
+    NSArray *allBooks;
+    
     if (mergeType == SSJMergeDataTypeByWriteDate) {
-        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+        startDate = [fromDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         
-        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:ss:mm.SSS"];
+        endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        allBooks = [db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
+                                          fromTable:@"bk_user_charge"
+                                              where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2];
+
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         startDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
         endDate = [toDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        
+        allBooks = [db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
+                                          fromTable:@"bk_user_charge"
+                                              where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
+                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
+                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2];
+
     }
     
     WCTMultiSelect *select;
@@ -55,19 +71,11 @@
 
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
-                  where:SSJBooksTypeTable.booksId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
-                                                                                                      fromTable:@"bk_user_charge"
-                                                                                                          where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                                                                                && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                                                                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                  where:SSJBooksTypeTable.booksId.inTable([self mergeTableName]).in(allBooks)];
 
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties fromTables:@[ [self mergeTableName] ]]
-                  where:SSJBooksTypeTable.booksId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.booksId
-                                                                                                      fromTable:@"bk_user_charge"
-                                                                                                          where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                                                                                && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                                                                                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                  where:SSJBooksTypeTable.booksId.inTable([self mergeTableName]).in(allBooks)];
     }
     
     WCTError *error = select.error;

@@ -376,8 +376,6 @@
     //判断有没有授权
     if ([self remindLocation]) {
         SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc] init];
-        self.reminderItem.remindName = @"为心愿存钱";
-        remindEditeVc.item = self.reminderItem;
         remindEditeVc.needToSave = YES;
         
         __weak typeof(self) weakSelf = self;
@@ -446,7 +444,10 @@
             photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
                 @strongify(self);
                 //切换背景
-                self.topImg.image = seleImg;
+                SSJDispatch_main_async_safe(^{
+                    self.topImg.image = seleImg;
+                });
+                
                 self.wishModel.wishImage = seleImgName;
                 if (![[SSJWishModel defaultWishImage] containsObject:seleImgName]) {
                     self.isNeedReSaveImage = YES;

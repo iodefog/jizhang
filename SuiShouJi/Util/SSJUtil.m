@@ -570,7 +570,7 @@ BOOL SSJSaveBooksCategory(SSJBooksCategory category) {
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-void clearCurrentBooksCategory() {
+void SSJClearCurrentBooksCategory() {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:SSJBookCategoryKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }

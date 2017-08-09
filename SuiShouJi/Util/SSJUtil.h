@@ -303,7 +303,7 @@ FOUNDATION_EXPORT SSJBooksCategory SSJGetBooksCategory();
 
 FOUNDATION_EXPORT BOOL SSJSaveBooksCategory(SSJBooksCategory category);
 
-FOUNDATION_EXPORT void clearCurrentBooksCategory();
+FOUNDATION_EXPORT void SSJClearCurrentBooksCategory();
 
 /**
  加入qq群
