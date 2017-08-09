@@ -94,8 +94,8 @@ static const CGFloat kVerticalGap = 10;
     if (![_actionTitle isEqualToString:actionTitle]) {
         _actionTitle = actionTitle;
         [self.actionBtn setTitle:actionTitle forState:UIControlStateNormal];
-        self.actionBtn.width = 150;
-        self.actionBtn.height = 30;
+        self.actionBtn.width = SSJSCREENWITH - 30;
+        self.actionBtn.height = 44;
         self.actionBtn.top = CGRectGetMaxY(self.subTitleLab.frame) + 20;
         [self sizeToFit];
     }
@@ -137,7 +137,7 @@ static const CGFloat kVerticalGap = 10;
         _actionBtn.layer.cornerRadius = 8;
         _actionBtn.layer.masksToBounds = YES;
         _actionBtn.hidden = YES;
-        _actionBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _actionBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         @weakify(self);
         [[_actionBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);

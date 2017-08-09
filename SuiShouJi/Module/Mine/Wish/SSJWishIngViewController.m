@@ -166,7 +166,7 @@
         _noDataRemindView.subTitle = @"不如和一百万人一起\n为心愿存钱\n一步步实现自己的小心愿吧";
         _noDataRemindView.actionTitle = @"许下心愿";
         _noDataRemindView.centerX = SSJSCREENWITH * 0.5;
-        _noDataRemindView.centerY = (SSJSCREENHEIGHT - 60) * 0.5;
+        _noDataRemindView.top = (SSJSCREENHEIGHT - 440) * 0.5;
         _noDataRemindView.actionBlock = ^{
             SSJMakeWishViewController *makeWish = [[SSJMakeWishViewController alloc] init];
             [SSJVisibalController().navigationController pushViewController:makeWish animated:YES];

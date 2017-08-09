@@ -59,6 +59,8 @@
 - (void)initTopView {
     NSArray *btnTitle = @[@"心愿清单",@"历史心愿"];
     _topScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, SSJSCREENWITH, 44)];
+    [_topScrollView ssj_setBorderWidth:1];
+    [_topScrollView ssj_setBorderStyle:SSJBorderStyleBottom];
     CGFloat kbtnWith = SSJSCREENWITH * 0.5;
     for (NSInteger i=0; i<btnTitle.count; i++) {
         UIButton *btn = [UIButton buttonWithType:(UIButtonTypeCustom)];
@@ -141,6 +143,7 @@
 - (void)updateAppearanceAfterThemeChanged {
     _inidicatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor];
     _topScrollView.backgroundColor = [UIColor clearColor];
+    [_topScrollView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 }
 
 -(void)ssj_backOffAction {
