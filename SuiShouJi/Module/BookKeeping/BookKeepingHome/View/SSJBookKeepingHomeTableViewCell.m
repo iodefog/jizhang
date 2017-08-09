@@ -59,7 +59,6 @@ static const CGFloat kChargeImgWidth = 30;
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         self.isAnimating = NO;
-        self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         [self.contentView addSubview:self.verticalLine];
         [self.contentView addSubview:self.categoryImageButton];
@@ -301,6 +300,7 @@ static const CGFloat kChargeImgWidth = 30;
 }
 
 - (void)updateAppearance {
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.backgroundColor = [UIColor clearColor];
     self.topLabel.textColor = SSJ_MAIN_COLOR;
     self.bottomLabel.textColor = SSJ_SECONDARY_COLOR;
