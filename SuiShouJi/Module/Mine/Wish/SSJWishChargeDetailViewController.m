@@ -259,7 +259,9 @@ static NSString *SSJWishChargeDetailMemoId = @"SSJWishChargeDetailMemoId";
         _dateSelectView.confirmBlock = ^(SSJHomeDatePickerView *view){
             weakSelf.chargeItem.cbillDate = [view.date formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
-            [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            SSJDispatch_main_async_safe(^{
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            });
         };
     }
     return _dateSelectView;

@@ -420,7 +420,7 @@ static CGFloat defImageHeight = 402;
     cell.wishChargeEdidBlock = ^(SSJWishChargeCell *cell) {
         SSJWishChargeDetailViewController *chargeDetailVC = [[SSJWishChargeDetailViewController alloc] init];
         chargeDetailVC.chargeItem = [[wSelf.wishChargeListArr ssj_safeObjectAtIndex:indexPath.row] copy];
-        chargeDetailVC.wishModel = wSelf.wishModel;
+        chargeDetailVC.wishModel = [wSelf.wishModel copy];
         [wSelf.navigationController pushViewController:chargeDetailVC animated:YES];
     };
     

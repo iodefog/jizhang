@@ -446,7 +446,10 @@
             photoVC.changeTopImage = ^(UIImage *seleImg,NSString *seleImgName) {
                 @strongify(self);
                 //切换背景
-                self.topImg.image = seleImg;
+                SSJDispatch_main_async_safe(^{
+                    self.topImg.image = seleImg;
+                });
+                
                 self.wishModel.wishImage = seleImgName;
                 if (![[SSJWishModel defaultWishImage] containsObject:seleImgName]) {
                     self.isNeedReSaveImage = YES;
