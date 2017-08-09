@@ -70,8 +70,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 
 @property (nonatomic, strong) SSJRecordMakingBillTypeInputAccessoryView *accessoryView;
 
-@property (nonatomic, strong) UIImageView *guideView;
-
 @property (nonatomic, strong) UITextField *currentInput;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -170,13 +168,11 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         [self updateMemberButtonTitle];
     }];
     
-    if (![self showGuideViewIfNeeded]) {
-        [self.FundingTypeSelectView dismiss];
-        //        [self.dateSelectedView dismiss];
-        if (_needToDismiss) {
-            [self.memberSelectView dismiss];
-            [self.billTypeInputView.moneyInput becomeFirstResponder];
-        }
+    [self.FundingTypeSelectView dismiss];
+    //        [self.dateSelectedView dismiss];
+    if (_needToDismiss) {
+        [self.memberSelectView dismiss];
+        [self.billTypeInputView.moneyInput becomeFirstResponder];
     }
 }
 
@@ -419,6 +415,16 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     if (_billTypeInputView.moneyInput == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        
+        // 键盘输入要隐藏引导
+        if ([self needToShowGuide]) {
+            if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
+                [self.paymentTypeView hideGuide];
+            } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+                [self.incomeTypeView hideGuide];
+            }
+        }
+        
         return NO;
     }
     return YES;
@@ -584,17 +590,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
     [self updateNavigationRightItem];
 }
 
-- (void)hideGuideView {
-    if (_guideView.superview) {
-        [UIView transitionWithView:_guideView.superview duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [_guideView removeFromSuperview];
-            _guideView = nil;
-        } completion:^(BOOL finished) {
-            [_billTypeInputView.moneyInput becomeFirstResponder];
-        }];
-    }
-}
-
 - (void)managerItemAction {
     switch (_customNaviBar.selectedBillType) {
         case SSJBillTypePay:
@@ -670,7 +665,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (RACSignal *)loadBooksListSignal {
+    @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
         RACSignal *sg_1 = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             [SSJBooksTypeStore queryForBooksListWithSuccess:^(NSMutableArray<SSJBooksTypeItem *> *bookList) {
                 [subscriber sendNext:bookList];
@@ -755,7 +752,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             __block SSJRecordMakingBillTypeSelectionCellItem *selectedItem = nil;
             [categoryList enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (selectedId && [obj.ID isEqualToString:selectedId]) {
-                    obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
                     selectedItem = obj;
                     *stop = YES;
                 }
@@ -763,6 +759,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             
             if (!selectedItem) {
                 selectedItem = [categoryList firstObject];
+            }
+            
+            if (![self needToShowGuide]) {
                 selectedItem.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
             }
             
@@ -773,6 +772,8 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
                 self.billTypeInputView.fillColor = selectedItem ? [UIColor ssj_colorWithHex:selectedItem.colorValue] : INPUT_DEFAULT_COLOR;
             }];
             self.billTypeInputView.billTypeName = selectedItem.title;
+            
+            [self showGuideViewIfNeeded];
             
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
@@ -915,7 +916,9 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }
     }
     
+    @weakify(self);
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        @strongify(self);
         [SSJRecordMakingStore saveChargeWithChargeItem:self.item Success:^(SSJBillingChargeCellItem *editeItem){
             [subscriber sendNext:editeItem];
             [subscriber sendCompleted];
@@ -924,6 +927,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         }];
         return nil;
     }] flattenMap:^RACStream *(SSJBillingChargeCellItem *editeItem) {
+        @strongify(self);
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
             BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
             if (hasChangeBooksType) {
@@ -947,6 +951,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             return nil;
         }];
     }] subscribeNext:^(SSJBillingChargeCellItem *editeItem) {
+        @strongify(self);
         BOOL hasChangeBooksType = ![editeItem.booksId isEqualToString:self.defaultBooksId];
         if (self.addNewChargeBlock) {
             self.addNewChargeBlock(@[editeItem],hasChangeBooksType);
@@ -960,25 +965,31 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
 }
 
 - (BOOL)showGuideViewIfNeeded {
-    BOOL isEverEntered = [[NSUserDefaults standardUserDefaults] boolForKey:kIsEverEnteredKey];
-    if (!isEverEntered) {
+    if ([self needToShowGuide]) {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsEverEnteredKey];
         [[NSUserDefaults standardUserDefaults] synchronize];
         
-        if (!_guideView) {
-            _guideView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"record_making_guide"]];
-            _guideView.userInteractionEnabled = YES;
-            UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideGuideView)];
-            [_guideView addGestureRecognizer:tap];
+        if (self.customNaviBar.selectedBillType == SSJBillTypePay
+            || self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+            __weak typeof(self) wself = self;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                SSJRecordMakingBillTypeSelectionView *selectionView = wself.customNaviBar.selectedBillType == SSJBillTypePay ? wself.paymentTypeView : wself.incomeTypeView;
+                [selectionView showGuideWithDismissHandler:^(SSJRecordMakingBillTypeSelectionView *view){
+                    [view.items enumerateObjectsWithOptions:NSEnumerationConcurrent usingBlock:^(SSJRecordMakingBillTypeSelectionCellItem *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                        if (wself.item.billId && [obj.ID isEqualToString:wself.item.billId]) {
+                            obj.state = SSJRecordMakingBillTypeSelectionCellStateSelected;
+                            *stop = YES;
+                        }
+                    }];
+                }];
+            });
         }
-        
-        UIWindow *window = [UIApplication sharedApplication].keyWindow;
-        _guideView.frame = window.bounds;
-        [UIView transitionWithView:window duration:0.25 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-            [window addSubview:_guideView];
-        } completion:NULL];
     }
-    return !isEverEntered;
+    return [self needToShowGuide];
+}
+
+- (BOOL)needToShowGuide {
+    return ![[NSUserDefaults standardUserDefaults] boolForKey:kIsEverEnteredKey];
 }
 
 - (void)initBillTypeView:(SSJRecordMakingBillTypeSelectionView *)billTypeView {
@@ -1057,10 +1068,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         
         SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [selectionView selectedItem];
         [UIView animateWithDuration:kAnimationDuration animations:^{
-            self.billTypeInputView.billTypeName = selectedItem ? selectedItem.title : nil;
-            self.billTypeInputView.fillColor = selectedItem ? [UIColor ssj_colorWithHex:selectedItem.colorValue] : INPUT_DEFAULT_COLOR;
+            wself.billTypeInputView.billTypeName = selectedItem ? selectedItem.title : nil;
+            wself.billTypeInputView.fillColor = selectedItem ? [UIColor ssj_colorWithHex:selectedItem.colorValue] : INPUT_DEFAULT_COLOR;
         }];
-        self.item.billId = selectedItem ? selectedItem.ID : nil;
+        wself.item.billId = selectedItem ? selectedItem.ID : nil;
     };
 }
 

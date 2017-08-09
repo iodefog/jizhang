@@ -345,3 +345,101 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 }
 
 @end
+
+#import <objc/runtime.h>
+
+static const void * kSSJRMBTSShowedKey = &kSSJRMBTSShowedKey;
+static const void * kSSJRMBTSVBorderViewKey = &kSSJRMBTSVBorderViewKey;
+static const void * kSSJRMBTSVListMenuKey = &kSSJRMBTSVListMenuKey;
+static const void * kSSJRMBTSDismissHandlerKey = &kSSJRMBTSDismissHandlerKey;
+
+static const NSTimeInterval kDuration = 0.25;
+
+@implementation SSJRecordMakingBillTypeSelectionView (SSJGuide)
+
+- (void)showGuideWithDismissHandler:(void(^)(SSJRecordMakingBillTypeSelectionView *view))handler {
+    if (![self guideShowed]) {
+        objc_setAssociatedObject(self, kSSJRMBTSShowedKey, @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        if (handler) {
+            objc_setAssociatedObject(self, kSSJRMBTSDismissHandlerKey, handler, OBJC_ASSOCIATION_COPY_NONATOMIC);
+        }
+        
+        CGRect rect = [self caculateTargetFrame];
+        [self borderView].frame = rect;
+        [self borderView].layer.cornerRadius = CGRectGetWidth(rect) * 0.5;
+        [self.window addSubview:[self borderView]];
+        
+        [[self listMenu] showInView:self.window atPoint:CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect)) superViewInsets:UIEdgeInsetsZero finishHandle:NULL dismissHandle:^(SSJListMenu *listMenu) {
+            [UIView animateWithDuration:kDuration animations:^{
+                [self borderView].alpha = 0;
+            } completion:^(BOOL finished) {
+                [[self borderView] removeFromSuperview];
+                void (^dismissHandler)() = objc_getAssociatedObject(self, kSSJRMBTSDismissHandlerKey);
+                if (dismissHandler) {
+                    dismissHandler(self);
+                    objc_setAssociatedObject(self, kSSJRMBTSDismissHandlerKey, nil, OBJC_ASSOCIATION_COPY_NONATOMIC);
+                }
+            }];
+        }];
+    }
+}
+
+- (void)hideGuide {
+    if ([self guideShowed]) {
+        [[self listMenu] dismiss];
+        [UIView animateWithDuration:kDuration animations:^{
+            [self borderView].alpha = 0;
+        } completion:^(BOOL finished) {
+            [[self borderView] removeFromSuperview];
+        }];
+    }
+}
+
+- (BOOL)guideShowed {
+    return [objc_getAssociatedObject(self, kSSJRMBTSShowedKey) boolValue];
+}
+
+- (CGRect)caculateTargetFrame {
+    UICollectionViewLayoutAttributes *attribute = [self.collectionView layoutAttributesForItemAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0]];
+    CGFloat borderLeft = CGRectGetMidX(attribute.frame) - SSJRMBTSCBoderSize.width * 0.5;
+    CGFloat borderTop = CGRectGetMinY(attribute.frame) + CGRectGetHeight(attribute.frame) * SSJRMBTSCBoderCenterYScale - SSJRMBTSCBoderSize.height * 0.5;
+    CGRect borderRect = CGRectMake(borderLeft, borderTop, SSJRMBTSCBoderSize.width, SSJRMBTSCBoderSize.height);
+    CGRect targetRect = [self.collectionView convertRect:borderRect toView:self.collectionView.window];
+    return targetRect;
+}
+
+- (UIView *)borderView {
+    UIView *borderView = objc_getAssociatedObject(self, kSSJRMBTSVBorderViewKey);
+    if (!borderView) {
+        borderView = [[UIView alloc] initWithFrame:CGRectZero];
+        borderView.layer.borderColor = [UIColor ssj_colorWithHex:@"#555555"].CGColor;
+        borderView.layer.borderWidth = 1;
+        objc_setAssociatedObject(self, kSSJRMBTSVBorderViewKey, borderView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return borderView;
+}
+
+- (SSJListMenu *)listMenu {
+    SSJListMenu *listMenu = objc_getAssociatedObject(self, kSSJRMBTSVListMenuKey);
+    if (!listMenu) {
+        listMenu = [[SSJListMenu alloc] init];
+        listMenu.width = 192;
+        listMenu.rowHeight = 32;
+        listMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        listMenu.borderColor = [UIColor clearColor];
+        listMenu.fillColor = [UIColor ssj_colorWithHex:@"#555555"];
+        listMenu.shadowOpacity = 0;
+        listMenu.items = @[[SSJListMenuItem itemWithImageName:nil
+                                                        title:@"长按可移动、编辑、删除类别"
+                                             normalTitleColor:[UIColor whiteColor]
+                                           selectedTitleColor:nil
+                                             normalImageColor:nil
+                                           selectedImageColor:nil
+                                              backgroundColor:nil
+                                               attributedText:nil]];
+        objc_setAssociatedObject(self, kSSJRMBTSVListMenuKey, listMenu, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return listMenu;
+}
+
+@end

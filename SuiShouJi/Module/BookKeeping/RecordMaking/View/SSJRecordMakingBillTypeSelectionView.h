@@ -41,3 +41,15 @@
 - (SSJRecordMakingBillTypeSelectionCellItem *)selectedItem;
 
 @end
+
+
+
+@interface SSJRecordMakingBillTypeSelectionView (SSJGuide)
+
+- (void)showGuideWithDismissHandler:(void(^)(SSJRecordMakingBillTypeSelectionView *view))handler;
+
+- (void)hideGuide;
+
+- (BOOL)guideShowed;
+
+@end

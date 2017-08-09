@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+extern const CGSize SSJRMBTSCBoderSize;
+extern const CGFloat SSJRMBTSCBoderCenterYScale;
+
 @class SSJRecordMakingBillTypeSelectionCellItem;
 
 @interface SSJRecordMakingBillTypeSelectionCell : UICollectionViewCell
