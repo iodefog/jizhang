@@ -12,6 +12,9 @@
 
 static const NSTimeInterval kDuration = 0.25;
 
+const CGSize SSJRMBTSCBoderSize = {40, 40};
+const CGFloat SSJRMBTSCBoderCenterYScale = 0.48;
+
 static NSString *const kBorderColorAnimationKey = @"kBorderColorAnimationKey";
 static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 
@@ -40,13 +43,17 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
 }
 
 - (void)layoutSubviews {
+    CGPoint center = CGPointMake(self.contentView.width * 0.5, self.contentView.height * SSJRMBTSCBoderCenterYScale);
+    
     self.imageView.size = CGSizeMake(24, 24);
-    self.imageView.top = 24;
-    self.imageView.centerX = self.contentView.width * 0.5;
-    self.borderView.size = CGSizeMake(40, 40);
-    self.borderView.center = CGPointMake(self.contentView.width * 0.5, self.imageView.centerY);
+    self.imageView.center = center;
+    
+    self.borderView.size = SSJRMBTSCBoderSize;
+    self.borderView.center = center;
+    
     self.label.bottom = self.contentView.height;
     self.label.centerX = self.contentView.width * 0.5;
+    
     self.pencil.size = CGSizeMake(17, 17);
     self.pencil.layer.cornerRadius = self.pencil.width * 0.5;
     self.pencil.center = CGPointMake(self.imageView.right + 8, self.imageView.top - 8);
