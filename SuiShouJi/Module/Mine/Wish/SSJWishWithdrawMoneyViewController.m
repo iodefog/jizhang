@@ -149,7 +149,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
 //取钱动画
 - (void)withdrawAnim {
     __weak __typeof(self)weakSelf = self;
-    [UIView animateWithDuration:1 animations:^{
+    [UIView animateWithDuration:0.8 animations:^{
         CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] - [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
         CGFloat height = weakSelf.saveFooterView.height -
         weakSelf.goldCoinsImageView.height * scale;
@@ -171,35 +171,68 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         [goldArr addObject:goldImageView];
     }
     
-    [UIView animateWithDuration:1 animations:^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
         CGFloat height = weakSelf.saveFooterView.height -
         weakSelf.goldCoinsImageView.height * scale;
-        weakSelf.goldCoinsImageView.top = height;
+        [UIView animateWithDuration:0.5 animations:^{
+            weakSelf.goldCoinsImageView.top = height;
+        } completion:^(BOOL finished) {
+            if (weakSelf.saveMoneyType == SSJSaveMoneyTypeNormal) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            } else if (weakSelf.saveMoneyType == SSJSaveMoneyTypeList) {
+                //跳转到心愿进度页面并从堆栈中删除存钱页面
+                SSJWishProgressViewController *progressVC = [[SSJWishProgressViewController alloc] init];
+                progressVC.wishId = self.wishModel.wishId;
+                [weakSelf.navigationController pushViewController:progressVC animated:YES];
+                NSMutableArray *marr = [[NSMutableArray alloc]initWithArray:weakSelf.navigationController.viewControllers];
+                for (UIViewController *vc in marr) {
+                    if ([vc isKindOfClass:[SSJWishWithdrawMoneyViewController class]]) {
+                        [marr removeObject:vc];
+                        break;
+                    }
+                }
+                weakSelf.navigationController.viewControllers = marr;
+            }
+            //显示完成心愿弹框
+            if ([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue] >= [weakSelf.wishModel.wishMoney doubleValue]) {
+                [self.fillWishSuccessView showWithDesc:@"心愿目标金额已达成～"];
+            }
+            
+        }];
+
+    });
+    
+    [UIView animateWithDuration:1 animations:^{
+        //        CGFloat scale = (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) <=1 ? (([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue]) / [weakSelf.wishModel.wishMoney doubleValue]) : 1;
+        //        CGFloat height = weakSelf.saveFooterView.height -
+        //        weakSelf.goldCoinsImageView.height * scale;
+        //        weakSelf.goldCoinsImageView.top = height;
+        
         //掉金币
         for (NSInteger i=0; i<goldArr.count; i++) {
             UIImageView *goldImageView = [goldArr ssj_safeObjectAtIndex:i];
             switch (i) {
                 case 0:
-                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.25, weakSelf.saveFooterView.height - 30);
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.25, weakSelf.saveFooterView.height - 15);
                     break;
                 case 1:
                     goldImageView.center = CGPointMake(weakSelf.view.width * 0.3, weakSelf.saveFooterView.height - 30);
                     break;
                 case 2:
-                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.4, weakSelf.saveFooterView.height - 30);
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.4, weakSelf.saveFooterView.height - 15);
                     break;
                 case 3:
                     goldImageView.center = CGPointMake(weakSelf.view.width * 0.5, weakSelf.saveFooterView.height - 30);
                     break;
                 case 4:
-                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.6, weakSelf.saveFooterView.height - 30);
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.6, weakSelf.saveFooterView.height - 15);
                     break;
                 case 5:
                     goldImageView.center = CGPointMake(weakSelf.view.width * 0.7, weakSelf.saveFooterView.height - 30);
                     break;
                 case 6:
-                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.8, weakSelf.saveFooterView.height - 50);
+                    goldImageView.center = CGPointMake(weakSelf.view.width * 0.8, weakSelf.saveFooterView.height - 15);
                     break;
                 case 7:
                     goldImageView.center = CGPointMake(weakSelf.view.width * 0.55, weakSelf.saveFooterView.height - 30);
@@ -211,27 +244,9 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         }
         
     } completion:^(BOOL finished) {
-        if (weakSelf.saveMoneyType == SSJSaveMoneyTypeNormal) {
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        } else if (weakSelf.saveMoneyType == SSJSaveMoneyTypeList) {
-            //跳转到心愿进度页面并从堆栈中删除存钱页面
-            SSJWishProgressViewController *progressVC = [[SSJWishProgressViewController alloc] init];
-            progressVC.wishId = self.wishModel.wishId;
-            [weakSelf.navigationController pushViewController:progressVC animated:YES];
-            NSMutableArray *marr = [[NSMutableArray alloc]initWithArray:weakSelf.navigationController.viewControllers];
-            for (UIViewController *vc in marr) {
-                if ([vc isKindOfClass:[SSJWishWithdrawMoneyViewController class]]) {
-                    [marr removeObject:vc];
-                    break;
-                }
-            }
-            weakSelf.navigationController.viewControllers = marr;
-        }
-        //显示完成心愿弹框
-        if ([weakSelf.wishModel.wishSaveMoney doubleValue] + [_moneyInput.text doubleValue] >= [weakSelf.wishModel.wishMoney doubleValue]) {
-            [self.fillWishSuccessView showWithDesc:@"心愿目标金额已达成～"];
-        }
-    }];
+            }];
+    
+    
 }
 
 #pragma mark - UITextFieldDelegate
@@ -299,7 +314,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle0]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.chargeItem.money;
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
         [newReminderCell.textInput ssj_installToolbar];
@@ -387,7 +402,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
         saveButton.size = CGSizeMake(83, 83);
         saveButton.titleLabel.font = [UIFont ssj_pingFangMediumFontOfSize:24];
         if (self.itype == SSJWishChargeBillTypeSave) {
-            [saveButton setTitle:@"投入" forState:UIControlStateNormal];
+            [saveButton setTitle:@"存钱" forState:UIControlStateNormal];
         } else {
             [saveButton setTitle:@"取钱" forState:UIControlStateNormal];
         }
