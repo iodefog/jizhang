@@ -176,7 +176,7 @@
         [[_loginButton rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             [wSelf.view endEditing:YES];
             
-            [[[wSelf.viewModel.normalLoginCommand execute:nil] takeUntil:wSelf.rac_willDeallocSignal] subscribeError:^(NSError *error) {
+            [[wSelf.viewModel.normalLoginCommand execute:nil] subscribeError:^(NSError *error) {
                 if (error.code != SSJErrorCodeLoginCanceled) {
                     [CDAutoHideMessageHUD showError:error];
                 }
