@@ -21,6 +21,7 @@
 
 #import "SSJWishHelper.h"
 #import "SSJTextFieldToolbarManager.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kTitle0 = @"取钱";
 static NSString *const kTitle1 = @"存钱";
@@ -139,7 +140,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
             //金币动画
             [self goldCoinsAnim];
         }
-        
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showMessage:@"操作失败"];
     }];
