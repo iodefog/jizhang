@@ -16,6 +16,7 @@
 #import "SSJFinancingHomeHelper.h"
 #import "SSJCustomKeyboard.h"
 #import "SSJFinancingGradientColorItem.h"
+#import "SSJFinancingStore.h"
 
 #import "FMDB.h"
 
@@ -329,31 +330,41 @@
 }
 
 -(void)rightBarButtonClicked:(id)sender{
-    __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
-    UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        if (weakSelf.item.chargeCount) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:0];
+    @weakify(self);
+    [SSJFinancingStore fundHasDataOrNotWithFundid:self.item.fundingID Success:^(BOOL hasData) {
+        @strongify(self);
+        if (hasData) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
+            UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                if (self.item.chargeCount) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金后，是否将展示在首页和报表的流水及相关借贷数据一并删除" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *reserve = [UIAlertAction actionWithTitle:@"仅删除资金" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self deleteFundingItem:self.item type:0];
+                    }];
+                    UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                        [self deleteFundingItem:self.item type:1];
+                    }];
+                    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    }];
+                    [alert addAction:reserve];
+                    [alert addAction:destructive];
+                    [alert addAction:cancel];
+                    [self presentViewController:alert animated:YES completion:NULL];
+                }else{
+                    [self deleteFundingItem:self.item type:0];
+                }
             }];
-            UIAlertAction *destructive = [UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-                [weakSelf deleteFundingItem:weakSelf.item type:1];
-            }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            }];
-            [alert addAction:reserve];
-            [alert addAction:destructive];
             [alert addAction:cancel];
-            [weakSelf presentViewController:alert animated:YES completion:NULL];
-        }else{
-            [weakSelf deleteFundingItem:weakSelf.item type:0];
+            [alert addAction:comfirm];
+            [self presentViewController:alert animated:YES completion:NULL];
+
+        } else {
+            
         }
+    } failure:^(NSError *error) {
+        
     }];
-    [alert addAction:cancel];
-    [alert addAction:comfirm];
-    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{

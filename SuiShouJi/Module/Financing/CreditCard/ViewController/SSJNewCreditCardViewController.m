@@ -24,6 +24,7 @@
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJListMenu.h"
+#import "SSJFinancingStore.h"
 
 #define NUM @"+-.0123456789"
 
@@ -499,27 +500,46 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 - (void)rightButtonClicked:(id)sender{
     __weak typeof(self) weakSelf = self;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
     @weakify(self);
-    [alert addAction:[UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    
+    [SSJFinancingStore fundHasDataOrNotWithFundid:self.item.cardId Success:^(BOOL hasData) {
         @strongify(self);
-        [self.authCodeAlertView show];
-    }]];
+        if (hasData) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                @strongify(self);
+                [self.authCodeAlertView show];
+            }]];
+            
+            [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                @strongify(self);
+                SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
+                mergeVc.transferOutFundItem = self.item;
+                mergeVc.transferOutType = SSJFundsTransferTypeCreditCard;
+                mergeVc.transferInSelectable = YES;
+                mergeVc.transferOutSelectable = NO;
+                mergeVc.needToDelete = YES;
+                [self.navigationController pushViewController:mergeVc animated:YES];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
+            [self presentViewController:alert animated:YES completion:NULL];
+            
+        } else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金账户，其对应的记账数据将一并删除？" preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+                @strongify(self);
+                [self.authCodeAlertView show];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
+            [self presentViewController:alert animated:YES completion:NULL];
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+
+
     
-    [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        @strongify(self);
-        SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
-        mergeVc.transferOutFundItem = self.item;
-        mergeVc.transferOutType = SSJFundsTransferTypeCreditCard;
-        mergeVc.transferInSelectable = YES;
-        mergeVc.transferOutSelectable = NO;
-        mergeVc.needToDelete = YES;
-        [self.navigationController pushViewController:mergeVc animated:YES];
-    }]];
     
-    
-    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
-    [self presentViewController:alert animated:YES completion:NULL];
 }
 
 - (void)remindSwitchChange:(id)sender{
