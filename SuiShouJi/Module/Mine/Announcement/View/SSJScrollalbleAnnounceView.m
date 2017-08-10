@@ -96,15 +96,19 @@
     return _displayLink;
 }
 
-- (void)setItems:(SSJHeadLineItem *)item{
+- (void)setItem:(SSJHeadLineItem *)item{
     _item = item;
-    
+    self.contentLabel.text = item.headContent;
+    [self.contentLabel sizeToFit];
+    if (self.contentLabel.width > self.width - self.headLab.right - 20) {
+        self.displayLink.paused = NO;
+    }
 }
 
 - (void)updateTheTextPostion {
-    self.contentLabel.left ++;
+    self.contentLabel.left --;
     if (self.contentLabel.right == self.headLab.right + 20) {
-        self.contentLabel.left = self.headLab.right + 20;
+        self.contentLabel.left = self.width;
     }
 }
 

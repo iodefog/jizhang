@@ -145,6 +145,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [super viewDidLayoutSubviews];
     
     self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
+    self.tableView.top = self.announceView.bottom;
 }
 
 #pragma mark - UITableViewDelegate
@@ -294,13 +295,13 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     } else if (service == self.annoucementService){
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
     } else if (service == self.headLineService) {
-        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
-        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
-            self.announceView.item = headLine;
-            self.announceView.height = 64;
-            self.announceView.hidden = NO;
-            [self.view setNeedsLayout];
-        }
+//        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
+//        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
+//            self.announceView.item = headLine;
+//            self.announceView.height = 34;
+//            self.announceView.hidden = NO;
+//            [self.view setNeedsLayout];
+//        }
     }
 }
 
