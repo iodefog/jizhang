@@ -131,7 +131,18 @@
     }
     self.memoL.text = item.memo.length ? item.memo : @"默默的爱";
     self.moneyL.text = [NSString stringWithFormat:@"%.2f",[item.summoney doubleValue] / 100];
-    self.nameL.text = item.crealname.length ? item.crealname : @"神秘用户";
+    if (item.crealname.length) {
+        if ([item.crealname ssj_validPhoneNum]) {
+            NSString *phoneNum = [item.crealname stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            self.nameL.text = phoneNum;
+        } else {
+            self.nameL.text = item.crealname;
+        }
+    } else {
+        self.nameL.text = @"神秘用户";
+    }
+//    self.nameL.text = item.crealname.length ? item.crealname : @"神秘用户";
+    
     if ([item.ranking isEqualToString:@"1"]) {
         self.markImageView.hidden = NO;
         self.markImageView.image = [UIImage imageNamed:@"rank_mark_img_jin"];
