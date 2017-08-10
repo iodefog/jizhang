@@ -229,6 +229,13 @@ FOUNDATION_EXPORT NSString *SSJUUID();
 FOUNDATION_EXPORT NSString *SSJUniqueID();
 
 /**
+ 流水、周期记账、心愿图片目录
+
+ @return <#return value description#>
+ */
+FOUNDATION_EXPORT NSString *SSJChargeImageDirectory();
+
+/**
  *  将图片存进沙盒
  *
  *  @param image 要保存的图片

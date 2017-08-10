@@ -215,12 +215,22 @@
     }];
 }
 
++ (NSUInteger)chargeImgSize {
+    NSUInteger diskCost = 0;
+    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:SSJChargeImageDirectory()];
+    while ([enumerator nextObject]) {
+        diskCost += [enumerator.fileAttributes[NSFileSize] unsignedIntegerValue];
+    }
+    return diskCost;
+}
+
 + (void)caculateCacheDataSizeWithSuccess:(void(^)(int64_t size))success
                                  failure:(void (^)(NSError *error))failure {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         int64_t size = [SSJBookkeepingTreeHelper caculateCacheSize];
         size += [UIImage ssj_memoCache].totalCost;
         size += [[SDImageCache sharedImageCache] getSize];
+        size += [self chargeImgSize];
         SSJDispatchMainAsync(^{
             if (success) {
                 success(size);
@@ -234,6 +244,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [SSJBookkeepingTreeHelper clearCache];
         [[UIImage ssj_memoCache] removeAllObjects];
+        [[NSFileManager defaultManager] removeItemAtPath:SSJChargeImageDirectory() error:nil];
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
             SSJDispatchMainAsync(^{
                 if (success) {
