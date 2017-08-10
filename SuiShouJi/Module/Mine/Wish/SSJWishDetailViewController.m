@@ -446,9 +446,9 @@
                 //切换背景
                 SSJDispatch_main_async_safe(^{
                     self.topImg.image = seleImg;
+                    self.wishModel.wishImage = seleImgName;
                 });
                 
-                self.wishModel.wishImage = seleImgName;
                 if (![[SSJWishModel defaultWishImage] containsObject:seleImgName]) {
                     self.isNeedReSaveImage = YES;
                 } else {
