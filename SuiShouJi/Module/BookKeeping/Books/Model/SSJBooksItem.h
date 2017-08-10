@@ -28,6 +28,9 @@
 
 @property (nonatomic, strong) NSString *cwriteDate;
 
+// 共享账本还是日常账本
+@property (nonatomic) SSJBooksCategory booksCategory;
+
 - (NSString *)getSingleColor;
 
 - (NSString *)parentIcon;

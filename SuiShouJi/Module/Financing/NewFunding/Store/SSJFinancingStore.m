@@ -174,4 +174,31 @@
     return exsit;
 }
 
++ (void)fundHasDataOrNotWithFundid:(NSString *)fundId
+                           Success:(void (^)(BOOL hasData))success
+                           failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        BOOL hasData;
+        NSString *userId = SSJUSERID();
+        NSInteger chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and ifunsid = ? and operatortype <> 2",userId,fundId];
+        NSInteger periodCount = [db intForQuery:@"select count(1) from bk_charge_period_config where cuserid = ? and ifunsid = ? and operatortype <> 2",userId,fundId];
+        NSInteger periodTransferCount = [db intForQuery:@"select count(1) from bk_transfer_cycle where cuserid = ? and (ctransferinaccountid = ? or ctransferoutaccountid = ?) and operatortype <> 2",userId,fundId,fundId];
+        
+        NSInteger totalCount = chargeCount + periodCount + periodTransferCount;
+
+        if (totalCount > 0 ) {
+            hasData = YES;
+        } else {
+            hasData = NO;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(hasData);
+            });
+        }
+        
+    }];
+}
+
 @end

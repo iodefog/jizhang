@@ -269,6 +269,7 @@
         item.booksId = booksType.booksId;
         item.booksName = booksType.booksName;
         item.booksParent = booksType.parentType;
+        item.booksCategory = SSJBooksCategoryPersional;
         NSString *startColor = [[booksType.booksColor componentsSeparatedByString:@","] firstObject];
         NSString *endColor = [[booksType.booksColor componentsSeparatedByString:@","] lastObject];
         SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
@@ -289,6 +290,7 @@
         item.booksId = shareBooksType.booksId;
         item.booksName = shareBooksType.booksName;
         item.booksParent = shareBooksType.booksParent;
+        item.booksCategory = SSJBooksCategoryPublic;
         NSString *startColor = [[shareBooksType.booksColor componentsSeparatedByString:@","] firstObject];
         NSString *endColor = [[shareBooksType.booksColor componentsSeparatedByString:@","] lastObject];
         SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
@@ -303,16 +305,6 @@
     return booksItems;
 }
 
-- (BOOL)isShareBooksOrNotWithBooksId:(NSString *)booksId {
-    NSNumber *count = [self.db getOneValueOnResult:SSJShareBooksTable.AnyProperty.count() fromTable:@"BK_SHARE_BOOKS"
-                                             where:SSJShareBooksTable.booksId == booksId];
-    
-    if (![count integerValue]) {
-        return NO;
-    } else {
-        return YES;
-    }
-}
 
 - (WCTDatabase *)db {
     if (!_db) {

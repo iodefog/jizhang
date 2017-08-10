@@ -110,7 +110,7 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 #ifdef PRODUCTION
     int times = 10;
 #else
-    int times = 0;
+    int times = 10;
 #endif
     
     if (SSJLaunchTimesForCurrentVersion() > times) {//当前版本不是第一次启动
