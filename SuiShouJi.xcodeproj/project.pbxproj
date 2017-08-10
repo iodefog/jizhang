@@ -13856,13 +13856,13 @@
 		9CD9BC481CFDA4990061803B /* SSJFundingTransferDetailItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferDetailItem.h; sourceTree = "<group>"; };
 		9CD9BC491CFDA4990061803B /* SSJFundingTransferDetailItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferDetailItem.m; sourceTree = "<group>"; };
 		9CD9BC4B1CFDBFB40061803B /* SSJFundingTransferListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferListViewController.h; sourceTree = "<group>"; };
-		9CD9BC4C1CFDBFB40061803B /* SSJFundingTransferListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJFundingTransferListViewController.m; path = Controller/SSJFundingTransferListViewController.m; sourceTree = "<group>"; };
+		9CD9BC4C1CFDBFB40061803B /* SSJFundingTransferListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferListViewController.m; sourceTree = "<group>"; };
 		9CD9BC4E1CFDC5C50061803B /* SSJFundingTransferDetailCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferDetailCell.h; sourceTree = "<group>"; };
 		9CD9BC4F1CFDC5C50061803B /* SSJFundingTransferDetailCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferDetailCell.m; sourceTree = "<group>"; };
 		9CD9BC521CFEAAAE0061803B /* SSJTransferDetailHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJTransferDetailHeader.h; sourceTree = "<group>"; };
 		9CD9BC531CFEAAAE0061803B /* SSJTransferDetailHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJTransferDetailHeader.m; sourceTree = "<group>"; };
 		9CD9BC5C1CFEB12E0061803B /* SSJFundingTransferEditeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SSJFundingTransferEditeViewController.h; path = Controller/SSJFundingTransferEditeViewController.h; sourceTree = "<group>"; };
-		9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferEditeViewController.m; sourceTree = "<group>"; };
+		9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJFundingTransferEditeViewController.m; path = Controller/SSJFundingTransferEditeViewController.m; sourceTree = "<group>"; };
 		9CD9BC621CFEBCA40061803B /* SSJFundingTransferEdite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFundingTransferEdite.h; sourceTree = "<group>"; };
 		9CD9BC631CFEBCA40061803B /* SSJFundingTransferEdite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFundingTransferEdite.m; sourceTree = "<group>"; };
 		9CD9BC661CFFD3600061803B /* SSJChargeCircleModifyCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJChargeCircleModifyCell.h; sourceTree = "<group>"; };
@@ -14642,8 +14642,8 @@
 		7D49C9821F00ACF4000B7E48 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
-				9CD9BC4C1CFDBFB40061803B /* SSJFundingTransferListViewController.m */,
 				9CD9BC5C1CFEB12E0061803B /* SSJFundingTransferEditeViewController.h */,
+				9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */,
 			);
 			name = Deprecated;
 			sourceTree = "<group>";
@@ -17634,7 +17634,7 @@
 				9CD9BC421CFD2E470061803B /* SSJFundingTransferViewController.h */,
 				9CD9BC411CFD2E470061803B /* SSJFundingTransferViewController.m */,
 				9CD9BC4B1CFDBFB40061803B /* SSJFundingTransferListViewController.h */,
-				9CD9BC5D1CFEB12E0061803B /* SSJFundingTransferEditeViewController.m */,
+				9CD9BC4C1CFDBFB40061803B /* SSJFundingTransferListViewController.m */,
 				7D22A38A1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.h */,
 				7D22A38B1E5041A800190CEB /* SSJFundingTransferChargeDetailViewController.m */,
 			);

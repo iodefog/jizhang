@@ -696,7 +696,6 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         if ([db executeUpdate:@"update bk_user_budget set itype = :type, imoney = :budgetMoney, iremindmoney = :remindMoney, csdate = :beginDate, cedate = :endDate, istate = :isAutoContinued, cbilltype = :cbilltype, iremind = :isRemind, ihasremind = :isAlreadyReminded, cwritedate = :cwritedate, iversion = :iversion, operatortype = 1, cbooksid = :booksId, islastday = :isLastDay where ibid = :ID and operatortype <> 2" withParameterDictionary:parametersInfo]) {
             
             return YES;
-            
         } else {
             if (error) {
                 *error = [db lastError];
