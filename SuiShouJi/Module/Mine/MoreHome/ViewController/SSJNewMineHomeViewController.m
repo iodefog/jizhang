@@ -31,6 +31,7 @@
 #import "SSJNewMineHomeTabelviewCell.h"
 #import "SSJMoreHomeAnnouncementButton.h"
 #import "SSJMineHomeBannerHeader.h"
+#import "SSJScrollalbleAnnounceView.h"
 
 #import "SSJStartChecker.h"
 #import "SSJMineHomeTableViewItem.h"
@@ -41,6 +42,7 @@
 #import "SSJWishHelper.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJAnnoucementService.h"
+#import "SSJMineHomeHeadLineService.h"
 
 static NSString *const kTitle0 = @"心愿存钱";
 static NSString *const kTitle1 = @"记账提醒";
@@ -75,6 +77,10 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 @property(nonatomic, strong) NSArray *listItems;
 
 @property(nonatomic, strong) NSArray *announcements;
+
+@property (nonatomic, strong) SSJScrollalbleAnnounceView *announceView;
+
+@property (nonatomic, strong) SSJMineHomeHeadLineService *headLineService;
 
 @end
 
@@ -278,7 +284,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         self.listItems = self.bannerService.item.listAdItems;
         self.bannerItems = self.bannerService.item.bannerItems;
         [self.tableView reloadData];
-    } else if (service == self.annoucementService){
+    } else if (service == self.headLineService){
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
     }
 }
@@ -346,6 +352,21 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _annoucementService = [[SSJAnnoucementService alloc] initWithDelegate:self];
     }
     return _annoucementService;
+}
+
+- (SSJScrollalbleAnnounceView *)announceView {
+    if (!_announceView) {
+        _announceView = [[SSJScrollalbleAnnounceView alloc] init];
+        _announceView.hidden = YES;
+    }
+    return _announceView;
+}
+
+- (SSJMineHomeHeadLineService *)headLineService {
+    if (!_headLineService) {
+        _headLineService = [[SSJMineHomeHeadLineService alloc] initWithDelegate:self];
+    }
+    return _headLineService;
 }
 
 #pragma mark - Event

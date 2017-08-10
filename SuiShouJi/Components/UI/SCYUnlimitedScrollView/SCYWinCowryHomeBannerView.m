@@ -123,8 +123,8 @@ static const NSTimeInterval kAutoRollInterval = 5;
 - (UIPageControl *)pageControl {
     if (!_pageControl) {
         _pageControl = [[UIPageControl alloc] initWithFrame:CGRectZero];
-        _pageControl.pageIndicatorTintColor = [UIColor lightGrayColor];
-        _pageControl.currentPageIndicatorTintColor = [UIColor ssj_colorWithHex:@"#ea5559"];
+        _pageControl.pageIndicatorTintColor = [UIColor ssj_colorWithHex:@"#333333" alpha:0.2];
+        _pageControl.currentPageIndicatorTintColor = [UIColor ssj_colorWithHex:@"#333333" alpha:0.4];
         _pageControl.hidesForSinglePage = YES;
     }
     return _pageControl;
