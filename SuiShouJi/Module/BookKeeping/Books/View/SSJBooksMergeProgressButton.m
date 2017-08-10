@@ -20,6 +20,8 @@
 
 @property (nonatomic, strong) NSTimer *animationTimer;
 
+@property (nonatomic, strong) UIView *backColorView;
+
 @property (nonatomic, strong) UIView *backWhiteView;
 
 @property (nonatomic) BOOL isAnimating;
@@ -41,6 +43,7 @@
         [self addSubview:self.backGroundImage];
         [self addSubview:self.titleLab];
         [self addSubview:self.backWhiteView];
+        [self addSubview:self.backColorView];
         self.clipsToBounds = YES;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     }
@@ -115,13 +118,23 @@
     return _animationTimer;
 }
 
+- (UIView *)backColorView {
+    if (!_backColorView ) {
+        _backColorView = [[UIView alloc] init];
+        _backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _backColorView.hidden = YES;
+    }
+    return _backColorView;
+}
+
 - (UIView *)backWhiteView {
     if (!_backWhiteView ) {
         _backWhiteView = [[UIView alloc] init];
-        _backWhiteView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+        _backWhiteView.backgroundColor = [UIColor whiteColor];
         _backWhiteView.hidden = YES;
     }
     return _backWhiteView;
+
 }
 
 - (void)setTitle:(NSString *)title {
@@ -137,6 +150,7 @@
         [self.animationTimer invalidate];
         self.animationTimer = nil;
         self.backGroundImage.hidden = YES;
+        self.backColorView.hidden = YES;
         self.backWhiteView.hidden = YES;
         [self.fishImage removeFromSuperlayer];
         if (self.isSuccess) {
@@ -190,6 +204,7 @@
         self.isAnimating = !self.isAnimating;
         self.titleLab.text = @"";
         self.backGroundImage.hidden = NO;
+        self.backColorView.hidden = NO;
         self.backWhiteView.hidden = NO;
         [self.layer addSublayer:self.fishImage];
     }
@@ -197,6 +212,7 @@
 
 - (void)updateTheFishPosition {
     self.currentTime += 0.01;
+    self.backColorView.frame = CGRectMake(self.fishImage.presentationLayer.position.x + 20, 0, self.width - self.fishImage.presentationLayer.position.x - 20, self.height);
     self.backWhiteView.frame = CGRectMake(self.fishImage.presentationLayer.position.x + 20, 0, self.width - self.fishImage.presentationLayer.position.x - 20, self.height);
     double currentPercent = self.backGroundImage.frame.size.width / self.width;
     if (currentPercent >= 0.8 && !_progressDidCompelete) {

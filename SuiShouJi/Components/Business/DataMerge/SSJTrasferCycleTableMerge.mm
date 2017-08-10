@@ -63,8 +63,6 @@
                   where:SSJTransferCycleTable.beginDate.between(startDate, endDate)
                   && SSJTransferCycleTable.userId == sourceUserid
                   && SSJTransferCycleTable.operatorType != 2];
-        
-        
     }
     
     WCTError *error = select.error;
