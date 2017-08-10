@@ -220,9 +220,9 @@ static CGFloat defImageHeight = 402;
         [self.saveBtn ssj_setBorderWidth:1];
         [self.bottomView ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
         [self.saveBtn ssj_setBorderStyle:SSJBorderStyleLeft];
-        [self.saveBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
+        [self.saveBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting currentThemeModel].mainColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
         [self.saveBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
-        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor] forState:UIControlStateNormal];
+        [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting currentThemeModel].mainColor] forState:UIControlStateNormal];
         [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         self.withdrawBtn.hidden = NO;
         self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
@@ -237,11 +237,11 @@ static CGFloat defImageHeight = 402;
             [self.saveBtn ssj_setBorderWidth:1];
             [self.saveBtn ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleBottom];
             self.withdrawBtn.hidden = NO;
-            [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
+            [self.withdrawBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
             [self.withdrawBtn ssj_setBackgroundColor:[UIColor clearColor] forState:UIControlStateNormal];
         }
         [self.saveBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];//ssj_setBackgroundColor
-        [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].buttonColor] forState:UIControlStateNormal];
+        [self.saveBtn ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.buttonColor] forState:UIControlStateNormal];
         self.bottomView.hidden = NO;
         self.wishProgressView.progressColor = [UIColor ssj_colorWithHex:@"#FFBB3C"];
        

@@ -264,28 +264,28 @@ NSString *const SSJAppEvaluateSelecatedKey = @"SSJAppEvaluateSelecatedKey";
 
 - (void)favorableButtonClicked
 {
-    if ([SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
-        [SKStoreReviewController requestReview];
-        self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
-        [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
-        [self dismiss];
-    } else {
-        [CDPointActivityIndicator startAnimating];
-        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
-        storeProductVC.delegate = self;
-        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
-            [CDPointActivityIndicator stopAnimating];
-            if (!error) {
-                [self.controller presentViewController:storeProductVC animated:YES completion:nil];
-                self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
-                [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
-                [self dismiss];
-            } else {
-                [CDAutoHideMessageHUD showError:error];
-            }
-        }];
-    }
-    
+//    if ([SKStoreReviewController respondsToSelector:@selector(requestReview)]) {
+//        [SKStoreReviewController requestReview];
+//        self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
+//        [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
+//        [self dismiss];
+//    } else {
+//        [CDPointActivityIndicator startAnimating];
+//        SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
+//        storeProductVC.delegate = self;
+//        [storeProductVC loadProductWithParameters:@{SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+//            [CDPointActivityIndicator stopAnimating];
+//            if (!error) {
+//                [self.controller presentViewController:storeProductVC animated:YES completion:nil];
+//                self.evaluateSelecatedType = SSJAPPEvaluateSelecatedTypePraise;
+//                [[NSUserDefaults standardUserDefaults] setObject:@(self.evaluateSelecatedType) forKey:SSJAppEvaluateSelecatedKey];
+//                [self dismiss];
+//            } else {
+//                [CDAutoHideMessageHUD showError:error];
+//            }
+//        }];
+//    }
+//    
     [SSJAnaliyticsManager event:@"favorite_good"];
 }
 

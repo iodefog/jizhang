@@ -169,7 +169,11 @@
     _booksTypeItem = booksTypeItem;
     if (_booksTypeItem) {
         self.transferBooksView.booksTypeItem = _booksTypeItem;
-        self.bookTypeLab.text = [_booksTypeItem parentName];
+        if (_booksTypeItem.booksCategory == SSJBooksCategoryPublic) {
+            self.bookTypeLab.text = @"共享账本";
+        } else if (_booksTypeItem.booksCategory == SSJBooksCategoryPersional) {
+            self.bookTypeLab.text = @"个人账本";
+        }
         self.bookTypeLab.hidden = NO;
         self.bookTypeTitleLab.hidden = NO;
         self.chargeCountLab.hidden = NO;
