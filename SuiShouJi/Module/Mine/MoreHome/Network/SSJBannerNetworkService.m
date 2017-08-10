@@ -18,9 +18,11 @@
 }
 
 - (void)handleResult:(NSDictionary *)rootElement{
-    [super handleResult:rootElement];
-    NSDictionary *result = [NSDictionary dictionaryWithDictionary:rootElement];
-    self.item = [SSJAdItem mj_objectWithKeyValues:result];
+    if ([self.returnCode isEqualToString:@"1"]) {
+        NSDictionary *result = [rootElement objectForKey:@"results"];
+        self.item = [SSJAdItem mj_objectWithKeyValues:result];
+        
+    }
     
 }
 
