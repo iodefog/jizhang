@@ -681,22 +681,24 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 }
 
 - (NSString *)budgetTypeNames {
-    if ([[self.model.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
+    if ([self.model.billIds containsObject:SSJAllBillTypeId]) {
         return @"所有支出类别";
     }
     
-    if (self.model.billIds.count <= 4) {
-        NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:4];
-        for (NSString *typeId in self.model.billIds) {
-            NSString *billTypeName = self.budgetTypeMap[typeId];
-            if (billTypeName) {
-                [typeNameArr addObject:billTypeName];
-            }
+    // 因为有些收支类别可能不存在（例如老版本客户端有，新版本没有），所以要以取出来的类别名称为准
+    NSMutableArray *typeNameArr = [NSMutableArray arrayWithCapacity:4];
+    for (NSString *typeId in self.model.billIds) {
+        NSString *billTypeName = self.budgetTypeMap[typeId];
+        if (billTypeName.length) {
+            [typeNameArr addObject:billTypeName];
         }
+    }
+    
+    if (typeNameArr.count <= 4) {
         return [typeNameArr componentsJoinedByString:@","];
     }
     
-    return [NSString stringWithFormat:@"%d个类别", (int)self.model.billIds.count];
+    return [NSString stringWithFormat:@"%d个类别", (int)typeNameArr.count];
 }
 
 //  已有冲突预算配置的提示信息

@@ -95,20 +95,26 @@ NSString *const SSJBudgetDetailBillInfoColorKey = @"SSJBudgetDetailBillInfoColor
     if (item.isMajor) {
         item.billTypeNames = [NSString stringWithFormat:@"%@预算消费明细", budgetType];
     } else {
+        // 因为有些收支类别可能不存在（例如老版本客户端有，新版本没有），所以要以取出来的类别名称为准
+        BOOL hasMore = NO;
         NSMutableArray *billNames = [NSMutableArray array];
         for (NSString *billId in model.billIds) {
             NSDictionary *billInfo = billMapping[billId];
-            if (billInfo[SSJBudgetDetailBillInfoNameKey]) {
-                [billNames addObject:billInfo[SSJBudgetDetailBillInfoNameKey]];
+            NSString *billName = billInfo[SSJBudgetDetailBillInfoNameKey];
+            if (!billName.length) {
+                continue;
             }
+            
             if (billNames.count == 4) {
+                hasMore = YES;
                 break;
+            } else {
+                [billNames addObject:billName];
             }
         }
         
         item.billTypeNames = [NSString stringWithFormat:@"预算分类：%@", [billNames componentsJoinedByString:@"、"]];
-        
-        if (model.billIds.count > 4) {
+        if (hasMore) {
             item.billTypeNames = [NSString stringWithFormat:@"%@等", item.billTypeNames];
         }
     }
