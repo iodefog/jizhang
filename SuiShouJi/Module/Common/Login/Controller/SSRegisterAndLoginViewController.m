@@ -114,8 +114,8 @@
 - (void)initialUI {
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.scrollView];
-    [self.view addSubview:self.topView];
-    [self.view addSubview:self.titleL];
+    [self.scrollView addSubview:self.topView];
+    [self.scrollView addSubview:self.titleL];
     [self.scrollView addSubview:self.tfRegYanZhenF];
     [self.scrollView addSubview:self.tfPassword];
     [self.scrollView addSubview:self.registerAndLoginButton];

@@ -299,7 +299,7 @@ static NSString *SSJWishWithdrawMemoId = @"SSJWishWithdrawMemoId";
     if ([title isEqualToString:kTitle1] || [title isEqualToString:kTitle0]) {
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
-        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入心愿金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         newReminderCell.textInput.text = self.chargeItem.money;
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
         [newReminderCell.textInput ssj_installToolbar];

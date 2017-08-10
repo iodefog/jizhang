@@ -59,6 +59,8 @@
     [self.scrollView addSubview:self.loginButton];
     [self.scrollView addSubview:self.forgetPasswordBtn];
     [self.scrollView addSubview:self.rightBtn];
+    
+    
     [self updateViewConstraints];
 }
 
