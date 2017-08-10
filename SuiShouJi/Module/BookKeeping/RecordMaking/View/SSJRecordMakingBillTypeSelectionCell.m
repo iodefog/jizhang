@@ -85,7 +85,7 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     
     [[[RACObserve(_item, state) takeUntil:self.rac_prepareForReuseSignal] skip:1] subscribeNext:^(id x) {
         @strongify(self);
-        self.pencil.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+        [self updatePencilAppearance];
         [self updateBorderAndTextColor:YES];
     }];
     
@@ -105,8 +105,17 @@ static NSString *const kTextColorAnimationKey = @"kTextColorAnimationKey";
     if (_item.colorValue.length) {
         self.imageView.tintColor = [UIColor ssj_colorWithHex:self.item.colorValue];
     }
-    self.pencil.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+    
+    [self updatePencilAppearance];
     [self updateBorderAndTextColor:NO];
+}
+
+- (void)updatePencilAppearance {
+    self.pencil.hidden = self.item.state != SSJRecordMakingBillTypeSelectionCellStateEditing;
+    if (self.item.state == SSJRecordMakingBillTypeSelectionCellStateEditing) {
+        self.pencil.transform = CGAffineTransformIdentity;
+        self.pencil.backgroundColor = SSJ_BORDER_COLOR;
+    }
 }
 
 - (void)updateBorderAndTextColor:(BOOL)animated {
