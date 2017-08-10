@@ -52,19 +52,17 @@
     if (mergeType == SSJMergeDataTypeByWriteDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self mergeTableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
-                                                                                               fromTable:@"bk_user_charge" where:SSJUserChargeTable.writeDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                                                                                          && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                                                                                          && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                  where:SSJTransferCycleTable.writeDate.between(startDate, endDate)
+                  && SSJTransferCycleTable.beginDate <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"]
+                  && SSJTransferCycleTable.userId == sourceUserid
+                  && SSJTransferCycleTable.operatorType != 2];
         
     } else if (mergeType == SSJMergeDataTypeByBillDate) {
         select = [[db prepareSelectMultiObjectsOnResults:multiProperties
                                               fromTables:@[ [self mergeTableName] ]]
-                  where:SSJTransferCycleTable.cycleId.inTable([self mergeTableName]).in([db getOneDistinctColumnOnResult:SSJUserChargeTable.cid
-                                                                                                 fromTable:@"bk_user_charge"
-                                                                                                     where:SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate, endDate)
-                                                                                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == sourceUserid
-                                                                                    && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2])];
+                  where:SSJTransferCycleTable.beginDate.between(startDate, endDate)
+                  && SSJTransferCycleTable.userId == sourceUserid
+                  && SSJTransferCycleTable.operatorType != 2];
         
         
     }

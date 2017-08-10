@@ -243,6 +243,9 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
                 } else {
                     if (item.bannerType == 0) {
                         SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
+                        if (item.bannerTitle.length) {
+                            webVc.title = item.bannerTitle;
+                        }
                         [self.navigationController pushViewController:webVc animated:YES];
                     }
                 }
