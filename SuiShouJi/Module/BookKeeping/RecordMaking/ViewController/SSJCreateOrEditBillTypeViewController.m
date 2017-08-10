@@ -428,7 +428,7 @@ static NSString *const kIsCustomBillGuideShowedKey = @"kIsCustomBillGuideShowedK
 
 - (UIImageView *)guideView {
     if (!_guideView) {
-        _guideView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:@"record_making_guide_1"]];
+        _guideView = [[UIImageView alloc] initWithImage:[UIImage ssj_compatibleImageNamed:(self.expended ? @"record_making_guide_expense" : @"record_making_guide_income")]];
         _guideView.userInteractionEnabled = YES;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideGuideView)];
         [_guideView addGestureRecognizer:tap];
