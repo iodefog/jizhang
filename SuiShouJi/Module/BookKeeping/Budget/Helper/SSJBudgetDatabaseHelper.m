@@ -81,6 +81,10 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         while ([budgetResult next]) {
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
             SSJBudgetListCellItem *cellItem = [SSJBudgetListCellItem cellItemWithBudgetModel:budget billTypeMapping:mapping];
+            if (!cellItem) {
+                continue;
+            }
+            
             BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
@@ -172,8 +176,24 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         if (!booksId.length) {
             booksId = SSJUSERID();
         }
-        FMResultSet *budgetResult = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         
+        FMResultSet *resultSet = [db executeQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and cbooksid = ? and itype = 1", SSJUSERID(), booksId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSMutableSet *billIDs = [NSMutableSet set];
+        while ([resultSet next]) {
+            [billIDs addObject:[resultSet stringForColumn:@"cbillid"]];
+        }
+        [resultSet close];
+        
+        FMResultSet *budgetResult = [db executeQuery:@"select * from bk_user_budget where cuserid = ? and operatortype <> 2 and csdate <= ? and cedate >= ? and cbooksid = ? order by imoney desc", SSJUSERID(), currentDate, currentDate, booksId];
         if (!budgetResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -188,6 +208,20 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         NSMutableArray *yearList = [NSMutableArray array];
         
         while ([budgetResult next]) {
+            // 如果此预算的收支类别都不存在用户的类别表中的话，就过滤掉此预算
+            BOOL hasBillType = NO;
+            NSArray *budgetBillIDs = [[budgetResult stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
+            for (NSString *billID in budgetBillIDs) {
+                if ([billIDs containsObject:billID]) {
+                    hasBillType = YES;
+                    break;
+                }
+            }
+            
+            if (!hasBillType) {
+                continue;
+            }
+            
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
             BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             
@@ -753,7 +787,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
     // 当前账本所有有效支出流水的总金额
     NSMutableString *sqlStr = [[NSString stringWithFormat:@"select sum(a.imoney) from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@' and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1", SSJUSERID(), budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId] mutableCopy];
     
-    if (![[budgetModel.billIds firstObject] isEqualToString:SSJAllBillTypeId]) {
+    if (![budgetModel.billIds containsObject:SSJAllBillTypeId]) {
         NSMutableArray *tmpBillIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
         for (NSString *billId in budgetModel.billIds) {
             [tmpBillIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
