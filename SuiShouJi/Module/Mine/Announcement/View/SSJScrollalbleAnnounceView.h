@@ -7,13 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJAnnoucementItem.h"
+#import "SSJHeadLineItem.h"
 
 @interface SSJScrollalbleAnnounceView : UIView
 
-@property(nonatomic, strong) NSArray <SSJAnnoucementItem *> *items;
+@property(nonatomic, strong) SSJHeadLineItem *item;
 
-@property (nonatomic, copy) void (^announceClickedBlock)(SSJAnnoucementItem *item);
+@property (nonatomic, copy) void (^headLineClickedBlock)(SSJHeadLineItem *item);
 
 - (void)updateAppearanceAfterThemeChanged;
 

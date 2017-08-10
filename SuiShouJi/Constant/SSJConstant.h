@@ -399,6 +399,9 @@ extern NSString *const SSJLunchStartVerKey;
 //启动页模型
 extern NSString *const SSJLunchUserSignItemKey;
 
+//上一次阅读的有鱼头条的id
+extern NSString *const SSJLastReadHeadLineIdKey;
+
 /** --------------- Notification --------------- */
 #pragma mark - Notification
 //  数据同步成功通知

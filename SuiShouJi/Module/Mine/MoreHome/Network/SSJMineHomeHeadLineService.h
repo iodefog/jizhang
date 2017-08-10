@@ -10,6 +10,8 @@
 
 @interface SSJMineHomeHeadLineService : SSJBaseNetworkService
 
-@property (nonatomic, strong) NSArray *heads;
+@property (nonatomic, strong) NSArray *headLines;
+
+- (void)requestHeadLines;
 
 @end
