@@ -350,7 +350,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 
 static const void * kSSJRMBTSShowedKey = &kSSJRMBTSShowedKey;
 static const void * kSSJRMBTSVBorderViewKey = &kSSJRMBTSVBorderViewKey;
-static const void * kSSJRMBTSVListMenuKey = &kSSJRMBTSVListMenuKey;
+static const void * kSSJRMBTSVGuideMenuKey = &kSSJRMBTSVGuideMenuKey;
 static const void * kSSJRMBTSDismissHandlerKey = &kSSJRMBTSDismissHandlerKey;
 
 static const NSTimeInterval kDuration = 0.25;
@@ -369,7 +369,7 @@ static const NSTimeInterval kDuration = 0.25;
         [self borderView].layer.cornerRadius = CGRectGetWidth(rect) * 0.5;
         [self.window addSubview:[self borderView]];
         
-        [[self listMenu] showInView:self.window atPoint:CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect)) superViewInsets:UIEdgeInsetsZero finishHandle:NULL dismissHandle:^(SSJListMenu *listMenu) {
+        [[self guideView] showInView:self.window atPoint:CGPointMake(CGRectGetMidX(rect), CGRectGetMaxY(rect)) superViewInsets:UIEdgeInsetsZero finishHandle:NULL dismissHandle:^(SSJListMenu *guideView) {
             [UIView animateWithDuration:kDuration animations:^{
                 [self borderView].alpha = 0;
             } completion:^(BOOL finished) {
@@ -386,7 +386,7 @@ static const NSTimeInterval kDuration = 0.25;
 
 - (void)hideGuide {
     if ([self guideShowed]) {
-        [[self listMenu] dismiss];
+        [[self guideView] dismiss];
         [UIView animateWithDuration:kDuration animations:^{
             [self borderView].alpha = 0;
         } completion:^(BOOL finished) {
@@ -419,27 +419,27 @@ static const NSTimeInterval kDuration = 0.25;
     return borderView;
 }
 
-- (SSJListMenu *)listMenu {
-    SSJListMenu *listMenu = objc_getAssociatedObject(self, kSSJRMBTSVListMenuKey);
-    if (!listMenu) {
-        listMenu = [[SSJListMenu alloc] init];
-        listMenu.width = 192;
-        listMenu.rowHeight = 32;
-        listMenu.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-        listMenu.borderColor = [UIColor clearColor];
-        listMenu.fillColor = [UIColor ssj_colorWithHex:@"#555555"];
-        listMenu.shadowOpacity = 0;
-        listMenu.items = @[[SSJListMenuItem itemWithImageName:nil
-                                                        title:@"长按可移动、编辑、删除类别"
-                                             normalTitleColor:[UIColor whiteColor]
-                                           selectedTitleColor:nil
-                                             normalImageColor:nil
-                                           selectedImageColor:nil
-                                              backgroundColor:nil
-                                               attributedText:nil]];
-        objc_setAssociatedObject(self, kSSJRMBTSVListMenuKey, listMenu, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+- (SSJListMenu *)guideView {
+    SSJListMenu *guideView = objc_getAssociatedObject(self, kSSJRMBTSVGuideMenuKey);
+    if (!guideView) {
+        guideView = [[SSJListMenu alloc] init];
+        guideView.width = 192;
+        guideView.rowHeight = 32;
+        guideView.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        guideView.borderColor = [UIColor clearColor];
+        guideView.fillColor = [UIColor ssj_colorWithHex:@"#555555"];
+        guideView.shadowOpacity = 0;
+        guideView.items = @[[SSJListMenuItem itemWithImageName:nil
+                                                         title:@"长按可移动、编辑、删除类别"
+                                              normalTitleColor:[UIColor whiteColor]
+                                            selectedTitleColor:nil
+                                              normalImageColor:nil
+                                            selectedImageColor:nil
+                                               backgroundColor:nil
+                                                attributedText:nil]];
+        objc_setAssociatedObject(self, kSSJRMBTSVGuideMenuKey, guideView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
-    return listMenu;
+    return guideView;
 }
 
 @end

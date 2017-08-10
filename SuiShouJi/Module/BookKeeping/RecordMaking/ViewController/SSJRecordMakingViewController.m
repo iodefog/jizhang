@@ -417,12 +417,10 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         
         // 键盘输入要隐藏引导
-        if ([self needToShowGuide]) {
-            if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
-                [self.paymentTypeView hideGuide];
-            } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
-                [self.incomeTypeView hideGuide];
-            }
+        if (self.customNaviBar.selectedBillType == SSJBillTypePay) {
+            [self.paymentTypeView hideGuide];
+        } else if (self.customNaviBar.selectedBillType == SSJBillTypeIncome) {
+            [self.incomeTypeView hideGuide];
         }
         
         return NO;
