@@ -104,7 +104,7 @@
                                                    @"cwritedate":writeDate,
                                                    @"operatortype":userBillRecord[@"operatortype"],
                                                    @"iversion":@(SSJSyncVersion())}];
-                } else {
+                } else if (userBillRecord) {
                     NSDictionary *billTypeInfo = viewModel.billTypeInfo[bookBillRecord[@"cbillid"]];
                     [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
                                                    @"cuserid":SSJUSERID(),
