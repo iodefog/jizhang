@@ -191,6 +191,7 @@
     NSMutableDictionary * typeInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithTypeItem:item]];
     [typeInfo removeObjectForKey:@"selectToEdite"];
     [typeInfo removeObjectForKey:@"editeModel"];
+    [typeInfo removeObjectForKey:@"booksCategory"];
     if (![[typeInfo allKeys] containsObject:@"iversion"]) {
         [typeInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
     }

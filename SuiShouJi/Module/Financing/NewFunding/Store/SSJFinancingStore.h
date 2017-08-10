@@ -24,4 +24,8 @@
                                       Success:(void (^)(NSArray <SSJFundingItem *> *items))success
                                       failure:(void (^)(NSError *error))failure;
 
+
++ (void)fundHasDataOrNotWithFundid:(NSString *)fundId
+                           Success:(void (^)(BOOL hasData))success
+                           failure:(void (^)(NSError *error))failure;
 @end

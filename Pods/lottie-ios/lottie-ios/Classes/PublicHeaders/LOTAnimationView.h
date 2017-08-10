@@ -60,6 +60,9 @@ typedef void (^LOTAnimationCompletionBlock)(BOOL animationFinished);
 /// Sets a completion block to call when the animation has completed
 @property (nonatomic, copy, nullable) LOTAnimationCompletionBlock completionBlock;
 
+/// Set the amimation data
+@property (nonatomic, strong, nonnull) LOTComposition *sceneModel;
+
 /* 
  * Plays the animation from its current position to a specific progress. 
  * The animation will start from its current position.
@@ -137,6 +140,9 @@ typedef void (^LOTAnimationCompletionBlock)(BOOL animationFinished);
 - (void)setValue:(nonnull id)value
       forKeypath:(nonnull NSString *)keypath
          atFrame:(nullable NSNumber *)frame;
+
+/// Logs all child keypaths
+- (void)logHierarchyKeypaths;
 
 /**
  * Adds a custom subview to the animation using a LayerName from After Effects 
