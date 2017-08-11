@@ -61,7 +61,7 @@
 //    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
     self.contentBackView.left = self.headLab.right + 20;
     self.contentBackView.height = self.height;
-    self.contentBackView.right = self.width;
+    self.contentBackView.width = self.width - self.headLab.right + 20;
     self.contentBackView.centerY = self.height / 2;
     self.contentLabel.left = 0;
     self.contentLabel.centerY = self.contentBackView.centerY;
