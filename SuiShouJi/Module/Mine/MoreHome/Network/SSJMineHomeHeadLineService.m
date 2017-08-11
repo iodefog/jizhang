@@ -17,7 +17,7 @@
 
 - (void)handleResult:(NSDictionary *)rootElement {
     NSArray *resultArr = [[rootElement objectForKey:@"results"] objectForKey:@"headlines"];
-    self.heads = [SSJHeadLineItem mj_objectArrayWithKeyValuesArray:resultArr];
+    self.headLines = [SSJHeadLineItem mj_objectArrayWithKeyValuesArray:resultArr];
 }
 
 @end

@@ -229,6 +229,13 @@ FOUNDATION_EXPORT NSString *SSJUUID();
 FOUNDATION_EXPORT NSString *SSJUniqueID();
 
 /**
+ 流水、周期记账、心愿图片目录
+
+ @return <#return value description#>
+ */
+FOUNDATION_EXPORT NSString *SSJChargeImageDirectory();
+
+/**
  *  将图片存进沙盒
  *
  *  @param image 要保存的图片
@@ -267,6 +274,14 @@ FOUNDATION_EXPORT NSString *SSJImagePath(NSString *imageName);
  *  @return (NSString *) 图片url地址
  */
 FOUNDATION_EXPORT NSString *SSJGetChargeImageUrl(NSString *imageName);
+
+/**
+ 如果图片在本地存在，就返回本地URL，否则返回服务器URL
+
+ @param imgName 图片名称
+ @return 图片URL
+ */
+FOUNDATION_EXPORT NSURL *SSJChargeImgUrlWithName(NSString *imgName);
 
 
 void SSJDispatchMainSync(void (^block)(void));

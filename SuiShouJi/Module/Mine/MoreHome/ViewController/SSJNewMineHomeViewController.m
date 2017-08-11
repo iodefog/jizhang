@@ -97,6 +97,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.announceView];
     [self.view addSubview:self.tableView];
     self.images = [@[@[@"more_wish"],@[@"more_tixing"], @[@"more_pifu", @"more_zhouqi"],@[@"more_fankui", @"more_haoping"]] mutableCopy];
     self.titles = [@[@[kTitle0],@[kTitle1] , @[kTitle2 , kTitle3], @[kTitle4,kTitle5]] mutableCopy];
@@ -135,12 +136,16 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
     [self.bannerService requestBannersList];
     
+    [self.headLineService requestHeadLines];
+    
     [self.annoucementService requestAnnoucementsWithPage:1];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT;
+    
+    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
+    self.tableView.top = self.announceView.bottom;
 }
 
 #pragma mark - UITableViewDelegate
@@ -243,6 +248,9 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
                 } else {
                     if (item.bannerType == 0) {
                         SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
+                        if (item.bannerTitle.length) {
+                            webVc.title = item.bannerTitle;
+                        }
                         [self.navigationController pushViewController:webVc animated:YES];
                     }
                 }
@@ -284,8 +292,16 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         self.listItems = self.bannerService.item.listAdItems;
         self.bannerItems = self.bannerService.item.bannerItems;
         [self.tableView reloadData];
-    } else if (service == self.headLineService){
+    } else if (service == self.annoucementService){
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
+    } else if (service == self.headLineService) {
+//        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
+//        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
+//            self.announceView.item = headLine;
+//            self.announceView.height = 34;
+//            self.announceView.hidden = NO;
+//            [self.view setNeedsLayout];
+//        }
     }
 }
 
@@ -356,7 +372,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
 - (SSJScrollalbleAnnounceView *)announceView {
     if (!_announceView) {
-        _announceView = [[SSJScrollalbleAnnounceView alloc] init];
+        _announceView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
         _announceView.hidden = YES;
     }
     return _announceView;

@@ -28,4 +28,6 @@
 // banner的类型 0跳转到外部页面 1打开app内部页面
 @property (nonatomic) int bannerType;
 
+@property (nonatomic, strong) NSString *bannerTitle;
+
 @end

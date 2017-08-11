@@ -17,7 +17,8 @@
              @"bannerId" : @"id",
              @"bannerTarget" : @"iosTarget",
              @"needLogin" : @"isLogin",
-             @"bannerType" : @"targetType"
+             @"bannerType" : @"targetType",
+             @"bannerTitle" : @"bannerTitle"
              };
 }
 

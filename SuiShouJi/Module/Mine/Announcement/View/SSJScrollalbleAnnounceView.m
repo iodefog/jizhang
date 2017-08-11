@@ -12,11 +12,11 @@
 
 @property(nonatomic, strong) UIView *backView;
 
-@property(nonatomic, strong) CATextLayer *announceTextLayer;
+@property(nonatomic, strong) UILabel *contentLabel;
 
 @property(nonatomic, strong) UILabel *headLab;
 
-@property(nonatomic, strong) NSTimer *timer;
+@property(nonatomic, strong) CADisplayLink *displayLink;
 
 @property(nonatomic) NSInteger currentIndex;
 
@@ -29,8 +29,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.backView];
+        [self addSubview:self.contentLabel];
         [self addSubview:self.headLab];
-        [self.layer addSublayer:self.announceTextLayer];
         self.currentIndex = 0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
@@ -46,8 +46,8 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.timer invalidate];
-    self.timer = nil;
+    [self.displayLink invalidate];
+    self.displayLink = nil;
 }
 
 - (void)layoutSubviews {
@@ -55,25 +55,18 @@
     self.backView.frame = self.bounds;
     self.headLab.left = 10;
     self.headLab.centerY = self.height / 2;
-    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
-    CGSize textLayerSize = [currentItem.announcementTitle sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
-    self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
 //    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
-    self.announceTextLayer.left = self.headLab.right + 20;
-    self.announceTextLayer.top = self.height / 2 - textLayerSize.height / 2;
+    self.contentLabel.left = self.headLab.right + 20;
+    self.contentLabel.centerY = self.height / 2;
 }
 
-- (CATextLayer *)announceTextLayer{
-    if (!_announceTextLayer) {
-        _announceTextLayer = [CATextLayer layer];
-        _announceTextLayer.foregroundColor = [UIColor blackColor].CGColor;
-        _announceTextLayer.contentsScale = [UIScreen mainScreen].scale;
-        CATransition *transition = [[CATransition alloc]init];
-        transition.type = kCATransitionPush;
-        transition.subtype = kCATransitionFromTop;
-        _announceTextLayer.actions = @{@"string":transition};
+- (UILabel *)contentLabel{
+    if (!_contentLabel) {
+        _contentLabel = [[UILabel alloc] init];
+        _contentLabel.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
+        _contentLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     }
-    return _announceTextLayer;
+    return _contentLabel;
 }
 
 - (UILabel *)headLab{
@@ -94,117 +87,41 @@
     return _backView;
 }
 
-- (NSTimer *)timer {
-    if (!_timer) {
-        _timer = [NSTimer timerWithTimeInterval:4 target:self selector:@selector(updateCurrentAnnouncement) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+- (CADisplayLink *)displayLink {
+    if (!_displayLink) {
+        _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateTheTextPostion)];
+        _displayLink.paused = YES;
+        [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSRunLoopCommonModes];
     }
-    return _timer;
+    return _displayLink;
 }
 
-- (void)setItems:(NSArray<SSJAnnoucementItem *> *)items{
-    _items = items;
-    NSString *announcementStr = [items firstObject].announcementTitle;
-    if (!items.count) {
-        return;
+- (void)setItem:(SSJHeadLineItem *)item{
+    _item = item;
+    self.contentLabel.text = item.headContent;
+    [self.contentLabel sizeToFit];
+    if (self.contentLabel.width > self.width - self.headLab.right - 20) {
+        self.displayLink.paused = NO;
     }
-    NSMutableAttributedString *attributeStr;
-    if ([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
-        announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
-
-    } else if([_items firstObject].announcementType == SSJAnnouceMentTypeHot) {
-        announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
-    } else {
-        announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:[items firstObject].announcementTitle]];
-    }
-    self.announceTextLayer.string = attributeStr;
-    CGSize textLayerSize = [announcementStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4]}];
-    self.announceTextLayer.size = CGSizeMake(self.width - self.headLab.right - 20 ,textLayerSize.height);
-    [self setNeedsLayout];
-    [self.timer fire];
 }
 
-- (void)updateCurrentAnnouncement {
-    self.currentIndex ++;
-    if (self.currentIndex > self.items.count - 1) {
-        self.currentIndex = 0;
+- (void)updateTheTextPostion {
+    self.contentLabel.left --;
+    if (self.contentLabel.right == self.headLab.right + 20) {
+        self.contentLabel.left = self.width;
     }
-    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
-    NSString *announcementStr = currentItem.announcementTitle;
-    NSMutableAttributedString *attributeStr;
-    if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
-        announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-        
-    } else if([_items firstObject].announcementType == SSJAnnouceMentTypeHot) {
-        announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-    } else {
-        announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
-        attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-        [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-        [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-    }
-    self.announceTextLayer.string = attributeStr;
-    [self setNeedsLayout];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
+    _contentLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _headLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    SSJAnnoucementItem *currentItem = [self.items objectAtIndex:self.currentIndex];
-    NSString *announcementStr = currentItem.announcementTitle;
-    NSMutableAttributedString *attributeStr;
-    if (announcementStr.length) {
-        if (currentItem.announcementType == SSJAnnouceMentTypeNew) {
-            announcementStr = [NSString stringWithFormat:@"【new】%@",announcementStr];
-            attributeStr = [[NSMutableAttributedString alloc] initWithString:announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【new】"]];
-            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-            
-        } else if([_items firstObject].announcementType == SSJAnnouceMentTypeNew) {
-            announcementStr = [NSString stringWithFormat:@"【hot】%@",announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[announcementStr rangeOfString:@"【hot】"]];
-            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-        } else {
-            announcementStr = [NSString stringWithFormat:@"%@",announcementStr];
-            [attributeStr addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4] range:NSMakeRange(0, attributeStr.length)];
-            [attributeStr addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:[announcementStr rangeOfString:currentItem.announcementTitle]];
-        }
-        self.announceTextLayer.string = attributeStr;
-        
-        if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
-            self.backgroundColor = [UIColor whiteColor];
-        } else {
-            self.backView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor alpha:0.1];
-            self.backgroundColor = [UIColor clearColor];
-        }   
-    }
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    SSJAnnoucementItem *item = [self.items ssj_safeObjectAtIndex:self.currentIndex];
-    if (self.announceClickedBlock) {
-        self.announceClickedBlock(item);
+    [[NSUserDefaults standardUserDefaults] setObject:self.item.headId forKey:SSJLastReadHeadLineIdKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    if (self.headLineClickedBlock) {
+        self.headLineClickedBlock(self.item);
     }
 }
 

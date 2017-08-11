@@ -432,9 +432,13 @@ NSString *SSJUniqueID(){
     return strUUID;
 }
 
+NSString *SSJChargeImageDirectory() {
+    return [SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"];
+}
+
 BOOL SSJSaveImage(UIImage *image , NSString *imageName){
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:SSJChargeImageDirectory()]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:SSJChargeImageDirectory() withIntermediateDirectories:YES attributes:nil error:nil];
     }
     float imageHeight = image.size.height;
     float imageWidth = image.size.width;
@@ -447,17 +451,17 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     UIImage *resizeImage = [image ssj_scaleImageWithSize:CGSizeMake(imageWidth, imageHeight)];
     NSString *fullImageName = [imageName hasSuffix:@".jpg"] ? imageName : [NSString stringWithFormat:@"%@.jpg",imageName];
     NSData *imageData = UIImageJPEGRepresentation(resizeImage, 0.4);
-    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+    NSString *fullPath = [SSJChargeImageDirectory() stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 };
 
 BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
-    if (![[NSFileManager defaultManager] fileExistsAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"]]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] withIntermediateDirectories:YES attributes:nil error:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:SSJChargeImageDirectory()]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:SSJChargeImageDirectory() withIntermediateDirectories:YES attributes:nil error:nil];
     }
     NSString *fullImageName = [NSString stringWithFormat:@"%@-thumb.jpg",imageName];
     NSData *imageData = UIImageJPEGRepresentation([image ssj_compressWithinSize:CGSizeMake(50, 50)], 0.5);
-    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+    NSString *fullPath = [SSJChargeImageDirectory() stringByAppendingPathComponent:fullImageName];
     return [imageData writeToFile:fullPath atomically:YES];
 }
 
@@ -466,7 +470,7 @@ NSString *SSJImagePath(NSString *imageName){
         imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
     }
     NSString *fullImageName = [NSString stringWithFormat:@"%@",imageName];
-    NSString *fullPath = [[SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"] stringByAppendingPathComponent:fullImageName];
+    NSString *fullPath = [SSJChargeImageDirectory() stringByAppendingPathComponent:fullImageName];
     return fullPath;
 };
 
@@ -476,6 +480,14 @@ NSString *SSJGetChargeImageUrl(NSString *imageName){
     }
     NSString *path = [NSString stringWithFormat:@"/image/sync/%@", imageName];
     return SSJImageURLWithAPI(path);
+}
+
+NSURL *SSJChargeImgUrlWithName(NSString *imgName) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(imgName)]) {
+        return [NSURL fileURLWithPath:SSJImagePath(imgName)];
+    } else {
+        return [NSURL URLWithString:SSJGetChargeImageUrl(imgName)];
+    }
 }
 
 void SSJDispatchMainSync(void (^block)(void)) {

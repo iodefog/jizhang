@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJSyncFileModel.h"
 #import "SSJGlobalServiceManager.h"
 
 @interface SSJSynchronizeTask : NSObject
