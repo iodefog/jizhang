@@ -33,7 +33,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
     [rs close];
     
     // 查询共享账本id、类型
-    rs = [db executeQuery:@"select sb.cbooksid, sb.iparenttype from bk_share_books as sb, bk_share_books_member as sbm where sb.cbooksid = smb.cbooksid and smb.cmemberid = ? and sbm.istate = 0 and sb.operatortype <> 2"];
+    rs = [db executeQuery:@"select sb.cbooksid, sb.iparenttype from bk_share_books as sb, bk_share_books_member as sbm where sb.cbooksid = sbm.cbooksid and sbm.cmemberid = ? and sbm.istate = 0 and sb.operatortype <> 2"];
     if (!rs) {
         if (error) {
             *error = [db lastError];
