@@ -184,17 +184,7 @@ static CGFloat defImageHeight = 402;
         self.finishBtn.hidden = YES;
     }
 
-    UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
-    if (!image) {
-        NSString *imgPath = SSJLocalImagePath(self.wishModel.wishImage);
-        image = [UIImage imageWithContentsOfFile:imgPath];
-    }
-    if (!image) {
-        [self.wishImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
-    } else {
-        self.wishImageView.image = image;
-    }
-    
+    [self.wishImageView sd_setImageWithURL:SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
         self.stateBtn.enabled = YES;

@@ -34,6 +34,14 @@
     }];
 }
 
+-(void)goBackAction{
+    if (self.webView.canGoBack) {
+        [self.webView goBack];
+    }else{
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

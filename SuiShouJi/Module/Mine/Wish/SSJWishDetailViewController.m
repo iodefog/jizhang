@@ -398,17 +398,8 @@
         _topImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, kFinalImgHeight(SSJSCREENWITH))];
         _topImg.userInteractionEnabled = YES;
         _topImg.contentMode = UIViewContentModeScaleToFill;
-        UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
-        if (!image) {
-            NSString *imgPath = SSJLocalImagePath(self.wishModel.wishImage);
-            image = [UIImage imageWithContentsOfFile:imgPath];
-        }
-        if (!image) {
-            [_topImg sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
-        } else {
-            _topImg.image = image;
-        }
-        
+       NSURL *url = SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish);
+         [_topImg sd_setImageWithURL:SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
     }
     return _topImg;
 }
