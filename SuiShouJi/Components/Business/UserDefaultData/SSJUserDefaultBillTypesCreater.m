@@ -16,6 +16,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
 @implementation SSJUserDefaultBillTypesCreater
 
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    // 查询个人账本id、类型
     FMResultSet *rs = [db executeQuery:@"select cbooksid, iparenttype from bk_books_type where cuserid = ? and operatortype <> 2", userId];
     if (!rs) {
         if (error) {
@@ -31,6 +32,22 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
     }
     [rs close];
     
+    // 查询共享账本id、类型
+    rs = [db executeQuery:@"select sb.cbooksid, sb.iparenttype from bk_share_books as sb, bk_share_books_member as sbm where sb.cbooksid = smb.cbooksid and smb.cmemberid = ? and sbm.istate = 0 and sb.operatortype <> 2"];
+    if (!rs) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    while ([rs next]) {
+        [booksTypeArr addObject:@{@"cbooksid":[rs stringForColumn:@"cbooksid"],
+                                  @"iparenttype":[rs stringForColumn:@"iparenttype"]}];
+    }
+    [rs close];
+    
+    // 根据不同的账本类型创建不同的收支类别
     for (NSDictionary *booksTypeInfo in booksTypeArr) {
         NSString *booksId = booksTypeInfo[@"cbooksid"];
         SSJBooksType booksType = [booksTypeInfo[@"iparenttype"] integerValue];
