@@ -16,6 +16,8 @@
 //保存前一个视图控制器navbar和toolbar的状态
 @property (nonatomic, assign) BOOL previousNavigationControllerToolbarHidden, previousNavigationControllerNavigationBarHidden;
 @property (nonatomic, strong) UIBarButtonItem *backButton, *forwardButton, *refreshButton, *stopButton, *actionButton, *fixedSeparator, *flexibleSeparator;
+
+@property (nonatomic, strong) UIButton *gobackButton, *closeButton;
 @property (nonatomic, strong) NSURL *webViewCurrentURL;
 @property (nonatomic, strong) UIProgressView *progressView;
 @property (nonatomic, strong) UILabel *lblinkURL;
@@ -39,7 +41,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.appliesTheme = NO;
-        self.toolBarHidden=YES;
+        self.toolBarHidden = YES;
         self.showURLInNavigationBar = NO;
 //        self.showPageTitleInNavigationBar = NO;
         self.hidesBottomBarWhenPushed=YES;
@@ -54,6 +56,10 @@
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:self.navigationController.navigationBarHidden animated:YES];
     [self.navigationController setToolbarHidden:self.toolBarHidden animated:YES];
+    
+    //设置导航栏返回和关闭按钮
+    [self setUpNav];
+    
     [self.view addSubview:self.webView];
     if (self.toolBarItemTintColor) {
         [self.navigationController.toolbar setTintColor:self.toolBarItemTintColor];
@@ -192,6 +198,26 @@
     return _flexibleSeparator;
 }
 
+- (UIButton *)gobackButton{
+    if (!_gobackButton) {
+        _gobackButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+        [_gobackButton setImage:[[UIImage imageNamed:@"navigation_backOff"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _gobackButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        [_gobackButton addTarget:self action:@selector(backButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _gobackButton;
+}
+
+- (UIButton *)closeButton{
+    if (!_closeButton) {
+        _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        [_closeButton addTarget:self action:@selector(closeButtonButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _closeButton;
+}
+
 - (void)loadRequest:(NSURLRequest *)request {
     [self.webView loadRequest:request];
 }
@@ -274,7 +300,11 @@
 
 #pragma mark - UIBarButtonItem Target Action Methods
 - (void)backButtonPressed:(id)sender {
-    [self.webView goBack];
+    if ([self.webView canGoBack]) {
+        [self.webView goBack];
+        return;
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)forwardButtonPressed:(id)sender {
@@ -298,6 +328,10 @@
                                                     otherButtonTitles:@"在Safari中打开",
                                   nil];
     [actionSheet showInView:self.view];
+}
+
+- (void)closeButtonButtonPressed:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)refresh{
@@ -402,6 +436,13 @@
     return ![validSchemes containsObject:URL.scheme];
 }
 
+
+- (void)setUpNav {
+    
+    UIBarButtonItem *item1 = [[UIBarButtonItem alloc] initWithCustomView:self.gobackButton];
+    UIBarButtonItem *item2 = [[UIBarButtonItem alloc] initWithCustomView:self.closeButton];
+    self.navigationItem.leftBarButtonItems = @[item1,item2];
+}
 
 @end
 

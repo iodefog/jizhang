@@ -245,7 +245,7 @@
     NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 1,enddate = ? ,iversion = ? where wishid = ? and cuserid = ?",date,@(SSJSyncVersion()),wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1,status = 1,enddate = ? ,iversion = ? ,cwritedate = ? where wishid = ? and cuserid = ?",date,@(SSJSyncVersion()),date,wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -271,7 +271,8 @@
                     Success:(void(^)())success
                     failure:(void(^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        if (![db executeUpdate:@"update bk_wish set operatortype = 2,iversion = ? where wishid = ? and cuserid = ?",@(SSJSyncVersion()),wishId,SSJUSERID()]) {
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_wish set operatortype = 2,iversion = ?,cwritedate = ? where wishid = ? and cuserid = ?",@(SSJSyncVersion()), writeDateStr, wishId, SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
@@ -298,7 +299,7 @@
                        failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         NSString *date = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_wish set operatortype = 1, status = 2, enddate = ?, iversion = ? where wishid = ? and cuserid = ?",date,@(SSJSyncVersion()),wishId,SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_wish set operatortype = 1, status = 2, enddate = ?,cwritedate = ?, iversion = ? where wishid = ? and cuserid = ?",date, date, @(SSJSyncVersion()),wishId,SSJUSERID()]) {
             SSJDispatch_main_async_safe(^{
                 failure([db lastError]);
             });
