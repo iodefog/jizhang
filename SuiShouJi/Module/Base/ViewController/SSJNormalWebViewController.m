@@ -390,8 +390,16 @@
  */
 - (void)updateNavTitle{
     if(self.webView.isLoading) {
+        
+        //如果说是公司文字则不要标题为空
+        NSString *URLString = [self.webViewCurrentURL absoluteString];
+        if ([URLString hasPrefix:@"http://jzcms.youyuwo.com/"]) {
+            self.showPageTitleInNavigationBar = NO;
+            self.navigationItem.title = @"";
+            return;
+        }
         if(self.showURLInNavigationBar) {
-            NSString *URLString = [self.webViewCurrentURL absoluteString];
+//            NSString *URLString = [self.webViewCurrentURL absoluteString];
             URLString = [URLString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
             URLString = [URLString stringByReplacingOccurrencesOfString:@"https://" withString:@""];
             URLString = [URLString substringToIndex:[URLString length]-1];
