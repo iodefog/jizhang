@@ -122,11 +122,11 @@
 -(SSJDownLoadProgressButton *)themeStatusButton{
     if (!_themeStatusButton) {
         _themeStatusButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, 57, 21)];
-        _themeStatusButton.maskColor = @"#eb4a64";
+        _themeStatusButton.maskColor = @"#EE4F4F";
         _themeStatusButton.layer.cornerRadius = 4.f;
         _themeStatusButton.layer.masksToBounds = YES;
         _themeStatusButton.layer.borderColor = [UIColor colorWithRed:235.f / 255 green:74.f / 255 blue:100.f / 255 alpha:0.5].CGColor;
-        [_themeStatusButton.button setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_themeStatusButton.button setTitleColor:[UIColor ssj_colorWithHex:@"EE4F4F"] forState:UIControlStateNormal];
         _themeStatusButton.button.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _themeStatusButton.layer.borderWidth = 1.f;
         [_themeStatusButton.button addTarget:self action:@selector(statusButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

@@ -74,6 +74,9 @@
 /**model*/
 @property (nonatomic, strong) SSJWishModel *wishModel;
 
+/**tableView距离底部距离*/
+@property (nonatomic, assign) CGFloat bottomMargen;
+
 /**心愿流水*/
 @property (nonatomic, strong) NSMutableArray <SSJWishChargeItem *> *wishChargeListArr;
 
@@ -86,6 +89,7 @@ static CGFloat defImageHeight = 402;
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"心愿进度";
+    self.bottomMargen = -10;
     
     [self.view addSubview:self.topBg];
     [self.topBg addSubview:self.wishImageView];
@@ -102,6 +106,7 @@ static CGFloat defImageHeight = 402;
     
     [self.view addSubview:self.vLine];
     [self updateAppearanceWithTheme];
+    
     [self.view setNeedsUpdateConstraints];
 }
 
@@ -178,7 +183,7 @@ static CGFloat defImageHeight = 402;
     self.saveAmountL.text = [NSString stringWithFormat:@"已存入：%.2lf",[self.wishModel.wishSaveMoney doubleValue]];
     self.targetAmountL.text = [NSString stringWithFormat:@"目标金额：%.2lf",[self.wishModel.wishMoney doubleValue]];
     
-    if (self.wishModel.status == SSJWishStateNormalIng && [self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue]) {
+    if (self.wishModel.status == SSJWishStateNormalIng && [self.wishModel.wishSaveMoney doubleValue] >= [self.wishModel.wishMoney doubleValue]) {//完成
         self.finishBtn.hidden = NO;
     } else {
         self.finishBtn.hidden = YES;
@@ -355,10 +360,10 @@ static CGFloat defImageHeight = 402;
         make.height.greaterThanOrEqualTo(0);
     }];
     
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.tableView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(0);
         make.top.mas_equalTo(self.topBg.mas_bottom);
-        make.bottom.mas_equalTo(self.bottomView.mas_top);
+        make.bottomMargin.mas_equalTo(self.bottomMargen).priorityLow();
     }];
     
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -553,6 +558,18 @@ static CGFloat defImageHeight = 402;
         _bottomView = [[UIView alloc] init];
         [_bottomView addSubview:self.saveBtn];
         [_bottomView addSubview:self.withdrawBtn];
+        @weakify(self);
+        [RACObserve(_bottomView, hidden) subscribeNext:^(id hidden) {
+            @strongify(self);
+            SSJDispatchMainAsync(^{
+                if ([hidden boolValue]) {//隐藏
+                    self.bottomMargen = -10;
+                } else {//显示
+                    self.bottomMargen = -54;;
+                }
+                [self.view setNeedsUpdateConstraints];
+            });
+        }];
     }
     return _bottomView;
 }

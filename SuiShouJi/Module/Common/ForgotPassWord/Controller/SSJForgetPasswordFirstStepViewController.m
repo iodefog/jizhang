@@ -544,7 +544,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
         _forgetPassWordLabel.text = @"忘记密码";
         _forgetPassWordLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_7];
         [_forgetPassWordLabel sizeToFit];
-        _forgetPassWordLabel.textColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _forgetPassWordLabel.textColor = [UIColor ssj_colorWithHex:@"EE4F4F"];
     }
     return _forgetPassWordLabel;
 }

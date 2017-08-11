@@ -29,7 +29,7 @@
 -(void)awakeFromNib{
     [super awakeFromNib];
     self.registerButton.layer.cornerRadius = 3.0f;
-    self.registerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+    self.registerButton.layer.borderColor = [UIColor ssj_colorWithHex:@"EE4F4F"].CGColor;
     self.registerButton.layer.borderWidth = 1.0f;
     self.loginButton.layer.cornerRadius = 3.0f;
 }

@@ -68,7 +68,7 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
         _sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _sureBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1];
         [_sureBtn setTitle:@"知道了" forState:UIControlStateNormal];
-        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_sureBtn setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
         [_sureBtn addTarget:self action:@selector(dismiss) forControlEvents:UIControlEventTouchUpInside];
         [_sureBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:@"#e8e8e8"]];
         [_sureBtn ssj_setBorderStyle:SSJBorderStyleTop];

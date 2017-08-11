@@ -244,13 +244,12 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             } else {
                 if ([item.bannerId isEqualToString:@"10000"]) {
                     SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
+                    qiuchengWebVc.title = @"生财有道";
                     [self.navigationController pushViewController:qiuchengWebVc animated:YES];
                 } else {
                     if (item.bannerType == 0) {
                         SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.bannerTarget]];
-                        if (item.bannerTitle.length) {
-                            webVc.title = item.bannerTitle;
-                        }
+                         webVc.showPageTitleInNavigationBar = YES;
                         [self.navigationController pushViewController:webVc animated:YES];
                     }
                 }

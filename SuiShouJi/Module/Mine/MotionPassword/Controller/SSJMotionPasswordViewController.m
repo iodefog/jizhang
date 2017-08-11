@@ -512,7 +512,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _forgetPwdBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_forgetPwdBtn setTitle:@"忘记手势密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+            [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#EE4F4F"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         } else {
             [_forgetPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         }
@@ -535,7 +535,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _changeAccountBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_changeAccountBtn setTitle:@"登录其它账号" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+            [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#EE4F4F"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         } else {
             [_changeAccountBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         }
@@ -550,7 +550,7 @@ static const int kVerifyFailureTimesLimit = 5;
         _verifyLoginPwdBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_verifyLoginPwdBtn setTitle:@"忘记手势？可验证登录密码" forState:UIControlStateNormal];
         if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#eb4a64"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
+            [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:@"#EE4F4F"] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         } else {
             [_verifyLoginPwdBtn setTitleColor:[[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.motionPasswordNormalColor] colorWithAlphaComponent:0.6] forState:UIControlStateNormal];
         }

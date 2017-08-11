@@ -13,7 +13,7 @@ static const CGFloat kHeaderHeight = 50;
 static const CGFloat kBodyHeight = 72;
 static const CGFloat kFooterHeight = 54;
 
-static NSString *const kPinkColor = @"eb4a64";
+static NSString *const kPinkColor = @"EE4F4F";
 
 @interface SSJMotionPasswordLoginPasswordAlertView ()
 

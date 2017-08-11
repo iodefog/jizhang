@@ -220,7 +220,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 -(UILabel *)themePriceLabel{
     if (!_themePriceLabel) {
         _themePriceLabel = [[UILabel alloc]init];
-        _themePriceLabel.textColor = [UIColor ssj_colorWithHex:@"#eb4a64"];
+        _themePriceLabel.textColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
         _themePriceLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _themePriceLabel.text = @"免费";
         [_themePriceLabel sizeToFit];
@@ -231,7 +231,7 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
 -(SSJDownLoadProgressButton *)themeDownLoadButton{
     if (!_themeDownLoadButton) {
         _themeDownLoadButton = [[SSJDownLoadProgressButton alloc]initWithFrame:CGRectMake(0, 0, self.view.width - 56, 45)];
-        _themeDownLoadButton.maskColor = @"#eb4a64";
+        _themeDownLoadButton.maskColor = @"#EE4F4F";
         if (_item.themeStatus == 0) {
             [_themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
         }else if (_item.themeStatus == 1) {
@@ -239,11 +239,11 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
         }else if (_item.themeStatus == 2) {
             [_themeDownLoadButton.button setTitle:@"使用中" forState:UIControlStateNormal];
         }
-        [_themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_themeDownLoadButton.button setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
         [_themeDownLoadButton.button addTarget:self action:@selector(themeDownLoadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _themeDownLoadButton.layer.cornerRadius = 2.f;
         _themeDownLoadButton.layer.borderWidth = 1.f;
-        _themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
+        _themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
     }
     return _themeDownLoadButton;
 }
@@ -302,8 +302,8 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
             [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
         }else {
             [self.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
-            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
-            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#EE4F4F"]];
         }
     }else{
         if ([self.item.themeId isEqualToString:[SSJThemeSetting currentThemeModel].ID]) {
@@ -313,12 +313,12 @@ static NSString *const kCellId = @"SSJThemeImageCollectionViewCell";
             [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#a7a7a7"]];
         }else if ([[NSFileManager defaultManager] fileExistsAtPath:[[NSString ssj_themeDirectory] stringByAppendingPathComponent:self.item.themeId]]) {
             [self.themeDownLoadButton.button setTitle:@"启用" forState:UIControlStateNormal];
-            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
-            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#EE4F4F"]];
         }else{
             [self.themeDownLoadButton.button setTitle:@"下载" forState:UIControlStateNormal];
-            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#eb4a64"].CGColor;
-            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#eb4a64"]];
+            self.themeDownLoadButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
+            [self.themeDownLoadButton.button setTintColor:[UIColor ssj_colorWithHex:@"#EE4F4F"]];
         }
     }
 }
