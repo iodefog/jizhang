@@ -151,7 +151,15 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         self.header.currentVersion = self.service.updateModel.appVersion;
+#ifdef PRODUCTION
+        if (self.service.isRewardOpen) {
+            self.tableView.tableFooterView = self.footer;
+        }
+#else
+        self.tableView.tableFooterView = self.footer;
+#endif
     }
+    
 }
 
 #pragma mark - Getter
@@ -162,9 +170,6 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.tableHeaderView = self.header;
-        if (![SSJStartChecker sharedInstance].isInReview) {
-            _tableView.tableFooterView = self.footer;
-        }
         
         [_tableView registerClass:[SSJEncourageCell class] forCellReuseIdentifier:SSJEncourageCellIndetifer];
         [_tableView ssj_clearExtendSeparator];
