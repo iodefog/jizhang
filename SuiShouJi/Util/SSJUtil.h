@@ -275,6 +275,14 @@ FOUNDATION_EXPORT NSString *SSJImagePath(NSString *imageName);
  */
 FOUNDATION_EXPORT NSString *SSJGetChargeImageUrl(NSString *imageName);
 
+/**
+ 如果图片在本地存在，就返回本地URL，否则返回服务器URL
+
+ @param imgName 图片名称
+ @return 图片URL
+ */
+FOUNDATION_EXPORT NSURL *SSJChargeImgUrlWithName(NSString *imgName);
+
 
 void SSJDispatchMainSync(void (^block)(void));
 

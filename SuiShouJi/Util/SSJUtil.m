@@ -482,6 +482,14 @@ NSString *SSJGetChargeImageUrl(NSString *imageName){
     return SSJImageURLWithAPI(path);
 }
 
+NSURL *SSJChargeImgUrlWithName(NSString *imgName) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(imgName)]) {
+        return [NSURL fileURLWithPath:SSJImagePath(imgName)];
+    } else {
+        return [NSURL URLWithString:SSJGetChargeImageUrl(imgName)];
+    }
+}
+
 void SSJDispatchMainSync(void (^block)(void)) {
     if ([NSThread isMainThread]) {
         if (block) {
