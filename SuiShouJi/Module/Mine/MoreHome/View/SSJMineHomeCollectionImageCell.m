@@ -115,7 +115,7 @@
 {
     if (!_dotView) {
         _dotView = [[UIView alloc] init];
-        _dotView.backgroundColor = [UIColor ssj_colorWithHex:@"eb4a64"];
+        _dotView.backgroundColor = [UIColor ssj_colorWithHex:@"EE4F4F"];
         _dotView.size = CGSizeMake(5, 5);
         _dotView.layer.cornerRadius = 2.5;
         _dotView.hidden = YES;

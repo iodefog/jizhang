@@ -147,8 +147,8 @@
                 self.sendButton.layer.shadowOpacity = 0.15;
                 self.sendButton.userInteractionEnabled = NO;
             } else {
-                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-                self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
+                self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
                 self.sendButton.layer.shadowOpacity = 0.39;
                 self.sendButton.userInteractionEnabled = YES;
             }
@@ -175,7 +175,7 @@
         _sendButton.layer.cornerRadius = 23.f;
         [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sendButton setTitle:@"芝麻开门" forState:UIControlStateNormal];
-        _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -281,7 +281,7 @@
         if ([service.returnCode isEqualToString:@"-2008"]) {
             self.codeInput.text = service.desc;
             self.codeInput.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-            self.codeInput.textColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+            self.codeInput.textColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
             self.codeInput.enabled = NO;
         } else {
             self.codeInput.enabled = YES;

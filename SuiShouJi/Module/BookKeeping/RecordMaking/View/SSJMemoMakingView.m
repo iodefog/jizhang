@@ -178,9 +178,9 @@
     if (!_comfirmButton) {
         _comfirmButton = [[UIButton alloc]init];                         
         [_comfirmButton setTitle:@"确定" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"EE4F4F"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 3.0f;
-        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"EE4F4F"].CGColor;
         _comfirmButton.layer.borderWidth = 1.f / [UIScreen mainScreen].scale;
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }

@@ -486,9 +486,9 @@ static NSString *const kCellId = @"CategoryCollectionViewCellIdentifier";
     }
     
     if ([SSJCurrentThemeID() isEqualToString:SSJDefaultThemeID]) {
-        [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_featureDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
         
-        [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_customDeleteButton setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
         
         
     } else {
