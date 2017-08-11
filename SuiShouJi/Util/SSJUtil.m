@@ -438,7 +438,7 @@ NSString *SSJChargeImageDirectory() {
     return [SSJDocumentPath() stringByAppendingPathComponent:@"ChargePic"];
 }
 
-BOOL SSJSaveImage(UIImage *image , NSString *imageName){
+BOOL SSJSaveImage(UIImage *image , NSString *imageName) {
     if (![[NSFileManager defaultManager] fileExistsAtPath:SSJChargeImageDirectory()]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:SSJChargeImageDirectory() withIntermediateDirectories:YES attributes:nil error:nil];
     }
@@ -457,7 +457,7 @@ BOOL SSJSaveImage(UIImage *image , NSString *imageName){
     return [imageData writeToFile:fullPath atomically:YES];
 };
 
-BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
+BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName) {
     if (![[NSFileManager defaultManager] fileExistsAtPath:SSJChargeImageDirectory()]) {
         [[NSFileManager defaultManager] createDirectoryAtPath:SSJChargeImageDirectory() withIntermediateDirectories:YES attributes:nil error:nil];
     }
@@ -467,28 +467,35 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName){
     return [imageData writeToFile:fullPath atomically:YES];
 }
 
-NSString *SSJImagePath(NSString *imageName){
-    if (![imageName hasSuffix:@".jpg"]) {
-        imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+NSString *SSJLocalImagePath(NSString *imageName) {
+    if (![imageName pathExtension]) {
+        imageName = [imageName stringByAppendingPathExtension:@"jpg"];
     }
     NSString *fullImageName = [NSString stringWithFormat:@"%@",imageName];
     NSString *fullPath = [SSJChargeImageDirectory() stringByAppendingPathComponent:fullImageName];
     return fullPath;
 };
 
-NSString *SSJGetChargeImageUrl(NSString *imageName){
-    if (![imageName hasSuffix:@".jpg"] && ![imageName hasSuffix:@".webp"]) {
-        imageName = [NSString stringWithFormat:@"%@.jpg",imageName];
+NSString *SSJWebImagePath(NSString *imageName, SSJWebImgPath type) {
+    if (![imageName pathExtension]) {
+        imageName = [imageName stringByAppendingPathExtension:@"jpg"];
     }
-    NSString *path = [NSString stringWithFormat:@"/image/sync/%@", imageName];
-    return SSJImageURLWithAPI(path);
+    switch (type) {
+        case SSJWebImgPathCharge:
+            return SSJImageURLWithAPI([NSString stringWithFormat:@"/image/sync/%@", imageName]);
+            break;
+            
+        case SSJWebImgPathWish:
+            return SSJImageURLWithAPI([NSString stringWithFormat:@"/image/sync/wish/%@", imageName]);
+            break;
+    }
 }
 
-NSURL *SSJChargeImgUrlWithName(NSString *imgName) {
-    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(imgName)]) {
-        return [NSURL fileURLWithPath:SSJImagePath(imgName)];
+NSURL *SSJImageUrl(NSString *imgName, SSJWebImgPath type) {
+    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJLocalImagePath(imgName)]) {
+        return [NSURL fileURLWithPath:SSJLocalImagePath(imgName)];
     } else {
-        return [NSURL URLWithString:SSJGetChargeImageUrl(imgName)];
+        return [NSURL URLWithString:SSJWebImagePath(imgName, type)];
     }
 }
 

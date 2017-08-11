@@ -146,10 +146,6 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                     }
                 }];
                 
-                // 删除已上传的图片
-//                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(uploadImgName) error:nil];
-//                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath([self thumbImgNameWithImgName:uploadImgName]) error:nil];
-                
                 // 上传完最后一组图片后根据过程中是否有错误，调用响应的回调
                 if (self.uploadCounter == 0) {
                     if (tError) {
@@ -251,8 +247,8 @@ static NSString *const kSyncTypeKey = @"kSyncTypeKey";
                                  @"sign":sign,
                                  @"appVersion":SSJAppVersion()};
         
-        NSData *imgData = [NSData dataWithContentsOfFile:SSJImagePath(imageName)];
-        NSData *thumbData = [NSData dataWithContentsOfFile:SSJImagePath(thumbImgName)];
+        NSData *imgData = [NSData dataWithContentsOfFile:SSJLocalImagePath(imageName)];
+        NSData *thumbData = [NSData dataWithContentsOfFile:SSJLocalImagePath(thumbImgName)];
         if (!imgData && !thumbData) {
             continue;
         }

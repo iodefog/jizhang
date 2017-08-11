@@ -45,7 +45,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
                                  error:(NSError **)error {
     
     NSDictionary *billTypesInfo = [self billTypesForBooksType:booksType];
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     [self createBillTypeWithIDs:billTypesInfo[kIncomeBillIdKey]
                          userId:userId

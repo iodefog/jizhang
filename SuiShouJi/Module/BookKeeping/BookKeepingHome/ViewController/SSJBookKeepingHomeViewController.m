@@ -358,7 +358,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         bookKeepingCell.item = [listItem.chargeItems ssj_safeObjectAtIndex:indexPath.row];
         __weak typeof(self) weakSelf = self;
         bookKeepingCell.imageClickBlock = ^(SSJBillingChargeCellItem *item){
-            [UIImage ssj_loadUrl:SSJChargeImgUrlWithName(item.chargeImage) compeltion:^(NSError *error, UIImage *image) {
+            [UIImage ssj_loadUrl:SSJImageUrl(item.chargeImage, SSJWebImgPathCharge) compeltion:^(NSError *error, UIImage *image) {
                 if (image) {
                     [SSJChargeImageBrowseView showWithImage:image];
                 }
