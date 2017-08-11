@@ -295,13 +295,13 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     } else if (service == self.annoucementService){
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
     } else if (service == self.headLineService) {
-//        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
-//        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
-//            self.announceView.item = headLine;
-//            self.announceView.height = 34;
-//            self.announceView.hidden = NO;
-//            [self.view setNeedsLayout];
-//        }
+        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
+        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
+            self.announceView.item = headLine;
+            self.announceView.height = 34;
+            self.announceView.hidden = NO;
+            [self.view setNeedsLayout];
+        }
     }
 }
 

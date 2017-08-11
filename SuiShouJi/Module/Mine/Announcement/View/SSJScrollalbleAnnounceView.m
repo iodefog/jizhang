@@ -16,6 +16,8 @@
 
 @property(nonatomic, strong) UILabel *headLab;
 
+@property(nonatomic, strong) UIView *contentBackView;
+
 @property(nonatomic, strong) CADisplayLink *displayLink;
 
 @property(nonatomic) NSInteger currentIndex;
@@ -29,7 +31,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.backView];
-        [self addSubview:self.contentLabel];
+        [self addSubview:self.contentBackView];
+        [self.contentBackView addSubview:self.contentLabel];
         [self addSubview:self.headLab];
         self.currentIndex = 0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -56,8 +59,12 @@
     self.headLab.left = 10;
     self.headLab.centerY = self.height / 2;
 //    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
-    self.contentLabel.left = self.headLab.right + 20;
-    self.contentLabel.centerY = self.height / 2;
+    self.contentBackView.left = self.headLab.right + 20;
+    self.contentBackView.height = self.height;
+    self.contentBackView.right = self.width;
+    self.contentBackView.centerY = self.height / 2;
+    self.contentLabel.left = 0;
+    self.contentLabel.centerY = self.contentBackView.centerY;
 }
 
 - (UILabel *)contentLabel{
@@ -96,6 +103,15 @@
     return _displayLink;
 }
 
+- (UIView *)contentBackView {
+    if (!_contentBackView) {
+        _contentBackView = [[UIView alloc] init];
+        _contentBackView.clipsToBounds = YES;
+    }
+    return _contentBackView;
+}
+
+
 - (void)setItem:(SSJHeadLineItem *)item{
     _item = item;
     self.contentLabel.text = item.headContent;
@@ -107,8 +123,8 @@
 
 - (void)updateTheTextPostion {
     self.contentLabel.left --;
-    if (self.contentLabel.right == self.headLab.right + 20) {
-        self.contentLabel.left = self.width;
+    if (self.contentLabel.right < 0) {
+        self.contentLabel.left = self.contentBackView.width;
     }
 }
 
