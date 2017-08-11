@@ -184,17 +184,7 @@ static CGFloat defImageHeight = 402;
         self.finishBtn.hidden = YES;
     }
 
-    UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
-    if (!image) {
-        NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
-        image = [UIImage imageWithContentsOfFile:imgPath];
-    }
-    if (!image) {
-        [self.wishImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(self.wishModel.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
-    } else {
-        self.wishImageView.image = image;
-    }
-    
+    [self.wishImageView sd_setImageWithURL:SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
         self.stateBtn.enabled = YES;
@@ -268,10 +258,10 @@ static CGFloat defImageHeight = 402;
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             //删除图片(没有网络未同步成功之后)
             if (![[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage]) {//仅自定义图片
-                if ([UIImage imageWithContentsOfFile:SSJImagePath(self.wishModel.wishImage)]) {//如果图存在
+                if ([UIImage imageWithContentsOfFile:SSJLocalImagePath(self.wishModel.wishImage)]) {//如果图存在
                     //根据路径删除图片
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.wishModel.wishImage)]) {
-                        [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(self.wishModel.wishImage) error:nil];
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJLocalImagePath(self.wishModel.wishImage)]) {
+                        [[NSFileManager defaultManager] removeItemAtPath:SSJLocalImagePath(self.wishModel.wishImage) error:nil];
                     }
                 }
             }

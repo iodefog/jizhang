@@ -85,18 +85,7 @@
         }
         
         [self.wishProgressView setProgress:[item.wishSaveMoney doubleValue] / [item.wishMoney doubleValue] withAnimation:self.isShowAnimation];
-        
-        UIImage *image = [UIImage imageNamed:item.wishImage];
-        if (!image) {
-            NSString *imgPath = SSJImagePath(item.wishImage);
-            image = [UIImage imageWithContentsOfFile:imgPath];
-        }
-        if (!image) {
-            [self.bgImageView sd_setImageWithURL:[NSURL URLWithString:SSJImageURLWithAPI(item.wishImage)] placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
-        } else {
-            self.bgImageView.image = image;
-        }
-
+        [self.bgImageView sd_setImageWithURL:SSJImageUrl(item.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
         [self updateStateBtnAppearance];
     }
     
