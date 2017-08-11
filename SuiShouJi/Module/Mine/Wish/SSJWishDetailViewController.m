@@ -400,7 +400,7 @@
         _topImg.contentMode = UIViewContentModeScaleToFill;
         UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
         if (!image) {
-            NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
+            NSString *imgPath = SSJLocalImagePath(self.wishModel.wishImage);
             image = [UIImage imageWithContentsOfFile:imgPath];
         }
         if (!image) {

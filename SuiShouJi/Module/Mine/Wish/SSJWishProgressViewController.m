@@ -186,7 +186,7 @@ static CGFloat defImageHeight = 402;
 
     UIImage *image = [UIImage imageNamed:self.wishModel.wishImage];
     if (!image) {
-        NSString *imgPath = SSJImagePath(self.wishModel.wishImage);
+        NSString *imgPath = SSJLocalImagePath(self.wishModel.wishImage);
         image = [UIImage imageWithContentsOfFile:imgPath];
     }
     if (!image) {
@@ -268,10 +268,10 @@ static CGFloat defImageHeight = 402;
             [CDAutoHideMessageHUD showMessage:@"删除成功"];
             //删除图片(没有网络未同步成功之后)
             if (![[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage]) {//仅自定义图片
-                if ([UIImage imageWithContentsOfFile:SSJImagePath(self.wishModel.wishImage)]) {//如果图存在
+                if ([UIImage imageWithContentsOfFile:SSJLocalImagePath(self.wishModel.wishImage)]) {//如果图存在
                     //根据路径删除图片
-                    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.wishModel.wishImage)]) {
-                        [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(self.wishModel.wishImage) error:nil];
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:SSJLocalImagePath(self.wishModel.wishImage)]) {
+                        [[NSFileManager defaultManager] removeItemAtPath:SSJLocalImagePath(self.wishModel.wishImage) error:nil];
                     }
                 }
             }

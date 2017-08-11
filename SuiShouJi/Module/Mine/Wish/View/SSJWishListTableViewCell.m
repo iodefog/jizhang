@@ -88,7 +88,7 @@
         
         UIImage *image = [UIImage imageNamed:item.wishImage];
         if (!image) {
-            NSString *imgPath = SSJImagePath(item.wishImage);
+            NSString *imgPath = SSJLocalImagePath(item.wishImage);
             image = [UIImage imageWithContentsOfFile:imgPath];
         }
         if (!image) {
