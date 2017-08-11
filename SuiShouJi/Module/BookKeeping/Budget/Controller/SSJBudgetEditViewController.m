@@ -498,7 +498,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
 - (void)updateRemindMoneyWithCell:(SSJBudgetEditTextFieldCell *)cell {
     NSString *remindMoney = [NSString stringWithFormat:@"%.2f", self.model.remindMoney];
     NSMutableAttributedString *detailText = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"当预算金额剩余%@元时，即会提醒您哦！", remindMoney]];
-    [detailText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"eb4a64"]} range:NSMakeRange(7, remindMoney.length)];
+    [detailText setAttributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:@"EE4F4F"]} range:NSMakeRange(7, remindMoney.length)];
     cell.detailTextLabel.attributedText = detailText;
     [cell.detailTextLabel sizeToFit];
     [cell setNeedsLayout];

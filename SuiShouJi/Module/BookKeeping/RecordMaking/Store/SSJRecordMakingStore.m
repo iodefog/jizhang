@@ -143,8 +143,8 @@
             }
             //删掉已经被删掉的图片
             if (originItem.chargeImage.length && item.chargeImage.length && ![item.chargeImage isEqualToString:originItem.chargeImage]) {
-                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeImage) error:nil];
-                [[NSFileManager defaultManager] removeItemAtPath:SSJImagePath(originItem.chargeThumbImage) error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:SSJLocalImagePath(originItem.chargeImage) error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:SSJLocalImagePath(originItem.chargeThumbImage) error:nil];
                 [db executeUpdate:@"delete from BK_IMG_SYNC where CIMGNAME = ?",originItem.chargeImage];
             }
             //修改成员流水表

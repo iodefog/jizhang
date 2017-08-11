@@ -107,9 +107,9 @@
     if (!_comfirmButton) {
         _comfirmButton = [[UIButton alloc]init];
         [_comfirmButton setTitle:@"OK" forState:UIControlStateNormal];
-        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"eb4a64"] forState:UIControlStateNormal];
+        [_comfirmButton setTitleColor:[UIColor ssj_colorWithHex:@"EE4F4F"] forState:UIControlStateNormal];
         _comfirmButton.layer.cornerRadius = 29;
-        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"eb4a64"].CGColor;
+        _comfirmButton.layer.borderColor = [UIColor ssj_colorWithHex:@"EE4F4F"].CGColor;
         _comfirmButton.layer.borderWidth = 1;
         [_comfirmButton addTarget:self action:@selector(comfirmButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -203,15 +203,9 @@
     }
     
     if (self.item.chargeImage.length != 0) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            UIImage *image = [UIImage imageWithContentsOfFile:SSJImagePath(self.item.chargeImage)];
-            self.imageBrowser.image = image;
+        [self.imageBrowser sd_setImageWithURL:SSJImageUrl(self.item.chargeImage, SSJWebImgPathCharge) placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
             [self updateImageSize];
-        }else{
-            [self.imageBrowser sd_setImageWithURL:[NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)] placeholderImage:nil options:(SDWebImageProgressiveDownload | SDWebImageAllowInvalidSSLCertificates) completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                [self updateImageSize];
-            }];
-        }
+        }];
     }
 }
 

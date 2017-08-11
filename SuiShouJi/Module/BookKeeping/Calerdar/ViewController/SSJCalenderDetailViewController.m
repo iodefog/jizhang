@@ -293,11 +293,7 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     
     if (self.item.chargeImage.length) {
         SSJCalenderDetailPhotoCellItem *photoItem = [[SSJCalenderDetailPhotoCellItem alloc] init];
-        if ([[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeImage)]) {
-            photoItem.photoPath = [NSURL fileURLWithPath:SSJImagePath(self.item.chargeImage)];
-        } else {
-            photoItem.photoPath = [NSURL URLWithString:SSJGetChargeImageUrl(self.item.chargeImage)];
-        }
+        photoItem.photoPath = SSJImageUrl(self.item.chargeImage, SSJWebImgPathCharge);
         [section_1 addObject:photoItem];
     }
     

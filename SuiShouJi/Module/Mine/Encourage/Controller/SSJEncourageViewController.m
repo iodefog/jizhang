@@ -17,6 +17,7 @@
 
 #import "SSJEncourageService.h"
 #import "SSJShareManager.h"
+#import "SSJStartChecker.h"
 
 static NSString *const ktitle1 = @"关于我们";
 static NSString *const ktitle2 = @"五星好评";
@@ -150,7 +151,15 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 - (void)serverDidFinished:(SSJBaseNetworkService *)service {
     if ([service.returnCode isEqualToString:@"1"]) {
         self.header.currentVersion = self.service.updateModel.appVersion;
+#ifdef PRODUCTION
+        if (self.service.isRewardOpen) {
+            self.tableView.tableFooterView = self.footer;
+        }
+#else
+        self.tableView.tableFooterView = self.footer;
+#endif
     }
+    
 }
 
 #pragma mark - Getter
@@ -161,7 +170,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _tableView.delegate = self;
         _tableView.backgroundColor = [UIColor clearColor];
         _tableView.tableHeaderView = self.header;
-        _tableView.tableFooterView = self.footer;
+        
         [_tableView registerClass:[SSJEncourageCell class] forCellReuseIdentifier:SSJEncourageCellIndetifer];
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {

@@ -263,8 +263,12 @@ FOUNDATION_EXPORT BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName);
  *
  *  @return (NSString *)
  */
-FOUNDATION_EXPORT NSString *SSJImagePath(NSString *imageName);
+FOUNDATION_EXPORT NSString *SSJLocalImagePath(NSString *imageName);
 
+typedef NS_ENUM(NSInteger, SSJWebImgPath) {
+    SSJWebImgPathCharge = 0,
+    SSJWebImgPathWish
+};
 
 /**
  *  获取网络图片的url
@@ -273,7 +277,15 @@ FOUNDATION_EXPORT NSString *SSJImagePath(NSString *imageName);
  *
  *  @return (NSString *) 图片url地址
  */
-FOUNDATION_EXPORT NSString *SSJGetChargeImageUrl(NSString *imageName);
+FOUNDATION_EXPORT NSString *SSJWebImagePath(NSString *imageName, SSJWebImgPath type);
+
+/**
+ 如果图片在本地存在，就返回本地URL，否则返回服务器URL
+
+ @param imgName 图片名称
+ @return 图片URL
+ */
+FOUNDATION_EXPORT NSURL *SSJImageUrl(NSString *imgName, SSJWebImgPath type);
 
 
 void SSJDispatchMainSync(void (^block)(void));

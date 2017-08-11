@@ -236,7 +236,7 @@ const int SSJImmovableOrder = INT_MAX;
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cbillid = ? and cuserid = ? and cbooksid = ?", @(i + firstOrder), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(SSJSyncVersion()), item.ID, SSJUSERID(), booksID]) {
+            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ? where cbillid = ? and cuserid = ? and cbooksid = ?", @(i + firstOrder), item.ID, SSJUSERID(), booksID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{

@@ -17,9 +17,9 @@ static const int kCustomThemeVersion = 2;
 
 @implementation SSJCustomThemeManager
     
-+ (void)load {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initializeCustomTheme) name:UIApplicationDidFinishLaunchingNotification object:nil];
-}
+//+ (void)load {
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initializeCustomTheme) name:UIApplicationDidFinishLaunchingNotification object:nil];
+//}
 
 
 + (void)initializeCustomTheme {

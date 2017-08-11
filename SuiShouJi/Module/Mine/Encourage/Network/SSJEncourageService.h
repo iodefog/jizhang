@@ -37,6 +37,9 @@
 // 新浪微博id
 @property (readonly , nonatomic, copy) NSString *sinaWeiboId;
 
+/**是否开启打赏支持*/
+@property (nonatomic, assign, getter=isRewardOpen) BOOL rewardOpen;
+
 @property (nonatomic, strong) SSJAppUpdateModel *updateModel;
 
 @end

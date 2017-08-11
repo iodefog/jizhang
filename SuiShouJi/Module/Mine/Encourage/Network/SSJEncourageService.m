@@ -58,7 +58,7 @@
         self.telNum = result[@"telephone"] ? : @"400-7676-298";
         self.sinaBlog = result[@"sina_blog"] ? : @"有鱼记账";
         self.sinaWeiboId = result[@"sina_blog_id"] ? : @"5603151337";
-
+        self.rewardOpen = [result[@"reward_open"] boolValue];
         self.updateModel = [SSJAppUpdateModel mj_objectWithKeyValues:result[@"app"]];
     }
 }

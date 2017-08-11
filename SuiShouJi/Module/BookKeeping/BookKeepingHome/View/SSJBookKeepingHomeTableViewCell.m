@@ -185,8 +185,7 @@ static const CGFloat kChargeImgWidth = 30;
     _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
     if (self.item.chargeImage.length) {
-        NSURL *imgURL = [[NSFileManager defaultManager] fileExistsAtPath:SSJImagePath(self.item.chargeThumbImage)] ? [NSURL fileURLWithPath:SSJImagePath(_item.chargeThumbImage)] : [NSURL URLWithString:SSJGetChargeImageUrl(_item.chargeThumbImage)];
-        [UIImage ssj_loadUrl:imgURL compeltion:^(NSError *error, UIImage *image) {
+        [UIImage ssj_loadUrl:SSJImageUrl(self.item.chargeThumbImage, SSJWebImgPathCharge) compeltion:^(NSError *error, UIImage *image) {
             if (!image) {
                 return;
             }  

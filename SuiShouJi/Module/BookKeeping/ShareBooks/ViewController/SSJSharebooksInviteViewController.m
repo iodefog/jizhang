@@ -231,8 +231,8 @@
                 self.sendButton.layer.shadowOpacity = 0.15;
 
             } else {
-                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-                self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+                self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
+                self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
                 self.sendButton.layer.shadowOpacity = 0.39;
             }
         }];
@@ -271,7 +271,7 @@
         _sendButton.layer.cornerRadius = 23.f;
         [_sendButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sendButton setTitle:@"确认使用此暗号" forState:UIControlStateNormal];
-        _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        _sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
         _sendButton.layer.shadowOffset = CGSizeMake(0, 4);
         [_sendButton addTarget:self action:@selector(sendButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         //友盟统计
@@ -303,8 +303,8 @@
     if ([sender.titleLabel.text isEqualToString:@"随机生成"]) {
         self.codeInput.text = [SSJShareBooksHelper generateTheRandomCodeWithType:SSJRandomCodeTypeUpperLetter | SSJRandomCodeTypeNumbers length:6];
         self.randomCode = self.codeInput.text;
-        self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-        self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+        self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
+        self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
         self.sendButton.layer.shadowOpacity = 0.39;
         [SSJAnaliyticsManager event:@"sb_anhao_suiji"];
     } else {
@@ -427,8 +427,8 @@
             NSDate *expireDate = [NSDate dateWithString:self.getCodeService.overTime formatString:@"yyyy-MM-dd HH:mm:ss"];
             self.expireDateLab.text = [NSString stringWithFormat:@"暗号于%@前有效",[expireDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"]];
             [self.resendButton setTitle:@"重新生成" forState:UIControlStateNormal];
-            self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
-            self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EB4A64"].CGColor;
+            self.sendButton.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
+            self.sendButton.layer.shadowColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
             self.sendButton.layer.shadowOpacity = 0.39;
             [self.sendButton setTitle:@"发送暗号" forState:UIControlStateNormal];
         }

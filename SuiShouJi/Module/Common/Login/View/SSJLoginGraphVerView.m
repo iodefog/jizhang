@@ -163,7 +163,7 @@
     if (!_commitBtn) {
         _commitBtn = [[UIButton alloc] init];
         [_commitBtn setTitle:@"提交" forState:UIControlStateNormal];
-        _commitBtn.backgroundColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        _commitBtn.backgroundColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
     }
     return _commitBtn;
 }

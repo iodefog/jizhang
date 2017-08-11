@@ -156,7 +156,7 @@
         [_titleLabel sizeToFit];
         [_topView addSubview:_titleLabel];
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 35, 35)];
-        [_closeButton setTitleColor:[UIColor ssj_colorWithHex:@"#eb4a64"] forState:UIControlStateNormal];
+        [_closeButton setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
         _closeButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [_closeButton setImage:[UIImage imageNamed:@"close"] forState:UIControlStateNormal];
         [_closeButton addTarget:self action:@selector(closeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];

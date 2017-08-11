@@ -10,7 +10,7 @@
 
 static NSString *const kNormalBorderColorValue = @"#aaaaaa";
 
-static NSString *const kSelectedBorderColorValue = @"#eb4a64";
+static NSString *const kSelectedBorderColorValue = @"#EE4F4F";
 
 @interface SSJLoanInterestTypeAlertView ()
 

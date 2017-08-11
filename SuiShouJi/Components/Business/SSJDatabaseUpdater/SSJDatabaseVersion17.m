@@ -42,6 +42,11 @@
         return error;
     }
     
+    error = [self updateUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -103,6 +108,13 @@
         return [db lastError];
     }
     
+    return nil;
+}
+
++ (NSError *)updateUserTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"alter table BK_USER add CLASTMERGETIME TEXT"]) {
+        return [db lastError];
+    }
     return nil;
 }
 

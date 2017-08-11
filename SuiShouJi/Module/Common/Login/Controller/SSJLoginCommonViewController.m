@@ -98,7 +98,7 @@
         _titleL.text = @"登录";
         _titleL.textColor = [UIColor whiteColor];
         _titleL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        _titleL.textColor = [UIColor ssj_colorWithHex:@"#EB4A64"];
+        _titleL.textColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
     }
     return _titleL;
 }
