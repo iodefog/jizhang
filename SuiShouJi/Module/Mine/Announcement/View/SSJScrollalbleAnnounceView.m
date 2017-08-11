@@ -107,6 +107,7 @@
     if (!_contentBackView) {
         _contentBackView = [[UIView alloc] init];
         _contentBackView.clipsToBounds = YES;
+        _contentBackView.backgroundColor = [UIColor clearColor];
     }
     return _contentBackView;
 }

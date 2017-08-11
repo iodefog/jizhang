@@ -372,6 +372,22 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 - (SSJScrollalbleAnnounceView *)announceView {
     if (!_announceView) {
         _announceView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
+        @weakify(self);
+        _announceView.headLineClickedBlock = ^(SSJHeadLineItem *item){
+            @strongify(self);
+            if ([item.headId isEqualToString:@"10000"]) {
+                SSJQiuChengWebViewController *qiuchengWebVc = [[SSJQiuChengWebViewController alloc] init];
+                qiuchengWebVc.title = @"生财有道";
+                [self.navigationController pushViewController:qiuchengWebVc animated:YES];
+            } else {
+                if (item.headType == 0) {
+                    SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.target]];
+                    webVc.showPageTitleInNavigationBar = YES;
+                    [self.navigationController pushViewController:webVc animated:YES];
+                }
+            }
+
+        };
         _announceView.hidden = YES;
     }
     return _announceView;
