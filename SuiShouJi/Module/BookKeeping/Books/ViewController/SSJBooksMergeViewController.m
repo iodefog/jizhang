@@ -14,6 +14,7 @@
 #import "SSJBooksMergeProgressButton.h"
 #import "SSJBooksTransferSelectView.h"
 #import "SSJBooksSelectView.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJBooksMergeViewController ()
 
@@ -294,6 +295,7 @@
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;
         [self updateWithBookData];
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = NO;
