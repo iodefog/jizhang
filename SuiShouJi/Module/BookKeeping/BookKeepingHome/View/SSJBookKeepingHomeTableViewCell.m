@@ -91,7 +91,7 @@ static const CGFloat kChargeImgWidth = 30;
             make.bottom.mas_equalTo(self.contentView).offset(-10);
             make.left.mas_equalTo(self.categoryImageButton.mas_right).offset(16);
             make.right.mas_equalTo(self.contentView).offset(-16);
-            make.height.mas_greaterThanOrEqualTo(46);
+            make.height.mas_greaterThanOrEqualTo(46).priorityHigh();
         }];
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.categoryImageButton.mas_left).offset(-16);
@@ -104,7 +104,7 @@ static const CGFloat kChargeImgWidth = 30;
             make.bottom.mas_equalTo(self.contentView).offset(-10);
             make.left.mas_equalTo(self.contentView).offset(16);
             make.right.mas_equalTo(self.categoryImageButton.mas_left).offset(-16);
-            make.height.mas_greaterThanOrEqualTo(46);
+            make.height.mas_greaterThanOrEqualTo(46).priorityHigh();
         }];
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.categoryImageButton.mas_right).offset(16);
