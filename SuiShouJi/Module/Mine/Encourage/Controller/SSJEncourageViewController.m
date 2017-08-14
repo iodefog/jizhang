@@ -101,7 +101,7 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         [CDPointActivityIndicator startAnimating];
         SKStoreProductViewController *storeProductVC = [[SKStoreProductViewController alloc] init];
         storeProductVC.delegate = self;
-        [storeProductVC loadProductWithParameters:@{        StoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
+        [storeProductVC loadProductWithParameters:@{        SKStoreProductParameterITunesItemIdentifier:SSJAppleID()} completionBlock:^(BOOL result, NSError * _Nullable error) {
             [CDPointActivityIndicator stopAnimating];
             if (!error) {
                 [self presentViewController:storeProductVC animated:YES completion:nil];
