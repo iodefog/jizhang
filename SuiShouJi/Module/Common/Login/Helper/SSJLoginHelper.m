@@ -91,6 +91,8 @@
                 NSString *ID = [NSString stringWithFormat:@"%@_%@", bookBillRecord[@"cbillid"], bookBillRecord[@"cbooksid"]];
                 NSDictionary *userBillRecord = viewModel.userBillInfo[ID];
                 SSJBillTypeModel *billTypeModel = SSJBillTypeModel(userBillRecord[@"cbillid"]);
+                // 如果收支类别在老表中是未开启的，迁移到新表后就当作删除
+                id operatortype = [userBillRecord[@"istate"] integerValue] == 0 ? @2 : userBillRecord[@"operatortype"];
                 // 如果本地文件中没有对应的类别，说明是自定义类别，从服务端返回的类别中找
                 if (billTypeModel) {
                     [userBillTypeArray addObject:@{@"cbillid":userBillRecord[@"cbillid"],
@@ -102,7 +104,7 @@
                                                    @"cicoin":billTypeModel.icon,
                                                    @"iorder":userBillRecord[@"iorder"],
                                                    @"cwritedate":writeDate,
-                                                   @"operatortype":userBillRecord[@"operatortype"],
+                                                   @"operatortype":operatortype,
                                                    @"iversion":@(SSJSyncVersion())}];
                 } else if (userBillRecord) {
                     NSDictionary *billTypeInfo = viewModel.billTypeInfo[bookBillRecord[@"cbillid"]];
@@ -115,7 +117,7 @@
                                                    @"cicoin":billTypeInfo[@"ccoin"],
                                                    @"iorder":userBillRecord[@"iorder"],
                                                    @"cwritedate":writeDate,
-                                                   @"operatortype":userBillRecord[@"operatortype"],
+                                                   @"operatortype":operatortype,
                                                    @"iversion":@(SSJSyncVersion())}];
                 }
             }

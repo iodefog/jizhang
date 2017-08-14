@@ -13,6 +13,7 @@
 #import "SSJFundingMergeSelectView.h"
 #import "SSJCreditCardItem.h"
 #import "SSJMergeFundSelectView.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJFundingMergeViewController ()
 
@@ -302,6 +303,7 @@
         if (self.needToDelete) {
             [self.navigationController popToRootViewControllerAnimated:YES];
         }
+        [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = NO;

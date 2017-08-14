@@ -130,7 +130,6 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
-    
     [SSJThemeSetting updateTabbarAppearance];
     
     //如果第一次打开记录当前时间
@@ -171,6 +170,11 @@ NSDate *SCYEnterBackgroundTime() {
     [MQManager initWithAppkey:SSJMQAppKey completion:NULL];
     //保存app启动时间，判断是否为新用户
 //    [SSJAPPEvaluatePopView evaluatePopViewConfiguration];
+    
+    // 如果自定义主题有升级的话，会先移除之前的主题包，导致启动后4个tab图标消失，延迟执行会避免这个问题（令人费解的机制）
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [SSJCustomThemeManager initializeCustomTheme];
+    });
     
     return YES;
 }

@@ -42,8 +42,6 @@ static const NSTimeInterval kAnimationDuration = 0.25;
 
 static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
-static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
-
 @interface SSJRecordMakingViewController () <UIScrollViewDelegate, UITextFieldDelegate, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, YYKeyboardObserver>
 
 @property (nonatomic, strong) SSJRecordMakingCustomNavigationBar *customNaviBar;
@@ -1002,18 +1000,6 @@ static NSString *const kIsAlertViewShowedKey = @"kIsAlertViewShowedKey";
             wself.addOrEditBillId = billID;
         };
         [wself.navigationController pushViewController:addBillTypeVC animated:YES];
-    };
-    
-    billTypeView.shouldDeleteAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:kIsAlertViewShowedKey]) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kIsAlertViewShowedKey];
-            [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"该类别将被移动到添加类别页哦。" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:^(SSJAlertViewAction * _Nonnull action) {
-                [selectionView deleteItem:item];
-                [wself deleteItem:item ofItems:selectionView.items];
-            }], nil];
-            return NO;
-        }
-        return YES;
     };
     
     billTypeView.selectAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView, SSJRecordMakingBillTypeSelectionCellItem *item) {

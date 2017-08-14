@@ -82,7 +82,7 @@
 // bookBillsArray、billType、userBillArray是用来把收支类别数据迁移到新表中
 // 如果返回了userBillTypeArray就不会返回bookBillsArray、billType、userBillArray；反之一样
 //-----------------------------------------------------------------
-//用户用过的收支类别数据（包含自定义类别）；用于对数据进行迁移；结构：@[@{booksid:账本id,cbillid:类别id}]
+//用户用过的收支类别数据（即需要进行迁移的类别，包含自定义类别）；用于对数据进行迁移；结构：@[@{booksid:账本id,cbillid:类别id}]
 @property (nonatomic, copy) NSArray *bookBillsArray;
 
 //自定义类别数据（对应老表bk_bill_type）；结构：@{@"ID":@{...}, ...}，ID即billId

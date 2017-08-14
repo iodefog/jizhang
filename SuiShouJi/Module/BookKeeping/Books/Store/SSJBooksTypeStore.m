@@ -472,6 +472,8 @@
     NSMutableDictionary *shareBookInfo = [NSMutableDictionary dictionaryWithDictionary:[self fieldMapWithShareBookItem:item]];
     [shareBookInfo removeObjectForKey:@"editing"];
     [shareBookInfo removeObjectForKey:@"memberCount"];
+    [shareBookInfo removeObjectForKey:@"booksCategory"];
+
     if (![[shareBookInfo allKeys] containsObject:@"iversion"]) {
         [shareBookInfo setObject:@(SSJSyncVersion()) forKey:@"iversion"];
     }

@@ -192,7 +192,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:SSJ_ERROR_MESSAGE action:action, nil];
         }];
         
-        if (![self.budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
+        if (![self.budgetModel.billIds containsObject:SSJAllBillTypeId]) {
             [SSJAnaliyticsManager event:@"budget_part_detail"];
         }
         

@@ -94,7 +94,7 @@
 
 -(void)setModel:(SSJBudgetModel *)model{
     _model = model;
-    if ([_model.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
+    if ([_model.billIds containsObject:SSJAllBillTypeId]) {
         
         NSString *typeStr;
         switch (_model.type) {

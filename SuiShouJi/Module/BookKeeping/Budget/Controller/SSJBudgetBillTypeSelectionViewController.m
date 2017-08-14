@@ -182,7 +182,7 @@ static NSString *const kBudgetBillTypeSelectionCellId = @"kBudgetBillTypeSelecti
         [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"更改类别后，该预算的历史预算数据将清除重置哦" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
             
             self.selectedTypeList = self.originalBillIds;
-            BOOL allSelect = [self.selectedTypeList isEqualToArray:@[SSJAllBillTypeId]];
+            BOOL allSelect = [self.selectedTypeList containsObject:SSJAllBillTypeId];
             for (SSJBudgetBillTypeSelectionCellItem *item in self.items) {
                 if (allSelect) {
                     item.selected = YES;
