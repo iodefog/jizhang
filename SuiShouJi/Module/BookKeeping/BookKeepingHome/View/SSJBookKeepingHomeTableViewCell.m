@@ -122,11 +122,9 @@ static const CGFloat kChargeImgWidth = 30;
             make.left.and.right.and.bottom.mas_equalTo(self.labelContainer);
         }];
     } else {
-        NSArray *installedConstraints = [MASViewConstraint installedConstraintsForView:self.bottomLabel];
-        for (MASConstraint *constraint in installedConstraints) {
-            [constraint uninstall];
-        }
-        
+        [self.bottomLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.mas_equalTo(0);
+        }];
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(self.labelContainer);
         }];
