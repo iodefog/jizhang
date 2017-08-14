@@ -232,16 +232,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        self.billStickyNoteView.hidden = YES;
 //    }
     
-    float tabBarHeight = SSJ_CURRENT_THEME.tabBarBackgroundImage.length ? 0 : SSJ_TABBAR_HEIGHT;
-    
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - tabBarHeight);
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-
-    self.tableView.top = self.bookKeepingHeader.bottom;
+    [self updateTableView];
     
     self.noDataHeader.top = -60;
-    
     self.noDataHeader.size = CGSizeMake(self.view.width, self.tableView.height - 60);
     
     self.clearView.frame = self.view.frame;
@@ -802,7 +795,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 #pragma mark - Private
-
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
@@ -814,10 +806,15 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
+    [self updateTableView];
+}
+
+- (void)updateTableView {
+    self.tableView.top = self.bookKeepingHeader.bottom;
     if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
         self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
         self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-    }else{
+    } else {
         self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
         self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
     }
