@@ -12,6 +12,8 @@
 
 @property(nonatomic, strong) UIView *backView;
 
+@property(nonatomic, strong) UIView *contentBgView;
+
 @property(nonatomic, strong) UILabel *contentLabel;
 
 @property(nonatomic, strong) UILabel *headLab;
@@ -19,6 +21,8 @@
 @property(nonatomic, strong) CADisplayLink *displayLink;
 
 @property(nonatomic) NSInteger currentIndex;
+
+@property (nonatomic, strong) UIButton *closeBtn;
 
 @end
 
@@ -29,7 +33,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.backView];
-        [self addSubview:self.contentLabel];
+        [self.backView addSubview:self.contentBgView];
+        [self.contentBgView addSubview:self.contentLabel];
+        [self addSubview:self.closeBtn];
         [self addSubview:self.headLab];
         self.currentIndex = 0;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
@@ -53,11 +59,16 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     self.backView.frame = self.bounds;
-    self.headLab.left = 10;
+    self.headLab.left = 15;
     self.headLab.centerY = self.height / 2;
-//    self.announceTextLayer.position = CGPointMake(self.headLab.right + 20 + self.announceTextLayer.width, self.height / 2);
-    self.contentLabel.left = self.headLab.right + 20;
-    self.contentLabel.centerY = self.height / 2;
+    self.contentLabel.left = 0;
+    self.contentBgView.left = self.headLab.right + 15;
+    self.closeBtn.right = self.right - 15;
+    self.contentBgView.height = self.height;
+    self.contentBgView.top = 0;
+    self.contentBgView.width = self.width - self.headLab.right - 50;
+    self.closeBtn.centerY = self.height / 2;
+    self.contentLabel.centerY = self.height * 0.5;
 }
 
 - (UILabel *)contentLabel{
@@ -87,6 +98,16 @@
     return _backView;
 }
 
+- (UIView *)contentBgView {
+    if (!_contentBgView) {
+        _contentBgView = [[UIView alloc] init];
+        _contentBgView.backgroundColor = [UIColor clearColor];
+        _contentBgView.layer.masksToBounds = YES;
+    }
+    return _contentBgView;
+}
+
+
 - (CADisplayLink *)displayLink {
     if (!_displayLink) {
         _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateTheTextPostion)];
@@ -96,20 +117,41 @@
     return _displayLink;
 }
 
+- (UIButton *)closeBtn {
+    if (!_closeBtn) {
+        _closeBtn = [[UIButton alloc] init];
+        [_closeBtn setImage:[UIImage imageNamed:@"home_tankuang_close"] forState:UIControlStateNormal];
+        _closeBtn.size = CGSizeMake(20, 20);
+        @weakify(self);
+        [[_closeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+            @strongify(self);
+            if (self.headLineCloseBtnClickedBlock) {
+                self.headLineCloseBtnClickedBlock(self.item);
+            }
+        }];
+    }
+    return _closeBtn;
+}
+
 - (void)setItem:(SSJHeadLineItem *)item{
     _item = item;
     self.contentLabel.text = item.headContent;
     [self.contentLabel sizeToFit];
-    if (self.contentLabel.width > self.width - self.headLab.right - 20) {
+    if (self.contentLabel.width > self.width - self.headLab.right - 50) {
         self.displayLink.paused = NO;
     }
 }
 
 - (void)updateTheTextPostion {
-    self.contentLabel.left --;
-    if (self.contentLabel.right == self.headLab.right + 20) {
-        self.contentLabel.left = self.width;
+    self.contentLabel.centerX --;
+    if (self.contentLabel.right <= 0) {
+        self.contentLabel.centerX = self.contentLabel.width * 0.8;
     }
+}
+
+- (void)removeDisplayLink {
+    [self.displayLink invalidate];
+    self.displayLink = nil;
 }
 
 - (void)updateAppearanceAfterThemeChanged {

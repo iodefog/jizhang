@@ -111,6 +111,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.tableView registerClass:[SSJNewMineHomeTabelviewCell class] forCellReuseIdentifier:SSJNewMineHomeTabelviewCelldentifier];
     [self.tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
     // Do any additional setup after loading the view.
+    
+    [self.headLineService requestHeadLines];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -136,14 +138,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 
     [self.bannerService requestBannersList];
     
-    [self.headLineService requestHeadLines];
-    
     [self.annoucementService requestAnnoucementsWithPage:1];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    
     self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
     self.tableView.top = self.announceView.bottom;
 }
@@ -294,13 +293,21 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     } else if (service == self.annoucementService){
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
     } else if (service == self.headLineService) {
-//        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
-//        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
-//            self.announceView.item = headLine;
-//            self.announceView.height = 34;
-//            self.announceView.hidden = NO;
-//            [self.view setNeedsLayout];
-//        }
+        SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
+        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
+            self.announceView.item = headLine;
+            self.announceView.height = 0;
+            @weakify(self);
+            [UIView animateWithDuration:0.7 animations:^{
+                @strongify(self);
+                SSJDispatch_main_async_safe(^{
+                    self.announceView.height = 34;
+                    self.announceView.hidden = NO;
+                    self.tableView.top = self.announceView.bottom;
+                    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
+                });
+            }];
+        }
     }
 }
 
@@ -373,6 +380,30 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     if (!_announceView) {
         _announceView = [[SSJScrollalbleAnnounceView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 0)];
         _announceView.hidden = YES;
+        MJWeakSelf;
+        _announceView.headLineClickedBlock = ^(SSJHeadLineItem *item) {
+            //进入webview
+            SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.target]];
+            webVc.showPageTitleInNavigationBar = YES;
+            [weakSelf.navigationController pushViewController:webVc animated:YES];
+        };
+        
+        _announceView.headLineCloseBtnClickedBlock = ^(SSJHeadLineItem *item) {
+            //停止计时器
+            [weakSelf.announceView removeDisplayLink];
+            //位置更改
+            [UIView animateWithDuration:0.7 animations:^{
+                SSJDispatch_main_async_safe(^{
+                    weakSelf.announceView.height = 0;
+                    weakSelf.announceView.hidden = YES;
+                    weakSelf.tableView.top = weakSelf.announceView.bottom;
+                    weakSelf.tableView.height = weakSelf.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - weakSelf.announceView.height;
+                });
+            } completion:^(BOOL finished) {
+                [weakSelf.announceView removeFromSuperview];
+            }];
+
+        };
     }
     return _announceView;
 }
