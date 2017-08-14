@@ -232,16 +232,9 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 //        self.billStickyNoteView.hidden = YES;
 //    }
     
-    float tabBarHeight = SSJ_CURRENT_THEME.tabBarBackgroundImage.length ? 0 : SSJ_TABBAR_HEIGHT;
-    
-    self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - tabBarHeight);
-    
-    self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-
-    self.tableView.top = self.bookKeepingHeader.bottom;
+    [self updateTableView];
     
     self.noDataHeader.top = -60;
-    
     self.noDataHeader.size = CGSizeMake(self.view.width, self.tableView.height - 60);
     
     self.clearView.frame = self.view.frame;
@@ -255,12 +248,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return NO;
 }
 
-
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 66;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 80;
 }
@@ -542,6 +530,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.estimatedRowHeight = 66;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
         __weak typeof(self) weakSelf = self;
         _tableView.tableViewClickBlock = ^(){
             [weakSelf clearSelectedIndexPath];
@@ -805,7 +795,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 #pragma mark - Private
-
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
     [self.bookKeepingHeader updateAfterThemeChange];
@@ -817,10 +806,15 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.mutiFunctionButton.mainButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.secondaryButtonNormalColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor];
     self.mutiFunctionButton.mainButtonSelectedColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonNormalColor];
+    [self updateTableView];
+}
+
+- (void)updateTableView {
+    self.tableView.top = self.bookKeepingHeader.bottom;
     if (!SSJ_CURRENT_THEME.tabBarBackgroundImage.length) {
         self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom - SSJ_TABBAR_HEIGHT);
         self.tableView.contentInset = UIEdgeInsetsMake(46, 0, 0, 0);
-    }else{
+    } else {
         self.tableView.size = CGSizeMake(self.view.width, self.view.height - self.bookKeepingHeader.bottom);
         self.tableView.contentInset = UIEdgeInsetsMake(46, 0, SSJ_TABBAR_HEIGHT, 0);
     }
@@ -865,10 +859,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
+                    NSIndexPath *currentMaxIndex = nil;
                     NSInteger maxSection = [weakSelf.tableView numberOfSections];
-                    NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
-                    NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
-                                        
+                    if (maxSection > 0) {
+                        NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection - 1];
+                        currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection - 1];
+                    }
                     
                     BOOL needToReload = NO;
                     
@@ -883,11 +879,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             }
 
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                            needToReload = [currentMaxIndex compare:item.chargeIndex] == NSOrderedAscending;
                             [weakSelf.tableView endUpdates];
                             
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-
+                            
+                            if (currentMaxIndex) {
+                                needToReload = [currentMaxIndex compare:item.chargeIndex] == NSOrderedAscending;
+                            }
                         } else {
                             [self.tableView reloadData];
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];

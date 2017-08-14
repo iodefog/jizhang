@@ -87,9 +87,11 @@ static const CGFloat kChargeImgWidth = 30;
     
     if (self.item.incomeOrExpence) {
         [self.labelContainer mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.contentView).offset(10);
+            make.bottom.mas_equalTo(self.contentView).offset(-10);
             make.left.mas_equalTo(self.categoryImageButton.mas_right).offset(16);
             make.right.mas_equalTo(self.contentView).offset(-16);
-            make.centerY.mas_equalTo(self.contentView);
+            make.height.mas_greaterThanOrEqualTo(46).priorityHigh();
         }];
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.right.mas_equalTo(self.categoryImageButton.mas_left).offset(-16);
@@ -98,9 +100,11 @@ static const CGFloat kChargeImgWidth = 30;
         }];
     } else {
         [self.labelContainer mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.contentView).offset(10);
+            make.bottom.mas_equalTo(self.contentView).offset(-10);
             make.left.mas_equalTo(self.contentView).offset(16);
             make.right.mas_equalTo(self.categoryImageButton.mas_left).offset(-16);
-            make.centerY.mas_equalTo(self.contentView);
+            make.height.mas_greaterThanOrEqualTo(46).priorityHigh();
         }];
         [self.chargeImage mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.categoryImageButton.mas_right).offset(16);
@@ -118,11 +122,9 @@ static const CGFloat kChargeImgWidth = 30;
             make.left.and.right.and.bottom.mas_equalTo(self.labelContainer);
         }];
     } else {
-        NSArray *installedConstraints = [MASViewConstraint installedConstraintsForView:self.bottomLabel];
-        for (MASConstraint *constraint in installedConstraints) {
-            [constraint uninstall];
-        }
-        
+        [self.bottomLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.mas_equalTo(0);
+        }];
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.edges.mas_equalTo(self.labelContainer);
         }];
@@ -379,6 +381,7 @@ static const CGFloat kChargeImgWidth = 30;
         _bottomLabel = [[UILabel alloc]initWithFrame:CGRectZero];
         _bottomLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _bottomLabel.numberOfLines = 2;
         [_bottomLabel sizeToFit];
     }
     return _bottomLabel;
