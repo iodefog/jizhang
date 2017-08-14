@@ -85,7 +85,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 continue;
             }
             
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
+            BOOL isAllBillType = [budget.billIds containsObject:SSJAllBillTypeId];
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
                     if (isAllBillType) {
@@ -209,21 +209,23 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         while ([budgetResult next]) {
             // 如果此预算的收支类别都不存在用户的类别表中的话，就过滤掉此预算
-            BOOL hasBillType = NO;
             NSArray *budgetBillIDs = [[budgetResult stringForColumn:@"cbilltype"] componentsSeparatedByString:@","];
-            for (NSString *billID in budgetBillIDs) {
-                if ([billIDs containsObject:billID]) {
-                    hasBillType = YES;
-                    break;
+            BOOL isAllBillType = [budgetBillIDs containsObject:SSJAllBillTypeId];
+            if (!isAllBillType) {
+                BOOL hasBillType = NO;
+                for (NSString *billID in budgetBillIDs) {
+                    if ([billIDs containsObject:billID]) {
+                        hasBillType = YES;
+                        break;
+                    }
+                }
+                
+                if (!hasBillType) {
+                    continue;
                 }
             }
             
-            if (!hasBillType) {
-                continue;
-            }
-            
             SSJBudgetModel *budget = [self budgetModelWithResultSet:budgetResult inDatabase:db];
-            BOOL isAllBillType = [[budget.billIds firstObject] isEqualToString:SSJAllBillTypeId];
             
             switch (budget.type) {
                 case SSJBudgetPeriodTypeWeek:
@@ -328,7 +330,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
         NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.cicoin, b.ccolor, b.cname, b.cbillid from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
-        if (![budgetModel.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
+        if (![budgetModel.billIds containsObject:SSJAllBillTypeId]) {
             NSMutableArray *billIds = [NSMutableArray arrayWithCapacity:budgetModel.billIds.count];
             for (NSString *billId in budgetModel.billIds) {
                 [billIds addObject:[NSString stringWithFormat:@"'%@'", billId]];
@@ -571,7 +573,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        if ([billIds isEqualToString:SSJAllBillTypeId]) {
+        if ([model.billIds containsObject:SSJAllBillTypeId]) {
             
             // 检测所有相同类型（周、月、年）、账本、周期分预算总额是否大于当前设置的总预算金额
             double amount = [db doubleForQuery:@"select sum(imoney) from bk_user_budget where cuserid = ? and operatortype <> 2 and ibid <> ? and itype = ? and cbooksid = ? and csdate = ? and cedate = ? and cbilltype <> 'all'", userId, model.ID, @(model.type), model.booksId, model.beginDate, model.endDate];

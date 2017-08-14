@@ -15,6 +15,9 @@
 
 @property (nonatomic, copy) void (^headLineClickedBlock)(SSJHeadLineItem *item);
 
-- (void)updateAppearanceAfterThemeChanged;
+@property (nonatomic, copy) void (^headLineCloseBtnClickedBlock)(SSJHeadLineItem *item);
 
+- (void)updateAppearanceAfterThemeChanged;
+//移除定时器
+- (void)removeDisplayLink;
 @end

@@ -768,7 +768,7 @@ static const NSInteger kBudgetRemindScaleTextFieldTag = 1001;
                 break;
         }
         
-        if (![self.model.billIds isEqualToArray:@[SSJAllBillTypeId]]) {
+        if (![self.model.billIds containsObject:SSJAllBillTypeId]) {
             [SSJAnaliyticsManager event:@"budget_add_part"];
         }
         

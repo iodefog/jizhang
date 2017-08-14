@@ -64,22 +64,26 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
     NSDictionary *billTypesInfo = [self billTypesForBooksType:booksType];
     NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
+    NSUInteger incomeOrder = [db intForQuery:@"select max(iorder) from bk_user_bill_type where cuserid = ? and cbooksid = ? and itype = ?", userId, booksId, @(0)] + 1;
     [self createBillTypeWithIDs:billTypesInfo[kIncomeBillIdKey]
                          userId:userId
                         booksId:booksId
                       writeDate:writeDate
+                      baseOrder:incomeOrder
                        database:db
                           error:error];
     
+    NSUInteger expenseOrder = [db intForQuery:@"select max(iorder) from bk_user_bill_type where cuserid = ? and cbooksid = ? and itype = ?", userId, booksId, @(0)] + 1;
     [self createBillTypeWithIDs:billTypesInfo[kExpenseBillIdKey]
                          userId:userId
                         booksId:booksId
                       writeDate:writeDate
+                      baseOrder:expenseOrder
                        database:db
                           error:error];
 }
 
-+ (void)createBillTypeWithIDs:(NSArray *)IDs userId:(NSString *)userId booksId:(NSString *)booksId writeDate:(NSString *)writeDate database:(FMDatabase *)db error:(NSError **)error {
++ (void)createBillTypeWithIDs:(NSArray *)IDs userId:(NSString *)userId booksId:(NSString *)booksId writeDate:(NSString *)writeDate baseOrder:(NSUInteger)baseOrder database:(FMDatabase *)db error:(NSError **)error {
     [IDs enumerateObjectsUsingBlock:^(NSString *billId, NSUInteger idx, BOOL * _Nonnull stop) {
         SSJBillTypeModel *model = SSJBillTypeModel(billId);
         NSDictionary *param = @{@"cbillid":model.ID,
@@ -108,7 +112,7 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
             tmpRecord[@"cname"] = model.name;
             tmpRecord[@"ccolor"] = model.color;
             tmpRecord[@"cicoin"] = model.icon;
-            tmpRecord[@"iorder"] = @(idx);
+            tmpRecord[@"iorder"] = @(idx + baseOrder);
             tmpRecord[@"cwritedate"] = writeDate;
             tmpRecord[@"operatortype"] = @0;
             tmpRecord[@"iversion"] = @(SSJSyncVersion());
