@@ -46,6 +46,7 @@ static const NSInteger kCountdownLimit = 60;    //  倒计时时限
 #pragma mark - Lifecycle
 - (void)dealloc {
 //    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextFieldTextDidChangeNotification object:nil];
+    [self.countdownTimer invalidate];
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {

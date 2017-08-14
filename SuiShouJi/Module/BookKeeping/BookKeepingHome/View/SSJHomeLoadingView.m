@@ -27,6 +27,8 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self.timer invalidate];
+    self.timer = nil;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

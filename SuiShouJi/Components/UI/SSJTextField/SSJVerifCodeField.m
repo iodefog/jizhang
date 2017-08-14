@@ -38,6 +38,7 @@ static const NSInteger kCountdownLimit = 60;
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self.observer];
+    [self invalidateTimer];
 }
 
 - (instancetype)initWithGetCodeType:(SSJRegistAndForgetPasswordType)type {
