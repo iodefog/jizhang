@@ -16,6 +16,8 @@
 
 @property(nonatomic) UIImage *cellImage;
 
+@property (nonatomic, strong) UIView *dotView;
+
 
 @end
 
@@ -27,8 +29,8 @@
         [self.contentView addSubview:self.cellImageView];
         
         [self.contentView addSubview:self.titleLab];
-
         
+        [self.contentView addSubview:self.dotView];
     }
     return self;
 }
@@ -52,6 +54,12 @@
         make.centerY.mas_equalTo(self.cellImageView);
     }];
     
+    [self.dotView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.cellImageView.mas_right);
+        make.size.mas_equalTo(CGSizeMake(5, 5));
+        make.centerY.mas_equalTo(self.cellImageView.mas_top);
+    }];
+    
     [super updateConstraints];
 }
 
@@ -69,6 +77,18 @@
         _cellImageView = [[UIImageView alloc]init];
     }
     return _cellImageView;
+}
+
+- (UIView *)dotView
+{
+    if (!_dotView) {
+        _dotView = [[UIView alloc] init];
+//        _dotView.size = CGSizeMake(5, 5);
+        _dotView.layer.cornerRadius = 2.5;
+        _dotView.hidden = YES;
+        [_dotView clipsToBounds];
+    }
+    return _dotView;
 }
 
 
@@ -90,7 +110,11 @@
     } else {
         self.cellImageView.image = [UIImage imageNamed:item.image];
     }
-    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO && [item.title isEqualToString:@"爱的鼓励"]) {
+        self.dotView.hidden = NO;
+    } else {
+        self.dotView.hidden = YES;
+    }
     
     [self setNeedsUpdateConstraints];
 }
@@ -98,6 +122,7 @@
 - (void)updateCellAppearanceAfterThemeChanged{
     [super updateCellAppearanceAfterThemeChanged];
     self.titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    self.dotView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
 }
 
 

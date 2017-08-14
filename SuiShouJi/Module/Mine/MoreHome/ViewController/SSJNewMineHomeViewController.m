@@ -200,7 +200,6 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         [self.navigationController pushViewController:themeVC animated:YES];
         return;
     }
-
     
     //  周期记账
     if ([item.title isEqualToString:kTitle3]) {
@@ -221,9 +220,16 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         return;
     }
     
+    //爱的鼓励
     if ([item.title isEqualToString:kTitle5]) {
         SSJEncourageViewController *encourageVc = [[SSJEncourageViewController alloc] init];
         [self.navigationController pushViewController:encourageVc animated:YES];
+        //存储
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:SSJLoveKey];//已经显示过
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
         return;
     }
     

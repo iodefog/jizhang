@@ -67,6 +67,8 @@ NSString *const SSJAnnouncementHaveReadKey = @"SSJAnnouncementHaveReadKey";
 
 NSString *const SSJLastReadHeadLineIdKey = @"SSJLastReadHeadLineIdKey";
 
+NSString *const SSJLoveKey = @"SSJLoveKey";
+
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
 NSString *const SSJSyncDataFailureNotification = @"SSJSyncDataFailureNotification";

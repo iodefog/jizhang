@@ -402,6 +402,9 @@ extern NSString *const SSJLunchUserSignItemKey;
 //上一次阅读的有鱼头条的id
 extern NSString *const SSJLastReadHeadLineIdKey;
 
+//是否显示小红点
+extern NSString *const SSJLoveKey;
+
 /** --------------- Notification --------------- */
 #pragma mark - Notification
 //  数据同步成功通知
