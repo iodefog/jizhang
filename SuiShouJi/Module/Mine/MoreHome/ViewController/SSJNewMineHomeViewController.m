@@ -390,6 +390,12 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _announceView.headLineClickedBlock = ^(SSJHeadLineItem *item) {
             //进入webview
             SSJAnnouncementWebViewController *webVc = [SSJAnnouncementWebViewController webViewVCWithURL:[NSURL URLWithString:item.target]];
+            SSJAnnoucementItem *annItem = [[SSJAnnoucementItem alloc] init];
+            annItem.announcementTitle = item.headContent;
+            annItem.announcementUrl = item.target;
+            annItem.announcementType = SSJAnnouceMentTypeHot;
+            annItem.announcementContent = item.headContent;
+            webVc.item = annItem;
             webVc.showPageTitleInNavigationBar = YES;
             [weakSelf.navigationController pushViewController:webVc animated:YES];
         };
