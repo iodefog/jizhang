@@ -255,12 +255,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     return NO;
 }
 
-
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 66;
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     return 80;
 }
@@ -542,6 +537,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.showsVerticalScrollIndicator = NO;
+        _tableView.estimatedRowHeight = 66;
+        _tableView.rowHeight = UITableViewAutomaticDimension;
         __weak typeof(self) weakSelf = self;
         _tableView.tableViewClickBlock = ^(){
             [weakSelf clearSelectedIndexPath];
@@ -865,10 +862,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                 self.tableView.hasData = YES;
                 if (weakSelf.newlyAddChargeArr.count && !_hasChangeBooksType) {
                     
+                    NSIndexPath *currentMaxIndex = nil;
                     NSInteger maxSection = [weakSelf.tableView numberOfSections];
-                    NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection];
-                    NSIndexPath *currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection];
-                                        
+                    if (maxSection > 0) {
+                        NSInteger rowCount = [weakSelf.tableView numberOfRowsInSection:maxSection - 1];
+                        currentMaxIndex = [NSIndexPath indexPathForRow:rowCount - 1 inSection:maxSection - 1];
+                    }
                     
                     BOOL needToReload = NO;
                     
@@ -883,11 +882,13 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
                             }
 
                             [self.tableView insertRowsAtIndexPaths:@[item.chargeIndex] withRowAnimation:UITableViewRowAnimationTop];
-                            needToReload = [currentMaxIndex compare:item.chargeIndex] == NSOrderedAscending;
                             [weakSelf.tableView endUpdates];
                             
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
-
+                            
+                            if (currentMaxIndex) {
+                                needToReload = [currentMaxIndex compare:item.chargeIndex] == NSOrderedAscending;
+                            }
                         } else {
                             [self.tableView reloadData];
                             [weakSelf.tableView scrollToRowAtIndexPath:item.chargeIndex atScrollPosition:UITableViewScrollPositionBottom animated:NO];
