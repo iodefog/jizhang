@@ -171,7 +171,8 @@
                                        SSJUserChargeTable.version,
                                        SSJUserChargeTable.billId,
                                        SSJUserChargeTable.chargeType,
-                                       SSJUserChargeTable.operatorType
+                                       SSJUserChargeTable.operatorType,
+                                       SSJUserChargeTable.cid
                                    }
                                      withObject:userCharge
                                           where:SSJUserChargeTable.chargeId == userCharge.chargeId]) {
@@ -188,7 +189,7 @@
             
         }
         
-        // 取出账本中所有的流水
+        // 取出账本中所有的周期记账
         NSArray *periodChargeArr = [self.db getObjectsOfClass:SSJChargePeriodConfigTable.class fromTable:@"BK_CHARGE_PERIOD_CONFIG"
                                                   where:SSJChargePeriodConfigTable.userId == userId
                               && SSJChargePeriodConfigTable.booksId == sourceBooksId

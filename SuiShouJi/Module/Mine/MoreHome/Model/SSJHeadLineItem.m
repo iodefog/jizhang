@@ -18,4 +18,8 @@
              };
 }
 
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
 @end
