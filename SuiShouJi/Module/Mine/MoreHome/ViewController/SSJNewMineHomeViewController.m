@@ -118,6 +118,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     [self ssj_remindUserToSetMotionPasswordIfNeeded];
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -139,6 +140,19 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.bannerService requestBannersList];
     
     [self.annoucementService requestAnnoucementsWithPage:1];
+    
+    //开启定时器
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO && self.announceView.isDisplayRun) {
+        [self.announceView startAnimation];
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    //暂停计时器
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO && self.announceView.isDisplayRun) {
+        [self.announceView stopAnimation];
+    }
 }
 
 - (void)viewDidLayoutSubviews {
@@ -393,7 +407,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             SSJAnnoucementItem *annItem = [[SSJAnnoucementItem alloc] init];
             annItem.announcementTitle = item.headContent;
             annItem.announcementUrl = item.target;
-            annItem.announcementType = SSJAnnouceMentTypeHot;
+            annItem.announcementType = item.headType;
             annItem.announcementContent = item.headContent;
             webVc.item = annItem;
             webVc.showPageTitleInNavigationBar = YES;
@@ -401,7 +415,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         };
         
         _announceView.headLineCloseBtnClickedBlock = ^(SSJHeadLineItem *item) {
-            //停止计时器
+            //移除计时器
             [weakSelf.announceView removeDisplayLink];
             //位置更改
             [UIView animateWithDuration:0.7 animations:^{

@@ -17,7 +17,17 @@
 
 @property (nonatomic, copy) void (^headLineCloseBtnClickedBlock)(SSJHeadLineItem *item);
 
+/**是否开启定时器*/
+@property (nonatomic, assign, readonly) BOOL isDisplayRun;
+
 - (void)updateAppearanceAfterThemeChanged;
+
+//开始
+- (void)startAnimation;
+
+//暂停
+- (void)stopAnimation;
+
 //移除定时器
 - (void)removeDisplayLink;
 @end

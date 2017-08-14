@@ -52,8 +52,7 @@
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self.displayLink invalidate];
-    self.displayLink = nil;
+    [self removeDisplayLink];
 }
 
 - (void)layoutSubviews {
@@ -138,7 +137,8 @@
     self.contentLabel.text = item.headContent;
     [self.contentLabel sizeToFit];
     if (self.contentLabel.width > self.width - self.headLab.right - 50) {
-        self.displayLink.paused = NO;
+        [self startAnimation];
+        _isDisplayRun = YES;
     }
 }
 
@@ -149,9 +149,21 @@
     }
 }
 
+//移除
 - (void)removeDisplayLink {
+    self.displayLink.paused = YES;
     [self.displayLink invalidate];
     self.displayLink = nil;
+}
+
+//开始
+- (void)startAnimation {
+    self.displayLink.paused = NO;
+}
+
+//暂停
+- (void)stopAnimation {
+    self.displayLink.paused = YES;
 }
 
 - (void)updateAppearanceAfterThemeChanged {
