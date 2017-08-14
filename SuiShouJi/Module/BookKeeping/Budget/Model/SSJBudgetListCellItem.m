@@ -12,36 +12,39 @@
 @implementation SSJBudgetListCellItem
 
 + (instancetype)cellItemWithBudgetModel:(SSJBudgetModel *)model billTypeMapping:(NSDictionary *)mapping {
-    // 因为有些收支类别可能不存在（例如老版本客户端有，新版本没有），所以要以取出来的类别名称为准
-    BOOL hasMore = NO;
-    NSMutableArray *billTypeNames = [NSMutableArray arrayWithCapacity:model.billIds.count];
-    for (NSString *billId in model.billIds) {
-        NSDictionary *billInfo = mapping[billId];
-        NSString *typeName = billInfo[@"name"];
-        if (!typeName.length) {
-            continue;
+    NSMutableString *billTypeName = nil;
+    if (![model.billIds containsObject:SSJAllBillTypeId]) {
+        // 因为有些收支类别可能不存在（例如老版本客户端有，新版本没有），所以要以取出来的类别名称为准
+        BOOL hasMore = NO;
+        NSMutableArray *billTypeNames = [NSMutableArray arrayWithCapacity:model.billIds.count];
+        for (NSString *billId in model.billIds) {
+            NSDictionary *billInfo = mapping[billId];
+            NSString *typeName = billInfo[@"name"];
+            if (!typeName.length) {
+                continue;
+            }
+            
+            if (billTypeNames.count >= 4) {
+                hasMore = YES;
+                break;
+            } else {
+                [billTypeNames addObject:typeName];
+            }
         }
         
-        if (billTypeNames.count >= 4) {
-            hasMore = YES;
-            break;
-        } else {
-            [billTypeNames addObject:typeName];
+        if (billTypeNames.count == 0) {
+            return nil;
         }
-    }
-    
-    if (billTypeNames.count == 0) {
-        return nil;
-    }
-    
-    NSMutableString *billTypeName = [[billTypeNames componentsJoinedByString:@","] mutableCopy];
-    if (hasMore) {
-        [billTypeName appendString:@"等"];
+        
+        billTypeName = [[billTypeNames componentsJoinedByString:@","] mutableCopy];
+        if (hasMore) {
+            [billTypeName appendString:@"等"];
+        }
     }
     
     SSJBudgetListCellItem *item = [[SSJBudgetListCellItem alloc] init];
     item.budgetID = model.ID;
-    item.isMajor = [model.billIds isEqualToArray:@[SSJAllBillTypeId]];
+    item.isMajor = [model.billIds containsObject:SSJAllBillTypeId];
     item.billTypeName = billTypeName;
     item.period = [NSString stringWithFormat:@"%@——%@", model.beginDate, model.endDate];
     
