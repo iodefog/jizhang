@@ -93,6 +93,9 @@
     NSDictionary *info = @{@"cwritedate":writeDateStr,
                            @"iversion":@(SSJSyncVersion())};
     
+    // 未开启的类别迁移到新表中改为删除
+    [db executeUpdate:@"update bk_user_bill set operatortype = 2 where istate = 0"];
+    
     // 将流水依赖的收支类别迁移到新表中
     if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, cuserid, cbooksid, iorder, itype, cname, ccolor, cicoin, cwritedate, operatortype, iversion) select ub.cbillid, ub.cuserid, ub.cbooksid, ub.iorder, bt.itype, bt.cname, bt.ccolor, bt.ccoin, :cwritedate, ub.operatortype, :iversion from bk_bill_type as bt, bk_user_bill as ub, bk_user_charge as uc where bt.id = ub.cbillid and ub.cuserid = uc.cuserid and ub.cbillid = uc.ibillid and ub.cbooksid = uc.cbooksid and uc.operatortype <> 2 group by ub.cbillid, ub.cbooksid, ub.cuserid" withParameterDictionary:info]) {
         return [db lastError];
