@@ -177,7 +177,7 @@
                                                                                  SSJBillTypeModel(@"1139"),
                                                                                  SSJBillTypeModel(@"1138"),
                                                                                  SSJBillTypeModel(@"1121"),
-                                                                                 SSJBillTypeModel(@"1044"),
+                                                                                 SSJBillTypeModel(@"1198"),
                                                                                  SSJBillTypeModel(@"1166")]]];
     
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"居住" items:@[SSJBillTypeModel(@"1009"),
@@ -295,7 +295,7 @@
                                                                                  SSJBillTypeModel(@"1013"),
                                                                                  SSJBillTypeModel(@"1001")]]];
     [categories addObject:[SSJBillTypeCategoryModel modelWithTitle:@"交通" items:@[SSJBillTypeModel(@"1002"),
-                                                                                 SSJBillTypeModel(@"1044"),
+                                                                                 SSJBillTypeModel(@"1198"),
                                                                                  SSJBillTypeModel(@"1122"),
                                                                                  SSJBillTypeModel(@"1136"),
                                                                                  SSJBillTypeModel(@"1193"),

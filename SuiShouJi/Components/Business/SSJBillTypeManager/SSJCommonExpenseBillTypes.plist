@@ -574,18 +574,18 @@
 		<key>color</key>
 		<string>#766bc8</string>
 	</dict>
-	<key>1044</key>
+	<key>1198</key>
 	<dict>
 		<key>ID</key>
-		<string>1044</string>
+		<string>1198</string>
 		<key>name</key>
-		<string>机票</string>
+		<string>飞机</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
-		<string>bt_jipiao</string>
+		<string>bt_airplan</string>
 		<key>color</key>
-		<string>#3c81ce</string>
+		<string>#B0C133</string>
 	</dict>
 	<key>1045</key>
 	<dict>
