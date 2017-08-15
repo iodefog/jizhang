@@ -227,13 +227,11 @@
         _transferInFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferInFundItem = fundItem;
-            if (self.transferInType == SSJFundsTransferTypeAll) {
-                if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
-                    self.transferInType = SSJFundsTransferTypeCreditCard;
-                } else {
-                    self.transferInType = SSJFundsTransferTypeNormal;
-
-                }
+            if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
+                self.transferInType = SSJFundsTransferTypeCreditCard;
+            } else {
+                self.transferInType = SSJFundsTransferTypeNormal;
+                
             }
             [self updateTransferItem];
         };
@@ -248,13 +246,11 @@
         _transferOutFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferOutFundItem = fundItem;
-            if (self.transferOutType == SSJFundsTransferTypeAll) {
-                if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
-                    self.transferOutType = SSJFundsTransferTypeCreditCard;
-                } else {
-                    self.transferOutType = SSJFundsTransferTypeNormal;
-                    
-                }
+            if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
+                self.transferOutType = SSJFundsTransferTypeCreditCard;
+            } else {
+                self.transferOutType = SSJFundsTransferTypeNormal;
+                
             }
             [self updateTransferItem];
         };
