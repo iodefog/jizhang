@@ -142,6 +142,7 @@
 }
 
 - (void)endDateButtonAction {
+    self.endDate = nil;
     if (_clickEndDateAction) {
         _clickEndDateAction();
     }

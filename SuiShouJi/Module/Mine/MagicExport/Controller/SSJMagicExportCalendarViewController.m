@@ -62,7 +62,6 @@
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showError:error];
     }];
-    
 }
 
 - (void)viewWillLayoutSubviews {
@@ -98,25 +97,38 @@
 #pragma mark - SSJMagicExportCalendarViewDelegate
 - (void)calendarView:(SSJMagicExportCalendarView *)calendarView willSelectDate:(NSDate *)date {
     if (!_selectedBeginDate) {
+        // 没有起始日期，设置起始日期为选中的日期
         _selectedBeginDate = date;
         _dateSwitchControl.beginDate = date;
     } else if ((_selectedBeginDate && [date compare:_selectedBeginDate] == NSOrderedAscending)) {
+        // 选择的日期早于起始日期，设置起始日期为选中的日期
         NSDate *lastBeginDate = _selectedBeginDate;
         _selectedBeginDate = date;
         _dateSwitchControl.beginDate = date;
         [calendarView deselectDates:@[lastBeginDate]];
-        [calendarView reloadDates:@[lastBeginDate]];
-    } else {
+    } else if (!_selectedEndDate) {
+        // 没有结束日期，设置结束日期为选中的日期
         _selectedEndDate = date;
         _dateSwitchControl.endDate = date;
-        _calendarView.userInteractionEnabled = NO;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            if (_completion) {
-                _completion(_selectedBeginDate, _selectedEndDate);
-            }
-            [self.navigationController popViewControllerAnimated:YES];
-        });
+        [self completeDateSelection];
+    } else {
+        // 选择的日期早于结束日期，设置结束日期为选中的日期
+        NSDate *lastEndDate = _selectedEndDate;
+        _selectedEndDate = date;
+        _dateSwitchControl.endDate = date;
+        [calendarView deselectDates:@[lastEndDate]];
+        [self completeDateSelection];
     }
+}
+
+- (void)completeDateSelection {
+    _calendarView.userInteractionEnabled = NO;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_completion) {
+            _completion(_selectedBeginDate, _selectedEndDate);
+        }
+        [self.navigationController popViewControllerAnimated:YES];
+    });
 }
 
 - (UIColor *)calendarView:(SSJMagicExportCalendarView *)calendarView titleColorForDate:(NSDate *)date selected:(BOOL)selected {
@@ -148,11 +160,20 @@
         _dateSwitchControl.endDate = _selectedEndDate;
         _dateSwitchControl.clickBeginDateAction = ^{
             if (wself.selectedBeginDate) {
-                [wself.calendarView deselectDates:@[wself.selectedBeginDate]];
-                [wself.calendarView reloadDates:@[wself.selectedBeginDate]];
+                NSDate *deselectDate = wself.selectedBeginDate;
                 wself.selectedBeginDate = nil;
-                wself.dateSwitchControl.beginDate = nil;
-                [wself.calendarView reloadData];
+                if (!wself.selectedEndDate || [wself.selectedEndDate compare:deselectDate] != NSOrderedSame) {
+                    [wself.calendarView deselectDates:@[deselectDate]];
+                }
+            }
+        };
+        _dateSwitchControl.clickEndDateAction = ^{
+            if (wself.selectedEndDate) {
+                NSDate *deselectDate = wself.selectedEndDate;
+                wself.selectedEndDate = nil;
+                if (!wself.selectedBeginDate || [wself.selectedBeginDate compare:deselectDate] != NSOrderedSame) {
+                    [wself.calendarView deselectDates:@[deselectDate]];
+                }
             }
         };
     }

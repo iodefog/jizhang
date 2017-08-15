@@ -215,15 +215,70 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
 }
 
 - (void)setSelectedDates:(NSArray<NSDate *> *)selectedDates {
-    _selectedDates = selectedDates;
-    [_innerSelectedDates removeAllObjects];
-    if (selectedDates) {
-        [_innerSelectedDates addObjectsFromArray:selectedDates];
+    NSMutableArray *reloadDates = [_selectedDates mutableCopy];
+    if (!reloadDates) {
+        reloadDates = [NSMutableArray arrayWithCapacity:selectedDates.count];
     }
     
-    [self enumerateItemsWithBlock:^(SSJMagicExportCalendarDateViewItem *item) {
-        [self updateColorsOfItem:item selected:[_innerSelectedDates containsObject:item.date]];
-    }];
+    [_innerSelectedDates removeAllObjects];
+    NSMutableArray *tmpDatesArr = [NSMutableArray arrayWithCapacity:selectedDates.count];
+    
+    for (NSDate *date in selectedDates) {
+        @autoreleasepool {
+            NSDate *tmpDate = [NSDate dateWithYear:date.year month:date.month day:date.day];
+            if ([tmpDate compare:_startDate] == NSOrderedAscending
+                || [tmpDate compare:_endDate] == NSOrderedDescending) {
+#ifdef DEBUG
+                [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"设置的选中日期超出时间范围"}]];
+#endif
+                continue;
+            }
+            
+            [reloadDates addObject:tmpDate];
+            [tmpDatesArr addObject:tmpDate];
+            [_innerSelectedDates addObject:tmpDate];
+        }
+    }
+    
+    _selectedDates = [tmpDatesArr copy];
+    
+    [self reloadDates:reloadDates];
+}
+
+- (void)selectDates:(NSArray<NSDate *> *)dates {
+    NSMutableArray *tmpDatesArr = [_selectedDates mutableCopy];
+    if (!tmpDatesArr) {
+        tmpDatesArr = [[NSMutableArray alloc] init];
+    }
+    
+    for (NSDate *date in dates) {
+        @autoreleasepool {
+            NSDate *tmpDate = [NSDate dateWithYear:date.year month:date.month day:date.day];
+            if ([tmpDate compare:_startDate] == NSOrderedAscending
+                || [tmpDate compare:_endDate] == NSOrderedDescending) {
+#ifdef DEBUG
+                [SSJAlertViewAdapter showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"设置的选中日期超出时间范围"}]];
+#endif
+                continue;
+            }
+            
+            [tmpDatesArr addObject:tmpDate];
+            [_innerSelectedDates addObject:tmpDate];
+        }
+    }
+    _selectedDates = [tmpDatesArr copy];
+    [self reloadDates:_selectedDates];
+}
+
+- (void)deselectDates:(NSArray<NSDate *> *)dates {
+    NSMutableArray *tmpDates = [_selectedDates mutableCopy];
+    [tmpDates removeObjectsInArray:dates];
+    _selectedDates = [tmpDates copy];
+    
+    [_innerSelectedDates removeAllObjects];
+    [_innerSelectedDates addObjectsFromArray:_selectedDates];
+    
+    [self reloadDates:dates];
 }
 
 - (void)reloadData {
@@ -322,40 +377,6 @@ static NSString *const kCalendarHeaderId = @"kCalendarHeaderId";
             
             [self updateColorsOfItem:item selected:[_innerSelectedDates containsObject:item.date]];
         }
-    }
-}
-
-- (void)selectDates:(NSArray<NSDate *> *)dates {
-    NSMutableArray *tmpDatesArr = [_selectedDates mutableCopy];
-    if (!tmpDatesArr) {
-        tmpDatesArr = [[NSMutableArray alloc] init];
-    }
-    
-    for (NSDate *date in dates) {
-        @autoreleasepool {
-            NSDate *tmpDate = [NSDate dateWithYear:date.year month:date.month day:date.day];
-            if ([tmpDate compare:_startDate] == NSOrderedAscending
-                || [tmpDate compare:_endDate] == NSOrderedDescending) {
-                SSJPRINT(@"警告：超出时间范围");
-                continue;
-            }
-            
-            if (![tmpDatesArr containsObject:tmpDate]) {
-                [tmpDatesArr addObject:tmpDate];
-                [_innerSelectedDates addObject:tmpDate];
-            }
-        }
-    }
-    _selectedDates = [tmpDatesArr copy];
-}
-
-- (void)deselectDates:(NSArray<NSDate *> *)dates {
-    NSMutableArray *tmpDates = [_selectedDates mutableCopy];
-    [tmpDates removeObjectsInArray:dates];
-    _selectedDates = [tmpDates copy];
-    
-    for (NSDate *date in dates) {
-        [_innerSelectedDates removeObject:date];
     }
 }
 
