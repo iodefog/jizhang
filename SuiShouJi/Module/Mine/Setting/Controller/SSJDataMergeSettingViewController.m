@@ -10,19 +10,22 @@
 #import "SSJBooksMergeViewController.h"
 #import "SSJFundingMergeViewController.h"
 #import "SSJAccountMergeViewController.h"
-
 #import "SSJMineHomeTabelviewCell.h"
-
-
 
 @interface SSJDataMergeSettingViewController ()
 
 @property (nonatomic, strong) NSArray *titles;
 
-
 @end
 
 @implementation SSJDataMergeSettingViewController
+
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.title = @"数据迁移";
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -31,8 +34,6 @@
     } else {
         self.titles = @[@[@"账本数据迁移",@"资金数据迁移"]];
     }
-
-    // Do any additional setup after loading the view.
 }
 
 #pragma mark - UITableViewDelegate

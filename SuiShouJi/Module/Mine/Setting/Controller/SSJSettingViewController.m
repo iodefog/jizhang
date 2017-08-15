@@ -30,7 +30,7 @@ static const CGFloat kLogoutButtonHeight = 44;
 
 static NSString *const kBindMobileNoTitle = @"手机绑定";
 static NSString *const kMobileNoTitle = @"手机号";
-static NSString *const kDataMergeTitle = @"数据合并";
+static NSString *const kDataMergeTitle = @"数据迁移";
 static NSString *const kModifyPwdTitle = @"修改密码";
 static NSString *const kFingerPrintPwdTitle = @"指纹密码";
 static NSString *const kMotionPwdTitle = @"手势密码";
@@ -104,8 +104,7 @@ static NSString *const kClearDataTitle = @"清理数据";
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
     // 只有清除数据不需要用户登录，其他操作均要求登录
-    if (![title isEqualToString:kClearDataTitle] && ![title isEqualToString:kDataMergeTitle]
-        && !SSJIsUserLogined()) {
+    if (![title isEqualToString:kClearDataTitle] && !SSJIsUserLogined()) {
         [SSJAnaliyticsManager event:@"sync_setup_tologin"];
         [self login];
         return;

@@ -228,7 +228,6 @@
                     return;
                 }
                 
-                
                 if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                     return;
                 }
