@@ -264,6 +264,7 @@
                 NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
                 
                 SSJDispatchMainSync(^{
+                    // 因为接口没有返回收支类别，所以要进行一次同步
                     [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
                     if (self.inviteCodeJoinBooksBlock) {
