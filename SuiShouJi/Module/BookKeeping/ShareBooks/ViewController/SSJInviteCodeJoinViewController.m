@@ -19,6 +19,7 @@
 
 #import "SSJDatabaseQueue.h"
 #import "SSJCodeInputEnableService.h"
+#import "SSJDataSynchronizer.h"
 
 @interface SSJInviteCodeJoinViewController ()
 
@@ -263,6 +264,7 @@
                 NSString *bookName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?",booksId];
                 
                 SSJDispatchMainSync(^{
+                    [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:NULL failure:NULL];
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
                     if (self.inviteCodeJoinBooksBlock) {
                         self.inviteCodeJoinBooksBlock(bookName);
