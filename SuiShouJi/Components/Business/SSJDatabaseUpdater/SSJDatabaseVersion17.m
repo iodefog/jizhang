@@ -132,8 +132,14 @@
         [userCharge setObject:[rs stringForColumn:@"cwritedate"] forKey:@"cwritedate"];
         [userCharge setObject:[rs stringForColumn:@"ichargeid"] forKey:@"ichargeid"];
         [userCharge setObject:[rs stringForColumn:@"cuserid"] forKey:@"cuserid"];
+        [userCharge setObject:[rs stringForColumn:@"ibillid"] forKey:@"ibillid"];
         [userCharge setObject:[rs stringForColumn:@"imoney"] forKey:@"imoney"];
+        [chargeArr addObject:userCharge];
     }
+    
+    [rs close];
+    
+    
 
     return nil;
 }
