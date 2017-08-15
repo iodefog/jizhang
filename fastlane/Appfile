@@ -10,6 +10,6 @@ end
 
 for_lane :testflight do |options|
 app_identifier "com.youyu.jizhang"
-apple_id "iosapp1@9188.com"
+apple_id "marsfan888@163.com"
 end
 
