@@ -250,6 +250,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     
 }
 
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     if (self.bannerItems.count && section == 0) {
         SSJMineHomeBannerHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:SSJNewMineHomeBannerHeaderdentifier];
