@@ -148,6 +148,7 @@
         [_startButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_startButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         [_startButton ssj_setBorderStyle:SSJBorderStyleBottom];
+        _startButton.tag = 100;
         [_startButton addTarget:self action:@selector(dateButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _startButton;
@@ -160,6 +161,7 @@
         [_endButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
         [_endButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.borderColor]];
         [_endButton ssj_setBorderStyle:SSJBorderStyleBottom];
+        _endButton.tag = 101;
         [_endButton addTarget:self action:@selector(dateButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _endButton;
@@ -220,8 +222,9 @@
     SSJMagicExportCalendarViewController *calendarVc = [[SSJMagicExportCalendarViewController alloc] init];
     calendarVc.userId = [self.manager getCurrentUnloggedUserId];
     calendarVc.booksId = SSJAllBooksIds;
-    calendarVc.selectedBeginDate = self.startDate;
-    calendarVc.selectedEndDate = self.endDate;
+    if (sender.tag == 101) {
+        calendarVc.selectedBeginDate = self.startDate;
+    }
     calendarVc.containsSpecialCharges = YES;
     @weakify(self);
     calendarVc.completion = ^(NSDate * _Nonnull selectedBeginDate, NSDate * _Nonnull selectedEndDate) {
