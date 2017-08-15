@@ -187,7 +187,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
             make.bottom.mas_equalTo(self.mas_top);
         }
         make.left.and.right.mas_equalTo(self);
-        make.height.mas_equalTo(280);
+        make.height.mas_equalTo(290);
     }];
 }
 
