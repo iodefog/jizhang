@@ -159,9 +159,9 @@
     @weakify(self);
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         @strongify(self);
-        [SSJMagicExportStore queryBillPeriodWithBookId:SSJAllBooksIds success:^(NSDictionary<NSString *,NSDate *> *result) {
-            self.firstRecordDate = result[SSJMagicExportStoreBeginDateKey];
-            self.lastRecordDate = result[SSJMagicExportStoreEndDateKey];
+        [SSJMagicExportStore queryAllBillDateWithBillId:nil billName:nil billType:SSJBillTypeSurplus booksId:SSJAllBooksIds userId:SSJUSERID() containsSpecialCharges:NO success:^(NSArray<NSDate *> * _Nonnull result) {
+            self.firstRecordDate = [result firstObject];
+            self.lastRecordDate = [result lastObject];
             
             if (!self.beginDate) {
                 self.beginDate = self.firstRecordDate;
@@ -182,7 +182,7 @@
             }
             [subscriber sendNext:nil];
             [subscriber sendCompleted];
-        } failure:^(NSError *error) {
+        } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];
         }];
         return nil;

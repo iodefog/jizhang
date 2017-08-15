@@ -9,73 +9,7 @@
 #import "SSJMagicExportStore.h"
 #import "SSJDatabaseQueue.h"
 
-NSString *const SSJMagicExportStoreBeginDateKey = @"SSJMagicExportStoreBeginDateKey";
-NSString *const SSJMagicExportStoreEndDateKey = @"SSJMagicExportStoreEndDateKey";
-
 @implementation SSJMagicExportStore
-
-+ (void)queryBillPeriodWithBookId:(NSString *)bookId
-                          success:(void (^)(NSDictionary<SSJMagicExportStoreDateKey *, NSDate *> *result))success
-                          failure:(void (^)(NSError *error))failure {
-    
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *tBooksId = bookId;
-        if (!tBooksId.length) {
-            tBooksId = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?", SSJUSERID()];
-            if (!tBooksId.length) {
-                tBooksId = SSJUSERID();
-            }
-        }
-        
-        NSMutableDictionary *params = [@{} mutableCopy];
-        NSString *sql = nil;
-        if ([tBooksId isEqualToString:SSJAllBooksIds]) {
-            // 三种情况：
-            // 1.个人账本非借贷流水：需要限制用户id为当前用户、流水时间不能超过当前时间
-            // 2.个人账本借贷流水：需要限制用户id为当前用户，因为借贷可以生成未来时间流水，所以不需要限制流水时间
-            // 3.共享账本流水：当前用户加入的共享账本的所有成员流水，并限制流水时间不能超过当前时间
-            params[@"userId"] = SSJUSERID();
-            params[@"loanChargeType"] = @(SSJChargeIdTypeLoan);
-            params[@"shareChargeType"] = @(SSJChargeIdTypeShareBooks);
-            params[@"memberState"] = @(SSJShareBooksMemberStateNormal);
-            sql = @"select max(cbilldate) as maxDate, min(cbilldate) as minDate from bk_user_charge where (ichargetype <> :shareChargeType and ichargetype <> :loanChargeType and cuserid = :userId and cbilldate <= datetime('now', 'localtime')) or (ichargetype = :loanChargeType and cuserid = :userId) or (ichargetype = :shareChargeType and cbooksid in (select cbooksid from bk_share_books_member where cmemberid = :userId and istate = :memberState) and cbilldate <= datetime('now', 'localtime')) and operatortype <> 2";
-        } else {
-            params[@"booksId"] = tBooksId;
-            sql = @"select max(uc.cbilldate) as maxDate, min(uc.cbilldate) as minDate from bk_user_charge as uc, bk_user_bill_type as bt where uc.ibillid = bt.cbillid and uc.cuserid = bt.cuserid and uc.cbooksid = bt.cbooksid and uc.operatortype <> 2 and uc.cbilldate <= datetime('now', 'localtime') and uc.cbooksid = :booksId";
-        }
-        
-        FMResultSet *result = [db executeQuery:sql withParameterDictionary:params];
-        if (!result) {
-            if (failure) {
-                SSJDispatchMainAsync(^{
-                    failure([db lastError]);
-                });
-            }
-            return;
-        }
-        
-        NSMutableDictionary *dateInfo = [NSMutableDictionary dictionaryWithCapacity:2];
-        while ([result next]) {
-            NSString *beginDateStr = [result stringForColumn:@"minDate"];
-            NSString *endDateStr = [result stringForColumn:@"maxDate"];
-            NSDate *beginDate = [NSDate dateWithString:beginDateStr formatString:@"yyyy-MM-dd"];
-            NSDate *endDate = [NSDate dateWithString:endDateStr formatString:@"yyyy-MM-dd"];
-            if (beginDate) {
-                [dateInfo setObject:beginDate forKey:SSJMagicExportStoreBeginDateKey];
-            }
-            if (endDate) {
-                [dateInfo setObject:endDate forKey:SSJMagicExportStoreEndDateKey];
-            }
-        }
-        [result close];
-        
-        if (success) {
-            SSJDispatchMainAsync(^{
-                success(dateInfo);
-            });
-        }
-    }];
-}
 
 + (void)queryAllBillDateWithBillId:(NSString *)billId
                           billName:(NSString *)billName

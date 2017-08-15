@@ -62,6 +62,7 @@
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showError:error];
     }];
+    
 }
 
 - (void)viewWillLayoutSubviews {

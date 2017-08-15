@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 //---------------------------------------------------------------------------------------------------------
 // 注意：
-// 如果传了billTypeId，就不需要传bil           lName和billType；
+// 如果传了billTypeId，就不需要传billName和billType；
 // 反之传了billName就必须传billType（因为有可能收入和支出都有同名的类别），billName不需要再传
 //---------------------------------------------------------------------------------------------------------
 /**
@@ -37,12 +37,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  查询制定用户的流水日期；如果为nil就查询当前用户；如果为SSJAllMembersId就查询所有用户
  */
-@property (nonatomic, copy) NSString *userId;
+@property (nonatomic, copy, nullable) NSString *userId;
 
 /**
  账本类型id,不传则查询当前账本数据，传SSJAllBooksIds则查询所有账本数据
  */
-@property (nonatomic, copy) NSString *booksId;
+@property (nonatomic, copy, nullable) NSString *booksId;
 
 /**
  是否包含特殊流水日期（例如：平账、借贷、转账等等）；默认NO

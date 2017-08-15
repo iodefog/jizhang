@@ -10,24 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NSString SSJMagicExportStoreDateKey;
-
-extern SSJMagicExportStoreDateKey *const SSJMagicExportStoreBeginDateKey;
-extern SSJMagicExportStoreDateKey *const SSJMagicExportStoreEndDateKey;
-
 @interface SSJMagicExportStore : NSObject
-
-/**
- *  查询第一次记账时间和最近一次记账时间(非借贷流水截止到当前系统时间，借贷流水不做时间限制)
- *
- *  @param bookId    账本类型id，如果为空，就查询当前账本，如果为SSJAllBooksIds则查询所有账本数据
- *  @param success   查询成功的回调；参数result结构：@｛SSJMagicExportStoreBeginDateKey：开始日期，
-                                                   SSJMagicExportStoreEndDateKey：结束日期｝
- *  @param failure   查询失败的回调
- */
-+ (void)queryBillPeriodWithBookId:(nullable NSString *)bookId
-                          success:(void (^)(NSDictionary<SSJMagicExportStoreDateKey *, NSDate *> *result))success
-                          failure:(nullable void (^)(NSError *error))failure;
 
 /**
  查询所有有效流水的记账时间(截止到当前系统时间)
@@ -39,14 +22,14 @@ extern SSJMagicExportStoreDateKey *const SSJMagicExportStoreEndDateKey;
  @param success 成功回调
  @param failure 失败回调
  */
-+ (void)queryAllBillDateWithBillId:(NSString *)billId
-                          billName:(NSString *)billName
++ (void)queryAllBillDateWithBillId:(nullable NSString *)billId
+                          billName:(nullable NSString *)billName
                           billType:(SSJBillType)billType
-                           booksId:(NSString *)booksId
-                            userId:(NSString *)userId
+                           booksId:(nullable NSString *)booksId
+                            userId:(nullable NSString *)userId
             containsSpecialCharges:(BOOL)containsSpecialCharges
                            success:(void (^)(NSArray<NSDate *> *result))success
-                           failure:(void (^)(NSError *error))failure;
+                           failure:(nullable void (^)(NSError *error))failure;
 
 @end
 
