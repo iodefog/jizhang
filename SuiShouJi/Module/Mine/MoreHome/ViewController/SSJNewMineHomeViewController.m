@@ -112,7 +112,6 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.tableView registerClass:[SSJMineHomeBannerHeader class] forHeaderFooterViewReuseIdentifier:SSJNewMineHomeBannerHeaderdentifier];
     // Do any additional setup after loading the view.
     
-    [self.headLineService requestHeadLines];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -140,6 +139,8 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [self.bannerService requestBannersList];
     
     [self.annoucementService requestAnnoucementsWithPage:1];
+    
+    [self.headLineService requestHeadLines];
     
     //开启定时器
     if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO && self.announceView.isDisplayRun) {
@@ -414,17 +415,16 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             [weakSelf.navigationController pushViewController:webVc animated:YES];
         };
         
+
         _announceView.headLineCloseBtnClickedBlock = ^(SSJHeadLineItem *item) {
             //移除计时器
             [weakSelf.announceView removeDisplayLink];
             //位置更改
             [UIView animateWithDuration:0.7 animations:^{
-                SSJDispatch_main_async_safe(^{
-                    weakSelf.announceView.height = 0;
-                    weakSelf.announceView.hidden = YES;
-                    weakSelf.tableView.top = weakSelf.announceView.bottom;
-                    weakSelf.tableView.height = weakSelf.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - weakSelf.announceView.height;
-                });
+                weakSelf.announceView.height = 0;
+                weakSelf.announceView.hidden = YES;
+                weakSelf.tableView.top = weakSelf.announceView.bottom;
+                weakSelf.tableView.height = weakSelf.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - weakSelf.announceView.height;
             } completion:^(BOOL finished) {
                 [weakSelf.announceView removeFromSuperview];
             }];
@@ -470,6 +470,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     [super updateAppearanceAfterThemeChanged];
     [self.rightButton updateAfterThemeChange];
     [self.header updateAfterThemeChange];
+    [self.announceView updateAppearanceAfterThemeChanged];
     self.navigationItem.leftBarButtonItem.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
 }
 

@@ -202,7 +202,9 @@
     if (!_gobackButton) {
         _gobackButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
         [_gobackButton setImage:[[UIImage imageNamed:@"navigation_backOff"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _gobackButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        if (self.appliesTheme) {
+            _gobackButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        }
         [_gobackButton addTarget:self action:@selector(backButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _gobackButton;
@@ -211,8 +213,10 @@
 - (UIButton *)closeButton{
     if (!_closeButton) {
         _closeButton = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 20, 20)];
+        if (self.appliesTheme) {
+            _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
+        }
         [_closeButton setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
-        _closeButton.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.naviBarTintColor];
         [_closeButton addTarget:self action:@selector(closeButtonButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _closeButton;
