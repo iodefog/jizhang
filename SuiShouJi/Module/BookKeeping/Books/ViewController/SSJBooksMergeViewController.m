@@ -288,6 +288,10 @@
         [CDAutoHideMessageHUD showMessage:@"请选择转入账本"];
         return;
     }
+    if (!self.transferOutBooksItem.booksId.length) {
+        [CDAutoHideMessageHUD showMessage:@"请选择转出账本"];
+        return;
+    }
     @weakify(self);
     [self.mergeButton startAnimating];
     [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{

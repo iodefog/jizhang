@@ -122,6 +122,7 @@
         [_closeBtn setImage:[[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         _closeBtn.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _closeBtn.size = CGSizeMake(20, 20);
+        _closeBtn.imageEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
         @weakify(self);
         [[_closeBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);

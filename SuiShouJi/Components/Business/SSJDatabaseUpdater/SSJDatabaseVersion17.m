@@ -124,7 +124,11 @@
 - (NSError *)updateTheTransferTableInDataBase:(FMDatabase *)db {
     NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
     
-    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = '3' and operatortype <> 2"];
+    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = ? and operatortype <> 2 and ichargetype = 0",@(SSJSpecialBillIdBalanceRollIn)];
+    
+    if (!rs) {
+        return [db lastError];
+    }
     
     while ([rs next]) {
         NSMutableDictionary *userCharge = [NSMutableDictionary dictionaryWithCapacity:0];
@@ -132,7 +136,50 @@
         [userCharge setObject:[rs stringForColumn:@"cwritedate"] forKey:@"cwritedate"];
         [userCharge setObject:[rs stringForColumn:@"ichargeid"] forKey:@"ichargeid"];
         [userCharge setObject:[rs stringForColumn:@"cuserid"] forKey:@"cuserid"];
+        [userCharge setObject:[rs stringForColumn:@"ibillid"] forKey:@"ibillid"];
         [userCharge setObject:[rs stringForColumn:@"imoney"] forKey:@"imoney"];
+        [userCharge setObject:[rs stringForColumn:@"cbilldate"] forKey:@"cbilldate"];
+        [userCharge setObject:[rs stringForColumn:@"cmemo"] forKey:@"cmemo"];
+        [chargeArr addObject:userCharge];
+    }
+    
+    [rs close];
+    
+    for (NSMutableDictionary *userCharge in chargeArr) {
+        NSString *writeDateStr = [userCharge objectForKey:@"cwritedate"];
+        NSString *fundId = [userCharge objectForKey:@"ifunsid"];
+        NSString *userid = [userCharge objectForKey:@"cuserid"];
+        NSString *money = [userCharge objectForKey:@"imoney"];
+        NSString *billDate = [userCharge objectForKey:@"cbilldate"];
+        NSString *memo = [userCharge objectForKey:@"cmemo"];
+        NSDate *writeDate = [NSDate dateWithString:writeDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSDate *startDate = [writeDate dateByAddingSeconds:1];
+        NSDate *endDate = [writeDate dateBySubtractingSeconds:1];
+        NSString *otherChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate between (? and ?) and ibillid = ? and imoney = ? and cuserid = ? and cbilldate = ? limit 1",[startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[endDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSpecialBillIdBalanceRollOut),money,userid,billDate];
+        if (otherChargeId.length) {
+            NSString *otherFundid = [db stringForQuery:@"select ifunsid from bk_user_charge where ichargeid = ?",otherChargeId];
+            NSString *cycleId = SSJUUID();
+            NSMutableDictionary *transferCycle = [NSMutableDictionary dictionaryWithCapacity:0];
+            [transferCycle setObject:cycleId forKey:@"ICYCLEID"];
+            [transferCycle setObject:userid forKey:@"CUSERID"];
+            [transferCycle setObject:fundId forKey:@"CTRANSFERINACCOUNTID"];
+            [transferCycle setObject:otherFundid forKey:@"CTRANSFEROUTACCOUNTID"];
+            [transferCycle setObject:money forKey:@"IMONEY"];
+            [transferCycle setObject:memo forKey:@"CMEMO"];
+            [transferCycle setObject:@(SSJCyclePeriodTypeOnce) forKey:@"ICYCLETYPE"];
+            [transferCycle setObject:billDate forKey:@"CBEGINDATE"];
+            [transferCycle setObject:@(1) forKey:@"ISTATE"];
+            [transferCycle setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"CWRITEDATE"];
+            [transferCycle setObject:@(SSJSyncVersion()) forKey:@"IVERSION"];
+            [transferCycle setObject:@(1) forKey:@"OPERATORTYPE"];
+            if (![db executeUpdate:@"insert into bk_transfer_cycle set ()" withParameterDictionary:transferCycle]) {
+                return [db lastError];
+            }
+        } else {
+            if (![db executeUpdate:@"delete from bk_user_charge where ichargeid = 'chargeId'"]) {
+                return [db lastError];
+            }
+        }
     }
 
     return nil;

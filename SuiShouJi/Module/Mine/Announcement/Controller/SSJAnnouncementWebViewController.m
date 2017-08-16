@@ -19,7 +19,7 @@
     [super viewDidLoad];
         
     
-    if ([SSJDefaultSource() isEqualToString:@"11501"] | [SSJDefaultSource() isEqualToString:@"11502"]) {
+    if (([SSJDefaultSource() isEqualToString:@"11501"] || [SSJDefaultSource() isEqualToString:@"11502"]) && self.item) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"home_bill_note_share"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         
         self.navigationItem.rightBarButtonItem = rightItem;
