@@ -14227,7 +14227,8 @@
 				7D768A7E1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.h */,
 				7D768A7F1C96CA4400CB75B0 /* SSJSynchronizeTaskQueue.m */,
 			);
-			path = DataSync;
+			name = DataSync;
+			path = ../Components/Business/DataSync;
 			sourceTree = "<group>";
 		};
 		7D2B241E1C3E093E009A74A8 /* SyncTable */ = {
@@ -14998,7 +14999,6 @@
 				7D2E7FB21C520E8300A2601C /* SSJUserTableManger */,
 				7DD7D73D1C4CDB4100ACE71A /* UserDefaultData */,
 				BD70DF681C4B26B3000E6CC9 /* SSJPageFlow */,
-				7D2B24011C3AA3AD009A74A8 /* DataSync */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -17786,6 +17786,7 @@
 			children = (
 				91EE65F71F20B073002931B7 /* defaultImage */,
 				9C61E2FC1EE654BC001BA5F2 /* LottieJson */,
+				7D2B24011C3AA3AD009A74A8 /* DataSync */,
 				9C24E6EE1EC428980022D60A /* buildconfig */,
 				9C30AA871EAF6E7C008DD51D /* customTheme */,
 				9C3A2D461E65A4C200DFAE2C /* Entitlements */,
