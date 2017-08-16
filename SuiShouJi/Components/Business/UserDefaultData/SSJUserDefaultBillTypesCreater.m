@@ -27,8 +27,10 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
     
     NSMutableArray *booksTypeArr = [NSMutableArray array];
     while ([rs next]) {
-        [booksTypeArr addObject:@{@"cbooksid":[rs stringForColumn:@"cbooksid"],
-                                  @"iparenttype":[rs stringForColumn:@"iparenttype"]}];
+        NSString *booksID = [rs stringForColumn:@"cbooksid"];
+        NSString *iparentType = [rs stringForColumn:@"iparenttype"] ?: @"0";// iparenttype字段是后来新加的 部分数据可能为nil
+        [booksTypeArr addObject:@{@"cbooksid":booksID,
+                                  @"iparenttype":iparentType}];
     }
     [rs close];
     

@@ -18904,7 +18904,7 @@
 						};
 					};
 					9C80FC961E95E88E00B1BAAC = {
-						DevelopmentTeam = 5JG69S6VH6;
+						DevelopmentTeam = 6LHW8D7QNZ;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -36124,9 +36124,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
-				DEVELOPMENT_TEAM = 5JG69S6VH6;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -36209,7 +36209,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a25ca6c7-bec7-412a-a44e-cdb85c64a39a";
+				PROVISIONING_PROFILE = "fb325597-97fe-4bb8-8fb2-9d8bc3bfd6bf";
 				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -36226,9 +36226,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/SuiShouJi/Resource/Entitlements/YouYuJiZhang.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Shuowu Huang (XK3WHDG7U4)";
-				DEVELOPMENT_TEAM = 5JG69S6VH6;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Yutang Zhou (UCD7C6BN5E)";
+				DEVELOPMENT_TEAM = 6LHW8D7QNZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -36312,7 +36312,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.youyu.jizhang;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "a25ca6c7-bec7-412a-a44e-cdb85c64a39a";
+				PROVISIONING_PROFILE = "fb325597-97fe-4bb8-8fb2-9d8bc3bfd6bf";
 				PROVISIONING_PROFILE_SPECIFIER = youyujizhangdev;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
