@@ -162,7 +162,7 @@
     NSString *imei = nil;
     if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
         imei = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
-    } else{
+    } else {
         imei = [SimulateIDFA createSimulateIDFA];
     }
 //    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
