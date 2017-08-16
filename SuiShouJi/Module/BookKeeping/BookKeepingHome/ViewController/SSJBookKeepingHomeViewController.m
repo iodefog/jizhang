@@ -1105,10 +1105,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 }
 
 - (void)clearSelectedIndexPath {
-    SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:self.selectIndex.section];
-    SSJBillingChargeCellItem *item = [listItem.chargeItems ssj_safeObjectAtIndex:self.selectIndex.row];
-    item.expanded = NO;
-    self.selectIndex = nil;
+    if (self.selectIndex) {
+        SSJBookKeepingHomeListItem *listItem = [self.items ssj_safeObjectAtIndex:self.selectIndex.section];
+        SSJBillingChargeCellItem *item = [listItem.chargeItems ssj_safeObjectAtIndex:self.selectIndex.row];
+        item.expanded = NO;
+        self.selectIndex = nil;
+    }
 }
 
 @end
