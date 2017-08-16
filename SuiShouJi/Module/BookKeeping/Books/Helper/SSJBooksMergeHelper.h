@@ -20,4 +20,5 @@
 - (NSNumber *)getChargeCountForBooksId:(NSString *)booksId;
 
 - (BOOL)isShareBooksOrNotWithBooksId:(NSString *)booksId;
+
 @end
