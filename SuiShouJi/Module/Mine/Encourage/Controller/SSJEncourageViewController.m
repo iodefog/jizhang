@@ -58,7 +58,11 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
 - (void)viewDidLoad {
     [super viewDidLoad];
     if (SSJ_MAIN_PACKAGE) {
-        self.titles = @[@[ktitle1],@[ktitle2,ktitle3]];
+        if ([SSJStartChecker sharedInstance].isInReview) {
+            self.titles = @[@[ktitle1],@[ktitle3]];
+        } else {
+            self.titles = @[@[ktitle1],@[ktitle2,ktitle3]];
+        }
     } else {
         self.titles = @[@[ktitle1],@[ktitle2]];
     }
