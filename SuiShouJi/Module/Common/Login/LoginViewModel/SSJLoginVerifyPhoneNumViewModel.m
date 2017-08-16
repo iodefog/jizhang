@@ -36,6 +36,8 @@
 #import "UIViewController+SSJPageFlow.h"
 
 #import <LocalAuthentication/LocalAuthentication.h>
+#import <AdSupport/ASIdentifierManager.h>
+#import "SimulateIDFA.h"
 
 @interface SSJLoginVerifyPhoneNumViewModel ()
 
@@ -157,7 +159,13 @@
     NSString *strKey=@"A9FK25RHT487ULMI";
     
     //imei
-    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
+    NSString *imei = nil;
+    if ([ASIdentifierManager sharedManager].advertisingTrackingEnabled) {
+        imei = [NSString stringWithFormat:@"%@",[ASIdentifierManager sharedManager].advertisingIdentifier];
+    } else{
+        imei = [SimulateIDFA createSimulateIDFA];
+    }
+//    NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     
     //手机型号
     NSString *phoneModel = SSJPhoneModel();
