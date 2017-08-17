@@ -121,15 +121,19 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #pragma mark - UIActionSheetDelegate
 -(void) actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    switch (buttonIndex)
-    {
-        case 0:  //打开照相机拍照
-            [self takePhoto];
-            break;
-        case 1:  //打开本地相册
-            [self localPhoto];
-            break;
-    }
+    // ios8以上UIActionSheet也是控制器，如果立即调用相册／相机，在ipad上无法正常调用，所以要在主线程的下一次loop迭代中调用
+    __weak typeof(self) weakSelf = self;
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+        switch (buttonIndex)
+        {
+            case 0:  //打开照相机拍照
+                [weakSelf takePhoto];
+                break;
+            case 1:  //打开本地相册
+                [weakSelf localPhoto];
+                break;
+        }
+    }];
 }
 
 #pragma mark - UITableViewDelegate
