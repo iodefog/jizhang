@@ -187,7 +187,8 @@ static const CGFloat kChargeImgWidth = 30;
     _categoryImageButton.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
     
     if (self.item.chargeImage.length) {
-        [UIImage ssj_loadUrl:SSJImageUrl(self.item.chargeThumbImage, SSJWebImgPathCharge) compeltion:^(NSError *error, UIImage *image) {
+        NSURL *imgUrl = SSJImageUrl(self.item.chargeThumbImage, SSJWebImgPathCharge);
+        [UIImage ssj_loadUrl:imgUrl compeltion:^(NSError *error, UIImage *image) {
             if (!image) {
                 return;
             }  
@@ -379,7 +380,7 @@ static const CGFloat kChargeImgWidth = 30;
 - (UILabel *)bottomLabel {
     if (!_bottomLabel) {
         _bottomLabel = [[UILabel alloc]initWithFrame:CGRectZero];
-        _bottomLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        _bottomLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         _bottomLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
         _bottomLabel.numberOfLines = 2;
         [_bottomLabel sizeToFit];

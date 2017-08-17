@@ -14,19 +14,11 @@
 #import "SSJDomainManager.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
-    if (api) {
-        return [[SSJDomainManager domain] stringByAppendingPathComponent:api];
-    } else {
-        return nil;
-    }
+    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
 }
 
 NSString* SSJImageURLWithAPI(NSString* api) {
-    if (api) {
-        return [[SSJDomainManager imageDomain] stringByAppendingPathComponent:api];
-    } else {
-        return nil;
-    }
+    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
 }
 
 NSString *SSJBundleID() {
@@ -468,7 +460,7 @@ BOOL SSJSaveThumbImage(UIImage *image , NSString *imageName) {
 }
 
 NSString *SSJLocalImagePath(NSString *imageName) {
-    if (![imageName pathExtension]) {
+    if (![imageName pathExtension].length) {
         imageName = [imageName stringByAppendingPathExtension:@"jpg"];
     }
     NSString *fullImageName = [NSString stringWithFormat:@"%@",imageName];
@@ -477,7 +469,7 @@ NSString *SSJLocalImagePath(NSString *imageName) {
 };
 
 NSString *SSJWebImagePath(NSString *imageName, SSJWebImgPath type) {
-    if (![imageName pathExtension]) {
+    if (![imageName pathExtension].length) {
         imageName = [imageName stringByAppendingPathExtension:@"jpg"];
     }
     switch (type) {

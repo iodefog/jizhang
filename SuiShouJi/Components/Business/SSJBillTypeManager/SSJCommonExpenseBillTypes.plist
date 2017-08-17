@@ -574,18 +574,18 @@
 		<key>color</key>
 		<string>#766bc8</string>
 	</dict>
-	<key>1198</key>
+	<key>1044</key>
 	<dict>
 		<key>ID</key>
-		<string>1198</string>
+		<string>1044</string>
 		<key>name</key>
-		<string>飞机</string>
+		<string>机票</string>
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
-		<string>bt_airplan</string>
+		<string>bt_jipiao</string>
 		<key>color</key>
-		<string>#B0C133</string>
+		<string>#3c81ce</string>
 	</dict>
 	<key>1045</key>
 	<dict>
@@ -2315,6 +2315,19 @@
 		<string>bt_gudingzichan</string>
 		<key>color</key>
 		<string>#A8A67E</string>
+	</dict>
+	<key>1198</key>
+	<dict>
+		<key>ID</key>
+		<string>1198</string>
+		<key>name</key>
+		<string>飞机</string>
+		<key>expended</key>
+		<true/>
+		<key>icon</key>
+		<string>bt_airplan</string>
+		<key>color</key>
+		<string>#B0C133</string>
 	</dict>
 </dict>
 </plist>
