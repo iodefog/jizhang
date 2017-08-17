@@ -73,6 +73,68 @@
     }
 }
 
++ (void)updateTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
+    
+    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = ? and operatortype <> 2 and (ichargetype = ? or ichargetype = ?) and cuserid = ?",@(SSJSpecialBillIdBalanceRollIn),@(SSJChargeIdTypeTransfer),@(SSJChargeIdTypeNormal),userId];
+    
+    while ([rs next]) {
+        NSMutableDictionary *userCharge = [NSMutableDictionary dictionaryWithCapacity:0];
+        [userCharge setObject:[rs stringForColumn:@"ifunsid"] forKey:@"ifunsid"];
+        [userCharge setObject:[rs stringForColumn:@"cwritedate"] forKey:@"cwritedate"];
+        [userCharge setObject:[rs stringForColumn:@"ichargeid"] forKey:@"ichargeid"];
+        [userCharge setObject:[rs stringForColumn:@"cuserid"] forKey:@"cuserid"];
+        [userCharge setObject:[rs stringForColumn:@"ibillid"] forKey:@"ibillid"];
+        [userCharge setObject:[rs stringForColumn:@"imoney"] forKey:@"imoney"];
+        [userCharge setObject:[rs stringForColumn:@"cbilldate"] forKey:@"cbilldate"];
+        [userCharge setObject:[rs stringForColumn:@"cmemo"] forKey:@"cmemo"];
+        [chargeArr addObject:userCharge];
+    }
+    
+    [rs close];
+    
+    for (NSMutableDictionary *userCharge in chargeArr) {
+        NSString *writeDateStr = [userCharge objectForKey:@"cwritedate"];
+        NSString *fundId = [userCharge objectForKey:@"ifunsid"];
+        NSString *chargeid = [userCharge objectForKey:@"ichargeid"];
+        NSString *userid = [userCharge objectForKey:@"cuserid"];
+        NSString *money = [userCharge objectForKey:@"imoney"];
+        NSString *billDate = [userCharge objectForKey:@"cbilldate"];
+        NSString *memo = [userCharge objectForKey:@"cmemo"];
+        NSDate *writeDate = [NSDate dateWithString:writeDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSDate *startDate = [writeDate dateBySubtractingSeconds:1];
+        NSDate *endDate = [writeDate dateByAddingSeconds:1];
+        NSString *otherChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate between ? and ? and ibillid = ? and imoney = ? and cuserid = ? and cbilldate = ? limit 1",[startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[endDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSpecialBillIdBalanceRollOut),money,userid,billDate];
+        if (otherChargeId.length) {
+            NSString *otherFundid = [db stringForQuery:@"select ifunsid from bk_user_charge where ichargeid = ?",otherChargeId];
+            NSString *cycleId = SSJUUID();
+            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            NSMutableDictionary *transferCycle = [NSMutableDictionary dictionaryWithCapacity:0];
+            [transferCycle setObject:cycleId forKey:@"icycleid"];
+            [transferCycle setObject:userid forKey:@"cuserid"];
+            [transferCycle setObject:fundId forKey:@"ctransferinaccountid"];
+            [transferCycle setObject:otherFundid forKey:@"ctransferoutaccountid"];
+            [transferCycle setObject:money forKey:@"imoney"];
+            [transferCycle setObject:memo forKey:@"cmemo"];
+            [transferCycle setObject:@(SSJCyclePeriodTypeOnce) forKey:@"icycletype"];
+            [transferCycle setObject:billDate forKey:@"cbegindate"];
+            [transferCycle setObject:@(1) forKey:@"istate"];
+            [transferCycle setObject:writeDate forKey:@"cwritedate"];
+            [transferCycle setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            [transferCycle setObject:@(1) forKey:@"operatortype"];
+            [transferCycle setObject:writeDate forKey:@"clientadddate"];
+            [db executeUpdate:@"insert into bk_transfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, istate, cwritedate, iversion, operatortype, clientadddate) values (:icycleid, :cuserid, :ctransferinaccountid, :ctransferoutaccountid, :imoney, :cmemo, :icycletype, :cbegindate, :istate, :cwritedate, :iversion, :operatortype, :clientadddate)" withParameterDictionary:transferCycle];
+            
+            [db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),otherChargeId,userid];
+            
+            [db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),chargeid,userid];
+        } else {
+            [db executeUpdate:@"delete from bk_user_charge where ichargeid = ?",chargeid];
+        }
+    }
+
+}
+
 + (void)updateTableWhenLoginWithViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel completion:(void(^)())completion {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
@@ -127,6 +189,8 @@
         
         // ??? 啥玩意 懵逼
 //        [self updateCustomUserBillNeededForUserId:SSJUSERID() billTypeItems:viewModel.customCategoryArray inDatabase:db error:nil];
+        
+        [self updateTransferForUserId:SSJUSERID() inDatabase:db error:nil];
         
         [self updateFundColorForUserId:SSJUSERID() inDatabase:db error:nil];
         

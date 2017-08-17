@@ -32,6 +32,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.clipsToBounds = YES;
         [self addSubview:self.backView];
         [self.backView addSubview:self.contentBgView];
         [self.contentBgView addSubview:self.contentLabel];

@@ -46,6 +46,8 @@
 
 static BOOL needToShowHeadLines = YES;
 
+static BOOL needAnimation = YES;
+
 static NSString *const kTitle0 = @"心愿存钱";
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -156,6 +158,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJLoveKey] == NO && self.announceView.isDisplayRun) {
         [self.announceView stopAnimation];
     }
+    self.tableView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
 }
 
 - (void)viewDidLayoutSubviews {
@@ -322,15 +325,25 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             self.announceView.item = headLine;
             self.announceView.height = 0;
             @weakify(self);
-            [UIView animateWithDuration:0.7 animations:^{
-                @strongify(self);
-                SSJDispatch_main_async_safe(^{
-                    self.announceView.height = 34;
-                    self.announceView.hidden = NO;
-                    self.tableView.top = self.announceView.bottom;
-                    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
-                });
-            }];
+            if (needAnimation) {
+                [UIView animateWithDuration:0.7 animations:^{
+                    @strongify(self);
+                    SSJDispatch_main_async_safe(^{
+                        self.announceView.height = 34;
+                        self.announceView.hidden = NO;
+                        self.tableView.top = self.announceView.bottom;
+                        self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
+                    });
+                } completion:^(BOOL finished) {
+                    needAnimation = NO;
+                }];
+            } else {
+                self.announceView.height = 34;
+                self.announceView.hidden = NO;
+                self.tableView.top = self.announceView.bottom;
+                self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
+
+            }
         }
     }
 }
