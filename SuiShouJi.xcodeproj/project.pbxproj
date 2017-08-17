@@ -4539,6 +4539,21 @@
 		9152949C1EB0718100C63264 /* SSJThemBgImageClipViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */; };
 		915A1AED1E10F02200F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
 		915A1AFA1E10F53500F73C7B /* SSJLoginPopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */; };
+		915A80F01F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F11F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F21F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F31F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F41F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F51F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F61F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F71F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F81F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80F91F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80FA1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80FB1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80FC1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80FD1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
+		915A80FE1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */; };
 		916012051DF7D86C00BF571C /* SSJHeaderBannerImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */; };
 		916012081DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 916012071DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.m */; };
 		916242121F2B12AF00AD5355 /* SSJRewardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 916242111F2B12AF00AD5355 /* SSJRewardViewController.m */; };
@@ -13068,6 +13083,8 @@
 		915294901EB0718100C63264 /* SSJThemBgImageClipViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SSJThemBgImageClipViewController.m; path = ../View/SSJThemBgImageClipViewController.m; sourceTree = "<group>"; };
 		915A1AEB1E10F02200F73C7B /* SSJLoginPopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJLoginPopView.h; sourceTree = "<group>"; };
 		915A1AEC1E10F02200F73C7B /* SSJLoginPopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJLoginPopView.m; sourceTree = "<group>"; };
+		915A80EE1F45903100168673 /* SSJFixedFinanceProductItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFixedFinanceProductItem.h; sourceTree = "<group>"; };
+		915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJFixedFinanceProductItem.m; sourceTree = "<group>"; };
 		916012031DF7D86C00BF571C /* SSJHeaderBannerImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerImageView.h; sourceTree = "<group>"; };
 		916012041DF7D86C00BF571C /* SSJHeaderBannerImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJHeaderBannerImageView.m; sourceTree = "<group>"; };
 		916012061DF7DC3B00BF571C /* SSJHeaderBannerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJHeaderBannerCollectionViewCell.h; sourceTree = "<group>"; };
@@ -15946,6 +15963,55 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		915A80E81F458F0D00168673 /* FixedFinanceProduct */ = {
+			isa = PBXGroup;
+			children = (
+				915A80E91F458F8100168673 /* Helper */,
+				915A80EA1F458F8100168673 /* Model */,
+				915A80EB1F458F8100168673 /* Store */,
+				915A80EC1F458F8100168673 /* View */,
+				915A80ED1F458F8100168673 /* ViewController */,
+			);
+			path = FixedFinanceProduct;
+			sourceTree = "<group>";
+		};
+		915A80E91F458F8100168673 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
+		915A80EA1F458F8100168673 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				915A80EE1F45903100168673 /* SSJFixedFinanceProductItem.h */,
+				915A80EF1F45903100168673 /* SSJFixedFinanceProductItem.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		915A80EB1F458F8100168673 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		915A80EC1F458F8100168673 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		915A80ED1F458F8100168673 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
 		9163C8991F03A79A004FBB07 /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -16653,6 +16719,7 @@
 		9C9471301CEB224C00D69079 /* Financing */ = {
 			isa = PBXGroup;
 			children = (
+				915A80E81F458F0D00168673 /* FixedFinanceProduct */,
 				9C47BB7A1DF1498B0077ACF5 /* CardRepayment */,
 				9C9A0C831D73CDB6002AF046 /* CreditCard */,
 				9CF593E51D63FFBB00006594 /* NewFunding */,
@@ -20569,6 +20636,7 @@
 				7D08A1111E4999D30085A8FB /* SSJLoanFundAccountSelectionCellItem.m in Sources */,
 				7D08A1121E4999D30085A8FB /* SSJBudgetEditUnitTextField.m in Sources */,
 				9C155F271E68572700FDFD18 /* NSBundle+MJRefresh.m in Sources */,
+				915A80F61F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C61E3671EEF93A5001BA5F2 /* SSJCodeInputView.m in Sources */,
 				7DB7E44F1EB98B23002383C5 /* SSJSegmentedControl.m in Sources */,
 				7D08A1131E4999D30085A8FB /* SSJLoanChangeChargeSelectionControl.m in Sources */,
@@ -21334,6 +21402,7 @@
 				7DA13A681E35AED7000490A4 /* SSJLoanFundAccountSelectionCellItem.m in Sources */,
 				7DA13A691E35AED7000490A4 /* SSJBudgetEditUnitTextField.m in Sources */,
 				9C155F261E68572700FDFD18 /* NSBundle+MJRefresh.m in Sources */,
+				915A80F51F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C61E3661EEF93A4001BA5F2 /* SSJCodeInputView.m in Sources */,
 				7DB7E44E1EB98B22002383C5 /* SSJSegmentedControl.m in Sources */,
 				7DA13A6A1E35AED7000490A4 /* SSJLoanChangeChargeSelectionControl.m in Sources */,
@@ -22099,6 +22168,7 @@
 				7DBB3AF11E55C2EE0075E638 /* SSJWaveWaterView.m in Sources */,
 				7DBB3AF21E55C2EE0075E638 /* SSJClearUserDataService.m in Sources */,
 				9C155F281E68572700FDFD18 /* NSBundle+MJRefresh.m in Sources */,
+				915A80F71F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C61E3681EEF93A6001BA5F2 /* SSJCodeInputView.m in Sources */,
 				7DB7E4501EB98B24002383C5 /* SSJSegmentedControl.m in Sources */,
 				7DBB3AF31E55C2EE0075E638 /* SSJCategoryListHelper.m in Sources */,
@@ -22864,6 +22934,7 @@
 				7DBB3F8B1E55C4E00075E638 /* SSJDatabaseVersion6.m in Sources */,
 				7DBB3F8C1E55C4E00075E638 /* SSJWaveWaterView.m in Sources */,
 				7DBB3F8D1E55C4E00075E638 /* SSJClearUserDataService.m in Sources */,
+				915A80F11F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C61E3641EEF93A2001BA5F2 /* SSJCodeInputView.m in Sources */,
 				9C155F221E68572700FDFD18 /* NSBundle+MJRefresh.m in Sources */,
 				7DBB3F8E1E55C4E00075E638 /* SSJCategoryListHelper.m in Sources */,
@@ -23780,6 +23851,7 @@
 				7DFB17601EB0341E00292DD3 /* SSJBudgetListSecondaryCell.m in Sources */,
 				7DB7E4661EB9E268002383C5 /* SSJNavigationController.m in Sources */,
 				7DFB17611EB0341E00292DD3 /* SSJLayerAddition.m in Sources */,
+				915A80FD1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				7D172F621F443F2100323D24 /* SSJShareBooksSyncTable.m in Sources */,
 				7DFB17621EB0341E00292DD3 /* SSJHomeTableView.m in Sources */,
 				7D7EF1481ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */,
@@ -24396,6 +24468,7 @@
 				7D7EF1431ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */,
 				9C13F55F1E8267D300AC5FA9 /* NSBundle+MJRefresh.m in Sources */,
 				9C13F5601E8267D300AC5FA9 /* SSJCategoryListHelper.m in Sources */,
+				915A80F81F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				913E2BE01ECE89FE008242CD /* SSJBookColorSelectedViewController.m in Sources */,
 				9C13F5611E8267D300AC5FA9 /* SSJFundingDetailDateHeader.m in Sources */,
 				9CE4AD301E8376260051B6DB /* SSJAnnoucementService.m in Sources */,
@@ -25492,6 +25565,7 @@
 				9C23D19E1F209D8A008C7500 /* SSJIdfaUploadService.m in Sources */,
 				9C23D19F1F209D8A008C7500 /* SSJHomeBillStickyNoteView.m in Sources */,
 				9C23D1A01F209D8A008C7500 /* SSJWeiXinLoginHelper.m in Sources */,
+				915A80F31F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C23D1A11F209D8A008C7500 /* SSJMagicExportCalendarViewController.m in Sources */,
 				9C23D1A21F209D8A008C7500 /* SSJScrollViewAddition.m in Sources */,
 				9C23D1A31F209D8A008C7500 /* SSJPersonalDetailUserNicknameCell.m in Sources */,
@@ -26075,6 +26149,7 @@
 				7DB7E4641EB9E267002383C5 /* SSJNavigationController.m in Sources */,
 				9C4C21081E9E30C8000C5F15 /* SSJLayerAddition.m in Sources */,
 				9C4C21091E9E30C8000C5F15 /* SSJHomeTableView.m in Sources */,
+				915A80FB1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				7D172F601F443F2000323D24 /* SSJShareBooksSyncTable.m in Sources */,
 				7D7EF1461ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */,
 				9C4C210A1E9E30C8000C5F15 /* SSJDateAddition.m in Sources */,
@@ -26658,6 +26733,7 @@
 				9CDB49611EF2A03F0097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C7D2D5C1E8DF8A80093001F /* SSJPushInfoItem.m in Sources */,
 				7DAC7DDD1F21D10700CE1DAB /* SSJCaterotyMenuSelectionView.m in Sources */,
+				915A80F01F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C56B7D81F42E75800852D39 /* SSJWishIngViewController.m in Sources */,
 				9C71B8C41EFBA91500C63A27 /* SSJCodeInputEnableService.m in Sources */,
 				9C7D2D5D1E8DF8A80093001F /* SSJLoanChargeModel.m in Sources */,
@@ -27426,6 +27502,7 @@
 				9CDB49681EF2A0450097E09D /* SSJShareBooksUrlHandle.m in Sources */,
 				9C7D2FD31E8DF96B0093001F /* SSJPushInfoItem.m in Sources */,
 				7DAC7DE51F21D10700CE1DAB /* SSJCaterotyMenuSelectionView.m in Sources */,
+				915A80F91F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C56B7DF1F42E75C00852D39 /* SSJWishIngViewController.m in Sources */,
 				9C71B8CC1EFBA91B00C63A27 /* SSJCodeInputEnableService.m in Sources */,
 				9C7D2FD41E8DF96B0093001F /* SSJLoanChargeModel.m in Sources */,
@@ -28378,6 +28455,7 @@
 				9C80FDA61E95E88E00B1BAAC /* SSJBudgetListSecondaryCell.m in Sources */,
 				7DB7E4631EB9E266002383C5 /* SSJNavigationController.m in Sources */,
 				9C80FDA71E95E88E00B1BAAC /* SSJLayerAddition.m in Sources */,
+				915A80FA1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				7D172F5F1F443F2000323D24 /* SSJShareBooksSyncTable.m in Sources */,
 				9C80FDA81E95E88E00B1BAAC /* SSJHomeTableView.m in Sources */,
 				7D7EF1451ECC350D00E5D51D /* SSJChargeImageBrowseView.m in Sources */,
@@ -29519,6 +29597,7 @@
 				9150CAD81F2F16DF00A37AF9 /* SSJRewardRankViewCell.m in Sources */,
 				9C53A1721F00BCA90035C229 /* SSJMineHomeTableViewItem.m in Sources */,
 				9C9CF0841EA5F73A007657FE /* SSJReportFormsCurveView.m in Sources */,
+				915A80FC1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C9CF0851EA5F73A007657FE /* SSJHomeDatePickerView.m in Sources */,
 				9C9CF0861EA5F73A007657FE /* SSJDatabaseVersion14.m in Sources */,
 				9C9CF0871EA5F73A007657FE /* SSJBooksParentSelectCell.m in Sources */,
@@ -30189,6 +30268,7 @@
 				7D172F471F443F0F00323D24 /* SSJShareBooksFriendMarkSyncTable.m in Sources */,
 				9C56B88C1F42E82100852D39 /* SSJWishChargeItem.m in Sources */,
 				9CDB4BAD1EF3ABBC0097E09D /* SSJHeaderBannerImageView.m in Sources */,
+				915A80FE1F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				7D5213671F024549004FE68A /* SSJChangeMobileNoSecondViewController.m in Sources */,
 				9CDB4BAE1EF3ABBC0097E09D /* SSJListMenuItem.m in Sources */,
 				9CDB4BAF1EF3ABBC0097E09D /* SSJProductAdviceViewController.m in Sources */,
@@ -30514,6 +30594,7 @@
 				7D70C1481E00E84300479E44 /* SSJReportFormCurveHeaderViewItem.m in Sources */,
 				7D52133D1F022ED3004FE68A /* SSJSettingPasswordViewController.m in Sources */,
 				91E0B9A31E01244A00D8516E /* SSJBookKeepingHomeEvaluatePopView.m in Sources */,
+				915A80F41F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9C24CFCE1D76CA0E0095D150 /* SSJBooksTypeCollectionViewCell.m in Sources */,
 				7DB9F82B1DFFC9230084E998 /* SSJReportFormsNoDataCellItem.m in Sources */,
 				9CECFB831D6D41A700DB2C8B /* SSJForgotPSWSendVerCodeService.m in Sources */,
@@ -31246,6 +31327,7 @@
 				7D22A32E1E4F16AC00190CEB /* SSJObjectAddition.m in Sources */,
 				9CA5F0BB1DD02BF8003E72E8 /* SSJSummaryBooksHeaderView.m in Sources */,
 				7D8C7E921D6EDE2400D72E2D /* SSJLoanDetailCell.m in Sources */,
+				915A80F21F45903100168673 /* SSJFixedFinanceProductItem.m in Sources */,
 				9CF594391D66D21300006594 /* SSJReminderListCell.m in Sources */,
 				BD70DF5B1C4751EA000E6CC9 /* SSJForgotPSWCheckVerCodeService.m in Sources */,
 				7D36AC561D46FDAE006526B3 /* SSJDatabaseVersion6.m in Sources */,

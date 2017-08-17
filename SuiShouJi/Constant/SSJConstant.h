@@ -237,7 +237,7 @@ typedef NS_ENUM(NSInteger, SSJWishType) {
 };
 
 typedef NS_ENUM(NSInteger, SSJOperatorType) {
-    SSJOperatorTypeCreate,          // 新建
+    SSJOperatorTypeCreate = 0,          // 新建
     SSJOperatorTypeModify,          // 修改
     SSJOperatorTypeDelete           // 删除
 };
@@ -260,6 +260,19 @@ typedef NS_ENUM(NSInteger, SSJMethodOfPayment) {
     SSJMethodOfPaymentAlipay,          // 支付宝
     SSJMethodOfPaymentWeChat,           // 微信
 };
+
+/**
+ 计息方式：固定收益理财
+ SSJMethodOfInterestOncePaid:    一次性付清
+ SSJMethodOfInterestEveryDay:    每日付息到期还本
+ SSJMethodOfInterestEveryMonth:  每月付息到期还本
+ */
+typedef NS_ENUM(NSInteger, SSJMethodOfInterest) {
+    SSJMethodOfInterestOncePaid = 0,
+    SSJMethodOfInterestEveryDay,
+    SSJMethodOfInterestEveryMonth
+};
+
 
 ///------------------------------------------
 /// @name 基本数据常量
