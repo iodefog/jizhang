@@ -120,8 +120,9 @@
         // 取出账本中所有的流水
         NSArray *chargeArr = [self.db getObjectsOfClass:SSJUserChargeTable.class fromTable:@"BK_USER_CHARGE"
                                                   where:SSJUserChargeTable.userId == userId
-                                                  && SSJUserChargeTable.booksId == sourceBooksId
-                                                  && SSJUserChargeTable.operatorType != 2];
+                              && SSJUserChargeTable.booksId == sourceBooksId
+                              && SSJUserChargeTable.operatorType != 2
+                              && (SSJUserChargeTable. chargeType != SSJChargeIdTypeLoan || SSJUserChargeTable.chargeType != SSJChargeIdTypeRepayment || SSJUserChargeTable.chargeType != SSJChargeIdTypeTransfer)];
         
         for (SSJUserChargeTable *userCharge in chargeArr) {
             userCharge.booksId = targetBooksId;
@@ -131,8 +132,6 @@
             if ([targetSharebookCount integerValue] > 0) {
                 userCharge.chargeType = SSJChargeIdTypeShareBooks;
                 userCharge.cid = targetBooksId;
-            } else {
-                userCharge.chargeType = SSJChargeIdTypeNormal;
             }
             if ([sameNameDic objectForKey:userCharge.billId]) {
                 userCharge.billId = [sameNameDic objectForKey:userCharge.billId];
@@ -254,7 +253,8 @@
     NSNumber *chargeCount = [self.db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"BK_USER_CHARGE"
                                                    where:SSJUserChargeTable.userId == userId
                              && SSJUserChargeTable.booksId == booksId
-                             && SSJUserChargeTable.operatorType != 2];
+                             && SSJUserChargeTable.operatorType != 2
+                             && (SSJUserChargeTable. chargeType != SSJChargeIdTypeLoan || SSJUserChargeTable.chargeType != SSJChargeIdTypeRepayment || SSJUserChargeTable.chargeType != SSJChargeIdTypeTransfer)];
     return chargeCount;
 }
 

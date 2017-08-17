@@ -44,6 +44,8 @@
 #import "SSJAnnoucementService.h"
 #import "SSJMineHomeHeadLineService.h"
 
+static BOOL needToShowHeadLines = YES;
+
 static NSString *const kTitle0 = @"心愿存钱";
 static NSString *const kTitle1 = @"记账提醒";
 static NSString *const kTitle2 = @"主题皮肤";
@@ -316,7 +318,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         self.rightButton.hasNewAnnoucements = self.annoucementService.hasNewAnnouceMent;
     } else if (service == self.headLineService) {
         SSJHeadLineItem *headLine = [self.headLineService.headLines firstObject];
-        if (headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) {
+        if ((headLine.headId != [[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey] || ![[NSUserDefaults standardUserDefaults] objectForKey:SSJLastReadHeadLineIdKey]) && needToShowHeadLines) {
             self.announceView.item = headLine;
             self.announceView.height = 0;
             @weakify(self);
@@ -420,6 +422,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         _announceView.headLineCloseBtnClickedBlock = ^(SSJHeadLineItem *item) {
             //移除计时器
             [weakSelf.announceView removeDisplayLink];
+            needToShowHeadLines = NO;
             //位置更改
             [UIView animateWithDuration:0.7 animations:^{
                 weakSelf.announceView.height = 0;
