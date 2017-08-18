@@ -263,6 +263,7 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
         headerView.bannerView.tapAction = ^(SCYWinCowryHomeBannerView *view, NSUInteger tapIndex) {
             @strongify(self);
             SSJBannerItem *item = [self.bannerItems ssj_safeObjectAtIndex:tapIndex];
+            [SSJAnaliyticsManager event:@"mine_banner_value" extra:item.bannerTarget];
             if (item.needLogin && !SSJIsUserLogined()) {
                 SSJLoginVerifyPhoneViewController *loginVc = [[SSJLoginVerifyPhoneViewController alloc] init];
                 SSJNavigationController *naviVC = [[SSJNavigationController alloc] initWithRootViewController:loginVc];
