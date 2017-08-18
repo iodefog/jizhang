@@ -228,11 +228,11 @@
             break;
             
         case SSJBooksTypeMarriage:
-            [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_jiehun" : @"book_type_jiehun"];
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_jiehun" : @"book_type_jiehun"];
             break;
             
         case SSJBooksTypeDecoration:
-            [SSJAnaliyticsManager event:self.isShareBook ? @" sb_book_category_zhuangxiu" : @"book_type_zhuangxiu"];
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_zhuangxiu" : @"book_type_zhuangxiu"];
             break;
             
         case SSJBooksTypeTravel:
@@ -240,8 +240,7 @@
             break;
             
         case SSJBooksTypeBaby:
-#warning TODO
-            
+            [SSJAnaliyticsManager event:self.isShareBook ? @"sb_book_category_baobao" : @"book_type_baobao"];
             break;
     }
 }
