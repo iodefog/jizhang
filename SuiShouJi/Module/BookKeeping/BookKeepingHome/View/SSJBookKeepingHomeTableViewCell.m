@@ -275,10 +275,12 @@ static const CGFloat kChargeImgWidth = 30;
 
 - (void)updateSubviewsAlpha {
     if (_editAndDeleteBtnShowed) {
+        self.chargeImage.alpha = 0;
         self.labelContainer.alpha = 0;
         self.editeButton.alpha = 1;
         self.deleteButton.alpha = 1;
     } else {
+        self.chargeImage.alpha = 1;
         self.labelContainer.alpha = 1;
         self.editeButton.alpha = 0;
         self.deleteButton.alpha = 0;
