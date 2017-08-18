@@ -47,6 +47,11 @@
         return error;
     }
     
+    error = [self updateTheTransferTableInDataBase:db];
+    if (error) {
+        return error;
+    }
+    
     return nil;
 }
 
@@ -121,10 +126,12 @@
     return nil;
 }
 
-- (NSError *)updateTheTransferTableInDataBase:(FMDatabase *)db {
++ (NSError *)updateTheTransferTableInDataBase:(FMDatabase *)db {
+    // 将以前的转账包括安卓chargetype为4的转账转移到周期转账表里
+    
     NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
     
-    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = ? and operatortype <> 2 and ichargetype = 0",@(SSJSpecialBillIdBalanceRollIn)];
+    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = ? and operatortype <> 2 and (ichargetype = ? or ichargetype = ?)",@(SSJSpecialBillIdBalanceRollIn),@(SSJChargeIdTypeTransfer),@(SSJChargeIdTypeNormal)];
     
     if (!rs) {
         return [db lastError];
@@ -148,35 +155,46 @@
     for (NSMutableDictionary *userCharge in chargeArr) {
         NSString *writeDateStr = [userCharge objectForKey:@"cwritedate"];
         NSString *fundId = [userCharge objectForKey:@"ifunsid"];
+        NSString *chargeid = [userCharge objectForKey:@"ichargeid"];
         NSString *userid = [userCharge objectForKey:@"cuserid"];
         NSString *money = [userCharge objectForKey:@"imoney"];
         NSString *billDate = [userCharge objectForKey:@"cbilldate"];
         NSString *memo = [userCharge objectForKey:@"cmemo"];
         NSDate *writeDate = [NSDate dateWithString:writeDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSDate *startDate = [writeDate dateByAddingSeconds:1];
-        NSDate *endDate = [writeDate dateBySubtractingSeconds:1];
-        NSString *otherChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate between (? and ?) and ibillid = ? and imoney = ? and cuserid = ? and cbilldate = ? limit 1",[startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[endDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSpecialBillIdBalanceRollOut),money,userid,billDate];
+        NSDate *startDate = [writeDate dateBySubtractingSeconds:1];
+        NSDate *endDate = [writeDate dateByAddingSeconds:1];
+        NSString *otherChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate between ? and ? and ibillid = ? and imoney = ? and cuserid = ? and cbilldate = ? limit 1",[startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[endDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSpecialBillIdBalanceRollOut),money,userid,billDate];
         if (otherChargeId.length) {
             NSString *otherFundid = [db stringForQuery:@"select ifunsid from bk_user_charge where ichargeid = ?",otherChargeId];
             NSString *cycleId = SSJUUID();
+            NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             NSMutableDictionary *transferCycle = [NSMutableDictionary dictionaryWithCapacity:0];
-            [transferCycle setObject:cycleId forKey:@"ICYCLEID"];
-            [transferCycle setObject:userid forKey:@"CUSERID"];
-            [transferCycle setObject:fundId forKey:@"CTRANSFERINACCOUNTID"];
-            [transferCycle setObject:otherFundid forKey:@"CTRANSFEROUTACCOUNTID"];
-            [transferCycle setObject:money forKey:@"IMONEY"];
-            [transferCycle setObject:memo forKey:@"CMEMO"];
-            [transferCycle setObject:@(SSJCyclePeriodTypeOnce) forKey:@"ICYCLETYPE"];
-            [transferCycle setObject:billDate forKey:@"CBEGINDATE"];
-            [transferCycle setObject:@(1) forKey:@"ISTATE"];
-            [transferCycle setObject:[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"] forKey:@"CWRITEDATE"];
-            [transferCycle setObject:@(SSJSyncVersion()) forKey:@"IVERSION"];
-            [transferCycle setObject:@(1) forKey:@"OPERATORTYPE"];
-            if (![db executeUpdate:@"insert into bk_transfer_cycle set ()" withParameterDictionary:transferCycle]) {
+            [transferCycle setObject:cycleId forKey:@"icycleid"];
+            [transferCycle setObject:userid forKey:@"cuserid"];
+            [transferCycle setObject:fundId forKey:@"ctransferinaccountid"];
+            [transferCycle setObject:otherFundid forKey:@"ctransferoutaccountid"];
+            [transferCycle setObject:money forKey:@"imoney"];
+            [transferCycle setObject:memo forKey:@"cmemo"];
+            [transferCycle setObject:@(SSJCyclePeriodTypeOnce) forKey:@"icycletype"];
+            [transferCycle setObject:billDate forKey:@"cbegindate"];
+            [transferCycle setObject:@(1) forKey:@"istate"];
+            [transferCycle setObject:writeDate forKey:@"cwritedate"];
+            [transferCycle setObject:@(SSJSyncVersion()) forKey:@"iversion"];
+            [transferCycle setObject:@(1) forKey:@"operatortype"];
+            [transferCycle setObject:writeDate forKey:@"clientadddate"];
+            if (![db executeUpdate:@"insert into bk_transfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, istate, cwritedate, iversion, operatortype, clientadddate) values (:icycleid, :cuserid, :ctransferinaccountid, :ctransferoutaccountid, :imoney, :cmemo, :icycletype, :cbegindate, :istate, :cwritedate, :iversion, :operatortype, :clientadddate)" withParameterDictionary:transferCycle]) {
+                return [db lastError];
+            }
+        
+            if (![db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),otherChargeId,userid]) {
+                return [db lastError];
+            }
+            
+            if (![db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),chargeid,userid]) {
                 return [db lastError];
             }
         } else {
-            if (![db executeUpdate:@"delete from bk_user_charge where ichargeid = 'chargeId'"]) {
+            if (![db executeUpdate:@"delete from bk_user_charge where ichargeid = ?",chargeid]) {
                 return [db lastError];
             }
         }
