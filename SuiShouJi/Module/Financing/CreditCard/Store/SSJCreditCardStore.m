@@ -13,7 +13,6 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanModel.h"
 #import "SSJLoanHelper.h"
-#import "SSJDailySumChargeTable.h"
 
 @implementation SSJCreditCardStore
 

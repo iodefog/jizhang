@@ -10,7 +10,6 @@
 #import "SSJFundingDetailsViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
-#import "SSJReminderDateSelectView.h"
 #import "SSJMonthSelectView.h"
 #import "SSJChargeCircleModifyCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"

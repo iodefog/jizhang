@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+SSJ_DEPRECATED
 @interface SSJBooksAdView : UIView
 
 @property(nonatomic, strong) UIImageView *adImageView;

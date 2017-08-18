@@ -8,7 +8,6 @@
 
 #import "SSJBooksTypeStore.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJDailySumChargeTable.h"
 #import "SSJReportFormsCurveModel.h"
 #import "SSJFinancingGradientColorItem.h"
 #import "SSJUserTableManager.h"

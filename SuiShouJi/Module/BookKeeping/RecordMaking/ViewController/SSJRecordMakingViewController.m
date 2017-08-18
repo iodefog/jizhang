@@ -8,7 +8,6 @@
 
 #import "SSJRecordMakingViewController.h"
 #import "SSJNavigationController.h"
-#import "SSJADDNewTypeViewController.h"
 #import "SSJImaageBrowseViewController.h"
 #import "SSJMemberManagerViewController.h"
 #import "SSJNewMemberViewController.h"

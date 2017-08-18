@@ -11,7 +11,6 @@
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJChargeCircleSelectView.h"
-#import "SSJReminderDateSelectView.h"
 #import "SSJReminderCircleSelectView.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJDataSynchronizer.h"
