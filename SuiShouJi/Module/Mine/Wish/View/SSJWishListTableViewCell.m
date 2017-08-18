@@ -85,7 +85,13 @@
         }
         
         [self.wishProgressView setProgress:[item.wishSaveMoney doubleValue] / [item.wishMoney doubleValue] withAnimation:self.isShowAnimation];
-        [self.bgImageView sd_setImageWithURL:SSJImageUrl(item.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+        
+        if ([[SSJWishModel defaultWishImage] containsObject:item.wishImage]) {
+            self.bgImageView.image = [UIImage imageNamed:item.wishImage];
+        } else {
+            [self.bgImageView sd_setImageWithURL:SSJImageUrl(item.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+        }
+        
         [self updateStateBtnAppearance];
     }
     

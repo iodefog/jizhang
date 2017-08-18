@@ -188,8 +188,12 @@ static CGFloat defImageHeight = 402;
     } else {
         self.finishBtn.hidden = YES;
     }
-
-    [self.wishImageView sd_setImageWithURL:SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+    if ([[SSJWishModel defaultWishImage] containsObject:self.wishModel.wishImage]) {
+        self.wishImageView.image = [UIImage imageNamed:self.wishModel.wishImage];
+    } else {
+        [self.wishImageView sd_setImageWithURL:SSJImageUrl(self.wishModel.wishImage, SSJWebImgPathWish) placeholderImage:[UIImage imageNamed:@"wish_image_def"]];
+    }
+    
     if (self.wishModel.status == SSJWishStateNormalIng) {//进行
         [self.stateBtn setTitle:@"进行中" forState:UIControlStateNormal];
         self.stateBtn.enabled = YES;
