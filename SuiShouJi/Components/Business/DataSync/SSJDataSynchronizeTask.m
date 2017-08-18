@@ -574,14 +574,14 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         while ([rs next]) {
             NSMutableDictionary *userCharge = [NSMutableDictionary dictionaryWithCapacity:0];
-            [userCharge setObject:[rs stringForColumn:@"ifunsid"] forKey:@"ifunsid"];
-            [userCharge setObject:[rs stringForColumn:@"cwritedate"] forKey:@"cwritedate"];
-            [userCharge setObject:[rs stringForColumn:@"ichargeid"] forKey:@"ichargeid"];
-            [userCharge setObject:[rs stringForColumn:@"cuserid"] forKey:@"cuserid"];
-            [userCharge setObject:[rs stringForColumn:@"ibillid"] forKey:@"ibillid"];
-            [userCharge setObject:[rs stringForColumn:@"imoney"] forKey:@"imoney"];
-            [userCharge setObject:[rs stringForColumn:@"cbilldate"] forKey:@"cbilldate"];
-            [userCharge setObject:[rs stringForColumn:@"cmemo"] forKey:@"cmemo"];
+            [userCharge setObject:[rs stringForColumn:@"ifunsid"] ? : @"" forKey:@"ifunsid"];
+            [userCharge setObject:[rs stringForColumn:@"cwritedate"] ? : @"" forKey:@"cwritedate"];
+            [userCharge setObject:[rs stringForColumn:@"ichargeid"] ? : @"" forKey:@"ichargeid"];
+            [userCharge setObject:[rs stringForColumn:@"cuserid"] ? : @"" forKey:@"cuserid"];
+            [userCharge setObject:[rs stringForColumn:@"ibillid"] ? : @"" forKey:@"ibillid"];
+            [userCharge setObject:[rs stringForColumn:@"imoney"] ? : @"" forKey:@"imoney"];
+            [userCharge setObject:[rs stringForColumn:@"cbilldate"] ? : @"" forKey:@"cbilldate"];
+            [userCharge setObject:[rs stringForColumn:@"cmemo"] ? : @"" forKey:@"cmemo"];
             [chargeArr addObject:userCharge];
         }
         
