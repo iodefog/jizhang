@@ -63,13 +63,20 @@
     self.images = @[@[@"fund_name",@"fund_balance",@"fund_color"],@[@"fund_memo"]];
     if (!self.item) {
         NSString *parentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
-        self.title = [NSString stringWithFormat:@"新建%@账户",parentName];
+        if (![parentName hasSuffix:@"账户"]) {
+            parentName = [NSString stringWithFormat:@"%@账户",parentName];
+        }
+        self.title = [NSString stringWithFormat:@"新建%@",parentName];
         self.item = [[SSJFinancingHomeitem alloc] init];
         self.item.fundingParent = self.selectParent;
         self.item.fundingIcon = [SSJFinancingHomeHelper fundIconForFundingParent:self.selectParent];
 
     } else {
-        self.title = [NSString stringWithFormat:@"编辑%@账户",self.item.fundingParentName];
+        NSString *parentName = self.item.fundingParentName;
+        if (![parentName hasSuffix:@"账户"]) {
+            parentName = [NSString stringWithFormat:@"%@账户",parentName];
+        }
+        self.title = [NSString stringWithFormat:@"编辑%@",parentName];
         self.navigationItem.rightBarButtonItem = self.rightButton;
     }
     
