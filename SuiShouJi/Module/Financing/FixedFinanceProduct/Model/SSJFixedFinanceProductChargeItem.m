@@ -7,7 +7,21 @@
 //
 
 #import "SSJFixedFinanceProductChargeItem.h"
+#import "FMResultSet.h"
 
 @implementation SSJFixedFinanceProductChargeItem
 
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
+{
+    return nil;
+}
+
+- (id)copyWithZone:(nullable NSZone *)zone {
+    SSJFixedFinanceProductChargeItem *item = [[SSJFixedFinanceProductChargeItem alloc] init];
+    return item;
+}
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
+}
 @end

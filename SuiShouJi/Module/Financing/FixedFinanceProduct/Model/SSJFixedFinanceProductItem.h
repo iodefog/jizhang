@@ -8,6 +8,8 @@
 
 #import "SSJBaseCellItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+@class FMResultSet;
 /**
  利率或期限类型：固定收益理财
  SSJMethodOfRateOrTimeDay:    日
@@ -20,7 +22,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
     SSJMethodOfRateOrTimeYear
 };
 
-@interface SSJFixedFinanceProductItem : SSJBaseCellItem
+@interface SSJFixedFinanceProductItem : SSJBaseCellItem<NSCopying>
 
 /**理财产品id*/
 @property (nonatomic, copy) NSString *productid;
@@ -29,7 +31,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 @property (nonatomic, copy) NSString *userid;
 
 /**提醒id*/
-@property (nonatomic, copy) NSString *remindid;
+@property (nonatomic, copy, nullable) NSString *remindid;
 
 /**理财账户id*/
 @property (nonatomic, copy) NSString *thisfundid;
@@ -38,13 +40,13 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 @property (nonatomic, copy) NSString *targetfundid;
 
 /**结算账户id*/
-@property (nonatomic, copy) NSString *etargetfundid;
+@property (nonatomic, copy, nullable) NSString *etargetfundid;
 
 /**投资金额*/
 @property (nonatomic, copy) NSString *money;
 
 /**备注*/
-@property (nonatomic, copy) NSString *memo;
+@property (nonatomic, copy, nullable) NSString *memo;
 
 /**利率*/
 @property (nonatomic, assign) float rate;
@@ -65,10 +67,13 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 @property (nonatomic, copy) NSString *startdate;
 
 /**结算日期*/
-@property (nonatomic, copy) NSString *enddate;
+@property (nonatomic, copy, nullable) NSString *enddate;
 
 /**是否结算*/
 @property (nonatomic, assign) NSInteger isend;
+
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
+
 
 ///**更新时间*/
 //@property (nonatomic, copy) NSString *writedate;
@@ -79,3 +84,5 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 ///**操作类型*/
 //@property (nonatomic, assign) SSJOperatorType operatortype;
 @end
+
+NS_ASSUME_NONNULL_END
