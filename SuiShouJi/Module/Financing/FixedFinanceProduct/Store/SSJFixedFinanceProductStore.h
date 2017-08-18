@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 #pragma mark - 固定理财
 /**
- 根据状态查询固定理财产品
+ 根据状态查询固定理财产品列表
 
  @param fundID    所属的账户ID
  @param state 状态：未结算，已结算，全部

@@ -7,8 +7,14 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJFixedFinanceProductItem.h"
+
 NS_ASSUME_NONNULL_BEGIN
-@interface SSJFixedFinanceProductViewController : SSJBaseViewController
-@property (nonatomic, copy) NSString *chargeId;
+
+@interface SSJFixedFinanceProductListViewController : SSJBaseViewController
+
+@property (nonatomic, strong) SSJFixedFinanceProductItem *item;
+
 @end
+
 NS_ASSUME_NONNULL_END
