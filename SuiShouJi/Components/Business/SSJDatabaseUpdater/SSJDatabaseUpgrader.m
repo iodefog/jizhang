@@ -27,9 +27,10 @@
 #import "SSJDatabaseVersion15.h"
 #import "SSJDatabaseVersion16.h"
 #import "SSJDatabaseVersion17.h"
+#import "SSJDatabaseVersion18.h"
 
 // 数据库最新的版本
-static const int kDatabaseVersion = 17;
+static const int kDatabaseVersion = 18;
 
 @implementation SSJDatabaseUpgrader
 
@@ -98,7 +99,8 @@ static const int kDatabaseVersion = 17;
              @14:[SSJDatabaseVersion14 class],
              @15:[SSJDatabaseVersion15 class],
              @16:[SSJDatabaseVersion16 class],
-             @17:[SSJDatabaseVersion17 class]};
+             @17:[SSJDatabaseVersion17 class],
+             @18:[SSJDatabaseVersion18 class]};
 }
 
 @end
