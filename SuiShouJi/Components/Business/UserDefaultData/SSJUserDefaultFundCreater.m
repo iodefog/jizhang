@@ -97,6 +97,19 @@
                @"cstartcolor":@"#39d4da",
                @"cendcolor":@"#7fe8e0"},
              
+             @{@"cfundid":[NSString stringWithFormat:@"%@-8",userId],
+               @"cacctname":@"固收理财",
+               @"cparent":@17,
+               @"ccolor":@"#5a98de",
+               @"cwritedate":writeDate,
+               @"operatortype":@0,
+               @"iversion":syncVersion,
+               @"cuserid":userId,
+               @"cicoin":@"ft_gushou",
+               @"iorder":@6,
+               @"cstartcolor":@"#39d4da",
+               @"cendcolor":@"#7fe8e0"},
+             
              @{@"cfundid":[NSString stringWithFormat:@"%@-5",userId],
                @"cacctname":@"借出款",
                @"cparent":@10,
@@ -106,7 +119,7 @@
                @"iversion":syncVersion,
                @"cuserid":userId,
                @"cicoin":@"ft_jiechukuan",
-               @"iorder":@6,
+               @"iorder":@7,
                @"cstartcolor":@"#55d696",
                @"cendcolor":@"#9be2a1"},
              
@@ -119,7 +132,7 @@
                @"iversion":syncVersion,
                @"cuserid":userId,
                @"cicoin":@"ft_qiankuan",
-               @"iorder":@7,
+               @"iorder":@8,
                @"cstartcolor":@"#f9b656",
                @"cendcolor":@"#f7cf70"}
              ];

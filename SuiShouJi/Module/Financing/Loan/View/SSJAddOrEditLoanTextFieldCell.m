@@ -37,7 +37,7 @@
     self.textLabel.left = 48;
     self.textLabel.centerY = self.contentView.height * 0.5;
     
-    _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 10 - 10, self.contentView.height);
+    _textField.frame = CGRectMake(self.textLabel.right + 10, 0, self.contentView.width - self.textLabel.right - 10 - 15, self.contentView.height);
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

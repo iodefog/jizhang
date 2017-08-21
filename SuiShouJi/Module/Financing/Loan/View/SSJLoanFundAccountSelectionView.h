@@ -22,6 +22,9 @@
 
 @property (nonatomic, copy) void (^selectAccountAction)(SSJLoanFundAccountSelectionView *);
 
+/**标题*/
+@property (nonatomic, copy) NSString *title;
+
 - (void)updateAppearance;
 
 - (void)show;

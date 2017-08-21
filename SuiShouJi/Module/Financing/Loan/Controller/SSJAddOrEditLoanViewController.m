@@ -944,7 +944,7 @@ const int kMemoMaxLength = 15;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
-
+ 
 - (NSDate *)paymentDate {
     return self.loanModel.repaymentDate ?: [self.loanModel.borrowDate dateByAddingMonths:1];
 }

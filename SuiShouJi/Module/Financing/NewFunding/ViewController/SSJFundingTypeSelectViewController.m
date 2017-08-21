@@ -11,14 +11,14 @@
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJAddOrEditFixedFinanceProductViewController.h"
 
 #import "SSJFundingTypeTableViewCell.h"
 #import "SCYSlidePagingHeaderView.h"
 
 #import "SSJFundingItem.h"
-#import "SSJDatabaseQueue.h"
 #import "SSJFinancingStore.h"
-
+#import "SSJFundingTypeManager.h"
 
 
 @interface SSJFundingTypeSelectViewController () <SCYSlidePagingHeaderViewDelegate>
@@ -51,6 +51,10 @@
     self.slideView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
     self.tableView.height = self.view.height - self.slideView.bottom;
     self.tableView.top = self.slideView.bottom;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 #pragma mark - UITableViewDelegate
@@ -114,6 +118,10 @@
             }
         };
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
+    } else if ([item.fundingID isEqualToString:@"17"]){
+        SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+//        listVC.item = item;
+        [self.navigationController pushViewController:addOrEditVC animated:YES];
     } else {
         UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
         if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
@@ -181,17 +189,12 @@
 
 #pragma mark - Private
 - (void)reloadFundList {
-    [self.view ssj_showLoadingIndicator];
-    @weakify(self);
-    [SSJFinancingStore queryFundingParentListWithFundingType:self.slideView.selectedIndex needLoanOrNot:self.needLoanOrNot Success:^(NSArray<SSJFundingItem *> *items) {
-        @strongify(self);
-        [self.view ssj_hideLoadingIndicator];
-        self.items = [NSArray arrayWithArray:items];
-        [self.tableView reloadData];
-    } failure:^(NSError *error) {
-        [self.view ssj_hideLoadingIndicator];
-
-    }];
+    if (!self.slideView.selectedIndex) {
+        self.items = [SSJFundingTypeManager sharedManager].sassetsFunds;
+    } else {
+        self.items = [SSJFundingTypeManager sharedManager].liabilitiesFunds;
+    }
+    [self.tableView reloadData];
 }
 
 -(void)reloadSelectedStatusexceptIndexPath:(NSIndexPath*)selectedIndexpath{
