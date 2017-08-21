@@ -120,9 +120,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJAddOrEditFixedFinanceProductViewController *vc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-    return;
     SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
@@ -133,6 +130,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             SSJLoanListViewController *loanListVC = [[SSJLoanListViewController alloc] init];
             loanListVC.item = financingItem;
             [self.navigationController pushViewController:loanListVC animated:YES];
+        } else if ([financingItem.fundingParent isEqualToString:@"17"]) {
+            SSJAddOrEditFixedFinanceProductViewController *fixedFinancevc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+            [self.navigationController pushViewController:fixedFinancevc animated:YES];
         } else {
             SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
                 fundingDetailVC.item = financingItem;

@@ -90,12 +90,10 @@
         [SSJAnaliyticsManager event:@"add_loan"];
         
     }else if ([item.fundingID isEqualToString:@"11"]){
-        
         SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
         addLoanController.type = SSJLoanTypeBorrow;
         addLoanController.enterFromFundTypeList = YES;
         [self.navigationController pushViewController:addLoanController animated:YES];
-        
         [SSJAnaliyticsManager event:@"add_owed"];
         
     }else if ([item.fundingID isEqualToString:@"3"]){
