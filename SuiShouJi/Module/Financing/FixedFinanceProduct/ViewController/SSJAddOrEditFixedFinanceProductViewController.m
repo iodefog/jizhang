@@ -25,6 +25,7 @@
 #import "SSJLoanHelper.h"
 
 #import "SSJTextFieldToolbarManager.h"
+#import "SSJGeTuiManager.h"
 #import "NSString+MoneyDisplayFormat.h"
 
 static NSString *KTitle1 = @"投资名称";
@@ -74,6 +75,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 @property (nonatomic, strong) UITextField *memoTextF;
 
+// 提醒开关
+@property (nonatomic, strong) UISwitch *remindSwitch;
+
 @end
 
 @implementation SSJAddOrEditFixedFinanceProductViewController
@@ -122,6 +126,38 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     }];
 }
 
+- (BOOL)remindLocation {
+    //如果已经弹出过授权弹框开启通知
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJNoticeAlertKey]) {//弹出过授权弹框
+        if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0f) {
+            UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+            if (UIUserNotificationTypeNone == setting.types) {
+                //推送关闭(去设置)
+                self.remindSwitch.on = NO;
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"哎呀，未开启推送通知" message:@"这样会错过您设定的提醒，墙裂建议您打开吆" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL],[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+                    NSURL * url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                    
+                    if([[UIApplication sharedApplication] canOpenURL:url]) {
+                        
+                        NSURL*url =[NSURL URLWithString:UIApplicationOpenSettingsURLString];           [[UIApplication sharedApplication] openURL:url];
+                    }
+                    
+                }],nil];
+            }else{
+                //推送打开去设置提醒详情
+                return YES;
+            }
+        }
+        
+    } else { //没有弹出过授权弹框
+        //弹出授权弹框
+        self.remindSwitch.on = NO;
+        [[SSJGeTuiManager shareManager] registerRemoteNotificationWithDelegate:[UIApplication sharedApplication]];//远程通知
+    }
+    return NO;
+}
+
+
 #pragma mark - Action
 - (void)sureButtonAction {
 //    if (self.sureAction) {
@@ -157,15 +193,40 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [CDAutoHideMessageHUD showMessage:@"请选择派息方式"];
         return;
     }
+    
+    //保存固定收益理财
+    //保存固定理财的提醒
 }
 
-- (void)remindSwitchAction:(UISwitch *)switchCtrl {
-    if (_reminderItem) {
-        _reminderItem.remindState = switchCtrl.on;
-    } else {
-        [self enterReminderVC];
+//- (void)remindSwitchAction:(UISwitch *)switchCtrl {
+//    if (_reminderItem) {
+//        _reminderItem.remindState = switchCtrl.on;
+//    } else {
+//        [self enterReminderVC];
+//    }
+//}
+
+- (void)switchValueChanged:(UISwitch *)switchc {
+    if (!switchc.isOn) return;
+    //判断有没有授权
+    if ([self remindLocation]) {
+        SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc] init];
+        remindEditeVc.needToSave = YES;
+        __weak typeof(self) weakSelf = self;
+        remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
+            weakSelf.remindSwitch.on = YES;
+            item.remindType = SSJFixedFinaProduct;
+            weakSelf.reminderItem = item;
+        };
+        
+        remindEditeVc.notSaveReminderAction = ^{
+            weakSelf.remindSwitch.on = NO;
+        };
+        remindEditeVc.needToSave = YES;
+        [self.navigationController pushViewController:remindEditeVc animated:YES];
     }
 }
+
 
 
 - (void)enterReminderVC {
@@ -175,7 +236,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         NSDate *paymentDate = [self paymentDate];
         
         tmpRemindItem = [[SSJReminderItem alloc] init];
-        tmpRemindItem.remindName = [NSString stringWithFormat:@"欠钱款元"];
+        tmpRemindItem.remindName = [NSString stringWithFormat:@"投资名称+投资到期"];
         
         tmpRemindItem.remindCycle = 7;
         tmpRemindItem.remindType = SSJReminderTypeBorrowing;
@@ -405,8 +466,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.switchControl.hidden = NO;
     cell.switchControl.on = _reminderItem.remindState;
     [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-    [cell.switchControl addTarget:self action:@selector(remindSwitchAction:) forControlEvents:UIControlEventValueChanged];
+    [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
     cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
+    self.remindSwitch = cell.switchControl;
     [cell setNeedsLayout];
     
     return cell;
@@ -642,5 +704,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _titleItems = @[@[KTitle1,KTitle2,KTitle3],@[KTitle4,KTitle5,KTitle6,KTitle7],@[KTitle8,KTitle9]];
     }
     return _titleItems;
+}
+
+- (SSJReminderItem *)reminderItem {
+    if (!_reminderItem) {
+        _reminderItem = [[SSJReminderItem alloc] init];
+    }
+    return _reminderItem;
+}
+
+
+- (UISwitch *)remindSwitch {
+    if (!_remindSwitch) {
+        _remindSwitch = [[UISwitch alloc] init];
+        [_remindSwitch addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
+    }
+    return _remindSwitch;
 }
 @end

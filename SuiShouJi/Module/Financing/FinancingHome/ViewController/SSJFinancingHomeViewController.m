@@ -18,6 +18,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJLoanListViewController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
+#import "SSJAddOrEditFixedFinanceProductViewController.h"
 
 #import "SSJEditableCollectionView.h"
 #import "SSJFinancingHomeCell.h"
@@ -119,6 +120,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    SSJAddOrEditFixedFinanceProductViewController *vc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+    [self.navigationController pushViewController:vc animated:YES];
+    return;
     SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {

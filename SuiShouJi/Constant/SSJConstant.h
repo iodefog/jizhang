@@ -217,7 +217,8 @@ typedef NS_ENUM(NSInteger, SSJReminderType) {
     SSJReminderTypeCharge,       //记账提醒
     SSJReminderTypeCreditCard,   //信用卡提醒
     SSJReminderTypeBorrowing,     //借贷提醒提醒
-    SSJReminderTypeWish           //愿望提醒
+    SSJReminderTypeWish,           //愿望提醒
+    SSJFixedFinaProduct             //固定理财
 };
 
 typedef NS_ENUM(NSInteger, SSJWishState) {
