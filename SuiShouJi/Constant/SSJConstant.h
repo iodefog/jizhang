@@ -274,6 +274,49 @@ typedef NS_ENUM(NSInteger, SSJMethodOfInterest) {
 };
 
 
+/**
+ 资金账户的父类型
+
+ - SSJFinancingParentCash: 现金
+ - SSJFinancingParentDepositCard: 储蓄卡
+ - SSJFinancingParentCreditCard: 信用卡
+ - SSJFinancingParentInvestment: 投资账户
+ - SSJFinancingParentFunds: 货币基金
+ - SSJFinancingParentValueCard: 实物储值卡
+ - SSJFinancingParentOnlineAccount: 网络充值账户
+ - SSJFinancingParentHousingFund: 住房公积金
+ - SSJFinancingParentReceivableMoney: 应收钱款
+ - SSJFinancingParentPaidLeave: 借出款
+ - SSJFinancingParentDebt: 欠款
+ - SSJFinancingParentSocialSecurity: 社保
+ - SSJFinancingParentWeiXin: 微信钱包
+ - SSJFinancingParentAlipay: 支付宝
+ - SSJFinancingParentOthers: 其他
+ - SSJFinancingParentHuabei: 蚂蚁花呗
+ - SSJFinancingParentFixedEarnings: 固收理财
+ */
+typedef NS_ENUM(NSInteger, SSJFinancingParent) {
+    SSJFinancingParentCash = 1,
+    SSJFinancingParentDepositCard,
+    SSJFinancingParentCreditCard,
+    SSJFinancingParentInvestment,
+    SSJFinancingParentFunds,
+    SSJFinancingParentValueCard,
+    SSJFinancingParentOnlineAccount,
+    SSJFinancingParentHousingFund,
+    SSJFinancingParentReceivableMoney,
+    SSJFinancingParentPaidLeave,
+    SSJFinancingParentDebt,
+    SSJFinancingParentSocialSecurity,
+    SSJFinancingParentWeiXin,
+    SSJFinancingParentAlipay,
+    SSJFinancingParentOthers,
+    SSJFinancingParentHuabei,
+    SSJFinancingParentFixedEarnings
+};
+
+
+
 ///------------------------------------------
 /// @name 基本数据常量
 ///------------------------------------------

@@ -13539,6 +13539,7 @@
 		9C66F1351D211FE60094125D /* SSJThemeCollectionHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeCollectionHeaderView.m; sourceTree = "<group>"; };
 		9C66F13F1D214E330094125D /* SSJThemeDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJThemeDetailViewController.h; sourceTree = "<group>"; };
 		9C66F1401D214E330094125D /* SSJThemeDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJThemeDetailViewController.m; sourceTree = "<group>"; };
+		9C69BE0C1F46E1AB009D1316 /* SSJFinancingItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJFinancingItem.h; sourceTree = "<group>"; };
 		9C6A6B5B1F1DAABD00F96BD1 /* SSJAccountMergeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAccountMergeManager.h; sourceTree = "<group>"; };
 		9C6A6B5C1F1DAABD00F96BD1 /* SSJAccountMergeManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SSJAccountMergeManager.mm; sourceTree = "<group>"; };
 		9C6A6B6B1F1DB68900F96BD1 /* SSJUserChargeTableMerge.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJUserChargeTableMerge.h; sourceTree = "<group>"; };
@@ -16883,6 +16884,7 @@
 				9C9471341CEB224C00D69079 /* SSJFinancingHomeitem.m */,
 				9C3A2D481E666BE000DFAE2C /* SSJFinancingGradientColorItem.h */,
 				9C3A2D491E666BE000DFAE2C /* SSJFinancingGradientColorItem.m */,
+				9C69BE0C1F46E1AB009D1316 /* SSJFinancingItem.h */,
 			);
 			path = Model;
 			sourceTree = "<group>";
