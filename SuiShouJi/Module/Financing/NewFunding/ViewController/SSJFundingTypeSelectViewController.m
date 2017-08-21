@@ -11,6 +11,7 @@
 #import "SSJAddOrEditLoanViewController.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJAddOrEditFixedFinanceProductViewController.h"
 
 #import "SSJFundingTypeTableViewCell.h"
 #import "SCYSlidePagingHeaderView.h"
@@ -114,6 +115,10 @@
             }
         };
         [self.navigationController pushViewController:newCreditCardVc animated:YES];
+    } else if ([item.fundingID isEqualToString:@"17"]){
+        SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+//        listVC.item = item;
+        [self.navigationController pushViewController:addOrEditVC animated:YES];
     } else {
         UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
         if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
