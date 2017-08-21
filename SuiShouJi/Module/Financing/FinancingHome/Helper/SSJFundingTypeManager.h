@@ -8,12 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface SSJFundingTypeManager : NSObject
-
-
-
-@end
-
 @interface SSJFundingParentmodel : NSObject
 
 @property (nonatomic, copy) NSString *ID;
@@ -28,5 +22,15 @@
 
 @property (nonatomic) BOOL expended;
 
+
+@end
+
+@interface SSJFundingTypeManager : NSObject
+
++ (instancetype)sharedManager;
+
+@property (nonatomic, strong) NSArray <SSJFundingParentmodel*> *sassetsFunds;
+
+@property (nonatomic, strong) NSArray <SSJFundingParentmodel*> *liabilitiesFunds;
 
 @end

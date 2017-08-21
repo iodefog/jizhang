@@ -18,7 +18,7 @@
 		<integer>1</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
+		<key>subFunds</key>
 		<array/>
 	</dict>
 	<key>2</key>
@@ -37,7 +37,7 @@
 		<integer>2</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
+		<key>subFunds</key>
 		<array/>
 	</dict>
 	<key>3</key>
@@ -56,46 +56,8 @@
 		<integer>1</integer>
 		<key>type</key>
 		<integer>1</integer>
-		<key>subFund</key>
-		<dict/>
-	</dict>
-	<key>6</key>
-	<dict>
-		<key>ID</key>
-		<string>6</string>
-		<key>name</key>
-		<string>实物储值卡</string>
-		<key>icon</key>
-		<string>ft_shiwuka</string>
-		<key>memo</key>
-		<string>购物卡、公交卡等</string>
-		<key>expand</key>
-		<false/>
-		<key>order</key>
-		<integer>0</integer>
-		<key>type</key>
-		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
-	</dict>
-	<key>7</key>
-	<dict>
-		<key>ID</key>
-		<string>7</string>
-		<key>name</key>
-		<string>网络充值账户</string>
-		<key>icon</key>
-		<string>ft_wangluochongzhi</string>
-		<key>memo</key>
-		<string>9188彩票等</string>
-		<key>expand</key>
-		<false/>
-		<key>order</key>
-		<integer>0</integer>
-		<key>type</key>
-		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>9</key>
 	<dict>
@@ -113,8 +75,8 @@
 		<integer>1</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>10</key>
 	<dict>
@@ -132,8 +94,8 @@
 		<integer>0</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>11</key>
 	<dict>
@@ -151,8 +113,8 @@
 		<integer>0</integer>
 		<key>type</key>
 		<integer>1</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>15</key>
 	<dict>
@@ -170,8 +132,8 @@
 		<integer>0</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>16</key>
 	<dict>
@@ -189,8 +151,8 @@
 		<integer>0</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array/>
 	</dict>
 	<key>18</key>
 	<dict>
@@ -208,7 +170,7 @@
 		<integer>3</integer>
 		<key>type</key>
 		<integer>1</integer>
-		<key>subFund</key>
+		<key>subFunds</key>
 		<array>
 			<dict>
 				<key>ID</key>
@@ -225,7 +187,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 			<dict>
@@ -243,7 +205,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 		</array>
@@ -264,7 +226,7 @@
 		<integer>4</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
+		<key>subFunds</key>
 		<array>
 			<dict>
 				<key>ID</key>
@@ -281,7 +243,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<array/>
 			</dict>
 			<dict>
@@ -299,7 +261,7 @@
 				<integer>1</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 			<dict>
@@ -317,7 +279,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 		</array>
@@ -338,8 +300,45 @@
 		<integer>5</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
-		<dict/>
+		<key>subFunds</key>
+		<array>
+			<dict>
+				<key>ID</key>
+				<string>6</string>
+				<key>name</key>
+				<string>实物储值卡</string>
+				<key>icon</key>
+				<string>ft_shiwuka</string>
+				<key>memo</key>
+				<string>购物卡、公交卡等</string>
+				<key>expand</key>
+				<false/>
+				<key>order</key>
+				<integer>0</integer>
+				<key>type</key>
+				<integer>0</integer>
+				<key>subFunds</key>
+				<array/>
+			</dict>
+			<dict>
+				<key>ID</key>
+				<string>7</string>
+				<key>name</key>
+				<string>网络充值账户</string>
+				<key>icon</key>
+				<string>ft_wangluochongzhi</string>
+				<key>memo</key>
+				<string>9188彩票等</string>
+				<key>expand</key>
+				<false/>
+				<key>order</key>
+				<integer>0</integer>
+				<key>type</key>
+				<integer>0</integer>
+				<key>subFunds</key>
+				<array/>
+			</dict>
+		</array>
 	</dict>
 	<key>21</key>
 	<dict>
@@ -357,7 +356,7 @@
 		<integer>6</integer>
 		<key>type</key>
 		<integer>0</integer>
-		<key>subFund</key>
+		<key>subFunds</key>
 		<array>
 			<dict>
 				<key>ID</key>
@@ -374,7 +373,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 			<dict>
@@ -392,7 +391,7 @@
 				<integer>0</integer>
 				<key>type</key>
 				<integer>0</integer>
-				<key>subFund</key>
+				<key>subFunds</key>
 				<dict/>
 			</dict>
 		</array>
