@@ -204,7 +204,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     [self.navigationController pushViewController:instalmentDetailVc animated:YES];
                 }
             } else {
-                if (billId == 3 || billId == 4) {
+                if ((billId == 3 || billId == 4) && cellItem.billId.length < 4) {
                     SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
                     transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
                     [self.navigationController pushViewController:transferVc animated:YES];

@@ -327,7 +327,7 @@
     self.memoLabel.hidden = _item.chargeMemo.length == 0;
     if (item.chargeMemo.length != 0) {
         self.memoImage.hidden = NO;
-        if (billid == 13 || billid == 14) {
+        if ((billid == 13 || billid == 14) && item.billId.length < 4) {
             self.memoLabel.text = @"共享账本流水";
         } else {
             self.memoLabel.text = _item.chargeMemo;
