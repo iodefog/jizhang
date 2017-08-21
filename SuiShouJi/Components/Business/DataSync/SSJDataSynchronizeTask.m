@@ -213,7 +213,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             
             NSInteger errorCode = [tableInfo[@"code"] integerValue];
             if (errorCode != 1) {
-                tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"]}];
+                tError = [NSError errorWithDomain:SSJErrorDomain code:errorCode userInfo:@{NSLocalizedDescriptionKey:tableInfo[@"desc"] ?: @""}];
                 SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
                 if (failure) {
                     failure(tError);
