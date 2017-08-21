@@ -202,7 +202,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
         return CGSizeMake(self.view.width - 30, 80);
 }
@@ -415,7 +415,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 sumMoney += creditItem.cardBalance;
             }
         }
-        
     }];
     
     if (self.headerView.hiddenButton.selected) {
