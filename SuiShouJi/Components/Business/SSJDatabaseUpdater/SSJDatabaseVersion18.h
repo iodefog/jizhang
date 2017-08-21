@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJDatabaseVersionProtocol.h"
 
-@interface SSJDatabaseVersion18 : NSObject
+@interface SSJDatabaseVersion18 : NSObject <SSJDatabaseVersionProtocol>
 
 @end
