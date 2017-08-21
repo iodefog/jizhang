@@ -10,19 +10,19 @@
 
 @protocol SSJFinancingItemProtocol
 
-//账本id
-@property (nonatomic, strong) NSString *booksId;
+//账户名称
+@property (nonatomic,strong) NSString *fundingName;
 
-//账本名称
-@property (nonatomic, strong) NSString *booksName;
+//账户颜色
+@property (nonatomic,strong) NSString *fundingColor;
 
-//账本顺序
-@property (nonatomic) NSInteger booksOrder;
+//账户ID
+@property (nonatomic,strong) NSString *fundingID;
 
-//账本父类
-@property (nonatomic) SSJBooksType booksParent;
+//账户图标
+@property (nonatomic,strong) NSString *fundingIcon;
 
-// 共享账本还是日常账本
-@property (nonatomic) SSJBooksCategory booksCategory;
+//账户父类
+@property (nonatomic,strong) NSString *fundingParent;
 
 @end
