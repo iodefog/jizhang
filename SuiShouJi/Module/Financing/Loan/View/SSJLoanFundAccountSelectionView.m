@@ -149,11 +149,17 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
     [self dismiss];
 }
 
+#pragma mark - Setter
+- (void)setTitle:(NSString *)title {
+    _title = title;
+    self.titleLabel.text = title;
+}
+
 #pragma mark - Getter
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] init];
-        _titleLabel.text = @"选择资金账户";
+        _titleLabel.text = self.title.length ? self.title : @"选择资金账户";
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
     }
@@ -178,6 +184,7 @@ static NSString *const kCellId = @"SSJLoanFundAccountSelectionCell";
         _tableView.rowHeight = 50;
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         [_tableView registerClass:[SSJLoanFundAccountSelectionCell class] forCellReuseIdentifier:kCellId];
+        [_tableView ssj_clearExtendSeparator];
     }
     return _tableView;
 }

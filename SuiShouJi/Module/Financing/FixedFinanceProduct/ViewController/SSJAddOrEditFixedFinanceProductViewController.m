@@ -16,11 +16,16 @@
 #import "SSJAddOrEditLoanTextFieldCell.h"
 #import "SSJAddOrEditLoanMultiLabelCell.h"
 #import "SSJFixedFinanceProDetailTableViewCell.h"
+#import "SSJJiXiMethodTableViewCell.h"
+#import "SSJHomeDatePickerView.h"
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJReminderItem.h"
 
+#import "SSJLoanHelper.h"
+
 #import "SSJTextFieldToolbarManager.h"
+#import "NSString+MoneyDisplayFormat.h"
 
 static NSString *KTitle1 = @"投资名称";
 static NSString *KTitle2 = @"投资金额";
@@ -28,7 +33,7 @@ static NSString *KTitle3 = @"转出账户";
 static NSString *KTitle4 = @"起息时间";
 static NSString *KTitle5 = @"利率";
 static NSString *KTitle6 = @"期限";
-static NSString *KTitle7 = @"计息方式";
+static NSString *KTitle7 = @"派息方式";
 static NSString *KTitle8 = @"提醒";
 static NSString *KTitle9 = @"备注";
 
@@ -49,9 +54,25 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 // 转出账户
 @property (nonatomic, strong) SSJLoanFundAccountSelectionView *fundingSelectionView;
 
+// 计息方式
+@property (nonatomic, strong) SSJLoanFundAccountSelectionView *jiXiMethodSelectionView;
+
+// 气息时间
+@property (nonatomic, strong) SSJHomeDatePickerView *borrowDateSelectionView;
+
 @property (nonatomic, strong) NSArray<NSString *> *imageItems;
 
 @property (nonatomic, strong) NSArray<NSString *> *titleItems;
+
+@property (nonatomic, strong) UITextField *nameTextF;
+
+@property (nonatomic, strong) UITextField *moneyTextF;
+
+@property (nonatomic, strong) UITextField *liLvTextF;
+
+@property (nonatomic, strong) UITextField *qiXianTextF;
+
+@property (nonatomic, strong) UITextField *memoTextF;
 
 @end
 
@@ -62,6 +83,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.title = @"添加固收理财";
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
+    [self loadData];
     [self updateAppearance];
 }
 
@@ -79,11 +101,62 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
+#pragma mark - Private
+- (void)loadData {
+    [self.view ssj_showLoadingIndicator];
+    self.jiXiMethodSelectionView.selectedIndex = -1;
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        
+        _tableView.hidden = NO;
+        [self.view ssj_hideLoadingIndicator];
+        
+        // 新建借贷设置默认账户
+        self.fundingSelectionView.items = items;
+        self.fundingSelectionView.selectedIndex = -1;
+        [_tableView reloadData];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [self.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+}
+
 #pragma mark - Action
 - (void)sureButtonAction {
 //    if (self.sureAction) {
 //        self.sureAction(self);
 //    }
+    
+    if (!self.nameTextF.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入投资名称"];
+        return;
+    }
+    
+    if (!self.nameTextF.text.length) {
+        [CDAutoHideMessageHUD showMessage:@"请输入投资金额"];
+        return;
+    }
+    
+    if (self.fundingSelectionView.selectedIndex < 0) {
+        [CDAutoHideMessageHUD showMessage:@"请选择起息时间"];
+        return;
+    }
+    
+    if (!self.liLvTextF.text.length || [self.liLvTextF.text doubleValue] <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入利率"];
+        return;
+    }
+    
+    if (self.qiXianTextF.text.length || [self.qiXianTextF.text doubleValue] <= 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入期限"];
+        return;
+    }
+    
+    if (self.jiXiMethodSelectionView.selectedIndex < 0) {
+        [CDAutoHideMessageHUD showMessage:@"请选择派息方式"];
+        return;
+    }
 }
 
 - (void)remindSwitchAction:(UISwitch *)switchCtrl {
@@ -134,6 +207,48 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     return [NSDate date];
 }
 
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:KTitle3]) {
+        [self.view endEditing:YES];
+        
+        [self.fundingSelectionView show];
+    } else if ([title isEqualToString:KTitle4]) {
+        [self.view endEditing:YES];
+        self.borrowDateSelectionView.date = [NSDate date];
+        [self.borrowDateSelectionView show];
+    } else if ([title isEqualToString:KTitle7]) {
+        [self.view endEditing:YES];
+        [self.jiXiMethodSelectionView show];
+    } else if ([title isEqualToString:KTitle8]) {
+        if (_reminderItem) {
+            [self enterReminderVC];
+        }
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
+    if ([title isEqualToString:KTitle5] || [title isEqualToString:KTitle6] || [title isEqualToString:KTitle7]) {
+        return 75;
+    }
+    return 44;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    return [[UIView alloc] init];
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 10;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return 0.01;
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.titleItems.count;
@@ -178,7 +293,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-    //        cell.textField.tag = kLenderTag;
+    self.nameTextF = cell.textField;
     [cell setNeedsLayout];
     return cell;
 }
@@ -186,14 +301,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (__kindof UITableViewCell *)cellOfKTitle2WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
+    cell.textLabel.text = title;
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.text = [NSString stringWithFormat:@"¥%.2f", [self.model.money doubleValue]];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
-//    cell.textField.tag = kMoneyTag;
+    self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
     return cell;
@@ -202,7 +317,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (__kindof UITableViewCell *)cellOfKTitle3WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
+    cell.textLabel.text = title;
     if (_fundingSelectionView.selectedIndex >= 0) {
         SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
         cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
@@ -222,8 +337,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (__kindof UITableViewCell *)cellOfKTitle4WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.textLabel.text = title;
     cell.additionalIcon.image = nil;
-    cell.subtitleLabel.text = [self.model.startdate ssj_dateStringFromFormat:@"yyyy.MM.dd HH:mm:ss.SSS" toFormat:@"yyyy-MM-dd"];
+    cell.subtitleLabel.text = self.model.startdate ? [self.model.startdate ssj_dateStringFromFormat:@"yyyy.MM.dd HH:mm:ss.SSS" toFormat:@"yyyy-MM-dd"] : [[NSDate date] ssj_dateStringWithFormat:@"yyyy-MM-dd"];
     cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     cell.switchControl.hidden = YES;
     cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -234,30 +350,46 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (__kindof UITableViewCell *)cellOfKTitle5WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJFixedFinanceProDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId forIndexPath:indexPath];
+    cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+    cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
+    cell.textField.delegate = self;
+    cell.nameL.text = @"利率";
+    self.liLvTextF = cell.textField;
+    NSString *oldStr = [NSString stringWithFormat:@"每月10号该账户将生成50.00元的利息流水"];
+    cell.subNameL.text = oldStr;
+    //    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
+    cell.hasPercentageL = YES;
     return cell;
 }
 
 - (__kindof UITableViewCell *)cellOfKTitle6WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJFixedFinanceProDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId forIndexPath:indexPath];
+    cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入整数" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+    cell.textField.keyboardType = UIKeyboardTypeNumberPad;
+    cell.textField.returnKeyType = UIReturnKeyDone;
+    cell.textField.delegate = self;
+    self.qiXianTextF = cell.textField;
+    cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.nameL.text = @"期限";
+    cell.segmentControl.selectedSegmentIndex = 2;
+    
     return cell;
 }
 
 - (__kindof UITableViewCell *)cellOfKTitle7WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
-    SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
-    cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    
-    if (_fundingSelectionView.selectedIndex >= 0) {
-        SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:_fundingSelectionView.selectedIndex];
-        cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-        cell.subtitleLabel.text = selectedFundItem.title;
+    SSJJiXiMethodTableViewCell *cell = [SSJJiXiMethodTableViewCell cellWithTableView:tableView];
+    cell.additionalIcon.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    cell.nameLabel.text = title;
+    if (_jiXiMethodSelectionView.selectedIndex >= 0) {
+        SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.jiXiMethodSelectionView.items ssj_safeObjectAtIndex:_jiXiMethodSelectionView.selectedIndex];
+        cell.detailL.text = selectedFundItem.title;
     } else {
-        cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = @"请选择账户";
+        cell.detailL.text = @"请选择派息方式";
     }
-    
-    cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    cell.switchControl.hidden = YES;
-    cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+    NSString *oldStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息2.00元"];
+    cell.subtitleLabel.text = oldStr;
+//    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
     [cell setNeedsLayout];
     return cell;
 
@@ -266,7 +398,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (__kindof UITableViewCell *)cellOfKTitle8WithTableView:(UITableView *)tableView indexPath:(NSIndexPath *)indexPath title:(NSString *)title image:(NSString *)imageName {
     SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    cell.textLabel.text = @"到期日提醒";
+    cell.textLabel.text = title;
     cell.subtitleLabel.text = [_reminderItem.remindDate formattedDateWithFormat:@"yyyy.MM.dd"];
     cell.additionalIcon.image = nil;
     cell.customAccessoryType = UITableViewCellAccessoryNone;
@@ -292,12 +424,78 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.clearsOnBeginEditing = NO;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
-//    cell.textField.tag = kMemoTag;
+    self.memoTextF = cell.textField;
     [cell setNeedsLayout];
     
     return cell;
 
 }
+
+#pragma mark - UITextFieldDelegate
+// 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+//    if (textField.tag == kLenderTag) {
+//        self.loanModel.lender = @"";
+//        [self updateRemindName];
+//    } else if (textField.tag == kMoneyTag) {
+//        self.loanModel.jMoney = 0;
+//        [self updateRemindName];
+//        [self updateInterest];
+//    } else if (textField.tag == kMemoTag) {
+//        self.loanModel.memo = @"";
+//    } else if (textField.tag == kRateTag) {
+//        self.loanModel.rate = 0;
+//        [self updateInterest];
+//    }
+    
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+#pragma mark - Event
+- (void)textDidChange:(NSNotification *)notification {
+    UITextField *textField = notification.object;
+    if ([textField isKindOfClass:[UITextField class]]) {
+        
+        if (textField == self.nameTextF) {
+            
+//            self.loanModel.lender = textField.text;
+            self.reminderItem.borrowtarget = textField.text;
+//            [self updateRemindName];
+            
+        } else if (textField == self.moneyTextF) {
+            
+            NSString *tmpMoneyStr = textField.text;
+            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:9];
+            textField.text = [NSString stringWithFormat:@"%@", tmpMoneyStr];
+//            self.loanModel.jMoney = [tmpMoneyStr doubleValue];
+            
+//            [self updateRemindName];
+//            [self updateInterest];
+            
+        } else if (textField == self.liLvTextF) {
+            
+//            self.loanModel.memo = textField.text;
+            
+        } else if (textField == self.memoTextF) {
+            
+            NSString *moneyStr = textField.text;
+            if ([moneyStr doubleValue] > 100) {
+                moneyStr = @"100.0";
+                [CDAutoHideMessageHUD showMessage:@"收益率不能大于100％"];
+            }
+//            textField.text = [moneyStr ssj_reserveDecimalDigits:1 intDigits:0];
+//            self.loanModel.rate = [textField.text doubleValue] * 0.01;
+//            [self updateInterest];
+            
+        }
+    }
+}
+
 
 #pragma mark - Lazy
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -311,8 +509,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditFixedFinanceProLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditFixedFinanceProTextFieldCellId];
         [_tableView registerClass:[SSJFixedFinanceProDetailTableViewCell class] forCellReuseIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId];
-        _tableView.sectionHeaderHeight = 10;
-        _tableView.sectionFooterHeight = 0;
     }
     return _tableView;
 }
@@ -374,6 +570,65 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     }
     return _fundingSelectionView;
 }
+
+
+- (SSJLoanFundAccountSelectionView *)jiXiMethodSelectionView {
+    if (!_jiXiMethodSelectionView) {
+        __weak typeof(self) weakSelf = self;
+        NSArray *titleArr = @[@"一次性还本付息",@"每日付息，到期还本",@"每月付息，到期还本"];
+        NSMutableArray *itemArr = [NSMutableArray array];
+        for (NSString *title in titleArr) {
+            SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+            item.title = title;
+            [itemArr addObject:item];
+        }
+        
+        _jiXiMethodSelectionView = [[SSJLoanFundAccountSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 192)];
+        
+        _jiXiMethodSelectionView.title = @"派息方式";
+        _jiXiMethodSelectionView.items = itemArr;
+        _jiXiMethodSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
+            if (index <= view.items.count - 1) {
+                SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
+                weakSelf.model.interesttype = index;
+                [weakSelf.tableView reloadData];
+                return YES;
+            } else {
+                SSJPRINT(@"警告：selectedIndex大于数组范围");
+                return NO;
+            }
+        };
+    }
+    return _jiXiMethodSelectionView;
+}
+
+
+- (SSJHomeDatePickerView *)borrowDateSelectionView {
+    if (!_borrowDateSelectionView) {
+        __weak typeof(self) wself = self;
+        _borrowDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        
+        _borrowDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
+        _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
+        _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
+            //                                   return [wself validateBorrowDate:date];
+            return [NSDate date];
+        };
+        _borrowDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
+            
+            //                                   wself.loanModel.borrowDate = view.date;
+            
+            if (wself.reminderItem.remindDate && [view.date compare:wself.reminderItem.remindDate] == NSOrderedDescending) {
+                wself.reminderItem.remindDate = view.date;
+            }
+            
+            [wself.tableView reloadData];
+            
+        };
+    }
+    return _borrowDateSelectionView;
+}
+
 
 - (NSArray<NSString *> *)imageItems {
     if (!_imageItems) {

@@ -23,6 +23,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (null_resettable, nonatomic, strong) UIColor *selectedBorderColor;
 
+/**选中的背景颜色*/
+@property (null_resettable, nonatomic, strong) UIColor *selectedbgColor;
+
 /**
  *  指定初始化化方法
  *

@@ -35,7 +35,11 @@
     [super layoutSubviews];
     
     self.imageView.frame = CGRectMake(10, (self.contentView.height - 24) * 0.5, 24, 24);
-    self.textLabel.frame = CGRectMake(self.imageView.right + 10, 0, self.contentView.width - self.imageView.right - 10, self.contentView.height);
+    if (self.imageView.image) {
+        self.textLabel.frame = CGRectMake(self.imageView.right + 10, 0, self.contentView.width - self.imageView.right - 10, self.contentView.height);
+    } else {
+        self.textLabel.frame = CGRectMake(17, 0, self.contentView.width - self.imageView.right - 10, self.contentView.height);
+    }
     self.checkMark.centerY = self.contentView.height * 0.5;
     self.checkMark.right = self.width - 10;
 }

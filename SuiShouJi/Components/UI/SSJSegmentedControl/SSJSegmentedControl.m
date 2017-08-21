@@ -26,6 +26,9 @@
         self.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         self.buttons = [NSMutableArray arrayWithCapacity:items.count];
         
+        self.layer.cornerRadius = 3;
+        self.layer.masksToBounds = YES;
+        
         for (int i = 0; i < items.count; i ++) {
             NSString *title = items[i];
             if (![title isKindOfClass:[NSString class]]) {
@@ -41,16 +44,17 @@
             
             [button ssj_setBorderWidth:1];
             [button ssj_setBorderStyle:SSJBorderStyleAll];
+            CGFloat inset = 0.5;
             if (i == 0) {
                 button.cornerRadius = 3;
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 1, 1, 0)];
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, inset, inset, 0)];
                 [button ssj_setCornerStyle:(UIRectCornerTopLeft | UIRectCornerBottomLeft)];
             } else if (i == items.count - 1) {
                 button.cornerRadius = 3;
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 0, 1, 1)];
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, inset)];
                 [button ssj_setCornerStyle:(UIRectCornerTopRight | UIRectCornerBottomRight)];
             } else {
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(1, 0, 1, 0)];
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, 0)];
             }
             
             [self addSubview:button];
@@ -153,6 +157,15 @@
     if (self.selectedSegmentIndex != newIndex) {
         self.selectedSegmentIndex = newIndex;
         [self sendActionsForControlEvents:UIControlEventValueChanged];
+    }
+}
+
+- (void)setSelectedbgColor:(UIColor *)selectedbgColor {
+    if (!CGColorEqualToColor(_selectedBorderColor.CGColor, selectedbgColor.CGColor)) {
+        _selectedBorderColor = selectedbgColor;
+        for (UIButton *btn in self.buttons) {
+            [btn ssj_setBackgroundColor:selectedbgColor forState:UIControlStateSelected];
+        }
     }
 }
 
