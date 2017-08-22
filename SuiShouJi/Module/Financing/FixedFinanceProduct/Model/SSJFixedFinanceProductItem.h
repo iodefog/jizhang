@@ -27,6 +27,9 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 /**理财产品id*/
 @property (nonatomic, copy) NSString *productid;
 
+/**理财产品名称*/
+@property (nonatomic, copy) NSString *productName;
+
 /**用户id*/
 @property (nonatomic, copy) NSString *userid;
 
@@ -74,7 +77,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
-
++ (NSArray *)keyArr;
 ///**更新时间*/
 //@property (nonatomic, copy) NSString *writedate;
 //

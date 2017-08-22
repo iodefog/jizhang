@@ -10,6 +10,27 @@
 @class FMResultSet;
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ 借贷变更流水类型
+ 
+ - SSJFixedFinCompoundChargeTypeCreate: 创建产生的流水
+ - SSJFixedFinCompoundChargeTypeBalanceChange: 余额变更产生的流水
+ - SSJFixedFinCompoundChargeTypeRedemption: 赎回产生的流水
+ - SSJFixedFinCompoundChargeTypeAdd: 追加产生的流水
+ - SSJFixedFinCompoundChargeTypeCloseOut: 结清产生的流水
+ - SSJFixedFinCompoundChargeTypeInterest: 还款/收款、结清产生的利息流水
+ 
+ */
+typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
+    SSJFixedFinCompoundChargeTypeCreate,//新建
+    SSJFixedFinCompoundChargeTypeBalanceIncrease,//转入
+    SSJFixedFinCompoundChargeTypeBalanceDecrease,//转出
+    SSJFixedFinCompoundChargeTypeRedemption,//赎回
+    SSJFixedFinCompoundChargeTypeAdd,//追加
+    SSJFixedFinCompoundChargeTypeCloseOut,//结清
+    SSJFixedFinCompoundChargeTypeInterest//利息
+};
+
 @interface SSJFixedFinanceProductChargeItem : SSJBaseCellItem<NSCopying>
 /**流水id*/
 @property (nonatomic, copy) NSString *chargeId;
@@ -41,6 +62,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSDate *billDate;
 
 @property (nonatomic, copy) NSDate *writeDate;
+
+@property (nonatomic) SSJFixedFinCompoundChargeType chargeType;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 

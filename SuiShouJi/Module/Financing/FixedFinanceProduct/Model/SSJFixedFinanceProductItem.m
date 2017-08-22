@@ -15,11 +15,11 @@
 }
 
 + (NSArray *)valueArr {
-    return @[@"productid",@"userid",@"remindid",@"thisfundid",@"targetfundid",@"etargetfundid",@"money",@"memo",@"rate",@"ratetype",@"time",@"timetype",@"interesttype",@"startdate",@"enddate",@"isend"];
+    return @[@"productid",@"userid",@"productName", @"remindid",@"thisfundid",@"targetfundid",@"etargetfundid",@"money",@"memo",@"rate",@"ratetype",@"time",@"timetype",@"interesttype",@"startdate",@"enddate",@"isend"];
 }
 
 + (NSArray *)keyArr {
-    return @[@"CPRODUCTID",@"CUSERID",@"CREMINDID",@"CTHISFUNDID",@"CTARGETFUNDID",@"CETARGETFUNDID",@"IMONEY",@"CMEMO",@"IRATE",@"IRATETYPE",@"ITIME",@"ITIMETYPE",@"INTERESTTYPE",@"CSTARTDATE",@"CENDDATE",@"ISEND"];
+    return @[@"CPRODUCTID",@"CUSERID", @"cproductname", @"CREMINDID",@"CTHISFUNDID",@"CTARGETFUNDID",@"CETARGETFUNDID",@"IMONEY",@"CMEMO",@"IRATE",@"IRATETYPE",@"ITIME",@"ITIMETYPE",@"INTERESTTYPE",@"CSTARTDATE",@"CENDDATE",@"ISEND"];
 }
 + (NSDictionary *)mj_replacedKeyFromPropertyName {
     return [NSDictionary dictionaryWithObjects:[self valueArr]  forKeys:[self keyArr]];

@@ -93,7 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
                   failure:(void (^)(NSError *error))failure;
 
 /**
- *  查询除借贷以外，当前用户的资金账户列表
+ *  查询除借贷和固定理财以外，当前用户的资金账户列表
  *
  *  @param success   成功的回调
  *  @param failure   失败的回调

@@ -46,7 +46,6 @@ static NSString *kCellID = @"cellID";
     [self.view addSubview:self.slideView];
     [self.tableView registerClass:[SSJFundingParentSelectHeader class] forHeaderFooterViewReuseIdentifier:kSSJFinancingColorSelectHeaderID];
     [self reloadFundList];
-    // Do any additional setup after loading the view.
 }
 
 - (void)viewDidLayoutSubviews {
