@@ -128,6 +128,11 @@
     } else {
         self.arrowImage.hidden = YES;
     }
+    if (self.model.expended) {
+        self.arrowImage.layer.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
+    } else {
+        self.arrowImage.layer.transform = CATransform3DIdentity;
+    }
     [self setNeedsUpdateConstraints];
 }
 
@@ -142,11 +147,6 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.model.subFunds.count) {
         self.model.expended = !self.model.expended;
-        if (self.model.expended) {
-            self.arrowImage.layer.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
-        } else {
-            self.arrowImage.layer.transform = CATransform3DIdentity;
-        }
     }
     if (self.didSelectFundParentHeader) {
         self.didSelectFundParentHeader(self.model);
