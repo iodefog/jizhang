@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong) SSJFundingParentmodel *model;
 
+@property (nonatomic, copy) void(^didSelectFundParentHeader)(SSJFundingParentmodel *model);
+
 @end
