@@ -1182,7 +1182,7 @@ const int kMemoMaxLength = 15;
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {

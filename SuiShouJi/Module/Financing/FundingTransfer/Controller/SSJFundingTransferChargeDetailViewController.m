@@ -349,7 +349,7 @@ static const NSInteger kMemoTag = 1002;
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem) {
             if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
-                SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
+                SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 newFundingVC.needLoanOrNot = NO;
                 newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
@@ -393,7 +393,7 @@ static const NSInteger kMemoTag = 1002;
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
             if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
-                SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
+                SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 newFundingVC.needLoanOrNot = NO;
                 newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
