@@ -43,7 +43,6 @@
     [super viewDidLoad];
     [self.view addSubview:self.slideView];
     [self reloadFundList];
-    // Do any additional setup after loading the view.
 }
 
 - (void)viewDidLayoutSubviews {
