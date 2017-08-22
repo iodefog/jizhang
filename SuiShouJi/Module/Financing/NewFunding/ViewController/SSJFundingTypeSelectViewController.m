@@ -169,9 +169,11 @@ static NSString *kCellID = @"cellID";
     
     if (!cell) {
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kCellID];
+        cell.backgroundColor = [UIColor clearColor];
     }
     
     cell.imageView.image = [UIImage imageNamed:cellItem.icon];
+    
     
     cell.textLabel.text = cellItem.name;
     
