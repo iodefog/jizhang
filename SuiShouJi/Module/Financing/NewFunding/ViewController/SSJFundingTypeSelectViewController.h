@@ -9,6 +9,7 @@
 #import "SSJNewBaseTableViewController.h"
 #import "SSJBaseCellItem.h"
 #import "SSJFundingItem.h"
+#import "SSJFundingTypeManager.h"
 
 @interface SSJFundingTypeSelectViewController : SSJNewBaseTableViewController
 
@@ -19,6 +20,6 @@ typedef void (^addNewFundingBlock)(SSJBaseCellItem *item);
 //是否需要借贷
 @property(nonatomic) BOOL needLoanOrNot;
 
-@property (nonatomic, copy) void (^fundingParentSelectBlock)(SSJFundingItem *selectItem);
+@property (nonatomic, copy) void (^fundingParentSelectBlock)(SSJFundingParentmodel *selectItem);
 
 @end

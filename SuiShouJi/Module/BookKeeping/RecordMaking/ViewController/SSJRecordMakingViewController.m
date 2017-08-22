@@ -263,7 +263,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
                 weakSelf.item.fundOperatorType = 1;
                 [weakSelf updateFundingType];
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {

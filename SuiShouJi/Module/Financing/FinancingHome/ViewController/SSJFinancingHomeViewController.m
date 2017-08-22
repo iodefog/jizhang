@@ -304,7 +304,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)rightButtonClicked:(id)sender{
-    SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+    SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     fundingTypeSelectVC.needLoanOrNot = YES;
     __weak typeof(self) weakSelf = self;
     fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseCellItem *item){

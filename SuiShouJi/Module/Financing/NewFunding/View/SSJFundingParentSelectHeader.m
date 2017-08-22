@@ -23,10 +23,8 @@
 
 @implementation SSJFundingParentSelectHeader
 
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
+- (instancetype)initWithReuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.fundIconImage];
         [self.contentView addSubview:self.titleLab];
         [self.contentView addSubview:self.memoLab];
@@ -42,26 +40,26 @@
 }
 
 - (void)updateConstraints {
-    [self.fundIconImage mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.fundIconImage mas_makeConstraints:^(MASConstraintMaker *make) {
         if (!self.model.memo.length) {
-            make.centerY.mas_equalTo(self);
+            make.centerY.mas_equalTo(self.contentView);
         } else {
-            make.top.mas_equalTo(self).offset(18);
+            make.top.mas_equalTo(self.contentView).offset(18);
         }
         make.left.mas_equalTo(15);
     }];
     
-    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.fundIconImage);
-        make.left.mas_equalTo(self).offset(45);
+        make.left.mas_equalTo(self.contentView).offset(45);
     }];
     
-    [self.memoLab mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.memoLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab.mas_bottom).offset(10);
         make.left.mas_equalTo(self.titleLab);
     }];
     
-    [self.arrowImage mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.arrowImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.mas_equalTo(self.titleLab);
         make.right.mas_equalTo(15);
     }];
@@ -109,6 +107,7 @@
     self.memoLab.text = _model.memo;
     self.fundIconImage.image = [UIImage imageNamed:_model.icon];
     self.arrowImage.hidden = _model.subFunds.count;
+    [self.contentView setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
