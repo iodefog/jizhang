@@ -574,7 +574,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     
     NSString *userId = SSJUSERID();
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:@"SELECT CICOIN, CFUNDID, CACCTNAME FROM BK_FUND_INFO WHERE CPARENT != 'root' AND CPARENT != '10' AND CPARENT != '11' AND OPERATORTYPE <> 2 AND CUSERID = ? ORDER BY IORDER", userId];
+        FMResultSet *rs = [db executeQuery:@"SELECT CICOIN, CFUNDID, CACCTNAME FROM BK_FUND_INFO WHERE CPARENT != 'root' AND CPARENT != '10' AND CPARENT != '11' AND CPARENT != '17' AND OPERATORTYPE <> 2 AND CUSERID = ? ORDER BY IORDER", userId];
         if (!rs) {
             if (failure) {
                 SSJDispatchMainAsync(^{

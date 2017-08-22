@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class SSJFixedFinanceProductItem;
 @class SSJFixedFinanceProductChargeItem;
 @class SSJReminderItem;
+@class SSJFixedFinanceProductCompoundItem;
 
 /**
  固定收益理财状态
