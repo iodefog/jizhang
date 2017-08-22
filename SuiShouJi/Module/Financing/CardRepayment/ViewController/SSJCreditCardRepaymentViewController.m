@@ -322,7 +322,7 @@ static NSString *const kTitle6 = @"还款账单月份";
                 [weakSelf.tableView reloadData];
                 [weakSelf.fundSelectView dismiss];
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {

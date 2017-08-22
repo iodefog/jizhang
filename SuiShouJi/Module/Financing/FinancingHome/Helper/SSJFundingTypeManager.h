@@ -18,6 +18,8 @@
 
 @property (nonatomic, copy) NSString *color;
 
+@property (nonatomic, strong) NSString *memo;
+
 @property (nonatomic, strong) NSArray *subFunds;
 
 @property (nonatomic) BOOL expended;

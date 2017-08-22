@@ -27,6 +27,7 @@
 #import "SSJUserDefaultBillTypesCreater.h"
 #import "SSJWishSyncTable.h"
 #import "SSJWishChargeSyncTable.h"
+#import "SSJRecycleSyncTable.h"
 
 #import "SSJSyncTable.h"
 
@@ -91,7 +92,8 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         
         NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
         
-        NSSet *fifthLayer = [NSSet setWithObjects:[SSJMemberChargeSyncTable class], nil];
+        NSSet *fifthLayer = [NSSet setWithObjects:[SSJMemberChargeSyncTable class],
+                                                  [SSJRecycleSyncTable class], nil];
         
         
         self.syncTableClasses = @[firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer];

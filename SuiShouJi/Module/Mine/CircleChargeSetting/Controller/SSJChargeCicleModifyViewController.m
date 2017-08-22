@@ -430,7 +430,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 [weakSelf.tableView reloadData];
                 [weakSelf.fundSelectView dismiss];
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     if ([item isKindOfClass:[SSJFundingItem class]]) {

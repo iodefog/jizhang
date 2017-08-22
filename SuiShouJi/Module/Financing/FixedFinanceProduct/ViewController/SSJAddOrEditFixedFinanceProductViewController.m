@@ -108,7 +108,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    
+    self.jiXiMethodSelectionView.selectedIndex = -1;
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         
         _tableView.hidden = NO;
@@ -609,20 +609,20 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 [weakSelf.tableView reloadData];
                 return YES;
             } else if (index == view.items.count - 1) {
-//                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
-//                NewFundingVC.needLoanOrNot = NO;
-//                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-//                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-//                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-//                        weakSelf.model.targetfundid = fundItem.fundingID;
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.model.targetfundid = fundItem.fundingID;
 //                        [weakSelf loadData];
-//                    } else if (0){//[item isKindOfClass:[SSJCreditCardItem class]]
-////                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-////                        weakSelf.model.targetfundid = cardItem.cardId;
-////                        [weakSelf loadData];
-//                    }
-//                };
-//                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+                    } else if (0){//[item isKindOfClass:[SSJCreditCardItem class]]
+//                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+//                        weakSelf.model.targetfundid = cardItem.cardId;
+//                        [weakSelf loadData];
+                    }
+                };
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 return NO;
             } else {
                 SSJPRINT(@"警告：selectedIndex大于数组范围");
@@ -648,7 +648,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _jiXiMethodSelectionView = [[SSJLoanFundAccountSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 192)];
         
         _jiXiMethodSelectionView.title = @"派息方式";
-        _jiXiMethodSelectionView.selectedIndex = -1;//计息方式
         _jiXiMethodSelectionView.items = itemArr;
         _jiXiMethodSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
             if (index <= view.items.count - 1) {

@@ -17,7 +17,6 @@
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJFundingMergeViewController.h"
 
-#import "FMDB.h"
 
 #define NUM @"+-.0123456789"
 
@@ -138,10 +137,10 @@
     } else if ([title isEqualToString:@"账户类型"]) {
         SSJFundingTypeSelectViewController *fundingTypeVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
         __weak typeof(self) weakSelf = self;
-        fundingTypeVC.fundingParentSelectBlock = ^(SSJFundingItem *selectItem){
-            weakSelf.item.fundingParent = selectItem.fundingID;
-            weakSelf.item.fundingParentName = selectItem.fundingName;
-            weakSelf.item.fundingIcon = selectItem.fundingIcon;
+        fundingTypeVC.fundingParentSelectBlock = ^(SSJFundingParentmodel *selectItem){
+            weakSelf.item.fundingParent = selectItem.ID;
+            weakSelf.item.fundingParentName = selectItem.name;
+            weakSelf.item.fundingIcon = selectItem.icon;
             [weakSelf.tableview reloadData];
         };
         [self.navigationController pushViewController:fundingTypeVC animated:YES];
@@ -310,10 +309,7 @@
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
     }
-    FMDatabase *db = [FMDatabase databaseWithPath:SSJSQLitePath()];
-    if (![db open]) {
-        SSJPRINT(@"Could not open db");
-    }
+
     if ([_nameTextField.text isEqualToString:@""]) {
         [CDAutoHideMessageHUD showMessage:@"请输入资金账户名称"];
         return;

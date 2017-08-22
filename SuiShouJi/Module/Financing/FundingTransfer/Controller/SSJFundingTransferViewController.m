@@ -360,7 +360,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             {
                 weakSelf.transferInItem = fundingItem;
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     weakSelf.transferInItem = item;
@@ -387,7 +387,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
             {
                 weakSelf.transferOutItem = fundingItem;
             }else{
-                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc] init];
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
                     weakSelf.transferOutItem = item;

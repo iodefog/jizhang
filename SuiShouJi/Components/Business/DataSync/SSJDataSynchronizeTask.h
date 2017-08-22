@@ -20,23 +20,23 @@
  5.成员流水
  
  
- (5)                        member_charge
-                            /          \
-                           v            \
- (4)                    user_charge      \
-                        /         \       \
-                       /           \       \
-                      v             \       \
- (3)           period_charge        loan     \                             wish_charge
-             (transfer_cycle)        |\       \                                 |
-              /       \              | \       \                                |
-             /         \             |  \       \                               |
-            v           v            v   \       \                              V
- (2)  fund(credit) user_bill_type  fund   \       \            budget         wish
-          |             |                  \       \            /  \            |
-          |             |                   \       \          /    \           |
-          v             v                    v       v        v      v          V
- (1)    remind        books                remind  member   books   remind    remind
+ (5)                        member_charge                                                        recycle
+                            /          \                                                            |
+                           v            \                                                           v
+ (4)                    user_charge      \                                                      user_charge
+                        /         \       \                                                         |
+                       /           \       \                                                        |
+                      v             \       \                                                       |
+ (3)           period_charge        loan     \                             wish_charge              |
+             (transfer_cycle)        |\       \                                 |                   |
+              /       \              | \       \                                |                   |
+             /         \             |  \       \                               |                   |
+            v           v            v   \       \                              V                   v
+ (2)  fund(credit) user_bill_type  fund   \       \            budget         wish                fund
+          |             |                  \       \            /  \            |                   |
+          |             |                   \       \          /    \           |                   |
+          v             v                    v       v        v      v          V                   v
+ (1)    remind        books                remind  member   books   remind    remind              books
  
  */
 @interface SSJDataSynchronizeTask : SSJSynchronizeTask

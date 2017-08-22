@@ -120,9 +120,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #pragma mark - UICollectionViewDelegate
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    SSJAddOrEditFixedFinanceProductViewController *vc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-    return;
     SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     
     if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
@@ -133,6 +130,9 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             SSJLoanListViewController *loanListVC = [[SSJLoanListViewController alloc] init];
             loanListVC.item = financingItem;
             [self.navigationController pushViewController:loanListVC animated:YES];
+        } else if ([financingItem.fundingParent isEqualToString:@"17"]) {
+            SSJAddOrEditFixedFinanceProductViewController *fixedFinancevc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+            [self.navigationController pushViewController:fixedFinancevc animated:YES];
         } else {
             SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];
                 fundingDetailVC.item = financingItem;
@@ -202,7 +202,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 #pragma mark - UICollectionViewDelegateFlowLayout
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
         return CGSizeMake(self.view.width - 30, 80);
 }
@@ -304,7 +304,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 }
 
 - (void)rightButtonClicked:(id)sender{
-    SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]init];
+    SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
     fundingTypeSelectVC.needLoanOrNot = YES;
     __weak typeof(self) weakSelf = self;
     fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
@@ -415,7 +415,6 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
                 sumMoney += creditItem.cardBalance;
             }
         }
-        
     }];
     
     if (self.headerView.hiddenButton.selected) {
