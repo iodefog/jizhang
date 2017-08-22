@@ -298,22 +298,22 @@ typedef NS_ENUM(NSInteger, SSJMethodOfInterest) {
  */
 typedef NS_ENUM(NSInteger, SSJFinancingParent) {
     SSJFinancingParentCash = 1,
-    SSJFinancingParentDepositCard,
-    SSJFinancingParentCreditCard,
-    SSJFinancingParentInvestment,
-    SSJFinancingParentFunds,
-    SSJFinancingParentValueCard,
-    SSJFinancingParentOnlineAccount,
-    SSJFinancingParentHousingFund,
-    SSJFinancingParentReceivableMoney,
-    SSJFinancingParentPaidLeave,
-    SSJFinancingParentDebt,
-    SSJFinancingParentSocialSecurity,
-    SSJFinancingParentWeiXin,
-    SSJFinancingParentAlipay,
-    SSJFinancingParentOthers,
-    SSJFinancingParentHuabei,
-    SSJFinancingParentFixedEarnings
+    SSJFinancingParentDepositCard = 2,
+    SSJFinancingParentCreditCard = 3,
+    SSJFinancingParentInvestment = 4,
+    SSJFinancingParentFunds = 5,
+    SSJFinancingParentValueCard = 6,
+    SSJFinancingParentOnlineAccount = 7,
+    SSJFinancingParentHousingFund = 8,
+    SSJFinancingParentReceivableMoney = 9,
+    SSJFinancingParentPaidLeave = 10,
+    SSJFinancingParentDebt = 11,
+    SSJFinancingParentSocialSecurity = 12,
+    SSJFinancingParentWeiXin = 13,
+    SSJFinancingParentAlipay = 14,
+    SSJFinancingParentOthers = 15,
+    SSJFinancingParentHuabei = 16,
+    SSJFinancingParentFixedEarnings = 17
 };
 
 

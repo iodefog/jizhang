@@ -62,11 +62,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SuiShouJi/Module/Mine/Recycle/View/SSJRecycleListCell.m"
-            timestampString = "525074988.881452"
+            timestampString = "525078005.055194"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "-dealloc"
             landmarkType = "7">
          </BreakpointContent>
@@ -78,11 +78,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "SuiShouJi/Module/Mine/Recycle/View/SSJRecycleListCell.m"
-            timestampString = "525074728.149281"
+            timestampString = "525075346.694794"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "20"
-            endingLineNumber = "20"
+            startingLineNumber = "22"
+            endingLineNumber = "22"
+            landmarkName = "-dealloc"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "SuiShouJi/Module/Mine/Recycle/Controller/SSJRecycleListViewController.m"
+            timestampString = "525087168.27759"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "31"
+            endingLineNumber = "31"
             landmarkName = "-dealloc"
             landmarkType = "7">
          </BreakpointContent>

@@ -240,10 +240,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
                     [self startSyncWithSuccess:success failure:failure];
                 }
             } else {
-#ifdef DEBUG
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"数据同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
+                [CDAutoHideMessageHUD showError:error];
                 [SSJAnaliyticsManager event:@"sync_failed" extra:error.localizedDescription];
-#endif
             }
             
             if (shouldPerformFailuer) {
@@ -269,13 +267,8 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
             }
             [self.imageFailureBlocks removeBlock];
             [self.imageSuccessBlocks removeBlock];
-#ifdef DEBUG
-            if (error.code == SSJErrorCodeImageSyncFailed) {
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"图片同步失败" message:error.localizedDescription action:[SSJAlertViewAction actionWithTitle:@"确认" handler:NULL], nil];
-            } else if (error.code == SSJErrorCodeNoImageSyncNeedToSync) {
-                [CDAutoHideMessageHUD showMessage:error.localizedDescription];
-            }
-#endif
+            
+            [CDAutoHideMessageHUD showError:error];
             
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJSyncImageFailureNotification object:self];
         });

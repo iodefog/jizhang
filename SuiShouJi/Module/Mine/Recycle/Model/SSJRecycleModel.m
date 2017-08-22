@@ -15,6 +15,7 @@
              @"userID":@"cuserid",
              @"sundryID":@"cid",
              @"type":@"itype",
+             @"clientAddDate":@"clientadddate",
              @"writeDate":@"cwritedate",
              @"state":@"operatortype",
              @"version":@"iversion"
@@ -27,6 +28,7 @@
     model.userID = self.userID;
     model.sundryID = self.sundryID;
     model.type = self.type;
+    model.clientAddDate = self.clientAddDate;
     model.writeDate = self.writeDate;
     model.state = self.state;
     model.version = self.version;

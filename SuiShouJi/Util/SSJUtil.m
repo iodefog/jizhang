@@ -608,3 +608,31 @@ BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data) {
     [[NSUserDefaults standardUserDefaults] setObject:data forKey:kEvaluatedPolicyDomainStateKey];
     return [[NSUserDefaults standardUserDefaults] synchronize];
 }
+
+NSString *SSJImageNameForBooksType(SSJBooksType type) {
+    switch (type) {
+        case SSJBooksTypeDaily:
+            return @"bk_moren";
+            break;
+            
+        case SSJBooksTypeBusiness:
+            return @"bk_shengyi";
+            break;
+            
+        case SSJBooksTypeMarriage:
+            return @"bk_jiehun";
+            break;
+            
+        case SSJBooksTypeDecoration:
+            return @"bk_zhuangxiu";
+            break;
+            
+        case SSJBooksTypeTravel:
+            return @"bk_lvxing";
+            break;
+            
+        case SSJBooksTypeBaby:
+            return @"bk_baby";
+            break;
+    }
+}

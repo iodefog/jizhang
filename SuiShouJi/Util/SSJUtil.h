@@ -347,3 +347,13 @@ FOUNDATION_EXPORT NSData *SSJEvaluatedPolicyDomainState();
  @return <#return value description#>
  */
 FOUNDATION_EXPORT BOOL SSJUpdateEvaluatedPolicyDomainState(NSData *data);
+
+/**
+ 根据账本类型返回对应的账本图标名称
+
+ @param type 账本类型
+ @return 图标名称
+ */
+FOUNDATION_EXPORT NSString *SSJImageNameForBooksType(SSJBooksType type);
+
+

@@ -30,7 +30,9 @@ typedef NS_ENUM(NSInteger, SSJRecycleState) {
 
 @property (nonatomic) SSJRecycleType type;
 
-@property (nonatomic, copy) NSString *writeDate;
+@property (nonatomic, strong) NSDate *clientAddDate;
+
+@property (nonatomic, strong) NSDate *writeDate;
 
 @property (nonatomic) SSJRecycleState state;
 
