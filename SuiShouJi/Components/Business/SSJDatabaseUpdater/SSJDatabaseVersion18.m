@@ -29,7 +29,6 @@
                                                         `CUSERID`	TEXT,\
                                                         `CID`	TEXT,\
                                                         `ITYPE`	INTEGER,\
-                                                        `ISTATE`	INTEGER,\
                                                         `CLIENTADDDATE`	TEXT,\
                                                         `CWRITEDATE`	TEXT,\
                                                         `OPERATORTYPE`	INTEGER,\
