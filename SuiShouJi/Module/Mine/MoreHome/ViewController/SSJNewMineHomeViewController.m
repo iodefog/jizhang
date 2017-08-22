@@ -328,13 +328,10 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
             @weakify(self);
             if (needAnimation) {
                 [UIView animateWithDuration:0.7 animations:^{
-                    @strongify(self);
-                    SSJDispatch_main_async_safe(^{
-                        self.announceView.height = 34;
-                        self.announceView.hidden = NO;
-                        self.tableView.top = self.announceView.bottom;
-                        self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
-                    });
+                    self.announceView.height = 34;
+                    self.announceView.hidden = NO;
+                    self.tableView.top = self.announceView.bottom;
+                    self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
                 } completion:^(BOOL finished) {
                     needAnimation = NO;
                 }];
@@ -345,6 +342,11 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
                 self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT - self.announceView.height;
 
             }
+        } else {
+            self.announceView.hidden = YES;
+            self.announceView.height = 0;
+            self.tableView.top = SSJ_NAVIBAR_BOTTOM;
+            self.tableView.height = self.view.height - SSJ_NAVIBAR_BOTTOM - SSJ_TABBAR_HEIGHT;
         }
     }
 }
