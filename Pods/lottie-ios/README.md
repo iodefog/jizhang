@@ -153,7 +153,9 @@ To bundle JSON just add it and any images that the animation requires to your ta
 ```swift
 let animationView = LOTAnimationView(name: "LottieLogo")
 self.view.addSubview(animationView)
-animationView.play()
+animationView.play{ (finished) in
+      // Do Something
+}
 ```
 
 If your animation is in another bundle you can use
@@ -186,6 +188,21 @@ animationView.play(fromProgress: 0.25, toProgress: 0.5, withCompletion: nil)
 
 Lottie comes with a `UIViewController` animation-controller for making custom viewController transitions!
 
+![Transition1](_Gifs/transitionMasked.gif)
+![Transition2](_Gifs/transitionPosition.gif)
+
+Just become the delegate for a transition
+
+```objective-c
+- (void)_showTransitionA {
+  ToAnimationViewController *vc = [[ToAnimationViewController alloc] init];
+  vc.transitioningDelegate = self;
+  [self presentViewController:vc animated:YES completion:NULL];
+}
+```
+
+And implement the delegate methods with a `LOTAnimationTransitionController`
+
 ```objective-c
 #pragma mark -- View Controller Transitioning
 
@@ -208,6 +225,8 @@ return animationController;
 }
 
 ```
+
+By setting `applyAnimationTransform` to YES you can make the Lottie animation move the from and to view controllers. They will be positioned at the origin of the layer. When set to NO Lottie just masks the view controller with the specified layer while resepecting z order.
 
 ## Debugging
 Lottie has a couple of debugging features to know about. 
@@ -269,6 +288,12 @@ animationView4.play()
 animationView2.setValue(UIColor.green, forKeypath: "BG-On.Group 1.Fill 1.Color", atFrame: 0)
 animationView3.setValue(UIColor.red, forKeypath: "BG-On.Group 1.Fill 1.Color", atFrame: 0)
 animationView4.setValue(UIColor.orange, forKeypath: "BG-On.Group 1.Fill 1.Color", atFrame: 0)
+```
+
+```objective-c
+[animationView2 setValue:[UIColor greenColor]
+              forKeypath:@"BG-On.Group 1.Fill 1.Color"
+                 atFrame:@0];
 ```
 The keyPath is a dot separated path of layer and property names from After Effects.
 LOTAnimationView provides `- (void)logHierarchyKeypaths` which will recursively log all settable keypaths for the animation.
@@ -431,7 +456,7 @@ Contributors are more than welcome. Just upload a PR with a description of your 
 If you would like to add more JSON files feel free to do so!
 
 ## Issues or feature requests?
-File github issues for anything that is unexpectedly broken. If an After Effects file is not working, please attach it to your issue. Debugging without the original file is much more difficult.
+File github issues for anything that is unexpectedly broken. If an After Effects file is not working, please attach it to your issue. Debugging without the original file is much more difficult. Lottie is developed and maintained by [Brandon Withrow](mailto:brandon.withrow@airbnb.com). Feel free to reach out via email or [Twitter](https://twitter.com/theWithra)
 
 ## Roadmap (In no particular order)
 - Add support for interactive animated transitions

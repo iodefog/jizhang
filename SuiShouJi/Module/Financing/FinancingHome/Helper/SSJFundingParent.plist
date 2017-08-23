@@ -59,6 +59,101 @@
 		<key>subFunds</key>
 		<array/>
 	</dict>
+	<key>4</key>
+	<dict>
+		<key>ID</key>
+		<string>4</string>
+		<key>name</key>
+		<string>一般投资</string>
+		<key>icon</key>
+		<string>ft_invest</string>
+		<key>memo</key>
+		<string>基金账户、证券账户</string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>1</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
+	<key>5</key>
+	<dict>
+		<key>ID</key>
+		<string>5</string>
+		<key>name</key>
+		<string>货币基金</string>
+		<key>icon</key>
+		<string>ft_huobijijin</string>
+		<key>memo</key>
+		<string>宝宝类</string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
+	<key>6</key>
+	<dict>
+		<key>ID</key>
+		<string>6</string>
+		<key>name</key>
+		<string>实物储值卡</string>
+		<key>icon</key>
+		<string>ft_shiwuka</string>
+		<key>memo</key>
+		<string>购物卡、公交卡等</string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<array/>
+	</dict>
+	<key>7</key>
+	<dict>
+		<key>ID</key>
+		<string>7</string>
+		<key>name</key>
+		<string>网络充值账户</string>
+		<key>icon</key>
+		<string>ft_wangluochongzhi</string>
+		<key>memo</key>
+		<string>9188彩票等</string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<array/>
+	</dict>
+	<key>8</key>
+	<dict>
+		<key>ID</key>
+		<string>8</string>
+		<key>name</key>
+		<string>住房公积金</string>
+		<key>icon</key>
+		<string>ft_house</string>
+		<key>memo</key>
+		<string></string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
 	<key>9</key>
 	<dict>
 		<key>ID</key>
@@ -116,6 +211,63 @@
 		<key>subFunds</key>
 		<array/>
 	</dict>
+	<key>12</key>
+	<dict>
+		<key>ID</key>
+		<string>12</string>
+		<key>name</key>
+		<string>社保</string>
+		<key>icon</key>
+		<string>ft_shebao</string>
+		<key>memo</key>
+		<string>医保</string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
+	<key>13</key>
+	<dict>
+		<key>ID</key>
+		<string>13</string>
+		<key>name</key>
+		<string>微信钱包</string>
+		<key>icon</key>
+		<string>ft_weixin</string>
+		<key>memo</key>
+		<string></string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
+	<key>14</key>
+	<dict>
+		<key>ID</key>
+		<string>14</string>
+		<key>name</key>
+		<string>支付宝</string>
+		<key>icon</key>
+		<string>ft_zhifubao</string>
+		<key>memo</key>
+		<string></string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<dict/>
+	</dict>
 	<key>15</key>
 	<dict>
 		<key>ID</key>
@@ -143,6 +295,25 @@
 		<string>蚂蚁花呗</string>
 		<key>icon</key>
 		<string>ft_mayihuabei</string>
+		<key>memo</key>
+		<string></string>
+		<key>expand</key>
+		<false/>
+		<key>order</key>
+		<integer>0</integer>
+		<key>type</key>
+		<integer>0</integer>
+		<key>subFunds</key>
+		<array/>
+	</dict>
+	<key>17</key>
+	<dict>
+		<key>ID</key>
+		<string>17</string>
+		<key>name</key>
+		<string>固收理财</string>
+		<key>icon</key>
+		<string>ft_gushou</string>
 		<key>memo</key>
 		<string></string>
 		<key>expand</key>
