@@ -20,6 +20,8 @@ typedef NS_ENUM(NSInteger, SSJRecycleState) {
     SSJRecycleStateRemoved = 2
 };
 
+@class FMResultSet;
+
 @interface SSJRecycleModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) NSString *ID;
@@ -37,5 +39,7 @@ typedef NS_ENUM(NSInteger, SSJRecycleState) {
 @property (nonatomic) SSJRecycleState state;
 
 @property (nonatomic) int64_t version;
+
++ (instancetype)modelWithResultSet:(FMResultSet *)rs;
 
 @end

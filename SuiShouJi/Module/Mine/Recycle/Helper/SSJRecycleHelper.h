@@ -17,6 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure;
 
++ (void)recoverWithRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                      success:(nullable void(^)())success
+                      failure:(nullable void(^)(NSError *error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

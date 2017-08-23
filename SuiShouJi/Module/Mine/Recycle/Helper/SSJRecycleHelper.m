@@ -20,16 +20,7 @@
         NSMutableArray *models = [NSMutableArray array];
         FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where cuserid = ? and operatortype = ? order by clientadddate desc", SSJUSERID(), @(SSJRecycleStateNormal)];
         while ([rs next]) {
-            SSJRecycleModel *model = [[SSJRecycleModel alloc] init];
-            model.ID = [rs stringForColumn:@"rid"];
-            model.userID = [rs stringForColumn:@"cuserid"];
-            model.sundryID = [rs stringForColumn:@"cid"];
-            model.type = [rs intForColumn:@"itype"];
-            model.clientAddDate = [NSDate dateWithString:[rs stringForColumn:@"clientadddate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            model.state = [rs intForColumn:@"operatortype"];
-            model.version = [rs longLongIntForColumn:@"iversion"];
-            [models addObject:model];
+            [models addObject:[SSJRecycleModel modelWithResultSet:rs]];
         }
         [rs close];
         
@@ -187,7 +178,7 @@
             [subtitles addObject:@"提醒"];
         }
     } else if (parent == SSJFinancingParentFixedEarnings) {
-        if ([db boolForQuery:@"select count(*) from bk_user_credit where cthisfundid = ? and length(cremindid) > 0", model.sundryID]) {
+        if ([db boolForQuery:@"select count(*) from bk_fixed_finance_product where cthisfundid = ? and length(cremindid) > 0", model.sundryID]) {
             [subtitles addObject:@"提醒"];
         }
     }
@@ -237,6 +228,94 @@
                                                                    subtitles:subtitles
                                                                        state:SSJRecycleListCellStateNormal];
     return item;
+}
+
++ (void)recoverWithRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                      success:(nullable void(^)())success
+                      failure:(nullable void(^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        for (NSString *recycleID in recycleIDs) {
+            
+            SSJRecycleModel *recycleModel = nil;
+            
+            FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleIDs];
+            while ([rs next]) {
+                recycleModel = [SSJRecycleModel modelWithResultSet:rs];
+            }
+            [rs close];
+            
+            NSError *error = nil;
+            switch (recycleModel.type) {
+                case SSJRecycleTypeCharge:
+                    [self recoverChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
+                    break;
+                    
+                case SSJRecycleTypeFund:
+                    
+                    break;
+                    
+                case SSJRecycleTypeBooks:
+                    
+                    break;
+            }
+        }
+    }];
+}
+
++ (void)recoverChargeWithRecycleModel:(SSJRecycleModel *)recycleModel
+                           inDatabase:(SSJDatabase *)db
+                                error:(NSError **)error {
+    
+    if ([db intForQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recycleModel.sundryID] != 2) {
+        return;
+    }
+    
+    NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // 如果流水依赖的资金账户也被删除了，先恢复资金账户
+    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1 and cwritedate = ? where cfundid = (select ifunsid from bk_user_charge wehre ichargeid = ?) and operatortype = 2", writeDateStr, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 如果流水依赖的共享账本也被删除了，先恢复账本
+    if (![db executeUpdate:@"update bk_books_type set operatortype = 1 and cwritedate = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and cuserid = ? and operatortype = 2", writeDateStr, recycleModel.sundryID, recycleModel.userID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 如果流水依赖的个人账本也被删除了，先恢复账本
+    if (![db executeUpdate:@"update bk_share_books set operatortype = 1 and cwritedate = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 将流水恢复
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1 and cwritedate = ? where ichargeid = ?", writeDateStr, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+}
+
++ (void)recoverFundWithRecycleModel:(SSJRecycleModel *)recycleModel
+                         inDatabase:(SSJDatabase *)db
+                              error:(NSError **)error {
+    
+}
+
++ (void)recoverBookWithRecycleModel:(SSJRecycleModel *)recycleModel
+                         inDatabase:(SSJDatabase *)db
+                              error:(NSError **)error {
+    
 }
 
 @end

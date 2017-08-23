@@ -7,6 +7,7 @@
 //
 
 #import "SSJRecycleModel.h"
+#import "FMResultSet.h"
 
 @implementation SSJRecycleModel
 
@@ -32,6 +33,19 @@
     model.writeDate = self.writeDate;
     model.state = self.state;
     model.version = self.version;
+    return model;
+}
+
++ (instancetype)modelWithResultSet:(FMResultSet *)rs {
+    SSJRecycleModel *model = [[SSJRecycleModel alloc] init];
+    model.ID = [rs stringForColumn:@"rid"];
+    model.userID = [rs stringForColumn:@"cuserid"];
+    model.sundryID = [rs stringForColumn:@"cid"];
+    model.type = [rs intForColumn:@"itype"];
+    model.clientAddDate = [NSDate dateWithString:[rs stringForColumn:@"clientadddate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    model.state = [rs intForColumn:@"operatortype"];
+    model.version = [rs longLongIntForColumn:@"iversion"];
     return model;
 }
 
