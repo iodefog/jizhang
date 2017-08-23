@@ -182,6 +182,14 @@
         if ([db boolForQuery:@"select count(*) from bk_loan where cthefundid = ? and length(cremindid) > 0", model.sundryID]) {
             [subtitles addObject:@"提醒"];
         }
+    } else if (parent == SSJFinancingParentCreditCard) {
+        if ([db boolForQuery:@"select count(*) from bk_user_credit where cfundid = ? and length(cremindid) > 0", model.sundryID]) {
+            [subtitles addObject:@"提醒"];
+        }
+    } else if (parent == SSJFinancingParentFixedEarnings) {
+        if ([db boolForQuery:@"select count(*) from bk_user_credit where cthisfundid = ? and length(cremindid) > 0", model.sundryID]) {
+            [subtitles addObject:@"提醒"];
+        }
     }
     
     SSJRecycleListCellItem *item = [SSJRecycleListCellItem itemWithRecycleID:model.ID
