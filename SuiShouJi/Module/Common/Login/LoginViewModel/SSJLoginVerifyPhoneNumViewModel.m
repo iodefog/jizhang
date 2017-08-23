@@ -21,7 +21,7 @@
 
 #import "SSJUserTableManager.h"
 #import "SSJUserDefaultDataCreater.h"
-#import "GeTuiSdk.h"
+#import <GTSDK/GeTuiSdk.h>
 #import "SSJDatabaseQueue.h"
 #import "SSJBookkeepingTreeStore.h"
 #import "SSJDataSynchronizer.h"

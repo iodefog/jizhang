@@ -73,17 +73,17 @@ static NSString *kCellID = @"cellID";
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
-    SSJFundingParentSelectHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kSSJFinancingColorSelectHeaderID];
-    @weakify(self);
+  SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
+  SSJFundingParentSelectHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kSSJFinancingColorSelectHeaderID];
+  @weakify(self);
     headerView.didSelectFundParentHeader = ^(SSJFundingParentmodel *model) {
-      @strongify(self);
-      if (model.subFunds.count) {
-        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
-        
-      } else {
-        [self popToVcWithModel:model];
-      }
+        @strongify(self);
+        if (model.subFunds.count) {
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
+      
+        } else {
+            [self popToVcWithModel:model];
+        }
     };
     headerView.model = model;
     return headerView;
@@ -95,8 +95,10 @@ static NSString *kCellID = @"cellID";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJFundingParentmodel *model = [self.items objectAtIndex:indexPath.row];
-    [self popToVcWithModel:model];
+    SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:indexPath.section];
+  
+    SSJFundingParentmodel *cellItem = [model.subFunds ssj_safeObjectAtIndex:indexPath.row];
+    [self popToVcWithModel:cellItem];
 }
 
 

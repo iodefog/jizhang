@@ -35,4 +35,6 @@
 
 @property (nonatomic, strong) NSArray <SSJFundingParentmodel*> *liabilitiesFunds;
 
+- (SSJFundingParentmodel *)modelForFundId:(NSString *)fundId;
+
 @end

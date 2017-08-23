@@ -9,7 +9,7 @@
 #import "SSJLoginService.h"
 #import "SSJUserInfoItem.h"
 #import "SSJCustomCategoryItem.h"
-#import "GeTuiSdk.h"
+#import <GTSDK/GeTuiSdk.h>
 
 @interface SSJLoginService ()
 
