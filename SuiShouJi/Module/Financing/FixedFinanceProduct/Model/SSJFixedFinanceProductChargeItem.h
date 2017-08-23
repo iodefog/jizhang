@@ -63,6 +63,9 @@ typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
 
 @property (nonatomic, copy) NSDate *writeDate;
 
+/**cid*/
+@property (nonatomic, copy) NSString *cid;
+
 @property (nonatomic) SSJFixedFinCompoundChargeType chargeType;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;

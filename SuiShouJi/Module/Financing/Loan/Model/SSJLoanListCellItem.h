@@ -9,6 +9,7 @@
 #import "SSJBaseCellItem.h"
 
 @class SSJLoanModel;
+@class SSJFixedFinanceProductItem;
 
 @interface SSJLoanListCellItem : SSJBaseCellItem
 
@@ -26,4 +27,5 @@
 
 + (instancetype)itemWithLoanModel:(SSJLoanModel *)model;
 
++ (instancetype)itemForFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model;
 @end

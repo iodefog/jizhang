@@ -18,7 +18,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 #import "SSJLoanListViewController.h"
 #import "SSJFundingDetailsViewController.h"
 #import "SSJFundingTransferViewController.h"
-#import "SSJAddOrEditFixedFinanceProductViewController.h"
+#import "SSJFixedFinanceProductListViewController.h"
 
 #import "SSJEditableCollectionView.h"
 #import "SSJFinancingHomeCell.h"
@@ -131,7 +131,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             loanListVC.item = financingItem;
             [self.navigationController pushViewController:loanListVC animated:YES];
         } else if ([financingItem.fundingParent isEqualToString:@"17"]) {
-            SSJAddOrEditFixedFinanceProductViewController *fixedFinancevc = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+            SSJFixedFinanceProductListViewController *fixedFinancevc = [[SSJFixedFinanceProductListViewController alloc] init];
+            fixedFinancevc.item = financingItem;
             [self.navigationController pushViewController:fixedFinancevc animated:YES];
         } else {
             SSJFundingDetailsViewController *fundingDetailVC = [[SSJFundingDetailsViewController alloc]init];

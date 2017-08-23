@@ -7,13 +7,13 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJFixedFinanceProductItem.h"
+@class SSJFinancingHomeitem;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJFixedFinanceProductListViewController : SSJBaseViewController
 
-@property (nonatomic, strong) SSJFixedFinanceProductItem *item;
+@property (nonatomic, strong) SSJFinancingHomeitem *item;
 
 @end
 

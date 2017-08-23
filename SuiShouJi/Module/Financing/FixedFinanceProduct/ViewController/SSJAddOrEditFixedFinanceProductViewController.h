@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseViewController.h"
+@class SSJFixedFinanceProductCompoundItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJAddOrEditFixedFinanceProductViewController : SSJBaseViewController
 
 @property (nonatomic, copy, nullable) SSJFixedFinanceProductItem *model;
+
+/**
+ 借贷产生的流水列表
+ 注意：新建不用传，编辑必须传
+ */
+@property (nonatomic, copy, nullable) NSArray <SSJFixedFinanceProductCompoundItem *>*chargeModels;
 
 @end
 NS_ASSUME_NONNULL_END

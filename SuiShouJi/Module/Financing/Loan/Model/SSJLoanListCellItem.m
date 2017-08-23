@@ -8,6 +8,7 @@
 
 #import "SSJLoanListCellItem.h"
 #import "SSJLoanModel.h"
+#import "SSJFixedFinanceProductItem.h"
 
 @implementation SSJLoanListCellItem
 
@@ -33,6 +34,16 @@
             break;
     }
     
+    return item;
+}
+
++ (instancetype)itemForFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model {
+    SSJLoanListCellItem *item = [[SSJLoanListCellItem alloc] init];
+    item.icon = model.productIcon;
+    item.memo = model.memo;
+    item.loanTitle = model.productName;
+    item.money = [NSString stringWithFormat:@"+%.2f",[model.money doubleValue]];
+    item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];
     return item;
 }
 

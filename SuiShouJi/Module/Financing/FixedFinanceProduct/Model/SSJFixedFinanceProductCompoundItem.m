@@ -24,4 +24,22 @@
     return [self debugDescription];
 }
 
+//@property (nonatomic, copy) SSJFixedFinanceProductChargeItem *chargeModel;
+//
+//@property (nonatomic, copy) SSJFixedFinanceProductChargeItem *targetChargeModel;
+//
+//@property (nonatomic, copy, nullable) SSJFixedFinanceProductChargeItem *interestChargeModel;
+
+- (void)setChargeModel:(SSJFixedFinanceProductChargeItem *)chargeModel {
+    _chargeModel = chargeModel;
+}
+
+- (void)setTargetChargeModel:(SSJFixedFinanceProductChargeItem *)targetChargeModel {
+    _targetChargeModel = targetChargeModel;
+}
+
+- (void)setInterestChargeModel:(SSJFixedFinanceProductChargeItem *)interestChargeModel {
+    _interestChargeModel = interestChargeModel;
+}
+
 @end
