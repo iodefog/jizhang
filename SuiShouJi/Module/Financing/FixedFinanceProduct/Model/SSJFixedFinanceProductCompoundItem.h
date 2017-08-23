@@ -7,17 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
-@class SSJFixedFinanceProductChargeItem;
+#import "SSJFixedFinanceProductChargeItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @interface SSJFixedFinanceProductCompoundItem : NSObject<NSCopying>
 @property (nonatomic, copy) NSString *changeRecord;
 
-@property (nonatomic, copy) SSJFixedFinanceProductChargeItem *chargeModel;
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeModel;
 
-@property (nonatomic, copy) SSJFixedFinanceProductChargeItem *targetChargeModel;
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *targetChargeModel;
 
-@property (nonatomic, copy, nullable) SSJFixedFinanceProductChargeItem *interestChargeModel;
+@property (nonatomic, strong, nullable) SSJFixedFinanceProductChargeItem *interestChargeModel;
 
 @property (nonatomic) BOOL closeOut;
 @end

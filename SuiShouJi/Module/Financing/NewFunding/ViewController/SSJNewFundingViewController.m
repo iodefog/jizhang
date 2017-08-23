@@ -16,6 +16,7 @@
 #import "SSJFinancingHomeHelper.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJFundingMergeViewController.h"
+#import "SSJFundingTypeManager.h"
 
 
 #define NUM @"+-.0123456789"
@@ -61,14 +62,18 @@
     self.titles = @[@[@"账户名称",@"账户余额",@"选择颜色"],@[@"备注"]];
     self.images = @[@[@"fund_name",@"fund_balance",@"fund_color"],@[@"fund_memo"]];
     if (!self.item) {
-        NSString *parentName = [SSJFinancingHomeHelper fundParentNameForFundingParent:self.selectParent];
+        SSJFundingParentmodel *parentModel = [[SSJFundingTypeManager sharedManager] modelForFundId:self.selectParent];
+
+        NSString *parentName = parentModel.name;
         if (![parentName hasSuffix:@"账户"]) {
             parentName = [NSString stringWithFormat:@"%@账户",parentName];
         }
         self.title = [NSString stringWithFormat:@"新建%@",parentName];
+        
         self.item = [[SSJFinancingHomeitem alloc] init];
-        self.item.fundingParent = self.selectParent;
-        self.item.fundingIcon = [SSJFinancingHomeHelper fundIconForFundingParent:self.selectParent];
+        self.item.fundingParent = parentModel.ID;
+        
+        self.item.fundingIcon = parentModel.icon;
 
     } else {
         NSString *parentName = self.item.fundingParentName;

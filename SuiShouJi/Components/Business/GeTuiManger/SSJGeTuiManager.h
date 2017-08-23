@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GeTuiSdk.h"
+#import <GTSDK/GeTuiSdk.h>
 
 @interface SSJGeTuiManager : NSObject
 
 + (instancetype)shareManager;
+
 - (void)SSJGeTuiManagerWithDelegate:(id<GeTuiSdkDelegate>)delegate;
 
 - (void)pushToViewControllerWithUserInfo:(NSDictionary *)userInfo;

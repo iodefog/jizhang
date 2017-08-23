@@ -26,7 +26,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.tableView];
+//    [self.view addSubview:self.tableView];
     [self.view addSubview:self.changeBtn];
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
