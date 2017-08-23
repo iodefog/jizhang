@@ -274,7 +274,7 @@
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 如果流水依赖的资金账户也被删除了，先恢复资金账户
-    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1 and cwritedate = ? where cfundid = (select ifunsid from bk_user_charge wehre ichargeid = ?) and operatortype = 2", writeDateStr, recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = (select ifunsid from bk_user_charge wehre ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -282,7 +282,7 @@
     }
     
     // 如果流水依赖的共享账本也被删除了，先恢复账本
-    if (![db executeUpdate:@"update bk_books_type set operatortype = 1 and cwritedate = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and cuserid = ? and operatortype = 2", writeDateStr, recycleModel.sundryID, recycleModel.userID]) {
+    if (![db executeUpdate:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and cuserid = ? and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID, recycleModel.userID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -290,7 +290,7 @@
     }
     
     // 如果流水依赖的个人账本也被删除了，先恢复账本
-    if (![db executeUpdate:@"update bk_share_books set operatortype = 1 and cwritedate = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_share_books set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -298,7 +298,15 @@
     }
     
     // 将流水恢复
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1 and cwritedate = ? where ichargeid = ?", writeDateStr, recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ichargeid = ?", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复回收站记录
+    if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where ichargeid = ?", @(SSJRecycleStateRecovered), writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
