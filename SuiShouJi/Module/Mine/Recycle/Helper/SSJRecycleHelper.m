@@ -465,7 +465,51 @@
 + (void)recoverBookWithRecycleModel:(SSJRecycleModel *)recycleModel
                          inDatabase:(SSJDatabase *)db
                               error:(NSError **)error {
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *clientDate = [db stringForQuery:@"select clientadddate from bk_recycle where rid = ?", recycleModel.ID];
     
+    // 恢复账本
+    if (![db executeUpdate:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复回收站记录
+    if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where rid = ?", @(SSJRecycleStateRecovered), writeDate, @(SSJSyncVersion()), recycleModel.ID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复此账户下流水依赖的资金账户
+    // 注意：过滤特殊流水，例如：平账、转账等等；因为老版本对这些特殊流水也写入了booksid
+    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cfundid in (select ifunsid from bk_user_charge where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复此账户下流水依赖的信用卡账户
+    // 注意：过滤特殊流水，例如：平账、转账等等；因为老版本对这些特殊流水也写入了booksid
+    if (![db executeUpdate:@"update bk_user_credit set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cfundid in (select ifunsid from bk_user_charge where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复此账户下流水
+    // 注意：过滤特殊流水，例如：平账、转账等等；因为老版本对这些特殊流水也写入了booksid
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
 }
 
 #pragma mark - 恢复周期转账
