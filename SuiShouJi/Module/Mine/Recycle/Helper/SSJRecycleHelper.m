@@ -314,6 +314,15 @@
         return;
     }
     
+    // 如果此流水是共享账本流水，先检测是否共享退出了共享账本，退出了就不能恢复
+    int state = [db intForQuery:@"select istate from bk_share_books_member where cmemberid = ? and cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?)", recycleModel.userID, recycleModel.sundryID];
+    if (state != SSJShareBooksMemberStateNormal) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"您已退出共享账本，无法恢复此记录"}];
+        }
+        return;
+    }
+    
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 如果流水依赖的资金账户也被删除了，先恢复资金账户
@@ -324,16 +333,8 @@
         return;
     }
     
-    // 如果流水依赖的共享账本也被删除了，先恢复账本
-    if (![db executeUpdate:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and cuserid = ? and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID, recycleModel.userID]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return;
-    }
-    
     // 如果流水依赖的个人账本也被删除了，先恢复账本
-    if (![db executeUpdate:@"update bk_share_books set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where cbooksid = (select cbooksid from bk_user_charge where ichargeid = ?) and cuserid = ? and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID, recycleModel.userID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -388,8 +389,24 @@
         return;
     }
     
+    // 恢复此账户下流水（过滤特殊流水，例如：平账、转账等等）依赖的个人账本
+    if (![db executeQuery:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cbooksid in (select cbooksid from bk_user_charge where ifunsid = ? and cwritedate = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
     // 恢复普通流水／周期记账流水
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ifunsid = ? and cwritedate = ? and (ichargetype = ? or ichargetype = ?) and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate, @(SSJChargeIdTypeNormal), @(SSJChargeIdTypeCircleConfig)]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复未退出的共享账本流水
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ifunsid = ? and cwritedate = ? and ichargetype = ? and operatortype = 2 and cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?)", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate, @(SSJChargeIdTypeShareBooks), recycleModel.userID, @(SSJShareBooksMemberStateNormal)]) {
         if (error) {
             *error = [db lastError];
         }
