@@ -26,7 +26,27 @@
 }
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet {
-    return nil;
+    SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
+    item.productid = [resultSet stringForColumn:@"CPRODUCTID"];
+    item.userid = [resultSet stringForColumn:@"CUSERID"];
+    item.productName = [resultSet stringForColumn:@"cproductname"];
+    item.remindid = [resultSet stringForColumn:@"CREMINDID"];
+    item.thisfundid = [resultSet stringForColumn:@"CTHISFUNDID"];
+    item.targetfundid = [resultSet stringForColumn:@"CTARGETFUNDID"];
+    item.etargetfundid = [resultSet stringForColumn:@"CETARGETFUNDID"];
+    item.money = [resultSet stringForColumn:@"IMONEY"];
+    item.memo = [resultSet stringForColumn:@"CMEMO"];
+    item.rate = [resultSet doubleForColumn:@"IRATE"];
+    item.ratetype = [resultSet intForColumn:@"IRATETYPE"];
+    item.time = [resultSet doubleForColumn:@"ITIME"];
+    item.timetype = [resultSet intForColumn:@"ITIMETYPE"];
+    item.interesttype = [resultSet intForColumn:@"INTERESTTYPE"];
+    item.startdate = [resultSet stringForColumn:@"CSTARTDATE"];
+    item.startDate = [item.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+    item.enddate = [resultSet stringForColumn:@"CENDDATE"];
+    item.isend = [resultSet boolForColumn:@"ISEND"];
+    item.productIcon = [resultSet stringForColumn:@"productIcon"];
+    return item;
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {
@@ -46,6 +66,7 @@
     item.startdate = _startdate;
     item.enddate = _enddate;
     item.isend = _isend;
+    item.productIcon = _productIcon;
     return item;
 }
 

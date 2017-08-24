@@ -31,7 +31,6 @@
   return nil;
 }
 
-// Change keyframe data
 - (BOOL)setValue:(id)value atFrame:(NSNumber *)frame {
   id data = [self keyframeDataForValue:value];
   if (data == nil) {

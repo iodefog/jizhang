@@ -30,6 +30,9 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 /**理财产品名称*/
 @property (nonatomic, copy) NSString *productName;
 
+/**理财产品图片*/
+@property (nonatomic, copy) NSString *productIcon;
+
 /**用户id*/
 @property (nonatomic, copy) NSString *userid;
 
@@ -68,6 +71,8 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 
 /**起息日期*/
 @property (nonatomic, copy) NSString *startdate;
+
+@property (nonatomic, strong) NSDate *startDate;
 
 /**结算日期*/
 @property (nonatomic, copy, nullable) NSString *enddate;
