@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJRepaymentModel.h"
 #import "SSJBillingChargeCellItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJRepaymentStore : NSObject
 
@@ -23,5 +24,8 @@
 + (void)deleteRepaymentWithRepaymentModel:(SSJRepaymentModel *)model
                                   Success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure ;
+
++ (void)queryFirstRepaymentItemSuccess:(void (^)(SSJFinancingHomeitem *item))success
+                               failure:(void (^)(NSError *error))failure;
 
 @end
