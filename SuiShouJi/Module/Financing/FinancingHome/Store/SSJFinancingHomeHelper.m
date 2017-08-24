@@ -390,17 +390,6 @@
     return fundItem;
 }
 
-+ (SSJFinancingHomeitem *)queryfirstFundItem{
-    __block SSJFinancingHomeitem *fundItem = [[SSJFinancingHomeitem alloc]init];
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? limit 1",userid];
-        while ([result next]) {
-            fundItem = [self fundingItemWithResultSet:result inDatabase:db];
-        }
-    }];
-    return fundItem;
-}
 
 + (NSString *)fundIconForFundingParent:(NSString *)parent {
     switch ([parent integerValue]) {
