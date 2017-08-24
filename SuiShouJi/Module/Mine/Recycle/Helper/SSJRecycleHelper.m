@@ -42,6 +42,8 @@
 
 @implementation SSJRecycleHelper
 
+#pragma mark -
+#pragma mark ---------------------------------------- 查询 ----------------------------------------
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -258,10 +260,13 @@
     return item;
 }
 
+#pragma mark -
+#pragma mark ---------------------------------------- 恢复 ----------------------------------------
+
 #pragma mark - 恢复回收站中指定的数据
-+ (void)recoverWithRecycleIDs:(NSArray<NSString *> *)recycleIDs
-                      success:(nullable void(^)())success
-                      failure:(nullable void(^)(NSError *error))failure {
++ (void)recoverRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                  success:(nullable void(^)())success
+                  failure:(nullable void(^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         for (NSString *recycleID in recycleIDs) {
@@ -804,6 +809,73 @@
     }
     
     return YES;
+}
+
+#pragma mark -
+#pragma mark ---------------------------------------- 清除 ----------------------------------------
+
+#pragma mark - 清除回收站数据
++ (void)clearRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                success:(nullable void(^)())success
+                failure:(nullable void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        for (NSString *recycleID in recycleIDs) {
+            SSJRecycleModel *recycleModel = nil;
+            FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleIDs];
+            while ([rs next]) {
+                recycleModel = [SSJRecycleModel modelWithResultSet:rs];
+            }
+            [rs close];
+            
+            NSError *error = nil;
+            switch (recycleModel.type) {
+                case SSJRecycleTypeCharge:
+                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
+                    break;
+                    
+                case SSJRecycleTypeFund:
+                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
+                    break;
+                    
+                case SSJRecycleTypeBooks:
+                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
+                    break;
+            }
+            
+            if (error) {
+                SSJDispatchMainAsync(^{
+                    if (failure) {
+                        failure(error);
+                    }
+                });
+                return;
+            }
+        }
+        
+        SSJDispatchMainAsync(^{
+            if (success) {
+                success();
+            }
+        });
+    }];
+}
+
++ (void)clearChargeWithRecycleModel:(SSJRecycleModel *)recycleModel
+                         inDatabase:(SSJDatabase *)db
+                              error:(NSError **)error {
+    
+}
+
++ (void)clearFundWithRecycleModel:(SSJRecycleModel *)recycleModel
+                       inDatabase:(SSJDatabase *)db
+                            error:(NSError **)error {
+    
+}
+
++ (void)clearBookWithRecycleModel:(SSJRecycleModel *)recycleModel
+                       inDatabase:(SSJDatabase *)db
+                            error:(NSError **)error {
+    
 }
 
 @end

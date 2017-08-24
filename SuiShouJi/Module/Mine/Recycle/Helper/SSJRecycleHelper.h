@@ -14,12 +14,36 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJRecycleHelper : NSObject
 
+/**
+ <#Description#>
+
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure;
 
-+ (void)recoverWithRecycleIDs:(NSArray<NSString *> *)recycleIDs
-                      success:(nullable void(^)())success
-                      failure:(nullable void(^)(NSError *error))failure;
+/**
+ <#Description#>
+
+ @param recycleIDs <#recycleIDs description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)recoverRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                  success:(nullable void(^)())success
+                  failure:(nullable void(^)(NSError *error))failure;
+
+/**
+ <#Description#>
+
+ @param recycleIDs <#recycleIDs description#>
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)clearRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                success:(nullable void(^)())success
+                failure:(nullable void(^)(NSError *error))failure;
 
 @end
 
