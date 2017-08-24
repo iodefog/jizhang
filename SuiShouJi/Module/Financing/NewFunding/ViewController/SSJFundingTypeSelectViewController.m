@@ -73,9 +73,9 @@ static NSString *kCellID = @"cellID";
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-  SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
-  SSJFundingParentSelectHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kSSJFinancingColorSelectHeaderID];
-  @weakify(self);
+    SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
+    SSJFundingParentSelectHeader *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kSSJFinancingColorSelectHeaderID];
+    @weakify(self);
     headerView.didSelectFundParentHeader = ^(SSJFundingParentmodel *model) {
         @strongify(self);
         if (model.subFunds.count) {

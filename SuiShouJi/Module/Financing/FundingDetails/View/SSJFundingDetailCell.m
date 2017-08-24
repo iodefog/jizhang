@@ -44,6 +44,7 @@
         [self.contentView addSubview:self.memoLabel];
         [self.contentView addSubview:self.seperator1];
         [self.contentView addSubview:self.seperator2];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

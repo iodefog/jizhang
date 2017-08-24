@@ -30,12 +30,6 @@
 
 @property(nonatomic, strong) UIView *horizontalSeperatorLine;
 
-@property(nonatomic, strong) UIView *bottomView;
-
-@property(nonatomic, strong) UILabel *incomeLab;
-
-@property(nonatomic, strong) UILabel *expenceLab;
-
 @end
 
 @implementation SSJCreditCardDetailHeader
@@ -56,9 +50,6 @@
         [self addSubview:self.limitTitleLab];
         [self addSubview:self.repaymentDayLab];
         [self addSubview:self.repaymentDayTitleLab];
-        [self addSubview:self.bottomView];
-        [self addSubview:self.incomeLab];
-        [self addSubview:self.expenceLab];
     }
     return self;
 }
@@ -89,20 +80,6 @@
     self.repaymentDayLab.right = self.backLayer.right;
     self.repaymentDayTitleLab.top = self.repaymentDayLab.bottom + 10;
     self.repaymentDayTitleLab.centerX = self.repaymentDayLab.centerX;
-    self.bottomView.size = CGSizeMake(self.width, 40);
-    self.bottomView.leftBottom = CGPointMake(0, self.height);
-    if (self.totalIncome == 0 && self.totalExpence == 0) {
-        self.incomeLab.hidden = YES;
-        self.expenceLab.hidden = YES;
-    }else{
-        self.incomeLab.hidden = NO;
-        self.expenceLab.hidden = NO;
-
-    }
-    self.incomeLab.left = 15;
-    self.incomeLab.centerY = self.bottomView.centerY;
-    self.expenceLab.right = self.width - 15;
-    self.expenceLab.centerY = self.bottomView.centerY;
 }
 
 -(UILabel *)balanceTitleLab{
@@ -239,32 +216,6 @@
     return _backGroundView;
 }
 
-- (UIView *)bottomView{
-    if (!_bottomView) {
-        _bottomView = [[UIView alloc]init];
-        _bottomView.backgroundColor = [UIColor clearColor];
-    }
-    return _bottomView;
-}
-
--(UILabel *)incomeLab{
-    if (!_incomeLab) {
-        _incomeLab = [[UILabel alloc]init];
-        _incomeLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _incomeLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-    }
-    return _incomeLab;
-}
-
--(UILabel *)expenceLab{
-    if (!_expenceLab) {
-        _expenceLab = [[UILabel alloc]init];
-        _expenceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _expenceLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
-    }
-    return _expenceLab;
-}
-
 - (CAGradientLayer *)backLayer {
     if (!_backLayer) {
         _backLayer = [CAGradientLayer layer];
@@ -317,18 +268,6 @@
         }
     }
     [self.billingDayLab sizeToFit];
-}
-
--(void)setTotalIncome:(double)totalIncome{
-    _totalIncome = totalIncome;
-    self.incomeLab.text = [NSString stringWithFormat:@"累计收入:%.2f",_totalIncome];
-    [self.incomeLab sizeToFit];
-}
-
-- (void)setTotalExpence:(double)totalExpence{
-    _totalExpence = totalExpence;
-    self.expenceLab.text = [NSString stringWithFormat:@"累计支出:%.2f",fabs(_totalExpence)];
-    [self.expenceLab sizeToFit];
 }
 
 - (void)setCardBalance:(double)cardBalance{

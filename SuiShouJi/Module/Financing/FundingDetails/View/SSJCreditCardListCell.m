@@ -29,6 +29,7 @@
         [self.contentView addSubview:self.periodLab];
         [self.contentView addSubview:self.expenseLab];
         [self.contentView addSubview:self.daysLab];
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
