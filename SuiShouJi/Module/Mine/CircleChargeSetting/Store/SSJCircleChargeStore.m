@@ -96,7 +96,7 @@
         memberItem.memberId = [NSString stringWithFormat:@"%@-0",userid];
         memberItem.memberName = @"我";
         item.membersItem = [@[memberItem] mutableCopy];
-        item.chargeCircleType = 0;
+        item.chargeCircleType = SSJCyclePeriodTypeDaily;
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(item);
@@ -181,11 +181,11 @@
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd"];
                 NSDate *date = [formatter dateFromString:item.billDate];
-                if (item.chargeCircleType == 1 && (date.weekday == 1 || date.weekday == 7)) {
+                if (item.chargeCircleType == SSJCyclePeriodTypeDaily && (date.weekday == 1 || date.weekday == 7)) {
                     
-                }else if (item.chargeCircleType == 2 && (date.weekday != 1 && date.weekday != 7)) {
+                }else if (item.chargeCircleType == SSJCyclePeriodTypePerWeekend && (date.weekday != 1 && date.weekday != 7)) {
                     
-                }else if (item.chargeCircleType == 5 && date.day != date.daysInMonth) {
+                }else if (item.chargeCircleType == SSJCyclePeriodTypeLastDayPerMonth && date.day != date.daysInMonth) {
                     
                 }else{
                     NSString *chargeId = SSJUUID();

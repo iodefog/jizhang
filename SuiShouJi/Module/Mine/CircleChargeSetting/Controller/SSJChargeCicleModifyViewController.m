@@ -306,25 +306,25 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }else if ([title isEqualToString:kTitle8]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
-            case 0:
+            case SSJCyclePeriodTypeDaily:
                 circleModifyCell.cellDetail = @"每天";
                 break;
-            case 1:
+            case SSJCyclePeriodTypeWorkday:
                 circleModifyCell.cellDetail = @"每个工作日";
                 break;
-            case 2:
+            case SSJCyclePeriodTypePerWeekend:
                 circleModifyCell.cellDetail = @"每个周末";
                 break;
-            case 3:
+            case SSJCyclePeriodTypeWeekly:
                 circleModifyCell.cellDetail = @"每周";
                 break;
-            case 4:
+            case SSJCyclePeriodTypePerMonth:
                 circleModifyCell.cellDetail = @"每月";
                 break;
-            case 5:
+            case SSJCyclePeriodTypeLastDayPerMonth:
                 circleModifyCell.cellDetail = @"每月最后一天";
                 break;
-            case 6:
+            case SSJCyclePeriodTypePerYear:
                 circleModifyCell.cellDetail = @"每年";
                 break;
             default:

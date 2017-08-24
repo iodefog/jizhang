@@ -77,7 +77,7 @@
 @property(nonatomic, strong) NSString *booksName;
 
 //循环记账类型
-@property (nonatomic) NSInteger chargeCircleType;
+@property (nonatomic) SSJCyclePeriodType chargeCircleType;
 
 //循环记账结束时间
 @property (nonatomic, strong) NSString *chargeCircleEndDate;

@@ -7,6 +7,7 @@
 //
 
 #import "SSJBaseCellItem.h"
+#import "SSJFinancingItem.h"
 
 @interface SSJCreditCardItem : SSJBaseCellItem
 
@@ -19,13 +20,13 @@
 // 信用卡额度
 @property(nonatomic) double cardLimit;
 
-// 信用卡额度
+// 信用卡余额
 @property(nonatomic) double cardBalance;
 
-// 信用卡额度
+// 信用卡收入
 @property(nonatomic) double cardIncome;
 
-// 信用卡额度
+// 信用卡支出
 @property(nonatomic) double cardExpence;
 
 // 是否已账单日结算
