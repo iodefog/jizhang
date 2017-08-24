@@ -71,6 +71,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     double _totalIncome;
     double _totalExpence;
 }
+
 #pragma mark - Lifecycle
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])
@@ -95,7 +96,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
-    [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kFundingListFirstLineCellID];
     [self.tableView addSubview:self.noDataHeader];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         [self.view addSubview:self.repaymentButton];
@@ -197,7 +197,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand) {
-        return [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).chargeArray count] + 1;
+        return [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).chargeArray count];
     }else{
         return 0;
     }
@@ -205,26 +205,14 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseCellItem *item;
-    if (indexPath.row >= 1) {
-        item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row - 1];
-    }
-    if (indexPath.row == 0) {
-        if ([[self.listItems objectAtIndex:indexPath.section] isKindOfClass:[SSJCreditCardListDetailItem class]]) {
-            SSJCreditCardListCell *cell = [tableView dequeueReusableCellWithIdentifier:kCreditCardListFirstLineCellID forIndexPath:indexPath];
-            cell.item = [self.listItems objectAtIndex:indexPath.section];
-            return cell;
-        }else{
-            SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListFirstLineCellID forIndexPath:indexPath];
-            cell.item = [self.listItems objectAtIndex:indexPath.section];
-            return cell;
-        }
-    }else if ([item isKindOfClass:[SSJFundingListDayItem class]]){
+    item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
+    if ([item isKindOfClass:[SSJFundingListDayItem class]]){
         SSJFundingDailySumCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListDailySumCellID forIndexPath:indexPath];
-        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
         return cell;
     }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
         if (indexPath.row < [[((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]) chargeArray] count]) {
             SSJBaseCellItem *nextItem = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
             if ([nextItem isKindOfClass:[SSJFundingListDayItem class]]) {
@@ -259,84 +247,75 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row > 0) {
-        SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
-        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
-            SSJBillingChargeCellItem *billingItem = (SSJBillingChargeCellItem *)item;
-            if (billingItem.chargeImage.length || billingItem.chargeMemo.length) {
-                return 65;
-            }
-            return 50;
-        }else{
-            return 30;
+    SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
+    if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+        SSJBillingChargeCellItem *billingItem = (SSJBillingChargeCellItem *)item;
+        if (billingItem.chargeImage.length || billingItem.chargeMemo.length) {
+            return 65;
         }
+        return 50;
+    }else{
+        return 36;
     }
-    SSJBaseCellItem *item = [self.listItems ssj_safeObjectAtIndex:indexPath.section];
-    if ([item isKindOfClass:[SSJCreditCardListDetailItem class]]) {
-        return 65;
-    }
-    return 35;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row > 0) {
-        SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
-        if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
-            
-            SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
-            int billId = [cellItem.billId intValue];
-            
-            if (cellItem.idType == SSJChargeIdTypeLoan) {
-                // 满足以下条件跳转详情页面，否则跳转编辑页面
-                // 1.借贷已结清 2.流水类别是转入／转出，只有创建借贷或结清时才回生成这两种流水 3.余额变更
-                BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.sundryId];
-                if (closeOut || billId == 3 || billId == 4 || billId == 9 || billId == 10) {
-                    SSJLoanChargeDetailViewController *detailController = [[SSJLoanChargeDetailViewController alloc] init];
-                    detailController.chargeId = cellItem.ID;
-                    [self.navigationController pushViewController:detailController animated:YES];
-                } else {
-                    SSJLoanChargeAddOrEditViewController *editController = [[SSJLoanChargeAddOrEditViewController alloc] init];
-                    editController.edited = YES;
-                    editController.chargeId = cellItem.ID;
-                    [self.navigationController pushViewController:editController animated:YES];
-                }
-            } else if(cellItem.idType == SSJChargeIdTypeRepayment) { 
-                if (billId == 3 || billId == 4) {
-                    // 如果是转账,则是还款,跳转到还款页面
-                    SSJCreditCardRepaymentViewController *repaymentVc = [[SSJCreditCardRepaymentViewController alloc]init];
-                    repaymentVc.chargeItem = cellItem;
-                    [self.navigationController pushViewController:repaymentVc animated:YES];
-                } else {
-                    SSJInstalmentDetailViewController *instalmentDetailVc = [[SSJInstalmentDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                    instalmentDetailVc.chargeItem = cellItem;
-                    [self.navigationController pushViewController:instalmentDetailVc animated:YES];
-                }
-            } else if (cellItem.billId.length < 4) {
-                if (billId == 1 || billId == 2) {
-                    SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                    balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
-                    balanceChangeVc.fundItem = self.item;
-                    [self.navigationController pushViewController:balanceChangeVc animated:YES];
-                } else if (billId == 3 || billId == 4) {
-                    SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
-                    transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
-                    [self.navigationController pushViewController:transferVc animated:YES];
-                } else if (billId == 13 || billId == 14) {
-                    SSJDeleteBooksDetailViewController *deleteBooksVc = [[SSJDeleteBooksDetailViewController alloc] init];
-                    deleteBooksVc.booksId = ((SSJBillingChargeCellItem*)item).booksId;
-                    deleteBooksVc.fundId = ((SSJBillingChargeCellItem*)item).fundId;
-                    deleteBooksVc.booksName = ((SSJBillingChargeCellItem*)item).chargeMemo;
-                    [self.navigationController pushViewController:deleteBooksVc animated:YES];
-                } else {
-                    SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-                    calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
-                    [self.navigationController pushViewController:calenderDetailVC animated:YES];
-                }
+    SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
+    if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
+        
+        SSJBillingChargeCellItem *cellItem = (SSJBillingChargeCellItem *)item;
+        int billId = [cellItem.billId intValue];
+        
+        if (cellItem.idType == SSJChargeIdTypeLoan) {
+            // 满足以下条件跳转详情页面，否则跳转编辑页面
+            // 1.借贷已结清 2.流水类别是转入／转出，只有创建借贷或结清时才回生成这两种流水 3.余额变更
+            BOOL closeOut = [SSJFundingDetailHelper queryCloseOutStateWithLoanId:cellItem.sundryId];
+            if (closeOut || billId == 3 || billId == 4 || billId == 9 || billId == 10) {
+                SSJLoanChargeDetailViewController *detailController = [[SSJLoanChargeDetailViewController alloc] init];
+                detailController.chargeId = cellItem.ID;
+                [self.navigationController pushViewController:detailController animated:YES];
+            } else {
+                SSJLoanChargeAddOrEditViewController *editController = [[SSJLoanChargeAddOrEditViewController alloc] init];
+                editController.edited = YES;
+                editController.chargeId = cellItem.ID;
+                [self.navigationController pushViewController:editController animated:YES];
+            }
+        } else if(cellItem.idType == SSJChargeIdTypeRepayment) {
+            if (billId == 3 || billId == 4) {
+                // 如果是转账,则是还款,跳转到还款页面
+                SSJCreditCardRepaymentViewController *repaymentVc = [[SSJCreditCardRepaymentViewController alloc]init];
+                repaymentVc.chargeItem = cellItem;
+                [self.navigationController pushViewController:repaymentVc animated:YES];
+            } else {
+                SSJInstalmentDetailViewController *instalmentDetailVc = [[SSJInstalmentDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                instalmentDetailVc.chargeItem = cellItem;
+                [self.navigationController pushViewController:instalmentDetailVc animated:YES];
+            }
+        } else if (cellItem.billId.length < 4) {
+            if (billId == 1 || billId == 2) {
+                SSJBalenceChangeDetailViewController *balanceChangeVc = [[SSJBalenceChangeDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                balanceChangeVc.chargeItem = (SSJBillingChargeCellItem *)item;
+                balanceChangeVc.fundItem = self.item;
+                [self.navigationController pushViewController:balanceChangeVc animated:YES];
+            } else if (billId == 3 || billId == 4) {
+                SSJFundingTransferChargeDetailViewController *transferVc = [[SSJFundingTransferChargeDetailViewController alloc] init];
+                transferVc.chargeItem = (SSJBillingChargeCellItem*)item;
+                [self.navigationController pushViewController:transferVc animated:YES];
+            } else if (billId == 13 || billId == 14) {
+                SSJDeleteBooksDetailViewController *deleteBooksVc = [[SSJDeleteBooksDetailViewController alloc] init];
+                deleteBooksVc.booksId = ((SSJBillingChargeCellItem*)item).booksId;
+                deleteBooksVc.fundId = ((SSJBillingChargeCellItem*)item).fundId;
+                deleteBooksVc.booksName = ((SSJBillingChargeCellItem*)item).chargeMemo;
+                [self.navigationController pushViewController:deleteBooksVc animated:YES];
             } else {
                 SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
                 [self.navigationController pushViewController:calenderDetailVC animated:YES];
             }
+        } else {
+            SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+            calenderDetailVC.item = (SSJBillingChargeCellItem *)item;
+            [self.navigationController pushViewController:calenderDetailVC animated:YES];
         }
     }
 }
@@ -349,7 +328,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(SSJFundingDetailNoDataView *)noDataHeader{
     if (!_noDataHeader) {
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 213 , self.view.width, self.view.height - 213 - SSJ_NAVIBAR_BOTTOM - 50)];
+            _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 173 , self.view.width, self.view.height - 173 - SSJ_NAVIBAR_BOTTOM - 50)];
         }else{
             _noDataHeader = [[SSJFundingDetailNoDataView alloc]initWithFrame:CGRectMake(0, 173 , self.view.width, self.view.height - 173 - SSJ_NAVIBAR_BOTTOM)];
         }
@@ -377,7 +356,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(SSJCreditCardDetailHeader *)creditCardHeader{
     if (!_creditCardHeader) {
-        _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 213)];
+        _creditCardHeader = [[SSJCreditCardDetailHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 173)];
         [_creditCardHeader ssj_setBorderColor:[UIColor whiteColor]];
         [_creditCardHeader ssj_setBorderStyle:SSJBorderStyleTop];
         [_creditCardHeader ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];

@@ -9,6 +9,10 @@
 #import "SSJBaseTableViewCell.h"
 #import "SSJFundingDetailListItem.h"
 
+SSJ_DEPRECATED
+
 @interface SSJFundingDetailListFirstLineCell : SSJBaseTableViewCell
+
 @property(nonatomic, strong) SSJFundingDetailListItem *item;
+
 @end
