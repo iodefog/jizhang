@@ -117,7 +117,7 @@
                 }
             }else {
                 // 修改还款表数据
-                if (![db executeUpdate:@"update bk_credit_repayment set capplydate = ?, repaymentmoney = ?, cmemo = ? where crepaymentid = ? and cuserid = ?",model.applyDate,model.repaymentMoney,model.memo,model.repaymentId,userID]) {
+                if (![db executeUpdate:@"update bk_credit_repayment set capplydate = ?, repaymentmoney = ?, cmemo = ?, crepaymentmonth  = ? where crepaymentid = ? and cuserid = ?",model.applyDate,model.repaymentMoney,model.memo,model.repaymentMonth,model.repaymentId,userID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
