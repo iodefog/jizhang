@@ -421,6 +421,22 @@
         return;
     }
     
+    // 恢复周期记账依赖的账本
+    if (![db executeUpdate:@"udpate bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cbooksid in (select cbooksid from bk_charge_period_config where cwritedate = ? and ifunsid = ? and operatortype = 2)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复周期记账
+    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 1, cwritedate = ?, iversion = ? where cwritedate = ? and ifunsid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
     // 周期转账
     if (![self recoverTransferWithFundID:recycleModel.sundryID
                               clientDate:clientDate
@@ -456,9 +472,6 @@
                                      error:error]) {
         return;
     }
-    
-#warning TODO
-    // 周期记账
 }
 
 #pragma mark - 恢复账本
@@ -505,6 +518,22 @@
     // 恢复此账户下流水
     // 注意：过滤特殊流水，例如：平账、转账等等；因为老版本对这些特殊流水也写入了booksid
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复周期记账依赖的资金账户
+    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cfundid in (select ifunsid from bk_charge_period_config where cwritedate = ? and cbooksid = ? and operatortype = 2)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return;
+    }
+    
+    // 恢复周期记账
+    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 1, cwritedate = ?, iversion = ? where cwritedate = ? and cbooksid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
