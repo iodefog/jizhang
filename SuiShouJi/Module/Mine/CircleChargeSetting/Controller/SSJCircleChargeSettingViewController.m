@@ -48,7 +48,7 @@
 
 #pragma mark - UITableViewDelegate
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 110;
+    return 75;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
@@ -95,6 +95,7 @@
     circleModifyVc.item = item;
     [self.navigationController pushViewController:circleModifyVc animated:YES];
 }
+
 
 #pragma mark - Getter
 -(SSJChargeCircleNoneView *)nodataView{

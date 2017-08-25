@@ -143,6 +143,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+
     self.view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:self.homeBar];
     [self.view addSubview:self.tableView];
