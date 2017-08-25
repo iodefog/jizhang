@@ -52,7 +52,7 @@
     [self.categoryImage mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo(CGSizeMake(20, 20));
         make.left.mas_equalTo(15);
-        make.centerY.mas_equalTo(self);
+        make.centerY.mas_equalTo(self.categoryLabel);
     }];
     
     [self.categoryLabel mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -95,6 +95,7 @@
         make.centerY.mas_equalTo(self.circleImage);
         make.right.mas_equalTo(self.mas_right).offset(-15);
     }];
+
     
     [super updateConstraints];
 }
