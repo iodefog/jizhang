@@ -53,6 +53,8 @@ static NSString *const kCellID = @"kCellID";
     [self.view addSubview:self.warningHeaderView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
     [self updateAppearance];
+    
+    [self loadData];
 }
 
 - (void)updateViewConstraints {
@@ -110,10 +112,20 @@ static NSString *const kCellID = @"kCellID";
         }
     };
     cell.recoverBtnDidClick = ^(SSJRecycleListCell *cell) {
-        
+        @strongify(self);
+        SSJRecycleListCellItem *item = cell.cellItem;
+        item.recoverBtnLoading = YES;
+        [self recoverData:@[item.recycleID] completion:^(BOOL success) {
+            item.recoverBtnLoading = NO;
+        }];
     };
     cell.deleteBtnDidClick = ^(SSJRecycleListCell *cell) {
-        
+        @strongify(self);
+        SSJRecycleListCellItem *item = cell.cellItem;
+        item.recoverBtnLoading = YES;
+        [self clearData:@[item.recycleID] completion:^(BOOL success) {
+            item.recoverBtnLoading = NO;
+        }];
     };
     return cell;
 }
@@ -147,8 +159,6 @@ static NSString *const kCellID = @"kCellID";
     } else if (item.state == SSJRecycleListCellStateUnselected) {
         item.state = SSJRecycleListCellStateSelected;
     }
-    
-    [self updateRightBarItemTitle];
 }
 
 #pragma mark - Private
@@ -159,61 +169,81 @@ static NSString *const kCellID = @"kCellID";
 }
 
 - (void)rightBarItemAction {
-    if (self.editing) {
-        // 先遍历数组查看是否所有的model都被选中
-        BOOL selectedAll = YES;
-        for (SSJRecycleListModel *sectionModel in self.listModels) {
-            for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
-                if (cellItem.state == SSJRecycleListCellStateUnselected) {
-                    selectedAll = NO;
-                    break;
-                }
-            }
-            
-            if (!selectedAll) {
-                break;
-            }
-        }
-        
-        // 如果都选中就结束编辑状态，反之就全选所有model
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(selectedAll ? @"取消" : @"全选", nil);
-        for (SSJRecycleListModel *sectionModel in self.listModels) {
-            for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
-                cellItem.state = selectedAll ? SSJRecycleListCellStateNormal : SSJRecycleListCellStateSelected;
-            }
-        }
-        
-    } else {
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(@"编辑", nil);
-        for (SSJRecycleListModel *sectionModel in self.listModels) {
-            for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
-                cellItem.state = SSJRecycleListCellStateUnselected;
-            }
+    self.editing = !self.editing;
+    self.navigationItem.rightBarButtonItem.title = NSLocalizedString(self.editing ? @"编辑" : @"取消", nil);
+    for (SSJRecycleListModel *sectionModel in self.listModels) {
+        for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
+            cellItem.state = self.editing ? SSJRecycleListCellStateUnselected : SSJRecycleListCellStateNormal;
         }
     }
     self.lastExpandedIndexPath = nil;
 }
 
-- (void)updateRightBarItemTitle {
-    if (self.editing) {
-        BOOL selectedAll = YES;
-        for (SSJRecycleListModel *sectionModel in self.listModels) {
-            for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
-                if (cellItem.state == SSJRecycleListCellStateUnselected) {
-                    selectedAll = NO;
-                    break;
-                }
-            }
-            
-            if (!selectedAll) {
-                break;
-            }
+- (RACSignal *)loadDataSignal {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJRecycleHelper queryRecycleListModelsWithSuccess:^(NSArray<SSJRecycleListModel *> * _Nonnull models) {
+            self.listModels = models;
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (void)loadData {
+    [self.view ssj_showLoadingIndicator];
+    [[self loadDataSignal] subscribeError:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
+        [self.tableView reloadData];
+    }];
+}
+
+- (void)recoverData:(NSArray *)recycleIDs completion:(void(^)(BOOL success))completion {
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJRecycleHelper recoverRecycleIDs:recycleIDs success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        return [self loadDataSignal];
+    }] subscribeError:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+        if (completion) {
+            completion(NO);
         }
-        
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(selectedAll ? @"取消" : @"全选", nil);
-    } else {
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(@"编辑", nil);
-    }
+    } completed:^{
+        if (completion) {
+            completion(YES);
+        }
+    }];
+}
+
+- (void)clearData:(NSArray *)recycleIDs completion:(void(^)(BOOL success))completion {
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJRecycleHelper clearRecycleIDs:recycleIDs success:^{
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] then:^RACSignal *{
+        return [self loadDataSignal];
+    }] subscribeError:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+        if (completion) {
+            completion(NO);
+        }
+    } completed:^{
+        if (completion) {
+            completion(YES);
+        }
+    }];
 }
 
 #pragma mark - Lazy
@@ -230,10 +260,24 @@ static NSString *const kCellID = @"kCellID";
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _deleteBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         [_deleteBtn setTitle:NSLocalizedString(@"彻底删除", nil) forState:UIControlStateNormal];
+        [_deleteBtn setTitle:nil forState:UIControlStateDisabled];
         [_deleteBtn ssj_setBorderStyle:SSJBorderStyleTop];
         @weakify(self);
-        [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
+        [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
             @strongify(self);
+            NSMutableArray *selectedIDs = [NSMutableArray array];
+            for (SSJRecycleListModel *model in self.listModels) {
+                for (SSJRecycleListCellItem *cellItem in model.cellItems) {
+                    if (cellItem.state == SSJRecycleListCellStateSelected) {
+                        [selectedIDs addObject:cellItem.recycleID];
+                    }
+                }
+            }
+            
+            [button ssj_showLoadingIndicator];
+            [self clearData:selectedIDs completion:^(BOOL success) {
+                [button ssj_hideLoadingIndicator];
+            }];
         }];
     }
     return _deleteBtn;

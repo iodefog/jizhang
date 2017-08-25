@@ -134,7 +134,9 @@
     if (!_recoverBtn) {
         _recoverBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_recoverBtn setTitle:NSLocalizedString(@"还原", nil) forState:UIControlStateNormal];
+        [_recoverBtn setTitle:nil forState:UIControlStateDisabled];
         [_recoverBtn setImage:[UIImage imageNamed:@"recycle_recover"] forState:UIControlStateNormal];
+        [_recoverBtn setImage:nil forState:UIControlStateDisabled];
         _recoverBtn.spaceBetweenImageAndTitle = 10;
         [_recoverBtn ssj_setBorderStyle:SSJBorderStyleRight];
     }
@@ -145,7 +147,9 @@
     if (!_deleteBtn) {
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteBtn setTitle:NSLocalizedString(@"彻底删除", nil) forState:UIControlStateNormal];
+        [_deleteBtn setTitle:nil forState:UIControlStateDisabled];
         [_deleteBtn setImage:[UIImage imageNamed:@"recycle_delete"] forState:UIControlStateNormal];
+        [_deleteBtn setImage:nil forState:UIControlStateDisabled];
         _deleteBtn.spaceBetweenImageAndTitle = 10;
     }
     return _deleteBtn;
@@ -299,6 +303,24 @@
         }
         
         [self setNeedsUpdateConstraints];
+    }];
+    
+    [[RACObserve(item, recoverBtnLoading) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *loadingValue) {
+        self.expandedView.recoverBtn.enabled = ![loadingValue boolValue];
+        if ([loadingValue boolValue]) {
+            [self.expandedView.recoverBtn ssj_showLoadingIndicator];
+        } else {
+            [self.expandedView.recoverBtn ssj_hideLoadingIndicator];
+        }
+    }];
+    
+    [[RACObserve(item, clearBtnLoading) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *loadingValue) {
+        self.expandedView.deleteBtn.enabled = ![loadingValue boolValue];
+        if ([loadingValue boolValue]) {
+            [self.expandedView.deleteBtn ssj_showLoadingIndicator];
+        } else {
+            [self.expandedView.deleteBtn ssj_hideLoadingIndicator];
+        }
     }];
 }
 
