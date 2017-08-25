@@ -44,6 +44,8 @@
 
 #pragma mark -
 #pragma mark ---------------------------------------- 查询 ----------------------------------------
+
+#pragma mark - 查询回收站数据
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -124,6 +126,7 @@
     }];
 }
 
+#pragma mark - 查询回收站流水
 + (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
     FMResultSet *rs = [db executeQuery:@"select uc.imoney, uc.cbooksid, ub.cicoin, ub.ccolor, ub.cname, fi.cacctname from bk_user_charge as uc, bk_user_bill_type as ub, bk_fund_info as fi where uc.ibillid = ub.cbillid and uc.cbooksid = ub.cbooksid and uc.cuserid = ub.cuserid and uc.ifunsid = fi.cfundid and uc.ichargeid = ? and uc.cuserid = ?", model.sundryID, model.userID];
     
@@ -175,6 +178,7 @@
     return item;
 }
 
+#pragma mark - 查询回收站资金账户
 + (SSJRecycleListCellItem *)fundItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
     
     NSString *iconName = nil;
@@ -222,6 +226,7 @@
     return item;
 }
 
+#pragma mark - 查询回收站账本
 + (SSJRecycleListCellItem *)booksItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
     
     NSString *iconName = nil;
