@@ -15,31 +15,31 @@ NS_ASSUME_NONNULL_BEGIN
 @interface SSJRecycleHelper : NSObject
 
 /**
- <#Description#>
+ 查询回收站数据
 
- @param success <#success description#>
- @param failure <#failure description#>
+ @param success 成功回调
+ @param failure 失败回调
  */
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure;
 
 /**
- <#Description#>
+ 还原回收站数据
 
- @param recycleIDs <#recycleIDs description#>
- @param success <#success description#>
- @param failure <#failure description#>
+ @param recycleIDs 要还原的数据ID
+ @param success 成功回调
+ @param failure 失败回调
  */
 + (void)recoverRecycleIDs:(NSArray<NSString *> *)recycleIDs
                   success:(nullable void(^)())success
                   failure:(nullable void(^)(NSError *error))failure;
 
 /**
- <#Description#>
+ 清除回收站数据
 
- @param recycleIDs <#recycleIDs description#>
- @param success <#success description#>
- @param failure <#failure description#>
+ @param recycleIDs 要清除的数据ID
+ @param success 成功回调
+ @param failure 失败回调
  */
 + (void)clearRecycleIDs:(NSArray<NSString *> *)recycleIDs
                 success:(nullable void(^)())success

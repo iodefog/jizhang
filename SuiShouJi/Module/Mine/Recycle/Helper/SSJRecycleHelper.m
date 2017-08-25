@@ -818,34 +818,14 @@
 + (void)clearRecycleIDs:(NSArray<NSString *> *)recycleIDs
                 success:(nullable void(^)())success
                 failure:(nullable void(^)(NSError *error))failure {
+    
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         for (NSString *recycleID in recycleIDs) {
-            SSJRecycleModel *recycleModel = nil;
-            FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleIDs];
-            while ([rs next]) {
-                recycleModel = [SSJRecycleModel modelWithResultSet:rs];
-            }
-            [rs close];
-            
-            NSError *error = nil;
-            switch (recycleModel.type) {
-                case SSJRecycleTypeCharge:
-                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
-                    break;
-                    
-                case SSJRecycleTypeFund:
-                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
-                    break;
-                    
-                case SSJRecycleTypeBooks:
-                    [self clearChargeWithRecycleModel:recycleModel inDatabase:db error:&error];
-                    break;
-            }
-            
-            if (error) {
+            if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where rid = ?", @(SSJRecycleStateRemoved), writeDate, @(SSJSyncVersion()), recycleID]) {
                 SSJDispatchMainAsync(^{
                     if (failure) {
-                        failure(error);
+                        failure([db lastError]);
                     }
                 });
                 return;
@@ -858,24 +838,6 @@
             }
         });
     }];
-}
-
-+ (void)clearChargeWithRecycleModel:(SSJRecycleModel *)recycleModel
-                         inDatabase:(SSJDatabase *)db
-                              error:(NSError **)error {
-    
-}
-
-+ (void)clearFundWithRecycleModel:(SSJRecycleModel *)recycleModel
-                       inDatabase:(SSJDatabase *)db
-                            error:(NSError **)error {
-    
-}
-
-+ (void)clearBookWithRecycleModel:(SSJRecycleModel *)recycleModel
-                       inDatabase:(SSJDatabase *)db
-                            error:(NSError **)error {
-    
 }
 
 @end
