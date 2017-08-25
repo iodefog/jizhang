@@ -33,16 +33,20 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
         self.ormDatabaseQueue = dispatch_queue_create("com.ShuiShouJi.SSJOrmDatabaseQueue", DISPATCH_QUEUE_CONCURRENT);
         dispatch_queue_set_specific(self.ormDatabaseQueue, kSSJOrmDatabaseQueueSpecificKey, (__bridge void *)self, NULL);
         [WCTStatistics SetGlobalErrorReport:^(WCTError *error) {
-            NSString *desc = [NSString stringWithFormat:@"code:%d  description:%@  sql:%@", [error infoForKey:WCTErrorKeyExtendedCode], error.localizedDescription, [error infoForKey:WCTErrorKeySQL]];
+            NSString *desc = [NSString stringWithFormat:@"code:%@  description:%@  sql:%@", [error infoForKey:WCTErrorKeyExtendedCode], error.localizedDescription, [error infoForKey:WCTErrorKeySQL]];
             NSError *customError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:desc}];
             [SSJDatabaseErrorHandler handleError:customError];
+        }];
+        
+        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+            NSLog(@"SQL: %@", sql);
         }];
     }
     return self;
 }
 
 - (WCTDatabase *)database {
-    if (_db){
+    if (!_db){
         _db = [[WCTDatabase alloc] initWithPath:SSJSQLitePath()];
     }
     return _db;
@@ -55,22 +59,6 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
     });
 }
 
-- (void)inTransaction:(void (^)(WCTDatabase *_db, BOOL *rollback))block {
-    BOOL shouldRollback = NO;
-
-    [[self database] beginTransaction];
-
-    block([self database], &shouldRollback);
-
-    if (shouldRollback) {
-        [[self database] rollbackTransaction];
-    }
-    else {
-        [[self database] commitTransaction];
-    }
-
-}
-
 - (void)asyncInDatabase:(void (^)(WCTDatabase *db))block {
     SSJOrmDatabaseQueue *currentDatabaseQueue = (__bridge id) dispatch_get_specific(kSSJOrmDatabaseQueueSpecificKey);
     if (currentDatabaseQueue == self) {
@@ -78,17 +66,6 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
     } else {
         dispatch_async(self.ormDatabaseQueue, ^{
             [self inDatabase:block];
-        });
-    }
-}
-
-- (void)asyncInTransaction:(void (^)(WCTDatabase *db, BOOL *rollback))block {
-    SSJOrmDatabaseQueue *currentDatabaseQueue = (__bridge id) dispatch_get_specific(kSSJOrmDatabaseQueueSpecificKey);
-    if (currentDatabaseQueue == self) {
-        [self inTransaction:block];
-    } else {
-        dispatch_async(self.ormDatabaseQueue, ^{
-            [self inTransaction:block];
         });
     }
 }

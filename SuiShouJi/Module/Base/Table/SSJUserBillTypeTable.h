@@ -16,7 +16,7 @@
 
 @property (nonatomic, retain) NSString* booksId;
 
-@property (nonatomic, retain) NSString* billType;
+@property (nonatomic, assign) SSJBillType billType;
 
 @property (nonatomic, retain) NSString* billName;
 

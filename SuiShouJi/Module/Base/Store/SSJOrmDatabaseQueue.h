@@ -17,4 +17,6 @@
 
 - (void)inDatabase:(void (^)(WCTDatabase *_db))blockblock;
 
+- (void)asyncInDatabase:(void (^)(WCTDatabase *db))block;
+
 @end
