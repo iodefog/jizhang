@@ -17,6 +17,7 @@
 #import "SSJSettingPasswordViewController.h"
 #import "SSJNavigationController.h"
 #import "SSJDataMergeSettingViewController.h"
+#import "SSJRecycleListViewController.h"
 
 #import "SSJMineHomeTabelviewCell.h"
 
@@ -37,6 +38,7 @@ static NSString *const kMotionPwdTitle = @"手势密码";
 static NSString *const kMagicExportTitle = @"数据导出";
 static NSString *const kDataSyncTitle = @"数据同步";
 static NSString *const kClearDataTitle = @"清理数据";
+static NSString *const kRecycleTitle = @"回收站";
 
 
 @interface SSJSettingViewController ()
@@ -133,6 +135,9 @@ static NSString *const kClearDataTitle = @"清理数据";
     } else if ([title isEqualToString:kDataMergeTitle]) {// 数据
         SSJDataMergeSettingViewController *mergeVC = [[SSJDataMergeSettingViewController alloc] init];
         [self.navigationController pushViewController:mergeVC animated:YES];
+    } else if ([title isEqualToString:kRecycleTitle]) {// 回收站
+        SSJRecycleListViewController *recycleVC = [[SSJRecycleListViewController alloc] init];
+        [self.navigationController pushViewController:recycleVC animated:YES];
     }
 }
 
@@ -232,7 +237,7 @@ static NSString *const kClearDataTitle = @"清理数据";
             }
         }
         
-        NSArray *section3 = @[kDataMergeTitle, kMagicExportTitle, kDataSyncTitle, kClearDataTitle];
+        NSArray *section3 = @[kDataMergeTitle, kMagicExportTitle, kDataSyncTitle, kClearDataTitle, kRecycleTitle];
         self.titles = @[section1, section2, section3];
         [self.tableView reloadData];
         
