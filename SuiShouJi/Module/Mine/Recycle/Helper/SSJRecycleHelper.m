@@ -150,14 +150,14 @@
     NSString *booksName = nil;
     NSString *memberName = nil;
     
-    BOOL isShareBooks = [db executeQuery:@"select count(1) from bk_share_books where cbooksid = ?", booksID];
+    BOOL isShareBooks = [db intForQuery:@"select count(1) from bk_share_books where cbooksid = ?", booksID];
     if (isShareBooks) {
         booksName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?", booksID];
-        booksName = [NSString stringWithFormat:@"%@(共享)", booksName];
+        booksName = [NSString stringWithFormat:@"%@ (共享)", booksName];
         memberName = @"我";
     } else {
         booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", booksID, model.userID];
-        booksName = [NSString stringWithFormat:@"%@(个人)", booksName];
+        booksName = [NSString stringWithFormat:@"%@ (个人)", booksName];
         
         rs = [db executeQuery:@"select m.cname from bk_user_charge as uc, bk_member_charge as mc, bk_member as m where uc.ichargeid = mc.ichargeid and mc.cmemberid = m.cmemberid and uc.ichargeid = ?", model.sundryID];
         NSMutableArray *memberNames = [NSMutableArray array];

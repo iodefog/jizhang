@@ -104,7 +104,7 @@ static NSString *const kCellID = @"kCellID";
             item.state = SSJRecycleListCellStateNormal;
         }
         
-        [self.tableView reloadRowsAtIndexPaths:(self.lastExpandedIndexPath ? @[indexPath, self.lastExpandedIndexPath] : @[indexPath]) withRowAnimation:UITableViewRowAnimationFade];
+        [self.tableView reloadRowsAtIndexPaths:(self.lastExpandedIndexPath ? @[indexPath, self.lastExpandedIndexPath] : @[indexPath]) withRowAnimation:UITableViewRowAnimationNone];
         
         if (item.state == SSJRecycleListCellStateNormal) {
             self.lastExpandedIndexPath = nil;

@@ -8,18 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSInteger, SSJRecycleType) {
-    SSJRecycleTypeCharge = 0,
-    SSJRecycleTypeFund = 1,
-    SSJRecycleTypeBooks = 2
-};
-
-typedef NS_ENUM(NSInteger, SSJRecycleState) {
-    SSJRecycleStateNormal = 0,
-    SSJRecycleStateRecovered = 1,
-    SSJRecycleStateRemoved = 2
-};
-
 @class FMResultSet;
 
 @interface SSJRecycleModel : NSObject <NSCopying>

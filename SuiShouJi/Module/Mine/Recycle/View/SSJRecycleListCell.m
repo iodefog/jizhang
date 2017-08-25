@@ -44,6 +44,9 @@
                 make.left.mas_equalTo(preLab.mas_right);
             }
             make.top.and.bottom.mas_equalTo(self);
+            
+            CGFloat wdith = [obj.text sizeWithAttributes:@{NSFontAttributeName:obj.font}].width + 10;
+            make.width.mas_equalTo(wdith);
         }];
     }];
     [super updateConstraints];
@@ -57,6 +60,8 @@
         for (int i = 0; titles.count - self.labels.count; i ++) {
             UILabel *lab = [[UILabel alloc] init];
             lab.textColor = SSJ_SECONDARY_COLOR;
+            lab.textAlignment = NSTextAlignmentCenter;
+            [lab ssj_setBorderWidth:2];
             [lab ssj_setBorderColor:SSJ_BORDER_COLOR];
             [lab ssj_setBorderInsets:UIEdgeInsetsMake(2, 0, 2, 0)];
             lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
@@ -125,6 +130,7 @@
     }];
     [_deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_recoverBtn.mas_right);
+        make.width.mas_equalTo(_recoverBtn);
         make.top.right.bottom.mas_equalTo(self);
     }];
     [super updateConstraints];
@@ -220,6 +226,12 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self.contentView addSubview:self.icon];
+        [self.contentView addSubview:self.titleLab];
+        [self.contentView addSubview:self.subtitleView];
+        [self.contentView addSubview:self.arrowBtn];
+        [self.contentView addSubview:self.expandedView];
+        [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
     }
     return self;
@@ -244,7 +256,7 @@
     }];
     
     [_subtitleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_titleLab);
+        make.left.mas_equalTo(_icon.mas_right).offset(5);
         make.top.mas_equalTo(_titleLab.mas_bottom).offset(8);
         make.right.mas_equalTo(self.contentView).offset(-15);
         make.height.mas_equalTo(13);
@@ -263,10 +275,18 @@
     if (![cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
         return;
     }
-    
+    [super setCellItem:cellItem];
     SSJRecycleListCellItem *item = cellItem;
     
     @weakify(self);
+    
+    RAC(self.icon, image) = [[RACObserve(item, icon) takeUntil:self.rac_prepareForReuseSignal] map:^id(UIImage *icon) {
+        return [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }];
+    RAC(self.icon, tintColor) = RACObserve(item, iconTintColor);
+    RAC(self.titleLab, text) = RACObserve(item, title);
+    RAC(self.subtitleView, titles) = RACObserve(item, subtitles);
+    
     [[RACObserve(item, state) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *stateValue) {
         @strongify(self);
         
@@ -276,6 +296,7 @@
                 [_arrowBtn setImage:btnImg forState:UIControlStateNormal];
                 self.arrowBtn.hidden = NO;
                 self.checkMark.hidden = YES;
+                self.expandedView.hidden = YES;
             }
                 break;
                 
@@ -284,12 +305,14 @@
                 [self.arrowBtn setImage:btnImg forState:UIControlStateNormal];
                 self.arrowBtn.hidden = NO;
                 self.checkMark.hidden = YES;
+                self.expandedView.hidden = NO;
             }
                 break;
                 
             case SSJRecycleListCellStateSelected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
+                self.expandedView.hidden = YES;
                 self.checkMark.tintColor = SSJ_MARCATO_COLOR;
             }
                 break;
@@ -297,6 +320,7 @@
             case SSJRecycleListCellStateUnselected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
+                self.expandedView.hidden = YES;
                 self.checkMark.tintColor = SSJ_SECONDARY_COLOR;
             }
                 break;
