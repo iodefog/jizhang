@@ -81,18 +81,17 @@
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, self.contentInsets);
     _topLab.width = CGRectGetWidth(contentFrame);
     _bottomLab.width = CGRectGetWidth(contentFrame);
-    
     _topLab.height = _item.topTitleFont.pointSize;
     _bottomLab.height = _item.bottomTitleFont.pointSize;
     
     CGFloat baseGap = (self.height - _topLab.height - _bottomLab.height) * 0.2;
     CGFloat top = baseGap * 2;
-    _topLab.top = top;
-    _bottomLab.top = _topLab.bottom + baseGap;
-    _topLab.centerX = _bottomLab.centerX = self.width * 0.5;
+    _bottomLab.top = top;
+    _topLab.top = _bottomLab.bottom + baseGap;
+    _bottomLab.centerX = _topLab.centerX = self.width * 0.5;
     
-    _topIndicator.center = _topLab.center;
-    _bottomIndicator.center = _bottomLab.center;
+    _topIndicator.center = _bottomLab.center;
+    _bottomIndicator.center = _topLab.center;
 }
 
 - (void)setItem:(SSJFinancingDetailHeadeViewCellItem *)item {
@@ -372,6 +371,11 @@
             }
         }
     }
+}
+
+
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
 }
 
 @end

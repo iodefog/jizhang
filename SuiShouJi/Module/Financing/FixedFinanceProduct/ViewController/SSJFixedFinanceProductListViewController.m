@@ -64,6 +64,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
         [self.view ssj_hideLoadingIndicator];
         self.dataItems = resultList;
         [self.tableView reloadData];
+        [self updateAmount];
         if (self.dataItems.count == 0) {
             [self.view ssj_showWatermarkWithCustomView:self.noDataRemindView animated:YES target:nil action:nil];
         } else {
@@ -75,6 +76,12 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
+
+- (void)updateAmount {
+    double amount = [[self.dataItems valueForKeyPath:@"@sum.money"] doubleValue];
+    self.amountView.amount = [NSString stringWithFormat:@"+%.2f", amount];
+}
+
 
 #pragma mark - Action
 - (void)addItemAction {
@@ -124,7 +131,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    if (section == 0) {
+    if (section == 0 && self.dataItems.count) {
         return self.amountView;
     } else {
         return [[UIView alloc] init];
@@ -133,8 +140,10 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    SSJFixedFinanceProductItem *model = [self.dataItems ssj_safeObjectAtIndex:indexPath.section];
+    SSJFixedFinanceProductItem *model = [self.dataItems ssj_safeObjectAtIndex:indexPath.row];
     SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+    detailVC.productID = model.productid;
+    detailVC.fundColor = [NSString stringWithFormat:@"%@,%@",self.item.startColor,self.item.endColor];
     [self.navigationController pushViewController:detailVC animated:YES];
 //    [SSJLoanHelper queryForFundColorWithID:model.fundID completion:^(NSString * _Nonnull color) {
 //        SSJLoanDetailViewController *loanDetailVC = [[SSJLoanDetailViewController alloc] init];

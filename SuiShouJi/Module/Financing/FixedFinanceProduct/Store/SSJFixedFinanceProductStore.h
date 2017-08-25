@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  *  @param success   查询成功的回调
  *  @param failure   查询失败的回调
  */
-+ (void)queryForLoanModelWithLoanID:(NSString *)fixedFinanceProductID
++ (void)queryForFixedFinanceProduceWithProductID:(NSString *)fixedFinanceProductID
                             success:(void (^)(SSJFixedFinanceProductItem *model))success
                             failure:(void (^)(NSError *error))failure;
 
@@ -141,6 +141,31 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                             success:(void (^)(void))success
                             failure:(void (^)(NSError *error))failure;
 
+
+/**
+ 查询流水cid后缀最大值
+ 返回后缀
+ @param productid <#productid description#>
+ */
++ (NSInteger)queryMaxChargeChargeIdSuffixWithProductId:(NSString *)productid;
+
+
+/**
+ 计算已产生利息
+
+ @param model model
+ @return 利息
+ */
++ (double)caculateGenerateRateWithModel:(SSJFixedFinanceProductItem *)model;
+
+
+/**
+ 计算预期利息
+ 
+ @param model model
+ @return 利息
+ */
++ (double)caculateExpectedRateWithModel:(SSJFixedFinanceProductItem *)model;
 @end
 
 

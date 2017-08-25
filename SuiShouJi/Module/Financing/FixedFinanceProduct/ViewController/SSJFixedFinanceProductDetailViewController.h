@@ -10,7 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @interface SSJFixedFinanceProductDetailViewController : SSJBaseViewController
 
-@property (nonatomic, copy) NSString *loanID;//账户id
+@property (nonatomic, copy) NSString *productID;//账户id
 
 //颜色
 @property (nonatomic, copy) NSString *fundColor;

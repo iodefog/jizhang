@@ -37,14 +37,14 @@
         switch (state) {
             case SSJFixedFinanceStateNoSettlement:
                 case SSJFixedFinanceStateSettlemented:
-                [sqlStr appendFormat:@" and isend = %ld", SSJFixedFinanceStateNoSettlement];
+                [sqlStr appendFormat:@" and isend = %ld ", state];
                 break;
                 case SSJFixedFinanceStateAll:
                 break;
             default:
                 break;
         }
-        [sqlStr appendString:@"order by l.cstartdate desc, l.isend asc, l.imoney desc"];
+        [sqlStr appendString:@" order by l.cstartdate desc, l.isend asc, l.imoney desc"];
         
         FMResultSet *result = [db executeQuery:sqlStr, userId, fundID ,@(state)];
         if (!result) {
@@ -103,7 +103,7 @@
         NSMutableArray *objectArr = [NSMutableArray array];
         [objectArr addObject:model.productid];
         [objectArr addObject:model.userid.length ? model.userid : SSJUSERID()];
-        [objectArr addObject:model.productName?:@"ff"];
+        [objectArr addObject:model.productName?:@""];
         [objectArr addObject: model.memo.length ? model.memo:@""];
         [objectArr addObject:model.thisfundid?:@""];
         [objectArr addObject:model.targetfundid?:@""];
@@ -199,8 +199,134 @@
     }];
 }
 
+/**
+ *  查询固收理财产品详情
+ *
+ *  @param fixedFinanceProductID    理财产品id
+ *  @param success   查询成功的回调
+ *  @param failure   查询失败的回调
+ */
++ (void)queryForFixedFinanceProduceWithProductID:(NSString *)fixedFinanceProductID
+                            success:(void (^)(SSJFixedFinanceProductItem *model))success
+                            failure:(void (^)(NSError *error))failure {
+    if (!fixedFinanceProductID.length) {
+        SSJDispatchMainAsync(^{
+            NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷ID不能为空"}];
+            failure(error);
+        });
+        return;
+    }
+    
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select l.* , fi.cstartcolor, fi.cendcolor from bk_fixed_finance_product l, bk_fund_info fi where l.cproductid = ? and l.cuserid = ? and l.cthisfundid = fi.cfundid",fixedFinanceProductID,userId];
+        if (!resultSet) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
+        while ([resultSet next]) {
+            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet];
+        }
+        [resultSet close];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(item);
+            });
+        }
+        
+    }];
+}
+
+#pragma mark - 固定理财流水
+
+/**
+ 查询某个固定理财所有的流水列表
+ 
+ @param model 固定理财模型
+ @param resultList 返回的流水列表
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)queryFixedFinanceProductChargeListWithModel:(SSJFixedFinanceProductItem *)model
+                                            success:(void (^)(NSArray <SSJFixedFinanceProductChargeItem *>*resultList))success
+                                            failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
+        NSMutableArray *chargeModels = [NSMutableArray array];
+        while ([resultSet next]) {
+            SSJFixedFinanceProductChargeItem *item = [[SSJFixedFinanceProductChargeItem alloc] init];
+            item.chargeId = [resultSet stringForColumn:@"ichargeid"];
+            item.fundId = [resultSet stringForColumn:@"ifunsid"];
+            item.billId = [resultSet stringForColumn:@"ibillid"];
+            item.userId = model.userid;
+            item.memo = [resultSet stringForColumn:@"cmemo"];
+            item.billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+            item.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            item.money = [resultSet doubleForColumn:@"imoney"];
+            [chargeModels addObject:item];
+        }
+        
+        [resultSet close];
+        
+        //分类
+        NSArray *compModels = [self updateFinanceChargeTypeWithModel:chargeModels];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(compModels);
+            });
+        }
+    }];
+}
+
+#pragma mark - Other
+
+/**
+ 查询流水cid后缀最大值
+ 
+ @param productid <#productid description#>
+ */
++ (NSInteger)queryMaxChargeChargeIdSuffixWithProductId:(NSString *)productid {
+    //查询是否有流水没有为1，否则+1
+    __block NSInteger chargeSuffixNum = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+       BOOL chargeExisted = [db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cid like (? || '_%') and ichargetype = 7", SSJUSERID(), productid];
+        if (!chargeExisted) {
+            chargeSuffixNum = [db intForQuery:@"select max(cast(substr(uc.cid, length(tc.cproductid) + 2) as int)) from bk_user_charge as uc, bk_fixed_finance_product as tc where uc.cuserid = ? and uc.ichargetype = 7 and uc.cid like (? || '_%')", SSJUSERID(), productid] + 1;
+        }
+    }];
+    return chargeSuffixNum;
+}
 
 
+/**
+ 计算已产生利息
+ 
+ @param model model
+ @return 利息
+ */
++ (double)caculateGenerateRateWithModel:(SSJFixedFinanceProductItem *)model {
+    return 10;
+}
+
+
+/**
+ 计算预期利息
+ 
+ @param model model
+ @return 利息
+ */
++ (double)caculateExpectedRateWithModel:(SSJFixedFinanceProductItem *)model {
+    return 20;
+}
 
 #pragma mark - Private
 + (BOOL)saveFixedFinanceProductChargeWithModel:(SSJFixedFinanceProductCompoundItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
@@ -302,6 +428,36 @@
     }
 
     return YES;
+}
+
++ (NSArray *)updateFinanceChargeTypeWithModel:(NSMutableArray *)chargeArr {
+    NSMutableArray *compArr = [NSMutableArray array];
+    for (SSJFixedFinanceProductChargeItem *item in chargeArr) {
+        if ([item.billId isEqualToString:@"4"]) {// 创建
+            item.chargeType = SSJFixedFinCompoundChargeTypeCreate;
+        } else if ([item.billId isEqualToString:@"3"]) {//全部赎回
+            item.chargeType = SSJFixedFinCompoundChargeTypeCloseOut;
+        } else if ([item.billId isEqualToString:@"15"]) {//固收理财变更转入（对固收理财账户而言，是追加投资）
+            item.chargeType = SSJFixedFinCompoundChargeTypeAdd;
+        } else if ([item.billId isEqualToString:@"16"]) {//固收理财变更转出（对固收理财账户而言，是部分赎回）
+            item.chargeType = SSJFixedFinCompoundChargeTypeRedemption;
+        } else if ([item.billId isEqualToString:@"17"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceIncrease;
+        } else if ([item.billId isEqualToString:@"18"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceDecrease;
+        } else if ([item.billId isEqualToString:@"19"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceInterestIncrease;
+        } else if ([item.billId isEqualToString:@"20"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceInterestDecrease;
+        } else if ([item.billId isEqualToString:@"21"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeInterest;
+        } else if ([item.billId isEqualToString:@"22"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypeCloseOutInterest;
+        }
+        
+        [compArr addObject:item];
+    }
+    return [compArr copy];
 }
 
 @end
