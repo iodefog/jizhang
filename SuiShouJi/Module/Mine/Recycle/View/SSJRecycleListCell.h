@@ -19,10 +19,6 @@ typedef NS_ENUM(NSInteger, SSJRecycleListCellState) {
 
 @property (nonatomic, copy) void(^expandBtnDidClick)(SSJRecycleListCell *cell);
 
-@property (nonatomic, copy) void(^recoverBtnDidClick)(SSJRecycleListCell *cell);
-
-@property (nonatomic, copy) void(^deleteBtnDidClick)(SSJRecycleListCell *cell);
-
 @end
 
 @interface SSJRecycleListCellItem : SSJBaseCellItem
@@ -36,10 +32,6 @@ typedef NS_ENUM(NSInteger, SSJRecycleListCellState) {
 @property (nonatomic, copy) NSArray<NSString *> *subtitles;
 
 @property (nonatomic) SSJRecycleListCellState state;
-
-@property (nonatomic) BOOL recoverBtnLoading;
-
-@property (nonatomic) BOOL clearBtnLoading;
 
 @property (nonatomic, copy) NSString *recycleID;
 

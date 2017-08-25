@@ -101,81 +101,6 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - _SSJRecycleListCellExpandedView
-#pragma mark -
-
-@interface _SSJRecycleListCellExpandedView : UIView
-
-@property (nonatomic, strong) UIButton *recoverBtn;
-
-@property (nonatomic, strong) UIButton *deleteBtn;
-
-@end
-
-@implementation _SSJRecycleListCellExpandedView
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self addSubview:self.recoverBtn];
-        [self addSubview:self.deleteBtn];
-        [self ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
-        [self updateAppearanceAccordingToTheme];
-    }
-    return self;
-}
-
-- (void)updateConstraints {
-    [_recoverBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.mas_equalTo(self);
-    }];
-    [_deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_recoverBtn.mas_right);
-        make.width.mas_equalTo(_recoverBtn);
-        make.top.right.bottom.mas_equalTo(self);
-    }];
-    [super updateConstraints];
-}
-
-- (UIButton *)recoverBtn {
-    if (!_recoverBtn) {
-        _recoverBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_recoverBtn setTitle:NSLocalizedString(@"还原", nil) forState:UIControlStateNormal];
-        [_recoverBtn setTitle:nil forState:UIControlStateDisabled];
-        [_recoverBtn setImage:[UIImage imageNamed:@"recycle_recover"] forState:UIControlStateNormal];
-        [_recoverBtn setImage:nil forState:UIControlStateDisabled];
-        _recoverBtn.spaceBetweenImageAndTitle = 10;
-        [_recoverBtn ssj_setBorderStyle:SSJBorderStyleRight];
-    }
-    return _recoverBtn;
-}
-
-- (UIButton *)deleteBtn {
-    if (!_deleteBtn) {
-        _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn setTitle:NSLocalizedString(@"彻底删除", nil) forState:UIControlStateNormal];
-        [_deleteBtn setTitle:nil forState:UIControlStateDisabled];
-        [_deleteBtn setImage:[UIImage imageNamed:@"recycle_delete"] forState:UIControlStateNormal];
-        [_deleteBtn setImage:nil forState:UIControlStateDisabled];
-        _deleteBtn.spaceBetweenImageAndTitle = 10;
-    }
-    return _deleteBtn;
-}
-
-- (void)updateAppearanceAccordingToTheme {
-    _recoverBtn.tintColor = SSJ_SECONDARY_COLOR;
-    [_recoverBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    [_recoverBtn ssj_setBorderColor:SSJ_BORDER_COLOR];
-    
-    _deleteBtn.tintColor = SSJ_SECONDARY_COLOR;
-    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    
-    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
-}
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJRecycleListCellItem
 #pragma mark -
 @implementation SSJRecycleListCellItem
@@ -212,8 +137,6 @@
 
 @property (nonatomic, strong) UIButton *arrowBtn;
 
-@property (nonatomic, strong) _SSJRecycleListCellExpandedView *expandedView;
-
 @property (nonatomic, strong) UIImageView *checkMark;
 
 @end
@@ -230,7 +153,6 @@
         [self.contentView addSubview:self.titleLab];
         [self.contentView addSubview:self.subtitleView];
         [self.contentView addSubview:self.arrowBtn];
-        [self.contentView addSubview:self.expandedView];
         [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
     }
@@ -256,16 +178,10 @@
     }];
     
     [_subtitleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_icon.mas_right).offset(5);
         make.top.mas_equalTo(_titleLab.mas_bottom).offset(8);
+        make.left.mas_equalTo(_icon.mas_right).offset(5);
         make.right.mas_equalTo(self.contentView).offset(-15);
         make.height.mas_equalTo(13);
-    }];
-    
-    [_expandedView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_subtitleView.mas_bottom).offset(19);
-        make.left.right.bottom.mas_equalTo(self.contentView);
-        make.height.mas_equalTo([self item].state == SSJRecycleListCellStateExpanded ? 44 : 0);
     }];
     
     [super updateConstraints];
@@ -296,7 +212,6 @@
                 [_arrowBtn setImage:btnImg forState:UIControlStateNormal];
                 self.arrowBtn.hidden = NO;
                 self.checkMark.hidden = YES;
-                self.expandedView.hidden = YES;
             }
                 break;
                 
@@ -305,14 +220,12 @@
                 [self.arrowBtn setImage:btnImg forState:UIControlStateNormal];
                 self.arrowBtn.hidden = NO;
                 self.checkMark.hidden = YES;
-                self.expandedView.hidden = NO;
             }
                 break;
                 
             case SSJRecycleListCellStateSelected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.expandedView.hidden = YES;
                 self.checkMark.tintColor = SSJ_MARCATO_COLOR;
             }
                 break;
@@ -320,31 +233,12 @@
             case SSJRecycleListCellStateUnselected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.expandedView.hidden = YES;
                 self.checkMark.tintColor = SSJ_SECONDARY_COLOR;
             }
                 break;
         }
         
         [self setNeedsUpdateConstraints];
-    }];
-    
-    [[RACObserve(item, recoverBtnLoading) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *loadingValue) {
-        self.expandedView.recoverBtn.enabled = ![loadingValue boolValue];
-        if ([loadingValue boolValue]) {
-            [self.expandedView.recoverBtn ssj_showLoadingIndicator];
-        } else {
-            [self.expandedView.recoverBtn ssj_hideLoadingIndicator];
-        }
-    }];
-    
-    [[RACObserve(item, clearBtnLoading) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *loadingValue) {
-        self.expandedView.deleteBtn.enabled = ![loadingValue boolValue];
-        if ([loadingValue boolValue]) {
-            [self.expandedView.deleteBtn ssj_showLoadingIndicator];
-        } else {
-            [self.expandedView.deleteBtn ssj_hideLoadingIndicator];
-        }
     }];
 }
 
@@ -361,7 +255,6 @@
     _titleLab.textColor = SSJ_MAIN_COLOR;
     _arrowBtn.tintColor = SSJ_SECONDARY_COLOR;
     [_subtitleView updateAppearanceAccordingToTheme];
-    [_expandedView updateAppearanceAccordingToTheme];
     
     if ([self item].state == SSJRecycleListCellStateSelected) {
         _checkMark.tintColor = SSJ_MARCATO_COLOR;
@@ -404,26 +297,6 @@
         }];
     }
     return _arrowBtn;
-}
-
-- (_SSJRecycleListCellExpandedView *)expandedView {
-    if (!_expandedView) {
-        _expandedView = [[_SSJRecycleListCellExpandedView alloc] init];
-        @weakify(self);
-        [[_expandedView.recoverBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            if (self.recoverBtnDidClick) {
-                self.recoverBtnDidClick(self);
-            }
-        }];
-        [[_expandedView.deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            if (self.deleteBtnDidClick) {
-                self.deleteBtnDidClick(self);
-            }
-        }];
-    }
-    return _expandedView;
 }
 
 - (UIImageView *)checkMark {

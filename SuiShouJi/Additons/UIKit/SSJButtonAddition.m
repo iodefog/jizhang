@@ -17,14 +17,20 @@ static const void *kSpaceBetweenImageAndTitleKey = &kSpaceBetweenImageAndTitleKe
 
 @implementation UIButton (SSJContentLayout)
 
-//+ (void)load {
-//    ssj_swizzleSelector(self, @selector(setFrame:), @selector(ssj_setFrame:));
-//}
-//
++ (void)load {
+//    SSJSwizzleSelector(self, @selector(setFrame:), @selector(ssj_setFrame:));
+    SSJSwizzleSelector(self, @selector(setBounds:), @selector(ssj_setBounds:));
+}
+
 //- (void)ssj_setFrame:(CGRect)frame {
 //    [self ssj_setFrame:frame];
 //    [self ssj_layoutContent];
 //}
+
+- (void)ssj_setBounds:(CGRect)bounds {
+    [self ssj_setBounds:bounds];
+    [self ssj_layoutContent];
+}
 
 - (SSJButtonLayoutType)contentLayoutType {
     return [objc_getAssociatedObject(self, kContentLayoutTypeKey) unsignedIntegerValue];

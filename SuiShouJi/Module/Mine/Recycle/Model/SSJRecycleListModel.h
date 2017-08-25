@@ -14,6 +14,6 @@
 
 @property (nonatomic, copy) NSString *dateStr;
 
-@property (nonatomic, copy) NSArray<SSJRecycleListCellItem *> *cellItems;
+@property (nonatomic, strong) NSMutableArray<SSJBaseCellItem *> *cellItems;
 
 @end
