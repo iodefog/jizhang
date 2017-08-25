@@ -34,10 +34,4 @@
 
 @property(nonatomic) NSInteger fundOperatortype;
 
-//渐变的开始颜色
-@property(nonatomic, strong) NSString *startColor;
-
-//渐变的结束颜色
-@property(nonatomic, strong) NSString *endColor;
-
 @end
