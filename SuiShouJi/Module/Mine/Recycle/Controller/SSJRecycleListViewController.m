@@ -53,6 +53,7 @@ static NSString *const kCellID = @"kCellID";
     [self.view addSubview:self.warningHeaderView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
     [self updateAppearance];
+    [self.view setNeedsUpdateConstraints];
     
     [self loadData];
 }
