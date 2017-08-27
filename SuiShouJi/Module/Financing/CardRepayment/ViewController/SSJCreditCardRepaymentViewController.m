@@ -338,8 +338,8 @@ static NSString *const kTitle6 = @"还款账单月份";
                         [weakSelf.tableView reloadData];
                     }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.cardId;
-                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.cardName;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.fundingID;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.fundingName;
                         weakSelf.repaymentModel.repaymentSourceFoundImage = @"ft_creditcard";
                         [weakSelf.tableView reloadData];
                     }

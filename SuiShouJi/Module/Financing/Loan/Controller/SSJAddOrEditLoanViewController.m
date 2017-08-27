@@ -1191,7 +1191,7 @@ const int kMemoMaxLength = 15;
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.loanModel.targetFundID = cardItem.cardId;
+                        weakSelf.loanModel.targetFundID = cardItem.fundingID;
                         [weakSelf loadData];
                     }
                 };

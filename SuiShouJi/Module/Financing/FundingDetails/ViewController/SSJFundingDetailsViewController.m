@@ -87,7 +87,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     self.navigationItem.rightBarButtonItem = self.rightButton;
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-        self.title = cardItem.cardName;
+        self.title = cardItem.fundingName;
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
         self.title = financingItem.fundingName;
@@ -113,7 +113,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.view ssj_showLoadingIndicator];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         self.cardItem = (SSJCreditCardItem *)self.item;
-        self.cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardItem.cardId];
+        self.cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardItem.fundingID];
         self.creditCardHeader.item = self.cardItem;
     }
     if ([self.item isKindOfClass:[SSJCreditCardItem class]] && self.cardItem.settleAtRepaymentDay) {
@@ -132,14 +132,14 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
-            weakSelf.title = cardItem.cardName;
+            weakSelf.title = cardItem.fundingName;
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
         }];
     }else{
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-            [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.cardId success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
+            [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.fundingID success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
 //                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
 //                [weakSelf.tableView reloadData];
                 [self array:weakSelf.listItems isEqualToAnotherArray:data];
@@ -154,7 +154,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.creditCardHeader.totalIncome = fundingItem.fundingIncome;
                 weakSelf.creditCardHeader.totalExpence = fundingItem.fundingExpence;
                 weakSelf.creditCardHeader.cardBalance = fundingItem.fundingIncome - fundingItem.fundingExpence;
-                weakSelf.title = cardItem.cardName;
+                weakSelf.title = cardItem.fundingName;
 
 
             } failure:^(NSError *error) {
@@ -426,7 +426,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
         SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-        creditCardVc.cardId = cardItem.cardId;
+        creditCardVc.cardId = cardItem.fundingID;
         [self.navigationController pushViewController:creditCardVc animated:YES];
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
@@ -461,7 +461,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
             weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
             weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
-            weakSelf.title = cardItem.cardName;
+            weakSelf.title = cardItem.fundingName;
             if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
                 [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
                 weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
@@ -475,7 +475,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else{
         if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-            [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.cardId success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
+            [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.fundingID success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
 //                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
 //                [weakSelf.tableView reloadData];
                 [self array:weakSelf.listItems isEqualToAnotherArray:data];
@@ -490,7 +490,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
                 weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
                 weakSelf.creditCardHeader.cardBalance = fabs(cardItem.cardIncome - cardItem.cardExpence);
-                weakSelf.title = cardItem.cardName;
+                weakSelf.title = cardItem.fundingName;
                 if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] || !SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
                     [weakSelf.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor ssj_colorWithHex:cardItem.cardColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
                     weakSelf.creditCardHeader.backGroundView.backgroundColor = [UIColor ssj_colorWithHex:cardItem.cardColor];
@@ -544,7 +544,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.cardId;
+            creditCardVc.cardId = self.cardItem.fundingID;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -558,7 +558,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.cardId;
+            creditCardVc.cardId = self.cardItem.fundingID;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -568,8 +568,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
     SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-    model.cardId = self.cardItem.cardId;
-    model.cardName = self.cardItem.cardName;
+    model.cardId = self.cardItem.fundingID;
+    model.cardName = self.cardItem.fundingName;
     model.cardBillingDay = self.cardItem.cardBillingDay;
     model.cardRepaymentDay = self.cardItem.cardRepaymentDay;
     //mzl
@@ -589,7 +589,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.cardId;
+            creditCardVc.cardId = self.cardItem.fundingID;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -603,7 +603,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.cardId;
+            creditCardVc.cardId = self.cardItem.fundingID;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -614,8 +614,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
     SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
     SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
-    model.cardId = item.cardId;
-    model.cardName = item.cardName;
+    model.cardId = item.fundingID;
+    model.cardName = item.fundingName;
     model.cardBillingDay = item.cardBillingDay;
     model.cardRepaymentDay = item.cardRepaymentDay;
     repaymentVC.repaymentModel = model;

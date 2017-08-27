@@ -21,7 +21,9 @@
 #import "SSJUserBillTypeTable.h"
 
 @implementation SSJFinancingHomeHelper
-+ (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success failure:(void (^)(NSError *error))failure {
+
++ (void)queryForFundingListWithSuccess:(void(^)(NSArray<SSJFinancingHomeitem *> *result))success
+                               failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
 
         NSString *userid = SSJUSERID();
@@ -113,7 +115,7 @@
             }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                 SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                 cardItem.cardOder = i + 1;
-                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",(long)cardItem.cardOder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),cardItem.cardId];
+                sql = [NSString stringWithFormat:@"update bk_fund_info set iorder = %ld , cwritedate = '%@' , iversion = %@ , operatortype = 1 where cfundid = '%@'",(long)cardItem.cardOder,[[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),cardItem.fundingID];
             }
             [db executeUpdate:sql];
         }
@@ -296,7 +298,7 @@
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
             if (!type) {
                 //删掉资金账户
-                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.cardId]) {
+                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -306,7 +308,7 @@
                     return;
                 };
                 //删掉信用卡
-                if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.cardId]) {
+                if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -333,7 +335,7 @@
                 }
             }else{
                 // 删掉账户所对应的转账
-                if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.cardId userId:userId error:NULL]) {
+                if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{

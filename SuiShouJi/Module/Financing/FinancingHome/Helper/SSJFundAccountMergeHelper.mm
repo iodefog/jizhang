@@ -340,7 +340,7 @@
             fundId = fundingItem.fundingID;
         } else if ([fundItem isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *cardItem = (SSJCreditCardItem *)fundItem;
-            fundId = cardItem.cardId;
+            fundId = cardItem.fundingID;
         }
     } else {
         fundId = @"";

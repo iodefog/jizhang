@@ -270,7 +270,7 @@
         targetFundId = fundingItem.fundingID;
     } else if ([_transferInFundItem isKindOfClass:[SSJCreditCardItem class]]) {
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferInFundItem;
-        targetFundId = cardItem.cardId;
+        targetFundId = cardItem.fundingID;
     }
     
     if ([_transferOutFundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
@@ -278,7 +278,7 @@
         sourceFundId = fundingItem.fundingID;
     } else if ([_transferOutFundItem isKindOfClass:[SSJCreditCardItem class]]) {
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)_transferOutFundItem;
-        sourceFundId = cardItem.cardId;
+        sourceFundId = cardItem.fundingID;
     }
     
     if (!self.transferInFundItem) {

@@ -376,7 +376,7 @@ NSDate *SCYEnterBackgroundTime() {
                         remindItem.fundId = cardId;
                     } failure:NULL];
                 }
-                cardItem.cardId = remindItem.fundId;
+                cardItem.fundingID = remindItem.fundId;
                 SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
                 creditCardVc.item = cardItem;
                 [currentVc.navigationController pushViewController:creditCardVc animated:YES];

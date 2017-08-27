@@ -9,19 +9,10 @@
 #import "SSJBaseCellItem.h"
 #import "SSJFinancingItem.h"
 
-@interface SSJCreditCardItem : SSJBaseCellItem
-
-// 信用卡id
-@property(nonatomic, strong) NSString *cardId;
-
-// 信用卡名称
-@property(nonatomic, strong) NSString *cardName;
+@interface SSJCreditCardItem : SSJBaseCellItem<SSJFinancingItemProtocol>
 
 // 信用卡额度
 @property(nonatomic) double cardLimit;
-
-// 信用卡余额
-@property(nonatomic) double cardBalance;
 
 // 信用卡收入
 @property(nonatomic) double cardIncome;
@@ -38,8 +29,6 @@
 // 还款日
 @property(nonatomic) NSInteger cardRepaymentDay;
 
-// 信用卡备注
-@property(nonatomic, strong) NSString *cardMemo;
 
 // 信用卡颜色
 @property(nonatomic, strong) NSString *cardColor;
@@ -55,12 +44,6 @@
 
 // 信用卡流水
 @property(nonatomic) NSInteger chargeCount;
-
-//渐变的开始颜色
-@property(nonatomic, strong) NSString *startColor;
-
-//渐变的结束颜色
-@property(nonatomic, strong) NSString *endColor;
 
 @property(nonatomic) BOOL hasMadeInstalment;
 

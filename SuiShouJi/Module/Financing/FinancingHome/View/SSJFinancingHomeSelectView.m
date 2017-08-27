@@ -169,7 +169,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     if ([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJFinancingHomeitem class]]) {
         fundId = ((SSJFinancingHomeitem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
     } else if (([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJCreditCardItem class]])) {
-        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).cardId;
+        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
     }
     
     SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
@@ -202,7 +202,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
     if ([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJFinancingHomeitem class]]) {
         fundId = ((SSJFinancingHomeitem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
     } else if (([[self.items ssj_safeObjectAtIndex:indexPath.row] isKindOfClass:[SSJCreditCardItem class]])) {
-        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).cardId;
+        fundId = ((SSJCreditCardItem *)[self.items ssj_safeObjectAtIndex:indexPath.row]).fundingID;
     }
     
     if (indexPath.row == 0) {
@@ -310,7 +310,7 @@ static NSString *const SSJFundingHomeSelectCellIndetifer = @"SSJFundingHomeSelec
             if ([[self.items ssj_safeObjectAtIndex:idx] isKindOfClass:[SSJFinancingHomeitem class]]) {
                 fundId = ((SSJFinancingHomeitem *)[_items ssj_safeObjectAtIndex:idx]).fundingID;
             } else if (([[self.items ssj_safeObjectAtIndex:idx] isKindOfClass:[SSJCreditCardItem class]])) {
-                fundId = ((SSJCreditCardItem *)[_items ssj_safeObjectAtIndex:idx]).cardId;
+                fundId = ((SSJCreditCardItem *)[_items ssj_safeObjectAtIndex:idx]).fundingID;
             }
             [self.selectedFundids addObject:fundId];
         }

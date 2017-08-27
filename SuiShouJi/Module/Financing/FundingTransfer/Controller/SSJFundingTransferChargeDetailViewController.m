@@ -359,8 +359,8 @@ static const NSInteger kMemoTag = 1002;
                         weakSelf.item.transferInImage = fundItem.fundingIcon;
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.transferInId = cardItem.cardId;
-                        weakSelf.item.transferInName = cardItem.cardName;
+                        weakSelf.item.transferInId = cardItem.fundingID;
+                        weakSelf.item.transferInName = cardItem.fundingName;
                         weakSelf.item.transferInImage = @"ft_creditcard";
                     } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
                         SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
@@ -403,8 +403,8 @@ static const NSInteger kMemoTag = 1002;
                         weakSelf.item.transferOutImage = fundItem.fundingIcon;
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.transferOutId = cardItem.cardId;
-                        weakSelf.item.transferOutName = cardItem.cardName;
+                        weakSelf.item.transferOutId = cardItem.fundingID;
+                        weakSelf.item.transferOutName = cardItem.fundingName;
                         weakSelf.item.transferOutImage = @"ft_creditcard";
                     } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
                         SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
