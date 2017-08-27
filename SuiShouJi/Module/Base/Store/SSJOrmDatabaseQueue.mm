@@ -38,9 +38,9 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
             [SSJDatabaseErrorHandler handleError:customError];
         }];
         
-        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-            NSLog(@"SQL: %@", sql);
-        }];
+//        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+//            NSLog(@"SQL: %@", sql);
+//        }];
     }
     return self;
 }
