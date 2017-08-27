@@ -92,7 +92,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).isExpand) {
-        return [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).chargeArray count] + 1;
+        return [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:section]).chargeArray count];
     }else{
         return 0;
     }
@@ -103,7 +103,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
     if ([item isKindOfClass:[SSJFundingListDayItem class]]){
         SSJFundingDailySumCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListDailySumCellID forIndexPath:indexPath];
-        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row - 1];
+        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
         return cell;
     }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];

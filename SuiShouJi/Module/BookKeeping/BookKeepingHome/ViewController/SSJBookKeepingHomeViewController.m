@@ -204,7 +204,6 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 -(void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self clearSelectedIndexPath];
     [self getCurrentDate];
     [self.floatingDateView dismiss];
@@ -264,12 +263,12 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:section];
-    SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
+      SSJBookKeepingHomeHeaderView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:kHeaderId];
     headerView.item = item;
     return headerView;
 }
 
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowrAtIndexPath:(NSIndexPath *)indexPath{
     SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
     if (![item.date isEqualToString:@"-1"]) {
         SSJBookKeepingHomeTableViewCell * currentCell = (SSJBookKeepingHomeTableViewCell *)cell;
@@ -279,10 +278,11 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
             [self.newlyAddChargeArr removeObject:item];
         }else{
             if (!self.hasLoad && self.items.count) {
-                __weak typeof(self) weakSelf = self;
+                @weakify(self);
                 SSJBookKeepingHomeListItem *item = [self.items ssj_safeObjectAtIndex:indexPath.section];
                 [currentCell animatedShowCellWithDistance:self.view.height + indexPath.row * 130 delay:0.2 * (item.totalCount + indexPath.row) completion:^{
-                    weakSelf.hasLoad = YES;
+                    @strongify(self);
+                    self.hasLoad = YES;
                 }];
             }
         }
