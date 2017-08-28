@@ -68,6 +68,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 @property (nonatomic, strong) NSArray<NSString *> *imageItems;
 
 @property (nonatomic, strong) NSArray<NSString *> *titleItems;
+
 // 创建时产生的流水
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *createCompoundModel;
 
@@ -204,6 +205,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
         _sureButton.enabled = YES;
         SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+        detailVC.productID = self.model.productid;
         [self.navigationController pushViewController:detailVC animated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
@@ -211,7 +213,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [_sureButton ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-    //保存固定理财的提醒
 }
 
 - (BOOL)checkFixedFinModelIsValid {

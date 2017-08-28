@@ -27,6 +27,9 @@
 /**是否有百分号*/
 @property (nonatomic, assign) BOOL hasPercentageL;
 
+/**是否没有年月日*/
+@property (nonatomic, assign) BOOL hasNotSegment;
+
 /**<#注释#>*/
 @property (nonatomic, assign) NSInteger segmentSelectedIndex;
 

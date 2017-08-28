@@ -137,9 +137,23 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param success 成功的回调
  @param failure 失败的回调
  */
-+ (void)saveLoanCompoundChargeModel:(SSJFixedFinanceProductChargeItem *)model
++ (void)saveFinanceCompoundChargeModel:(SSJFixedFinanceProductChargeItem *)model
                             success:(void (^)(void))success
                             failure:(void (^)(NSError *error))failure;
+
+
+/**
+ 追加投资
+
+ @param model <#model description#>
+ @param chargeModels 追加产生的流水
+ @param success <#success description#>
+ @param failure <#failure description#>
+ */
++ (void)addInvestmentWithProductModel:(SSJFixedFinanceProductItem *)model
+                         chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
+                              success:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure;
 
 
 /**

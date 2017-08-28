@@ -8,7 +8,7 @@
 
 #import "SSJFixedFinanceProductDetailViewController.h"
 #import "SSJFixedFinanctAddViewController.h"
-#import "SSJFixedFinancRedemptionViewController.h"
+#import "SSJFixedFinanceRedemViewController.h"
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductDetailItem.h"
@@ -577,13 +577,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:0]]) {
                 SSJFixedFinanctAddViewController *addVC = [[SSJFixedFinanctAddViewController alloc] init];
                 //            addVC.edited = NO;
-                //            addVC.loanId = wself.loanID;
+                addVC.productid = wself.productID;
                 
                 [wself.navigationController pushViewController:addVC animated:YES];
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
-                SSJFixedFinancRedemptionViewController *redVC = [[SSJFixedFinancRedemptionViewController alloc] init];
-                //            addVC.edited = NO;
-                //            addVC.loanId = wself.loanID;
+                SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
+                redVC.productid = self.productID;
                 
                 [wself.navigationController pushViewController:redVC animated:YES];
             }

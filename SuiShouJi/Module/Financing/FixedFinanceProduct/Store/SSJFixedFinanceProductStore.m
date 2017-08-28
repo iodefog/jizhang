@@ -179,7 +179,7 @@
             }
         }
         
-        // 修改借贷账户的可见状态
+        // 修改固定理财账户的可见状态
         if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, iversion = ?, operatortype = 1, cwritedate = ? where cfundid = ?", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], @(17)]) {
             *rollback = YES;
             if (failure) {
@@ -287,6 +287,50 @@
     }];
 }
 
+/**
+ 追加投资
+ 
+ @param model model
+ @param chargeModels 追加产生的流水
+ @param success 成功
+ @param failure 失败
+ */
++ (void)addInvestmentWithProductModel:(SSJFixedFinanceProductItem *)productModel
+                         chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
+                              success:(void (^)(void))success
+                              failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        //存储流水记录
+        NSError *error = nil;
+        NSDate *lastDate = [NSDate date];
+        for (SSJFixedFinanceProductCompoundItem *model in chargeModels) {
+            NSDate *writeDate = [lastDate dateByAddingSeconds:1];
+            model.chargeModel.writeDate = writeDate;
+            model.targetChargeModel.writeDate = writeDate;
+            model.interestChargeModel.writeDate = writeDate;
+            lastDate = writeDate;
+            
+            if (![self saveFixedFinanceProductChargeWithModel:model inDatabase:db error:&error]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+
+    }];
+    
+}
+
 #pragma mark - Other
 
 /**
@@ -299,9 +343,9 @@
     __block NSInteger chargeSuffixNum = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
        BOOL chargeExisted = [db boolForQuery:@"select count(1) from bk_user_charge where cuserid = ? and cid like (? || '_%') and ichargetype = 7", SSJUSERID(), productid];
-        if (!chargeExisted) {
+//        if (!chargeExisted) {
             chargeSuffixNum = [db intForQuery:@"select max(cast(substr(uc.cid, length(tc.cproductid) + 2) as int)) from bk_user_charge as uc, bk_fixed_finance_product as tc where uc.cuserid = ? and uc.ichargetype = 7 and uc.cid like (? || '_%')", SSJUSERID(), productid] + 1;
-        }
+//        }
     }];
     return chargeSuffixNum;
 }
