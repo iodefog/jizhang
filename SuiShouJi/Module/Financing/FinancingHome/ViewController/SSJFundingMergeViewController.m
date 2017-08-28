@@ -134,12 +134,18 @@
         @weakify(self);
         _transferInFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            self.transferInFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferOutType exceptFundItem:self.transferOutFundItem];
-            if (!self.transferInFundSelectView.fundsArr.count) {
-                [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
-                return;
-            }
-            [self.transferInFundSelectView showWithSelectedItem:self.transferInFundItem];
+            [self.mergeHelper getFundingsWithType:self.transferOutType exceptFundItem:self.transferOutFundItem Success:^(NSArray *fundList) {
+                if (!fundList.count) {
+                    [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
+                    return;
+                } else {
+                    self.transferInFundSelectView.fundsArr = fundList;
+                    [self.transferInFundSelectView showWithSelectedItem:self.transferInFundItem];
+                }
+            } failure:^(NSError *error) {
+                [SSJAlertViewAdapter showError:error];
+            }];
+
         };
     }
     return _transferInFundBackView;
@@ -153,12 +159,17 @@
         @weakify(self);
         _transferOutFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            self.transferOutFundSelectView.fundsArr = [self.mergeHelper getFundingsWithType:self.transferInType exceptFundItem:self.transferInFundItem];
-            if (!self.transferOutFundSelectView.fundsArr.count) {
-                [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
-                return;
-            }
-            [self.transferOutFundSelectView showWithSelectedItem:self.transferOutFundItem];
+            [self.mergeHelper getFundingsWithType:self.transferInType exceptFundItem:self.transferInFundItem Success:^(NSArray *fundList) {
+                if (!fundList.count) {
+                    [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
+                    return;
+                } else {
+                    self.transferOutFundSelectView.fundsArr = fundList;
+                    [self.transferOutFundSelectView showWithSelectedItem:self.transferOutFundItem];
+                }
+            } failure:^(NSError *error) {
+
+            }];
         };
     }
     return _transferOutFundBackView;
