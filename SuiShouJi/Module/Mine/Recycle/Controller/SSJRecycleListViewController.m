@@ -22,8 +22,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 
 @property (nonatomic) BOOL editing;
 
-@property (nonatomic, strong) NSIndexPath *lastExpandedIndexPath;
-
 @property (nonatomic, strong) NSMutableArray<SSJRecycleListModel *> *listModels;
 
 @property (nonatomic, strong) SSJSyncSettingWarningFooterView *warningHeaderView;
@@ -51,6 +49,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     
     [self.tableView registerClass:[SSJRecycleListCell class] forCellReuseIdentifier:kRecycleListCellID];
     [self.tableView registerClass:[SSJRecycleRecoverClearCell class] forCellReuseIdentifier:kRecycleRecoverClearCellID];
+    [self.tableView registerClass:[SSJRecycleListHeaderView class] forHeaderFooterViewReuseIdentifier:kHeaderID];
     [self.view addSubview:self.warningHeaderView];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
     [self updateAppearance];
@@ -114,7 +113,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
                 [self insertEditCellAtIndexPath:expandedIndexPath recycleID:item.recycleID];
                 
                 [self.tableView endUpdates];
-                self.lastExpandedIndexPath = expandedIndexPath;
             } else {
                 [self deleteExpandedCell];
             }
@@ -211,7 +209,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 - (void)rightBarItemAction {
     self.editing = !self.editing;
     self.navigationItem.rightBarButtonItem.title = NSLocalizedString(self.editing ? @"编辑" : @"取消", nil);
-    [self deleteLastExpandedCellIfNeeded];
+    [self deleteExpandedCell];
     
     for (SSJRecycleListModel *sectionModel in self.listModels) {
         for (SSJRecycleListCellItem *cellItem in sectionModel.cellItems) {
@@ -228,15 +226,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     [model.cellItems insertObject:item atIndex:indexPath.row];
     
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-}
-
-- (void)deleteLastExpandedCellIfNeeded {
-    if (self.lastExpandedIndexPath) {
-        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:self.lastExpandedIndexPath.section];
-        [model.cellItems removeObjectAtIndex:self.lastExpandedIndexPath.row];
-        [self.tableView deleteRowsAtIndexPaths:@[self.lastExpandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-        self.lastExpandedIndexPath = nil;
-    }
 }
 
 - (void)deleteExpandedCell {
