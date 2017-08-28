@@ -173,6 +173,8 @@
     CFTimeInterval interval=[_fishImage convertTime:CACurrentMediaTime() fromLayer:nil];
     //设置时间偏移量，保证暂停时停留在旋转的位置
     [_fishImage setTimeOffset:interval];
+    
+    _isAnimating = NO;;
     //速度设置为0，暂停动画
     _fishImage.speed=0;
 }
@@ -182,9 +184,9 @@
     //获得暂停的时间
     CFTimeInterval beginTime = CACurrentMediaTime() - _fishImage.timeOffset;
     //设置偏移量
-    _fishImage.timeOffset=0;
+    _fishImage.timeOffset = 0;
     //设置开始时间
-    _fishImage.beginTime=beginTime;
+    _fishImage.beginTime = beginTime;
     //设置动画速度，开始运动
     _fishImage.speed=1.0;
 }
