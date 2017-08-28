@@ -43,14 +43,16 @@
         [self.contentView addSubview:self.circleLabel];
         [self.contentView addSubview:self.switchButton];
         [self.contentView addSubview:self.timeLabel];
+        [self.contentView addSubview:self.booksLabel];
     }
     return self;
 }
 
 - (void)updateConstraints {
     [self.categoryImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(20, 20));
         make.left.mas_equalTo(15);
-        make.centerY.mas_equalTo(self);
+        make.centerY.mas_equalTo(self.categoryLabel);
     }];
     
     [self.categoryLabel mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -73,12 +75,37 @@
         make.centerY.mas_equalTo(self.circleImage);
     }];
     
+    [self.seperatorView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(1, 9));
+        make.left.mas_equalTo(self.circleLabel.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.circleImage);
+    }];
+    
+    [self.booksLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.seperatorView.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.circleImage);
+    }];
+    
+    [self.switchButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.categoryLabel);
+        make.right.mas_equalTo(self.mas_right).offset(-15);
+    }];
+    
+    [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.circleImage);
+        make.right.mas_equalTo(self.mas_right).offset(-15);
+    }];
+
+    
     [super updateConstraints];
 }
 
 -(UIImageView *)categoryImage{
     if (!_categoryImage) {
         _categoryImage = [[UIImageView alloc]init];
+        _categoryImage.layer.borderWidth = 1.f;
+        _categoryImage.layer.cornerRadius = 10.f;
+        _categoryImage.contentMode = UIViewContentModeCenter;
     }
     return _categoryImage;
 }
@@ -139,12 +166,31 @@
     return _timeLabel;
 }
 
+- (UIView *)seperatorView {
+    if (!_seperatorView) {
+        _seperatorView = [[UIView alloc] init];
+        _seperatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperatorView;
+}
+
+- (UILabel *)booksLabel {
+    if (!_booksLabel) {
+        _booksLabel = [[UILabel alloc] init];
+        _booksLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _booksLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _booksLabel;
+}
+
 -(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
     self.switchButton.on = _item.isOnOrNot;
-    self.categoryImage.image = [[UIImage imageNamed:_item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.categoryImage.image = [[[UIImage imageNamed:_item.imageName] ssj_compressWithinSize:CGSizeMake(15, 15)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.categoryImage.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
+    self.categoryImage.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
     self.categoryLabel.text = _item.typeName;
-    [self.categoryLabel sizeToFit];
+    self.booksLabel.text = _item.booksName;
     if (_item.incomeOrExpence) {
         self.moneyLabel.text = [NSString stringWithFormat:@"-%.2f",[_item.money doubleValue]];
     }else{
@@ -176,6 +222,7 @@
         default:
             break;
     }
+    [self updateConstraintsIfNeeded];
 }
 
 

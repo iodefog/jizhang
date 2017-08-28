@@ -235,8 +235,8 @@
 
 - (void)setItem:(SSJCreditCardItem *)item{
     _item = item;
-    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.cardBalance];
-    if (_item.cardBalance > 0) {
+    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
+    if (_item.fundingAmount > 0) {
         self.balanceTitleLab.text = @"当前余额";
     }else{
         self.balanceTitleLab.text = @"当前欠款";

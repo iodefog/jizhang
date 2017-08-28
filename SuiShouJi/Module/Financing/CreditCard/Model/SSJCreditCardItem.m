@@ -10,5 +10,14 @@
 
 @implementation SSJCreditCardItem
 
+@synthesize fundingName;
+@synthesize fundingMemo;
+@synthesize fundingColor;
+@synthesize fundingID;
+@synthesize fundingIcon;
+@synthesize fundingParent;
+@synthesize startColor;
+@synthesize endColor;
+@synthesize fundingAmount;
 
 @end

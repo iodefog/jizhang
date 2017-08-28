@@ -71,6 +71,9 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (section == 0) {
+        return 0.1f;
+    }
     return 10;
 }
 
@@ -205,7 +208,6 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
     }
     return _noDataRemindView;
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

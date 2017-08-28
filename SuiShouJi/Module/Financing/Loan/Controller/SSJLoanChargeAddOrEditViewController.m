@@ -868,8 +868,8 @@ static NSUInteger kDateTag = 1005;
                         weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
-                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
+                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.fundingID;
+                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.fundingID;
                     }
                     
                     if (weakSelf.edited) {

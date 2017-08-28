@@ -312,7 +312,7 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
         if ([item isKindOfClass:[SSJFundingItem class]]) {
             weakSelf.newlyAddFundId = ((SSJFundingItem *)item).fundingID;
         }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-            weakSelf.newlyAddFundId = ((SSJCreditCardItem *)item).cardId;
+            weakSelf.newlyAddFundId = ((SSJCreditCardItem *)item).fundingID;
         }
     };
     [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
@@ -412,8 +412,8 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
             }
         }else if([obj isKindOfClass:[SSJCreditCardItem class]]){
             SSJCreditCardItem *creditItem = (SSJCreditCardItem *)obj;
-            if ([self.selectedFundids isEqualToString:@"all"] || [self.selectedFundidsArr containsObject:creditItem.cardId]) {
-                sumMoney += creditItem.cardBalance;
+            if ([self.selectedFundids isEqualToString:@"all"] || [self.selectedFundidsArr containsObject:creditItem.fundingID]) {
+                sumMoney += creditItem.fundingAmount;
             }
         }
     }];

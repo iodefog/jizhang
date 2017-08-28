@@ -37,6 +37,8 @@
 
 
 @property (nonatomic, strong) CAShapeLayer *coverLayer;
+
+
 @end
 static CGFloat imageScale = 0.8; //裁剪框和真实尺寸大小比例
 @implementation SSJThemBgImageClipViewController
@@ -297,4 +299,5 @@ static CGFloat imageScale = 0.8; //裁剪框和真实尺寸大小比例
     }
     return _coverLayer;
 }
+
 @end

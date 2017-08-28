@@ -10,6 +10,9 @@
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 
 @interface SSJBillTypeSelectCell : SSJBaseTableViewCell
+
 @property(nonatomic, strong) SSJRecordMakingBillTypeSelectionCellItem *item;
+
 @property(nonatomic) BOOL isSelected;
+
 @end

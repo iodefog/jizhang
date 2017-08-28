@@ -43,6 +43,7 @@
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJAnnoucementService.h"
 #import "SSJMineHomeHeadLineService.h"
+#import "SSJBooksTypeStore.h"
 
 static BOOL needToShowHeadLines = YES;
 
@@ -223,15 +224,16 @@ static NSString * SSJNewMineHomeBannerHeaderdentifier = @"SSJNewMineHomeBannerHe
     
     //  周期记账
     if ([item.title isEqualToString:kTitle3]) {
-        if (SSJGetBooksCategory() == SSJBooksCategoryPersional) {
-            SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-            [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
-            return;
-        } else if (SSJGetBooksCategory() == SSJBooksCategoryPublic) {
-            [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
+        [SSJBooksTypeStore getCurrentBooksTypeWithsuccess:^(SSJBooksCategory booksType) {
+            if (booksType == SSJBooksCategoryPersional) {
+                SSJCircleChargeSettingViewController *circleChargeSettingVC = [[SSJCircleChargeSettingViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                [self.navigationController pushViewController:circleChargeSettingVC animated:YES];
+                return;
+            } else if (booksType == SSJBooksCategoryPublic) {
+                [CDAutoHideMessageHUD showMessage:@"共享账本不能周期记账哦~"];
+            }
+        } failure:NULL];
         }
-        return;
-    }
     
     //建议与咨询
     if ([item.title isEqualToString:kTitle4]) {

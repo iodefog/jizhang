@@ -13,6 +13,9 @@
 //账户名称
 @property (nonatomic,strong) NSString *fundingName;
 
+//账户名称
+@property (nonatomic,strong) NSString *fundingMemo;
+
 //账户颜色
 @property (nonatomic,strong) NSString *fundingColor;
 
@@ -30,5 +33,8 @@
 
 //渐变的结束颜色
 @property(nonatomic, strong) NSString *endColor;
+
+//账户余额
+@property (nonatomic) double fundingAmount;
 
 @end

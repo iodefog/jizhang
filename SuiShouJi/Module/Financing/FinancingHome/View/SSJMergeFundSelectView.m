@@ -119,7 +119,7 @@ static NSString *cellId = @"SSJFundingTypeCell";
     if ([self.selectItem isKindOfClass:[SSJFinancingHomeitem class]]) {
         selectFundid = ((SSJFinancingHomeitem *)self.selectItem).fundingID;
     } else if ([self.selectItem isKindOfClass:[SSJCreditCardItem class]]) {
-        selectFundid = ((SSJCreditCardItem *)self.selectItem).cardId;
+        selectFundid = ((SSJCreditCardItem *)self.selectItem).fundingID;
     }
     
     SSJFinancingHomeitem *item = [self.fundsArr ssj_safeObjectAtIndex:indexPath.row];

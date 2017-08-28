@@ -94,7 +94,7 @@
         self.titleLab.text = fundingItem.fundingName;
     } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
         SSJCreditCardItem *fundingItem = (SSJCreditCardItem *)item;
-        self.titleLab.text = fundingItem.cardName;
+        self.titleLab.text = fundingItem.fundingName;
     }
     [self updateConstraintsIfNeeded];
 }

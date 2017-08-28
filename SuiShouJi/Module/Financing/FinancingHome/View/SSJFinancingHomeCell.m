@@ -221,17 +221,17 @@ static const CGFloat kRadius = 12.f;
 //        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
         [CATransaction commit];
         self.fundingBalanceLabel.hidden = NO;
-        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.cardBalance];
+        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
         [self.fundingBalanceLabel sizeToFit];
         if (item.cardType == SSJCrediteCardTypeCrediteCard) {
             self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         } else {
             self.fundingImage.image = [[UIImage imageNamed:@"ft_mayihuabei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         }
-        self.fundingNameLabel.text = item.cardName;
+        self.fundingNameLabel.text = item.fundingName;
         [self.fundingNameLabel sizeToFit];
-        if (item.cardMemo.length) {
-            self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.cardMemo];
+        if (item.fundingMemo.length) {
+            self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.fundingMemo];
         } else {
             self.cardMemoLabel.text = @"";
         }

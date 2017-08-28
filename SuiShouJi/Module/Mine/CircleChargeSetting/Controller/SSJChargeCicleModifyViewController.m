@@ -441,8 +441,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                         [weakSelf.tableView reloadData];
                     }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.fundId = cardItem.cardId;
-                        weakSelf.item.fundName = cardItem.cardName;
+                        weakSelf.item.fundId = cardItem.fundingID;
+                        weakSelf.item.fundName = cardItem.fundingName;
                         weakSelf.item.fundImage = @"ft_creditcard";
                         [weakSelf.tableView reloadData];
                     }

@@ -195,7 +195,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
-        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.cicoin, b.cname, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.ifunsid = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.cardId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
+        NSString *sql = [NSString stringWithFormat:@"select a.* , a.cwritedate as chargedate, a.cid as sundryid, c.lender, c.itype as loantype, b.cicoin, b.cname, b.ccolor, b.itype from bk_user_charge a, bk_user_bill_type b left join bk_loan c on a.cid = c.loanid left join bk_share_books_member d on d.cbooksid = a.cbooksid and d.cmemberid = a.cuserid where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.ifunsid = '%@' and a.operatortype <> 2 and (a.cbilldate <= '%@' or (length(a.cid) > 0 and a.ichargetype = %ld)) and (d.istate = %d or d.istate is null or a.ibillid in ('13','14')) order by a.cbilldate desc ,  a.cwritedate desc", cardItem.fundingID , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"],(long)SSJChargeIdTypeLoan,(int)SSJShareBooksMemberStateNormal];
         FMResultSet *resultSet = [db executeQuery:sql];
         SSJCreditCardItem *newcardItem = [[SSJCreditCardItem alloc]init];
         if (!resultSet) {
@@ -391,19 +391,19 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             }
         }
         [resultSet close];
-        newcardItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
-        newcardItem.endColor = [db stringForQuery:@"select cendcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
-        newcardItem.cardName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
-        newcardItem.cardType = [db boolForQuery:@"select itype from bk_user_credit where cfundid = ? and cuserid = ?",cardItem.cardId,userid];
+        newcardItem.startColor = [db stringForQuery:@"select cstartcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.fundingID,userid];
+        newcardItem.endColor = [db stringForQuery:@"select cendcolor from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.fundingID,userid];
+        newcardItem.fundingName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",cardItem.fundingID,userid];
+        newcardItem.cardType = [db boolForQuery:@"select itype from bk_user_credit where cfundid = ? and cuserid = ?",cardItem.fundingID,userid];
         for (SSJCreditCardListDetailItem *listItem in result) {
-            listItem.instalmentMoney = [db doubleForQuery:@"select repaymentmoney from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,listItem.month,cardItem.cardId];
-            listItem.repaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0",userid,listItem.month,cardItem.cardId];
+            listItem.instalmentMoney = [db doubleForQuery:@"select repaymentmoney from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,listItem.month,cardItem.fundingID];
+            listItem.repaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0",userid,listItem.month,cardItem.fundingID];
             NSDate *currentMonth = [NSDate dateWithString:listItem.month formatString:@"yyyy-MM"];
             NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateBySubtractingMonths:1];
             NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:cardItem.cardBillingDay] dateByAddingDays:1];
-            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and capplydate <= ?",userid,listItem.month,cardItem.cardId,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+            listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and capplydate <= ?",userid,listItem.month,cardItem.fundingID,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         }
-        double instalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,cardItem.cardId];
+        double instalMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount > 0",userid,cardItem.fundingID];
         if (instalMoney > 0) {
             newcardItem.hasMadeInstalment = YES;
         } else {

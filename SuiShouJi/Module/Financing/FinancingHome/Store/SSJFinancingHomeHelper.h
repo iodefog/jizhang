@@ -34,9 +34,7 @@
                              Success:(void(^)())success
                              failure:(void (^)(NSError *error))failure;
 
-+ (SSJFinancingHomeitem *)queryFundItemWithFundingId:(NSString *)fundingId;
 
 + (NSString *)fundParentNameForFundingParent:(NSString *)parent;
 
-+ (NSString *)fundIconForFundingParent:(NSString *)parent;
 @end

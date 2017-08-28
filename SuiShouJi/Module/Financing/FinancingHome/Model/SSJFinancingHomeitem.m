@@ -11,12 +11,14 @@
 @implementation SSJFinancingHomeitem
 
 @synthesize fundingName;
+@synthesize fundingMemo;
 @synthesize fundingColor;
 @synthesize fundingID;
 @synthesize fundingIcon;
 @synthesize fundingParent;
 @synthesize startColor;
 @synthesize endColor;
+@synthesize fundingAmount;
 
 -(BOOL)isEqual:(id)object{
     SSJFinancingHomeitem *anotherItem = (SSJFinancingHomeitem*)object;

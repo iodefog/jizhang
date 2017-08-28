@@ -70,7 +70,7 @@ static const CGFloat kBooksCornerRadius = 8.f;
         } else if ([_fundingItem isKindOfClass:[SSJCreditCardItem class]]) {
             SSJCreditCardItem *carditem = (SSJCreditCardItem *)_fundingItem;
             self.gradientLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:carditem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:carditem.endColor].CGColor];
-            self.fundNameLab.text = carditem.cardName;
+            self.fundNameLab.text = carditem.fundingName;
         }
         self.gradientLayer.borderWidth = 0.f;
     } else {

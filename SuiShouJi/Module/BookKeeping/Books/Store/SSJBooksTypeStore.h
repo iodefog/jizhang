@@ -163,5 +163,8 @@ typedef enum : NSUInteger {
                                   success:(void(^)())success
                                   failure:(void(^)(NSError *error))failure;
 
++ (void)getCurrentBooksTypeWithsuccess:(void(^)(SSJBooksCategory booksType))success
+                               failure:(void(^)(NSError *error))failure;
+
 
 @end
