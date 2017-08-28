@@ -9,6 +9,7 @@
 #import "SSJFixedFinanceProductDetailViewController.h"
 #import "SSJFixedFinanctAddViewController.h"
 #import "SSJFixedFinanceRedemViewController.h"
+#import "SSJFixedFinancesSettlementViewController.h"
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductDetailItem.h"
@@ -454,10 +455,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 }
 
 - (void)closeOutBtnAction {
-//    _loanModel.endTargetFundID = _loanModel.targetFundID;
-//    SSJLoanCloseOutViewController *closeOutVC = [[SSJLoanCloseOutViewController alloc] init];
-//    closeOutVC.loanModel = _loanModel;
-//    [self.navigationController pushViewController:closeOutVC animated:YES];
+    SSJFixedFinancesSettlementViewController *closeOutVC = [[SSJFixedFinancesSettlementViewController alloc] init];
+    closeOutVC.productid = self.productID;
+    [self.navigationController pushViewController:closeOutVC animated:YES];
 }
 
 - (void)changeBtnAction {
@@ -572,6 +572,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         __weak typeof(self) wself = self;
         NSArray *titles =  @[@[@"追加本金", @"部分赎回"], @[@"取消"]];
         _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:titles];
+        MJWeakSelf;
         _changeChargeSelectionView.selectionHandle = ^(NSString * title){
             
             if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:0]]) {
@@ -582,7 +583,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 [wself.navigationController pushViewController:addVC animated:YES];
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
                 SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
-                redVC.productid = self.productID;
+                redVC.productid = weakSelf.productID;
                 
                 [wself.navigationController pushViewController:redVC animated:YES];
             }

@@ -1,12 +1,13 @@
 //
-//  SSJFixedFinanceRedemViewController.m
+//  SSJFixedFinancesSettlementViewController.m
 //  SuiShouJi
 //
 //  Created by yi cai on 2017/8/28.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJFixedFinanceRedemViewController.h"
+#import "SSJFixedFinancesSettlementViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
@@ -24,19 +25,19 @@
 #import "SSJLoanHelper.h"
 #import "SSJDataSynchronizer.h"
 
-
 static NSString *kAddOrEditFixedFinanceProLabelCellId = @"kAddOrEditFixedFinanceProLabelCellId";
 static NSString *kAddOrEditFixedFinanceProTextFieldCellId = @"kAddOrEditFixedFinanceProTextFieldCellId";
 static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditFixefFinanceProSegmentTextFieldCellId";
 static NSString *const kAddOrEditFinanceTextFieldCellId = @"kAddOrEditFinanceTextFieldCellId";
 
-static NSString *kTitle1 = @"部分赎回金额";
-static NSString *kTitle2 = @"手续费";
-static NSString *kTitle3 = @"扣取金额";
-static NSString *kTitle4 = @"转入账户";
-static NSString *kTitle5 = @"赎回日期";
-static NSString *kTitle6 = @"备注";
-@interface SSJFixedFinanceRedemViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+static NSString *kTitle1 = @"投资本金";
+static NSString *kTitle2 = @"利息收入";
+static NSString *kTitle3 = @"手续费";
+static NSString *kTitle4 = @"金额";
+static NSString *kTitle5 = @"计算转入账户";
+static NSString *kTitle6 = @"结算日期";
+
+@interface SSJFixedFinancesSettlementViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -57,6 +58,8 @@ static NSString *kTitle6 = @"备注";
 
 @property (nonatomic, strong) UITextField *liXiTextF;
 
+@property (nonatomic, strong) UITextField *poundageTextF;
+
 @property (nonatomic, strong) UILabel *subL;
 
 @property (nonatomic, strong) UITextField *memoTextF;
@@ -73,7 +76,7 @@ static NSString *kTitle6 = @"备注";
 
 @end
 
-@implementation SSJFixedFinanceRedemViewController
+@implementation SSJFixedFinancesSettlementViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -85,14 +88,13 @@ static NSString *kTitle6 = @"备注";
 }
 
 - (void)setUpNav {
-    self.title = @"部分赎回";
+    self.title = @"结算";
 }
 
 - (void)orangeData {
-    self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-    self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+    self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle5,kTitle6]];
+    self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money"]];
 }
-
 
 #pragma mark - Theme
 - (void)updateAppearanceAfterThemeChanged {
@@ -112,6 +114,7 @@ static NSString *kTitle6 = @"备注";
     return YES;
 }
 
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.titleItems.count;
@@ -125,22 +128,27 @@ static NSString *kTitle6 = @"备注";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
     NSString *imageName = [self.imageItems  ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString: kTitle1]) {
+    if ([title isEqualToString: kTitle1] || [title isEqualToString:kTitle2]) {
         
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-
+        
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
-        self.moneyTextF = cell.textField;
+        if ([title isEqualToString:kTitle1]) {
+            self.moneyTextF = cell.textField;
+        } else if([title isEqualToString:kTitle2]) {
+            self.liXiTextF = cell.textField;
+        }
+        
         [cell setNeedsLayout];
         return cell;
         
-    } else if ([title isEqualToString:kTitle4]) {
+    } else if ([title isEqualToString:kTitle5]) {
         
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -163,21 +171,6 @@ static NSString *kTitle6 = @"备注";
         
     } else if ([title isEqualToString:kTitle6]) {
         
-        SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
-        cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textLabel.text = title;
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"最多可输入10个字符" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-//        cell.textField.text = self.compoundModel.chargeModel.memo;
-        cell.textField.keyboardType = UIKeyboardTypeDefault;
-        cell.textField.returnKeyType = UIReturnKeyDone;
-        cell.textField.clearsOnBeginEditing = NO;
-        cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        cell.textField.delegate = self;
-        [cell setNeedsLayout];
-        return cell;
-        
-    } else if ([title isEqualToString:kTitle5]) {
-        
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
@@ -189,7 +182,7 @@ static NSString *kTitle6 = @"备注";
         [cell setNeedsLayout];
         return cell;
         
-    } else if ([title isEqualToString:kTitle2]) {
+    } else if ([title isEqualToString:kTitle3]) {
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
@@ -199,20 +192,20 @@ static NSString *kTitle6 = @"备注";
         [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         cell.switchControl.on = _isLiXiOn;
         [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
-//        self.liXiSwitch = cell.switchControl;
+        //        self.liXiSwitch = cell.switchControl;
         [cell setNeedsLayout];
         
         return cell;
-    } else if ([title isEqualToString:kTitle3]) {
+    } else if ([title isEqualToString:kTitle4]) {
         SSJFixedFinanceProDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId forIndexPath:indexPath];
         cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利息" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.chargeModel.money];
-        self.liXiTextF = cell.textField;
+        self.poundageTextF = cell.textField;
         cell.nameL.text = title;
         NSString *oldStr = [NSString stringWithFormat:@"每月10号该账户将生成50.00元的利息流水"];
         cell.subNameL.text = oldStr;
@@ -221,7 +214,7 @@ static NSString *kTitle6 = @"备注";
         cell.hasNotSegment = YES;
         self.subL = cell.subNameL;
         return cell;
-
+        
     } else {
         return [[UITableViewCell alloc] init];
     }
@@ -233,10 +226,10 @@ static NSString *kTitle6 = @"备注";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle4]) {
+    if ([title isEqualToString:kTitle5]) {
         [self.view endEditing:YES];
         [self.fundingSelectionView show];
-    } else if ([title isEqualToString:kTitle5]) {
+    } else if ([title isEqualToString:kTitle6]) {
         [self.view endEditing:YES];
         self.dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         [self.dateSelectionView show];
@@ -248,19 +241,14 @@ static NSString *kTitle6 = @"备注";
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-//    if (section == 0) {
-        return [[UIView alloc] init];
-//    }
-//    else {
-//        return self.footerView;
-//    }
+    return [[UIView alloc] init];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString:kTitle3]) {
+    if ([title isEqualToString:kTitle4]) {
         return 75;
-    } else if ([title isEqualToString:kTitle2] || [title isEqualToString:kTitle4] || [title isEqualToString:kTitle5]) {
+    } else if ([title isEqualToString:kTitle5] || [title isEqualToString:kTitle3]) {
         return 55;
     }
     return 50;
@@ -275,7 +263,7 @@ static NSString *kTitle6 = @"备注";
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-
+    
     
     [self.view ssj_showLoadingIndicator];
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
@@ -298,13 +286,13 @@ static NSString *kTitle6 = @"备注";
 
 - (BOOL)checkIfNeedCheck {
     if (!self.moneyTextF.text.length || [self.moneyTextF.text doubleValue] <=0) {
-        [CDAutoHideMessageHUD showMessage:@"请先输入赎回金额"];
+        [CDAutoHideMessageHUD showMessage:@"请先输入投资本金"];
         return NO;
     }
     
     if (_isLiXiOn) {
-        if (!self.liXiTextF.text.length || [self.liXiTextF.text doubleValue] <= 0) {
-            [CDAutoHideMessageHUD showMessage:@"请输入扣取金额"];
+        if (!self.poundageTextF.text.length) {
+            [CDAutoHideMessageHUD showMessage:@"请输入金额"];
             return NO;
         }
     }
@@ -340,11 +328,11 @@ static NSString *kTitle6 = @"备注";
 - (void)switchValueChanged:(UISwitch *)swit {
     _isLiXiOn = !_isLiXiOn;
     if (_isLiXiOn) {
-        self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
-        self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        self.titleItems = @[@[kTitle1,kTitle2,kTitle3,kTitle4],@[kTitle5,kTitle6]];
+        self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money"]];
     } else {
-        self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-        self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle5,kTitle6]];
+        self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money"]];
     }
     
     [self.tableView beginUpdates];
@@ -382,7 +370,7 @@ static NSString *kTitle6 = @"备注";
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_sureButton setTitle:@"保存" forState:UIControlStateNormal];
+        [_sureButton setTitle:@"结算" forState:UIControlStateNormal];
         [_sureButton setTitle:@"" forState:UIControlStateDisabled];
         [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
@@ -431,30 +419,29 @@ static NSString *kTitle6 = @"备注";
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 return YES;
-            }
-//            else if (index == view.items.count - 1) {
-//                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//                NewFundingVC.needLoanOrNot = NO;
-//                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-//                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-//                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-//                        weakSelf.model.targetfundid = fundItem.fundingID;
-                        //                        [weakSelf loadData];
-//                    } else if (0){//[item isKindOfClass:[SSJCreditCardItem class]]
-                        //                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        //                        weakSelf.model.targetfundid = cardItem.cardId;
-                        //                        [weakSelf loadData];
+            } else if (index == view.items.count - 1) {
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
+                    if ([item isKindOfClass:[SSJFundingItem class]]) {
+                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                        weakSelf.financeModel.targetfundid = fundItem.fundingID;
+                        [weakSelf loadData];
+                    }
+//                    else if ([item isKindOfClass:[SSJCreditCardItem class]]){
+//                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
+//                        weakSelf.loanModel.targetFundID = cardItem.cardId;
+//                        [weakSelf loadData];
 //                    }
-            return YES;
                 };
-//                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
-//                return NO;
-//            } else {
-//                SSJPRINT(@"警告：selectedIndex大于数组范围");
-//                return NO;
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+                return NO;
+            } else {
+                SSJPRINT(@"警告：selectedIndex大于数组范围");
+                return NO;
             }
-//        };
-//    }
+        };
+    }
     return _fundingSelectionView;
 }
 
@@ -503,7 +490,5 @@ static NSString *kTitle6 = @"备注";
         
     }
 }
-
-
 
 @end
