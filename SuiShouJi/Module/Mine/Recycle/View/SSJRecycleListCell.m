@@ -127,6 +127,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJRecycleListCell
 #pragma mark -
+
+#import "SSJCheckMark.h"
+
 @interface SSJRecycleListCell ()
 
 @property (nonatomic, strong) UIImageView *icon;
@@ -137,7 +140,7 @@
 
 @property (nonatomic, strong) UIButton *arrowBtn;
 
-@property (nonatomic, strong) UIImageView *checkMark;
+@property (nonatomic, strong) SSJCheckMark *checkMark;
 
 @end
 
@@ -183,6 +186,11 @@
         make.right.mas_equalTo(self.contentView).offset(-15);
         make.height.mas_equalTo(13);
     }];
+    [_checkMark mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(16, 16));
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView).offset(-15);
+    }];
     
     [super updateConstraints];
 }
@@ -226,14 +234,14 @@
             case SSJRecycleListCellStateSelected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.checkMark.tintColor = SSJ_MARCATO_COLOR;
+                self.checkMark.currentState = SSJCheckMarkSelected;
             }
                 break;
                 
             case SSJRecycleListCellStateUnselected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.checkMark.tintColor = SSJ_SECONDARY_COLOR;
+                self.checkMark.currentState = SSJCheckMarkNormal;
             }
                 break;
         }
@@ -255,12 +263,7 @@
     _titleLab.textColor = SSJ_MAIN_COLOR;
     _arrowBtn.tintColor = SSJ_SECONDARY_COLOR;
     [_subtitleView updateAppearanceAccordingToTheme];
-    
-    if ([self item].state == SSJRecycleListCellStateSelected) {
-        _checkMark.tintColor = SSJ_MARCATO_COLOR;
-    } else if ([self item].state == SSJRecycleListCellStateSelected) {
-        _checkMark.tintColor = SSJ_SECONDARY_COLOR;
-    }
+    [_checkMark updateAppearanceAccordingToTheme];
 }
 
 - (UIImageView *)icon {
@@ -299,9 +302,9 @@
     return _arrowBtn;
 }
 
-- (UIImageView *)checkMark {
+- (SSJCheckMark *)checkMark {
     if (!_checkMark) {
-        _checkMark = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"recycle_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _checkMark = [[SSJCheckMark alloc] init];
     }
     return _checkMark;
 }

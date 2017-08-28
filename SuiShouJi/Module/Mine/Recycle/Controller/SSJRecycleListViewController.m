@@ -208,7 +208,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 
 - (void)rightBarItemAction {
     self.editing = !self.editing;
-    self.navigationItem.rightBarButtonItem.title = NSLocalizedString(self.editing ? @"编辑" : @"取消", nil);
+    self.navigationItem.rightBarButtonItem.title = NSLocalizedString(self.editing ? @"取消" : @"编辑", nil);
     [self deleteExpandedCell];
     
     for (SSJRecycleListModel *sectionModel in self.listModels) {
