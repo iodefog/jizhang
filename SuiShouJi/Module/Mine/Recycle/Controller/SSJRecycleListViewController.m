@@ -154,33 +154,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     }
 }
 
-- (void)deleteCellsWithRecoverClearCellItem:(SSJRecycleRecoverClearCellItem *)cellItem {
-    __block NSIndexPath *expandedIndexPath = nil;
-    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
-        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *item, NSUInteger row, BOOL * _Nonnull stop_2) {
-            if (cellItem == item) {
-                expandedIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                *stop_2 = *stop_1 = YES;
-            }
-        }];
-    }];
-    
-    if (expandedIndexPath) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:expandedIndexPath.row - 1 inSection:expandedIndexPath.section];
-        
-        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
-        [model.cellItems ssj_safeRemoveObjectAtIndex:indexPath.row];
-        [model.cellItems ssj_safeRemoveObjectAtIndex:expandedIndexPath.row];
-        
-        if (model.cellItems.count) {
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath, expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-        } else {
-            [self.listModels ssj_safeRemoveObjectAtIndex:indexPath.section];
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-        }
-    }
-}
-
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
@@ -285,6 +258,33 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
         SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:expandedIndexPath.section];
         [model.cellItems removeObjectAtIndex:expandedIndexPath.row];
         [self.tableView deleteRowsAtIndexPaths:@[expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (void)deleteCellsWithRecoverClearCellItem:(SSJRecycleRecoverClearCellItem *)cellItem {
+    __block NSIndexPath *expandedIndexPath = nil;
+    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
+        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *item, NSUInteger row, BOOL * _Nonnull stop_2) {
+            if (cellItem == item) {
+                expandedIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                *stop_2 = *stop_1 = YES;
+            }
+        }];
+    }];
+    
+    if (expandedIndexPath) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:expandedIndexPath.row - 1 inSection:expandedIndexPath.section];
+        
+        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
+        [model.cellItems ssj_safeRemoveObjectAtIndex:expandedIndexPath.row];
+        [model.cellItems ssj_safeRemoveObjectAtIndex:indexPath.row];
+        
+        if (model.cellItems.count) {
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath, expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [self.listModels ssj_safeRemoveObjectAtIndex:indexPath.section];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
 }
 
