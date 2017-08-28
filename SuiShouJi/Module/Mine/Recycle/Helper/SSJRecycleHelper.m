@@ -106,17 +106,19 @@
             lastDate = model.clientAddDate;
         }
         
-        SSJRecycleListModel *listModel = [[SSJRecycleListModel alloc] init];
-        NSDate *now = [NSDate date];
-        if ([lastDate isSameDay:now]) {
-            listModel.dateStr = @"今天";
-        } else if ([lastDate isSameDay:[now dateBySubtractingDays:1]]) {
-            listModel.dateStr = @"昨天";
-        } else {
-            listModel.dateStr = [lastDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"];
+        if (cellItems.count) {
+            SSJRecycleListModel *listModel = [[SSJRecycleListModel alloc] init];
+            NSDate *now = [NSDate date];
+            if ([lastDate isSameDay:now]) {
+                listModel.dateStr = @"今天";
+            } else if ([lastDate isSameDay:[now dateBySubtractingDays:1]]) {
+                listModel.dateStr = @"昨天";
+            } else {
+                listModel.dateStr = [lastDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"];
+            }
+            listModel.cellItems = cellItems;
+            [resultModels addObject:listModel];
         }
-        listModel.cellItems = cellItems;
-        [resultModels addObject:listModel];
         
         SSJDispatchMainAsync(^{
             if (success) {

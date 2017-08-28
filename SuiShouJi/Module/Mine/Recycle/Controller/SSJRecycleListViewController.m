@@ -24,7 +24,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 
 @property (nonatomic, strong) NSIndexPath *lastExpandedIndexPath;
 
-@property (nonatomic, strong) NSArray<SSJRecycleListModel *> *listModels;
+@property (nonatomic, strong) NSMutableArray<SSJRecycleListModel *> *listModels;
 
 @property (nonatomic, strong) SSJSyncSettingWarningFooterView *warningHeaderView;
 
@@ -131,6 +131,9 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             item.recoverBtnLoading = YES;
             [self recoverData:@[item.recycleID] completion:^(BOOL success) {
                 item.recoverBtnLoading = NO;
+                if (success) {
+                    [self deleteCellsWithRecoverClearCellItem:cell.cellItem];
+                }
             }];
         };
         cell.deleteBtnDidClick = ^(SSJRecycleRecoverClearCell *cell) {
@@ -139,12 +142,42 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             item.recoverBtnLoading = YES;
             [self clearData:@[item.recycleID] completion:^(BOOL success) {
                 item.recoverBtnLoading = NO;
+                if (success) {
+                    [self deleteCellsWithRecoverClearCellItem:cell.cellItem];
+                }
             }];
         };
         return cell;
         
     } else {
         return [UITableViewCell new];
+    }
+}
+
+- (void)deleteCellsWithRecoverClearCellItem:(SSJRecycleRecoverClearCellItem *)cellItem {
+    __block NSIndexPath *expandedIndexPath = nil;
+    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
+        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *item, NSUInteger row, BOOL * _Nonnull stop_2) {
+            if (cellItem == item) {
+                expandedIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                *stop_2 = *stop_1 = YES;
+            }
+        }];
+    }];
+    
+    if (expandedIndexPath) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:expandedIndexPath.row - 1 inSection:expandedIndexPath.section];
+        
+        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
+        [model.cellItems ssj_safeRemoveObjectAtIndex:indexPath.row];
+        [model.cellItems ssj_safeRemoveObjectAtIndex:expandedIndexPath.row];
+        
+        if (model.cellItems.count) {
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath, expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            [self.listModels ssj_safeRemoveObjectAtIndex:indexPath.section];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+        }
     }
 }
 
@@ -271,7 +304,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 - (RACSignal *)loadDataSignal {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJRecycleHelper queryRecycleListModelsWithSuccess:^(NSArray<SSJRecycleListModel *> * _Nonnull models) {
-            self.listModels = models;
+            self.listModels = [models mutableCopy];
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];
@@ -292,15 +325,13 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 }
 
 - (void)recoverData:(NSArray *)recycleIDs completion:(void(^)(BOOL success))completion {
-    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJRecycleHelper recoverRecycleIDs:recycleIDs success:^{
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];
         }];
         return nil;
-    }] then:^RACSignal *{
-        return [self loadDataSignal];
     }] subscribeError:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
         if (completion) {
@@ -314,15 +345,13 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 }
 
 - (void)clearData:(NSArray *)recycleIDs completion:(void(^)(BOOL success))completion {
-    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJRecycleHelper clearRecycleIDs:recycleIDs success:^{
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];
         }];
         return nil;
-    }] then:^RACSignal *{
-        return [self loadDataSignal];
     }] subscribeError:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
         if (completion) {
