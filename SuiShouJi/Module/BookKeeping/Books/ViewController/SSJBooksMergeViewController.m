@@ -28,8 +28,6 @@
 
 @property (nonatomic, strong) UIImageView *transferImage;
 
-@property (nonatomic, strong) SSJBooksMergeHelper *mergeHelper;
-
 @property (nonatomic, strong) NSArray *allBooksItem;
 
 @property (nonatomic, strong) SSJBooksSelectView *transferInBooksSelectView;
@@ -131,14 +129,7 @@
     
 }
 
-#pragma mark - Getter
-- (SSJBooksMergeHelper *)mergeHelper {
-    if (!_mergeHelper) {
-        _mergeHelper = [[SSJBooksMergeHelper alloc] init];
-    }
-    return _mergeHelper;
-}
-
+#pragma mark - Gette
 - (SSJBooksTransferSelectView *)transferInBookBackView {
     if (!_transferInBookBackView) {
         _transferInBookBackView = [[SSJBooksTransferSelectView alloc] initWithFrame:CGRectZero type:SSJBooksTransferViewTypeTransferIn];
@@ -147,13 +138,15 @@
         @weakify(self);
         _transferInBookBackView.transferInSelectButtonClick = ^{
             @strongify(self);
-            NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
-            if (!allBooks.count) {
-                [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
-            } else {
-                self.transferInBooksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId];
-                [self.transferInBooksSelectView showWithSelectedItem:self.transferInBooksItem];
-            }
+            [SSJBooksMergeHelper getAllBooksItemWithExceptionId:self.transferOutBooksItem.booksId Success:^(NSArray *bookList) {
+                if (!bookList.count) {
+                    [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
+                } else {
+                    self.transferInBooksSelectView.booksItems = bookList;
+                    [self.transferInBooksSelectView showWithSelectedItem:self.transferInBooksItem];
+                }
+
+            } failure:NULL];
         };
     }
     return _transferInBookBackView;
@@ -167,13 +160,15 @@
         @weakify(self);
         _transferOutBookBackView.transferInSelectButtonClick = ^{
             @strongify(self);
-            NSArray *allBooks = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
-            if (!allBooks.count) {
-                [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
-            } else {
-                self.transferOutBooksSelectView.booksItems = [self.mergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId];
-                [self.transferOutBooksSelectView showWithSelectedItem:self.transferOutBooksItem];
-            }
+            [SSJBooksMergeHelper getAllBooksItemWithExceptionId:self.transferInBooksItem.booksId Success:^(NSArray *bookList) {
+                if (!bookList.count) {
+                    [CDAutoHideMessageHUD showMessage:@"你还没有其他账本哦,可以先添加一个账本"];
+                } else {
+                    self.transferOutBooksSelectView.booksItems = bookList;
+                    [self.transferOutBooksSelectView showWithSelectedItem:self.transferInBooksItem];
+                }
+                
+            } failure:NULL];
         };
     }
     return _transferOutBookBackView;
@@ -268,18 +263,15 @@
     if (!self.transferOutBooksItem) {
         SSJPRINT(@"转出账户不能为空");
     }
+    [SSJBooksMergeHelper getChargeCountForBooksId:self.transferOutBooksItem.booksId Success:^(NSNumber *chargeCount) {
+        self.transferOutBookBackView.chargeCount = chargeCount;
+        self.transferOutBookBackView.booksTypeItem = self.transferOutBooksItem;
+    } failure:NULL];
     
-    NSNumber *transfeOutChargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferOutBooksItem.booksId];
-    
-    NSNumber *transfeInChargeCount = [self.mergeHelper getChargeCountForBooksId:self.transferInBooksItem.booksId];
-    
-    self.transferOutBookBackView.chargeCount = transfeOutChargeCount;
-    
-    self.transferInBookBackView.chargeCount = transfeInChargeCount;
-    
-    self.transferOutBookBackView.booksTypeItem = self.transferOutBooksItem;
-    
-    self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
+    [SSJBooksMergeHelper getChargeCountForBooksId:self.transferInBooksItem.booksId Success:^(NSNumber *chargeCount) {
+        self.transferInBookBackView.chargeCount = chargeCount;
+        self.transferInBookBackView.booksTypeItem = self.transferInBooksItem;
+    } failure:NULL];
     
 }
 
@@ -294,7 +286,7 @@
     }
     @weakify(self);
     [self.mergeButton startAnimating];
-    [self.mergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
+    [SSJBooksMergeHelper startMergeWithSourceBooksId:self.transferOutBooksItem.booksId targetBooksId:self.transferInBooksItem.booksId Success:^{
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;

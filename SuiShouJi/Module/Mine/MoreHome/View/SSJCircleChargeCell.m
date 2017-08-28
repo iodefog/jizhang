@@ -11,14 +11,25 @@
 #import "SSJDataSynchronizer.h"
 
 @interface SSJCircleChargeCell()
+
 @property (nonatomic,strong) UIImageView *categoryImage;
+
 @property (nonatomic,strong) UILabel *categoryLabel;
+
 @property (nonatomic,strong) UIImageView *circleImage;
+
 @property (nonatomic,strong) UILabel *moneyLabel;
+
 @property (nonatomic,strong) UILabel *circleLabel;
+
 @property (nonatomic,strong) UILabel *timeLabel;
+
+@property (nonatomic,strong) UILabel *booksLabel;
+
 @property (nonatomic,strong) UISwitch *switchButton;
+
 @property (nonatomic,strong) UIView *seperatorView;
+
 @end
 @implementation SSJCircleChargeCell
 
@@ -32,36 +43,68 @@
         [self.contentView addSubview:self.circleLabel];
         [self.contentView addSubview:self.switchButton];
         [self.contentView addSubview:self.timeLabel];
+        [self.contentView addSubview:self.booksLabel];
     }
     return self;
 }
 
--(void)layoutSubviews{
-    [super layoutSubviews];
-    self.categoryImage.size = CGSizeMake(46, 46);
-    self.categoryImage.left = self.contentView.left + 10;
-//    self.categoryImage.top = 22;
-    self.categoryImage.centerY = self.contentView.centerY;
-    self.categoryLabel.left = self.categoryImage.right + 10;
-    self.categoryLabel.bottom = self.categoryImage.centerY - 8;
-    self.moneyLabel.left = self.categoryLabel.right + 10;
-    self.moneyLabel.centerY = self.categoryLabel.centerY;
-    self.circleImage.size = CGSizeMake(20, 20);
-    self.circleImage.left = self.categoryLabel.left;
-    self.circleImage.top = self.categoryImage.centerY + 8;
-    self.circleLabel.centerY = self.circleImage.centerY;
-    self.circleLabel.left = self.circleImage.right + 10;
-    self.switchButton.right = self.contentView.width - 10;
-    self.switchButton.centerY = self.height / 2;
-    self.timeLabel.left = self.categoryLabel.left;
-    self.timeLabel.top = self.circleLabel.bottom + 10;
+- (void)updateConstraints {
+    [self.categoryImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(20, 20));
+        make.left.mas_equalTo(15);
+        make.centerY.mas_equalTo(self.categoryLabel);
+    }];
+    
+    [self.categoryLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.mas_equalTo(self.mas_centerY).offset(-6);
+        make.left.mas_equalTo(44);
+    }];
+    
+    [self.moneyLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.categoryLabel.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.categoryLabel);
+    }];
+    
+    [self.circleImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.categoryLabel);
+        make.top.mas_equalTo(self.mas_centerY).offset(6);
+    }];
+    
+    [self.circleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.circleImage.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.circleImage);
+    }];
+    
+    [self.seperatorView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(1, 9));
+        make.left.mas_equalTo(self.circleLabel.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.circleImage);
+    }];
+    
+    [self.booksLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(self.seperatorView.mas_right).offset(10);
+        make.centerY.mas_equalTo(self.circleImage);
+    }];
+    
+    [self.switchButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.categoryLabel);
+        make.right.mas_equalTo(self.mas_right).offset(-15);
+    }];
+    
+    [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerY.mas_equalTo(self.circleImage);
+        make.right.mas_equalTo(self.mas_right).offset(-15);
+    }];
+
+    
+    [super updateConstraints];
 }
 
 -(UIImageView *)categoryImage{
     if (!_categoryImage) {
         _categoryImage = [[UIImageView alloc]init];
-        _categoryImage.tintColor = [UIColor whiteColor];
-        _categoryImage.layer.cornerRadius = 23;
+        _categoryImage.layer.borderWidth = 1.f;
+        _categoryImage.layer.cornerRadius = 10.f;
         _categoryImage.contentMode = UIViewContentModeCenter;
     }
     return _categoryImage;
@@ -98,7 +141,7 @@
 -(UILabel *)circleLabel{
     if (!_circleLabel) {
         _circleLabel = [[UILabel alloc]init];
-        _circleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _circleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _circleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         
     }
@@ -107,7 +150,7 @@
 
 -(UISwitch *)switchButton{
     if (!_switchButton) {
-        _switchButton = [[UISwitch alloc]init];
+        _switchButton = [[UISwitch alloc] init];
         _switchButton.onTintColor = [UIColor ssj_colorWithHex:@"43cf78"];
         [_switchButton addTarget:self action:@selector(switchButtonClicked:) forControlEvents:UIControlEventValueChanged];
     }
@@ -118,52 +161,68 @@
     if (!_timeLabel) {
         _timeLabel = [[UILabel alloc]init];
         _timeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
-        _timeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
+        _timeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
     }
     return _timeLabel;
+}
+
+- (UIView *)seperatorView {
+    if (!_seperatorView) {
+        _seperatorView = [[UIView alloc] init];
+        _seperatorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperatorView;
+}
+
+- (UILabel *)booksLabel {
+    if (!_booksLabel) {
+        _booksLabel = [[UILabel alloc] init];
+        _booksLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _booksLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+    }
+    return _booksLabel;
 }
 
 -(void)setItem:(SSJBillingChargeCellItem *)item{
     _item = item;
     self.switchButton.on = _item.isOnOrNot;
-    self.categoryImage.image = [[UIImage imageNamed:_item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    self.categoryImage.backgroundColor = [UIColor ssj_colorWithHex:_item.colorValue];
+    self.categoryImage.image = [[[UIImage imageNamed:_item.imageName] ssj_compressWithinSize:CGSizeMake(15, 15)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.categoryImage.layer.borderColor = [UIColor ssj_colorWithHex:_item.colorValue].CGColor;
+    self.categoryImage.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
     self.categoryLabel.text = _item.typeName;
-    [self.categoryLabel sizeToFit];
-    if ( _item.incomeOrExpence) {
+    self.booksLabel.text = _item.booksName;
+    if (_item.incomeOrExpence) {
         self.moneyLabel.text = [NSString stringWithFormat:@"-%.2f",[_item.money doubleValue]];
     }else{
         self.moneyLabel.text = [NSString stringWithFormat:@"+%.2f",[_item.money doubleValue]];
     }
-    [self.moneyLabel sizeToFit];
     self.timeLabel.text = _item.billDate;
-    [self.timeLabel sizeToFit];
     switch (_item.chargeCircleType) {
-        case 0:
+        case SSJCyclePeriodTypeDaily:
             self.circleLabel.text = @"每天";
             break;
-        case 1:
+        case SSJCyclePeriodTypeWorkday:
             self.circleLabel.text = @"每个工作日";
             break;
-        case 2:
+        case SSJCyclePeriodTypePerWeekend:
             self.circleLabel.text = @"每个周末";
             break;
-        case 3:
+        case SSJCyclePeriodTypeWeekly:
             self.circleLabel.text = @"每周";
             break;
-        case 4:
+        case SSJCyclePeriodTypePerMonth:
             self.circleLabel.text = @"每月";
             break;
-        case 5:
+        case SSJCyclePeriodTypeLastDayPerMonth:
             self.circleLabel.text = @"每月最后一天";
             break;
-        case 6:
+        case SSJCyclePeriodTypePerYear:
             self.circleLabel.text = @"每年";
             break;
         default:
             break;
     }
-    [self.circleLabel sizeToFit];
+    [self updateConstraintsIfNeeded];
 }
 
 
@@ -193,6 +252,10 @@
     }];
     
     [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+}
+
+- (void)updateCellAppearanceAfterThemeChanged {
+    
 }
 
 /*

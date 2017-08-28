@@ -17,18 +17,15 @@ typedef NS_ENUM(NSInteger, SSJFundsTransferType) {
     SSJFundsTransferTypeCreditCard = 2,
 };
 
-- (void)startMergeWithSourceFundId:(NSString *)sourceFundId
++ (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
                       needToDelete:(BOOL)needToDelete
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure;
 
-/**
- 获取所有的资金帐户
 
- @param fundType 资金账户类型,0为普通资金帐户,1为信用卡或者蚂蚁花呗
- @return 所有得资金帐户
- */
-- (NSArray *)getFundingsWithType:(SSJFundsTransferType)fundType exceptFundItem:(SSJBaseCellItem *)fundItem;
-
++ (void)getFundingsWithType:(SSJFundsTransferType)fundType
+               exceptFundItem:(SSJBaseCellItem *)fundItem
+                      Success:(void(^)(NSArray *fundList))success
+                      failure:(void (^)(NSError *error))failure;
 @end

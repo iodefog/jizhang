@@ -168,7 +168,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         if ([_transferOutItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferOutItem).fundingID;
         } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
-            self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).cardId;
+            self.transferOutFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferOutItem).fundingID;
         } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
             self.transferOutFundingTypeSelect.selectFundID = ((SSJFinancingHomeitem *)_transferOutItem).fundingID;
         }
@@ -178,7 +178,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         if ([_transferInItem isKindOfClass:[SSJFundingItem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJFundingItem *)_transferInItem).fundingID;
         } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
-            self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).cardId;
+            self.transferInFundingTypeSelect.selectFundID = ((SSJCreditCardItem *)_transferInItem).fundingID;
         } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]) {
             self.transferInFundingTypeSelect.selectFundID = ((SSJFinancingHomeitem *)_transferInItem).fundingID;
         }
@@ -225,7 +225,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
                 circleModifyCell.cellDetail = ((SSJFundingItem *)_transferOutItem).fundingName;
                 circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferOutItem).fundingIcon;
             } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
-                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).cardName;
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferOutItem).fundingName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
                 circleModifyCell.cellDetail = ((SSJFinancingHomeitem *)_transferOutItem).fundingName;
@@ -245,7 +245,7 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
                 circleModifyCell.cellDetail = ((SSJFundingItem *)_transferInItem).fundingName;
                 circleModifyCell.cellTypeImageName = ((SSJFundingItem *)_transferInItem).fundingIcon;
             } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]) {
-                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).cardName;
+                circleModifyCell.cellDetail = ((SSJCreditCardItem *)_transferInItem).fundingName;
                 circleModifyCell.cellTypeImageName = @"ft_creditcard";
             } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]) {
                 circleModifyCell.cellDetail = ((SSJFinancingHomeitem *)_transferInItem).fundingName;
@@ -561,8 +561,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         transferInId = ((SSJFundingItem *)_transferInItem).fundingID;
         transferInName = ((SSJFundingItem *)_transferInItem).fundingName;
     } else if ([_transferInItem isKindOfClass:[SSJCreditCardItem class]]){
-        transferInId = ((SSJCreditCardItem *)_transferInItem).cardId;
-        transferInName = ((SSJCreditCardItem *)_transferInItem).cardName;
+        transferInId = ((SSJCreditCardItem *)_transferInItem).fundingID;
+        transferInName = ((SSJCreditCardItem *)_transferInItem).fundingName;
     } else if ([_transferInItem isKindOfClass:[SSJFinancingHomeitem class]]){
         transferInId = ((SSJFinancingHomeitem *)_transferInItem).fundingID;
         transferInName = ((SSJFinancingHomeitem *)_transferInItem).fundingName;
@@ -576,8 +576,8 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         transferOutName = ((SSJFundingItem *)_transferOutItem).fundingName
         ;
     } else if ([_transferOutItem isKindOfClass:[SSJCreditCardItem class]]) {
-        transferOutId = ((SSJCreditCardItem *)_transferOutItem).cardId;
-        transferOutName = ((SSJCreditCardItem *)_transferOutItem).cardName;
+        transferOutId = ((SSJCreditCardItem *)_transferOutItem).fundingID;
+        transferOutName = ((SSJCreditCardItem *)_transferOutItem).fundingName;
     } else if ([_transferOutItem isKindOfClass:[SSJFinancingHomeitem class]]) {
         transferOutId = ((SSJFinancingHomeitem *)_transferOutItem).fundingID;
         transferOutName = ((SSJFinancingHomeitem *)_transferOutItem).fundingName;

@@ -20,7 +20,7 @@
             booksId = userid;
         }
         NSMutableArray *chargeList = [NSMutableArray array];
-        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.cicoin as bill_img , b.cname , b.ccolor , b.itype as INCOMEOREXPENSE , b.cbillid , c.cbooksname , d.cacctname , d.cicoin as fund_img from bk_charge_period_config as a, bk_user_bill_type as b , bk_books_type as c , bk_fund_info as d where a.cuserid = ? and a.operatortype != 2 and a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and c.cbooksid = ? and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.itype ASC , A.imoney DESC",userid,booksId];
+        FMResultSet *chargeResult = [db executeQuery:@"select a.* , b.cicoin as bill_img , b.cname , b.ccolor , b.itype as INCOMEOREXPENSE , b.cbillid , c.cbooksname , d.cacctname , d.cicoin as fund_img from bk_charge_period_config as a, bk_user_bill_type as b , bk_books_type as c , bk_fund_info as d where a.cuserid = ? and a.operatortype != 2 and a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cbooksid = c.cbooksid and c.cuserid = a.cuserid and a.ifunsid = d.cfundid order by A.itype ASC , A.imoney DESC",userid];
         if (!chargeResult) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
@@ -96,7 +96,7 @@
         memberItem.memberId = [NSString stringWithFormat:@"%@-0",userid];
         memberItem.memberName = @"我";
         item.membersItem = [@[memberItem] mutableCopy];
-        item.chargeCircleType = 0;
+        item.chargeCircleType = SSJCyclePeriodTypeDaily;
         if (success) {
             SSJDispatch_main_async_safe(^{
                 success(item);
@@ -181,11 +181,11 @@
                 NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
                 [formatter setDateFormat:@"yyyy-MM-dd"];
                 NSDate *date = [formatter dateFromString:item.billDate];
-                if (item.chargeCircleType == 1 && (date.weekday == 1 || date.weekday == 7)) {
+                if (item.chargeCircleType == SSJCyclePeriodTypeDaily && (date.weekday == 1 || date.weekday == 7)) {
                     
-                }else if (item.chargeCircleType == 2 && (date.weekday != 1 && date.weekday != 7)) {
+                }else if (item.chargeCircleType == SSJCyclePeriodTypePerWeekend && (date.weekday != 1 && date.weekday != 7)) {
                     
-                }else if (item.chargeCircleType == 5 && date.day != date.daysInMonth) {
+                }else if (item.chargeCircleType == SSJCyclePeriodTypeLastDayPerMonth && date.day != date.daysInMonth) {
                     
                 }else{
                     NSString *chargeId = SSJUUID();

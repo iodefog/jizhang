@@ -117,7 +117,7 @@
                 }
             }else {
                 // 修改还款表数据
-                if (![db executeUpdate:@"update bk_credit_repayment set capplydate = ?, repaymentmoney = ?, cmemo = ? where crepaymentid = ? and cuserid = ?",model.applyDate,model.repaymentMoney,model.memo,model.repaymentId,userID]) {
+                if (![db executeUpdate:@"update bk_credit_repayment set capplydate = ?, repaymentmoney = ?, cmemo = ?, crepaymentmonth  = ? where crepaymentid = ? and cuserid = ?",model.applyDate,model.repaymentMoney,model.memo,[model.repaymentMonth formattedDateWithFormat:@"yyyy-MM"],model.repaymentId,userID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -286,6 +286,30 @@
         }
     }];
     return isInvalid;
+}
+
++ (void)queryFirstRepaymentItemSuccess:(void (^)(SSJFinancingHomeitem *item))success
+                               failure:(void (^)(NSError *error))failure  {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *userid = SSJUSERID();
+        FMResultSet *result = [db executeQuery:@"select a.* from bk_fund_info a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent not in ('3','10','11','16') order by a.iorder limit 1",userid];
+        SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+
+        while ([result next]) {
+            item.fundingColor = [result stringForColumn:@"CCOLOR"];
+            item.fundingIcon = [result stringForColumn:@"CICOIN"];
+            item.fundingID = [result stringForColumn:@"CFUNDID"];
+            item.fundingName = [result stringForColumn:@"CACCTNAME"];
+            item.fundingParent = [result stringForColumn:@"CPARENT"];
+            item.fundingMemo = [result stringForColumn:@"CMEMO"];
+            item.fundingOrder = [result intForColumn:@"IORDER"];
+        }
+    
+        if (success) {
+            success(item);
+        }
+
+    }];
 }
 
 @end

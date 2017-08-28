@@ -575,9 +575,9 @@ static NSUInteger kClostOutDateTag = 1004;
                         [weakSelf loadData];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.loanModel.endTargetFundID = cardItem.cardId;
-                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
-                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
+                        weakSelf.loanModel.endTargetFundID = cardItem.fundingID;
+                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.fundingID;
+                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.fundingID;
                         [weakSelf loadData];
                     }
                 };

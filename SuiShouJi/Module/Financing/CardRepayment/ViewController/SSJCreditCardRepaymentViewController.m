@@ -75,17 +75,22 @@ static NSString *const kTitle6 = @"还款账单月份";
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }else {
-        self.repaymentModel.applyDate = [NSDate date];
-        self.repaymentModel.repaymentSourceFoundId = [SSJFinancingHomeHelper queryfirstFundItem].fundingID;
-        self.repaymentModel.repaymentSourceFoundName = [SSJFinancingHomeHelper queryfirstFundItem].fundingName;
-        self.repaymentModel.repaymentSourceFoundImage = [SSJFinancingHomeHelper queryfirstFundItem].fundingIcon;
-        NSDate *repaymentDate = [NSDate date];
-        if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
-            repaymentDate = [repaymentDate dateBySubtractingMonths:1];
-        }else {
-            repaymentDate = repaymentDate;
-        }
-        self.repaymentModel.repaymentMonth = repaymentDate;
+        [SSJRepaymentStore queryFirstRepaymentItemSuccess:^(SSJFinancingHomeitem *item) {
+            self.repaymentModel.applyDate = [NSDate date];
+            self.repaymentModel.repaymentSourceFoundId = item.fundingID;
+            self.repaymentModel.repaymentSourceFoundName = item.fundingName;
+            self.repaymentModel.repaymentSourceFoundImage = item.fundingIcon;
+            NSDate *repaymentDate = [NSDate date];
+            if (repaymentDate.day < self.repaymentModel.cardBillingDay) {
+                repaymentDate = [repaymentDate dateBySubtractingMonths:1];
+            }else {
+                repaymentDate = repaymentDate;
+            }
+            self.repaymentModel.repaymentMonth = repaymentDate;
+            [self.tableView reloadData];
+        } failure:^(NSError *error) {
+            
+        }];
     }
     [self.view addSubview:self.tableView];
     // Do any additional setup after loading the view.
@@ -333,8 +338,8 @@ static NSString *const kTitle6 = @"还款账单月份";
                         [weakSelf.tableView reloadData];
                     }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.cardId;
-                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.cardName;
+                        weakSelf.repaymentModel.repaymentSourceFoundId = cardItem.fundingID;
+                        weakSelf.repaymentModel.repaymentSourceFoundName = cardItem.fundingName;
                         weakSelf.repaymentModel.repaymentSourceFoundImage = @"ft_creditcard";
                         [weakSelf.tableView reloadData];
                     }

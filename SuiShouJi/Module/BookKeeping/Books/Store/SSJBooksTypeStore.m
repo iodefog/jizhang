@@ -907,4 +907,28 @@
     return item.mj_keyValues;
 }
 
+
++ (void)getCurrentBooksTypeWithsuccess:(void(^)(SSJBooksCategory booksType))success
+                               failure:(void(^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *currentBooksId = [db stringForQuery:@"select CCURRENTBOOKSID from BK_USER where cuserid = ?",SSJUSERID()];
+        
+        NSInteger shareBooksCount = [db intForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksId];
+        
+
+        SSJBooksCategory booksType;
+        if (shareBooksCount) {
+            booksType = SSJBooksCategoryPublic;
+        } else {
+            booksType = SSJBooksCategoryPersional;
+        }
+        
+        SSJDispatch_main_async_safe(^{
+            if (success) {
+                success(booksType);
+            }
+        });
+    }];
+ 
+}
 @end
