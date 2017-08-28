@@ -229,6 +229,10 @@
     }
 }
 
+- (void)setIsSuccess:(BOOL)isSuccess {
+    _isSuccess = isSuccess;
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

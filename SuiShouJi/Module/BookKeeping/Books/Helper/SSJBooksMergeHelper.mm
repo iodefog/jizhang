@@ -224,7 +224,7 @@
             }
             
             
-            SSJDispatch_main_async_safe(^{
+            dispatch_main_async_safe(^{
                 if (success) {
                     success();
                 }
