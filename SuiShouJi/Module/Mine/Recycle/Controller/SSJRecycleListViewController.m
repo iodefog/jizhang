@@ -101,25 +101,26 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
         @weakify(self);
         cell.expandBtnDidClick = ^(SSJRecycleListCell *cell) {
             @strongify(self);
+            
             SSJRecycleListCellItem *item = cell.cellItem;
             if (item.state == SSJRecycleListCellStateNormal) {
+                
+                [self deleteExpandedCell];
+                
                 item.state = SSJRecycleListCellStateExpanded;
-            } else if (item.state == SSJRecycleListCellStateExpanded) {
-                item.state = SSJRecycleListCellStateNormal;
-            }
-            
-            if (item.state == SSJRecycleListCellStateNormal) {
-                [self deleteLastExpandedCellIfNeeded];
-            } else if (item.state == SSJRecycleListCellStateExpanded) {
-                NSIndexPath *expandedIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
                 [self.tableView beginUpdates];
-                [self insertEditCellAtIndexPath:expandedIndexPath];
-                [self deleteLastExpandedCellIfNeeded];
+                NSIndexPath *currentIndexPath = [self indexPathForCellItem:item];
+                NSIndexPath *expandedIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:currentIndexPath.section];
+                [self insertEditCellAtIndexPath:expandedIndexPath recycleID:item.recycleID];
+                
                 [self.tableView endUpdates];
                 self.lastExpandedIndexPath = expandedIndexPath;
+            } else {
+                [self deleteExpandedCell];
             }
         };
         return cell;
+        
     } else if ([cellItem isKindOfClass:[SSJRecycleRecoverClearCellItem class]]) {
         SSJRecycleRecoverClearCell *cell = [tableView dequeueReusableCellWithIdentifier:kRecycleRecoverClearCellID forIndexPath:indexPath];
         cell.cellItem = cellItem;
@@ -141,6 +142,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             }];
         };
         return cell;
+        
     } else {
         return [UITableViewCell new];
     }
@@ -212,9 +214,9 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     }
 }
 
-- (void)insertEditCellAtIndexPath:(NSIndexPath *)indexPath {
+- (void)insertEditCellAtIndexPath:(NSIndexPath *)indexPath recycleID:(NSString *)recycleID {
     SSJRecycleRecoverClearCellItem *item = [[SSJRecycleRecoverClearCellItem alloc] init];
-    item.recycleID = item.recycleID;
+    item.recycleID = recycleID;
     
     SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
     [model.cellItems insertObject:item atIndex:indexPath.row];
@@ -229,6 +231,41 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
         [self.tableView deleteRowsAtIndexPaths:@[self.lastExpandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
         self.lastExpandedIndexPath = nil;
     }
+}
+
+- (void)deleteExpandedCell {
+    __block NSIndexPath *expandedIndexPath = nil;
+    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
+        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *cellItem, NSUInteger row, BOOL * _Nonnull stop_2) {
+            if ([cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
+                SSJRecycleListCellItem *listCellItem = (SSJRecycleListCellItem *)cellItem;
+                if (listCellItem.state == SSJRecycleListCellStateExpanded) {
+                    listCellItem.state = SSJRecycleListCellStateNormal;
+                    expandedIndexPath = [NSIndexPath indexPathForRow:row + 1 inSection:section];
+                    *stop_2 = *stop_1 = YES;
+                }
+            }
+        }];
+    }];
+    
+    if (expandedIndexPath) {
+        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:expandedIndexPath.section];
+        [model.cellItems removeObjectAtIndex:expandedIndexPath.row];
+        [self.tableView deleteRowsAtIndexPaths:@[expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
+- (NSIndexPath *)indexPathForCellItem:(SSJBaseCellItem *)item {
+    __block NSIndexPath *expandedIndexPath = nil;
+    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
+        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *cellItem, NSUInteger row, BOOL * _Nonnull stop_2) {
+            if (item == cellItem) {
+                expandedIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
+                *stop_2 = *stop_1 = YES;
+            }
+        }];
+    }];
+    return expandedIndexPath;
 }
 
 - (RACSignal *)loadDataSignal {
