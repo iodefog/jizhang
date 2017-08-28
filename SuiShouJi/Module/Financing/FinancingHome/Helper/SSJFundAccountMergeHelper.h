@@ -17,14 +17,14 @@ typedef NS_ENUM(NSInteger, SSJFundsTransferType) {
     SSJFundsTransferTypeCreditCard = 2,
 };
 
-- (void)startMergeWithSourceFundId:(NSString *)sourceFundId
++ (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
                       needToDelete:(BOOL)needToDelete
                            Success:(void(^)())success
                            failure:(void (^)(NSError *error))failure;
 
 
-- (void)getFundingsWithType:(SSJFundsTransferType)fundType
++ (void)getFundingsWithType:(SSJFundsTransferType)fundType
                exceptFundItem:(SSJBaseCellItem *)fundItem
                       Success:(void(^)(NSArray *fundList))success
                       failure:(void (^)(NSError *error))failure;

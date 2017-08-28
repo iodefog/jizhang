@@ -134,7 +134,7 @@
         @weakify(self);
         _transferInFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            [self.mergeHelper getFundingsWithType:self.transferOutType exceptFundItem:self.transferOutFundItem Success:^(NSArray *fundList) {
+            [SSJFundAccountMergeHelper getFundingsWithType:self.transferOutType exceptFundItem:self.transferOutFundItem Success:^(NSArray *fundList) {
                 if (!fundList.count) {
                     [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
                     return;
@@ -159,7 +159,7 @@
         @weakify(self);
         _transferOutFundBackView.fundSelectBlock = ^{
             @strongify(self);
-            [self.mergeHelper getFundingsWithType:self.transferInType exceptFundItem:self.transferInFundItem Success:^(NSArray *fundList) {
+            [SSJFundAccountMergeHelper getFundingsWithType:self.transferInType exceptFundItem:self.transferInFundItem Success:^(NSArray *fundList) {
                 if (!fundList.count) {
                     [CDAutoHideMessageHUD showMessage:@"你还没有其他资金帐户迁移哦,请先添加一个资金帐户"];
                     return;
@@ -303,7 +303,7 @@
     }
     @weakify(self);
     [self.mergeButton startAnimating];
-    [self.mergeHelper startMergeWithSourceFundId:sourceFundId targetFundId:targetFundId needToDelete:self.needToDelete Success:^{
+    [SSJFundAccountMergeHelper startMergeWithSourceFundId:sourceFundId targetFundId:targetFundId needToDelete:self.needToDelete Success:^{
         @strongify(self);
         self.mergeButton.progressDidCompelete = YES;
         self.mergeButton.isSuccess = YES;

@@ -29,16 +29,7 @@
 
 @implementation SSJFundAccountMergeHelper
 
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
-- (void)startMergeWithSourceFundId:(NSString *)sourceFundId
++ (void)startMergeWithSourceFundId:(NSString *)sourceFundId
                       targetFundId:(NSString *)targetFundId
                       needToDelete:(BOOL)needToDelete
                             Success:(void(^)())success
@@ -336,7 +327,7 @@
     }];
 }
 
-- (void)getFundingsWithType:(SSJFundsTransferType)fundType
++ (void)getFundingsWithType:(SSJFundsTransferType)fundType
                   exceptFundItem:(SSJBaseCellItem *)fundItem
                          Success:(void(^)(NSArray *fundList))success
                          failure:(void (^)(NSError *error))failure {

@@ -10,13 +10,17 @@
 
 @interface SSJBooksMergeHelper : NSObject
 
-- (void)startMergeWithSourceBooksId:(NSString *)sourceBooksId
++ (void)startMergeWithSourceBooksId:(NSString *)sourceBooksId
                       targetBooksId:(NSString *)targetBooksId
                             Success:(void(^)())success
                             failure:(void (^)(NSError *error))failure;
 
-- (NSArray *)getAllBooksItemWithExceptionId:(NSString *)exceptionId;
++ (void)getAllBooksItemWithExceptionId:(NSString *)exceptionId
+                               Success:(void(^)(NSArray * bookList))success
+                               failure:(void (^)(NSError *error))failure;
 
-- (NSNumber *)getChargeCountForBooksId:(NSString *)booksId;
++ (void)getChargeCountForBooksId:(NSString *)booksId
+                         Success:(void(^)(NSNumber *chargeCount))success
+                         failure:(void (^)(NSError *error))failure ;
 
 @end
