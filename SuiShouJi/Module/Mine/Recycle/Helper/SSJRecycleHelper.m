@@ -11,6 +11,7 @@
 #import "SSJRecycleModel.h"
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleListCell.h"
+#import "SSJBooksTypeItem.h"
 
 @interface _SSJRecycleTransferModel : NSObject
 
@@ -129,9 +130,9 @@
 }
 
 #pragma mark - 查询回收站流水
-+ (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
-    FMResultSet *rs = [db executeQuery:@"select uc.imoney, uc.cbooksid, ub.cicoin, ub.ccolor, ub.cname, fi.cacctname from bk_user_charge as uc, bk_user_bill_type as ub, bk_fund_info as fi where uc.ibillid = ub.cbillid and uc.cbooksid = ub.cbooksid and uc.cuserid = ub.cuserid and uc.ifunsid = fi.cfundid and uc.ichargeid = ? and uc.cuserid = ?", model.sundryID, model.userID];
-    
++ (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model
+                                            inDatabase:(SSJDatabase *)db
+                                                 error:(NSError **)error {
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *billName = nil;
@@ -139,6 +140,7 @@
     NSString *fundName = nil;
     NSString *booksID = nil;
     
+    FMResultSet *rs = [db executeQuery:@"select uc.imoney, uc.cbooksid, ub.cicoin, ub.ccolor, ub.cname, fi.cacctname from bk_user_charge as uc, bk_user_bill_type as ub, bk_fund_info as fi where uc.ibillid = ub.cbillid and uc.cbooksid = ub.cbooksid and uc.cuserid = ub.cuserid and uc.ifunsid = fi.cfundid and uc.ichargeid = ? and uc.cuserid = ?", model.sundryID, model.userID];
     while ([rs next]) {
         iconName = [rs stringForColumn:@"cicoin"];
         colorValue = [rs stringForColumn:@"ccolor"];
@@ -229,34 +231,27 @@
 }
 
 #pragma mark - 查询回收站账本
-+ (SSJRecycleListCellItem *)booksItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
-    
++ (SSJRecycleListCellItem *)booksItemWithRecycleModel:(SSJRecycleModel *)model
+                                           inDatabase:(SSJDatabase *)db
+                                                error:(NSError **)error {
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *bookName = nil;
     NSMutableArray *subtitles = [NSMutableArray array];
     
-    if ([db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", model.sundryID]) {
-        FMResultSet *rs = [db executeQuery:@"select sb.cbooksname, sb.cbookscolor, sb.iparenttype, count(uc.*) as chargecount from bk_share_books as sb, bk_user_charge as uc where sb.cbooksid = uc.cbooksid and uc.operatortype <> 2 and sb.cbooksid = ?", model.sundryID];
-        while ([rs next]) {
-            iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
-            colorValue = [rs stringForColumn:@"cbookscolor"];
-            bookName = [rs stringForColumn:@"cbooksname"];
-            [subtitles addObject:[NSString stringWithFormat:@"%d条流水", [rs intForColumn:@"chargecount"]]];
-        }
-        [subtitles addObject:@"共享账本"];
-        [rs close];
-    } else {
-        FMResultSet *rs = [db executeQuery:@"select bt.cbooksname, bt.cbookscolor, bt.iparenttype, count(uc.*) as chargecount from bk_books_type as bt, bk_user_charge as uc where bt.cbooksid = uc.cbooksid and uc.operatortype <> 2 and bt.cbooksid = ?", model.sundryID];
-        while ([rs next]) {
-            iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
-            colorValue = [rs stringForColumn:@"cbookscolor"];
-            bookName = [rs stringForColumn:@"cbooksname"];
-            [subtitles addObject:[NSString stringWithFormat:@"%d条流水", [rs intForColumn:@"chargecount"]]];
-        }
-        [subtitles addObject:@"个人账本"];
-        [rs close];
+    FMResultSet *rs = [db executeQuery:@"select cbooksname, cbookscolor, iparenttype from bk_books_type where cbooksid = ?", model.sundryID];
+    while ([rs next]) {
+        bookName = [rs stringForColumn:@"cbooksname"];
+        iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
+        colorValue = [self singleColorValueWithGradientColor:[rs stringForColumn:@"cbookscolor"]];
     }
+    [rs close];
+    
+    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cbooksid = ? and cwritedate = ? and operatortype = 2 and length(ibillid) >= 4", model.sundryID, [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
+    [subtitles addObject:@"个人账本"];
+    
+    
     
     SSJRecycleListCellItem *item = [SSJRecycleListCellItem itemWithRecycleID:model.ID
                                                                         icon:[UIImage imageNamed:iconName]
@@ -265,6 +260,18 @@
                                                                    subtitles:subtitles
                                                                        state:SSJRecycleListCellStateNormal];
     return item;
+}
+
++ (NSString *)singleColorValueWithGradientColor:(NSString *)gradientColor {
+    NSArray *colorValues = [gradientColor componentsSeparatedByString:@","];
+    SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+    colorItem.startColor = [colorValues firstObject];
+    colorItem.endColor = [colorValues lastObject];
+    
+    SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
+    booksItem.booksColor = colorItem;
+    
+    return [booksItem getSingleColor];
 }
 
 #pragma mark -

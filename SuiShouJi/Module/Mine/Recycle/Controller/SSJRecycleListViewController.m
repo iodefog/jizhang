@@ -68,28 +68,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     [self loadData];
 }
 
-- (UIBarButtonItem *)editButtonItem {
-    if (!_editButtonItem) {
-        _editButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
-    }
-    return _editButtonItem;
-}
-
-- (void)setupBindings {
-    @weakify(self);
-    RAC(self.deleteBtn, hidden) = [[RACSignal merge:@[RACObserve(self, editing), RACObserve(self, listModels)]] map:^id(NSNumber *value) {
-        @strongify(self);
-        return @(!self.editing || self.listModels.count == 0);
-    }];
-    
-    [[RACSignal merge:@[RACObserve(self, listModels)]] subscribeNext:^(id value) {
-        @strongify(self);
-        self.warningHeaderView.hidden = self.listModels.count == 0;
-        self.noDataRemindView.hidden = self.listModels.count > 0;
-        [self.navigationItem setRightBarButtonItem:(self.listModels.count == 0 ? nil : self.editButtonItem) animated:YES];
-    }];
-}
-
 - (void)updateViewConstraints {
     [self.warningHeaderView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
@@ -236,6 +214,21 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 }
 
 #pragma mark - Private
+- (void)setupBindings {
+    @weakify(self);
+    RAC(self.deleteBtn, hidden) = [[RACSignal merge:@[RACObserve(self, editing), RACObserve(self, listModels)]] map:^id(NSNumber *value) {
+        @strongify(self);
+        return @(!self.editing || self.listModels.count == 0);
+    }];
+    
+    [[RACSignal merge:@[RACObserve(self, listModels)]] subscribeNext:^(id value) {
+        @strongify(self);
+        self.warningHeaderView.hidden = self.listModels.count == 0;
+        self.noDataRemindView.hidden = self.listModels.count > 0;
+        [self.navigationItem setRightBarButtonItem:(self.listModels.count == 0 ? nil : self.editButtonItem) animated:YES];
+    }];
+}
+
 - (void)updateAppearance {
     [_warningHeaderView updateAppearanceAccordingToTheme];
     _deleteBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
@@ -441,11 +434,18 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     return _deleteBtn;
 }
 
+- (UIBarButtonItem *)editButtonItem {
+    if (!_editButtonItem) {
+        _editButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
+    }
+    return _editButtonItem;
+}
+
 - (SSJBudgetNodataRemindView *)noDataRemindView {
     if (!_noDataRemindView) {
         _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
         _noDataRemindView.image = @"budget_no_data";
-        _noDataRemindView.title = @"报表空空如也";
+        _noDataRemindView.title = @"空空如也～";
     }
     return _noDataRemindView;
 }
