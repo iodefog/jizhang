@@ -379,6 +379,17 @@
                     return;
                 }
                 
+                // 删除依赖此账本的周期记账
+                if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2, cwritedate = ?, iversion = ? where cbooksid = ? and operatortype <> 2", writeDate, @(SSJSyncVersion()), item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
                 if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
                                                      recycleType:SSJRecycleTypeBooks
                                                        writeDate:writeDate
