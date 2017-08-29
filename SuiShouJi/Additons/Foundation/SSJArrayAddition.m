@@ -34,6 +34,15 @@
 
 @implementation NSMutableArray (SSJCategory)
 
+- (void)ssj_safeRemoveObjectAtIndex:(NSUInteger)index {
+    if (self.count <= index) {
+        SSJPRINT(@"<<< 警告：数组越界 >>>");
+        return;
+    }
+    
+    [self removeObjectAtIndex:index];
+}
+
 - (void)ssj_removeFirstObject {
     if (self.count > 0) {
         [self removeObjectAtIndex:0];

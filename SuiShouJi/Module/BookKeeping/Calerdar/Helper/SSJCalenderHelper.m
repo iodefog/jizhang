@@ -225,16 +225,40 @@
             booksId = userId;
         }
         
-        if (![db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",[[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.ID]) {
+        NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"UPDATE BK_USER_CHARGE SET OPERATORTYPE = 2 , CWRITEDATE = ? , IVERSION = ? WHERE ICHARGEID = ?",writeDate,@(SSJSyncVersion()),item.ID]) {
+            NSError *error = [db lastError];
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
-                    failure([db lastError]);
+                    failure(error);
                 });
             }
             return;
         }
-                
+        
+        // 将流水放入回收站中
+        NSString *cycleID = [NSString stringWithFormat:@"%d_%@", (int)SSJRecycleTypeCharge, item.ID];
+        NSDictionary *params = @{@"rid":cycleID,
+                                 @"cuserid":item.userId,
+                                 @"cid":item.ID,
+                                 @"itype":@(SSJRecycleTypeCharge),
+                                 @"clientadddate":writeDate,
+                                 @"cwritedate":writeDate,
+                                 @"operatortype":@(SSJRecycleStateNormal),
+                                 @"iversion":@(SSJSyncVersion())};
+        
+        if (![db executeUpdate:@"replace into bk_recycle (rid, cuserid, cid, itype, clientadddate, cwritedate, operatortype, iversion) values (:rid, :cuserid, :cid, :itype, :clientadddate, :cwritedate, :operatortype, :iversion)" withParameterDictionary:params]) {
+            NSError *error = [db lastError];
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return;
+        }
+        
         if (success) {
             SSJDispatchMainAsync(^{
                 success();

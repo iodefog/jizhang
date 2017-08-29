@@ -15,13 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJAddOrEditFixedFinanceProductViewController : SSJBaseViewController
 
-@property (nonatomic, copy, nullable) SSJFixedFinanceProductItem *model;
+@property (nonatomic, strong, nullable) SSJFixedFinanceProductItem *model;
 
 /**
- 借贷产生的流水列表
+ 的流水列表
  注意：新建不用传，编辑必须传
  */
-@property (nonatomic, copy, nullable) NSArray <SSJFixedFinanceProductCompoundItem *>*chargeModels;
+@property (nonatomic, strong, nullable) NSArray <SSJFixedFinanceProductCompoundItem *>*chargeModels;
+
+// 是否是编辑
+@property (nonatomic) BOOL edited;
 
 @end
 NS_ASSUME_NONNULL_END

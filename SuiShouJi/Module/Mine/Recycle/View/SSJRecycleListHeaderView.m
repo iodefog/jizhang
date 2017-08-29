@@ -23,6 +23,7 @@
 - (instancetype)initWithReuseIdentifier:(nullable NSString *)reuseIdentifier {
     if (self = [super initWithReuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.dateLab];
+        self.backgroundView = [[UIView alloc] init];
         [self updateCellAppearanceAfterThemeChanged];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateCellAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
@@ -30,7 +31,7 @@
 }
 
 - (void)updateConstraints {
-    [self.textLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.dateLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15);
         make.top.mas_equalTo(18);
     }];
@@ -39,6 +40,7 @@
 
 - (void)updateCellAppearanceAfterThemeChanged {
     self.dateLab.textColor = SSJ_SECONDARY_COLOR;
+    self.backgroundView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
 }
 
 - (void)setDateStr:(NSString *)dateStr {

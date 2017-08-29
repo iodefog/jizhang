@@ -14,4 +14,6 @@
 
 - (NSString *)ssj_debugDescription;
 
+- (id)ssj_copyWithZone:(NSZone *)zone;
+
 @end

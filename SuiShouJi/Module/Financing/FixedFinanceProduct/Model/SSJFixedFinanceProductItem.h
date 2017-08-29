@@ -10,17 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class FMResultSet;
-/**
- 利率或期限类型：固定收益理财
- SSJMethodOfRateOrTimeDay:    日
- SSJMethodOfRateOrTimeMonth:    月
- SSJMethodOfRateOrTimeYear:  年
- */
-typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
-    SSJMethodOfRateOrTimeDay = 0,
-    SSJMethodOfRateOrTimeMonth,
-    SSJMethodOfRateOrTimeYear
-};
+
 
 @interface SSJFixedFinanceProductItem : SSJBaseCellItem<NSCopying>
 
@@ -43,7 +33,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 @property (nonatomic, copy) NSString *thisfundid;
 
 /**转出账户id*/
-@property (nonatomic, copy) NSString *targetfundid;
+@property (nonatomic, copy,nullable) NSString *targetfundid;
 
 /**结算账户id*/
 @property (nonatomic, copy, nullable) NSString *etargetfundid;

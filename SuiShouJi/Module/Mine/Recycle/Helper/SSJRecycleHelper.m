@@ -11,6 +11,7 @@
 #import "SSJRecycleModel.h"
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleListCell.h"
+#import "SSJBooksTypeItem.h"
 
 @interface _SSJRecycleTransferModel : NSObject
 
@@ -42,6 +43,10 @@
 
 @implementation SSJRecycleHelper
 
+#pragma mark -
+#pragma mark ---------------------------------------- 查询 ----------------------------------------
+
+#pragma mark - 查询回收站数据
 + (void)queryRecycleListModelsWithSuccess:(void(^)(NSArray<SSJRecycleListModel *> *models))success
                                   failure:(nullable void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
@@ -102,17 +107,19 @@
             lastDate = model.clientAddDate;
         }
         
-        SSJRecycleListModel *listModel = [[SSJRecycleListModel alloc] init];
-        NSDate *now = [NSDate date];
-        if ([lastDate isSameDay:now]) {
-            listModel.dateStr = @"今天";
-        } else if ([lastDate isSameDay:[now dateBySubtractingDays:1]]) {
-            listModel.dateStr = @"昨天";
-        } else {
-            listModel.dateStr = [lastDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"];
+        if (cellItems.count) {
+            SSJRecycleListModel *listModel = [[SSJRecycleListModel alloc] init];
+            NSDate *now = [NSDate date];
+            if ([lastDate isSameDay:now]) {
+                listModel.dateStr = @"今天";
+            } else if ([lastDate isSameDay:[now dateBySubtractingDays:1]]) {
+                listModel.dateStr = @"昨天";
+            } else {
+                listModel.dateStr = [lastDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm"];
+            }
+            listModel.cellItems = cellItems;
+            [resultModels addObject:listModel];
         }
-        listModel.cellItems = cellItems;
-        [resultModels addObject:listModel];
         
         SSJDispatchMainAsync(^{
             if (success) {
@@ -122,9 +129,10 @@
     }];
 }
 
-+ (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
-    FMResultSet *rs = [db executeQuery:@"select uc.imoney, uc.cbooksid, ub.cicoin, ub.ccolor, ub.cname, fi.cacctname from bk_user_charge as uc, bk_user_bill_type as ub, bk_fund_info as fi where uc.ibillid = ub.cbillid and uc.cbooksid = ub.cbooksid and uc.cuserid = ub.cuserid and uc.ifunsid = fi.cfundid and uc.ichargeid = ? and uc.cuserid = ?", model.sundryID, model.userID];
-    
+#pragma mark - 查询回收站流水
++ (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model
+                                            inDatabase:(SSJDatabase *)db
+                                                 error:(NSError **)error {
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *billName = nil;
@@ -132,6 +140,7 @@
     NSString *fundName = nil;
     NSString *booksID = nil;
     
+    FMResultSet *rs = [db executeQuery:@"select uc.imoney, uc.cbooksid, ub.cicoin, ub.ccolor, ub.cname, fi.cacctname from bk_user_charge as uc, bk_user_bill_type as ub, bk_fund_info as fi where uc.ibillid = ub.cbillid and uc.cbooksid = ub.cbooksid and uc.cuserid = ub.cuserid and uc.ifunsid = fi.cfundid and uc.ichargeid = ? and uc.cuserid = ?", model.sundryID, model.userID];
     while ([rs next]) {
         iconName = [rs stringForColumn:@"cicoin"];
         colorValue = [rs stringForColumn:@"ccolor"];
@@ -145,14 +154,14 @@
     NSString *booksName = nil;
     NSString *memberName = nil;
     
-    BOOL isShareBooks = [db executeQuery:@"select count(1) from bk_share_books where cbooksid = ?", booksID];
+    BOOL isShareBooks = [db intForQuery:@"select count(1) from bk_share_books where cbooksid = ?", booksID];
     if (isShareBooks) {
         booksName = [db stringForQuery:@"select cbooksname from bk_share_books where cbooksid = ?", booksID];
-        booksName = [NSString stringWithFormat:@"%@(共享)", booksName];
+        booksName = [NSString stringWithFormat:@"%@ (共享)", booksName];
         memberName = @"我";
     } else {
         booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ? and cuserid = ?", booksID, model.userID];
-        booksName = [NSString stringWithFormat:@"%@(个人)", booksName];
+        booksName = [NSString stringWithFormat:@"%@ (个人)", booksName];
         
         rs = [db executeQuery:@"select m.cname from bk_user_charge as uc, bk_member_charge as mc, bk_member as m where uc.ichargeid = mc.ichargeid and mc.cmemberid = m.cmemberid and uc.ichargeid = ?", model.sundryID];
         NSMutableArray *memberNames = [NSMutableArray array];
@@ -173,6 +182,7 @@
     return item;
 }
 
+#pragma mark - 查询回收站资金账户
 + (SSJRecycleListCellItem *)fundItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
     
     NSString *iconName = nil;
@@ -220,34 +230,28 @@
     return item;
 }
 
-+ (SSJRecycleListCellItem *)booksItemWithRecycleModel:(SSJRecycleModel *)model inDatabase:(SSJDatabase *)db error:(NSError **)error {
-    
+#pragma mark - 查询回收站账本
++ (SSJRecycleListCellItem *)booksItemWithRecycleModel:(SSJRecycleModel *)model
+                                           inDatabase:(SSJDatabase *)db
+                                                error:(NSError **)error {
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *bookName = nil;
     NSMutableArray *subtitles = [NSMutableArray array];
     
-    if ([db boolForQuery:@"select count(*) from bk_share_books where cbooksid = ?", model.sundryID]) {
-        FMResultSet *rs = [db executeQuery:@"select sb.cbooksname, sb.cbookscolor, sb.iparenttype, count(uc.*) as chargecount from bk_share_books as sb, bk_user_charge as uc where sb.cbooksid = uc.cbooksid and uc.operatortype <> 2 and sb.cbooksid = ?", model.sundryID];
-        while ([rs next]) {
-            iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
-            colorValue = [rs stringForColumn:@"cbookscolor"];
-            bookName = [rs stringForColumn:@"cbooksname"];
-            [subtitles addObject:[NSString stringWithFormat:@"%d条流水", [rs intForColumn:@"chargecount"]]];
-        }
-        [subtitles addObject:@"共享账本"];
-        [rs close];
-    } else {
-        FMResultSet *rs = [db executeQuery:@"select bt.cbooksname, bt.cbookscolor, bt.iparenttype, count(uc.*) as chargecount from bk_books_type as bt, bk_user_charge as uc where bt.cbooksid = uc.cbooksid and uc.operatortype <> 2 and bt.cbooksid = ?", model.sundryID];
-        while ([rs next]) {
-            iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
-            colorValue = [rs stringForColumn:@"cbookscolor"];
-            bookName = [rs stringForColumn:@"cbooksname"];
-            [subtitles addObject:[NSString stringWithFormat:@"%d条流水", [rs intForColumn:@"chargecount"]]];
-        }
-        [subtitles addObject:@"个人账本"];
-        [rs close];
+    FMResultSet *rs = [db executeQuery:@"select cbooksname, cbookscolor, iparenttype from bk_books_type where cbooksid = ?", model.sundryID];
+    while ([rs next]) {
+        bookName = [rs stringForColumn:@"cbooksname"];
+        iconName = SSJImageNameForBooksType([rs intForColumn:@"iparenttype"]);
+        colorValue = [self singleColorValueWithGradientColor:[rs stringForColumn:@"cbookscolor"]];
     }
+    [rs close];
+    
+    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cbooksid = ? and cwritedate = ? and operatortype = 2 and length(ibillid) >= 4", model.sundryID, [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
+    [subtitles addObject:@"个人账本"];
+    
+    
     
     SSJRecycleListCellItem *item = [SSJRecycleListCellItem itemWithRecycleID:model.ID
                                                                         icon:[UIImage imageNamed:iconName]
@@ -258,15 +262,30 @@
     return item;
 }
 
-#pragma mark - 恢复回收站中指定的数据
-+ (void)recoverWithRecycleIDs:(NSArray<NSString *> *)recycleIDs
-                      success:(nullable void(^)())success
-                      failure:(nullable void(^)(NSError *error))failure {
++ (NSString *)singleColorValueWithGradientColor:(NSString *)gradientColor {
+    NSArray *colorValues = [gradientColor componentsSeparatedByString:@","];
+    SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
+    colorItem.startColor = [colorValues firstObject];
+    colorItem.endColor = [colorValues lastObject];
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+    SSJBooksTypeItem *booksItem = [[SSJBooksTypeItem alloc] init];
+    booksItem.booksColor = colorItem;
+    
+    return [booksItem getSingleColor];
+}
+
+#pragma mark -
+#pragma mark ---------------------------------------- 恢复 ----------------------------------------
+
+#pragma mark - 恢复回收站中指定的数据
++ (void)recoverRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                  success:(nullable void(^)())success
+                  failure:(nullable void(^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         for (NSString *recycleID in recycleIDs) {
             SSJRecycleModel *recycleModel = nil;
-            FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleIDs];
+            FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleID];
             while ([rs next]) {
                 recycleModel = [SSJRecycleModel modelWithResultSet:rs];
             }
@@ -289,6 +308,7 @@
             
             if (error) {
                 SSJDispatchMainAsync(^{
+                    *rollback = YES;
                     if (failure) {
                         failure(error);
                     }
@@ -326,7 +346,7 @@
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 如果流水依赖的资金账户也被删除了，先恢复资金账户
-    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = (select ifunsid from bk_user_charge wehre ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = (select ifunsid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -350,7 +370,7 @@
     }
     
     // 恢复回收站记录
-    if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where ichargeid = ?", @(SSJRecycleStateRecovered), writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where rid = ?", @(SSJRecycleStateRecovered), writeDateStr, @(SSJSyncVersion()), recycleModel.ID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -397,7 +417,7 @@
         return;
     }
     
-    // 恢复普通流水／周期记账流水
+    // 恢复普通流水／周期记账/平账流水
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ifunsid = ? and cwritedate = ? and (ichargetype = ? or ichargetype = ?) and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate, @(SSJChargeIdTypeNormal), @(SSJChargeIdTypeCircleConfig)]) {
         if (error) {
             *error = [db lastError];
@@ -797,6 +817,64 @@
                         inDatabase:(SSJDatabase *)db
                              error:(NSError **)error {
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cid = ? and ichargetype = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), sundryID, @(chargeType), clientDate]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    return YES;
+}
+
+#pragma mark -
+#pragma mark ---------------------------------------- 清除 ----------------------------------------
+
+#pragma mark - 清除回收站数据
++ (void)clearRecycleIDs:(NSArray<NSString *> *)recycleIDs
+                success:(nullable void(^)())success
+                failure:(nullable void(^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        for (NSString *recycleID in recycleIDs) {
+            if (![db executeUpdate:@"update bk_recycle set operatortype = ?, cwritedate = ?, iversion = ? where rid = ?", @(SSJRecycleStateRemoved), writeDate, @(SSJSyncVersion()), recycleID]) {
+                SSJDispatchMainAsync(^{
+                    if (failure) {
+                        failure([db lastError]);
+                    }
+                });
+                return;
+            }
+        }
+        
+        SSJDispatchMainAsync(^{
+            if (success) {
+                success();
+            }
+        });
+    }];
+}
+
+#pragma mark -
+#pragma mark --------------------------------- 创建账本回收站数据 ---------------------------------
+
+#pragma mark - 创建账本回收站数据
++ (BOOL)createRecycleRecordWithID:(NSString *)ID
+                      recycleType:(SSJRecycleType)recycleType
+                        writeDate:(NSString *)writeDate
+                         database:(FMDatabase *)db
+                            error:(NSError **)error {
+    NSString *cycleID = [NSString stringWithFormat:@"%d_%@", (int)recycleType, ID];
+    NSDictionary *params = @{@"rid":cycleID,
+                             @"cuserid":SSJUSERID(),
+                             @"cid":ID,
+                             @"itype":@(recycleType),
+                             @"clientadddate":writeDate,
+                             @"cwritedate":writeDate,
+                             @"operatortype":@(SSJRecycleStateNormal),
+                             @"iversion":@(SSJSyncVersion())};
+    
+    if (![db executeUpdate:@"replace into bk_recycle (rid, cuserid, cid, itype, clientadddate, cwritedate, operatortype, iversion) values (:rid, :cuserid, :cid, :itype, :clientadddate, :cwritedate, :operatortype, :iversion)" withParameterDictionary:params]) {
         if (error) {
             *error = [db lastError];
         }
