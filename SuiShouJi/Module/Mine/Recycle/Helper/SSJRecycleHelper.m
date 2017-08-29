@@ -416,7 +416,7 @@
         return;
     }
     
-    // 恢复普通流水／周期记账流水
+    // 恢复普通流水／周期记账/平账流水
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ifunsid = ? and cwritedate = ? and (ichargetype = ? or ichargetype = ?) and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate, @(SSJChargeIdTypeNormal), @(SSJChargeIdTypeCircleConfig)]) {
         if (error) {
             *error = [db lastError];
