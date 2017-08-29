@@ -45,7 +45,15 @@
     item.startDate = [item.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     item.enddate = [resultSet stringForColumn:@"CENDDATE"];
     item.isend = [resultSet boolForColumn:@"ISEND"];
-    item.productIcon = [resultSet stringForColumn:@"productIcon"];
+    if (![resultSet columnIsNull:@"producticon"]) {
+        item.productIcon = [resultSet stringForColumn:@"productIcon"];
+    }
+    
+    if (![resultSet columnIsNull:@"cstartcolor"] && ![resultSet columnIsNull:@"cendcolor"]) {
+        item.startcolor = [resultSet stringForColumn:@"cstartcolor"];
+        item.endcolor = [resultSet stringForColumn:@"cendcolor"];
+    }
+    
     return item;
 }
 
@@ -67,6 +75,8 @@
     item.enddate = _enddate;
     item.isend = _isend;
     item.productIcon = _productIcon;
+    item.startcolor = _startcolor;
+    item.endcolor = _endcolor;
     return item;
 }
 

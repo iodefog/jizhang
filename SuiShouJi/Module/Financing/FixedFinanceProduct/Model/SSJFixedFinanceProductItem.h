@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 /**提醒id*/
 @property (nonatomic, copy, nullable) NSString *remindid;
 
-/**理财账户id*/
+/**资金账户id*/
 @property (nonatomic, copy) NSString *thisfundid;
 
 /**转出账户id*/
@@ -79,6 +79,11 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 
 /**是否结算*/
 @property (nonatomic, assign) NSInteger isend;
+
+/**颜色*/
+@property (nonatomic, copy) NSString *startcolor;
+
+@property (nonatomic, copy) NSString *endcolor;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 

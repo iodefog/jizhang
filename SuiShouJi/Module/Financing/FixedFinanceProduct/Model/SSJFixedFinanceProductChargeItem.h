@@ -20,15 +20,47 @@ NS_ASSUME_NONNULL_BEGIN
  - SSJFixedFinCompoundChargeTypeCloseOut: 结清产生的流水
  - SSJFixedFinCompoundChargeTypeInterest: 还款/收款、结清产生的利息流水
  
+ * 固收理财变更转入（对固收理财账户而言，是追加投资）
+public static final String FIXED_FIN_PRODUCT_CHANGE_IN_ID = "15";
+
+ * 固收理财变更转出（对固收理财账户而言，是部分赎回）
+public static final String FIXED_FIN_PRODUCT_CHANGE_OUT_ID = "16";
+ * 固收理财余额转入
+
+public static final String FIXED_FIN_PRODUCT_MONEY_IN_ID = "17";
+
+ * 固收理财余额转出
+
+public static final String FIXED_FIN_PRODUCT_MONEY_OUT_ID = "18";
+
+ * 固收理财结算利息转入
+
+public static final String FIXED_FIN_PRODUCT_INTEREST_IN_ID = "19";
+
+ * 固收理财结算利息转出
+
+public static final String FIXED_FIN_PRODUCT_INTEREST_OUT_ID = "20";
+
+ * 固收理财派发利息流水
+
+public static final String FIXED_FIN_PRODUCT_INTEREST_ID = "21";
+
+ * 固收理财手续费率（部分赎回，结算）
+
+public static final String FIXED_FIN_PRODUCT_COMMISSION_ID = "22";
+
  */
 typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
     SSJFixedFinCompoundChargeTypeCreate,//新建
-    SSJFixedFinCompoundChargeTypeBalanceIncrease,//转入
-    SSJFixedFinCompoundChargeTypeBalanceDecrease,//转出
-    SSJFixedFinCompoundChargeTypeRedemption,//赎回
     SSJFixedFinCompoundChargeTypeAdd,//追加
-    SSJFixedFinCompoundChargeTypeCloseOut,//结清
-    SSJFixedFinCompoundChargeTypeInterest//利息
+    SSJFixedFinCompoundChargeTypeRedemption,//赎回
+    SSJFixedFinCompoundChargeTypeBalanceIncrease,//余额转入
+    SSJFixedFinCompoundChargeTypeBalanceDecrease,//余额转出
+    SSJFixedFinCompoundChargeTypeBalanceInterestIncrease,//利息转入
+    SSJFixedFinCompoundChargeTypeBalanceInterestDecrease,//利息转出
+    SSJFixedFinCompoundChargeTypeInterest,//固收理财派发利息流水
+    SSJFixedFinCompoundChargeTypeCloseOutInterest,//结算利息
+    SSJFixedFinCompoundChargeTypeCloseOut//结清
 };
 
 @interface SSJFixedFinanceProductChargeItem : SSJBaseCellItem<NSCopying>
@@ -67,6 +99,9 @@ typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
 @property (nonatomic, copy) NSString *cid;
 
 @property (nonatomic) SSJFixedFinCompoundChargeType chargeType;
+
+/**是否显示时间*/
+@property (nonatomic, assign) BOOL isHiddenTime;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 

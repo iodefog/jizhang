@@ -19,6 +19,8 @@
 #import "SSJUserChargeTable.h"
 #import "SSJFundingTypeManager.h"
 #import "SSJUserBillTypeTable.h"
+#import "SSJUserCreditTable.h"
+#import "SSJUserRemindTable.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -28,8 +30,12 @@
 
         NSString *userid = SSJUSERID();
 
-        NSArray *fundResult = [db getObjectsOfClass:SSJFundInfoTable.class fromTable:@"bk_fund_info" where:SSJFundInfoTable.operatorType != 2
-                                                                                                           && SSJFundInfoTable.userId == userid];
+
+        NSArray *fundResult = [db getObjectsOfClass:SSJFundInfoTable.class
+                                          fromTable:@"bk_fund_info"
+                                              where:SSJFundInfoTable.operatorType != 2
+                                                    && SSJFundInfoTable.userId == userid
+                                            orderBy:SSJFundInfoTable.fundOrder.order(WCTOrderedAscending)];
 
         NSMutableArray *fundingList = [NSMutableArray arrayWithCapacity:0];
         for (SSJFundInfoTable *fund in fundResult) {
@@ -45,6 +51,13 @@
             item.startColor = fund.startColor;
             item.endColor = fund.endColor;
 
+            item.cardItem = [self getCreditCardItemForCardId:item.fundingID inDataBase:db];
+
+            if ([item.fundingParent isEqualToString:@"16"]) {
+                item.cardItem.cardType = SSJCrediteCardTypeAlipay;
+            } else if ([item.fundingParent isEqualToString:@"3"]) {
+                item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
+            }
 
 
             item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"bk_user_charge" where:SSJUserChargeTable.userId == userid
@@ -83,7 +96,7 @@
         }
 
         if (success) {
-            SSJDispatch_main_async_safe(^{
+            dispatch_main_async_safe (^{
                 success(fundingList);
             });
         }
@@ -551,5 +564,21 @@
     }
     return @"";
 }
+
+
++ (SSJCreditCardItem *)getCreditCardItemForCardId:(NSString *)cardId inDataBase:(WCTDatabase *)db {
+    SSJUserCreditTable *userCredit = [db getOneObjectOfClass:SSJUserCreditTable.class fromTable:@"bk_user_credit" where:SSJUserCreditTable.cardId == cardId];
+    SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc] init];
+    cardItem.cardLimit = [userCredit.cardQuota doubleValue];
+    cardItem.settleAtRepaymentDay = userCredit.billDateSettlement;
+    cardItem.cardRepaymentDay = [userCredit.repaymentDate integerValue];
+    cardItem.cardBillingDay = [userCredit.billingDate integerValue];
+    cardItem.remindId = userCredit.remindId;
+    if (cardItem.remindId.length) {
+        cardItem.remindState = [db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId];
+    }
+    return cardItem;
+}
+
 
 @end

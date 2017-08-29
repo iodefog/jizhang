@@ -68,6 +68,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 @property (nonatomic, strong) NSArray<NSString *> *imageItems;
 
 @property (nonatomic, strong) NSArray<NSString *> *titleItems;
+
 // 创建时产生的流水
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *createCompoundModel;
 
@@ -204,6 +205,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
         _sureButton.enabled = YES;
         SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+        detailVC.productID = self.model.productid;
         [self.navigationController pushViewController:detailVC animated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
@@ -211,7 +213,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [_sureButton ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-    //保存固定理财的提醒
 }
 
 - (BOOL)checkFixedFinModelIsValid {
@@ -252,17 +253,18 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.model.money = self.moneyTextF.text;
     self.model.rate = [self.liLvTextF.text doubleValue];
     self.model.time = [self.qiXianTextF.text doubleValue];
+    self.model.productName = self.nameTextF.text;
     self.model.ratetype = self.liLvSegmentControl.selectedSegmentIndex;
     self.model.timetype = self.qiXiansegmentControl.selectedSegmentIndex;
     self.createCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     //[self.model.startdate  ssj_dateStringFromFormat:<#(NSString *)#> toFormat:<#(NSString *)#>];
     
     self.createCompoundModel.chargeModel.memo = self.model.memo;
-    self.createCompoundModel.chargeModel.cid = self.model.productid;
+
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
-    self.createCompoundModel.targetChargeModel.cid = self.model.productid;
+;
     
     if (self.edited) {
         
@@ -863,18 +865,18 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             chargeModel.chargeId = SSJUUID();
-            chargeModel.fundId = self.model.productid;
+            chargeModel.fundId = self.model.thisfundid;
             chargeModel.billId = chargeBillId;
             chargeModel.userId = SSJUSERID();
-            chargeModel.cid = self.model.productid;
+            chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.model.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.model.productid]];
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             targetChargeModel.chargeId = SSJUUID();
-            chargeModel.fundId = self.model.productid;
+            targetChargeModel.fundId = self.model.targetfundid;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.userId = SSJUSERID();
-            chargeModel.cid = self.model.productid;
+            targetChargeModel.cid = chargeModel.cid;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
@@ -888,18 +890,17 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (SSJFixedFinanceProductCompoundItem *)changeCompoundModel {
     if (!_changeCompoundModel) {
         _changeCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
-        
         SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         chargeModel.chargeId = SSJUUID();
         chargeModel.fundId = self.model.thisfundid;
         chargeModel.userId = SSJUSERID();
-        chargeModel.cid = self.model.productid;
+        chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.model.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.model.productid]];
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.model.thisfundid;
+        targetChargeModel.fundId = self.model.targetfundid;
         targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.cid = self.model.productid;
+        targetChargeModel.cid = chargeModel.cid;
         
         _changeCompoundModel.chargeModel = chargeModel;
         _changeCompoundModel.targetChargeModel = targetChargeModel;

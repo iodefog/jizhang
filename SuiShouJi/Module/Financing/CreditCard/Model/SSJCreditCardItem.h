@@ -11,38 +11,60 @@
 
 @interface SSJCreditCardItem : SSJBaseCellItem<SSJFinancingItemProtocol>
 
-// 信用卡额度
+/**
+ 信用卡额度
+ */
 @property(nonatomic) double cardLimit;
 
-// 信用卡收入
+/**
+ 信用卡收入
+ */
 @property(nonatomic) double cardIncome;
 
-// 信用卡支出
+/**
+ 信用卡支出
+ */
 @property(nonatomic) double cardExpence;
 
-// 是否已账单日结算
+/**
+ 是否已账单日结算
+ */
 @property(nonatomic) BOOL settleAtRepaymentDay;
 
-// 账单日
+/**
+ 账单日
+ */
 @property(nonatomic) NSInteger cardBillingDay;
 
-// 还款日
+/**
+ 还款日
+ */
 @property(nonatomic) NSInteger cardRepaymentDay;
 
 
-// 信用卡颜色
+/**
+ 信用卡颜色
+ */
 @property(nonatomic, strong) NSString *cardColor;
 
-// 信用卡顺序
+/**
+ 信用卡颜色
+ */
 @property(nonatomic) NSInteger cardOder;
 
-// 提醒id
+/**
+ 提醒id
+ */
 @property(nonatomic, strong) NSString *remindId;
 
-// 提醒的状态
+/**
+ 提醒状态
+ */
 @property(nonatomic) BOOL remindState;
 
-// 信用卡流水
+/**
+ 流水条数
+ */
 @property(nonatomic) NSInteger chargeCount;
 
 @property(nonatomic) BOOL hasMadeInstalment;

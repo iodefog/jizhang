@@ -43,12 +43,22 @@
         make.width.greaterThanOrEqualTo(0);
     }];
     
-    [self.subNameL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.nameL.mas_bottom);
-        make.left.mas_equalTo(self.nameL);
-        make.right.mas_equalTo(self.segmentControl.mas_left);
-        make.bottom.mas_equalTo(0);
-    }];
+    if (!self.hasNotSegment) {//有
+        [self.subNameL mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.nameL.mas_bottom);
+            make.left.mas_equalTo(self.nameL);
+            make.right.mas_equalTo(self.segmentControl.mas_left);
+            make.bottom.mas_equalTo(0);
+        }];
+    } else {
+        [self.subNameL mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.nameL.mas_bottom);
+            make.left.mas_equalTo(self.nameL);
+            make.right.mas_equalTo(-15);
+            make.bottom.mas_equalTo(0);
+        }];
+    }
+    
     
     if (self.hasPercentageL) {
         [self.percentageL mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -73,14 +83,14 @@
         }];
     }
     
-    [self.segmentControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.contentView.mas_centerY);
-        make.right.mas_equalTo(-15);
-        make.width.mas_equalTo(102);
-        make.height.mas_equalTo(20);
-    }];
-
-   
+    if (!self.hasNotSegment) {
+        [self.segmentControl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.mas_equalTo(self.contentView.mas_centerY);
+            make.right.mas_equalTo(-15);
+            make.width.mas_equalTo(102);
+            make.height.mas_equalTo(20);
+        }];
+    }
     [super updateConstraints];
 }
 
