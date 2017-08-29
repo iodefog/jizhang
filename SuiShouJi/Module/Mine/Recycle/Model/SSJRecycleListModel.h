@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SSJRecycleCellItem.h"
 
 @class SSJRecycleListCellItem;
 
-@interface SSJRecycleListModel : NSObject
+@interface SSJRecycleListModel : NSObject <NSCopying>
 
 @property (nonatomic, copy) NSString *dateStr;
 
-@property (nonatomic, strong) NSMutableArray<SSJBaseCellItem *> *cellItems;
+@property (nonatomic, strong) NSMutableArray<SSJBaseCellItem<SSJRecycleCellItem> *> *cellItems;
 
 @end

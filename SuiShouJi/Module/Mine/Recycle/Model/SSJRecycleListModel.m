@@ -10,6 +10,13 @@
 
 @implementation SSJRecycleListModel
 
+- (instancetype)copyWithZone:(NSZone *)zone {
+    SSJRecycleListModel *model = [[SSJRecycleListModel alloc] init];
+    model.dateStr = self.dateStr;
+    model.cellItems = [self.cellItems mutableCopy];
+    return model;
+}
+
 - (NSString *)debugDescription {
     return [self ssj_debugDescription];
 }

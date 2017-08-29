@@ -101,30 +101,6 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - SSJRecycleListCellItem
-#pragma mark -
-@implementation SSJRecycleListCellItem
-
-+ (instancetype)itemWithRecycleID:(NSString *)recycleID
-                             icon:(UIImage *)icon
-                    iconTintColor:(UIColor *)iconTintColor
-                            title:(NSString *)title
-                        subtitles:(NSArray<NSString *> *)subtitles
-                            state:(SSJRecycleListCellState)state {
-    SSJRecycleListCellItem *item = [[SSJRecycleListCellItem alloc] init];
-    item.recycleID = recycleID;
-    item.icon = icon;
-    item.iconTintColor = iconTintColor;
-    item.title = title;
-    item.subtitles = subtitles;
-    item.state = state;
-    return item;
-}
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJRecycleListCell
 #pragma mark -
 

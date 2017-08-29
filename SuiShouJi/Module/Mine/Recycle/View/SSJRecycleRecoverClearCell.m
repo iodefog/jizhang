@@ -8,10 +8,6 @@
 
 #import "SSJRecycleRecoverClearCell.h"
 
-@implementation SSJRecycleRecoverClearCellItem
-
-@end
-
 @interface SSJRecycleRecoverClearCell ()
 
 @property (nonatomic, strong) UIButton *recoverBtn;

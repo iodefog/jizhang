@@ -11,6 +11,7 @@
 #import "SSJRecycleListCell.h"
 #import "SSJRecycleRecoverClearCell.h"
 #import "SSJRecycleListHeaderView.h"
+#import "SSJBudgetNodataRemindView.h"
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleHelper.h"
 
@@ -27,6 +28,10 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 @property (nonatomic, strong) SSJSyncSettingWarningFooterView *warningHeaderView;
 
 @property (nonatomic, strong) UIButton *deleteBtn;
+
+@property (nonatomic, strong) UIBarButtonItem *editButtonItem;
+
+@property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
 
 @end
 
@@ -47,15 +52,42 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view addSubview:self.warningHeaderView];
+    [self.view addSubview:self.deleteBtn];
+    [self.view addSubview:self.noDataRemindView];
+    
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
     [self.tableView registerClass:[SSJRecycleListCell class] forCellReuseIdentifier:kRecycleListCellID];
     [self.tableView registerClass:[SSJRecycleRecoverClearCell class] forCellReuseIdentifier:kRecycleRecoverClearCellID];
     [self.tableView registerClass:[SSJRecycleListHeaderView class] forHeaderFooterViewReuseIdentifier:kHeaderID];
-    [self.view addSubview:self.warningHeaderView];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
+    
     [self updateAppearance];
     [self.view setNeedsUpdateConstraints];
     
+    [self setupBindings];
     [self loadData];
+}
+
+- (UIBarButtonItem *)editButtonItem {
+    if (!_editButtonItem) {
+        _editButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"编辑" style:UIBarButtonItemStylePlain target:self action:@selector(rightBarItemAction)];
+    }
+    return _editButtonItem;
+}
+
+- (void)setupBindings {
+    @weakify(self);
+    RAC(self.deleteBtn, hidden) = [[RACSignal merge:@[RACObserve(self, editing), RACObserve(self, listModels)]] map:^id(NSNumber *value) {
+        @strongify(self);
+        return @(!self.editing || self.listModels.count == 0);
+    }];
+    
+    [[RACSignal merge:@[RACObserve(self, listModels)]] subscribeNext:^(id value) {
+        @strongify(self);
+        self.warningHeaderView.hidden = self.listModels.count == 0;
+        self.noDataRemindView.hidden = self.listModels.count > 0;
+        [self.navigationItem setRightBarButtonItem:(self.listModels.count == 0 ? nil : self.editButtonItem) animated:YES];
+    }];
 }
 
 - (void)updateViewConstraints {
@@ -71,6 +103,10 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     [self.deleteBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.width.mas_equalTo(self.view);
         make.height.mas_equalTo(44);
+    }];
+    [self.noDataRemindView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(SSJ_NAVIBAR_BOTTOM);
+        make.left.bottom.right.mas_equalTo(self.view);
     }];
     [super updateViewConstraints];
 }
@@ -130,7 +166,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             [self recoverData:@[item.recycleID] completion:^(BOOL success) {
                 item.recoverBtnLoading = NO;
                 if (success) {
-                    [self deleteCellsWithRecoverClearCellItem:cell.cellItem];
+                    [self deleteCellsWithRecycleIDs:@[item.recycleID]];
                 }
             }];
         };
@@ -141,7 +177,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             [self clearData:@[item.recycleID] completion:^(BOOL success) {
                 item.recoverBtnLoading = NO;
                 if (success) {
-                    [self deleteCellsWithRecoverClearCellItem:cell.cellItem];
+                    [self deleteCellsWithRecycleIDs:@[item.recycleID]];
                 }
             }];
         };
@@ -202,8 +238,10 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 #pragma mark - Private
 - (void)updateAppearance {
     [_warningHeaderView updateAppearanceAccordingToTheme];
-    [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-    [_deleteBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    _deleteBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
+    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    [_deleteBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [_noDataRemindView updateAppearance];
 }
 
 - (void)rightBarItemAction {
@@ -250,31 +288,38 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     }
 }
 
-- (void)deleteCellsWithRecoverClearCellItem:(SSJRecycleRecoverClearCellItem *)cellItem {
-    __block NSIndexPath *expandedIndexPath = nil;
-    [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
-        [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem *item, NSUInteger row, BOOL * _Nonnull stop_2) {
-            if (cellItem == item) {
-                expandedIndexPath = [NSIndexPath indexPathForRow:row inSection:section];
-                *stop_2 = *stop_1 = YES;
+- (void)deleteCellsWithRecycleIDs:(NSArray<NSString *> *)recycleIDs {
+    [self.tableView beginUpdates];
+    for (NSString *recycleID in recycleIDs) {
+        NSMutableArray *deleteSections = [NSMutableArray array];
+        [self.listModels enumerateObjectsUsingBlock:^(SSJRecycleListModel *model, NSUInteger section, BOOL * _Nonnull stop_1) {
+            NSMutableArray *deleteIndexPaths = [NSMutableArray array];
+            [model.cellItems enumerateObjectsUsingBlock:^(SSJBaseCellItem<SSJRecycleCellItem> *item, NSUInteger row, BOOL * _Nonnull stop_2) {
+                if ([recycleID isEqualToString:item.recycleID]) {
+                    [deleteIndexPaths addObject:[NSIndexPath indexPathForRow:row inSection:section]];
+                }
+            }];
+            
+            [deleteIndexPaths enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSIndexPath *indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+                [model.cellItems ssj_safeRemoveObjectAtIndex:indexPath.row];
+            }];
+            
+            [self.tableView deleteRowsAtIndexPaths:deleteIndexPaths withRowAnimation:UITableViewRowAnimationFade];
+            
+            if (!model.cellItems.count) {
+                [deleteSections addObject:@(section)];
             }
         }];
-    }];
-    
-    if (expandedIndexPath) {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:expandedIndexPath.row - 1 inSection:expandedIndexPath.section];
         
-        SSJRecycleListModel *model = [self.listModels ssj_safeObjectAtIndex:indexPath.section];
-        [model.cellItems ssj_safeRemoveObjectAtIndex:expandedIndexPath.row];
-        [model.cellItems ssj_safeRemoveObjectAtIndex:indexPath.row];
-        
-        if (model.cellItems.count) {
-            [self.tableView deleteRowsAtIndexPaths:@[indexPath, expandedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
-        } else {
-            [self.listModels ssj_safeRemoveObjectAtIndex:indexPath.section];
-            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        [deleteSections enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(NSNumber *section, NSUInteger idx, BOOL * _Nonnull stop) {
+            [self.listModels ssj_safeRemoveObjectAtIndex:[section intValue]];
+            [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:[section intValue]] withRowAnimation:UITableViewRowAnimationFade];
+        }];
     }
+    
+    self.listModels = [self.listModels mutableCopy];
+    
+    [self.tableView endUpdates];
 }
 
 - (NSIndexPath *)indexPathForCellItem:(SSJBaseCellItem *)item {
@@ -375,6 +420,9 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             NSMutableArray *selectedIDs = [NSMutableArray array];
             for (SSJRecycleListModel *model in self.listModels) {
                 for (SSJRecycleListCellItem *cellItem in model.cellItems) {
+                    if (![cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
+                        continue;
+                    }
                     if (cellItem.state == SSJRecycleListCellStateSelected) {
                         [selectedIDs addObject:cellItem.recycleID];
                     }
@@ -384,10 +432,22 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
             [button ssj_showLoadingIndicator];
             [self clearData:selectedIDs completion:^(BOOL success) {
                 [button ssj_hideLoadingIndicator];
+                if (success) {
+                    [self deleteCellsWithRecycleIDs:selectedIDs];
+                }
             }];
         }];
     }
     return _deleteBtn;
+}
+
+- (SSJBudgetNodataRemindView *)noDataRemindView {
+    if (!_noDataRemindView) {
+        _noDataRemindView = [[SSJBudgetNodataRemindView alloc] init];
+        _noDataRemindView.image = @"budget_no_data";
+        _noDataRemindView.title = @"报表空空如也";
+    }
+    return _noDataRemindView;
 }
 
 @end
