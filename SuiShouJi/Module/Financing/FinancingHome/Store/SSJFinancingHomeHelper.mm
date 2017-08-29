@@ -92,7 +92,7 @@
                                                           && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
                                                                                                                  fromTable:@"bk_user_bill_type"
                                                                                                                      where:(SSJUserBillTypeTable.userId == userid || SSJUserBillTypeTable.userId.isNull())
-                                                                                                                           && SSJUserBillTypeTable.billType == SSJBillTypePay]) ] doubleValue];
+                                                                                                                           && SSJUserBillTypeTable.billType == SSJBillTypePay])] doubleValue];
 
             item.fundingAmount = fundIncome - fundExpence;
 
