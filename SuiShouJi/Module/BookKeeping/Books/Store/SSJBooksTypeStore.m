@@ -325,10 +325,23 @@
                               Success:(void(^)(BOOL bookstypeHasChange))success
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
         NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         if (!type) {
             for (SSJBooksTypeItem *item in items) {
-                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?", writeDate,@(SSJSyncVersion()),item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
+                if (![self createRecycleRecordWithBooksID:item.booksId writeDate:writeDate db:db error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -340,7 +353,7 @@
             }
         }else{
             for (SSJBooksTypeItem *item in items) {
-                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?", writeDate, @(SSJSyncVersion()), item.booksId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -349,7 +362,9 @@
                     }
                     return;
                 }
-                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                
+                // 老版本的特殊流水（转账）也有账本id，所以在删除流水时需要将这些特殊流水过滤
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ? and length(ibillid) >= 4", writeDate, @(SSJSyncVersion()), item.booksId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -358,7 +373,16 @@
                     }
                     return;
                 }
-
+                
+                if (![self createRecycleRecordWithBooksID:item.booksId writeDate:writeDate db:db error:&error]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
             }
         }
         
@@ -387,6 +411,33 @@
             });
         }
     }];
+}
+
+/**
+ 创建账本回收站数据
+ */
++ (BOOL)createRecycleRecordWithBooksID:(NSString *)booksID
+                             writeDate:(NSString *)writeDate
+                                    db:(FMDatabase *)db
+                                 error:(NSError **)error {
+    NSString *cycleID = [NSString stringWithFormat:@"%d_%@", (int)SSJRecycleTypeBooks, booksID];
+    NSDictionary *params = @{@"rid":cycleID,
+                             @"cuserid":SSJUSERID(),
+                             @"cid":booksID,
+                             @"itype":@(SSJRecycleTypeBooks),
+                             @"clientadddate":writeDate,
+                             @"cwritedate":writeDate,
+                             @"operatortype":@(SSJRecycleStateNormal),
+                             @"iversion":@(SSJSyncVersion())};
+    
+    if (![db executeUpdate:@"replace into bk_recycle (rid, cuserid, cid, itype, clientadddate, cwritedate, operatortype, iversion) values (:rid, :cuserid, :cid, :itype, :clientadddate, :cwritedate, :operatortype, :iversion)" withParameterDictionary:params]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    return YES;
 }
 
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success
