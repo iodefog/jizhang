@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJBaseCellItem.h"
 #import "SSJFinancingItem.h"
+#import "SSJCreditCardItem.h"
 
 @interface SSJFinancingHomeitem : SSJBaseCellItem<SSJFinancingItemProtocol>
 
@@ -27,5 +28,7 @@
 @property(nonatomic) NSInteger chargeCount;
 
 @property(nonatomic) NSInteger fundOperatortype;
+
+@property (nonatomic, strong) SSJCreditCardItem *cardItem;
 
 @end
