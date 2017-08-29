@@ -43,7 +43,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
 @property (nonatomic, copy) NSString *thisfundid;
 
 /**转出账户id*/
-@property (nonatomic, copy) NSString *targetfundid;
+@property (nonatomic, copy,nullable) NSString *targetfundid;
 
 /**结算账户id*/
 @property (nonatomic, copy, nullable) NSString *etargetfundid;

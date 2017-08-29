@@ -15,6 +15,7 @@
 
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJLocalNotificationHelper.h"
 
 @implementation SSJFixedFinanceProductStore
 
@@ -242,6 +243,78 @@
         }
         
     }];
+}
+
+
+/**
+ 删除固收理财产品
+ 
+ @param model 模型
+ @param success 成功
+ @param failure 失败
+ */
++ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
+                                   success:(void (^)(void))success
+                                   failure:(void (^)(NSError *error))failure {
+    NSString *userId = SSJUSERID();
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
+        if ([self deleteFixedFinanceProductModel:model inDatabase:db forUserId:userId error:&error]) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            } else {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+            }
+        }
+    }];
+    
+}
+
++ (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
+                            inDatabase:(FMDatabase *)db
+                             forUserId:(NSString *)userId
+                                 error:(NSError **)error{
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    // 将固定理财的operatortype改为2
+    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.productid]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    // 将和固定理财相关的流水operatortype改为2
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like (? || '_%') and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.productid, @(SSJChargeIdTypeFixedFinance)]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    // 如果有提醒将提醒的operatortype改为2
+    if (model.remindid.length) {
+        if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindid]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        //取消提醒
+        SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+        remindItem.remindId = model.remindid;
+        remindItem.userId = model.userid;
+        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+
+    }
+    return YES;
 }
 
 #pragma mark - 固定理财流水

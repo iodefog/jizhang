@@ -27,6 +27,7 @@
 #import "SSJLoanHelper.h"
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJDataSynchronizer.h"
+#import "SSJLocalNotificationStore.h"
 
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJGeTuiManager.h"
@@ -44,7 +45,6 @@ static NSString *KTitle9 = @"备注";
 
 static NSString *kAddOrEditFixedFinanceProLabelCellId = @"kAddOrEditFixedFinanceProLabelCellId";
 static NSString *kAddOrEditFixedFinanceProTextFieldCellId = @"kAddOrEditFixedFinanceProTextFieldCellId";
-//static NSString *kAddOrEditFixedFinanceProMultiLabelCellId = @"kAddOrEditFixedFinanceProMultiLabelCellId";
 static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditFixefFinanceProSegmentTextFieldCellId";
 
 @interface SSJAddOrEditFixedFinanceProductViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
@@ -92,8 +92,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 @property (nonatomic, strong) SSJSegmentedControl *qiXiansegmentControl;
 
-// 是否是编辑
-@property (nonatomic) BOOL edited;
+
 
 // 原始的借贷金额，只有在编辑记录此金额
 @property (nonatomic) double originalMoney;
@@ -104,11 +103,31 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"添加固收理财";
+    
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
+    if (_model.remindid.length) {
+        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_model.remindid];
+    }
+    [self updateTitle];
+    
     [self loadData];
+    
+    if (_edited) {
+        self.originalMoney = [_model.money doubleValue];
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
+
     [self updateAppearance];
+}
+
+- (void)updateTitle {
+    if (_edited) {
+        self.title = @"编辑固收理财";
+    } else {
+        self.title = @"添加固收理财";
+    }
 }
 
 
@@ -129,6 +148,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
     self.jiXiMethodSelectionView.selectedIndex = -1;
+    MJWeakSelf;
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         
         _tableView.hidden = NO;
@@ -136,14 +156,37 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         
         // 新建借贷设置默认账户
         self.fundingSelectionView.items = items;
-        self.fundingSelectionView.selectedIndex = -1;
-        [_tableView reloadData];
+        if (_edited) {//编辑
+            BOOL hasSelectedFund = NO;  // 是否有选中的账户
+            for (int i = 0; i < items.count; i ++) {
+                SSJLoanFundAccountSelectionViewItem *item = items[i];
+                if ([item.ID isEqualToString:weakSelf.model.targetfundid]) {
+                    self.fundingSelectionView.selectedIndex = i;
+                    hasSelectedFund = YES;
+                    break;
+                }
+            }
+            // 如果此借贷的目标资金账户不在现有账户列表中，就置为nil
+            if (!hasSelectedFund) {
+                self.model.targetfundid = nil;
+            }
+        } else {//新建
+            self.fundingSelectionView.selectedIndex = -1;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        [_tableView reloadData];
         
     } failure:^(NSError * _Nonnull error) {
         _tableView.hidden = NO;
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
+    
+    //拍息方式
+    if (_edited) {
+        self.jiXiMethodSelectionView.selectedIndex = self.model.interesttype;
+    }
 }
 
 - (BOOL)remindLocation {
@@ -179,6 +222,15 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 
 #pragma mark - Action
+- (void)deleteButtonClicked {
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.model success:^{
+        
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
+
 - (void)sureButtonAction {
     if (![self checkFixedFinModelIsValid]) return;
     [self updateChargeModels];
@@ -196,10 +248,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         if (self.changeCompoundModel.chargeModel.money > 0) {
             [saveChargeModels addObject:self.changeCompoundModel];
         }
-        _sureButton.enabled = NO;
-        [_sureButton ssj_showLoadingIndicator];
-
     }
+    _sureButton.enabled = NO;
+    [_sureButton ssj_showLoadingIndicator];
     
     //保存固定收益理财
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
@@ -469,7 +520,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.textLabel.text = title;
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"必填" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    //        cell.textField.text = self.loanModel.lender;
+    cell.textField.text = self.model.productName;
     cell.textField.keyboardType = UIKeyboardTypeDefault;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
@@ -536,6 +587,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.delegate = self;
+    cell.textField.text = [NSString stringWithFormat:@"%.2f",self.model.rate];
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
     self.liLvSegmentControl = cell.segmentControl;
@@ -552,6 +604,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.keyboardType = UIKeyboardTypeNumberPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
+    cell.textField.text = [NSString stringWithFormat:@"%.f",self.model.time];
     self.qiXianTextF = cell.textField;
     self.qiXiansegmentControl = cell.segmentControl;
     cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];

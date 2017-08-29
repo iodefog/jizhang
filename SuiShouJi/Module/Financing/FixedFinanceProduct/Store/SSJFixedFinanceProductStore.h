@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class SSJFixedFinanceProductChargeItem;
 @class SSJReminderItem;
 @class SSJFixedFinanceProductCompoundItem;
+@class FMDatabase;
 
 /**
  固定收益理财状态
@@ -92,6 +93,19 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 + (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
                                   success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure;
+
+/**
+ 删除固收理财产品
+ 
+ @param model  模型
+ @param db     db FMDatabase实例
+ 
+ @return 是否合并成功
+ */
++ (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
+             inDatabase:(FMDatabase *)db
+              forUserId:(NSString *)userId
+                  error:(NSError **)error;
 
 
 #pragma mark - 固定理财流水
