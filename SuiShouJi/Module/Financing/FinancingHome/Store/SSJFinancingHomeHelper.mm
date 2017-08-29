@@ -51,12 +51,15 @@
             item.startColor = fund.startColor;
             item.endColor = fund.endColor;
 
-            item.cardItem = [self getCreditCardItemForCardId:item.fundingID inDataBase:db];
+            if ([item.fundingParent isEqualToString:@"16"] || [item.fundingParent isEqualToString:@"3"]) {
+                item.cardItem = [self getCreditCardItemForCardId:item.fundingID inDataBase:db];
+                
+                if ([item.fundingParent isEqualToString:@"16"]) {
+                    item.cardItem.cardType = SSJCrediteCardTypeAlipay;
+                } else if ([item.fundingParent isEqualToString:@"3"]) {
+                    item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
+                }
 
-            if ([item.fundingParent isEqualToString:@"16"]) {
-                item.cardItem.cardType = SSJCrediteCardTypeAlipay;
-            } else if ([item.fundingParent isEqualToString:@"3"]) {
-                item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
             }
 
 
@@ -78,7 +81,7 @@
                                                          && SSJUserChargeTable.fundId == item.fundingID
                                                          && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
                                                                                                                 fromTable:@"bk_user_bill_type"
-                                                                                                                    where:SSJUserBillTypeTable.userId == userid
+                                                                                                                    where:(SSJUserBillTypeTable.userId == userid || SSJUserBillTypeTable.userId.isNull())
                                                                                                                           && SSJUserBillTypeTable.billType == SSJBillTypeIncome])] doubleValue];
 
             double fundExpence = [[db getOneValueOnResult:SSJUserChargeTable.money.sum()
@@ -88,7 +91,7 @@
                                                           && SSJUserChargeTable.fundId == item.fundingID
                                                           && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
                                                                                                                  fromTable:@"bk_user_bill_type"
-                                                                                                                     where:SSJUserBillTypeTable.userId == userid
+                                                                                                                     where:(SSJUserBillTypeTable.userId == userid || SSJUserBillTypeTable.userId.isNull())
                                                                                                                            && SSJUserBillTypeTable.billType == SSJBillTypePay]) ] doubleValue];
 
             item.fundingAmount = fundIncome - fundExpence;
