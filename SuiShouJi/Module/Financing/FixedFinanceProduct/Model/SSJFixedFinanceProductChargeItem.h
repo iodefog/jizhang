@@ -100,6 +100,9 @@ typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
 
 @property (nonatomic) SSJFixedFinCompoundChargeType chargeType;
 
+/**是否显示时间*/
+@property (nonatomic, assign) BOOL isShowTime;
+
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 

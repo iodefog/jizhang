@@ -305,6 +305,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 }
             }
         }];
+        
+//        for (SSJFixedFinanceProductChargeItem *chargeItem in self.section2Items) {
+//            chargeItem.billDate compare:<#(nonnull NSDate *)#>
+//        }
+
     }
 }
 
@@ -574,7 +579,6 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         _changeChargeSelectionView = [[SSJLoanChangeChargeSelectionControl alloc] initWithTitles:titles];
         MJWeakSelf;
         _changeChargeSelectionView.selectionHandle = ^(NSString * title){
-            
             if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:0]]) {
                 SSJFixedFinanctAddViewController *addVC = [[SSJFixedFinanctAddViewController alloc] init];
                 //            addVC.edited = NO;
@@ -587,12 +591,23 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 
                 [wself.navigationController pushViewController:redVC animated:YES];
             }
-            
-            
         };
     }
     return _changeChargeSelectionView;
 }
 
+
+- (SSJLoanDetailChargeChangeHeaderView *)changeSectionHeaderView {
+    if (!_changeSectionHeaderView) {
+        __weak typeof(self) wself = self;
+        _changeSectionHeaderView = [[SSJLoanDetailChargeChangeHeaderView alloc] init];
+        _changeSectionHeaderView.expanded = YES;
+        _changeSectionHeaderView.tapHandle = ^(SSJLoanDetailChargeChangeHeaderView *view) {
+            [wself reorganiseSection2Items];
+            [wself.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        };
+    }
+    return _changeSectionHeaderView;
+}
 
 @end
