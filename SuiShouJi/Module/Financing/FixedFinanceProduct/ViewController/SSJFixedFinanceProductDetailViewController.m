@@ -10,6 +10,7 @@
 #import "SSJFixedFinanctAddViewController.h"
 #import "SSJFixedFinanceRedemViewController.h"
 #import "SSJFixedFinancesSettlementViewController.h"
+#import "SSJAddOrEditFixedFinanceProductViewController.h"
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductDetailItem.h"
@@ -241,7 +242,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         item.endColor = self.financeModel.endcolor;
         self.headerView.colorItem = item;
         
-        self.changeSectionHeaderView.title = [NSString stringWithFormat:@"变更记录：%d条", (int)self.section2Items.count];
+        self.changeSectionHeaderView.title = [NSString stringWithFormat:@"流水记录：%d条", (int)self.chargeModels.count];
     }];
 }
 
@@ -465,20 +466,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 #pragma mark - Event
 - (void)editAction {
-//    SSJAddOrEditLoanViewController *editLoanVC = [[SSJAddOrEditLoanViewController alloc] init];
-//    editLoanVC.loanModel = self.loanModel;
-//    editLoanVC.chargeModels = self.chargeModels;
-//    [self.navigationController pushViewController:editLoanVC animated:YES];
-//    
-//    switch (_loanModel.type) {
-//        case SSJLoanTypeLend:
-//            [SSJAnaliyticsManager event:@"edit_loan"];
-//            break;
-//            
-//        case SSJLoanTypeBorrow:
-//            [SSJAnaliyticsManager event:@"edit_owed"];
-//            break;
-//    }
+    SSJAddOrEditFixedFinanceProductViewController *editFinanceVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+    editFinanceVC.model = self.financeModel;
+    editFinanceVC.edited = YES;
+//    editFinanceVC.chargeModels = self.chargeModels;
+    [self.navigationController pushViewController:editFinanceVC animated:YES];
 }
 
 - (void)closeOutBtnAction {

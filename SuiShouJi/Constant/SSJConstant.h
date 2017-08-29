@@ -318,6 +318,18 @@ typedef NS_ENUM(NSInteger, SSJFinancingParent) {
 };
 
 /**
+
+ 利率或期限类型：固定收益理财
+ SSJMethodOfRateOrTimeDay:    日
+ SSJMethodOfRateOrTimeMonth:    月
+ SSJMethodOfRateOrTimeYear:  年
+ */
+typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
+    SSJMethodOfRateOrTimeDay = 0,
+    SSJMethodOfRateOrTimeMonth,
+    SSJMethodOfRateOrTimeYear
+};
+/**
  回收站数据类型
 
  - SSJRecycleTypeCharge: 流水
