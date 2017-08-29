@@ -15,6 +15,7 @@
 #import "SSJUserItem.h"
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserDefaultBillTypesCreater.h"
+#import "SSJRecycleHelper.h"
 
 @implementation SSJBooksTypeStore
 
@@ -341,7 +342,11 @@
                     return;
                 }
                 
-                if (![self createRecycleRecordWithBooksID:item.booksId writeDate:writeDate db:db error:&error]) {
+                if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
+                                                     recycleType:SSJRecycleTypeBooks
+                                                       writeDate:writeDate
+                                                        database:db
+                                                           error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -374,7 +379,11 @@
                     return;
                 }
                 
-                if (![self createRecycleRecordWithBooksID:item.booksId writeDate:writeDate db:db error:&error]) {
+                if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
+                                                     recycleType:SSJRecycleTypeBooks
+                                                       writeDate:writeDate
+                                                        database:db
+                                                           error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -411,33 +420,6 @@
             });
         }
     }];
-}
-
-/**
- 创建账本回收站数据
- */
-+ (BOOL)createRecycleRecordWithBooksID:(NSString *)booksID
-                             writeDate:(NSString *)writeDate
-                                    db:(FMDatabase *)db
-                                 error:(NSError **)error {
-    NSString *cycleID = [NSString stringWithFormat:@"%d_%@", (int)SSJRecycleTypeBooks, booksID];
-    NSDictionary *params = @{@"rid":cycleID,
-                             @"cuserid":SSJUSERID(),
-                             @"cid":booksID,
-                             @"itype":@(SSJRecycleTypeBooks),
-                             @"clientadddate":writeDate,
-                             @"cwritedate":writeDate,
-                             @"operatortype":@(SSJRecycleStateNormal),
-                             @"iversion":@(SSJSyncVersion())};
-    
-    if (![db executeUpdate:@"replace into bk_recycle (rid, cuserid, cid, itype, clientadddate, cwritedate, operatortype, iversion) values (:rid, :cuserid, :cid, :itype, :clientadddate, :cwritedate, :operatortype, :iversion)" withParameterDictionary:params]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
-    }
-    
-    return YES;
 }
 
 + (void)getTotalIncomeAndExpenceWithSuccess:(void(^)(double income,double expenture))success

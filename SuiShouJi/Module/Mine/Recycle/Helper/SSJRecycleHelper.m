@@ -854,4 +854,33 @@
     }];
 }
 
+#pragma mark -
+#pragma mark --------------------------------- 创建账本回收站数据 ---------------------------------
+
+#pragma mark - 创建账本回收站数据
++ (BOOL)createRecycleRecordWithID:(NSString *)ID
+                      recycleType:(SSJRecycleType)recycleType
+                        writeDate:(NSString *)writeDate
+                         database:(FMDatabase *)db
+                            error:(NSError **)error {
+    NSString *cycleID = [NSString stringWithFormat:@"%d_%@", (int)recycleType, ID];
+    NSDictionary *params = @{@"rid":cycleID,
+                             @"cuserid":SSJUSERID(),
+                             @"cid":ID,
+                             @"itype":@(recycleType),
+                             @"clientadddate":writeDate,
+                             @"cwritedate":writeDate,
+                             @"operatortype":@(SSJRecycleStateNormal),
+                             @"iversion":@(SSJSyncVersion())};
+    
+    if (![db executeUpdate:@"replace into bk_recycle (rid, cuserid, cid, itype, clientadddate, cwritedate, operatortype, iversion) values (:rid, :cuserid, :cid, :itype, :clientadddate, :cwritedate, :operatortype, :iversion)" withParameterDictionary:params]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    return YES;
+}
+
 @end
