@@ -317,7 +317,17 @@ typedef NS_ENUM(NSInteger, SSJFinancingParent) {
     SSJFinancingParentFixedEarnings = 17
 };
 
-
+/**
+ 利率或期限类型：固定收益理财
+ SSJMethodOfRateOrTimeDay:    日
+ SSJMethodOfRateOrTimeMonth:    月
+ SSJMethodOfRateOrTimeYear:  年
+ */
+typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
+    SSJMethodOfRateOrTimeDay = 0,
+    SSJMethodOfRateOrTimeMonth,
+    SSJMethodOfRateOrTimeYear
+};
 
 ///------------------------------------------
 /// @name 基本数据常量

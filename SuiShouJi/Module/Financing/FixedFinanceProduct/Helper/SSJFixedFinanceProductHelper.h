@@ -19,11 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
  计算每日利息
  
  @param model 借贷模型，根据rate、interestType两个属性计算利息
- @param models 借贷生成的流水记录
  @return 计算结果
  */
-+ (double)caculateInterestForEveryDayWithLoanModel:(SSJFixedFinanceProductItem *)model chargeModels:(NSArray <SSJFixedFinanceProductChargeItem *>*)models;
-
++ (double)caculateInterestForEveryDayWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money;
+//SSJMethodOfRateOrTime ratetype
 /**
  计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算
  

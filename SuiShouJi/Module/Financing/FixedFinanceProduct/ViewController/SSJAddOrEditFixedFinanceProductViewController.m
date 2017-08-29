@@ -28,10 +28,12 @@
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJDataSynchronizer.h"
 #import "SSJLocalNotificationStore.h"
+#import "SSJFixedFinanceProductHelper.h"
 
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJGeTuiManager.h"
 #import "NSString+MoneyDisplayFormat.h"
+
 
 static NSString *KTitle1 = @"投资名称";
 static NSString *KTitle2 = @"投资金额";
@@ -85,6 +87,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 @property (nonatomic, strong) UITextField *memoTextF;
 
+@property (nonatomic, copy) NSMutableAttributedString *jixiText;
+
+@property (nonatomic, copy) NSMutableAttributedString *liLvText;
+
 // 提醒开关
 @property (nonatomic, strong) UISwitch *remindSwitch;
 
@@ -106,9 +112,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
-    if (_model.remindid.length) {
-        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_model.remindid];
-    }
+    
+    [self originalData];
     [self updateTitle];
     
     [self loadData];
@@ -128,6 +133,41 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     } else {
         self.title = @"添加固收理财";
     }
+}
+
+- (void)originalData {
+    if (_model.remindid.length) {
+        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_model.remindid];
+    }
+    //拍息方式
+    NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate interstType:self.model.ratetype money:[self.model.money doubleValue]]];
+//    if (_edited) {
+        self.jiXiMethodSelectionView.selectedIndex = self.model.interesttype;
+            NSString *oldlilvStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息%@元",targetLiLvStr];
+        NSString *oldjixiStr = @"每月10号该账户将生成50.00元的利息流水";
+        
+        self.liLvText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+    
+//        self.jixiText =
+//    } else {//新建
+//        self.liLvText =
+//        self.jixiText =
+//    }
+}
+
+- (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
+    NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:rate interstType:rateType money:money]];
+
+    NSString *oldlilvStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息%@元",targetLiLvStr];
+    
+    self.liLvText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+    
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+    [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+}
+
+- (void)updateJiXiLiXi {
+    
 }
 
 
@@ -183,10 +223,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
     
-    //拍息方式
-    if (_edited) {
-        self.jiXiMethodSelectionView.selectedIndex = self.model.interesttype;
-    }
 }
 
 - (BOOL)remindLocation {
@@ -591,9 +627,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
     self.liLvSegmentControl = cell.segmentControl;
-    NSString *oldStr = [NSString stringWithFormat:@"每月10号该账户将生成50.00元的利息流水"];
-    cell.subNameL.text = oldStr;
-    //    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
+    cell.subNameL.attributedText = self.liLvText;
     cell.hasPercentageL = YES;
     return cell;
 }
@@ -624,9 +658,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     } else {
         cell.detailL.text = @"请选择派息方式";
     }
-    NSString *oldStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息2.00元"];
-    cell.subtitleLabel.text = oldStr;
-//    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
+    cell.subtitleLabel.attributedText = self.jixiText;
     [cell setNeedsLayout];
     return cell;
 
@@ -693,6 +725,26 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     [textField resignFirstResponder];
     return YES;
 }
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+ //计算利率
+    if (textField == self.liLvTextF) {
+        
+    }
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (self.moneyTextF == textField || self.liLvTextF == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        //计算利息
+        [self updateDayLiXiWithRate:[self.liLvTextF.text doubleValue] interstType:self.liLvSegmentControl.selectedSegmentIndex money:[self.moneyTextF.text doubleValue]];
+        return NO;
+    }
+    return YES;
+}
+
 
 #pragma mark - Event
 - (void)textDidChange:(NSNotification *)notification {
@@ -832,6 +884,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.model.interesttype = index;
                 weakSelf.jiXiMethodSelectionView.selectedIndex = index;
+                //计算计息金额
+                
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 return YES;

@@ -314,6 +314,7 @@
         [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
 
     }
+    
     return YES;
 }
 
