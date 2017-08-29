@@ -28,7 +28,7 @@
 
 @property (nonatomic, retain) NSString* remindId;
 
-@property (nonatomic, assign) int billDateSettlement;
+@property (nonatomic, assign) BOOL billDateSettlement;
 
 @property (nonatomic, assign) int type;
 
