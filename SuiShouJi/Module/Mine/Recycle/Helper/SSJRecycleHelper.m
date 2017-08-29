@@ -282,7 +282,7 @@
                   success:(nullable void(^)())success
                   failure:(nullable void(^)(NSError *error))failure {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         for (NSString *recycleID in recycleIDs) {
             SSJRecycleModel *recycleModel = nil;
             FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleID];
@@ -308,6 +308,7 @@
             
             if (error) {
                 SSJDispatchMainAsync(^{
+                    *rollback = YES;
                     if (failure) {
                         failure(error);
                     }
