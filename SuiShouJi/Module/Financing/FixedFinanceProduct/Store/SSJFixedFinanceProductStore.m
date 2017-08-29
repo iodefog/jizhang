@@ -16,6 +16,7 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJLocalNotificationStore.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJRecycleHelper.h"
 
 @implementation SSJFixedFinanceProductStore
 
@@ -315,6 +316,10 @@
 
     }
     
+    if (![SSJRecycleHelper createRecycleRecordWithID:model.productid recycleType:SSJRecycleTypeFund writeDate:writeDate database:db error:error]) {
+        return NO;
+    }
+
     return YES;
 }
 

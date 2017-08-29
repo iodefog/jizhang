@@ -23,6 +23,19 @@
              };
 }
 
++ (instancetype)modelWithResultSet:(FMResultSet *)rs {
+    SSJRecycleModel *model = [[SSJRecycleModel alloc] init];
+    model.ID = [rs stringForColumn:@"rid"];
+    model.userID = [rs stringForColumn:@"cuserid"];
+    model.sundryID = [rs stringForColumn:@"cid"];
+    model.type = [rs intForColumn:@"itype"];
+    model.clientAddDate = [NSDate dateWithString:[rs stringForColumn:@"clientadddate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    model.state = [rs intForColumn:@"operatortype"];
+    model.version = [rs longLongIntForColumn:@"iversion"];
+    return model;
+}
+
 - (instancetype)copyWithZone:(NSZone *)zone {
     SSJRecycleModel *model = [[SSJRecycleModel alloc] init];
     model.ID = self.ID;
@@ -36,17 +49,8 @@
     return model;
 }
 
-+ (instancetype)modelWithResultSet:(FMResultSet *)rs {
-    SSJRecycleModel *model = [[SSJRecycleModel alloc] init];
-    model.ID = [rs stringForColumn:@"rid"];
-    model.userID = [rs stringForColumn:@"cuserid"];
-    model.sundryID = [rs stringForColumn:@"cid"];
-    model.type = [rs intForColumn:@"itype"];
-    model.clientAddDate = [NSDate dateWithString:[rs stringForColumn:@"clientadddate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    model.state = [rs intForColumn:@"operatortype"];
-    model.version = [rs longLongIntForColumn:@"iversion"];
-    return model;
+- (NSString *)debugDescription {
+    return [self ssj_debugDescription];
 }
 
 @end

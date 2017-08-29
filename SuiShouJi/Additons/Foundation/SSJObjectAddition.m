@@ -45,4 +45,13 @@
     return [NSString stringWithFormat:@"%@:%@", self, [self mj_keyValues].description];
 }
 
+- (id)ssj_copyWithZone:(nullable NSZone *)zone {
+    id obj = [[[self class] alloc] init];
+    [[self class] mj_enumerateProperties:^(MJProperty *property, BOOL *stop) {
+        id value = [self valueForKey:property.name];
+        [obj setValue:value forKey:property.name];
+    }];
+    return obj;
+}
+
 @end

@@ -15,6 +15,7 @@
 #import "SSJUserItem.h"
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserDefaultBillTypesCreater.h"
+#import "SSJRecycleHelper.h"
 
 @implementation SSJBooksTypeStore
 
@@ -325,10 +326,27 @@
                               Success:(void(^)(BOOL bookstypeHasChange))success
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
         NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
         if (!type) {
             for (SSJBooksTypeItem *item in items) {
-                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?", writeDate,@(SSJSyncVersion()),item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
+                if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
+                                                     recycleType:SSJRecycleTypeBooks
+                                                       writeDate:writeDate
+                                                        database:db
+                                                           error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -340,7 +358,7 @@
             }
         }else{
             for (SSJBooksTypeItem *item in items) {
-                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                if (![db executeUpdate:@"update bk_books_type set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?", writeDate, @(SSJSyncVersion()), item.booksId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -349,7 +367,9 @@
                     }
                     return;
                 }
-                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ?",[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSyncVersion()),item.booksId]) {
+                
+                // 老版本的特殊流水（转账）也有账本id，所以在删除流水时需要将这些特殊流水过滤
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ? and length(ibillid) >= 4", writeDate, @(SSJSyncVersion()), item.booksId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -358,7 +378,20 @@
                     }
                     return;
                 }
-
+                
+                if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
+                                                     recycleType:SSJRecycleTypeBooks
+                                                       writeDate:writeDate
+                                                        database:db
+                                                           error:&error]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
             }
         }
         

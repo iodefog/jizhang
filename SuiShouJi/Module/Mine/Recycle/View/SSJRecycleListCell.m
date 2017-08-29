@@ -44,6 +44,9 @@
                 make.left.mas_equalTo(preLab.mas_right);
             }
             make.top.and.bottom.mas_equalTo(self);
+            
+            CGFloat wdith = [obj.text sizeWithAttributes:@{NSFontAttributeName:obj.font}].width + 10;
+            make.width.mas_equalTo(wdith);
         }];
     }];
     [super updateConstraints];
@@ -57,6 +60,8 @@
         for (int i = 0; titles.count - self.labels.count; i ++) {
             UILabel *lab = [[UILabel alloc] init];
             lab.textColor = SSJ_SECONDARY_COLOR;
+            lab.textAlignment = NSTextAlignmentCenter;
+            [lab ssj_setBorderWidth:2];
             [lab ssj_setBorderColor:SSJ_BORDER_COLOR];
             [lab ssj_setBorderInsets:UIEdgeInsetsMake(2, 0, 2, 0)];
             lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
@@ -96,102 +101,11 @@
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - _SSJRecycleListCellExpandedView
-#pragma mark -
-
-@interface _SSJRecycleListCellExpandedView : UIView
-
-@property (nonatomic, strong) UIButton *recoverBtn;
-
-@property (nonatomic, strong) UIButton *deleteBtn;
-
-@end
-
-@implementation _SSJRecycleListCellExpandedView
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        [self addSubview:self.recoverBtn];
-        [self addSubview:self.deleteBtn];
-        [self ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
-        [self updateAppearanceAccordingToTheme];
-    }
-    return self;
-}
-
-- (void)updateConstraints {
-    [_recoverBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.left.bottom.mas_equalTo(self);
-    }];
-    [_deleteBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_recoverBtn.mas_right);
-        make.top.right.bottom.mas_equalTo(self);
-    }];
-    [super updateConstraints];
-}
-
-- (UIButton *)recoverBtn {
-    if (!_recoverBtn) {
-        _recoverBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_recoverBtn setTitle:NSLocalizedString(@"还原", nil) forState:UIControlStateNormal];
-        [_recoverBtn setImage:[UIImage imageNamed:@"recycle_recover"] forState:UIControlStateNormal];
-        _recoverBtn.spaceBetweenImageAndTitle = 10;
-        [_recoverBtn ssj_setBorderStyle:SSJBorderStyleRight];
-    }
-    return _recoverBtn;
-}
-
-- (UIButton *)deleteBtn {
-    if (!_deleteBtn) {
-        _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_deleteBtn setTitle:NSLocalizedString(@"彻底删除", nil) forState:UIControlStateNormal];
-        [_deleteBtn setImage:[UIImage imageNamed:@"recycle_delete"] forState:UIControlStateNormal];
-        _deleteBtn.spaceBetweenImageAndTitle = 10;
-    }
-    return _deleteBtn;
-}
-
-- (void)updateAppearanceAccordingToTheme {
-    _recoverBtn.tintColor = SSJ_SECONDARY_COLOR;
-    [_recoverBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    [_recoverBtn ssj_setBorderColor:SSJ_BORDER_COLOR];
-    
-    _deleteBtn.tintColor = SSJ_SECONDARY_COLOR;
-    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    
-    [self ssj_setBorderColor:SSJ_BORDER_COLOR];
-}
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - SSJRecycleListCellItem
-#pragma mark -
-@implementation SSJRecycleListCellItem
-
-+ (instancetype)itemWithRecycleID:(NSString *)recycleID
-                             icon:(UIImage *)icon
-                    iconTintColor:(UIColor *)iconTintColor
-                            title:(NSString *)title
-                        subtitles:(NSArray<NSString *> *)subtitles
-                            state:(SSJRecycleListCellState)state {
-    SSJRecycleListCellItem *item = [[SSJRecycleListCellItem alloc] init];
-    item.recycleID = recycleID;
-    item.icon = icon;
-    item.iconTintColor = iconTintColor;
-    item.title = title;
-    item.subtitles = subtitles;
-    item.state = state;
-    return item;
-}
-
-@end
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - SSJRecycleListCell
 #pragma mark -
+
+#import "SSJCheckMark.h"
+
 @interface SSJRecycleListCell ()
 
 @property (nonatomic, strong) UIImageView *icon;
@@ -202,9 +116,7 @@
 
 @property (nonatomic, strong) UIButton *arrowBtn;
 
-@property (nonatomic, strong) _SSJRecycleListCellExpandedView *expandedView;
-
-@property (nonatomic, strong) UIImageView *checkMark;
+@property (nonatomic, strong) SSJCheckMark *checkMark;
 
 @end
 
@@ -216,6 +128,11 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        [self.contentView addSubview:self.icon];
+        [self.contentView addSubview:self.titleLab];
+        [self.contentView addSubview:self.subtitleView];
+        [self.contentView addSubview:self.arrowBtn];
+        [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
     }
     return self;
@@ -240,16 +157,15 @@
     }];
     
     [_subtitleView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_titleLab);
         make.top.mas_equalTo(_titleLab.mas_bottom).offset(8);
+        make.left.mas_equalTo(_icon.mas_right).offset(5);
         make.right.mas_equalTo(self.contentView).offset(-15);
         make.height.mas_equalTo(13);
     }];
-    
-    [_expandedView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_subtitleView.mas_bottom).offset(19);
-        make.left.right.bottom.mas_equalTo(self.contentView);
-        make.height.mas_equalTo([self item].state == SSJRecycleListCellStateExpanded ? 44 : 0);
+    [_checkMark mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(16, 16));
+        make.centerY.mas_equalTo(self.contentView);
+        make.right.mas_equalTo(self.contentView).offset(-15);
     }];
     
     [super updateConstraints];
@@ -259,10 +175,18 @@
     if (![cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
         return;
     }
-    
+    [super setCellItem:cellItem];
     SSJRecycleListCellItem *item = cellItem;
     
     @weakify(self);
+    
+    RAC(self.icon, image) = [[RACObserve(item, icon) takeUntil:self.rac_prepareForReuseSignal] map:^id(UIImage *icon) {
+        return [icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    }];
+    RAC(self.icon, tintColor) = RACObserve(item, iconTintColor);
+    RAC(self.titleLab, text) = RACObserve(item, title);
+    RAC(self.subtitleView, titles) = RACObserve(item, subtitles);
+    
     [[RACObserve(item, state) takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *stateValue) {
         @strongify(self);
         
@@ -286,14 +210,14 @@
             case SSJRecycleListCellStateSelected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.checkMark.tintColor = SSJ_MARCATO_COLOR;
+                self.checkMark.currentState = SSJCheckMarkSelected;
             }
                 break;
                 
             case SSJRecycleListCellStateUnselected: {
                 self.arrowBtn.hidden = YES;
                 self.checkMark.hidden = NO;
-                self.checkMark.tintColor = SSJ_SECONDARY_COLOR;
+                self.checkMark.currentState = SSJCheckMarkNormal;
             }
                 break;
         }
@@ -315,13 +239,7 @@
     _titleLab.textColor = SSJ_MAIN_COLOR;
     _arrowBtn.tintColor = SSJ_SECONDARY_COLOR;
     [_subtitleView updateAppearanceAccordingToTheme];
-    [_expandedView updateAppearanceAccordingToTheme];
-    
-    if ([self item].state == SSJRecycleListCellStateSelected) {
-        _checkMark.tintColor = SSJ_MARCATO_COLOR;
-    } else if ([self item].state == SSJRecycleListCellStateSelected) {
-        _checkMark.tintColor = SSJ_SECONDARY_COLOR;
-    }
+    [_checkMark updateAppearanceAccordingToTheme];
 }
 
 - (UIImageView *)icon {
@@ -360,29 +278,9 @@
     return _arrowBtn;
 }
 
-- (_SSJRecycleListCellExpandedView *)expandedView {
-    if (!_expandedView) {
-        _expandedView = [[_SSJRecycleListCellExpandedView alloc] init];
-        @weakify(self);
-        [[_expandedView.recoverBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            if (self.recoverBtnDidClick) {
-                self.recoverBtnDidClick(self);
-            }
-        }];
-        [[_expandedView.deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            if (self.deleteBtnDidClick) {
-                self.deleteBtnDidClick(self);
-            }
-        }];
-    }
-    return _expandedView;
-}
-
-- (UIImageView *)checkMark {
+- (SSJCheckMark *)checkMark {
     if (!_checkMark) {
-        _checkMark = [[UIImageView alloc] initWithImage:[[UIImage imageNamed:@"recycle_checkmark"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        _checkMark = [[SSJCheckMark alloc] init];
     }
     return _checkMark;
 }

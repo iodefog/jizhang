@@ -318,6 +318,7 @@ typedef NS_ENUM(NSInteger, SSJFinancingParent) {
 };
 
 /**
+
  利率或期限类型：固定收益理财
  SSJMethodOfRateOrTimeDay:    日
  SSJMethodOfRateOrTimeMonth:    月
@@ -327,6 +328,31 @@ typedef NS_ENUM(NSInteger, SSJMethodOfRateOrTime) {
     SSJMethodOfRateOrTimeDay = 0,
     SSJMethodOfRateOrTimeMonth,
     SSJMethodOfRateOrTimeYear
+};
+/**
+ 回收站数据类型
+
+ - SSJRecycleTypeCharge: 流水
+ - SSJRecycleTypeFund: 资金账户
+ - SSJRecycleTypeBooks: 账本
+ */
+typedef NS_ENUM(NSInteger, SSJRecycleType) {
+    SSJRecycleTypeCharge = 0,
+    SSJRecycleTypeFund = 1,
+    SSJRecycleTypeBooks = 2
+};
+
+/**
+ 回收站数据状态
+
+ - SSJRecycleStateNormal: 普通状体
+ - SSJRecycleStateRecovered: 已经还原
+ - SSJRecycleStateRemoved: 彻底删除
+ */
+typedef NS_ENUM(NSInteger, SSJRecycleState) {
+    SSJRecycleStateNormal = 0,
+    SSJRecycleStateRecovered = 1,
+    SSJRecycleStateRemoved = 2
 };
 
 ///------------------------------------------
