@@ -41,22 +41,30 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self.imageView sizeToFit];
-    self.timeL.left = self.imageView.left;
-    self.timeL.top = 10;
-    [self.timeL sizeToFit];
-    
-    self.imageView.centerY = (self.contentView.height + self.timeL.height)*0.5;
-    self.subTitleL.top = CGRectGetMaxY(self.textLabel.frame);
-    self.subTitleL.left = self.textLabel.left;
-    [self.subTitleL sizeToFit];
-    self.textLabel.centerY = self.imageView.centerY;
-    [self.textLabel sizeToFit];
-    
-    self.subTitleL.frame = CGRectMake(self.textLabel.left, CGRectGetMaxY(self.textLabel.frame) + 5, self.contentView.width - self.textLabel.left, 20);
+    if ([self.cellItem isKindOfClass:[SSJFixedFinanceProductChargeItem class]]) {
+        SSJFixedFinanceProductChargeItem *model = self.cellItem;
+        [self.imageView sizeToFit];
+        if (!model.isHiddenTime) {//显示时间
+            self.timeL.left = self.imageView.left = 15;
+            self.timeL.top = 15;
+            self.timeL.width = self.contentView.width - 30;
+            self.timeL.height = 25;
+            self.imageView.centerY = 65;
+        } else {
+            self.imageView.centerY = 25 ;
+        }
+        
+        self.textLabel.centerY = self.detailTextLabel.centerY = self.imageView.centerY;
+        self.textLabel.left = CGRectGetMaxX(self.imageView.frame) + 10;
+        
+        if (model.memo.length) {
+            self.subTitleL.frame = CGRectMake(self.textLabel.left, CGRectGetMaxY(self.textLabel.frame), self.contentView.width - self.textLabel.left, 25);
+        }
+    }
 }
 
 - (void)setCellItem:(__kindof SSJBaseCellItem *)cellItem {
+    [super setCellItem:cellItem];
     if ([cellItem isKindOfClass:[SSJFixedFinanceProductChargeItem class]]) {
         SSJFixedFinanceProductChargeItem *model = cellItem;
         SSJFixedFinanceDetailCellItem *item = [SSJFixedFinanceDetailCellItem cellItemWithChargeModel:model];
@@ -65,7 +73,31 @@
         self.textLabel.text = item.nameStr;
         self.subTitleL.text = item.subStr;
         self.detailTextLabel.text = item.amountStr;
-        [self.contentView setNeedsLayout];
+        if (model.isHiddenTime) {//隐藏时间
+            self.timeL.hidden = YES;
+        } else {
+            self.timeL.hidden = NO;
+        }
+        
+        if (model.memo.length) {
+            self.subTitleL.hidden = NO;
+        } else {
+            self.subTitleL.hidden = YES;
+        }
+        
+        if (model.memo.length) {
+            if (model.isHiddenTime) {
+                model.rowHeight = 75;
+            } else {
+            model.rowHeight = 115;
+            }
+        } else {
+            if (model.isHiddenTime) {
+                model.rowHeight = 50;
+            } else {
+                model.rowHeight = 90;
+            }
+        }
     }
 }
 
@@ -85,6 +117,7 @@
     if (!_timeL) {
         _timeL = [[UILabel alloc] init];
         _timeL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _timeL.contentMode = UIViewContentModeBottomLeft;
     }
     return _timeL;
 }

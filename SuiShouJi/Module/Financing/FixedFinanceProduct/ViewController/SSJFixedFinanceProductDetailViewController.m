@@ -139,7 +139,20 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 #pragma mark - UITableViewDelegate
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.section == 1) {
+        if (!self.changeSectionHeaderView.expanded) {
+            SSJFixedFinanceProductChargeItem *item = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
+            return item.rowHeight;
+        }
+        return 0;
+    }
     return 44;
+    
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
@@ -286,7 +299,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 - (void)reorganiseSection2Items {
     if (!self.changeSectionHeaderView.expanded) {
         // 把流水列表按照billdate、writedate降序排序，优先级billdate>writedate
-        self.section2Items = [self.chargeModels sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+       NSArray *tempArr = [self.chargeModels sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
             
             SSJFixedFinanceProductChargeItem *model1 = obj1;
             SSJFixedFinanceProductChargeItem *model2 = obj2;
@@ -306,10 +319,19 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             }
         }];
         
-//        for (SSJFixedFinanceProductChargeItem *chargeItem in self.section2Items) {
-//            chargeItem.billDate compare:<#(nonnull NSDate *)#>
-//        }
-
+        //对时间做处理
+        SSJFixedFinanceProductChargeItem *lastItem;
+        for (SSJFixedFinanceProductChargeItem *item in tempArr) {
+            if ([lastItem.billDate isSameDay:item.billDate]) {
+                item.isHiddenTime = YES;
+            } else {
+                item.isHiddenTime = NO;
+            }
+            lastItem = item;
+        }
+        self.section2Items = tempArr;
+    } else {
+        self.section2Items = [NSArray array];
     }
 }
 
