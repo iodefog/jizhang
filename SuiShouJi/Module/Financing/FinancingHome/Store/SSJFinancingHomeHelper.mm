@@ -21,6 +21,7 @@
 #import "SSJUserBillTypeTable.h"
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
+#import "SSJShareBooksMemberTable.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -51,48 +52,31 @@
             item.startColor = fund.startColor;
             item.endColor = fund.endColor;
 
-            item.cardItem = [self getCreditCardItemForCardId:item.fundingID inDataBase:db];
+            if ([item.fundingParent isEqualToString:@"16"] || [item.fundingParent isEqualToString:@"3"]) {
+                item.cardItem = [self getCreditCardItemForCardId:item.fundingID inDataBase:db];
+                
+                if ([item.fundingParent isEqualToString:@"16"]) {
+                    item.cardItem.cardType = SSJCrediteCardTypeAlipay;
+                } else if ([item.fundingParent isEqualToString:@"3"]) {
+                    item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
+                }
 
-            if ([item.fundingParent isEqualToString:@"16"]) {
-                item.cardItem.cardType = SSJCrediteCardTypeAlipay;
-            } else if ([item.fundingParent isEqualToString:@"3"]) {
-                item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
             }
 
 
             item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"bk_user_charge" where:SSJUserChargeTable.userId == userid
                                                                                                                              && SSJUserChargeTable.operatorType != 2
                                                                                                                              && SSJUserChargeTable.fundId == item.fundingID] doubleValue];
-            
 
-        
+            item.fundingIncome = [[self getFundBalanceWithFundId:item.fundingID type:SSJBillTypeIncome inDataBase:db] doubleValue];
+
+            item.fundingExpence = [[self getFundBalanceWithFundId:item.fundingID type:SSJBillTypePay inDataBase:db] doubleValue];
+
+            item.fundingAmount = item.fundingIncome - item.fundingExpence;
 
             if (fund.display || (![item.fundingParent isEqualToString:@"11"] && ![item.fundingParent isEqualToString:@"10"])) {
                 [fundingList addObject:item];
             }
-
-            double fundIncome = [[db getOneValueOnResult:SSJUserChargeTable.money.sum()
-                                               fromTable:@"bk_user_charge"
-                                                   where:SSJUserChargeTable.userId == userid
-                                                         && SSJUserChargeTable.operatorType != 2
-                                                         && SSJUserChargeTable.fundId == item.fundingID
-                                                         && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
-                                                                                                                fromTable:@"bk_user_bill_type"
-                                                                                                                    where:SSJUserBillTypeTable.userId == userid
-                                                                                                                          && SSJUserBillTypeTable.billType == SSJBillTypeIncome])] doubleValue];
-
-            double fundExpence = [[db getOneValueOnResult:SSJUserChargeTable.money.sum()
-                                                fromTable:@"bk_user_charge"
-                                                    where:SSJUserChargeTable.userId == userid
-                                                          && SSJUserChargeTable.operatorType != 2
-                                                          && SSJUserChargeTable.fundId == item.fundingID
-                                                          && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
-                                                                                                                 fromTable:@"bk_user_bill_type"
-                                                                                                                     where:SSJUserBillTypeTable.userId == userid
-                                                                                                                           && SSJUserBillTypeTable.billType == SSJBillTypePay]) ] doubleValue];
-
-            item.fundingAmount = fundIncome - fundExpence;
-
         }
 
         if (success) {
@@ -575,10 +559,45 @@
     cardItem.cardBillingDay = [userCredit.billingDate integerValue];
     cardItem.remindId = userCredit.remindId;
     if (cardItem.remindId.length) {
-        cardItem.remindState = [db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId];
+        cardItem.remindState = [[db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId] boolValue];
     }
     return cardItem;
 }
+
++ (NSNumber *)getFundBalanceWithFundId:(NSString *)fundId type:(SSJBillType)type inDataBase:(WCTDatabase *)db {
+    NSNumber *currentBalance = 0;
+
+    WCTResultList resultList = { SSJUserChargeTable.money.inTable (@"bk_user_charge").sum()};
+
+    WCDB::JoinClause joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type", WCDB::JoinClause::Type::Inner).
+            on(SSJUserChargeTable.billId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.billId.inTable(@"bk_user_bill_type")
+               && ((SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.booksId.inTable(@"bk_user_bill_type")
+               && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.userId.inTable(@"bk_user_bill_type"))
+                   || SSJUserBillTypeTable.billId.length() < 4)
+               && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID ()
+               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+               && SSJUserBillTypeTable.billType == type
+               && SSJUserChargeTable.fundId == fundId);
+    
+    joinClause.join("bk_share_books_member", WCDB::JoinClause::Type::Left).
+            on(SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJShareBooksMemberTable.booksId.inTable(@"bk_share_books_member"));
+
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).
+            where(SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member") == SSJShareBooksMemberStateNormal
+                  || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull()
+                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
+                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14");
+
+    WCTStatement *statement = [db prepare:statementSelect];
+
+    while ([statement step]) {
+        currentBalance = (NSNumber *)[statement getValueAtIndex:0];
+    }
+
+    return currentBalance;
+
+}
+
 
 
 @end

@@ -51,11 +51,10 @@ static const CGFloat kRadius = 12.f;
     self.fundingImage.centerY = self.contentView.height / 2 + 5;
     self.deleteButton.size = CGSizeMake(30, 30);
     self.deleteButton.rightTop = CGPointMake(self.contentView.width, -5);
-    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)_item;
+    if (!_item.cardItem) {
         self.fundingBalanceLabel.centerY = self.fundingImage.centerY;
         self.fundingBalanceLabel.right = self.contentView.width - 10;
-        if (!fundItem.fundingMemo.length) {
+        if (!_item.fundingMemo.length) {
             self.fundingNameLabel.left = self.fundingImage.right + 10;
             self.fundingNameLabel.centerY = self.fundingImage.centerY;
         }else{
@@ -71,13 +70,12 @@ static const CGFloat kRadius = 12.f;
             self.fundingMemoLabel.width = self.fundingBalanceLabel.left - self.fundingMemoLabel.left - 20;
         }
     }else{
-        SSJCreditCardItem *carditem = (SSJCreditCardItem *)_item;
         self.fundingBalanceLabel.right = self.contentView.width - 10;
         self.fundingNameLabel.bottom = self.fundingImage.centerY - 3;
         self.fundingNameLabel.left = self.fundingImage.right + 10;
         self.fundingMemoLabel.top = self.fundingImage.centerY + 3;
         self.fundingMemoLabel.left = self.fundingImage.right + 10;
-        if (carditem.cardRepaymentDay == 0 && carditem.cardBillingDay == 0) {
+        if (self.item.cardItem.cardRepaymentDay == 0 && self.item.cardItem.cardBillingDay == 0) {
             self.fundingBalanceLabel.centerY = self.fundingImage.centerY;
         }else{
             self.fundingBalanceLabel.centerY = self.fundingNameLabel.centerY;
@@ -188,57 +186,39 @@ static const CGFloat kRadius = 12.f;
     return _fundingImage;
 }
 
--(void)setItem:(SSJBaseCellItem *)item {
+-(void)setItem:(SSJFinancingHomeitem *)item {
     _item = item;
-    if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+    [CATransaction commit];
+    self.fundingNameLabel.text = item.fundingName;
+    [self.fundingNameLabel sizeToFit];
+    self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
+    [self.fundingBalanceLabel sizeToFit];
+    self.fundingImage.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    if (!self.item.cardItem) {
         SSJFinancingHomeitem *item = (SSJFinancingHomeitem *)_item;
-        
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-//        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
-        [CATransaction commit];
-        
-        self.fundingNameLabel.text = item.fundingName;
-        [self.fundingNameLabel sizeToFit];
-        self.fundingBalanceLabel.hidden = NO;
-        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
-        [self.fundingBalanceLabel sizeToFit];
         self.fundingMemoLabel.text = item.fundingMemo;
         [self.fundingMemoLabel sizeToFit];
-        self.fundingImage.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         self.cardMemoLabel.text = @"";
         [self.cardMemoLabel sizeToFit];
         self.cardBillingDayLabel.text = @"";
         [self.cardBillingDayLabel sizeToFit];
         self.cardLimitLabel.text = @"";
         [self.cardLimitLabel sizeToFit];
-    }else if([_item isKindOfClass:[SSJCreditCardItem class]]){
-        SSJCreditCardItem *item = (SSJCreditCardItem *)_item;
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-//        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
-        [CATransaction commit];
-        self.fundingBalanceLabel.hidden = NO;
-        self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
-        [self.fundingBalanceLabel sizeToFit];
-        if (item.cardType == SSJCrediteCardTypeCrediteCard) {
-            self.fundingImage.image = [[UIImage imageNamed:@"ft_creditcard"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        } else {
-            self.fundingImage.image = [[UIImage imageNamed:@"ft_mayihuabei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        }
-        self.fundingNameLabel.text = item.fundingName;
-        [self.fundingNameLabel sizeToFit];
+
+    } else {
         if (item.fundingMemo.length) {
             self.cardMemoLabel.text = [NSString stringWithFormat:@"| %@",item.fundingMemo];
         } else {
             self.cardMemoLabel.text = @"";
         }
-        [self.cardMemoLabel sizeToFit];
-        if (item.cardBillingDay != 0 && item.cardRepaymentDay != 0) {
-            NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardBillingDay];
-            NSDate *repaymentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:item.cardRepaymentDay];
+        self.fundingBalanceLabel.hidden = NO;
+        if (self.item.cardItem.cardBillingDay != 0 && self.item.cardItem.cardRepaymentDay != 0) {
+            NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardItem.cardBillingDay];
+            NSDate *repaymentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardItem.cardRepaymentDay];
             if ([repaymentDate isEarlierThanOrEqualTo:[NSDate date]] && [billDate isEarlierThanOrEqualTo:[NSDate date]]) {
                 repaymentDate = [repaymentDate dateByAddingMonths:1];
                 billDate = [billDate dateByAddingMonths:1];
@@ -278,14 +258,15 @@ static const CGFloat kRadius = 12.f;
             //                float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
             //                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
             //            }else{
-            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
+            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",self.item.cardItem.cardLimit];
             //            }
             [self.fundingMemoLabel sizeToFit];
         }else{
-            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",item.cardLimit];
+            self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",self.item.cardItem.cardLimit];
             self.cardBillingDayLabel.text = @"";
             [self.fundingMemoLabel sizeToFit];
         }
+
     }
     
     [self setNeedsLayout];

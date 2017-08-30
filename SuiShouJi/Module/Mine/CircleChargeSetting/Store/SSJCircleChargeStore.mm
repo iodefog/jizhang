@@ -9,8 +9,12 @@
 #import "SSJCircleChargeStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJChargeMemberItem.h"
+#import "SSJBooksTypeItem.h"
+#import "SSJBooksTypeTable.h"
+#import "SSJOrmDatabaseQueue.h"
 
 @implementation SSJCircleChargeStore
+
 + (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
                               failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
@@ -46,7 +50,7 @@
             item.billDetailDate = @"00:00";
             item.booksName = [chargeResult stringForColumn:@"CBOOKSNAME"];
             item.isOnOrNot = [chargeResult boolForColumn:@"ISTATE"];
-            item.chargeCircleType = [chargeResult intForColumn:@"ITYPE"];
+            item.chargeCircleType = (SSJCyclePeriodType)[chargeResult intForColumn:@"ITYPE"];
             item.fundName = [chargeResult stringForColumn:@"CACCTNAME"];
             item.fundImage = [chargeResult stringForColumn:@"fund_img"];
             item.chargeCircleEndDate = [chargeResult stringForColumn:@"cbilldateend"];
@@ -76,7 +80,7 @@
 + (void)queryDefualtItemWithIncomeOrExpence:(BOOL)incomeOrExpence
                                     Success:(void(^)(SSJBillingChargeCellItem *item))success
                               failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         NSString *userid = SSJUSERID();
         NSString *booksId = [db stringForQuery:@"select ccurrentBooksId from bk_user where cuserid = ?", userid];
         if (!booksId.length) {
@@ -122,7 +126,7 @@
     item.billDate = [set stringForColumn:@"CBILLDATE"];
     item.booksName = [set stringForColumn:@"CBOOKSNAME"];
     item.isOnOrNot = [set boolForColumn:@"ISTATE"];
-    item.chargeCircleType = [set intForColumn:@"ITYPE"];
+    item.chargeCircleType = (SSJCyclePeriodType)[set intForColumn:@"ITYPE"];
     item.chargeCircleEndDate = [set stringForColumn:@"CBILLDATEEND"];
     item.fundName = [set stringForColumn:@"CACCTNAME"];
     return item;
@@ -252,4 +256,28 @@
     }];
 }
 
++ (void)getBooksForCircleChargeWithsuccess:(void(^)(NSArray *books))success
+                                   failure:(void (^)(NSError *error))failure {
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
+        NSArray *books = [db getObjectsOfClass:SSJBooksTypeTable.class fromTable:@"bk_books_type" where:SSJBooksTypeTable.userId == SSJUSERID() && SSJBooksTypeTable.operatorType != 2];
+        NSMutableArray *booksArr = [NSMutableArray arrayWithCapacity:0];
+        for (SSJBooksTypeTable *bookstype in books) {
+            SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc] init];
+            item.booksName = bookstype.booksName;
+            item.booksId = bookstype.booksId;
+            [booksArr addObject:item];
+        }
+        dispatch_main_async_safe(^{
+            if (success) {
+                success(booksArr);
+            }
+        });
+    }];
+}
+
++ (void)getFirstBillItemForBooksId:(NSString *)booksId
+                       withSuccess:(void(^)(NSArray *books))success
+                           failure:(void (^)(NSError *error))failure {
+    
+}
 @end

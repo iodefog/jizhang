@@ -16,7 +16,7 @@
 
 @property (nonatomic, retain) NSString* joinDate;
 
-@property (nonatomic, retain) NSString* memberState;
+@property (nonatomic, assign) SSJShareBooksMemberState memberState;
 
 @property (nonatomic, retain) NSString* memberIcon;
 

@@ -539,6 +539,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     return closeOut;
 }
 
++ (SSJFinancingHomeitem *)getFundItemWithFundId:(NSString *)fundId inDataBase:(FMDatabase *)db {
+    SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
+    
+    
+    return item;
+}
 
 + (NSString *)stringFromWeekday:(NSInteger)weekday {
     switch (weekday) {

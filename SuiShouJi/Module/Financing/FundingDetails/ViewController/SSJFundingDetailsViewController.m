@@ -85,19 +85,13 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.rightButton;
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-        self.title = cardItem.fundingName;
-    }else{
-        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-        self.title = financingItem.fundingName;
-    }
+    self.title = self.item.fundingName;
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
     [self.tableView addSubview:self.noDataHeader];
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+    if (self.item.cardItem) {
         [self.view addSubview:self.repaymentButton];
         self.tableView.tableHeaderView = self.creditCardHeader;
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
@@ -111,15 +105,16 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [super viewWillAppear:animated];
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-        self.cardItem = (SSJCreditCardItem *)self.item;
-        self.cardItem = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardItem.fundingID];
-        self.creditCardHeader.item = self.cardItem;
+    if (self.item.cardItem) {
+        self.cardItem = self.item.cardItem;
+        self.creditCardHeader.item = self.item.cardItem;
     }
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]] && self.cardItem.settleAtRepaymentDay) {
-        [SSJFundingDetailHelper queryDataWithCreditCardItem:self.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
-//            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-//            [weakSelf.tableView reloadData];
+    @weakify(self)
+    if (self.item.cardItem && self.item.cardItem.settleAtRepaymentDay) {
+        [SSJFundingDetailHelper queryDataWithCreditCardItem:self.item.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
+            @strongify(self);
+            //            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+            //            [weakSelf.tableView reloadData];
             [self array:weakSelf.listItems isEqualToAnotherArray:data];
             [weakSelf.view ssj_hideLoadingIndicator];
             if (data.count == 0) {
@@ -129,65 +124,42 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }
             _totalIncome = cardItem.cardIncome;
             _totalExpence = cardItem.cardExpence;
-            weakSelf.creditCardHeader.totalIncome = cardItem.cardIncome;
-            weakSelf.creditCardHeader.totalExpence = cardItem.cardExpence;
-            weakSelf.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
-            weakSelf.title = cardItem.fundingName;
+            self.creditCardHeader.totalIncome = cardItem.cardIncome;
+            self.creditCardHeader.totalExpence = cardItem.cardExpence;
+            self.creditCardHeader.cardBalance = cardItem.cardIncome - cardItem.cardExpence;
+            self.title = cardItem.fundingName;
         } failure:^(NSError *error) {
             [weakSelf.view ssj_hideLoadingIndicator];
         }];
     }else{
-        if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
-            SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-            [SSJFundingDetailHelper queryDataWithFundTypeID:cardItem.fundingID success:^(NSMutableArray *data,SSJFinancingHomeitem *fundingItem) {
-//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-//                [weakSelf.tableView reloadData];
-                [self array:weakSelf.listItems isEqualToAnotherArray:data];
-                [weakSelf.view ssj_hideLoadingIndicator];
-                if (data.count == 0) {
-                    weakSelf.noDataHeader.hidden = NO;
-                }else{
-                    weakSelf.noDataHeader.hidden = YES;
-                }
-                _totalIncome = fundingItem.fundingIncome;
-                _totalExpence = fundingItem.fundingExpence;
-                weakSelf.creditCardHeader.totalIncome = fundingItem.fundingIncome;
-                weakSelf.creditCardHeader.totalExpence = fundingItem.fundingExpence;
-                weakSelf.creditCardHeader.cardBalance = fundingItem.fundingIncome - fundingItem.fundingExpence;
-                weakSelf.title = cardItem.fundingName;
-
-
-            } failure:^(NSError *error) {
-                [weakSelf.view ssj_hideLoadingIndicator];
-            }];
-        }else{
-            SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
-            [SSJFundingDetailHelper queryDataWithFundTypeID:financingItem.fundingID success:^(NSMutableArray <SSJFundingDetailListItem *>*data,SSJFinancingHomeitem *fundingItem) {
-//                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
-//                [weakSelf.tableView reloadData];
-                [self array:weakSelf.listItems isEqualToAnotherArray:data];
-                [weakSelf.view ssj_hideLoadingIndicator];
-                if (data.count == 0) {
-                    weakSelf.noDataHeader.hidden = NO;
-                }else{
-                    weakSelf.noDataHeader.hidden = YES;
-                }
-                _totalIncome = fundingItem.fundingIncome;
-                _totalExpence = fundingItem.fundingExpence;
-                weakSelf.header.income = fundingItem.fundingIncome;
-                weakSelf.header.expence = fundingItem.fundingExpence;
-                SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-                item.startColor = fundingItem.startColor;
-                item.endColor = fundingItem.endColor;
-                weakSelf.header.item = item;
-                weakSelf.title = fundingItem.fundingName;
-            } failure:^(NSError *error) {
-                [weakSelf.view ssj_hideLoadingIndicator];
-            }];
-        }
-
+        
+        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
+        [SSJFundingDetailHelper queryDataWithFundTypeID:financingItem.fundingID success:^(NSMutableArray <SSJFundingDetailListItem *>*data,SSJFinancingHomeitem *fundingItem) {
+            @strongify(self);
+            //                weakSelf.listItems = [NSMutableArray arrayWithArray:data];
+            //                [weakSelf.tableView reloadData];
+            [self array:self.listItems isEqualToAnotherArray:data];
+            [self.view ssj_hideLoadingIndicator];
+            if (data.count == 0) {
+                self.noDataHeader.hidden = NO;
+            }else{
+                self.noDataHeader.hidden = YES;
+            }
+            _totalIncome = fundingItem.fundingIncome;
+            _totalExpence = fundingItem.fundingExpence;
+            self.header.income = fundingItem.fundingIncome;
+            self.header.expence = fundingItem.fundingExpence;
+            SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
+            item.startColor = fundingItem.startColor;
+            item.endColor = fundingItem.endColor;
+            self.header.item = item;
+            self.title = fundingItem.fundingName;
+        } failure:^(NSError *error) {
+            [self.view ssj_hideLoadingIndicator];
+        }];
     }
-//    [self getTotalIcomeAndExpence];
+    
+    //    [self getTotalIcomeAndExpence];
 }
 
 #pragma mark - UITableViewDataSource
@@ -537,6 +509,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 //    [self getTotalIcomeAndExpence];
 }
 
+- (void)reloadCurrentFundData {
+    
+}
+
 - (void)enterInstalmentVc {
     if (self.cardItem.cardBillingDay == 0 && self.cardItem.cardRepaymentDay == 0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"请先去设置账单日和还款日哦" preferredStyle:UIAlertControllerStyleAlert];
@@ -572,11 +548,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     model.cardName = self.cardItem.fundingName;
     model.cardBillingDay = self.cardItem.cardBillingDay;
     model.cardRepaymentDay = self.cardItem.cardRepaymentDay;
-    //mzl
-//    SSJFundingDetailListItem *item = (SSJFundingDetailListItem *)[self.listItems ssj_safeObjectAtIndex:0];
-//    if (item) {
-//        model.totalArrears = item.income - item.expenture > 0 ? 0 :item.expenture - item.income;
-//    }
     [SSJAnaliyticsManager event:@"credit_stages_repayment"];
     instalmentVc.repaymentModel = model;
     [self.navigationController pushViewController:instalmentVc animated:YES];
