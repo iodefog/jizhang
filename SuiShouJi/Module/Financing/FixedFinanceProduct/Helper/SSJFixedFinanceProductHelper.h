@@ -21,7 +21,23 @@ NS_ASSUME_NONNULL_BEGIN
  @param model 借贷模型，根据rate、interestType两个属性计算利息
  @return 计算结果
  */
-+ (double)caculateInterestForEveryDayWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money;
++ (double)caculateInterestForEveryDayWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType money:(double)money;
+
+
+/**
+ 计算预期利息
+
+ @param rate 利率
+ @param rateType 利率类型（年，月，日）
+ @param time 期限
+ @param timeType 期限类型（年，月，日）
+ @param money 本金
+ @param interesttype 气息方式
+ @param startDate 气息时间
+ @return 预期利息预期利息key：interest，key：desc
+ */
++ (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:(NSString *)startDate;
+
 //SSJMethodOfRateOrTime ratetype
 /**
  计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算
