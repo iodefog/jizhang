@@ -559,7 +559,7 @@
     cardItem.cardBillingDay = [userCredit.billingDate integerValue];
     cardItem.remindId = userCredit.remindId;
     if (cardItem.remindId.length) {
-        cardItem.remindState = [db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId];
+        cardItem.remindState = [[db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId] boolValue];
     }
     return cardItem;
 }
