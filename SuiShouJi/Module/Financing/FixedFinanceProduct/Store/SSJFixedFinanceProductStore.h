@@ -81,6 +81,17 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                  success:(void (^)(void))success
                                  failure:(void (^)(NSError *error))failure;
 
+/**
+ 删除固收理财产品
+ 
+ @param model 模型
+ @param success 成功
+ @param failure 失败
+ */
++ (void)deleteFixedFinanceProductAccountWithModel:(SSJFixedFinanceProductItem *)model
+                                   success:(void (^)(void))success
+                                   failure:(void (^)(NSError *error))failure;
+
 
 
 /**
@@ -106,7 +117,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
              inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
                   error:(NSError **)error;
-
 
 #pragma mark - 固定理财流水
 

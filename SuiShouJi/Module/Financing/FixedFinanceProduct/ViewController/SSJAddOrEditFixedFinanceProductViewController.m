@@ -321,10 +321,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 #pragma mark - Action
 - (void)deleteButtonClicked {
+    MJWeakSelf;
     [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.model success:^{
-        
+#warning 测试未完成返回列表页面
+        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
-        
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
 

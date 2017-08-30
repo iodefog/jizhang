@@ -248,19 +248,32 @@
 
 
 /**
- 删除固收理财产品
+ 删除固收理财账户
  
  @param model 模型
  @param success 成功
  @param failure 失败
  */
-+ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
-                                   success:(void (^)(void))success
-                                   failure:(void (^)(NSError *error))failure {
++ (void)deleteFixedFinanceProductAccountWithModel:(SSJFixedFinanceProductItem *)model
+                                          success:(void (^)(void))success
+                                          failure:(void (^)(NSError *error))failure {
     NSString *userId = SSJUSERID();
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         NSError *error = nil;
-        if ([self deleteFixedFinanceProductModel:model inDatabase:db forUserId:userId needcreateRecycleRecord:YES error:&error]) {
+        // 将固定理财的operatortype改为2
+        if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.thisfundid]) {
+            if (failure) {
+                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return ;
+        }
+        
+        
+        if ([self deleteFixedFinanceProductModel:model inDatabase:db forUserId:userId writeDate:writeDate needcreateRecycleRecord:YES error:&error]) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -275,23 +288,51 @@
             }
         }
     }];
-    
 }
+
+/**
+ 删除固收理财产品
+ 
+ @param model 模型
+ @param success 成功
+ @param failure 失败
+ */
++ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
+                                   success:(void (^)(void))success
+                                   failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        //将理财产品operator = 2
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        NSError *error = nil;
+        if (![db executeUpdate:@"update bk_fixed_finance_product set operatortype = ?, iversion = ?, cwritedate = ? where cproductid = ? and cuserid = ?", @(SSJOperatorTypeDelete), @(SSJSyncVersion()), writeDate, model.productid,SSJUSERID()]) {
+            if (failure) {
+                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return ;
+        }
+        
+        //删除所有流水
+        [self deleteFixedFinanceProductModel:model inDatabase:db forUserId:SSJUSERID() writeDate:writeDate needcreateRecycleRecord:NO error:&error];
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
+}
+
+
 
 + (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
                             inDatabase:(FMDatabase *)db
                              forUserId:(NSString *)userId
+                             writeDate:(NSString *)writeDate
                needcreateRecycleRecord:(BOOL)needcreateRecycleRecord
-                                 error:(NSError **)error{
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    // 将固定理财的operatortype改为2
-    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.productid]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
-    }
-    
+                                 error:(NSError **)error {
     // 将和固定理财相关的流水operatortype改为2
     if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like (? || '_%') and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.productid, @(SSJChargeIdTypeFixedFinance)]) {
         if (error) {
@@ -315,6 +356,7 @@
         remindItem.userId = model.userid;
         [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
     }
+    
     if (needcreateRecycleRecord) {
         if (![SSJRecycleHelper createRecycleRecordWithID:model.productid recycleType:SSJRecycleTypeFund writeDate:writeDate database:db error:error]) {
             return NO;

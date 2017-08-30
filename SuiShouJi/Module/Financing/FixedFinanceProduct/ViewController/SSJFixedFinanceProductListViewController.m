@@ -32,7 +32,9 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 @property (nonatomic, strong) UITableView *tableView;
 
-@property (nonatomic, strong) UIBarButtonItem *addItem;
+@property (nonatomic, strong) UIButton *addBtn;
+
+@property (nonatomic, strong) UIBarButtonItem *deleteItem;
 
 @property (nonatomic, strong) NSArray<SSJFixedFinanceProductItem *> *dataItems;
 @end
@@ -43,6 +45,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
     [super viewDidLoad];
     [self.view addSubview:self.headerSegmentView];
     [self.view addSubview:self.tableView];
+    [self.view addSubview:self.addBtn];
     [self setUpNav];
     [self updateAppearance];
 }
@@ -55,7 +58,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 #pragma mark - Private
 - (void)setUpNav {
     self.title = self.item.fundingName;
-    [self.navigationItem setRightBarButtonItem:self.addItem animated:YES];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
 }
 
 - (void)reloadDataAccordingToHeaderViewIndex {
@@ -84,7 +87,11 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 
 #pragma mark - Action
-- (void)addItemAction {
+- (void)deleteAction {
+//    [SSJFixedFinanceProductStore deleteFixedFinanceProductAccountWithModel:[self.dataItems ssj] success:<#^(void)success#> failure:<#^(NSError * _Nonnull error)failure#>
+    
+}
+- (void)addAction {
     SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
     [self.navigationController pushViewController:addOrEditVC animated:YES];
 }
@@ -103,9 +110,9 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
     [_headerSegmentView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     [_amountView updateAppearance];
-//    _addBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-//    [_addBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
-//    [_addBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+    _addBtn.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
+    [_addBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+    [_addBtn ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
 
 }
 
@@ -214,13 +221,6 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
     return _noDataRemindView;
 }
 
-- (UIBarButtonItem *)addItem {
-    if (!_addItem) {
-        _addItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"] style:UIBarButtonItemStylePlain target:self action:@selector(addItemAction)];
-    }
-    return _addItem;
-}
-
 - (NSArray<SSJFixedFinanceProductItem *> *)dataItems {
     if (!_dataItems) {
         _dataItems = [NSArray array];
@@ -228,4 +228,15 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
     return _dataItems;
 }
 
+- (UIButton *)addBtn {
+    if (!_addBtn) {
+        _addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _addBtn.frame = CGRectMake(0, self.view.height - 50, self.view.width, 50);
+        _addBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        [_addBtn setTitle:@"添加" forState:UIControlStateNormal];
+        [_addBtn addTarget:self action:@selector(addAction) forControlEvents:UIControlEventTouchUpInside];
+        [_addBtn ssj_setBorderStyle:SSJBorderStyleTop];
+    }
+    return _addBtn;
+}
 @end
