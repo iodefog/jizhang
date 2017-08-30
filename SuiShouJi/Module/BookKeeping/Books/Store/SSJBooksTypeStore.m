@@ -80,7 +80,7 @@
             booksItem.booksId = [rs stringForColumn:@"cbooksid"];
             booksItem.booksName = [rs stringForColumn:@"cbooksname"];
             booksItem.booksOrder = [rs intForColumn:@"iorder"];
-            booksItem.booksParent = [rs intForColumn:@"iparenttype"];
+            booksItem.booksParent = (SSJBooksType)[rs intForColumn:@"iparenttype"];
             SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
             NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
             if (colorArray.count > 1) {
@@ -104,7 +104,7 @@
             SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
             shareBookItem.booksId = [rs stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [rs stringForColumn:@"cbooksname"];
-            shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
+            shareBookItem.booksParent = (SSJBooksType)[rs intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
             shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
             shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
@@ -161,7 +161,7 @@
             item.booksCategory = SSJBooksCategoryPersional;
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
-            item.booksParent = [booksResult intForColumn:@"iparenttype"];
+            item.booksParent = (SSJBooksType)[booksResult intForColumn:@"iparenttype"];
             if (item.booksOrder == 0) {
                 item.booksOrder = order;
             }
@@ -379,6 +379,17 @@
                     return;
                 }
                 
+                // 删除依赖此账本的周期记账
+                if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2, cwritedate = ?, iversion = ? where cbooksid = ? and operatortype <> 2", writeDate, @(SSJSyncVersion()), item.booksId]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
+                
                 if (![SSJRecycleHelper createRecycleRecordWithID:item.booksId
                                                      recycleType:SSJRecycleTypeBooks
                                                        writeDate:writeDate
@@ -452,7 +463,7 @@
             shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
             //            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
-            shareBookItem.booksParent = [result intForColumn:@"iparenttype"];
+            shareBookItem.booksParent = (SSJBooksType)[result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
             shareBookItem.memberCount = [result intForColumn:@"memberCount"];
             shareBookItem.booksCategory = SSJBooksCategoryPublic;
@@ -964,4 +975,6 @@
     }];
  
 }
+
+
 @end

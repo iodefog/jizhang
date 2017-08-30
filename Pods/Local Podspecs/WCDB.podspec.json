@@ -1,6 +1,6 @@
 {
   "name": "WCDB",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "summary": "WCDB is a cross-platform database framework developed by Wechat.",
   "description": "WCDB is an efficient, complete, easy-to-use mobile database framework used in the WeChat application.\nIt can be a replacement for Core Data, SQLite & FMDB.",
   "homepage": "https://github.com/Tencent/wcdb",
@@ -17,7 +17,7 @@
   },
   "source": {
     "git": "https://github.com/Tencent/wcdb.git",
-    "tag": "v1.0.2"
+    "tag": "v1.0.3"
   },
   "public_header_files": [
     "apple/WCDB/WCDB.h",

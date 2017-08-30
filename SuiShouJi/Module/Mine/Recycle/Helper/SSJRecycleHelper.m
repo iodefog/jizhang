@@ -282,7 +282,7 @@
                   success:(nullable void(^)())success
                   failure:(nullable void(^)(NSError *error))failure {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         for (NSString *recycleID in recycleIDs) {
             SSJRecycleModel *recycleModel = nil;
             FMResultSet *rs = [db executeQuery:@"select * from bk_recycle where rid = ?", recycleID];
@@ -308,6 +308,7 @@
             
             if (error) {
                 SSJDispatchMainAsync(^{
+                    *rollback = YES;
                     if (failure) {
                         failure(error);
                     }
@@ -416,7 +417,7 @@
         return;
     }
     
-    // 恢复普通流水／周期记账流水
+    // 恢复普通流水／周期记账/平账流水
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ifunsid = ? and cwritedate = ? and (ichargetype = ? or ichargetype = ?) and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate, @(SSJChargeIdTypeNormal), @(SSJChargeIdTypeCircleConfig)]) {
         if (error) {
             *error = [db lastError];
