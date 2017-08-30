@@ -130,14 +130,14 @@ static NSString *kTitle6 = @"备注";
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
 
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         self.moneyTextF = cell.textField;
-        [cell setNeedsLayout];
+//        [cell setNeedsLayout];
         return cell;
         
     } else if ([title isEqualToString:kTitle4]) {
@@ -173,6 +173,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.clearsOnBeginEditing = NO;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
+        self.memoTextF = cell.textField;
         [cell setNeedsLayout];
         return cell;
         
@@ -214,8 +215,8 @@ static NSString *kTitle6 = @"备注";
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.chargeModel.money];
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
-        NSString *oldStr = [NSString stringWithFormat:@"每月10号该账户将生成50.00元的利息流水"];
-        cell.subNameL.text = oldStr;
+//        NSString *oldStr = [NSString stringWithFormat:@"实际扣除金额为"];
+//        cell.subNameL.text = oldStr;
         //    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
         cell.hasPercentageL = NO;
         cell.hasNotSegment = YES;
@@ -318,8 +319,10 @@ static NSString *kTitle6 = @"备注";
 
 - (void)updateModel {
     self.compoundModel.chargeModel.money = self.compoundModel.targetChargeModel.money = [self.moneyTextF.text doubleValue];
+    self.compoundModel.chargeModel.memo = self.compoundModel.targetChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
+    
+    self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
-    self.compoundModel.chargeModel.memo = self.compoundModel.targetChargeModel.memo = self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
 }
 
 #pragma mark - Action
@@ -329,7 +332,7 @@ static NSString *kTitle6 = @"备注";
     MJWeakSelf;
     //保存流水
     NSArray *chargArr = @[self.compoundModel];
-    [SSJFixedFinanceProductStore addInvestmentWithProductModel:self.financeModel chargeModels:chargArr success:^{
+    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:1 chargeModels:chargArr success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {
@@ -485,7 +488,7 @@ static NSString *kTitle6 = @"备注";
         targetChargeModel.userId = SSJUSERID();
         targetChargeModel.billDate = billDate;
         targetChargeModel.cid = chargeModel.cid;
-        targetChargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
+//        targetChargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
         
         SSJFixedFinanceProductChargeItem *interestChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         interestChargeModel.chargeId = SSJUUID();
@@ -494,7 +497,7 @@ static NSString *kTitle6 = @"备注";
         interestChargeModel.userId = SSJUSERID();
         interestChargeModel.billDate = billDate;
         interestChargeModel.cid = chargeModel.cid;
-        interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
+//        interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
         
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;
@@ -504,6 +507,17 @@ static NSString *kTitle6 = @"备注";
     }
 }
 
-
+//typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
+//    SSJFixedFinCompoundChargeTypeCreate,//新建
+//    SSJFixedFinCompoundChargeTypeAdd,//追加
+//    SSJFixedFinCompoundChargeTypeRedemption,//赎回
+//    SSJFixedFinCompoundChargeTypeBalanceIncrease,//余额转入
+//    SSJFixedFinCompoundChargeTypeBalanceDecrease,//余额转出
+//    SSJFixedFinCompoundChargeTypeBalanceInterestIncrease,//利息转入
+//    SSJFixedFinCompoundChargeTypeBalanceInterestDecrease,//利息转出
+//    SSJFixedFinCompoundChargeTypeInterest,//固收理财派发利息流水
+//    SSJFixedFinCompoundChargeTypeCloseOutInterest,//结算利息
+//    SSJFixedFinCompoundChargeTypeCloseOut//结清
+//};
 
 @end

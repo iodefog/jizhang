@@ -317,7 +317,7 @@ static NSString *kTitle6 = @"结算日期";
     MJWeakSelf;
     //保存流水
     NSArray *chargArr = @[self.compoundModel];
-    [SSJFixedFinanceProductStore addInvestmentWithProductModel:self.financeModel chargeModels:chargArr success:^{
+    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:0 chargeModels:chargArr success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {
