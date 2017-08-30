@@ -16,6 +16,10 @@
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserDefaultBillTypesCreater.h"
 #import "SSJRecycleHelper.h"
+#import <WCDB/WCDB.h>
+#import "SSJBooksTypeTable.h"
+#import "SSJShareBooksTable.h"
+#import "SSJShareBooksMemberTable.h"
 
 @implementation SSJBooksTypeStore
 
@@ -975,4 +979,6 @@
     }];
  
 }
+
+
 @end

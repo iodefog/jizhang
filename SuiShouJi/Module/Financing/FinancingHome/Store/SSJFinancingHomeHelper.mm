@@ -21,6 +21,7 @@
 #import "SSJUserBillTypeTable.h"
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
+#import "SSJShareBooksMemberTable.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -74,25 +75,9 @@
                 [fundingList addObject:item];
             }
 
-            double fundIncome = [[db getOneValueOnResult:SSJUserChargeTable.money.sum()
-                                               fromTable:@"bk_user_charge"
-                                                   where:SSJUserChargeTable.userId == userid
-                                                         && SSJUserChargeTable.operatorType != 2
-                                                         && SSJUserChargeTable.fundId == item.fundingID
-                                                         && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
-                                                                                                                fromTable:@"bk_user_bill_type"
-                                                                                                                    where:(SSJUserBillTypeTable.userId == userid || SSJUserBillTypeTable.userId.isNull())
-                                                                                                                          && SSJUserBillTypeTable.billType == SSJBillTypeIncome])] doubleValue];
 
-            double fundExpence = [[db getOneValueOnResult:SSJUserChargeTable.money.sum()
-                                                fromTable:@"bk_user_charge"
-                                                    where:SSJUserChargeTable.userId == userid
-                                                          && SSJUserChargeTable.operatorType != 2
-                                                          && SSJUserChargeTable.fundId == item.fundingID
-                                                          && SSJUserChargeTable.billId.in([db getOneDistinctColumnOnResult:SSJUserBillTypeTable.billId
-                                                                                                                 fromTable:@"bk_user_bill_type"
-                                                                                                                     where:(SSJUserBillTypeTable.userId == userid || SSJUserBillTypeTable.userId.isNull())
-                                                                                                                           && SSJUserBillTypeTable.billType == SSJBillTypePay])] doubleValue];
+
+
 
             item.fundingAmount = fundIncome - fundExpence;
 
@@ -582,6 +567,38 @@
     }
     return cardItem;
 }
+
++ (NSNumber *)getFundBalanceWithFundId:(NSString *)fundId type:(SSJBillType)type inDataBase:(WCTDatabase *)db {
+    NSNumber *currentBalance;
+
+    WCTResultList resultList = { SSJUserChargeTable.money.inTable (@"bk_user_charge").sum()};
+
+    WCDB::JoinClause joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type", WCDB::JoinClause::Type::Inner).
+            on(SSJUserChargeTable.billId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.billId.inTable(@"bk_user_bill_type")
+               && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID ()
+               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+               && SSJUserBillTypeTable.billType == type
+               && SSJUserChargeTable.fundId == fundId);
+
+    joinClause.join("bk_share_books_member", WCDB::JoinClause::Type::Left).
+            on(SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJShareBooksMemberTable.booksId.inTable(@"bk_share_books_member"));
+
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).
+            where(SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member") == SSJShareBooksMemberStateNormal
+                  || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull ()
+                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
+                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14");
+
+    WCTStatement *statement = [db prepare:statementSelect];
+
+    while ([statement step]) {
+        currentBalance = (NSNumber *)[statement getValueAtIndex:0];
+    }
+
+    return currentBalance;
+
+}
+
 
 
 @end

@@ -267,7 +267,6 @@
             item.booksId = bookstype.booksId;
             [booksArr addObject:item];
         }
-        
         dispatch_main_async_safe(^{
             if (success) {
                 success(booksArr);
@@ -276,4 +275,9 @@
     }];
 }
 
++ (void)getFirstBillItemForBooksId:(NSString *)booksId
+                       withSuccess:(void(^)(NSArray *books))success
+                           failure:(void (^)(NSError *error))failure {
+    
+}
 @end
