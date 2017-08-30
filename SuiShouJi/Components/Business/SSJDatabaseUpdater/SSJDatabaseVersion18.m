@@ -31,16 +31,16 @@
 }
 
 + (NSError *)createRecycleTableWithDatabase:(FMDatabase *)db {
-    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS `BK_RECYCLE` (\
-                                                        `RID`	TEXT,\
-                                                        `CUSERID`	TEXT,\
-                                                        `CID`	TEXT,\
-                                                        `ITYPE`	INTEGER,\
-                                                        `CLIENTADDDATE`	TEXT,\
-                                                        `CWRITEDATE`	TEXT,\
-                                                        `OPERATORTYPE`	INTEGER,\
-                                                        `IVERSION`	INTEGER,\
-                                                        PRIMARY KEY(RID)"]) {
+    if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_RECYCLE (\
+                                                        RID	TEXT,\
+                                                        CUSERID TEXT,\
+                                                        CID	TEXT,\
+                                                        ITYPE INTEGER,\
+                                                        CLIENTADDDATE TEXT,\
+                                                        CWRITEDATE	TEXT,\
+                                                        OPERATORTYPE INTEGER,\
+                                                        IVERSION INTEGER,\
+                                                        PRIMARY KEY(RID))"]) {
         return [db lastError];
     }
     
