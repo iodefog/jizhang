@@ -172,7 +172,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         double surplus = 0; // 剩余金额
         
         // 查询依赖借贷的转帐流水
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cuserid = ? and ifunsid = ? and cid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
         
         while ([resultSet next]) {
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
