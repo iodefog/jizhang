@@ -336,20 +336,20 @@ static NSString * SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
     }
 
     [SSJFinancingHomeHelper queryForFundingListWithSuccess:^(NSArray<SSJFinancingHomeitem *> *result) {
-//        @strongify(self);
-//        self.items = [[NSMutableArray alloc]initWithArray:result];
-//        if (self.newlyAddFundId) {
-//            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 1 inSection:0]]];
-//            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
-//            self.newlyAddFundId = nil;
-//        }else{
-//            [self.collectionView reloadData];
-//        }
-//        [self.collectionView ssj_hideLoadingIndicator];
-//        
-//        [self getSumMoney];
+        @strongify(self);
+        self.items = [[NSMutableArray alloc]initWithArray:result];
+        if (self.newlyAddFundId) {
+            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:result.count - 1 inSection:0]]];
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:result.count - 1 inSection:0] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
+            self.newlyAddFundId = nil;
+        }else{
+            [self.collectionView reloadData];
+        }
+        [self.collectionView ssj_hideLoadingIndicator];
+        
+        [self getSumMoney];
     } failure:^(NSError *error) {
-//        [self.collectionView ssj_hideLoadingIndicator];
+        [self.collectionView ssj_hideLoadingIndicator];
     }];
 }
 
