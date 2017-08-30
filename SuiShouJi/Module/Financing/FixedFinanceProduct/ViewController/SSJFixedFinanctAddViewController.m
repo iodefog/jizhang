@@ -282,7 +282,7 @@ static NSUInteger kDateTag = 2005;
     MJWeakSelf;
     //保存流水
     NSMutableArray *saveChargeModels = [@[self.compoundModel] mutableCopy];
-    [SSJFixedFinanceProductStore addInvestmentWithProductModel:self.financeModel chargeModels:saveChargeModels success:^{
+    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel   type:1 chargeModels:saveChargeModels success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {

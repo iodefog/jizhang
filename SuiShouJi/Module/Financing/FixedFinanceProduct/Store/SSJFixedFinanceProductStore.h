@@ -157,18 +157,19 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 
 /**
- 追加投资
-
- @param model <#model description#>
+ 追加或赎回投资
+ 
+ @param model model
+ param type 1追加2赎回
  @param chargeModels 追加产生的流水
- @param success <#success description#>
- @param failure <#failure description#>
+ @param success 成功
+ @param failure 失败
  */
-+ (void)addInvestmentWithProductModel:(SSJFixedFinanceProductItem *)model
-                         chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
-                              success:(void (^)(void))success
-                              failure:(void (^)(NSError *error))failure;
-
++ (void)addOrRedemptionInvestmentWithProductModel:(SSJFixedFinanceProductItem *)productModel
+                                             type:(NSInteger)type
+                                     chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
+                                          success:(void (^)(void))success
+                                          failure:(void (^)(NSError *error))failure;
 
 /**
  查询流水cid后缀最大值
@@ -194,6 +195,9 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return 利息
  */
 + (double)caculateExpectedRateWithModel:(SSJFixedFinanceProductItem *)model;
+
+//每日利息流水
+//+ (void)
 @end
 
 

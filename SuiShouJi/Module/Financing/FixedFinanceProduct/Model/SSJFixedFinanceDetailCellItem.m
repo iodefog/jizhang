@@ -19,38 +19,38 @@
     switch (model.chargeType) {
         case SSJFixedFinCompoundChargeTypeCreate://新建
             icon = @"fixed_finance_benjin";
-            name = @"投资本金";
+            name = @"固收理财本金";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeAdd://追加
             icon = @"fixed_finance_add";
-            name = @"追加本金";
+            name = @"固收理财追加购买";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeRedemption://赎回
             icon = @"fixed_finance_shu";
-            name = @"部分赎回";
+            name = @"固收理财部分赎回";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
             icon = @"fixed_finance_edit";
-            name = @"余额变更";
+            name = @"固收理财余额变更";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
             icon = @"fixed_finance_edit";
-            name = @"余额变更";
+            name = @"固收理财余额变更";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
             icon = @"fixed_finance_lixi";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
-            name = @"";
+            name = @"固收理财日息";
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             icon = @"fixed_finance_lixi";
-            name = @"";
+            name = @"固收理财日息";
             break;
         case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
             icon = @"fixed_finance_lixi";
@@ -60,12 +60,12 @@
             
         case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
             icon = @"fixed_finance_lixi";
-            name = @"";
-            money = [NSString stringWithFormat:@"+%.2f",model.money];
+            name = @"部分赎回手续费";
+            money = [NSString stringWithFormat:@"-%.2f",model.money];
             break;
         case SSJFixedFinCompoundChargeTypeCloseOut://结清
             icon = @"fixed_finance_lixi";
-            name = @"";
+            name = @"固收理财结算";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             break;
             

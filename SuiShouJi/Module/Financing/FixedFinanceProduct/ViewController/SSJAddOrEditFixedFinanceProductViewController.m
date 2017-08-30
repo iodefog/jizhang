@@ -335,21 +335,28 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
 //    保存流水，包括创建产生的流水，如果是编辑，还要包括余额变更流水
     NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
-    if (_edited) {
+    if (_edited) {//编辑
+        //删除以前所有流水
+        //生成新的流水
+        
         // 1.编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
         // 2.因为详情页面中流水列表是根据billdate、writedate排序的，如果只update余额变更流水，顺序就会乱掉，所以要update所有流水
         for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
             [saveChargeModels addObject:compoundModel];
+            
         }
         
         // 如果有新的余额变更流水，就保存
         if (self.changeCompoundModel.chargeModel.money > 0) {
             [saveChargeModels addObject:self.changeCompoundModel];
         }
+        return;
     }
+    
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
     
+    //新建
     //保存固定收益理财
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
         _sureButton.enabled = YES;
