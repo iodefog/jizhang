@@ -16,10 +16,6 @@
 #import "SSJUserChargeSyncTable.h"
 #import "SSJUserDefaultBillTypesCreater.h"
 #import "SSJRecycleHelper.h"
-#import <WCDB/WCDB.h>
-#import "SSJBooksTypeTable.h"
-#import "SSJShareBooksTable.h"
-#import "SSJShareBooksMemberTable.h"
 
 @implementation SSJBooksTypeStore
 
@@ -84,7 +80,7 @@
             booksItem.booksId = [rs stringForColumn:@"cbooksid"];
             booksItem.booksName = [rs stringForColumn:@"cbooksname"];
             booksItem.booksOrder = [rs intForColumn:@"iorder"];
-            booksItem.booksParent = [rs intForColumn:@"iparenttype"];
+            booksItem.booksParent = (SSJBooksType)[rs intForColumn:@"iparenttype"];
             SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
             NSArray *colorArray = [[rs stringForColumn:@"cbookscolor"] componentsSeparatedByString:@","];
             if (colorArray.count > 1) {
@@ -108,7 +104,7 @@
             SSJShareBookItem *shareBookItem = [[SSJShareBookItem alloc] init];
             shareBookItem.booksId = [rs stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [rs stringForColumn:@"cbooksname"];
-            shareBookItem.booksParent = [rs intForColumn:@"iparenttype"];
+            shareBookItem.booksParent = (SSJBooksType)[rs intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [rs intForColumn:@"iorder"];
             shareBookItem.memberCount = [rs intForColumn:@"memberCount"];
             shareBookItem.adminId = [rs stringForColumn:@"cadmin"];
@@ -165,7 +161,7 @@
             item.booksCategory = SSJBooksCategoryPersional;
             item.userId = [booksResult stringForColumn:@"cuserid"];
             item.booksOrder = [booksResult intForColumn:@"iorder"];
-            item.booksParent = [booksResult intForColumn:@"iparenttype"];
+            item.booksParent = (SSJBooksType)[booksResult intForColumn:@"iparenttype"];
             if (item.booksOrder == 0) {
                 item.booksOrder = order;
             }
@@ -467,7 +463,7 @@
             shareBookItem.booksId = [result stringForColumn:@"cbooksid"];
             shareBookItem.booksName = [result stringForColumn:@"cbooksname"];
             //            shareBookItem.booksColor = [result stringForColumn:@"cbookscolor"];
-            shareBookItem.booksParent = [result intForColumn:@"iparenttype"];
+            shareBookItem.booksParent = (SSJBooksType)[result intForColumn:@"iparenttype"];
             shareBookItem.booksOrder = [result intForColumn:@"iorder"];
             shareBookItem.memberCount = [result intForColumn:@"memberCount"];
             shareBookItem.booksCategory = SSJBooksCategoryPublic;
