@@ -24,24 +24,16 @@
 #import "SSJShareBooksMemberSyncTable.h"
 #import "SSJShareBooksSyncTable.h"
 #import "SSJShareBooksFriendMarkSyncTable.h"
-#import "SSJUserDefaultBillTypesCreater.h"
 #import "SSJWishSyncTable.h"
 #import "SSJWishChargeSyncTable.h"
 #import "SSJRecycleSyncTable.h"
 
 #import "SSJSyncTable.h"
-
+#import "SSJDataSynchronizeExtraProcesser.h"
 #import "SSJDatabaseQueue.h"
 #import "AFNetworking.h"
-#import "SSJFinancingGradientColorItem.h"
-
-#import "SSJRegularManager.h"
-
-#import "SSJLocalNotificationStore.h"
-#import "SSJLocalNotificationHelper.h"
-#import "SSJDomainManager.h"
-
 #import "ZipArchive.h"
+
 
 //
 static const NSTimeInterval kTimeoutInterval = 30;
@@ -233,7 +225,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 return;
             }
             
-            [self extraProcessAfterMerge];
+            [SSJDataSynchronizeExtraProcesser extraProcessWithUserID:self.userId data:tableInfo];
             
             if (success) {
                 SSJPRINT(@"<<< --------- SSJ Sync Data Success! --------- >>>");
@@ -410,227 +402,6 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     return mergeSuccess;
 }
 
-- (void)extraProcessAfterMerge {
-    // 如果用户当前账本已删除，就切换成日常账本
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        int operatorType = [db intForQuery:@"select bt.operatortype from bk_books_type as bt, bk_user as u where u.cuserid = ? and bt.cuserid = u.cuserid and u.ccurrentbooksid = bt.cbooksid", self.userId];
-        if (operatorType == 2) {
-            [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", self.userId];
-            SSJDispatchMainAsync(^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-            });
-        }
-    }];
-    
-    // 如果当前的账本已经被踢,那切换回默认账本
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
-        NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",self.userId];
-        
-        if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
-            
-            NSInteger currentBooksStatus = [db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?",currentBooksid,self.userId];
-            if (currentBooksStatus != SSJShareBooksMemberStateNormal) {
-                [db executeUpdate:@"update bk_user set ccurrentbooksid = ?",self.userId];
-                SSJDispatchMainSync(^{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:NULL];
-                });
-            }
-        }
-        
-    }];
-    
-    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
-    [SSJRegularManager supplementCycleRecordsForUserId:self.userId];
-    
-    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", self.userId], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], self.userId];
-        if (!success) {
-            *rollback = YES;
-        }
-    }];
-    
-    // 根据用户的提醒表中的记录注册本地通知
-    [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
-    [SSJLocalNotificationStore queryForreminderListForUserId:self.userId WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-        for (SSJReminderItem *item in result) {
-            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-        }
-    } failure:^(NSError *error) {
-        SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-    }];
-    
-    // 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSString *booksID1 = self.userId;
-        NSString *booksID2 = [NSString stringWithFormat:@"%@-1", self.userId];
-        NSString *booksID3 = [NSString stringWithFormat:@"%@-2", self.userId];
-        NSString *booksID4 = [NSString stringWithFormat:@"%@-3", self.userId];
-        NSString *booksID5 = [NSString stringWithFormat:@"%@-4", self.userId];
-        
-        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID1, self.userId];
-        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_shengyi' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID2, self.userId];
-        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_jiehun' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID3, self.userId];
-        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_zhuangxiu' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID4, self.userId];
-        [db executeUpdate:@"update bk_books_type set cicoin = 'bk_lvxing' where cbooksid = ? and cuserid = ? and (length(cicoin) == 0 or cicoin is null)", booksID5, self.userId];
-        
-        NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, self.userId];
-        [db executeUpdate:sqlStr];
-    }];
-    
-    // 将没有新加字段cdetaildate的流水补上
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
-        [db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?", @(SSJChargeIdTypeCircleConfig)];
-        
-        [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(clientadddate,12,5) from bk_user_charge where length(cdetaildate) = 0 or cdetaildate is null) where length(clientadddate) > 0 and ichargetype <> ? and (length(cdetaildate) = 0 or cdetaildate is null)", @(SSJChargeIdTypeCircleConfig)];
-        
-        [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(cwritedate,12,5) from bk_user_charge where length(cdetaildate) = 0 or cdetaildate is null) where length(cdetaildate) = 0 or cdetaildate is null"];
-        
-    }];
-    
-    // 将没有渐变色的数据改成渐变色
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root' and operatortype <> 2"];
-        
-        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        
-        NSString *cwriteDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        
-        NSArray *colors = [SSJFinancingGradientColorItem defualtColors];
-        
-        while ([result next]) {
-            NSString *fundid = [result stringForColumn:@"cfundid"];
-            NSString *order = [result stringForColumn:@"iorder"] ?: @"";
-            NSDictionary *dic = @{@"fundid":fundid,
-                                  @"order":order};
-            [tempArr addObject:dic];
-        };
-        
-        for (NSDictionary *dict in tempArr) {
-            NSString *fundid = [dict objectForKey:@"fundid"];
-            NSString *order = [dict objectForKey:@"order"];
-            NSInteger index = [order integerValue];
-            if (index > 1) {
-                index --;
-            }
-            index = index - index / 7 * 7;
-            SSJFinancingGradientColorItem *item = [colors objectAtIndex:index];
-            [db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid];
-        }
-    }];
-    
-    
-    // 删除已经退出的账本中的share_books,share_books_friends_mark
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
-        [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
-        
-        [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)",self.userId,@(SSJShareBooksMemberStateNormal)];
-    }];
-    
-    
-    // 将一个收支类别的账本补充一套收支类别
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSMutableArray *booksResult = [NSMutableArray arrayWithCapacity:0];
-        
-        FMResultSet *shareBooksResult = [db executeQuery:@"select sb.iparenttype ,ub.cbooksid ,ub.cuserid , count(ub.cbillid) from bk_share_books sb, bk_share_books_member sbm left join bk_user_bill_type ub on sbm.cbooksid = ub.cbooksid and ub.cuserid = sbm.cmemberid where length(ub.cbillid) < 10 and ub.cuserid = ? and sb.cbooksid = ub.cbooksid group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
-        
-        while ([shareBooksResult next]) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
-            NSString *booksId = [shareBooksResult stringForColumn:@"cbooksid"];
-            NSInteger parentType = [shareBooksResult intForColumn:@"iparenttype"];
-            [dic setObject:booksId forKey:@"cbooksid"];
-            [dic setObject:@(parentType) forKey:@"iparenttype"];
-            [booksResult addObject:dic];
-        }
-        
-        [shareBooksResult close];
-        
-        FMResultSet *normalBooksResult = [db executeQuery:@"select bt.iparenttype, ub.cbooksid, ub.cuserid, count(ub.cbillid) from bk_books_type bt left join bk_user_bill_type ub on bt.cbooksid = ub.cbooksid and ub.cuserid = bt.cuserid where length(ub.cbillid) < 10 and ub.cuserid = ? group by ub.cbooksid, ub.cuserid having count(ub.cbillid) = 0",self.userId];
-        
-        while ([normalBooksResult next]) {
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:0];
-            NSString *booksId = [normalBooksResult stringForColumn:@"cbooksid"];
-            NSInteger parentType = [normalBooksResult intForColumn:@"iparenttype"];
-            [dic setObject:booksId forKey:@"cbooksid"];
-            [dic setObject:@(parentType) forKey:@"iparenttype"];
-            [booksResult addObject:dic];
-        }
-        
-        [shareBooksResult close];
-        
-        for (NSDictionary *dic in booksResult) {
-            NSString *booksId = [dic objectForKey:@"cbooksid"];
-            NSInteger parentType = [[dic objectForKey:@"iparenttype"] integerValue];
-            [SSJUserDefaultBillTypesCreater createDefaultDataTypeForUserId:self.userId booksId:booksId booksType:parentType inDatabase:db error:nil];
-        }
-    }];
-    
-    // 将以前的转账包括安卓chargetype为4的转账转移到周期转账表里
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
-        
-        FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ibillid = ? and operatortype <> 2 and (ichargetype = ? or ichargetype = ?) and cuserid = ?",@(SSJSpecialBillIdBalanceRollIn),@(SSJChargeIdTypeTransfer),@(SSJChargeIdTypeNormal),self.userId];
-        
-        while ([rs next]) {
-            NSMutableDictionary *userCharge = [NSMutableDictionary dictionaryWithCapacity:0];
-            [userCharge setObject:[rs stringForColumn:@"ifunsid"] ? : @"" forKey:@"ifunsid"];
-            [userCharge setObject:[rs stringForColumn:@"cwritedate"] ? : @"" forKey:@"cwritedate"];
-            [userCharge setObject:[rs stringForColumn:@"ichargeid"] ? : @"" forKey:@"ichargeid"];
-            [userCharge setObject:[rs stringForColumn:@"cuserid"] ? : @"" forKey:@"cuserid"];
-            [userCharge setObject:[rs stringForColumn:@"ibillid"] ? : @"" forKey:@"ibillid"];
-            [userCharge setObject:[rs stringForColumn:@"imoney"] ? : @"" forKey:@"imoney"];
-            [userCharge setObject:[rs stringForColumn:@"cbilldate"] ? : @"" forKey:@"cbilldate"];
-            [userCharge setObject:[rs stringForColumn:@"cmemo"] ? : @"" forKey:@"cmemo"];
-            [chargeArr addObject:userCharge];
-        }
-        
-        [rs close];
-        
-        for (NSMutableDictionary *userCharge in chargeArr) {
-            NSString *writeDateStr = [userCharge objectForKey:@"cwritedate"];
-            NSString *fundId = [userCharge objectForKey:@"ifunsid"];
-            NSString *chargeid = [userCharge objectForKey:@"ichargeid"];
-            NSString *userid = [userCharge objectForKey:@"cuserid"];
-            NSString *money = [userCharge objectForKey:@"imoney"];
-            NSString *billDate = [userCharge objectForKey:@"cbilldate"];
-            NSString *memo = [userCharge objectForKey:@"cmemo"];
-            NSDate *writeDate = [NSDate dateWithString:writeDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            NSDate *startDate = [writeDate dateBySubtractingSeconds:1];
-            NSDate *endDate = [writeDate dateByAddingSeconds:1];
-            NSString *otherChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where cwritedate between ? and ? and ibillid = ? and imoney = ? and cuserid = ? and cbilldate = ? limit 1",[startDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],[endDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],@(SSJSpecialBillIdBalanceRollOut),money,userid,billDate];
-            if (otherChargeId.length) {
-                NSString *otherFundid = [db stringForQuery:@"select ifunsid from bk_user_charge where ichargeid = ?",otherChargeId];
-                NSString *cycleId = SSJUUID();
-                NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                NSMutableDictionary *transferCycle = [NSMutableDictionary dictionaryWithCapacity:0];
-                [transferCycle setObject:cycleId forKey:@"icycleid"];
-                [transferCycle setObject:userid forKey:@"cuserid"];
-                [transferCycle setObject:fundId forKey:@"ctransferinaccountid"];
-                [transferCycle setObject:otherFundid forKey:@"ctransferoutaccountid"];
-                [transferCycle setObject:money forKey:@"imoney"];
-                [transferCycle setObject:memo forKey:@"cmemo"];
-                [transferCycle setObject:@(SSJCyclePeriodTypeOnce) forKey:@"icycletype"];
-                [transferCycle setObject:billDate forKey:@"cbegindate"];
-                [transferCycle setObject:@(1) forKey:@"istate"];
-                [transferCycle setObject:writeDate forKey:@"cwritedate"];
-                [transferCycle setObject:@(SSJSyncVersion()) forKey:@"iversion"];
-                [transferCycle setObject:@(1) forKey:@"operatortype"];
-                [transferCycle setObject:writeDate forKey:@"clientadddate"];
-                [db executeUpdate:@"insert into bk_transfer_cycle (icycleid, cuserid, ctransferinaccountid, ctransferoutaccountid, imoney, cmemo, icycletype, cbegindate, istate, cwritedate, iversion, operatortype, clientadddate) values (:icycleid, :cuserid, :ctransferinaccountid, :ctransferoutaccountid, :imoney, :cmemo, :icycletype, :cbegindate, :istate, :cwritedate, :iversion, :operatortype, :clientadddate)" withParameterDictionary:transferCycle];
-                
-                [db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),otherChargeId,userid];
-                
-                [db executeUpdate:@"update bk_user_charge set ichargetype = ?, cid = ?, cwritedate = ?, iversion = ?, operatortype = ? where ichargeid = ? and cuserid = ?",@(SSJChargeIdTypeCyclicTransfer),cycleId,writeDate,@(SSJSyncVersion()),@(1),chargeid,userid];
-            } else {
-                [db executeUpdate:@"delete from bk_user_charge where ichargeid = ?",chargeid];
-            }
-        }
-    }];
-}
-
 //  将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
     NSString *syncFilePath = [[self syncFileDirectory] stringByAppendingPathComponent:kUploadSyncFileName];
@@ -768,7 +539,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         task.userId = SSJUSERID();
         //  合并数据
         if ([task mergeData:data error:&error]) {
-            [task extraProcessAfterMerge];
+            [SSJDataSynchronizeExtraProcesser extraProcessWithUserID:task.userId data:data];
             [subscriber sendCompleted];
         } else {
             [subscriber sendError:error];
