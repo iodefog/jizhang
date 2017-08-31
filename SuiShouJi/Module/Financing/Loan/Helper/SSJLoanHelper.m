@@ -444,9 +444,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSError *error = nil;
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([self deleteLoanModel:model
-                        forUserId:userId
-                        writeDate:nil
+                        writeDate:writeDate
                          database:db
                             error:&error]) {
             if (success) {
@@ -466,15 +466,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (BOOL)deleteLoanModel:(SSJLoanModel *)model
-              forUserId:(NSString *)userId
               writeDate:(NSString *)writeDate
                database:(FMDatabase *)db
                   error:(NSError **)error {
-    
-    writeDate = writeDate ?: [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
     // 将借贷记录的operatortype改为2
-    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -482,7 +478,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将和借贷相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid = ? and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like ? || '_%' and ichargetype = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
         if (error) {
             *error = [db lastError];
         }
@@ -490,7 +486,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将提醒的operatortype改为2
-    if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
+    if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -834,10 +830,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
         // 如果此借贷已经删除，按照执行成功处理
-        int operatorType = [db intForQuery:@"select operatortype from bk_loan where loanid = ?", model.chargeModel.loanId];
-        if (operatorType == 2) {
+        if ([db intForQuery:@"select operatortype from bk_loan where loanid = ?", model.chargeModel.loanId] == 2) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -1280,6 +1274,36 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             }
         });
     }];
+}
+
++ (BOOL)deleteLoanDataRelatedToFundID:(NSString *)fundID
+                            writeDate:(NSString *)writeDate
+                             database:(FMDatabase *)db
+                                error:(NSError **)error {
+    NSMutableSet *loanIDs = [NSMutableSet set];
+    FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?", fundID, @(SSJChargeIdTypeLoan)];
+    while ([rs next]) {
+        NSString *loanID = [[[rs stringForColumn:@"cid"] componentsSeparatedByString:@"_"] firstObject];
+        [loanIDs addObject:loanID];
+    }
+    [rs close];
+    
+    for (NSString *loanID in loanIDs) {
+        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
+        rs = [db executeQuery:@"select loanid, cuserid, cremindid from bk_loan where loanid = ?", loanID];
+        while ([rs next]) {
+            loanModel.ID = [rs stringForColumn:@"loanid"];
+            loanModel.userID = [rs stringForColumn:@"cuserid"];
+            loanModel.remindID = [rs stringForColumn:@"cremindid"];
+        }
+        [rs close];
+        
+        if (![self deleteLoanModel:loanModel writeDate:writeDate database:db error:error]) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 @end

@@ -88,8 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  @return 是否删除成功
  */
 + (BOOL)deleteLoanModel:(SSJLoanModel *)model
-              forUserId:(NSString *)userId
-              writeDate:(nullable NSString *)writeDate
+              writeDate:(NSString *)writeDate
                database:(FMDatabase *)db
                   error:(NSError **)error;
 
@@ -224,6 +223,20 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)queryMaxLoanChargeSuffixWithLoanID:(NSString *)loanID
                                    success:(void (^)(int suffix))success
                                    failure:(nullable void (^)(NSError *error))failure;
+
+/**
+ 删除和指定ID的资金账户相关的借贷数据（借贷项目、流水、提醒）
+
+ @param fundID 资金账户ID
+ @param writeDate 删除时间
+ @param db 数据库对象
+ @param error 错误描述对象
+ @return 是否删除成功
+ */
++ (BOOL)deleteLoanDataRelatedToFundID:(NSString *)fundID
+                            writeDate:(NSString *)writeDate
+                             database:(FMDatabase *)db
+                                error:(NSError **)error;
 
 @end
 
