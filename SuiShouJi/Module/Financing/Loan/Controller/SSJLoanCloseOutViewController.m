@@ -197,9 +197,7 @@ static NSUInteger kClostOutDateTag = 1004;
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
 
-    [[[[self loadCompoundChargeModels] then:^RACSignal *{
-        return [self loadMaxSuffix];
-    }] then:^RACSignal *{
+    [[[self loadCompoundChargeModels] then:^RACSignal *{
         return [self loadFundModels];
     }] subscribeError:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
@@ -251,21 +249,6 @@ static NSUInteger kClostOutDateTag = 1004;
             [self initCompoundModel];
             self.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.endDate model:self.loanModel chargeModels:self.chargeModels];
 
-            [subscriber sendCompleted];
-        } failure:^(NSError * _Nonnull error) {
-            [subscriber sendError:error];
-        }];
-        return nil;
-    }];
-}
-
-- (RACSignal *)loadMaxSuffix {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJLoanHelper queryMaxLoanChargeSuffixWithLoanID:self.loanModel.ID success:^(int suffix) {
-            NSString *loanID = [NSString stringWithFormat:@"%@_%d", self.loanModel.ID, suffix + 1];
-            self.compoundModel.chargeModel.loanId = loanID;
-            self.compoundModel.targetChargeModel.loanId = loanID;
-            self.compoundModel.interestChargeModel.loanId = loanID;
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
             [subscriber sendError:error];
@@ -360,11 +343,14 @@ static NSUInteger kClostOutDateTag = 1004;
                 break;
         }
         
+        NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
+        
         _compoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
         _compoundModel.chargeModel.chargeId = SSJUUID();
         _compoundModel.chargeModel.fundId = self.loanModel.fundID;
         _compoundModel.chargeModel.billId = chargeBillId;
         _compoundModel.chargeModel.userId = SSJUSERID();
+        _compoundModel.chargeModel.loanId = loanID;
         _compoundModel.chargeModel.billDate = self.loanModel.endDate;
         _compoundModel.chargeModel.money = self.loanModel.jMoney;
         
@@ -373,6 +359,7 @@ static NSUInteger kClostOutDateTag = 1004;
         _compoundModel.targetChargeModel.fundId = self.loanModel.endTargetFundID;
         _compoundModel.targetChargeModel.billId = targetChargeBillId;
         _compoundModel.targetChargeModel.userId = SSJUSERID();
+        _compoundModel.targetChargeModel.loanId = loanID;
         _compoundModel.targetChargeModel.billDate = self.loanModel.endDate;
         _compoundModel.targetChargeModel.money = self.loanModel.jMoney;
         
@@ -381,6 +368,7 @@ static NSUInteger kClostOutDateTag = 1004;
         _compoundModel.interestChargeModel.fundId = self.loanModel.endTargetFundID;
         _compoundModel.interestChargeModel.billId = interestChargeBillId;
         _compoundModel.interestChargeModel.userId = SSJUSERID();
+        _compoundModel.interestChargeModel.loanId = loanID;
         _compoundModel.interestChargeModel.billDate = self.loanModel.endDate;
     }
 }

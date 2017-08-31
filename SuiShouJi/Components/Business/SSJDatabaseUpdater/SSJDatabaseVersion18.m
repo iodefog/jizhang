@@ -118,8 +118,10 @@
     }
     
     __block NSError *tError = nil;
+    __block int64_t timestamp = SSJMilliTimestamp();
     [compoundModels enumerateObjectsUsingBlock:^(SSJLoanCompoundChargeModel *compoundModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        NSString *cid = [NSString stringWithFormat:@"%@_%d", compoundModel.chargeModel.loanId, (int)idx + 1];
+        timestamp += idx;
+        NSString *cid = [NSString stringWithFormat:@"%@_%lld", compoundModel.chargeModel.loanId, timestamp];
         
         if (![self updateLoanChargeWithModel:compoundModel.chargeModel cid:cid db:db error:&tError]) {
             return;

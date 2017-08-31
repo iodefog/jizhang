@@ -660,27 +660,6 @@ const int kMemoMaxLength = 15;
     _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
 }
 
-- (RACSignal *)queryMaxCidSuffix {
-    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        if (_edited) {
-            [SSJLoanHelper queryMaxLoanChargeSuffixWithLoanID:self.loanModel.ID success:^(int suffix) {
-                NSString *cid = [NSString stringWithFormat:@"%@_%d", self.loanModel.ID, suffix + 1];
-                self.changeCompoundModel.chargeModel.loanId = cid;
-                self.changeCompoundModel.targetChargeModel.loanId = cid;
-                [subscriber sendCompleted];
-            } failure:^(NSError * _Nonnull error) {
-                [subscriber sendError:error];
-            }];
-        } else {
-            NSString *cid = [NSString stringWithFormat:@"%@_2", self.loanModel.ID];
-            self.changeCompoundModel.chargeModel.loanId = cid;
-            self.changeCompoundModel.targetChargeModel.loanId = cid;
-            [subscriber sendCompleted];
-        }
-        return nil;
-    }];
-}
-
 - (RACSignal *)queryFundModelList {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
@@ -735,9 +714,7 @@ const int kMemoMaxLength = 15;
         [self.view ssj_showLoadingIndicator];
     }
     
-    [[[self queryMaxCidSuffix] then:^RACSignal *{
-        return [self queryFundModelList];
-    }] subscribeError:^(NSError *error) {
+    [[self queryFundModelList] subscribeError:^(NSError *error) {
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showError:error];
     } completed:^{
@@ -988,6 +965,10 @@ const int kMemoMaxLength = 15;
 
 // 更新余额变更流水的金额
 - (void)updateBalanceChangeMoney {
+    if (!_edited) {
+        return;
+    }
+    
     if (self.loanModel.jMoney > self.originalMoney) {
         
         self.changeCompoundModel.chargeModel.money = self.loanModel.jMoney - self.originalMoney;
@@ -1123,7 +1104,7 @@ const int kMemoMaxLength = 15;
                     break;
             }
             
-            NSString *loanID = [NSString stringWithFormat:@"%@_1", self.loanModel.ID];
+            NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
             
             _createCompoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
             _createCompoundModel.chargeModel.chargeId = SSJUUID();
@@ -1149,14 +1130,18 @@ const int kMemoMaxLength = 15;
     if (!_changeCompoundModel) {
         _changeCompoundModel = [[SSJLoanCompoundChargeModel alloc] init];
         
+        NSString *cid = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
+        
         _changeCompoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
         _changeCompoundModel.chargeModel.chargeId = SSJUUID();
         _changeCompoundModel.chargeModel.userId = SSJUSERID();
+        _changeCompoundModel.chargeModel.loanId = cid;
         _changeCompoundModel.chargeModel.type = self.loanModel.type;
         
         _changeCompoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
         _changeCompoundModel.targetChargeModel.chargeId = SSJUUID();
         _changeCompoundModel.targetChargeModel.userId = SSJUSERID();
+        _changeCompoundModel.targetChargeModel.loanId = cid;
         _changeCompoundModel.targetChargeModel.type = self.loanModel.type;
     }
     return _changeCompoundModel;
