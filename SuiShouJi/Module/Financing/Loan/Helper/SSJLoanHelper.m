@@ -116,42 +116,16 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select l.* , fi.cstartcolor, fi.cendcolor from bk_loan l, bk_fund_info fi where l.loanid = ? and l.cuserid = ? and l.cthefundid = fi.cfundid", loanID, userId];
-        if (!resultSet) {
+        NSError *error = nil;
+        SSJLoanModel *model = [self queryForLoanModelWithLoanID:loanID database:db error:&error];
+        if (error) {
             if (failure) {
                 SSJDispatchMainAsync(^{
-                    failure([db lastError]);
+                    failure(error);
                 });
             }
             return;
         }
-        
-        SSJLoanModel *model = [[SSJLoanModel alloc] init];
-        while ([resultSet next]) {
-            model.ID = [resultSet stringForColumn:@"loanid"];
-            model.userID = [resultSet stringForColumn:@"cuserid"];
-            model.lender = [resultSet stringForColumn:@"lender"];
-            model.jMoney = [resultSet doubleForColumn:@"jmoney"];
-            model.fundID = [resultSet stringForColumn:@"cthefundid"];
-            model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
-            model.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-            model.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
-            model.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
-            model.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
-            model.rate = [resultSet doubleForColumn:@"rate"];
-            model.memo = [resultSet stringForColumn:@"memo"];
-            model.remindID = [resultSet stringForColumn:@"cremindid"];
-            model.interest = [resultSet boolForColumn:@"interest"];
-            model.interestType = [resultSet intForColumn:@"interesttype"];
-            model.closeOut = [resultSet boolForColumn:@"iend"];
-            model.type = [resultSet intForColumn:@"itype"];
-            model.operatorType = [resultSet intForColumn:@"operatorType"];
-            model.version = [resultSet longLongIntForColumn:@"iversion"];
-            model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            model.startColor = [resultSet stringForColumn:@"cstartcolor"];
-            model.endColor = [resultSet stringForColumn:@"cendcolor"];
-        }
-        [resultSet close];
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -161,32 +135,100 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }];
 }
 
++ (void)queryForLoanModelWithChargeID:(NSString *)chargeID
+                              success:(void (^)(SSJLoanModel *model))success
+                              failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        NSString *sundryID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ? and ichargetype = ?", chargeID, @(SSJChargeIdTypeLoan)];
+        if (!sundryID) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"查询不到此借贷流水"}]);
+                });
+            }
+            return;
+        }
+        
+        NSError *error = nil;
+        NSString *loanID = [[sundryID componentsSeparatedByString:@"_"] firstObject];
+        SSJLoanModel *model = [self queryForLoanModelWithLoanID:loanID database:db error:&error];
+        if (error) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success(model);
+            });
+        }
+    }];
+}
+
++ (SSJLoanModel *)queryForLoanModelWithLoanID:(NSString *)loanID
+                                     database:(FMDatabase *)db
+                                        error:(NSError **)error {
+    FMResultSet *rs = [db executeQuery:@"select l.* , fi.cstartcolor, fi.cendcolor from bk_loan l, bk_fund_info fi where l.loanid = ? and l.cuserid = ? and l.cthefundid = fi.cfundid", loanID, SSJUSERID()];
+    SSJLoanModel *model = [[SSJLoanModel alloc] init];
+    while ([rs next]) {
+        model.ID = [rs stringForColumn:@"loanid"];
+        model.userID = [rs stringForColumn:@"cuserid"];
+        model.lender = [rs stringForColumn:@"lender"];
+        model.jMoney = [rs doubleForColumn:@"jmoney"];
+        model.fundID = [rs stringForColumn:@"cthefundid"];
+        model.targetFundID = [rs stringForColumn:@"ctargetfundid"];
+        model.endTargetFundID = [rs stringForColumn:@"cetarget"];
+        model.borrowDate = [NSDate dateWithString:[rs stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
+        model.repaymentDate = [NSDate dateWithString:[rs stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
+        model.endDate = [NSDate dateWithString:[rs stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
+        model.rate = [rs doubleForColumn:@"rate"];
+        model.memo = [rs stringForColumn:@"memo"];
+        model.remindID = [rs stringForColumn:@"cremindid"];
+        model.interest = [rs boolForColumn:@"interest"];
+        model.interestType = [rs intForColumn:@"interesttype"];
+        model.closeOut = [rs boolForColumn:@"iend"];
+        model.type = [rs intForColumn:@"itype"];
+        model.operatorType = [rs intForColumn:@"operatorType"];
+        model.version = [rs longLongIntForColumn:@"iversion"];
+        model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        model.startColor = [rs stringForColumn:@"cstartcolor"];
+        model.endColor = [rs stringForColumn:@"cendcolor"];
+    }
+    [rs close];
+    
+    return model;
+}
+
 + (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
                                      success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
                                      failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
         
-        SSJLoanCompoundChargeModel *createModel = nil;
         NSMutableArray *compoundModels = [NSMutableArray array];
         double surplus = 0; // 剩余金额
         
         // 查询依赖借贷的转帐流水
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
+        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cuserid = ? and ifunsid = ? and cid like ? || '_%' and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
         
-        while ([resultSet next]) {
+        while ([rs next]) {
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
-            chargeModel.chargeId = [resultSet stringForColumn:@"ichargeid"];
-            chargeModel.fundId = [resultSet stringForColumn:@"ifunsid"];
-            chargeModel.billId = [resultSet stringForColumn:@"ibillid"];
+            chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
+            chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
+            chargeModel.billId = [rs stringForColumn:@"ibillid"];
+            chargeModel.loanId = [rs stringForColumn:@"cid"];
             chargeModel.userId = loanModel.userID;
             chargeModel.icon = SSJBillTypeModel(chargeModel.billId).icon;
-            chargeModel.memo = [resultSet stringForColumn:@"cmemo"];
-            chargeModel.billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
-            chargeModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            chargeModel.money = [resultSet doubleForColumn:@"imoney"];
+            chargeModel.memo = [rs stringForColumn:@"cmemo"];
+            chargeModel.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+            chargeModel.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            chargeModel.money = [rs doubleForColumn:@"imoney"];
             chargeModel.oldMoney = surplus;
-            chargeModel.loanId = loanModel.ID;
             chargeModel.type = loanModel.type;
             
             [self updateChargeTypeWithModel:chargeModel];
@@ -214,18 +256,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
             compoundModel.chargeModel = chargeModel;
             if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
-                createModel = compoundModel;
+                // 确保创建的流水在数组中第一个
+                [compoundModels insertObject:compoundModel atIndex:0];
             } else {
                 [compoundModels addObject:compoundModel];
             }
         }
+        [rs close];
         
-        [resultSet close];
-        
-        // 确保创建的流水在数组中第一个
-        if (createModel) {
-            [compoundModels insertObject:createModel atIndex:0];
-        }
         
         // 查询和第一次查询结果匹配的流水（例第一次查询结果是转入，这次查询就是转出、利息，反之一样）
         for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {
@@ -233,27 +271,20 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             NSString *billDateStr = [compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *writeDateStr = [compoundModel.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             
-            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and cbilldate = ? and cwritedate = ? and cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, billDateStr, writeDateStr, compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId,@(SSJChargeIdTypeLoan)];
+            FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId,@(SSJChargeIdTypeLoan)];
             
-            while ([resultSet next]) {
-                NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
-                NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
-                NSString *billId = [resultSet stringForColumn:@"ibillid"];
-                NSString *memo = [resultSet stringForColumn:@"cmemo"];
-                NSDate *billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
-                double money = [resultSet doubleForColumn:@"imoney"];
-                
+            while ([rs next]) {
                 SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
-                chargeModel.chargeId = chargeId;
-                chargeModel.fundId = fundId;
-                chargeModel.billId = billId;
-                chargeModel.loanId = compoundModel.chargeModel.loanId;
-                chargeModel.memo = memo;
-                chargeModel.billDate = billDate;
-                chargeModel.writeDate = compoundModel.chargeModel.writeDate;
-                chargeModel.money = money;
-                chargeModel.type = compoundModel.chargeModel.type;
+                chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
+                chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
+                chargeModel.billId = [rs stringForColumn:@"ibillid"];
+                chargeModel.loanId = [rs stringForColumn:@"cid"];
+                chargeModel.memo = [rs stringForColumn:@"cmemo"];
+                chargeModel.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+                chargeModel.money = [rs doubleForColumn:@"imoney"];
                 chargeModel.userId = compoundModel.chargeModel.userId;
+                chargeModel.writeDate = compoundModel.chargeModel.writeDate;
+                chargeModel.type = compoundModel.chargeModel.type;
                 [self updateChargeTypeWithTargetModel:chargeModel];
                 if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
                     compoundModel.interestChargeModel = chargeModel;
@@ -261,14 +292,14 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                     compoundModel.targetChargeModel = chargeModel;
                 }
             }
-            [resultSet close];
+            [rs close];
             
-            resultSet = [db executeQuery:@"select lender, iend from bk_loan where loanid = ? and cuserid = ?", compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId];
-            
-            while ([resultSet next]) {
-                compoundModel.lender = [resultSet stringForColumn:@"lender"];
-                compoundModel.closeOut = [resultSet boolForColumn:@"iend"];
+            rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ? and cuserid = ?", compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId];
+            while ([rs next]) {
+                compoundModel.lender = [rs stringForColumn:@"lender"];
+                compoundModel.closeOut = [rs boolForColumn:@"iend"];
             }
+            [rs close];
         }
         
         if (success) {
@@ -412,9 +443,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
         NSError *error = nil;
-        if ([self deleteLoanModel:model inDatabase:db forUserId:userId error:&error]) {
+        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if ([self deleteLoanModel:model
+                        writeDate:writeDate
+                         database:db
+                            error:&error]) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -432,14 +466,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (BOOL)deleteLoanModel:(SSJLoanModel *)model
-             inDatabase:(FMDatabase *)db
-              forUserId:(NSString *)userId
-                  error:(NSError **)error{
-    
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
+              writeDate:(NSString *)writeDate
+               database:(FMDatabase *)db
+                  error:(NSError **)error {
     // 将借贷记录的operatortype改为2
-    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
+    if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -447,7 +478,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将和借贷相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid = ? and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like ? || '_%' and ichargetype = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
         if (error) {
             *error = [db lastError];
         }
@@ -455,7 +486,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将提醒的operatortype改为2
-    if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ?", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
+    if (![db executeUpdate:@"update bk_user_remind set operatortype = ?, iversion = ?, cwritedate = ? where cremindid = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.remindID]) {
         if (error) {
             *error = [db lastError];
         }
@@ -463,7 +494,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     //取消提醒
-    SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+    SSJReminderItem *remindItem = [[SSJReminderItem alloc] init];
     remindItem.remindId = model.remindID;
     remindItem.userId = model.userID;
     [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
@@ -723,94 +754,46 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return days * principal * rate / 365;
 }
 
-+ (void)queryLoanCompoundChangeModelWithChargeId:(NSString *)chargeId
++ (void)queryLoanCompoundChangeModelWithChargeID:(NSString *)chargeID
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSString *sundryID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ?", chargeID];
         
-        FMResultSet *resultSet = [db executeQuery:@"select ifunsid, ibillid, cid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where ichargeid = ? and operatortype <> 2", chargeId];
-        
-        NSString *billDateStr = nil;
-        NSString *writeDateStr = nil;
+        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cid = ? and ichargetype = ? and operatortype <> 2", sundryID, @(SSJChargeIdTypeLoan)];
         
         NSMutableArray *chargeModels = [NSMutableArray array];
-        SSJLoanChargeModel *model1 = [[SSJLoanChargeModel alloc] init];
-        
-        while ([resultSet next]) {
-            NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
-            NSString *billId = [resultSet stringForColumn:@"ibillid"];
-            NSString *loanId = [resultSet stringForColumn:@"cid"];
-            NSString *userId = [resultSet stringForColumn:@"cuserid"];
-            NSString *memo = [resultSet stringForColumn:@"cmemo"];
-            double money = [resultSet doubleForColumn:@"imoney"];
-            billDateStr = [resultSet stringForColumn:@"cbilldate"];
-            writeDateStr = [resultSet stringForColumn:@"cwritedate"];
-            NSDate *billDate = [NSDate dateWithString:billDateStr formatString:@"yyyy-MM-dd"];
-            NSDate *writeDate = [NSDate dateWithString:writeDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            
-            model1.chargeId = chargeId;
-            model1.fundId = fundId;
-            model1.billId = billId;
-            model1.loanId = loanId;
-            model1.userId = userId;
-            model1.memo = memo;
-            model1.money = money;
-            model1.billDate = billDate;
-            model1.writeDate = writeDate;
-            [chargeModels addObject:model1];
-        }
-        [resultSet close];
-        
-        NSString *rootId = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = (select cthefundid from bk_loan where loanid = ?)", model1.loanId];
-        if ([rootId isEqualToString:@"10"]) {
-            model1.type = SSJLoanTypeLend;
-        } else if ([rootId isEqualToString:@"11"]) {
-            model1.type = SSJLoanTypeBorrow;
-        } else {
-            if (failure) {
-                NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"此流水不是借贷生成的 model:%@", model1.debugDescription]}];
-                failure(error);
-            }
-            return;
-        }
-        
-        resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo from bk_user_charge where ichargeid <> ? and cuserid = ? and cid = ? and ichargetype = ? and cbilldate = ? and cwritedate = ? and operatortype <> 2", model1.chargeId, model1.userId, model1.loanId, @(SSJChargeIdTypeLoan) , billDateStr, writeDateStr];
-        
-        while ([resultSet next]) {
-            NSString *chargeId = [resultSet stringForColumn:@"ichargeid"];
-            NSString *fundId = [resultSet stringForColumn:@"ifunsid"];
-            NSString *billId = [resultSet stringForColumn:@"ibillid"];
-            NSString *memo = [resultSet stringForColumn:@"cmemo"];
-            double money = [resultSet doubleForColumn:@"imoney"];
-            
+        while ([rs next]) {
             SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
-            model.chargeId = chargeId;
-            model.fundId = fundId;
-            model.billId = billId;
-            model.loanId = model1.loanId;
-            model.userId = model1.userId;
-            model.memo = memo;
-            model.money = money;
-            model.billDate = model1.billDate;
-            model.writeDate = model1.writeDate;
-            model.type = model1.type;
+            model.chargeId = [rs stringForColumn:@"ichargeid"];
+            model.fundId = [rs stringForColumn:@"ifunsid"];
+            model.billId = [rs stringForColumn:@"ibillid"];
+            model.loanId = sundryID;
+            model.userId = [rs stringForColumn:@"cuserid"];
+            model.memo = [rs stringForColumn:@"cmemo"];
+            model.money = [rs doubleForColumn:@"imoney"];
+            model.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+            model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
             [chargeModels addObject:model];
         }
-        [resultSet close];
+        [rs close];
+        
+        NSString *loanID = [[sundryID componentsSeparatedByString:@"_"] firstObject];
+        
+        rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ?", loanID];
         
         SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        
-        resultSet = [db executeQuery:@"select lender, iend from bk_loan where loanid = ?", model1.loanId];
-        while ([resultSet next]) {
-            compoundModel.lender = [resultSet stringForColumn:@"lender"];
-            compoundModel.closeOut = [resultSet boolForColumn:@"iend"];
+        while ([rs next]) {
+            compoundModel.lender = [rs stringForColumn:@"lender"];
+            compoundModel.closeOut = [rs boolForColumn:@"iend"];
         }
-        [resultSet close];
+        [rs close];
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
             NSString *rootId = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?", chargeModel.fundId];
             if ([rootId isEqualToString:@"10"] || [rootId isEqualToString:@"11"]) {
+                chargeModel.type = [rootId isEqualToString:@"10"] ? SSJLoanTypeLend : SSJLoanTypeBorrow;
                 [self updateChargeTypeWithModel:chargeModel];
                 compoundModel.chargeModel = chargeModel;
             } else {
@@ -847,10 +830,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
         // 如果此借贷已经删除，按照执行成功处理
-        int operatorType = [db intForQuery:@"select operatortype from bk_loan where loanid = ?", model.chargeModel.loanId];
-        if (operatorType == 2) {
+        if ([db intForQuery:@"select operatortype from bk_loan where loanid = ?", model.chargeModel.loanId] == 2) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -1268,6 +1249,58 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"借贷流水的writeDate为nil writeDate:%@", model.writeDate]}];
         }
         return NO;
+    }
+    
+    return YES;
+}
+
++ (void)queryMaxLoanChargeSuffixWithLoanID:(NSString *)loanID
+                                   success:(void (^)(int suffix))success
+                                   failure:(nullable void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+        int maxSuffix = 0;
+        FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where cid like ? || '_%' and ichargetype = ?", loanID, @(SSJChargeIdTypeLoan)];
+        while ([rs next]) {
+            NSString *cid = [rs stringForColumn:@"cid"];
+            int suffix = [[[cid componentsSeparatedByString:@"_"] lastObject] intValue];
+            maxSuffix = MAX(maxSuffix, suffix);
+        }
+        [rs close];
+        
+        SSJDispatchMainAsync(^{
+            if (success) {
+                success(maxSuffix);
+            }
+        });
+    }];
+}
+
++ (BOOL)deleteLoanDataRelatedToFundID:(NSString *)fundID
+                            writeDate:(NSString *)writeDate
+                             database:(FMDatabase *)db
+                                error:(NSError **)error {
+    NSMutableSet *loanIDs = [NSMutableSet set];
+    FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?", fundID, @(SSJChargeIdTypeLoan)];
+    while ([rs next]) {
+        NSString *loanID = [[[rs stringForColumn:@"cid"] componentsSeparatedByString:@"_"] firstObject];
+        [loanIDs addObject:loanID];
+    }
+    [rs close];
+    
+    for (NSString *loanID in loanIDs) {
+        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
+        rs = [db executeQuery:@"select loanid, cuserid, cremindid from bk_loan where loanid = ?", loanID];
+        while ([rs next]) {
+            loanModel.ID = [rs stringForColumn:@"loanid"];
+            loanModel.userID = [rs stringForColumn:@"cuserid"];
+            loanModel.remindID = [rs stringForColumn:@"cremindid"];
+        }
+        [rs close];
+        
+        if (![self deleteLoanModel:loanModel writeDate:writeDate database:db error:error]) {
+            return NO;
+        }
     }
     
     return YES;

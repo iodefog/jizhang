@@ -31,7 +31,7 @@ static NSUInteger kAccountTag = 1003;
 static NSUInteger kMemoTag = 1004;
 static NSUInteger kDateTag = 1005;
 
-@interface SSJLoanChargeAddOrEditViewController ()<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
+@interface SSJLoanChargeAddOrEditViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
 
@@ -75,13 +75,12 @@ static NSUInteger kDateTag = 1005;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self loadData];
-    
     [self showDeleteItemIfNeeded];
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
     self.tableView.hidden = YES;
     [self updateAppearance];
+    [self loadData];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -245,14 +244,13 @@ static NSUInteger kDateTag = 1005;
             [self goBackAction];
         } failure:^(NSError * _Nonnull error) {
             self.navigationItem.rightBarButtonItem.enabled = YES;
-            [self showError:error];
+            [CDAutoHideMessageHUD showError:error];
         }];
         
     }], nil];
 }
 
 - (void)sureButtonAction {
-    
     if (self.surplus == 0 && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         switch (self.loanModel.type) {
             case SSJLoanTypeLend:
@@ -441,68 +439,67 @@ static NSUInteger kDateTag = 1005;
 }
 
 #pragma mark - Private
-- (void)updateAppearance {
-    [_sureButton ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
-    [_sureButton ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
-    _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
-}
-
-- (void)updateTitle {
-    switch (self.loanModel.type) {
-        case SSJLoanTypeLend:
-            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-                self.title = @"收款";
-            } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
-                self.title = @"追加借出";
-            }
-            break;
-            
-        case SSJLoanTypeBorrow:
-            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-                self.title = @"还款";
-            } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
-                self.title = @"追加欠款";
-            }
-            break;
-    }
-}
-
-- (void)showDeleteItemIfNeeded {
-    if (_edited) {
-        UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteItemAction)];
-        self.navigationItem.rightBarButtonItem = deleteItem;
-    }
-}
-
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
     
-    if (self.edited) {
-        [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
-            self.compoundModel = model;
-            self.chargeType = self.compoundModel.chargeModel.chargeType;
-            [self loadLoanModelAndFundListWithLoanId:self.compoundModel.chargeModel.loanId];
-        } failure:^(NSError * _Nonnull error) {
-            [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
-        }];
-    } else {
-        [self loadLoanModelAndFundListWithLoanId:self.loanId];
-    }
+    [[[[self loadLoanModel] then:^RACSignal *{
+        return [self loadCompoundChargeModel];
+    }] then:^RACSignal *{
+        return [self loadFundModelList];
+    }] subscribeError:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showError:error];
+    } completed:^{
+        [self.view ssj_hideLoadingIndicator];
+    }];
 }
 
-- (void)loadLoanModelAndFundListWithLoanId:(NSString *)loanId {
-    [SSJLoanHelper queryForLoanModelWithLoanID:loanId success:^(SSJLoanModel * _Nonnull model) {
+- (RACSignal *)loadLoanModel {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.edited) {
+            [SSJLoanHelper queryForLoanModelWithChargeID:self.chargeId success:^(SSJLoanModel * _Nonnull model) {
+                self.loanModel = model;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        } else {
+            [SSJLoanHelper queryForLoanModelWithLoanID:self.loanId success:^(SSJLoanModel * _Nonnull model) {
+                self.loanModel = model;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadCompoundChargeModel {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        if (self.edited) {
+            [SSJLoanHelper queryLoanCompoundChangeModelWithChargeID:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+                self.compoundModel = model;
+                self.chargeType = self.compoundModel.chargeModel.chargeType;
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        } else {
+            [SSJLoanHelper queryMaxLoanChargeSuffixWithLoanID:self.loanId success:^(int suffix) {
+                [self initCompoundModelWithSuffix:(suffix + 1)];
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadFundModelList {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-            
-            [self.view ssj_hideLoadingIndicator];
-            
-            self.loanModel = model;
-            
-            if (!_edited) {
-                [self initCompoundModel];
-            }
-            
             if (self.surplus == 0) {
                 if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
                     self.surplus = self.loanModel.jMoney + self.compoundModel.chargeModel.money;
@@ -534,34 +531,19 @@ static NSUInteger kDateTag = 1005;
                 self.compoundModel.targetChargeModel.fundId = nil;
             }
             
+            [subscriber sendCompleted];
+            
         } failure:^(NSError * _Nonnull error) {
-            [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
+            [subscriber sendError:error];
         }];
-        
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        return nil;
     }];
 }
 
-- (void)showError:(NSError *)error {
-    NSString *message = nil;
-    if (error.code == 1) {
-        message = @"该流水暂不能删除哦，可先编辑收款或追加借出金额再操作。";
-    } else {
-#ifdef DEBUG
-        message = [error localizedDescription];
-#else
-        message = SSJ_ERROR_MESSAGE;
-#endif
-    }
-
-    [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:message action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-}
-
-- (void)initCompoundModel {
+- (void)initCompoundModelWithSuffix:(int)suffix {
     if (!_compoundModel) {
+        _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        
         NSString *chargeBillId = nil;
         NSString *targetChargeBillId = nil;
         NSString *interestChargeBillId = nil;
@@ -590,46 +572,41 @@ static NSUInteger kDateTag = 1005;
                 break;
         }
         
+        NSString *loanID = [NSString stringWithFormat:@"%@_%d", self.loanModel.ID, suffix];
         NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         NSDate *billDate = [today compare:self.loanModel.borrowDate] == NSOrderedAscending ? self.loanModel.borrowDate : today;
         
-        SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
-        chargeModel.chargeId = SSJUUID();
-        chargeModel.fundId = self.loanModel.fundID;
-        chargeModel.billId = chargeBillId;
-        chargeModel.loanId = self.loanModel.ID;
-        chargeModel.userId = SSJUSERID();
-        chargeModel.billDate = billDate;
-        chargeModel.chargeType = self.chargeType;
+        _compoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
+        _compoundModel.chargeModel.chargeId = SSJUUID();
+        _compoundModel.chargeModel.fundId = self.loanModel.fundID;
+        _compoundModel.chargeModel.billId = chargeBillId;
+        _compoundModel.chargeModel.loanId = loanID;
+        _compoundModel.chargeModel.userId = SSJUSERID();
+        _compoundModel.chargeModel.billDate = billDate;
+        _compoundModel.chargeModel.chargeType = self.chargeType;
         
-        SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
-        targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.loanModel.targetFundID;
-        targetChargeModel.billId = targetChargeBillId;
-        targetChargeModel.loanId = self.loanModel.ID;
-        targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.billDate = billDate;
-        targetChargeModel.chargeType = self.chargeType;
-        
-        _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        _compoundModel.chargeModel = chargeModel;
-        _compoundModel.targetChargeModel = targetChargeModel;
+        _compoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
+        _compoundModel.targetChargeModel.chargeId = SSJUUID();
+        _compoundModel.targetChargeModel.fundId = self.loanModel.targetFundID;
+        _compoundModel.targetChargeModel.billId = targetChargeBillId;
+        _compoundModel.targetChargeModel.loanId = loanID;
+        _compoundModel.targetChargeModel.userId = SSJUSERID();
+        _compoundModel.targetChargeModel.billDate = billDate;
+        _compoundModel.targetChargeModel.chargeType = self.chargeType;
         
         // 新建还款流水并且此借贷开启计息，创建一个利息流水模型
         if (!_edited
             && self.loanModel.interest
             && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
             
-            SSJLoanChargeModel *interestModel = [[SSJLoanChargeModel alloc] init];
-            interestModel.chargeId = SSJUUID();
-            interestModel.fundId = self.loanModel.targetFundID;
-            interestModel.billId = interestChargeBillId;
-            interestModel.loanId = self.loanModel.ID;
-            interestModel.userId = SSJUSERID();
-            interestModel.billDate = billDate;
-            interestModel.chargeType = SSJLoanCompoundChargeTypeInterest;
-            
-            _compoundModel.interestChargeModel = interestModel;
+            _compoundModel.interestChargeModel = [[SSJLoanChargeModel alloc] init];
+            _compoundModel.interestChargeModel.chargeId = SSJUUID();
+            _compoundModel.interestChargeModel.fundId = self.loanModel.targetFundID;
+            _compoundModel.interestChargeModel.billId = interestChargeBillId;
+            _compoundModel.interestChargeModel.loanId = loanID;
+            _compoundModel.interestChargeModel.userId = SSJUSERID();
+            _compoundModel.interestChargeModel.billDate = billDate;
+            _compoundModel.interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
         }
     }
 }
@@ -646,6 +623,26 @@ static NSUInteger kDateTag = 1005;
                         @(kAccountTag)],
                       @[@(kMemoTag),
                         @(kDateTag)]];
+    }
+}
+
+- (void)updateTitle {
+    switch (self.loanModel.type) {
+        case SSJLoanTypeLend:
+            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                self.title = @"收款";
+            } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                self.title = @"追加借出";
+            }
+            break;
+            
+        case SSJLoanTypeBorrow:
+            if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+                self.title = @"还款";
+            } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+                self.title = @"追加欠款";
+            }
+            break;
     }
 }
 
@@ -731,6 +728,13 @@ static NSUInteger kDateTag = 1005;
     }
 }
 
+- (void)showDeleteItemIfNeeded {
+    if (_edited) {
+        UIBarButtonItem *deleteItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteItemAction)];
+        self.navigationItem.rightBarButtonItem = deleteItem;
+    }
+}
+
 - (BOOL)showInterestTypeAlertIfNeeded {
     if (self.loanModel.interest
         && self.loanModel.interestType == SSJLoanInterestTypeUnknown) {
@@ -780,7 +784,6 @@ static NSUInteger kDateTag = 1005;
 }
 
 - (void)saveLoanCharge {
-    
     // 更新借贷的剩余金额
     if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
         self.loanModel.jMoney = self.surplus - self.compoundModel.chargeModel.money;
@@ -803,8 +806,14 @@ static NSUInteger kDateTag = 1005;
     } failure:^(NSError * _Nonnull error) {
         self.sureButton.enabled = YES;
         [self.sureButton ssj_hideLoadingIndicator];
-        [self showError:error];
+        [CDAutoHideMessageHUD showError:error];
     }];
+}
+
+- (void)updateAppearance {
+    [_sureButton ssj_setBackgroundColor:SSJ_BUTTON_NORMAL_COLOR forState:UIControlStateNormal];
+    [_sureButton ssj_setBackgroundColor:SSJ_BUTTON_DISABLE_COLOR forState:UIControlStateDisabled];
+    _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
 }
 
 #pragma mark - Getter
@@ -861,7 +870,6 @@ static NSUInteger kDateTag = 1005;
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    
                     if ([item isKindOfClass:[SSJFundingItem class]]) {
                         SSJFundingItem *fundItem = (SSJFundingItem *)item;
                         weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
@@ -872,11 +880,9 @@ static NSUInteger kDateTag = 1005;
                         weakSelf.compoundModel.interestChargeModel.fundId = cardItem.fundingID;
                     }
                     
-                    if (weakSelf.edited) {
-                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.compoundModel.chargeModel.loanId];
-                    } else {
-                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.loanId];
-                    }
+                    [[weakSelf loadFundModelList] subscribeError:^(NSError *error) {
+                        [CDAutoHideMessageHUD showError:error];
+                    }];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 

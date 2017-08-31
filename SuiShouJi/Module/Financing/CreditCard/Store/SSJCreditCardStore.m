@@ -283,47 +283,12 @@
         remindItem.remindId = item.remindId;
         [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
     }
-    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?)", item.fundingID,@(SSJChargeIdTypeLoan)];
-    if (!resultSet) {
-        if (error) {
-            *error = [db lastError];
-        }
+    
+    // 删除和此信用卡账户有关的借贷数据
+    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:item.fundingID writeDate:writeDate database:db error:error]) {
         return NO;
     }
-    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-    while ([resultSet next]) {
-        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
-        loanModel.ID = [resultSet stringForColumn:@"loanid"];
-        loanModel.userID = [resultSet stringForColumn:@"cuserid"];
-        loanModel.lender = [resultSet stringForColumn:@"lender"];
-        loanModel.jMoney = [resultSet doubleForColumn:@"jmoney"];
-        loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
-        loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
-        loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-        loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
-        loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
-        loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
-        loanModel.rate = [resultSet doubleForColumn:@"rate"];
-        loanModel.memo = [resultSet stringForColumn:@"memo"];
-        loanModel.remindID = [resultSet stringForColumn:@"cremindid"];
-        loanModel.interest = [resultSet boolForColumn:@"interest"];
-        loanModel.closeOut = [resultSet boolForColumn:@"iend"];
-        loanModel.type = [resultSet intForColumn:@"itype"];
-        loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
-        loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
-        loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        [tempArr addObject:loanModel];
-    }
-    [resultSet close];
     
-    for (SSJLoanModel *model in tempArr) {
-        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return NO;
-        };
-    }
     //删除流水表
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ? and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),userId,item.fundingID,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {
         if (error) {

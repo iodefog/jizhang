@@ -14,6 +14,7 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJBillingChargeCellItem.h"
+#import "SSJOrmDatabaseQueue.h"
 #import "SSJFundInfoTable.h"
 #import "SSJUserChargeTable.h"
 #import "SSJFundingTypeManager.h"
@@ -21,7 +22,6 @@
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
 #import "SSJShareBooksMemberTable.h"
-#import "SSJOrmDatabaseQueue.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -29,7 +29,6 @@
                                failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
 
-        
         NSString *userid = SSJUSERID();
 
 
@@ -137,7 +136,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         *rollback = YES;
                         if (failure) {
-                            dispatch_main_async_safe(^{
+                            SSJDispatch_main_sync_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -148,59 +147,23 @@
                     if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         *rollback = YES;
                         if (failure) {
-                            dispatch_main_async_safe(^{
+                            SSJDispatch_main_sync_safe(^{
                                 failure([db lastError]);
                             });
                         }
                         return;
                     };
-                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where cthefundid = ?",fundingItem.fundingID];
-                    if (!resultSet) {
+                    
+                    // 删除和此账户相关的借贷数据（借贷项目、流水、提醒）
+                    NSError *error = nil;
+                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:fundingItem.fundingID writeDate:writeDate database:db error:&error]) {
+                        *rollback = YES;
                         if (failure) {
-                            *rollback = YES;
-                            dispatch_main_async_safe(^{
-                                failure([db lastError]);
+                            SSJDispatch_main_sync_safe(^{
+                                failure(error);
                             });
                         }
                         return;
-                    }
-                    
-                    NSMutableArray *models = [NSMutableArray array];
-                    while ([resultSet next]) {
-                        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
-                        loanModel.ID = [resultSet stringForColumn:@"loanid"];
-                        loanModel.userID = [resultSet stringForColumn:@"cuserid"];
-                        loanModel.lender = [resultSet stringForColumn:@"lender"];
-                        loanModel.jMoney = [resultSet doubleForColumn:@"jmoney"];
-                        loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
-                        loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
-                        loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.rate = [resultSet doubleForColumn:@"rate"];
-                        loanModel.memo = [resultSet stringForColumn:@"memo"];
-                        loanModel.remindID = [resultSet stringForColumn:@"cremindid"];
-                        loanModel.interest = [resultSet boolForColumn:@"interest"];
-                        loanModel.closeOut = [resultSet boolForColumn:@"iend"];
-                        loanModel.type = (SSJLoanType)[resultSet intForColumn:@"itype"];
-                        loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
-                        loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
-                        loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                        [models addObject:loanModel];
-                    }
-                    [resultSet close];
-                    
-                    for (SSJLoanModel *loanModel in models) {
-                        if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
-                            if (failure) {
-                                *rollback = YES;
-                                dispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        };
                     }
                 }
             }else{
@@ -210,7 +173,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
-                            dispatch_main_async_safe(^{
+                            SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -221,57 +184,30 @@
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
-                            dispatch_main_async_safe (^{
+                            SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
                         return;
                     };
                     
-                    //找出所有和当前资金账户有关的借贷
-                    FMResultSet *resultSet = [db executeQuery:@"select * from bk_loan where loanid in (select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?)", fundingItem.fundingID,@(SSJChargeIdTypeLoan)];
-                    NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-                    while ([resultSet next]) {
-                        SSJLoanModel *loanModel = [[SSJLoanModel alloc] init];
-                        loanModel.ID = [resultSet stringForColumn:@"loanid"];
-                        loanModel.userID = [resultSet stringForColumn:@"cuserid"];
-                        loanModel.lender = [resultSet stringForColumn:@"lender"];
-                        loanModel.jMoney = [resultSet doubleForColumn:@"jmoney"];
-                        loanModel.fundID = [resultSet stringForColumn:@"cthefundid"];
-                        loanModel.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
-                        loanModel.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
-                        loanModel.borrowDate = [NSDate dateWithString:[resultSet stringForColumn:@"cborrowdate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.repaymentDate = [NSDate dateWithString:[resultSet stringForColumn:@"crepaymentdate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.endDate = [NSDate dateWithString:[resultSet stringForColumn:@"cenddate"] formatString:@"yyyy-MM-dd"];
-                        loanModel.rate = [resultSet doubleForColumn:@"rate"];
-                        loanModel.memo = [resultSet stringForColumn:@"memo"];
-                        loanModel.remindID = [resultSet stringForColumn:@"cremindid"];
-                        loanModel.interest = [resultSet boolForColumn:@"interest"];
-                        loanModel.closeOut = [resultSet boolForColumn:@"iend"];
-                        loanModel.type = (SSJLoanType)[resultSet intForColumn:@"itype"];
-                        loanModel.operatorType = [resultSet intForColumn:@"operatorType"];
-                        loanModel.version = [resultSet longLongIntForColumn:@"iversion"];
-                        loanModel.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                        [tempArr addObject:loanModel];
-                    }
-                    [resultSet close];
-                    for (SSJLoanModel *model in tempArr) {
-                        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
-                            if (failure) {
-                                *rollback = YES;
-                                dispatch_main_async_safe(^{
-                                    failure([db lastError]);
-                                });
-                            }
-                            return;
-                        };
+                    // 删除和此账户相关的借贷数据（借贷项目、流水、提醒）
+                    NSError *error = nil;
+                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:fundingItem.fundingID writeDate:writeDate database:db error:&error]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatch_main_sync_safe(^{
+                                failure(error);
+                            });
+                        }
+                        return;
                     }
                     
                     // 删掉账户所对应的转账
                     if (![self deleteTransferChargeInDataBase:db withFundId:fundingItem.fundingID userId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
-                            dispatch_main_async_safe(^{
+                            SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -282,7 +218,7 @@
                     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),fundingItem.fundingID,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {
                         if (failure) {
                             *rollback = YES;
-                            dispatch_main_async_safe(^{
+                            SSJDispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -299,7 +235,7 @@
                 if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
-                        dispatch_main_async_safe(^{
+                        SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -309,7 +245,7 @@
                 if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
-                        dispatch_main_async_safe(^{
+                        SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -319,7 +255,7 @@
                 if (cardItem.remindId.length) {
                     if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,cardItem.remindId]) {
                         *rollback = YES;
-                        dispatch_main_async_safe(^{
+                        SSJDispatch_main_async_safe(^{
                             if (failure) {
                                 failure([db lastError]);
                             }
@@ -336,7 +272,7 @@
                 if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
-                        dispatch_main_async_safe(^{
+                        SSJDispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -345,7 +281,7 @@
                 
                 if (![SSJCreditCardStore deleteCreditCardWithCardItem:cardItem inDatabase:db forUserId:userId error:NULL]) {
                     *rollback = YES;
-                    dispatch_main_async_safe(^{
+                    SSJDispatch_main_async_safe(^{
                         if (failure) {
                             failure([db lastError]);
                         }
@@ -355,7 +291,7 @@
             }
         }
         if (success) {
-            dispatch_main_async_safe(^{
+            SSJDispatch_main_async_safe(^{
                 success();
             });
         }

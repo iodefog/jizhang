@@ -200,7 +200,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 }
 
 + (void)queryDataWithCreditCardId:(NSString *)cardId
-                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJCreditCardItem *cardItem))success
+                        success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJFinancingHomeitem *cardItem))success
                         failure:(void (^)(NSError *error))failure{
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
         SSJFinancingHomeitem *newItem = [self getFundingItemWithFundId:cardId inDataBase:db];
@@ -399,25 +399,32 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 listItem.month = currentMonth;
                 listItem.billingDay = newItem.cardItem.cardBillingDay;
                 listItem.repaymentDay = newItem.cardItem.cardRepaymentDay;
-                listItem.instalmentMoney = [db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney
+                listItem.instalmentMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney
                                                          fromTable:@"bk_credit_repayment"
                                                              where:SSJCreditRepaymentTable.userId == userId
                                                                    && SSJCreditRepaymentTable.repaymentMonth == listItem.month
                                                                    && SSJCreditRepaymentTable.operatorType == 2
                                                                    && SSJCreditRepaymentTable.cardId == cardId
-                                                                   && SSJCreditRepaymentTable.instalmentCount > 0];
-                listItem.repaymentMoney = [db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum ()
+                                                                   && SSJCreditRepaymentTable.instalmentCount > 0] doubleValue];
+                listItem.repaymentMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
                                                         fromTable:@"bk_credit_repayment"
                                                             where:SSJCreditRepaymentTable.userId == userId
                                                                   && SSJCreditRepaymentTable.repaymentMonth == listItem.month
                                                                   && SSJCreditRepaymentTable.cardId == cardId
                                                                   && SSJCreditRepaymentTable.operatorType == 2
-                                                                  && SSJCreditRepaymentTable.instalmentCount = 0];
-                listItem.repaymentMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0",userid,listItem.month,cardItem.fundingID];
+                                                                  && SSJCreditRepaymentTable.instalmentCount = 0] doubleValue];
                 NSDate *currentMonth = [NSDate dateWithString:listItem.month formatString:@"yyyy-MM"];
                 NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateBySubtractingMonths:1];
                 NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateByAddingDays:1];
-                listItem.repaymentForOtherMonthMoney = [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and crepaymentmonth <> ? and ccardid = ? and operatortype <> 2 and iinstalmentcount = 0 and capplydate >= ? and capplydate <= ?",userid,listItem.month,cardItem.fundingID,[firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]];
+                listItem.repaymentForOtherMonthMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
+                                                                      fromTable:@"bk_credit_repayment"
+                                                                          where:SSJCreditRepaymentTable.userId == userId
+                                                                                && SSJCreditRepaymentTable.repaymentMonth == listItem.month
+                                                                                && SSJCreditRepaymentTable.cardId == cardId
+                                                                                && SSJCreditRepaymentTable.operatorType == 2
+                                                                                && SSJCreditRepaymentTable.instalmentCount == 0
+                                                                                && SSJCreditRepaymentTable.applyDate.between ([firstDate formattedDateWithFormat:@"yyyy-MM-dd"],[seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
+                                                            doubleValue];
                 if (result.count < 2) {
                     listItem.isExpand = YES;
                 }else{
