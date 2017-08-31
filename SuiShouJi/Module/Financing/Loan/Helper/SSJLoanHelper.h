@@ -67,7 +67,7 @@ NS_ASSUME_NONNULL_BEGIN
               failure:(void (^)(NSError *error))failure;
 
 /**
- *  删除借贷模型
+ *  删除借贷项目及其相关的流水、提醒
  *
  *  @param model     借贷模型
  *  @param success   成功的回调
@@ -77,18 +77,20 @@ NS_ASSUME_NONNULL_BEGIN
                 success:(void (^)())success
                 failure:(void (^)(NSError *error))failure;
 
-
 /**
- 删除借贷模型
+ 删除借贷项目及其相关的流水、提醒
 
- @param model  借贷模型
- @param db     db FMDatabase实例
-
- @return 是否合并成功
+ @param model 借贷模型
+ @param userId 用户id
+ @param writeDate 删除时间；为nil的话就取当前时间
+ @param db 数据库对象
+ @param error 错误描述对象
+ @return 是否删除成功
  */
 + (BOOL)deleteLoanModel:(SSJLoanModel *)model
-             inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
+              writeDate:(nullable NSString *)writeDate
+               database:(FMDatabase *)db
                   error:(NSError **)error;
 
 /**

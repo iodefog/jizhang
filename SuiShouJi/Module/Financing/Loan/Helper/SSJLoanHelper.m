@@ -443,9 +443,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
         NSError *error = nil;
-        if ([self deleteLoanModel:model inDatabase:db forUserId:userId error:&error]) {
+        if ([self deleteLoanModel:model
+                        forUserId:userId
+                        writeDate:nil
+                         database:db
+                            error:&error]) {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success();
@@ -463,11 +466,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
 }
 
 + (BOOL)deleteLoanModel:(SSJLoanModel *)model
-             inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
-                  error:(NSError **)error{
+              writeDate:(NSString *)writeDate
+               database:(FMDatabase *)db
+                  error:(NSError **)error {
     
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    writeDate = writeDate ?: [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 将借贷记录的operatortype改为2
     if (![db executeUpdate:@"update bk_loan set operatortype = ?, iversion = ?, cwritedate = ? where loanid = ?", @2, @(SSJSyncVersion()), writeDate, model.ID]) {
@@ -494,7 +498,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     //取消提醒
-    SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
+    SSJReminderItem *remindItem = [[SSJReminderItem alloc] init];
     remindItem.remindId = model.remindID;
     remindItem.userId = model.userID;
     [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];

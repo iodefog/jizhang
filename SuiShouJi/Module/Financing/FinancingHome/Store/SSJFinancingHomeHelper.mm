@@ -191,11 +191,16 @@
                     [resultSet close];
                     
                     for (SSJLoanModel *loanModel in models) {
-                        if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
+                        NSError *error = nil;
+                        if (![SSJLoanHelper deleteLoanModel:loanModel
+                                                  forUserId:userId
+                                                  writeDate:writeDate
+                                                   database:db
+                                                      error:&error]) {
                             if (failure) {
                                 *rollback = YES;
                                 SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
+                                    failure(error);
                                 });
                             }
                             return;
@@ -254,12 +259,18 @@
                         [tempArr addObject:loanModel];
                     }
                     [resultSet close];
+                    
                     for (SSJLoanModel *model in tempArr) {
-                        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
+                        NSError *error = nil;
+                        if (![SSJLoanHelper deleteLoanModel:model
+                                                  forUserId:userId
+                                                  writeDate:writeDate
+                                                   database:db
+                                                      error:&error]) {
                             if (failure) {
                                 *rollback = YES;
                                 SSJDispatch_main_async_safe(^{
-                                    failure([db lastError]);
+                                    failure(error);
                                 });
                             }
                             return;

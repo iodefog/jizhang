@@ -317,10 +317,11 @@
     [resultSet close];
     
     for (SSJLoanModel *model in tempArr) {
-        if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
-            if (error) {
-                *error = [db lastError];
-            }
+        if (![SSJLoanHelper deleteLoanModel:model
+                                  forUserId:userId
+                                  writeDate:writeDate
+                                   database:db
+                                      error:error]) {
             return NO;
         };
     }
