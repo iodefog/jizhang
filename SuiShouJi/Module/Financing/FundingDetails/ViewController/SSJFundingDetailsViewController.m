@@ -111,7 +111,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     @weakify(self)
     if (self.item.cardItem && self.item.cardItem.settleAtRepaymentDay) {
-        [SSJFundingDetailHelper queryDataWithCreditCardItem:self.item.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
+        [SSJFundingDetailHelper queryDataWithCreditCardId:self.item.fundingID success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
             @strongify(self);
             //            weakSelf.listItems = [NSMutableArray arrayWithArray:data];
             //            [weakSelf.tableView reloadData];
@@ -419,7 +419,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     __weak typeof(self) weakSelf = self;
     [self.view ssj_showLoadingIndicator];
     if ([self.item isKindOfClass:[SSJCreditCardItem class]] && self.cardItem.settleAtRepaymentDay) {
-        [SSJFundingDetailHelper queryDataWithCreditCardItem:self.cardItem success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
+        [SSJFundingDetailHelper queryDataWithCreditCardId:self.cardItem.fundingID success:^(NSMutableArray *data,SSJCreditCardItem *cardItem) {
             weakSelf.listItems = [NSMutableArray arrayWithArray:data];
             [weakSelf.tableView reloadData];
             [weakSelf.view ssj_hideLoadingIndicator];

@@ -256,17 +256,17 @@
     }else{
         self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardBillingDay];
     }
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
-    } else {
-        self.backLayer.colors = nil;
-        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
-        } else {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
-        }
-    }
+//    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+//        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
+//        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+//    } else {
+//        self.backLayer.colors = nil;
+//        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+//            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
+//        } else {
+//            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
+//        }
+//    }
     [self.billingDayLab sizeToFit];
 }
 

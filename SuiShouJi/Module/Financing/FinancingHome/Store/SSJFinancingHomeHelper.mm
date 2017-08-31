@@ -14,7 +14,6 @@
 #import "SSJLoanHelper.h"
 #import "SSJLocalNotificationHelper.h"
 #import "SSJBillingChargeCellItem.h"
-#import "SSJOrmDatabaseQueue.h"
 #import "SSJFundInfoTable.h"
 #import "SSJUserChargeTable.h"
 #import "SSJFundingTypeManager.h"
@@ -22,6 +21,7 @@
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
 #import "SSJShareBooksMemberTable.h"
+#import "SSJOrmDatabaseQueue.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -29,6 +29,7 @@
                                failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
 
+        
         NSString *userid = SSJUSERID();
 
 
@@ -136,7 +137,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         *rollback = YES;
                         if (failure) {
-                            SSJDispatch_main_sync_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -147,7 +148,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         *rollback = YES;
                         if (failure) {
-                            SSJDispatch_main_sync_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -157,7 +158,7 @@
                     if (!resultSet) {
                         if (failure) {
                             *rollback = YES;
-                            SSJDispatch_main_sync_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -194,7 +195,7 @@
                         if (![SSJLoanHelper deleteLoanModel:loanModel inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {
                                 *rollback = YES;
-                                SSJDispatch_main_async_safe(^{
+                                dispatch_main_async_safe(^{
                                     failure([db lastError]);
                                 });
                             }
@@ -209,7 +210,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
-                            SSJDispatch_main_async_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -220,7 +221,7 @@
                     if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
-                            SSJDispatch_main_async_safe(^{
+                            dispatch_main_async_safe (^{
                                 failure([db lastError]);
                             });
                         }
@@ -258,7 +259,7 @@
                         if (![SSJLoanHelper deleteLoanModel:model inDatabase:db forUserId:userId error:NULL]) {
                             if (failure) {
                                 *rollback = YES;
-                                SSJDispatch_main_async_safe(^{
+                                dispatch_main_async_safe(^{
                                     failure([db lastError]);
                                 });
                             }
@@ -270,7 +271,7 @@
                     if (![self deleteTransferChargeInDataBase:db withFundId:fundingItem.fundingID userId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
-                            SSJDispatch_main_async_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -281,7 +282,7 @@
                     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),fundingItem.fundingID,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {
                         if (failure) {
                             *rollback = YES;
-                            SSJDispatch_main_async_safe(^{
+                            dispatch_main_async_safe(^{
                                 failure([db lastError]);
                             });
                         }
@@ -298,7 +299,7 @@
                 if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
-                        SSJDispatch_main_async_safe(^{
+                        dispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -308,7 +309,7 @@
                 if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?",writeDate,@(SSJSyncVersion()),cardItem.fundingID]) {
                     *rollback = YES;
                     if (failure) {
-                        SSJDispatch_main_async_safe(^{
+                        dispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -318,7 +319,7 @@
                 if (cardItem.remindId.length) {
                     if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,cardItem.remindId]) {
                         *rollback = YES;
-                        SSJDispatch_main_async_safe(^{
+                        dispatch_main_async_safe(^{
                             if (failure) {
                                 failure([db lastError]);
                             }
@@ -335,7 +336,7 @@
                 if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
-                        SSJDispatch_main_async_safe(^{
+                        dispatch_main_async_safe(^{
                             failure([db lastError]);
                         });
                     }
@@ -344,7 +345,7 @@
                 
                 if (![SSJCreditCardStore deleteCreditCardWithCardItem:cardItem inDatabase:db forUserId:userId error:NULL]) {
                     *rollback = YES;
-                    SSJDispatch_main_async_safe(^{
+                    dispatch_main_async_safe(^{
                         if (failure) {
                             failure([db lastError]);
                         }
@@ -354,7 +355,7 @@
             }
         }
         if (success) {
-            SSJDispatch_main_async_safe(^{
+            dispatch_main_async_safe(^{
                 success();
             });
         }

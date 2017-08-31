@@ -11,6 +11,9 @@
 #import "SSJCreditCardItem.h"
 #import "SSJFinancingHomeitem.h"
 
+@class SSJBillingChargeCellItem;
+@class WCTStatement;
+
 //  对应日期的key
 extern NSString *const SSJFundingDetailDateKey;
 
@@ -35,7 +38,7 @@ extern NSString *const SSJFundingDetailSumKey;
                         success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJFinancingHomeitem *fundingItem))success
                         failure:(void (^)(NSError *error))failure;
 
-+ (void)queryDataWithCreditCardItem:(SSJCreditCardItem *)cardItem
++ (void)queryDataWithCreditCardId:(NSString *)cardId
                             success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data,SSJCreditCardItem *cardItem))success
                             failure:(void (^)(NSError *error))failure;
 

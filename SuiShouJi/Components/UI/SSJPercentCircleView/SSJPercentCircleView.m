@@ -220,12 +220,12 @@
             
             //  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                UIImage *screentShot = [weakSelf ssj_takeScreenShotWithSize:weakSelf.size opaque:NO scale:0];
+//                UIImage *screentShot = [weakSelf ssj_takeScreenShotWithSize:weakSelf.size opaque:NO scale:0];
 //                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     weakSelf.skinView.hidden = NO;
-                    weakSelf.skinView.image = screentShot;
-                    weakSelf.skinView.size = screentShot.size;
+//                    weakSelf.skinView.image = screentShot;
+//                    weakSelf.skinView.size = screentShot.size;
                     
                     weakSelf.contentView.hidden = YES;
                 });
