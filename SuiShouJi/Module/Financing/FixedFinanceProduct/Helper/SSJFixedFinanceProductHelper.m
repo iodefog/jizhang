@@ -51,7 +51,7 @@
  @param startDate 气息时间
  @return 预期利息key：interest，key：desc
  */
-+ (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:(NSString *)startDate {
++ (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:( NSString *)startDate {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     double interest = 0;
     NSString *desc = @"";
@@ -255,6 +255,75 @@
     [dict setValue:@"0.00" forKey:@"interest"];
     [dict setValue:@"" forKey:@"desc"];
     return dict;
+}
+
+- (double)calculateInterestWithMoney:(double)money rate:(double)rate interesttype:(SSJMethodOfInterest)interesttype timetype:(SSJMethodOfRateOrTime)timetype {
+    switch (interesttype) {
+        case SSJMethodOfInterestEveryDay:
+            switch (timetype) {
+                case SSJMethodOfRateOrTimeDay:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeMonth:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeYear:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            break;
+        case SSJMethodOfInterestEveryMonth:
+            switch (timetype) {
+                case SSJMethodOfRateOrTimeDay:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeMonth:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeYear:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            break;
+        case SSJMethodOfInterestOncePaid:
+            switch (timetype) {
+                case SSJMethodOfRateOrTimeDay:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeMonth:
+                    
+                    break;
+                case SSJMethodOfRateOrTimeYear:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+            
+            break;
+            
+        default:
+            break;
+    }
+    return 0;
+}
+
+
+
+- (NSInteger)getDifferenceWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
+//    [endDate dateByAddingDays:<#(NSInteger)#>]
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    unsigned int unitFlags = NSCalendarUnitDay;
+    NSDateComponents *comps = [gregorian components:unitFlags fromDate:startDate toDate:endDate options:0];
+    return [comps day];
 }
 
 @end

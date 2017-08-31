@@ -74,8 +74,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 // 创建时产生的流水
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *createCompoundModel;
 
-// 编辑金额新产生的余额变更流水
-@property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *changeCompoundModel;
 
 @property (nonatomic, strong) UITextField *nameTextF;
 
@@ -249,7 +247,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    self.jiXiMethodSelectionView.selectedIndex = -1;
+    
+    if (_edited) {
+        self.jiXiMethodSelectionView.selectedIndex = self.model.interesttype;
+    } else {
+        self.jiXiMethodSelectionView.selectedIndex = -1;
+    }
+    
     MJWeakSelf;
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         
@@ -335,41 +339,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)sureButtonAction {
     if (![self checkFixedFinModelIsValid]) return;
     [self updateChargeModels];
-    
-//    保存流水，包括创建产生的流水，如果是编辑，还要包括余额变更流水
-    NSMutableArray *saveChargeModels = [@[self.createCompoundModel] mutableCopy];
-    if (_edited) {//编辑
-        //删除以前所有流水
-        //生成新的流水
-        
-        // 1.编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
-        // 2.因为详情页面中流水列表是根据billdate、writedate排序的，如果只update余额变更流水，顺序就会乱掉，所以要update所有流水
-        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-            [saveChargeModels addObject:compoundModel];
-            
-        }
-        
-        // 如果有新的余额变更流水，就保存
-        if (self.changeCompoundModel.chargeModel.money > 0) {
-            [saveChargeModels addObject:self.changeCompoundModel];
-        }
-        return;
-    }
-    
+    MJWeakSelf;
+    NSArray *saveChargeModels = @[self.createCompoundModel];
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
-    
-    //新建
+
     //保存固定收益理财
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
-        _sureButton.enabled = YES;
+        weakSelf.sureButton.enabled = YES;
         SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
-        detailVC.productID = self.model.productid;
-        [self.navigationController pushViewController:detailVC animated:YES];
+        detailVC.productID = weakSelf.model.productid;
+        [weakSelf.navigationController pushViewController:detailVC animated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
-        _sureButton.enabled = YES;
-        [_sureButton ssj_hideLoadingIndicator];
+        weakSelf.sureButton.enabled = YES;
+        [weakSelf.sureButton ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
@@ -416,7 +400,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.model.ratetype = self.liLvSegmentControl.selectedSegmentIndex;
     self.model.timetype = self.qiXiansegmentControl.selectedSegmentIndex;
     self.createCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-    //[self.model.startdate  ssj_dateStringFromFormat:<#(NSString *)#> toFormat:<#(NSString *)#>];
     
     self.createCompoundModel.chargeModel.memo = self.model.memo;
 
@@ -425,63 +408,35 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
 ;
     
-    if (self.edited) {
-        
-        [self updateBalanceChangeMoney];
-        
-        self.changeCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-        self.changeCompoundModel.chargeModel.memo = self.model.memo;
-        
-        self.changeCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
-        self.changeCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-        self.createCompoundModel.targetChargeModel.cid = self.model.productid;
-        self.createCompoundModel.chargeModel.cid = self.model.productid;
-        self.changeCompoundModel.targetChargeModel.memo = self.model.memo;
-        
-        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
-                || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
-                
-                compoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-                compoundModel.chargeModel.memo = self.model.memo;
-                
-                compoundModel.targetChargeModel.fundId = self.model.targetfundid;
-                compoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-                compoundModel.targetChargeModel.memo = self.model.memo;
-            }
-        }
-        
-    } else {
+//    if (self.edited) {
+//        [self updateBalanceChangeMoney];
+//        
+//        self.changeCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+//        self.changeCompoundModel.chargeModel.memo = self.model.memo;
+//        
+//        self.changeCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
+//        self.changeCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+//        self.createCompoundModel.targetChargeModel.cid = self.model.productid;
+//        self.createCompoundModel.chargeModel.cid = self.model.productid;
+//        self.changeCompoundModel.targetChargeModel.memo = self.model.memo;
+//        
+//        for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
+//            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceIncrease
+//                || compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeBalanceDecrease) {
+//                
+//                compoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+//                compoundModel.chargeModel.memo = self.model.memo;
+//                
+//                compoundModel.targetChargeModel.fundId = self.model.targetfundid;
+//                compoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+//                compoundModel.targetChargeModel.memo = self.model.memo;
+//            }
+//        }
+//        
+//    } else {
         self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
         self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
-    }
-}
-
-
-// 更新余额变更流水的金额
-- (void)updateBalanceChangeMoney {
-    if ([self.model.money doubleValue] > self.originalMoney) {
-        
-        self.changeCompoundModel.chargeModel.money = [self.model.money doubleValue] - self.originalMoney;
-        self.changeCompoundModel.targetChargeModel.money = [self.model.money doubleValue] - self.originalMoney;
-        self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-        
-        self.changeCompoundModel.chargeModel.billId = @"18";
-        self.changeCompoundModel.targetChargeModel.billId = @"17";
-        
-    } else if ([self.model.money doubleValue] < self.originalMoney) {
-        
-        self.changeCompoundModel.chargeModel.money = self.originalMoney - [self.model.money doubleValue];
-        self.changeCompoundModel.targetChargeModel.money = self.originalMoney - [self.model.money doubleValue];
-        self.changeCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
-        
-                 self.changeCompoundModel.chargeModel.billId = @"17";
-                self.changeCompoundModel.targetChargeModel.billId = @"18";
-
-    } else {
-        self.changeCompoundModel.chargeModel.money = 0;
-        self.changeCompoundModel.targetChargeModel.money = 0;
-    }
+//    }
 }
 
 
@@ -809,54 +764,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [self updateJiXi];
         return NO;
     } else if(self.qiXianTextF == textField) {
-        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+//        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+//        self.qiXianTextF.text = [text ssj_reserveDecimalDigits:0 intDigits:9];
         [self updateJiXi];
     }
     return YES;
 }
-
-
-#pragma mark - Event
-- (void)textDidChange:(NSNotification *)notification {
-    UITextField *textField = notification.object;
-    if ([textField isKindOfClass:[UITextField class]]) {
-        
-        if (textField == self.nameTextF) {
-            
-//            self.loanModel.lender = textField.text;
-            self.reminderItem.borrowtarget = textField.text;
-//            [self updateRemindName];
-            
-        } else if (textField == self.moneyTextF) {
-            
-            NSString *tmpMoneyStr = textField.text;
-            tmpMoneyStr = [tmpMoneyStr ssj_reserveDecimalDigits:2 intDigits:9];
-            textField.text = [NSString stringWithFormat:@"%@", tmpMoneyStr];
-//            self.loanModel.jMoney = [tmpMoneyStr doubleValue];
-            
-//            [self updateRemindName];
-//            [self updateInterest];
-            
-        } else if (textField == self.liLvTextF) {
-            
-//            self.loanModel.memo = textField.text;
-            
-        } else if (textField == self.memoTextF) {
-            
-            NSString *moneyStr = textField.text;
-            if ([moneyStr doubleValue] > 100) {
-                moneyStr = @"100.0";
-                [CDAutoHideMessageHUD showMessage:@"收益率不能大于100％"];
-            }
-//            textField.text = [moneyStr ssj_reserveDecimalDigits:1 intDigits:0];
-//            self.loanModel.rate = [textField.text doubleValue] * 0.01;
-//            [self updateInterest];
-            
-        }
-    }
-}
-
 
 #pragma mark - Lazy
 - (TPKeyboardAvoidingTableView *)tableView {
@@ -1031,15 +944,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (SSJFixedFinanceProductCompoundItem *)createCompoundModel {
     if (!_createCompoundModel) {
-        if (_edited) {
-            for (SSJFixedFinanceProductCompoundItem *compoundModel in _chargeModels) {
-                if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
-                    _createCompoundModel = compoundModel;
-                }
-            }
-        } else {
-            NSString *chargeBillId = @"4";
-            NSString *targetChargeBillId = @"3";
+            NSString *chargeBillId = @"3";
+            NSString *targetChargeBillId = @"4";
             
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             chargeModel.chargeId = SSJUUID();
@@ -1060,30 +966,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
             _createCompoundModel.chargeModel = chargeModel;
             _createCompoundModel.targetChargeModel = targetChargeModel;
-        }
     }
     return _createCompoundModel;
-}
-
-- (SSJFixedFinanceProductCompoundItem *)changeCompoundModel {
-    if (!_changeCompoundModel) {
-        _changeCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
-        SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        chargeModel.chargeId = SSJUUID();
-        chargeModel.fundId = self.model.thisfundid;
-        chargeModel.userId = SSJUSERID();
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.model.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.model.productid]];
-        
-        SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.model.targetfundid;
-        targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.cid = chargeModel.cid;
-        
-        _changeCompoundModel.chargeModel = chargeModel;
-        _changeCompoundModel.targetChargeModel = targetChargeModel;
-    }
-    return _changeCompoundModel;
 }
 
 - (SSJFixedFinanceProductItem *)model {

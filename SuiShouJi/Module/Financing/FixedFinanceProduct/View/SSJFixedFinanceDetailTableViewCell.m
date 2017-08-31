@@ -72,6 +72,9 @@
         self.imageView.image = [UIImage imageNamed:item.iconStr];
         self.textLabel.text = item.nameStr;
         self.subTitleL.text = item.subStr;
+        if (item.bottomTitle.length) {
+            self.subTitleL.attributedText = item.bottomTitle;
+        }
         self.detailTextLabel.text = item.amountStr;
         if (model.isHiddenTime) {//隐藏时间
             self.timeL.hidden = YES;

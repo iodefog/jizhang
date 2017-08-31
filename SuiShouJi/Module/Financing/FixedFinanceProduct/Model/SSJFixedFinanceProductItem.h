@@ -75,17 +75,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *endcolor;
 
+
+/**
+ 1:余额转入，由少变多，0:余额转出，由多变少
+ */
+@property (nonatomic, assign) NSInteger balanceOutOrIn;
+
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
 + (NSArray *)keyArr;
-///**更新时间*/
-//@property (nonatomic, copy) NSString *writedate;
-//
-///**版本号*/
-//@property (nonatomic, assign) NSInteger version;
 
-///**操作类型*/
-//@property (nonatomic, assign) SSJOperatorType operatortype;
 @end
 
 NS_ASSUME_NONNULL_END
