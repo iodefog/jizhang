@@ -38,14 +38,12 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     [self.view addSubview:self.tableView];
     [self updateAppearance];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [self loadData];
 }
 
@@ -78,7 +76,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
     [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJLoanHelper queryLoanCompoundChangeModelWithChargeId:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
+        [SSJLoanHelper queryLoanCompoundChangeModelWithChargeID:self.chargeId success:^(SSJLoanCompoundChargeModel * _Nonnull model) {
             self.compoundModel = model;
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {

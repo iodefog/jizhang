@@ -43,6 +43,17 @@ NS_ASSUME_NONNULL_BEGIN
                             failure:(void (^)(NSError *error))failure;
 
 /**
+ 根据借贷流水查询借贷模型
+
+ @param chargeID 流水id
+ @param success 查询成功的回调
+ @param failure 查询失败的回调
+ */
++ (void)queryForLoanModelWithChargeID:(NSString *)chargeID
+                              success:(void (^)(SSJLoanModel *model))success
+                              failure:(void (^)(NSError *error))failure;
+
+/**
  *  新增或更新借贷
  *
  *  @param model     借贷模型
@@ -154,13 +165,13 @@ NS_ASSUME_NONNULL_BEGIN
 + (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
 
 /**
- 查询借贷详情
+ 查询借贷复合流水模型
 
- @param model 借贷流水中的莫一个子流水，转入、转出、利息等
+ @param chargeID 借贷流水ID
  @param success 成功的回调
  @param failure 失败的回调
  */
-+ (void)queryLoanCompoundChangeModelWithChargeId:(NSString *)chargeId
++ (void)queryLoanCompoundChangeModelWithChargeID:(NSString *)chargeID
                                          success:(void (^)(SSJLoanCompoundChargeModel *model))success
                                          failure:(void (^)(NSError *error))failure;
 
@@ -200,6 +211,17 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)saveLoanCompoundChargeModels:(NSArray <SSJLoanCompoundChargeModel *>*)models
                              success:(void (^)(void))success
                              failure:(void (^)(NSError *error))failure;
+
+/**
+ 查询最大的借贷流水后缀
+
+ @param loanID 借贷项目ID
+ @param success 成功的回调
+ @param failure 失败的回调
+ */
++ (void)queryMaxLoanChargeSuffixWithLoanID:(NSString *)loanID
+                                   success:(void (^)(int suffix))success
+                                   failure:(nullable void (^)(NSError *error))failure;
 
 @end
 

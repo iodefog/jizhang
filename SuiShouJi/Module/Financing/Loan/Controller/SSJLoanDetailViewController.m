@@ -161,14 +161,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             SSJLoanChargeDetailViewController *chargeDetailController = [[SSJLoanChargeDetailViewController alloc] init];
             chargeDetailController.chargeId = item.chargeId;
             [self.navigationController pushViewController:chargeDetailController animated:YES];
-            
         } else {
-            
             SSJLoanChargeAddOrEditViewController *chargeEditController = [[SSJLoanChargeAddOrEditViewController alloc] init];
             chargeEditController.edited = YES;
             chargeEditController.chargeId = item.chargeId;
             [self.navigationController pushViewController:chargeEditController animated:YES];
-            
         }
     }
 }
@@ -492,7 +489,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
     [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJLoanHelper queryForLoanModelWithLoanID:_loanID success:^(SSJLoanModel * _Nonnull model) {
+        [SSJLoanHelper queryForLoanModelWithLoanID:self.loanID success:^(SSJLoanModel * _Nonnull model) {
             self.loanModel = model;
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {

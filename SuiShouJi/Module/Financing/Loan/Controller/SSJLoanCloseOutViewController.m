@@ -49,7 +49,7 @@ static NSUInteger kClostOutDateTag = 1004;
 
 @property (nonatomic, strong) SSJLoanCompoundChargeModel *compoundModel;
 
-@property (nonatomic, strong) NSArray <SSJLoanCompoundChargeModel *>*chargeModels;
+@property (nonatomic, strong) NSArray<SSJLoanCompoundChargeModel *> *chargeModels;
 
 @end
 
@@ -71,12 +71,11 @@ static NSUInteger kClostOutDateTag = 1004;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self loadData];
-    
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
     self.tableView.hidden = YES;
     [self updateAppearance];
+    [self loadData];
 }
 
 - (void)updateAppearanceAfterThemeChanged {
@@ -197,53 +196,81 @@ static NSUInteger kClostOutDateTag = 1004;
 
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    
-    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-        
-        self.fundingSelectionView.items = items;
-        self.fundingSelectionView.selectedIndex = -1;
-        
-        BOOL hasSelectedFund = NO;
-        for (int i = 0; i < items.count; i ++) {
-            SSJLoanFundAccountSelectionViewItem *item = items[i];
-            if ([item.ID isEqualToString:self.loanModel.endTargetFundID]) {
-                self.fundingSelectionView.selectedIndex = i;
-                hasSelectedFund = YES;
-                break;
+
+    [[[[self loadCompoundChargeModels] then:^RACSignal *{
+        return [self loadMaxSuffix];
+    }] then:^RACSignal *{
+        return [self loadFundModels];
+    }] subscribeError:^(NSError *error) {
+        [self.view ssj_hideLoadingIndicator];
+        [CDAutoHideMessageHUD showError:error];
+    } completed:^{
+        [self organiseTitles];
+        [self organiseImages];
+        [self organiseCellTags];
+        [self.tableView reloadData];
+        self.tableView.hidden = NO;
+        [self.view ssj_hideLoadingIndicator];
+    }];
+}
+
+- (RACSignal *)loadFundModels {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+            self.fundingSelectionView.items = items;
+            self.fundingSelectionView.selectedIndex = -1;
+            
+            BOOL hasSelectedFund = NO;
+            for (int i = 0; i < items.count; i ++) {
+                SSJLoanFundAccountSelectionViewItem *item = items[i];
+                if ([item.ID isEqualToString:self.loanModel.endTargetFundID]) {
+                    self.fundingSelectionView.selectedIndex = i;
+                    hasSelectedFund = YES;
+                    break;
+                }
             }
-        }
-        
-        // 如果此借贷的目标资金账户不在现有账户列表中，就置为nil，在保存的时候会监测endTargetFundID，空的话会提示用户选择账户
-        if (!hasSelectedFund) {
-            self.loanModel.endTargetFundID = nil;
-        }
-        
+            
+            // 如果此借贷的目标资金账户不在现有账户列表中，就置为nil，在保存的时候会监测endTargetFundID，空的话会提示用户选择账户
+            if (!hasSelectedFund) {
+                self.loanModel.endTargetFundID = nil;
+            }
+            
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadCompoundChargeModels {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
-            
-            [self.view ssj_hideLoadingIndicator];
-            
             self.chargeModels = list;
-            
             [self initEndDate];
             [self initCompoundModel];
-            
             self.compoundModel.interestChargeModel.money = [SSJLoanHelper caculateInterestUntilDate:self.loanModel.endDate model:self.loanModel chargeModels:self.chargeModels];
-            
-            [self organiseTitles];
-            [self organiseImages];
-            [self organiseCellTags];
-            
-            [self.tableView reloadData];
-            self.tableView.hidden = NO;
-            
+
+            [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
-            [self.view ssj_hideLoadingIndicator];
-            [self showError:error];
+            [subscriber sendError:error];
         }];
-        
-    } failure:^(NSError * _Nonnull error) {
-        [self.view ssj_hideLoadingIndicator];
-        [self showError:error];
+        return nil;
+    }];
+}
+
+- (RACSignal *)loadMaxSuffix {
+    return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJLoanHelper queryMaxLoanChargeSuffixWithLoanID:self.loanModel.ID success:^(int suffix) {
+            NSString *loanID = [NSString stringWithFormat:@"%@_%d", self.loanModel.ID, suffix + 1];
+            self.compoundModel.chargeModel.loanId = loanID;
+            self.compoundModel.targetChargeModel.loanId = loanID;
+            self.compoundModel.interestChargeModel.loanId = loanID;
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
     }];
 }
 
@@ -313,6 +340,8 @@ static NSUInteger kClostOutDateTag = 1004;
 
 - (void)initCompoundModel {
     if (!_compoundModel) {
+        _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        
         NSString *chargeBillId = nil;
         NSString *targetChargeBillId = nil;
         NSString *interestChargeBillId = nil;
@@ -331,36 +360,28 @@ static NSUInteger kClostOutDateTag = 1004;
                 break;
         }
         
-        SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
-        chargeModel.chargeId = SSJUUID();
-        chargeModel.fundId = self.loanModel.fundID;
-        chargeModel.billId = chargeBillId;
-        chargeModel.loanId = self.loanModel.ID;
-        chargeModel.userId = SSJUSERID();
-        chargeModel.billDate = self.loanModel.endDate;
-        chargeModel.money = self.loanModel.jMoney;
+        _compoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
+        _compoundModel.chargeModel.chargeId = SSJUUID();
+        _compoundModel.chargeModel.fundId = self.loanModel.fundID;
+        _compoundModel.chargeModel.billId = chargeBillId;
+        _compoundModel.chargeModel.userId = SSJUSERID();
+        _compoundModel.chargeModel.billDate = self.loanModel.endDate;
+        _compoundModel.chargeModel.money = self.loanModel.jMoney;
         
-        SSJLoanChargeModel *targetChargeModel = [[SSJLoanChargeModel alloc] init];
-        targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.loanModel.endTargetFundID;
-        targetChargeModel.billId = targetChargeBillId;
-        targetChargeModel.loanId = self.loanModel.ID;
-        targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.billDate = self.loanModel.endDate;
-        targetChargeModel.money = self.loanModel.jMoney;
+        _compoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
+        _compoundModel.targetChargeModel.chargeId = SSJUUID();
+        _compoundModel.targetChargeModel.fundId = self.loanModel.endTargetFundID;
+        _compoundModel.targetChargeModel.billId = targetChargeBillId;
+        _compoundModel.targetChargeModel.userId = SSJUSERID();
+        _compoundModel.targetChargeModel.billDate = self.loanModel.endDate;
+        _compoundModel.targetChargeModel.money = self.loanModel.jMoney;
         
-        SSJLoanChargeModel *interestModel = [[SSJLoanChargeModel alloc] init];
-        interestModel.chargeId = SSJUUID();
-        interestModel.fundId = self.loanModel.endTargetFundID;
-        interestModel.billId = interestChargeBillId;
-        interestModel.loanId = self.loanModel.ID;
-        interestModel.userId = SSJUSERID();
-        interestModel.billDate = self.loanModel.endDate;
-        
-        _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-        _compoundModel.chargeModel = chargeModel;
-        _compoundModel.targetChargeModel = targetChargeModel;
-        _compoundModel.interestChargeModel = interestModel;
+        _compoundModel.interestChargeModel = [[SSJLoanChargeModel alloc] init];
+        _compoundModel.interestChargeModel.chargeId = SSJUUID();
+        _compoundModel.interestChargeModel.fundId = self.loanModel.endTargetFundID;
+        _compoundModel.interestChargeModel.billId = interestChargeBillId;
+        _compoundModel.interestChargeModel.userId = SSJUSERID();
+        _compoundModel.interestChargeModel.billDate = self.loanModel.endDate;
     }
 }
 
@@ -572,13 +593,17 @@ static NSUInteger kClostOutDateTag = 1004;
                         weakSelf.loanModel.endTargetFundID = fundItem.fundingID;
                         weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
                         weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
-                        [weakSelf loadData];
+                        [[weakSelf loadFundModels] subscribeError:^(NSError *error) {
+                            [CDAutoHideMessageHUD showError:error];
+                        }];
                     } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
                         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
                         weakSelf.loanModel.endTargetFundID = cardItem.fundingID;
                         weakSelf.compoundModel.targetChargeModel.fundId = cardItem.fundingID;
                         weakSelf.compoundModel.interestChargeModel.fundId = cardItem.fundingID;
-                        [weakSelf loadData];
+                        [[weakSelf loadFundModels] subscribeError:^(NSError *error) {
+                            [CDAutoHideMessageHUD showError:error];
+                        }];
                     }
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
