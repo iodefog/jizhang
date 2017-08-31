@@ -486,12 +486,8 @@ static NSUInteger kDateTag = 1005;
                 [subscriber sendError:error];
             }];
         } else {
-            [SSJLoanHelper queryMaxLoanChargeSuffixWithLoanID:self.loanId success:^(int suffix) {
-                [self initCompoundModelWithSuffix:(suffix + 1)];
-                [subscriber sendCompleted];
-            } failure:^(NSError * _Nonnull error) {
-                [subscriber sendError:error];
-            }];
+            [self initCompoundModel];
+            [subscriber sendCompleted];
         }
         return nil;
     }];
@@ -540,7 +536,7 @@ static NSUInteger kDateTag = 1005;
     }];
 }
 
-- (void)initCompoundModelWithSuffix:(int)suffix {
+- (void)initCompoundModel {
     if (!_compoundModel) {
         _compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
         
@@ -572,7 +568,7 @@ static NSUInteger kDateTag = 1005;
                 break;
         }
         
-        NSString *loanID = [NSString stringWithFormat:@"%@_%d", self.loanModel.ID, suffix];
+        NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
         NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         NSDate *billDate = [today compare:self.loanModel.borrowDate] == NSOrderedAscending ? self.loanModel.borrowDate : today;
         

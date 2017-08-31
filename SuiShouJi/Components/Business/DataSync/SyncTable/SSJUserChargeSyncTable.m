@@ -42,7 +42,7 @@
 
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     
-    if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeShareBooks) {
+    if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeFixedFinance) {
         return NO;
     }
     
@@ -116,19 +116,11 @@
         BOOL isExisted = NO;
         int localOperatorType = 0;
         
-        FMResultSet *resultSet = [db executeQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
-        if (!resultSet) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return NO;
-        }
-        
-        while ([resultSet next]) {
+        NSString *typeStr = [db stringForQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
+        if (typeStr) {
             isExisted = YES;
-            localOperatorType = [resultSet intForColumn:@"operatortype"];
+            localOperatorType = [typeStr intValue];
         }
-        [resultSet close];
         
         // 0添加  1修改  2删除
         int opertoryValue = [recordInfo[@"operatortype"] intValue];
@@ -159,10 +151,11 @@
 
             
             if (chargeType == SSJChargeIdTypeShareBooks) {
-                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]] || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
-                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = '%@'",keyValuesStr, recordInfo[@"ichargeid"]];
+                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]]
+                    || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = '%@'", keyValuesStr, recordInfo[@"ichargeid"]];
                 } else {
-                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr,  condition];
+                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
                 }
             } else {
                 statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
@@ -191,8 +184,6 @@
             }
             return NO;
         }
-
-        
     }
     return YES;
 }

@@ -14,7 +14,7 @@
 @interface SSJDatabaseVersion18 : NSObject <SSJDatabaseVersionProtocol>
 
 /**
- 修改借贷流水的cid，cid拼接格式：借贷项目id_idx；idx从1开始
+ 修改借贷流水的cid，cid拼接格式：loanID_suffix；suffix从1开始
 
  @param models 存储借贷流水模型的数组
  @param db 数据库对象
