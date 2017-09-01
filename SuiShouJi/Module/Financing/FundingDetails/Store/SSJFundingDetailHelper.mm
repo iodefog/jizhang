@@ -729,81 +729,85 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 + (SSJBillingChargeCellItem *)getChargeItemWithStatement:(WCTStatement *)statement {
     SSJBillingChargeCellItem *chargeItem = [[SSJBillingChargeCellItem alloc] init];
     for ( int i = 0 ; i < [statement getCount] ; ++ i ) {
-        WCTValue *value = [statement getValueAtIndex:i];
+        id value = [statement getValueAtIndex:i];
         NSString *name = [statement getNameAtIndex:i];
         NSString *str = SSJUserChargeTable.chargeId.getDescription();
         NSString *tableName = [statement getTableNameAtIndex:i];
         if (value) {
             if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
                 && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.ID = (NSString *)value;
+                chargeItem.ID = value;
             } else if ([name isEqualToString:SSJUserBillTypeTable.billIcon.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
-                chargeItem.imageName = (NSString *)value;
+                chargeItem.imageName = value;
             } else if ([name isEqualToString:SSJUserBillTypeTable.billName.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
-                chargeItem.typeName = (NSString *)value;
+                chargeItem.typeName = value;
             } else if ([name isEqualToString:SSJUserBillTypeTable.billColor.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
-                chargeItem.colorValue = (NSString *)value;
+                chargeItem.colorValue = value;
             } else if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.incomeOrExpence = [(NSNumber *)value boolValue];
             } else if ([name isEqualToString:SSJUserChargeTable.fundId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.fundId = (NSString *)value;
+                chargeItem.fundId = value;
             } else if ([name isEqualToString:SSJUserChargeTable.billDate.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.billDate = (NSString *)value;
+                chargeItem.billDate = value;
             } else if ([name isEqualToString:SSJUserChargeTable.writeDate.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.editeDate = (NSString *)value;
+                chargeItem.editeDate = value;
             } else if ([name isEqualToString:SSJUserChargeTable.billDate.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.billId = (NSString *)value;
+                chargeItem.billId = value;
             } else if ([name isEqualToString:SSJUserChargeTable.memo.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.chargeMemo = (NSString *)value;
+                chargeItem.chargeMemo = value;
             } else if ([name isEqualToString:SSJUserChargeTable.imgUrl.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.chargeImage = (NSString *)value;
+                chargeItem.chargeImage = value;
             } else if ([name isEqualToString:SSJUserChargeTable.thumbUrl.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.chargeThumbImage = (NSString *)value;
+                chargeItem.chargeThumbImage = value;
             } else if ([name isEqualToString:SSJUserChargeTable.booksId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.booksId = (NSString *)value;
+                chargeItem.booksId = value;
             } else if ([name isEqualToString:SSJLoanTable.lender.getDescription()]
                        && [tableName isEqualToString:@"BK_LOAN"]) {
-                chargeItem.loanSource = (NSString *)value;
+                chargeItem.loanSource = value;
             } else if ([name isEqualToString:SSJLoanTable.type.getDescription()]
                        && [tableName isEqualToString:@"BK_LOAN"]) {
-                chargeItem.loanType = (SSJLoanType)[(NSNumber *)value integerValue];
+                chargeItem.loanType = (SSJLoanType)[value integerValue];
             } else if ([name isEqualToString:SSJUserChargeTable.chargeType.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.idType = (SSJChargeIdType)[(NSNumber *)value integerValue];
+                chargeItem.idType = (SSJChargeIdType)[value integerValue];
             } else if ([name isEqualToString:SSJUserChargeTable.cid.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.sundryId = (NSString *)value;
+                chargeItem.sundryId = value;
             } else if ([name isEqualToString:SSJUserChargeTable.money.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.money = (NSString *)value;
+                chargeItem.money = value;
             } else if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.ID = (NSString *)value;
+                chargeItem.ID = value;
             } else if ([name isEqualToString:SSJUserChargeTable.billId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.billId = (NSString *)value;
-            }
-            chargeItem.fundParent = @"3";
-            double money = [chargeItem.money doubleValue];
-            NSString *moneyStr = [[NSString stringWithFormat:@"%f",money] ssj_moneyDecimalDisplayWithDigits:2];
-            if (chargeItem.incomeOrExpence == SSJBillTypePay) {
-                chargeItem.money = [NSString stringWithFormat:@"-%@",moneyStr];
-            }else if(chargeItem.incomeOrExpence == SSJBillTypeIncome){
-                chargeItem.money = [NSString stringWithFormat:@"+%@",moneyStr];
+                chargeItem.billId = value;
+            } else if ([name isEqualToString:SSJUserBillTypeTable.billType.getDescription()]
+                       && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
+                chargeItem.incomeOrExpence = [value integerValue];
             }
         }
+
+    }
+    chargeItem.fundParent = @"3";
+    double money = [chargeItem.money doubleValue];
+    NSString *moneyStr = [[NSString stringWithFormat:@"%f",money] ssj_moneyDecimalDisplayWithDigits:2];
+    if (chargeItem.incomeOrExpence == SSJBillTypePay) {
+        chargeItem.money = [NSString stringWithFormat:@"-%@",moneyStr];
+    }else if(chargeItem.incomeOrExpence == SSJBillTypeIncome){
+        chargeItem.money = [NSString stringWithFormat:@"+%@",moneyStr];
     }
     return chargeItem;
 }
