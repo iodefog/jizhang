@@ -32,11 +32,6 @@
         return error;
     }
     
-    error = [self insertSpecialBillTypeWithDatabase:db];
-    if (error) {
-        return error;
-    }
-    
     error = [self migrateBillTypeRecordsToNewTableWithDatabase:db];
     if (error) {
         return error;
@@ -72,22 +67,6 @@
 + (NSError *)createUserBillTypeTableWithDatabase:(FMDatabase *)db {
     if (![db executeUpdate:@"CREATE TABLE IF NOT EXISTS BK_USER_BILL_TYPE (CBILLID TEXT, CUSERID TEXT, CBOOKSID TEXT, ITYPE INTEGER, CNAME TEXT, CCOLOR TEXT, CICOIN TEXT, IORDER INTEGER, CWRITEDATE TEXT, OPERATORTYPE INTEGER, IVERSION INTEGER, PRIMARY KEY(CBILLID, CUSERID, CBOOKSID))"]) {
         return db.lastError;
-    }
-    return nil;
-}
-
-+ (NSError *)insertSpecialBillTypeWithDatabase:(FMDatabase *)db {
-    NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    for (NSDictionary *billTypeInfo in [[SSJBillTypeManager sharedManager].specialBillTypes allValues]) {
-        NSDictionary *param = @{@"cbillid":billTypeInfo[@"ID"],
-                                @"itype":billTypeInfo[@"expended"],
-                                @"cname":billTypeInfo[@"name"],
-                                @"ccolor":billTypeInfo[@"color"],
-                                @"cicoin":billTypeInfo[@"icon"]};
-        
-        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, itype, cname, ccolor, cicoin) values (:cbillid, :itype, :cname, :ccolor, :cicoin)" withParameterDictionary:param]) {
-            return db.lastError;
-        }
     }
     return nil;
 }

@@ -16,6 +16,26 @@ static NSString *const kExpenseBillIdKey = @"kExpenseBillIdKey";
 @implementation SSJUserDefaultBillTypesCreater
 
 + (void)createDefaultDataTypeForUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+    // 创建特殊类别
+    for (NSDictionary *billTypeInfo in [[SSJBillTypeManager sharedManager].specialBillTypes allValues]) {
+        if ([db boolForQuery:@"select count(1) from bk_user_bill_type where cbillid = ?", billTypeInfo[@"ID"]]) {
+            continue;
+        }
+        
+        NSDictionary *param = @{@"cbillid":billTypeInfo[@"ID"],
+                                @"itype":billTypeInfo[@"expended"],
+                                @"cname":billTypeInfo[@"name"],
+                                @"ccolor":billTypeInfo[@"color"],
+                                @"cicoin":billTypeInfo[@"icon"]};
+        
+        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, itype, cname, ccolor, cicoin) values (:cbillid, :itype, :cname, :ccolor, :cicoin)" withParameterDictionary:param]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return;
+        }
+    }
+    
     // 查询个人账本id、类型
     FMResultSet *rs = [db executeQuery:@"select cbooksid, iparenttype from bk_books_type where cuserid = ? and operatortype <> 2", userId];
     if (!rs) {
