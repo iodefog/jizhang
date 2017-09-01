@@ -14,35 +14,40 @@
     return @"bk_loan";
 }
 
-+ (NSArray *)columns {
-    return @[@"loanid",
-             @"cuserid",
-             @"lender",
-             @"jmoney",
-             @"cthefundid",
-             @"ctargetfundid",
-             @"cetarget",
-             @"cborrowdate",
-             @"crepaymentdate",
-             @"cenddate",
-             @"rate",
-             @"memo",
-             @"cremindid",
-             @"interest",
-             @"interesttype",
-             @"iend",
-             @"itype",
-             @"operatortype",
-             @"iversion",
-             @"cwritedate"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"loanid",
+            @"cuserid",
+            @"lender",
+            @"jmoney",
+            @"cthefundid",
+            @"ctargetfundid",
+            @"cetarget",
+            @"cborrowdate",
+            @"crepaymentdate",
+            @"cenddate",
+            @"rate",
+            @"memo",
+            @"cremindid",
+            @"interest",
+            @"interesttype",
+            @"iend",
+            @"itype",
+            @"operatortype",
+            @"iversion",
+            @"cwritedate",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"loanid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"loanid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
 @end

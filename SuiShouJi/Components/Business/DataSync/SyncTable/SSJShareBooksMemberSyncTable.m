@@ -16,7 +16,7 @@
     return @"bk_share_books_member";
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(SSJDatabase *)db error:(NSError **)error {
+- (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(SSJDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         FMResultSet *rs = [db executeQuery:@"select istate from bk_share_books_member where cmemberid = ? and cbooksid = ?", recordInfo[@"cmemberid"], recordInfo[@"cbooksid"]];
         if (!rs) {
@@ -74,12 +74,12 @@
     return YES;
 }
 
-+ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSMutableArray *syncRecords = [NSMutableArray array];
     return syncRecords;
 }
 
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)updateVersionOfRecordModifiedDuringSync:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {

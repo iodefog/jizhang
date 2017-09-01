@@ -15,32 +15,37 @@
     return @"bk_fund_info";
 }
 
-+ (NSArray *)columns {
-    return @[@"cfundid",
-             @"cacctname",
-             @"cicoin",
-             @"cparent",
-             @"ccolor",
-             @"cmemo",
-             @"cuserid",
-             @"iorder",
-             @"idisplay",
-             @"cwritedate",
-             @"iversion",
-             @"operatortype",
-             @"cstartcolor",
-             @"cendcolor"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cfundid",
+            @"cacctname",
+            @"cicoin",
+            @"cparent",
+            @"ccolor",
+            @"cmemo",
+            @"cuserid",
+            @"iorder",
+            @"idisplay",
+            @"cwritedate",
+            @"iversion",
+            @"operatortype",
+            @"cstartcolor",
+            @"cendcolor",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cfundid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"cfundid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
-+ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
         if (error) {
@@ -94,7 +99,7 @@
     return syncRecords;
 }
 
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)updateVersionOfRecordModifiedDuringSync:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
         if (error) {
@@ -119,7 +124,7 @@
     return success;
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     return [db boolForQuery:@"select count(*) from BK_FUND_INFO where CFUNDID = ?", record[@"cparent"]];
 }
 

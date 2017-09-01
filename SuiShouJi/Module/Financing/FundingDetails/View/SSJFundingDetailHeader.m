@@ -145,21 +145,20 @@
     return _backLayer;
 }
 
-- (void)setExpence:(double)expence {
-    NSString *expenceStr = [[NSString stringWithFormat:@"%f",expence] ssj_moneyDecimalDisplayWithDigits:2];
-    CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
-    if (expenceSize.width > self.width / 2 - 10) {
-        self.totalExpenceLabel.width = self.width / 2 - 10;
-        self.totalExpenceLabel.height = expenceSize.height;
-        self.totalExpenceLabel.text = expenceStr;
+- (void)setItem:(SSJFinancingHomeitem *)item {
+    _item = item;
+    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:_item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:_item.endColor].CGColor];
+        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:_item.startColor].CGColor;
     } else {
-        self.totalExpenceLabel.text = expenceStr;
-        [self.totalExpenceLabel sizeToFit];
+        self.backLayer.colors = nil;
+        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
+        } else {
+            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:_item.startColor].CGColor;
+        }
     }
-}
-
-- (void)setIncome:(double)income {
-    NSString *incomeStr = [[NSString stringWithFormat:@"%f",income] ssj_moneyDecimalDisplayWithDigits:2];
+    NSString *incomeStr = [[NSString stringWithFormat:@"%f",_item.fundingIncome] ssj_moneyDecimalDisplayWithDigits:2];
     CGSize incomeSize = [incomeStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
     if (incomeSize.width > self.width / 2 - 10) {
         self.totalIncomeLabel.width = self.width / 2 - 10;
@@ -169,19 +168,16 @@
         self.totalIncomeLabel.text = incomeStr;
         [self.totalIncomeLabel sizeToFit];
     }
-}
 
-- (void)setItem:(SSJFinancingGradientColorItem *)item {
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
+    NSString *expenceStr = [[NSString stringWithFormat:@"%f",_item.fundingExpence] ssj_moneyDecimalDisplayWithDigits:2];
+    CGSize expenceSize = [expenceStr sizeWithAttributes:@{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1]}];
+    if (expenceSize.width > self.width / 2 - 10) {
+        self.totalExpenceLabel.width = self.width / 2 - 10;
+        self.totalExpenceLabel.height = expenceSize.height;
+        self.totalExpenceLabel.text = expenceStr;
     } else {
-        self.backLayer.colors = nil;
-        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
-        } else {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
-        }
+        self.totalExpenceLabel.text = expenceStr;
+        [self.totalExpenceLabel sizeToFit];
     }
 }
 

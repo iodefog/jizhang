@@ -14,24 +14,30 @@
     return @"bk_user_bill_type";
 }
 
-+ (NSArray *)columns {
-    return @[@"cbillid",
-             @"cuserid",
-             @"cbooksid",
-             @"itype",
-             @"cname",
-             @"ccolor",
-             @"cicoin",
-             @"cwritedate",
-             @"operatortype",
-             @"iversion"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cbillid",
+            @"cuserid",
+            @"cbooksid",
+            @"itype",
+            @"cname",
+            @"ccolor",
+            @"cicoin",
+            @"cwritedate",
+            @"operatortype",
+            @"iversion",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cbillid", @"cuserid", @"cbooksid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObjects:
+            @"cbillid",
+            @"cuserid",
+            @"cbooksid",
+            nil];
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         BOOL exist = [db boolForQuery:@"select count(*) from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", recordInfo[@"cbillid"], recordInfo[@"cuserid"], recordInfo[@"cbooksid"] ? : recordInfo[@"cuserid"]];
         

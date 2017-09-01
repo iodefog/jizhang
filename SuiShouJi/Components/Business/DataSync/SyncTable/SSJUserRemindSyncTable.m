@@ -14,27 +14,32 @@
     return @"bk_user_remind";
 }
 
-+ (NSArray *)columns {
-    return @[@"cremindid",
-             @"cuserid",
-             @"cremindname",
-             @"cmemo",
-             @"cstartdate",
-             @"istate",
-             @"itype",
-             @"icycle",
-             @"iisend",
-             @"operatortype",
-             @"iversion",
-             @"cwritedate"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cremindid",
+            @"cuserid",
+            @"cremindname",
+            @"cmemo",
+            @"cstartdate",
+            @"istate",
+            @"itype",
+            @"icycle",
+            @"iisend",
+            @"operatortype",
+            @"iversion",
+            @"cwritedate",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cremindid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"cremindid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
 @end

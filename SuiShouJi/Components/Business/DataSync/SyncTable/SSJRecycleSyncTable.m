@@ -14,19 +14,21 @@
     return @"bk_recycle";
 }
 
-+ (NSArray *)columns {
-    return @[@"rid",
-             @"cuserid",
-             @"cid",
-             @"itype",
-             @"clientadddate",
-             @"cwritedate",
-             @"operatortype",
-             @"iversion"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"rid",
+            @"cuserid",
+            @"cid",
+            @"itype",
+            @"clientadddate",
+            @"cwritedate",
+            @"operatortype",
+            @"iversion",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"rid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"rid"];
 }
 
 @end

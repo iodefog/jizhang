@@ -14,29 +14,34 @@
     return @"bk_transfer_cycle";
 }
 
-+ (NSArray *)columns {
-    return @[@"icycleid",
-             @"cuserid",
-             @"ctransferinaccountid",
-             @"ctransferoutaccountid",
-             @"imoney",
-             @"cmemo",
-             @"icycletype",
-             @"cbegindate",
-             @"cenddate",
-             @"istate",
-             @"clientadddate",
-             @"cwritedate",
-             @"iversion",
-             @"operatortype"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"icycleid",
+            @"cuserid",
+            @"ctransferinaccountid",
+            @"ctransferoutaccountid",
+            @"imoney",
+            @"cmemo",
+            @"icycletype",
+            @"cbegindate",
+            @"cenddate",
+            @"istate",
+            @"clientadddate",
+            @"cwritedate",
+            @"iversion",
+            @"operatortype",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"icycleid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"icycleid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
 @end

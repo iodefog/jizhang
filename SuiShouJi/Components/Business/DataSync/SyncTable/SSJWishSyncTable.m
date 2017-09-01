@@ -13,23 +13,25 @@
     return @"bk_wish";
 }
 
-+ (NSArray *)columns {
-    return @[@"wishid",
-             @"cuserid",
-             @"wishname",
-             @"wishmoney",
-             @"wishimage",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype",
-             @"status",
-             @"remindid",
-             @"startdate",
-             @"enddate",
-             @"wishtype"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"wishid",
+            @"cuserid",
+            @"wishname",
+            @"wishmoney",
+            @"wishimage",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            @"status",
+            @"remindid",
+            @"startdate",
+            @"enddate",
+            @"wishtype",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"wishid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"wishid"];
 }
 @end

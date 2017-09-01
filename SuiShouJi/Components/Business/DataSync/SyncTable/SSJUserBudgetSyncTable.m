@@ -14,31 +14,33 @@
     return @"bk_user_budget";
 }
 
-+ (NSArray *)columns {
-    return @[@"ibid",
-             @"cuserid",
-             @"itype",
-             @"imoney",
-             @"iremindmoney",
-             @"csdate",
-             @"cedate",
-             @"istate",
-             @"ccadddate",
-             @"cbilltype",
-             @"iremind",
-             @"ihasremind",
-             @"cbooksid",
-             @"islastday",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"ibid",
+            @"cuserid",
+            @"itype",
+            @"imoney",
+            @"iremindmoney",
+            @"csdate",
+            @"cedate",
+            @"istate",
+            @"ccadddate",
+            @"cbilltype",
+            @"iremind",
+            @"ihasremind",
+            @"cbooksid",
+            @"islastday",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"ibid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"ibid"];
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSDate *startDate = [NSDate dateWithString:record[@"csdate"] formatString:@"yyyy-MM-dd"];
     NSDate *endDate = [NSDate dateWithString:record[@"cedate"] formatString:@"yyyy-MM-dd"];
     NSDate *tmpDate = [NSDate date];

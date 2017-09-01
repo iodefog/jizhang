@@ -14,18 +14,24 @@
     return @"bk_share_books_friends_mark";
 }
 
-+ (NSArray *)columns {
-    return @[@"cuserid",
-             @"cbooksid",
-             @"cfriendid",
-             @"cmark",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cuserid",
+            @"cbooksid",
+            @"cfriendid",
+            @"cmark",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cuserid",@"cbooksid",@"cfriendid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObjects:
+            @"cuserid",
+            @"cbooksid",
+            @"cfriendid",
+            nil];
 }
 
 @end

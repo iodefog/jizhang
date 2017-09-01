@@ -632,7 +632,7 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         NSString *userId = SSJUSERID();
         //更新bk_user_charge表
-        if (![SSJUserChargeSyncTable mergeRecords:shareCharge forUserId:SSJUSERID() inDatabase:db error:nil]) {
+        if (![[SSJUserChargeSyncTable table] mergeRecords:shareCharge forUserId:SSJUSERID() inDatabase:db error:nil]) {
             *rollback = YES;
             if ([db lastError]) {
                 SSJDispatchMainAsync(^{

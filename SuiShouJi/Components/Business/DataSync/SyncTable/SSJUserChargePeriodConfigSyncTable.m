@@ -14,34 +14,39 @@
     return @"bk_charge_period_config";
 }
 
-+ (NSArray *)columns {
-    return @[@"iconfigid",
-             @"cuserid",
-             @"ibillid",
-             @"ifunsid",
-             @"itype",
-             @"imoney",
-             @"cimgurl",
-             @"cmemo",
-             @"cbilldate",
-             @"istate",
-             @"cbooksid",
-             @"cmemberids",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype",
-             @"cbilldateend"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"iconfigid",
+            @"cuserid",
+            @"ibillid",
+            @"ifunsid",
+            @"itype",
+            @"imoney",
+            @"cimgurl",
+            @"cmemo",
+            @"cbilldate",
+            @"istate",
+            @"cbooksid",
+            @"cmemberids",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            @"cbilldateend",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"iconfigid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"iconfigid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
+- (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
     NSString *booksId = record[@"cbooksid"];

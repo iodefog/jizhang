@@ -12,11 +12,11 @@
 
 @property (nonatomic, retain) NSString* cardId;
 
-@property (nonatomic, retain) NSString* cardQuota;
+@property (nonatomic, assign) double cardQuota;
 
-@property (nonatomic, retain) NSString* billingDate;
+@property (nonatomic, assign) NSInteger billingDate;
 
-@property (nonatomic, retain) NSString* repaymentDate;
+@property (nonatomic, assign) NSInteger repaymentDate;
 
 @property (nonatomic, retain) NSString* userId;
 
@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) BOOL billDateSettlement;
 
-@property (nonatomic, assign) int type;
+@property (nonatomic, assign) SSJAccountType type;
 
 
 WCDB_PROPERTY(cardId)

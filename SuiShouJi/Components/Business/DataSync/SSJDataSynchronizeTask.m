@@ -55,40 +55,44 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
 @property (nonatomic) int64_t lastSuccessSyncVersion;
 
 // 需要同步的表
-@property (nonatomic, strong) NSArray *syncTableClasses;
+@property (nonatomic, strong) NSArray *syncTables;
 
 @end
 
 @implementation SSJDataSynchronizeTask
 
+- (void)dealloc {
+    
+}
+
 - (instancetype)init {
     if (self = [super init]) {
-        NSSet *firstLayer = [NSSet setWithObjects:[SSJUserRemindSyncTable class],
-                                                  [SSJBooksTypeSyncTable class],
-                                                  [SSJMemberSyncTable class], nil];
+        NSSet *firstLayer = [NSSet setWithObjects:[SSJUserRemindSyncTable table],
+                                                  [SSJBooksTypeSyncTable table],
+                                                  [SSJMemberSyncTable table], nil];
         
-        NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoSyncTable class],
-                                                   [SSJUserCreditSyncTable class],
-                                                   [SSJCreditRepaymentSyncTable class],
-                                                   [SSJUserBillTypeSyncTable class],
-                                                   [SSJUserBudgetSyncTable class],
-                                                   [SSJWishSyncTable class], nil];
+        NSSet *secondLayer = [NSSet setWithObjects:[SSJFundInfoSyncTable table],
+                                                   [SSJUserCreditSyncTable table],
+                                                   [SSJCreditRepaymentSyncTable table],
+                                                   [SSJUserBillTypeSyncTable table],
+                                                   [SSJUserBudgetSyncTable table],
+                                                   [SSJWishSyncTable table], nil];
         
-        NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable class],
-                                                  [SSJTransferCycleSyncTable class],
-                                                  [SSJLoanSyncTable class],
-                                                  [SSJShareBooksSyncTable class],
-                                                  [SSJShareBooksMemberSyncTable class],
-                                                  [SSJShareBooksFriendMarkSyncTable class],
-                                                  [SSJWishChargeSyncTable class], nil];
+        NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable table],
+                                                  [SSJTransferCycleSyncTable table],
+                                                  [SSJLoanSyncTable table],
+                                                  [SSJShareBooksSyncTable table],
+                                                  [SSJShareBooksMemberSyncTable table],
+                                                  [SSJShareBooksFriendMarkSyncTable table],
+                                                  [SSJWishChargeSyncTable table], nil];
         
-        NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable class], nil];
+        NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeSyncTable table], nil];
         
-        NSSet *fifthLayer = [NSSet setWithObjects:[SSJMemberChargeSyncTable class],
-                                                  [SSJRecycleSyncTable class], nil];
+        NSSet *fifthLayer = [NSSet setWithObjects:[SSJMemberChargeSyncTable table],
+                                                  [SSJRecycleSyncTable table], nil];
         
         
-        self.syncTableClasses = @[firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer];
+        self.syncTables = @[firstLayer, secondLayer, thirdLayer, fourthLayer, fifthLayer];
     }
     return self;
 }
@@ -246,11 +250,13 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         //  更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
-        for (NSSet *layer in self.syncTableClasses) {
-            for (Class syncTable in layer) {
-                NSArray *syncRecords = [syncTable queryRecordsNeedToSyncWithUserId:self.userId inDatabase:db error:error];
+        for (NSSet *layer in self.syncTables) {
+            for (SSJBaseSyncTable *table in layer) {
+                NSArray *syncRecords = [table queryRecordsNeedToSyncWithUserId:self.userId
+                                                                    inDatabase:db
+                                                                         error:error];
                 if (syncRecords.count) {
-                    [jsonObject setObject:syncRecords forKey:[syncTable tableName]];
+                    [jsonObject setObject:syncRecords forKey:[[table class] tableName]];
                 }
             }
         }
@@ -367,16 +373,23 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     __block BOOL mergeSuccess = YES;
     __block BOOL updateVersionSuccess = YES;
     
-    for (NSSet *layer in self.syncTableClasses) {
-        for (Class syncTable in layer) {
+    for (NSSet *layer in self.syncTables) {
+        for (SSJBaseSyncTable *table in layer) {
             [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-                if (![syncTable mergeRecords:tableInfo[[syncTable tableName]] forUserId:self.userId inDatabase:db error:error]) {
+                if (![table mergeRecords:tableInfo[[[table class] tableName]]
+                               forUserId:self.userId
+                              inDatabase:db
+                                   error:error]) {
                     *rollback = YES;
                     mergeSuccess = NO;
                     return;
                 }
                 
-                if ([versinStr length] && ![syncTable updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:[versinStr longLongValue] + 1 forUserId:self.userId inDatabase:db error:error]) {
+                if ([versinStr length]
+                    && ![table updateVersionOfRecordModifiedDuringSync:[versinStr longLongValue] + 1
+                                                             forUserId:self.userId
+                                                            inDatabase:db
+                                                                 error:error]) {
                     updateVersionSuccess = NO;
                 }
             }];

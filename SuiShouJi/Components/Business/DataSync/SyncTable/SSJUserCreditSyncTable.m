@@ -14,26 +14,31 @@
     return @"bk_user_credit";
 }
 
-+ (NSArray *)columns {
-    return @[@"cfundid",
-             @"iquota",
-             @"cbilldate",
-             @"crepaymentdate",
-             @"cremindid",
-             @"cuserid",
-             @"cwritedate",
-             @"iversion",
-             @"operatortype",
-             @"ibilldatesettlement",
-             @"itype"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cfundid",
+            @"iquota",
+            @"cbilldate",
+            @"crepaymentdate",
+            @"cremindid",
+            @"cuserid",
+            @"cwritedate",
+            @"iversion",
+            @"operatortype",
+            @"ibilldatesettlement",
+            @"itype",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cfundid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"cfundid"];
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
 @end

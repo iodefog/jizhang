@@ -8,39 +8,71 @@
 
 #import "SSJUserChargeSyncTable.h"
 
+@interface SSJUserChargeSyncTable ()
+
+@property (nonatomic, strong) NSMutableArray *quitBooks;
+
+@end
+
 @implementation SSJUserChargeSyncTable
 
 + (NSString *)tableName {
     return @"bk_user_charge";
 }
 
-+ (NSArray *)columns {
-    return @[@"ichargeid",
-             @"imoney",
-             @"ibillid",
-             @"ifunsid",
-             @"ioldmoney",
-             @"ibalance",
-             @"cbilldate",
-             @"cuserid",
-             @"cimgurl",
-             @"thumburl",
-             @"cmemo",
-             @"cbooksid",
-             @"clientadddate",
-             @"cwritedate",
-             @"iversion",
-             @"ichargetype",
-             @"cid",
-             @"operatortype",
-             @"cdetaildate"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"ichargeid",
+            @"imoney",
+            @"ibillid",
+            @"ifunsid",
+            @"ioldmoney",
+            @"ibalance",
+            @"cbilldate",
+            @"cuserid",
+            @"cimgurl",
+            @"thumburl",
+            @"cmemo",
+            @"cbooksid",
+            @"clientadddate",
+            @"cwritedate",
+            @"iversion",
+            @"ichargetype",
+            @"cid",
+            @"operatortype",
+            @"cdetaildate",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"ichargeid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"ichargeid"];
 }
 
-+ (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
+- (instancetype)init {
+    if (self = [super init]) {
+        self.quitBooks = [NSMutableArray array];
+    }
+    return self;
+}
+
+- (BOOL)mergeRecords:(NSArray *)records
+           forUserId:(NSString *)userId
+          inDatabase:(FMDatabase *)db
+               error:(NSError **)error {
+    
+    FMResultSet *rs = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
+    while ([rs next]) {
+        [self.quitBooks addObject:[rs stringForColumn:@"cbooksid"]];
+    }
+    [rs close];
+    
+    return [super mergeRecords:records forUserId:userId inDatabase:db error:error];
+}
+
+- (BOOL)shouldMergeRecord:(NSDictionary *)record
+                forUserId:(NSString *)userId
+               inDatabase:(FMDatabase *)db
+                    error:(NSError *__autoreleasing *)error {
     
     if ([record[@"ichargetype"] integerValue] > SSJChargeIdTypeFixedFinance) {
         return NO;
@@ -94,98 +126,23 @@
     return YES;
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    for (NSDictionary *recordInfo in records) {
-        
-        NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
-        
-        FMResultSet *quitBooksResult = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
-        while ([quitBooksResult next]) {
-            NSString *quitBookId = [quitBooksResult stringForColumn:@"cbooksid"];
-            [quitBooksArr addObject:quitBookId];
-        }
-        [quitBooksResult close];
-        
-        if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
-            if (error && *error) {
-                return NO;
-            }
-            continue;
-        }
-        
-        BOOL isExisted = NO;
-        int localOperatorType = 0;
-        
-        NSString *typeStr = [db stringForQuery:@"select operatortype from bk_user_charge where ichargeid = ?", recordInfo[@"ichargeid"]];
-        if (typeStr) {
-            isExisted = YES;
-            localOperatorType = [typeStr intValue];
-        }
-        
-        // 0添加  1修改  2删除
-        int opertoryValue = [recordInfo[@"operatortype"] intValue];
-        NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
-        NSString *statement = nil;
-        
-        if (isExisted) {
-            if (localOperatorType == 2) {
-                continue;
-            }
-            
-            NSMutableString *condition = [NSMutableString stringWithFormat:@"ichargeid = '%@'",recordInfo[@"ichargeid"]];
-            
-            if (opertoryValue == 0 || opertoryValue == 1) {
-                [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
-            }
-            
-            int chargeType = [recordInfo[@"ichargetype"] intValue];
-            
-            NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
-            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                if ([[self columns] containsObject:key]) {
-                    [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
-                    [mergeRecord setObject:obj forKey:key];
-                }
-            }];
-            NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
-
-            
-            if (chargeType == SSJChargeIdTypeShareBooks) {
-                if ([quitBooksArr containsObject:recordInfo[@"cbooksid"]]
-                    || ![recordInfo[@"cuserid"] isEqualToString:userId]) {
-                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where ichargeid = '%@'", keyValuesStr, recordInfo[@"ichargeid"]];
-                } else {
-                    statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
-                }
-            } else {
-                statement = [NSString stringWithFormat:@"update bk_user_charge set %@ where %@",keyValuesStr, condition];
-            }
-        } else {
-            NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];
-            NSMutableArray *values = [NSMutableArray arrayWithCapacity:[recordInfo count]];
-            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                if ([[self columns] containsObject:key]) {
-                    [columns addObject:key];
-                    [values addObject:[NSString stringWithFormat:@":%@", key]];
-                    [mergeRecord setObject:obj forKey:key];
-                }
-            }];
-            
-            NSString *columnsStr = [columns componentsJoinedByString:@", "];
-            NSString *valuesStr = [values componentsJoinedByString:@", "];
-            
-            statement = [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [self tableName], columnsStr, valuesStr];
-        }
-        
-        BOOL success = [db executeUpdate:statement withParameterDictionary:mergeRecord];
-        if (!success) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return NO;
-        }
+- (BOOL)updateRecord:(NSDictionary *)record
+           condition:(NSString *)condition
+           forUserId:(NSString *)userId
+          inDatabase:(FMDatabase *)db
+               error:(NSError **)error {
+    
+    int chargeType = [record[@"ichargetype"] intValue];
+    BOOL isBookQuitted = [self.quitBooks containsObject:record[@"cbooksid"]];
+    BOOL isOtherMemberCharge = ![record[@"cuserid"] isEqualToString:userId];
+    
+    if (chargeType == SSJChargeIdTypeShareBooks && (isBookQuitted || isOtherMemberCharge)) {
+        self.subjectToDeletion = NO;
+    } else {
+        self.subjectToDeletion = YES;
     }
-    return YES;
+    
+    return [super updateRecord:record condition:condition forUserId:userId inDatabase:db error:error];
 }
 
 @end
