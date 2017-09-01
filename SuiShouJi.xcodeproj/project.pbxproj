@@ -14253,12 +14253,12 @@
 				7D172E7A1F4438ED00323D24 /* SSJDataSynchronizeTask.m */,
 				7D172E7B1F4438ED00323D24 /* SSJImageSynchronizeTask.h */,
 				7D172E7C1F4438ED00323D24 /* SSJImageSynchronizeTask.m */,
+				7D172E7F1F4438ED00323D24 /* SSJSynchronizeTaskQueue.h */,
+				7D172E801F4438ED00323D24 /* SSJSynchronizeTaskQueue.m */,
 				7DE86E031F58262E004DE21C /* SSJDataSynchronizeExtraProcesser.h */,
 				7DE86E041F58262E004DE21C /* SSJDataSynchronizeExtraProcesser.m */,
 				7D172E7D1F4438ED00323D24 /* SSJShareBooksMemberKickedOutAlerter.h */,
 				7D172E7E1F4438ED00323D24 /* SSJShareBooksMemberKickedOutAlerter.m */,
-				7D172E7F1F4438ED00323D24 /* SSJSynchronizeTaskQueue.h */,
-				7D172E801F4438ED00323D24 /* SSJSynchronizeTaskQueue.m */,
 			);
 			path = DataSync;
 			sourceTree = "<group>";

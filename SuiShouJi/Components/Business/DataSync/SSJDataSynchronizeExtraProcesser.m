@@ -19,24 +19,38 @@
 @implementation SSJDataSynchronizeExtraProcesser
 
 + (void)extraProcessWithUserID:(NSString *)userID data:(NSDictionary *)data {
-    // 如果用户当前账本已删除，就切换成日常账本
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        int operatorType = [db intForQuery:@"select bt.operatortype from bk_books_type as bt, bk_user as u where u.cuserid = ? and bt.cuserid = u.cuserid and u.ccurrentbooksid = bt.cbooksid", userID];
-        if (operatorType == 2) {
-            [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", userID];
-            SSJDispatchMainAsync(^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
-            });
-        }
-    }];
+    [self switchAnotherBookIfNeeded:userID];
     
-    // 如果当前的账本已经被踢,那切换回默认账本
+    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
+    [SSJRegularManager supplementCycleRecordsForUserId:userID];
+    
+    [self supplementMemberCharges:userID];
+    
+    [self resetLocalNotification:userID];
+    
+    [self updateBookIcon:userID];
+    
+    [self updateChargeDetailDate];
+    
+    [self updateFundGradientColor];
+    
+    [self deleteDataOfShareBooksQuitted:userID];
+    
+    [self supplementBillTypesOfShareBooks:userID];
+    
+    [self upgradeOldTransferCharges:userID];
+    
+    [self upgradeLoanCharges:data[@"bk_user_charge"]];
+}
+
+/**
+ 如果用户当前账本已删除或者已退出，就切换成日常账本
+ */
++ (void)switchAnotherBookIfNeeded:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
         NSString *currentBooksid = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?", userID];
         
         if ([db boolForQuery:@"select count(1) from bk_share_books where cbooksid = ?",currentBooksid]) {
-            
             NSInteger currentBooksStatus = [db intForQuery:@"select istate from bk_share_books_member where cbooksid = ? and cmemberid = ?", currentBooksid, userID];
             if (currentBooksStatus != SSJShareBooksMemberStateNormal) {
                 [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", userID];
@@ -44,21 +58,33 @@
                     [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:NULL];
                 });
             }
+        } else {
+            if ([db intForQuery:@"select operatortype from bk_books_type where cuserid = ? and cbooksid = ?", userID, currentBooksid] == 2) {
+                [db executeUpdate:@"update bk_user set ccurrentbooksid = ?", userID];
+                SSJDispatchMainAsync(^{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:SSJBooksTypeDidChangeNotification object:nil];
+                });
+            }
         }
     }];
-    
-    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
-    [SSJRegularManager supplementCycleRecordsForUserId:userID];
-    
-    // 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+}
+
+/**
+ 用户流水表中存在，但是成员流水表中不存在的流水插入到成员流水表中，默认就是用户自己的
+ */
++ (void)supplementMemberCharges:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
         BOOL success = [db executeUpdate:@"insert into bk_member_charge (ichargeid, cmemberid, imoney, iversion, cwritedate, operatortype) select a.ichargeid, ?, a.imoney, ?, ?, 0 from bk_user_charge as a left join bk_member_charge as b on a.ichargeid = b.ichargeid where b.ichargeid is null and a.operatortype <> 2 and a.cuserid = ?", [NSString stringWithFormat:@"%@-0", userID], @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], userID];
         if (!success) {
             *rollback = YES;
         }
     }];
-    
-    // 根据用户的提醒表中的记录注册本地通知
+}
+
+/**
+ 根据用户的提醒表中的记录注册本地通知
+ */
++ (void)resetLocalNotification:(NSString *)userID {
     [SSJLocalNotificationHelper cancelLocalNotificationWithKey:SSJReminderNotificationKey];
     [SSJLocalNotificationStore queryForreminderListForUserId:userID WithSuccess:^(NSArray<SSJReminderItem *> *result) {
         for (SSJReminderItem *item in result) {
@@ -67,8 +93,12 @@
     } failure:^(NSError *error) {
         SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
     }];
-    
-    // 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
+}
+
+/**
+ 因为老版本没有同步账本图标，老版本同步过来的数据图表为空，所以这里把图标加上
+ */
++ (void)updateBookIcon:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *booksID1 = userID;
         NSString *booksID2 = [NSString stringWithFormat:@"%@-1", userID];
@@ -85,8 +115,12 @@
         NSString *sqlStr = [NSString stringWithFormat:@"update bk_books_type set cicoin = 'bk_moren' where cbooksid not in ('%@', '%@', '%@', '%@', '%@') and cuserid = '%@' and (length(cicoin) == 0 or cicoin is null)", booksID1, booksID2, booksID3, booksID4, booksID5, userID];
         [db executeUpdate:sqlStr];
     }];
-    
-    // 将没有新加字段cdetaildate的流水补上
+}
+
+/**
+ 将没有新加字段cdetaildate的流水补上
+ */
++ (void)updateChargeDetailDate {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
         [db executeUpdate:@"update bk_user_charge set cdetaildate = '00:00' where ichargetype = ?", @(SSJChargeIdTypeCircleConfig)];
@@ -94,10 +128,13 @@
         [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(clientadddate,12,5) from bk_user_charge where length(cdetaildate) = 0 or cdetaildate is null) where length(clientadddate) > 0 and ichargetype <> ? and (length(cdetaildate) = 0 or cdetaildate is null)", @(SSJChargeIdTypeCircleConfig)];
         
         [db executeUpdate:@"update bk_user_charge set cdetaildate = (select substr(cwritedate,12,5) from bk_user_charge where length(cdetaildate) = 0 or cdetaildate is null) where length(cdetaildate) = 0 or cdetaildate is null"];
-        
     }];
-    
-    // 将没有渐变色的数据改成渐变色
+}
+
+/**
+ 将没有渐变色的数据改成渐变色
+ */
++ (void)updateFundGradientColor {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         FMResultSet *result = [db executeQuery:@"select cfundid ,iorder from bk_fund_info where (length(cstartcolor) = 0 or cstartcolor is null) and cparent <> 'root' and operatortype <> 2"];
         
@@ -127,18 +164,22 @@
             [db executeUpdate:@"update bk_fund_info set cstartcolor = ? , cendcolor = ?, cwritedate = ?, iversion = ?, operatortype = 1 where cfundid = ?",item.startColor,item.endColor,cwriteDate,@(SSJSyncVersion()),fundid];
         }
     }];
-    
-    
-    // 删除已经退出的账本中的share_books,share_books_friends_mark
+}
+
+/**
+  删除已经退出的账本中的share_books,share_books_friends_mark
+ */
++ (void)deleteDataOfShareBooksQuitted:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        
         [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)", userID, @(SSJShareBooksMemberStateNormal)];
-        
         [db executeUpdate:@"delete from bk_share_books_friends_mark where cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?)", userID, @(SSJShareBooksMemberStateNormal)];
     }];
-    
-    
-    // 将一个收支类别的账本补充一套收支类别
+}
+
+/**
+ 将一个收支类别的账本补充一套收支类别
+ */
++ (void)supplementBillTypesOfShareBooks:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSMutableArray *booksResult = [NSMutableArray arrayWithCapacity:0];
         
@@ -174,8 +215,12 @@
             [SSJUserDefaultBillTypesCreater createDefaultDataTypeForUserId:userID booksId:booksId booksType:parentType inDatabase:db error:nil];
         }
     }];
-    
-    // 将以前的转账包括安卓chargetype为4的转账转移到周期转账表里
+}
+
+/**
+ 将以前的转账包括安卓chargetype为4的转账转移到周期转账表里
+ */
++ (void)upgradeOldTransferCharges:(NSString *)userID {
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSMutableArray *chargeArr = [NSMutableArray arrayWithCapacity:0];
         
@@ -236,11 +281,14 @@
             }
         }
     }];
-    
+}
+
+/**
+ 升级借贷流水；如果流水cid不是loanid_timestamp格式的话，要改成这种格式
+ */
++ (void)upgradeLoanCharges:(NSArray<NSDictionary *> *)charges {
     NSMutableArray *chargeModels = [NSMutableArray array];
-    NSArray *userCharges = data[@"bk_user_charge"];
-    
-    for (NSDictionary *chargeInfo in userCharges) {
+    for (NSDictionary *chargeInfo in charges) {
         if ([chargeInfo[@"operatortype"] intValue] == 2
             || [chargeInfo[@"ichargetype"] integerValue] != SSJChargeIdTypeLoan) {
             continue;
