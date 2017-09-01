@@ -744,7 +744,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if ([name isEqualToString:SSJUserBillTypeTable.billName.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
                 chargeItem.typeName = (NSString *)value;
-            } else if ([name isEqualToString:SSJUserBillTypeTable.billColor.in(@"BK_USER_BILL_TYPE").getDescription()]
+            } else if ([name isEqualToString:SSJUserBillTypeTable.billColor.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
                 chargeItem.colorValue = (NSString *)value;
             } else if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
@@ -792,6 +792,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
                        && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.ID = (NSString *)value;
+            } else if ([name isEqualToString:SSJUserChargeTable.billId.getDescription()]
+                       && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
+                chargeItem.billId = (NSString *)value;
             }
             chargeItem.fundParent = @"3";
             double money = [chargeItem.money doubleValue];
