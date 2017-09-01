@@ -262,13 +262,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_header ssj_setBorderColor:[UIColor whiteColor]];
         [_header ssj_setBorderStyle:SSJBorderStyleTop];
         [_header ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
-        if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-            SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)_item;
-            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-            colorItem.startColor = financingItem.startColor;
-            colorItem.endColor = financingItem.endColor;
-            _header.item = colorItem;
-        }
+        _header.item = self.item;
     }
     return _header;
 }
@@ -414,14 +408,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }else{
                     self.noDataHeader.hidden = YES;
                 }
-                _totalIncome = fundingItem.fundingIncome;
-                _totalExpence = fundingItem.fundingExpence;
-                self.header.income = fundingItem.fundingIncome;
-                self.header.expence = fundingItem.fundingExpence;
-                SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-                item.startColor = fundingItem.startColor;
-                item.endColor = fundingItem.endColor;
-                self.header.item = item;
+                self.header.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {

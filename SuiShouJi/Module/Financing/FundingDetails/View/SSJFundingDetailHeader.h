@@ -7,15 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJFinancingGradientColorItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJFundingDetailHeader : UIView
 
-@property(nonatomic) double income;
-
-@property(nonatomic) double expence;
-
-@property(nonatomic, strong) SSJFinancingGradientColorItem *item;
+@property(nonatomic, strong) SSJFinancingHomeitem *item;
 
 - (void)updateAfterThemeChange;
 
