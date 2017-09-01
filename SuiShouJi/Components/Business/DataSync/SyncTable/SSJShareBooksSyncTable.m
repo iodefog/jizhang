@@ -15,25 +15,27 @@
     return @"bk_share_books";
 }
 
-+ (NSArray *)columns {
-    return @[@"cbooksid",
-             @"ccreator",
-             @"cadmin",
-             @"cbooksname",
-             @"cbookscolor",
-             @"iparenttype",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype",
-             @"iorder"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cbooksid",
+            @"ccreator",
+            @"cadmin",
+            @"cbooksname",
+            @"cbookscolor",
+            @"iparenttype",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            @"iorder",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cbooksid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"cbooksid"];
 }
 
 
-+ (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
         if (error) {
@@ -76,7 +78,7 @@
     return syncRecords;
 }
 
-+ (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)updateVersionOfRecordModifiedDuringSync:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
@@ -95,7 +97,7 @@
     return [db executeUpdate:@"update bk_member_charge set iversion = ? where iversion = ? and ichargeid in (select cbooksid from bk_share_books_member where cmemberid = ?)", @(newVersion), @(version + 2), userId];
 }
  
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     
     NSMutableArray *quitBooksArr = [NSMutableArray arrayWithCapacity:0];
     
@@ -121,7 +123,7 @@
         }
         
         NSMutableDictionary *recordInfo = [record mutableCopy];
-        NSDictionary *mapping = [self fieldMapping];
+        NSDictionary *mapping = [[self class] fieldMapping];
         if (mapping) {
             [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
                 id value = recordInfo[obj];
@@ -148,7 +150,7 @@
         // 根据表中的主键拼接合并条件
         NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
         [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if ([[self primaryKeys] containsObject:key]) {
+            if ([[[self class] primaryKeys] containsObject:key]) {
                 [keyValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, obj]];
             }
         }];
@@ -156,7 +158,7 @@
         NSString *necessaryCondition = [keyValues componentsJoinedByString:@" and "];
         
         // 检测表中是否存在将要合并的记录
-        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
+        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [[self class] tableName], necessaryCondition]];
         
         if (!resultSet) {
             if (error) {
@@ -191,20 +193,20 @@
                 
                 NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
                 [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                    if ([[self columns] containsObject:key]) {
+                    if ([[[self class] columns] containsObject:key]) {
                         [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
                         [mergeRecord setObject:obj forKey:key];
                     }
                 }];
                 NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
-                statement = [NSString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, condition];
+                statement = [NSString stringWithFormat:@"update %@ set %@ where %@", [[self class] tableName], keyValuesStr, condition];
             }
             
         } else {
             NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];
             NSMutableArray *values = [NSMutableArray arrayWithCapacity:[recordInfo count]];
             [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                if ([[self columns] containsObject:key]) {
+                if ([[[self class] columns] containsObject:key]) {
                     [columns addObject:key];
                     [values addObject:[NSString stringWithFormat:@":%@", key]];
                     [mergeRecord setObject:obj forKey:key];
@@ -214,7 +216,7 @@
             NSString *columnsStr = [columns componentsJoinedByString:@", "];
             NSString *valuesStr = [values componentsJoinedByString:@", "];
             
-            statement = [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [self tableName], columnsStr, valuesStr];
+            statement = [NSString stringWithFormat:@"insert into %@ (%@) values (%@)", [[self class] tableName], columnsStr, valuesStr];
         }
         
         BOOL success = [db executeUpdate:statement withParameterDictionary:mergeRecord];

@@ -61,7 +61,7 @@
                                   failure:(void (^)(NSError *error))failure{
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
         NSError *tError;
-        if (![SSJUserChargeSyncTable mergeRecords:shareChargeArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
+        if (![[SSJUserChargeSyncTable table] mergeRecords:shareChargeArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
@@ -70,7 +70,7 @@
             return;
         };
         
-        if (![SSJShareBooksMemberSyncTable mergeRecords:shareMemberArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
+        if (![[SSJShareBooksMemberSyncTable table] mergeRecords:shareMemberArray forUserId:SSJUSERID() inDatabase:db error:&tError]) {
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);

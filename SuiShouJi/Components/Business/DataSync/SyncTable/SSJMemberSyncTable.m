@@ -14,21 +14,26 @@
     return @"bk_member";
 }
 
-+ (NSArray *)columns {
-    return @[@"cmemberid",
-             @"cname",
-             @"cuserid",
-             @"ccolor",
-             @"istate",
-             @"iorder",
-             @"cwritedate",
-             @"operatortype",
-             @"iversion",
-             @"cadddate"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cmemberid",
+            @"cname",
+            @"cuserid",
+            @"ccolor",
+            @"istate",
+            @"iorder",
+            @"cwritedate",
+            @"operatortype",
+            @"iversion",
+            @"cadddate",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cmemberid", @"cuserid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObjects:
+            @"cmemberid",
+            @"cuserid",
+            nil];
 }
 
 @end

@@ -229,19 +229,19 @@
                     return;
                 }
                 
-                if (![SSJShareBooksSyncTable mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                if (![[SSJShareBooksSyncTable table] mergeRecords:@[self.service.shareBooksTableInfo] forUserId:SSJUSERID() inDatabase:db error:&error]) {
                     return;
                 }
                 
-                if (![SSJShareBooksMemberSyncTable mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                if (![[SSJShareBooksMemberSyncTable table] mergeRecords:self.service.shareMemberTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
                     return;
                 }
                 
-                if (![SSJUserChargeSyncTable mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                if (![[SSJUserChargeSyncTable table] mergeRecords:self.service.userChargeTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
                     return;
                 }
                 
-                if (![SSJShareBooksFriendMarkSyncTable mergeRecords:self.service.shareFriendMarkTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
+                if (![[SSJShareBooksFriendMarkSyncTable table] mergeRecords:self.service.shareFriendMarkTableInfo forUserId:SSJUSERID() inDatabase:db error:&error]) {
                     return;
                 }
                 

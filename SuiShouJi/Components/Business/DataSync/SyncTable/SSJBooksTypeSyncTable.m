@@ -14,29 +14,37 @@
     return @"bk_books_type";
 }
 
-+ (NSArray *)columns {
-    return @[@"cbooksid",
-             @"cuserid",
-             @"cbooksname",
-             @"cbookscolor",
-             @"cwritedate",
-             @"operatortype",
-             @"iparenttype",
-             @"iversion",
-             @"iorder",
-             @"cicoin"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"cbooksid",
+            @"cuserid",
+            @"cbooksname",
+            @"cbookscolor",
+            @"cwritedate",
+            @"operatortype",
+            @"iparenttype",
+            @"iversion",
+            @"iorder",
+            @"cicoin",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"cbooksid", @"cuserid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObjects:
+            @"cbooksid",
+            @"cuserid",
+            nil];
 }
 
 + (NSDictionary *)fieldMapping {
     return @{@"cicoin":@"cicon"};
 }
 
-+ (BOOL)subjectToDeletion {
-    return NO;
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
 }
 
 @end

@@ -13,20 +13,22 @@
     return @"bk_wish_charge";
 }
 
-+ (NSArray *)columns {
-    return @[@"chargeid",
-             @"money",
-             @"wishid",
-             @"cuserid",
-             @"iversion",
-             @"cwritedate",
-             @"operatortype",
-             @"memo",
-             @"itype",
-             @"cbilldate"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"chargeid",
+            @"money",
+            @"wishid",
+            @"cuserid",
+            @"iversion",
+            @"cwritedate",
+            @"operatortype",
+            @"memo",
+            @"itype",
+            @"cbilldate",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"chargeid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"chargeid"];
 }
 @end

@@ -14,26 +14,28 @@
     return @"bk_credit_repayment";
 }
 
-+ (NSArray *)columns {
-    return @[@"crepaymentid",
-             @"iinstalmentcount",
-             @"capplydate",
-             @"ccardid",
-             @"repaymentmoney",
-             @"ipoundagerate",
-             @"cmemo",
-             @"cuserid",
-             @"operatortype",
-             @"cwritedate",
-             @"iversion",
-             @"crepaymentmonth"];
++ (NSSet *)columns {
+    return [NSSet setWithObjects:
+            @"crepaymentid",
+            @"iinstalmentcount",
+            @"capplydate",
+            @"ccardid",
+            @"repaymentmoney",
+            @"ipoundagerate",
+            @"cmemo",
+            @"cuserid",
+            @"operatortype",
+            @"cwritedate",
+            @"iversion",
+            @"crepaymentmonth",
+            nil];
 }
 
-+ (NSArray *)primaryKeys {
-    return @[@"crepaymentid"];
++ (NSSet *)primaryKeys {
+    return [NSSet setWithObject:@"crepaymentid"];
 }
 
-+ (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
+- (BOOL)mergeRecords:(NSArray *)records forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     for (NSDictionary *recordInfo in records) {
         NSString *repaymentid = recordInfo[@"crepaymentid"];
         NSString *instalmentcount = recordInfo[@"iinstalmentcount"];
@@ -47,13 +49,16 @@
         NSString *writedate = recordInfo[@"cwritedate"];
         NSString *version = recordInfo[@"iversion"];
         NSString *month = recordInfo[@"crepaymentmonth"];
+        
         BOOL isExsit = NO;
         NSInteger localOperatortype = 0;
-        FMResultSet *resultSet = [db executeQuery:@"select * from bk_credit_repayment where cuserid = ? and crepaymentid = ?",userid,repaymentid];
-        while ([resultSet next]) {
+        FMResultSet *rs = [db executeQuery:@"select * from bk_credit_repayment where cuserid = ? and crepaymentid = ?",userid,repaymentid];
+        while ([rs next]) {
             isExsit = YES;
-            localOperatortype = [resultSet intForColumn:@"operatortype"];
+            localOperatortype = [rs intForColumn:@"operatortype"];
         }
+        [rs close];
+        
         if (!([db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and crepaymentmonth = ? and iinstalmentcount > 0 and operatortype <> 2",userId,month] && [instalmentcount integerValue]) || [operatortype isEqualToString:@"2"]) {
             // 首先判断当月有没有分期,如果有,则直接抛弃这条数据
             if (localOperatortype == 1 || localOperatortype == 0) {

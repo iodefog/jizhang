@@ -138,13 +138,13 @@
 + (void)updateTableWhenLoginWithViewModel:(SSJLoginVerifyPhoneNumViewModel *)viewModel completion:(void(^)())completion {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
         //  merge登陆接口返回的收支类型、资金账户、账本
-        [SSJBooksTypeSyncTable mergeRecords:viewModel.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [[SSJBooksTypeSyncTable table] mergeRecords:viewModel.booksTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         //  更新父类型为空的账本
         [self updateBooksParentIfNeededForUserId:SSJUSERID() inDatabase:db error:nil];
-        [SSJFundInfoSyncTable mergeRecords:viewModel.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
+        [[SSJFundInfoSyncTable table] mergeRecords:viewModel.fundInfoArray forUserId:SSJUSERID() inDatabase:db error:nil];
         
         if (viewModel.userBillTypeArray.count) {
-            [SSJUserBillTypeSyncTable mergeRecords:viewModel.userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+            [[SSJUserBillTypeSyncTable table] mergeRecords:viewModel.userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         } else {
             // 如果用户的收支类别没有迁移到新表中，后端会反回老结构的收支类别数据，客户端需要把数据格式处理成新表的结构，写入新表中
             NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -184,7 +184,7 @@
                 }
             }
             
-            [SSJUserBillTypeSyncTable mergeRecords:userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
+            [[SSJUserBillTypeSyncTable table] mergeRecords:userBillTypeArray forUserId:SSJUSERID() inDatabase:db error:nil];
         }
         
         // ??? 啥玩意 懵逼
