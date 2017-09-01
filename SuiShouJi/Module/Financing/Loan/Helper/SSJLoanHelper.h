@@ -214,17 +214,6 @@ NS_ASSUME_NONNULL_BEGIN
                              failure:(void (^)(NSError *error))failure;
 
 /**
- 查询最大的借贷流水后缀
-
- @param loanID 借贷项目ID
- @param success 成功的回调
- @param failure 失败的回调
- */
-+ (void)queryMaxLoanChargeSuffixWithLoanID:(NSString *)loanID
-                                   success:(void (^)(int suffix))success
-                                   failure:(nullable void (^)(NSError *error))failure;
-
-/**
  删除和指定ID的资金账户相关的借贷数据（借贷项目、流水、提醒）
 
  @param fundID 资金账户ID

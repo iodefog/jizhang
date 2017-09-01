@@ -35,4 +35,8 @@
     return @[@"icycleid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 @end

@@ -41,4 +41,8 @@
     return @[@"loanid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 @end

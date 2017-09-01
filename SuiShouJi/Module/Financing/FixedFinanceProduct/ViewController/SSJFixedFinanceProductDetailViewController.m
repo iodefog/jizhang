@@ -367,7 +367,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 surplus -= model.money;
                 break;
             case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
-                surplus -= model.money;
+                surplus += model.money;
                 break;
                 
             case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
@@ -375,7 +375,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 break;
             case SSJFixedFinCompoundChargeTypeCloseOut://结清
                 break;
-                
+                surplus -= model.money;
             default:
                 break;
         }
@@ -383,6 +383,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
     NSString *surplusTitle = @"当前余额";
     NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
+    
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
     NSString *paymentTitle = @"已产生利息";

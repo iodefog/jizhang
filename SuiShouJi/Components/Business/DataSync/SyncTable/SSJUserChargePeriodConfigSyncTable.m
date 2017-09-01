@@ -37,6 +37,10 @@
     return @[@"iconfigid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError *__autoreleasing *)error {
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];

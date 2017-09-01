@@ -41,6 +41,26 @@
 + (NSArray *)primaryKeys;
 
 /**
+ 返回本地数据库的字段名和服务端数据库字段名的映射；
+ 父类返回nil，子类根据情况复写此方法；
+ key:本地数据库字段名 value:服务端数据库字段名
+ 此举是为了填坑，本地数据库字段名命名错误导致相应的数据无法同步
+ 
+ @return
+ */
++ (NSDictionary *)fieldMapping;
+
+/**
+ 合并数据时是否已删除数据为准；
+ 默认返回YES；
+ 如果返回YES，就以删除的数据为准，没有删除的数据，就以writedate最新的数据为准；
+ 如果返回NO，就只以writedate最新的数据为准
+
+ @return 根据返回值决定合并数据时是否已删除数据为准
+ */
++ (BOOL)subjectToDeletion;
+
+/**
  *  查询需要同步的记录
  *
  *  @param db FMDatabase实例
@@ -73,15 +93,5 @@
  *  @return 是否更新成功
  */
 + (BOOL)updateSyncVersionOfRecordModifiedDuringSynchronizationToNewVersion:(int64_t)newVersion forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error;
-
-/**
- 返回本地数据库的字段名和服务端数据库字段名的映射；
- 父类返回nil，子类根据情况复写此方法；
- key:本地数据库字段名 value:服务端数据库字段名
- 此举是为了填坑，本地数据库字段名命名错误导致相应的数据无法同步
-
- @return
- */
-+ (NSDictionary *)fieldMapping;
 
 @end

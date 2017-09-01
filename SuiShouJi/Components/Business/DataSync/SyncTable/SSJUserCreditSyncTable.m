@@ -32,4 +32,8 @@
     return @[@"cfundid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 @end

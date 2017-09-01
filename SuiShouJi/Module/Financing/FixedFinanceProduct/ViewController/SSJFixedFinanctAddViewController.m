@@ -133,6 +133,16 @@ static NSUInteger kDateTag = 2005;
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    UITextField *field = [self.view viewWithTag:kMoneyTag];
+    if (field == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        return NO;
+    }
+    return YES;
+}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -272,7 +282,6 @@ static NSUInteger kDateTag = 2005;
     
     self.compoundModel.targetChargeModel.money = [moneyF.text doubleValue];
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
-    self.compoundModel.chargeModel.fundId = self.financeModel.thisfundid;//
     return YES;
 }
 
@@ -283,6 +292,7 @@ static NSUInteger kDateTag = 2005;
     //保存流水
     NSMutableArray *saveChargeModels = [@[self.compoundModel] mutableCopy];
     [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel   type:1 chargeModels:saveChargeModels success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {
@@ -413,8 +423,6 @@ static NSUInteger kDateTag = 2005;
 
         SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         chargeModel.chargeId = SSJUUID();
-//        chargeModel.fundId = self.financeModel.thisfundid;//
-//        targetChargeModel.fundId = self.financeModel.targetfundid;thisfundid
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
         chargeModel.billDate = billDate;
@@ -423,7 +431,6 @@ static NSUInteger kDateTag = 2005;
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         targetChargeModel.chargeId = SSJUUID();
-        targetChargeModel.fundId = self.financeModel.targetfundid;
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.userId = SSJUSERID();
         targetChargeModel.billDate = billDate;
@@ -433,7 +440,6 @@ static NSUInteger kDateTag = 2005;
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;
         _compoundModel.targetChargeModel = targetChargeModel;
-        
     }
 }
 
