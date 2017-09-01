@@ -294,7 +294,6 @@ static NSUInteger kDateTag = 2005;
     [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel   type:1 chargeModels:saveChargeModels success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];

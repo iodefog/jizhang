@@ -451,7 +451,6 @@
                                           failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
 
-        //存储流水记录
         NSError *error = nil;
         NSDate *lastDate = [NSDate date];
         for (SSJFixedFinanceProductCompoundItem *model in chargeModels) {
@@ -468,7 +467,7 @@
                 if (type == 1) {//追加
                     newMoney = oldMoney + model.chargeModel.money;
                 } else if (type == 2) {//赎回
-                    newMoney = oldMoney - model.chargeModel.money;
+                    newMoney = oldMoney - model.chargeModel.money - model.interestChargeModel.money;
                 }
                 
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -482,7 +481,7 @@
                 }
             }
             
-            //保存流水
+            //保存流水//存储流水记录
             if (![self saveFixedFinanceProductChargeWithModel:model inDatabase:db error:&error]) {
                 if (failure) {
                     SSJDispatchMainAsync(^{

@@ -71,6 +71,9 @@ static NSString *kTitle6 = @"备注";
 /**是否计算利息*/
 @property (nonatomic, assign) BOOL isLiXiOn;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *moneyStr;
+
 @end
 
 @implementation SSJFixedFinanceRedemViewController
@@ -112,6 +115,27 @@ static NSString *kTitle6 = @"备注";
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (self.moneyTextF == textField || self.liXiTextF == textField) {
+        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        if (self.moneyTextF == textField) {
+            self.moneyStr = text;
+        } else {
+            [self updateSubTitle];
+        }
+        return NO;
+    }
+    return YES;
+}
+
+- (void)updateSubTitle {
+    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] + [self.liXiTextF.text doubleValue])];
+    NSString *oldStr = [NSString stringWithFormat:@"实际扣除金额为：%@元",targetStr];
+    self.subL.attributedText = [oldStr attributeStrWithTargetStr:targetStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+}
+
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.titleItems.count;
@@ -125,19 +149,19 @@ static NSString *kTitle6 = @"备注";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *title = [self.titleItems ssj_objectAtIndexPath:indexPath];
     NSString *imageName = [self.imageItems  ssj_objectAtIndexPath:indexPath];
-    if ([title isEqualToString: kTitle1]) {
+    if ([title isEqualToString:kTitle1]) {
         
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-
+        cell.textField.text = self.moneyStr;
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         self.moneyTextF = cell.textField;
-//        [cell setNeedsLayout];
+        
         return cell;
         
     } else if ([title isEqualToString:kTitle4]) {
@@ -212,7 +236,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
-        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.chargeModel.money];
+        cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
 //        NSString *oldStr = [NSString stringWithFormat:@"实际扣除金额为"];
@@ -329,10 +353,16 @@ static NSString *kTitle6 = @"备注";
 - (void)sureButtonAction {
     if (![self checkIfNeedCheck]) return;
     [self updateModel];
+    //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
+    if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
+        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额，可尝试结清此固定理财产品"];
+        return;
+    }
+    
     MJWeakSelf;
     //保存流水
     NSArray *chargArr = @[self.compoundModel];
-    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:1 chargeModels:chargArr success:^{
+    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:2 chargeModels:chargArr success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
     } failure:^(NSError * _Nonnull error) {

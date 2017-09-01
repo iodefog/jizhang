@@ -381,21 +381,22 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     //保存固定收益理财
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
         weakSelf.sureButton.enabled = YES;
-        if (!weakSelf.edited) {
-            //将当期页面从占中删除
-            NSMutableArray *array = [self.navigationController.viewControllers mutableCopy];
-            for (UIViewController *vc in array) {
-                if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
-                    [array removeObject:vc];
-                    break;
-                }
-            }
-            self.navigationController.viewControllers = [array copy];
-        }
         
+        //调转到详情页面
         SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
         detailVC.productID = weakSelf.model.productid;
         [weakSelf.navigationController pushViewController:detailVC animated:YES];
+        
+        //将当期页面从占中删除
+        NSMutableArray *array = [self.navigationController.viewControllers mutableCopy];
+        for (UIViewController *vc in array) {
+            if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                [array removeObject:vc];
+                break;
+            }
+        }
+        self.navigationController.viewControllers = [array copy];
+        
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         weakSelf.sureButton.enabled = YES;
