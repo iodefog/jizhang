@@ -57,6 +57,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 @property (nonatomic, strong) NSArray <SSJFixedFinanceProductChargeItem *>*chargeModels;
 
+/**当前金额*/
+@property (nonatomic, assign) double currentMoney;
+
 @end
 
 @implementation SSJFixedFinanceProductDetailViewController
@@ -383,7 +386,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
     NSString *surplusTitle = @"当前余额";
     NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
-    
+    self.currentMoney = surplus;
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
     NSString *paymentTitle = @"已产生利息";
@@ -603,7 +606,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
                 SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
                 redVC.productid = weakSelf.productID;
-                
+                redVC.canRedemMoney = weakSelf.currentMoney;
                 [wself.navigationController pushViewController:redVC animated:YES];
             }
         };
