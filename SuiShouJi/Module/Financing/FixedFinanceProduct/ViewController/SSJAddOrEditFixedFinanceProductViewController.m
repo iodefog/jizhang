@@ -10,6 +10,7 @@
 #import "SSJFundingTypeSelectViewController.h"
 #import "SSJReminderEditeViewController.h"
 #import "SSJFixedFinanceProductDetailViewController.h"
+#import "SSJFixedFinanceProductListViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
@@ -166,7 +167,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [weakSelf updateJiXi];
     }];
     
-    [RACObserve(self, moneyTextF.text) subscribeNext:^(id x) {
+    [RACObserve(self, qiXianTextF.text) subscribeNext:^(id x) {
         [weakSelf updateJiXi];
     }];
 }
@@ -355,8 +356,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)deleteButtonClicked {
     MJWeakSelf;
     [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.model success:^{
-#warning 测试未完成返回列表页面
-        [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        NSArray *array = self.navigationController.viewControllers;
+        for (UIViewController *vc in array) {
+            if ([vc isKindOfClass:[SSJFixedFinanceProductListViewController class]]) {
+                [weakSelf.navigationController popToViewController:vc animated:YES];
+                break;
+            }
+        }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -375,6 +381,18 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     //保存固定收益理财
     [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
         weakSelf.sureButton.enabled = YES;
+        if (!weakSelf.edited) {
+            //将当期页面从占中删除
+            NSMutableArray *array = [self.navigationController.viewControllers mutableCopy];
+            for (UIViewController *vc in array) {
+                if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                    [array removeObject:vc];
+                    break;
+                }
+            }
+            self.navigationController.viewControllers = [array copy];
+        }
+        
         SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
         detailVC.productID = weakSelf.model.productid;
         [weakSelf.navigationController pushViewController:detailVC animated:YES];
