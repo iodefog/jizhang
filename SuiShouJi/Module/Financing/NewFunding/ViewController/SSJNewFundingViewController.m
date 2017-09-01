@@ -245,8 +245,7 @@
             self.item.fundingName = textField.text;
         }
         if (textField.tag == 101){
-            NSString *fundingBalance = [[NSString stringWithFormat:@"%f",[textField.text doubleValue]] ssj_moneyDecimalDisplayWithDigits:2];
-            self.item.fundingAmount = [fundingBalance doubleValue];
+            self.item.fundingAmount = [textField.text doubleValue];
         }
         if (textField.tag == 102){
             self.item.fundingMemo = textField.text;
@@ -304,9 +303,7 @@
 }
 
 -(void)saveButtonClicked:(id)sender {
-    self.item.fundingName = _nameTextField.text;
-    self.item.fundingAmount = [_amountTextField.text doubleValue];
-    self.item.fundingMemo = _memoTextField.text;
+    [self.view endEditing:YES];
     
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
@@ -337,7 +334,6 @@
         if (weakSelf.addNewFundBlock) {
             weakSelf.addNewFundBlock(item);
         }
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         if (item.fundOperatortype == 0) {
             UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
             [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
@@ -345,8 +341,9 @@
             [weakSelf.navigationController popViewControllerAnimated:YES];
             
         }
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
-        
+        [SSJAlertViewAdapter showError:error];
     }];
 }
 

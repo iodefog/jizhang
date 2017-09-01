@@ -330,7 +330,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 #pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+    if (self.item.cardItem) {
         SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
         creditCardVc.cardId = cardItem.fundingID;
@@ -338,7 +338,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
         SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
-        financingItem.fundingAmount = _totalIncome - _totalExpence;
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
         [SSJAnaliyticsManager event:@"fund_edit"];
