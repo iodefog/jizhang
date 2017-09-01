@@ -163,7 +163,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
             }
             NSString *month = [item.billDate substringWithRange:NSMakeRange (0,7)];
-            double money = [item.money doubleValue];
+            double money = ABS([item.money doubleValue]);
             if ([month isEqualToString:lastDate]) {
                 SSJFundingDetailListItem *listItem = [result lastObject];
                 if (item.incomeOrExpence) {
@@ -302,7 +302,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         }
         
         for (SSJBillingChargeCellItem *item in chargeArr) {
-            double money = [item.money doubleValue];
+            double money = ABS([item.money doubleValue]);
             if (item.idType == SSJChargeIdTypeLoan && item.sundryId.length) {
                 // 先判断他是借入还是借出
                 switch (item.loanType) {
@@ -675,10 +675,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
     if ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@""]) {
         SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc] init];
-        cardItem.cardLimit = [credit.cardQuota doubleValue];
+        cardItem.cardLimit = credit.cardQuota;
         cardItem.settleAtRepaymentDay = credit.billDateSettlement;
-        cardItem.cardBillingDay = [credit.billingDate integerValue];
-        cardItem.cardRepaymentDay = [credit.repaymentDate integerValue];
+        cardItem.cardBillingDay = credit.billingDate;
+        cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindId = credit.remindId;
         cardItem.remindState = [[db getOneValueOnResult:SSJUserRemindTable.state
                                               fromTable:@"bk_user_remind"

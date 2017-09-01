@@ -19,7 +19,6 @@ typedef void (^addNewFundBlock)(SSJFinancingHomeitem *newFundingItem);
 
 @property(nonatomic,copy) NSString *selectParent;
 
-@property(nonatomic,copy) SSJFinancingGradientColorItem *selectColor;
 
 @property (nonatomic,strong) SSJFinancingHomeitem *item;
 

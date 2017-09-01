@@ -262,13 +262,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [_header ssj_setBorderColor:[UIColor whiteColor]];
         [_header ssj_setBorderStyle:SSJBorderStyleTop];
         [_header ssj_setBorderWidth:1 / [UIScreen mainScreen].scale];
-        if ([_item isKindOfClass:[SSJFinancingHomeitem class]]) {
-            SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)_item;
-            SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-            colorItem.startColor = financingItem.startColor;
-            colorItem.endColor = financingItem.endColor;
-            _header.item = colorItem;
-        }
+        _header.item = self.item;
     }
     return _header;
 }
@@ -336,7 +330,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 #pragma mark - Event
 -(void)rightButtonClicked:(id)sender{
-    if ([self.item isKindOfClass:[SSJCreditCardItem class]]) {
+    if (self.item.cardItem) {
         SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
         SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
         creditCardVc.cardId = cardItem.fundingID;
@@ -344,7 +338,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
         SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
-        financingItem.fundingAmount = _totalIncome - _totalExpence;
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
         [SSJAnaliyticsManager event:@"fund_edit"];
@@ -414,14 +407,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }else{
                     self.noDataHeader.hidden = YES;
                 }
-                _totalIncome = fundingItem.fundingIncome;
-                _totalExpence = fundingItem.fundingExpence;
-                self.header.income = fundingItem.fundingIncome;
-                self.header.expence = fundingItem.fundingExpence;
-                SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-                item.startColor = fundingItem.startColor;
-                item.endColor = fundingItem.endColor;
-                self.header.item = item;
+                self.header.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {

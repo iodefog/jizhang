@@ -40,7 +40,7 @@
 
 @property (nonatomic, retain) NSString* endColor;
 
-@property (nonatomic, assign) int fundType;
+@property (nonatomic, assign) SSJAccountType fundType;
 
 WCDB_PROPERTY(fundId)
 WCDB_PROPERTY(fundName)

@@ -440,7 +440,6 @@ static NSUInteger kDateTag = 2005;
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;
         _compoundModel.targetChargeModel = targetChargeModel;
-        
     }
 }
 
