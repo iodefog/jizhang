@@ -7,22 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJCreditCardItem.h"
+#import "SSJFinancingHomeitem.h"
 #import "SSJFinancingGradientColorItem.h"
 
 @interface SSJCreditCardDetailHeader : UIView
 
-@property(nonatomic, strong) SSJCreditCardItem *item;
-
-@property(nonatomic) double totalIncome;
-
-@property(nonatomic) double totalExpence;
-
-@property(nonatomic) double cardBalance;
+@property(nonatomic, strong) SSJFinancingHomeitem *item;
 
 @property(nonatomic, strong) UIView *backGroundView;
 
-@property(nonatomic, strong) SSJFinancingGradientColorItem *colorItem;
 
 - (void)updateAfterThemeChange;
 

@@ -233,71 +233,41 @@
     return _backLayer;
 }
 
-- (void)setItem:(SSJCreditCardItem *)item{
+- (void)setItem:(SSJFinancingHomeitem *)item{
     _item = item;
-    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
     if (_item.fundingAmount > 0) {
         self.balanceTitleLab.text = @"当前余额";
     }else{
         self.balanceTitleLab.text = @"当前欠款";
     }
     [self.balanceTitleLab sizeToFit];
-    [self.balanceLab sizeToFit];
-    self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardLimit];
+
+    self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardItem.cardLimit];
     [self.limitLab sizeToFit];
-    if (_item.cardRepaymentDay == 0) {
+
+    if (_item.cardItem.cardRepaymentDay == 0) {
         self.repaymentDayLab.text = @"未设置";
     }else{
-        self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardRepaymentDay];
+        self.repaymentDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardItem.cardRepaymentDay];
     }
+
     [self.repaymentDayLab sizeToFit];
-    if (_item.cardBillingDay == 0) {
+
+    if (_item.cardItem.cardBillingDay == 0) {
         self.billingDayLab.text = @"未设置";
     }else{
-        self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardBillingDay];
-    }
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:item.startColor].CGColor;
-    } else {
-        self.backLayer.colors = nil;
-        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
-        } else {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
-        }
+        self.billingDayLab.text = [NSString stringWithFormat:@"每月%ld日",(long)_item.cardItem.cardBillingDay];
     }
     [self.billingDayLab sizeToFit];
-}
 
-- (void)setCardBalance:(double)cardBalance{
-    _cardBalance = cardBalance;
-    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_cardBalance];
+    self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
     [self.balanceLab sizeToFit];
+
+    self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:_item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:_item.endColor].CGColor];
+    self.backLayer.shadowColor = [UIColor ssj_colorWithHex:_item.startColor].CGColor;
 }
 
-- (void)setColorItem:(SSJFinancingGradientColorItem *)colorItem {
-    self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:colorItem.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:colorItem.endColor].CGColor];
-    self.backLayer.shadowColor = [UIColor ssj_colorWithHex:colorItem.startColor].CGColor;
 
-}
-
-- (void)updateAfterThemeChange {
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        _backLayer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, _backLayer.width + 4, _backLayer.height + 4) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(8, 8)].CGPath;
-    }
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:self.item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:self.item.endColor].CGColor];
-        self.backLayer.shadowColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
-    } else {
-        self.backLayer.colors = nil;
-        if (SSJ_CURRENT_THEME.financingDetailHeaderColor.length) {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailHeaderColor alpha:SSJ_CURRENT_THEME.financingDetailHeaderAlpha].CGColor;
-        } else {
-            self.backLayer.backgroundColor = [UIColor ssj_colorWithHex:self.item.startColor].CGColor;
-        }
-    }
-}
 
 /*
 // Only override drawRect: if you perform custom drawing.

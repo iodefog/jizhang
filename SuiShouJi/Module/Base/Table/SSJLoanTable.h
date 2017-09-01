@@ -38,7 +38,7 @@
 
 @property (nonatomic, retain) NSString* remindId;
 
-@property (nonatomic, assign) int type;
+@property (nonatomic, assign) SSJLoginType type;
 
 @property (nonatomic, assign) int end;
 
