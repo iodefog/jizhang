@@ -9,6 +9,7 @@
 #import "SSJDatabaseVersion18.h"
 #import "FMDB.h"
 #import "SSJLoanCompoundChargeModel.h"
+#import "SSJBillTypeManager.h"
 
 @implementation SSJDatabaseVersion18
 
@@ -18,6 +19,11 @@
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
     NSError *error = [self createRecycleTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    error = [self insertSpecialBillTypeWithDatabase:db];
     if (error) {
         return error;
     }
@@ -44,6 +50,25 @@
         return [db lastError];
     }
     
+    return nil;
+}
+
++ (NSError *)insertSpecialBillTypeWithDatabase:(FMDatabase *)db {
+    for (SSJSpecialBillId billID = SSJSpecialBillIdFixedFinanceChangeEarning;
+         billID <= SSJSpecialBillIdFixedFinanceServiceCharge;
+         billID ++) {
+        
+        if ([db boolForQuery:@"select count(1) from bk_user_bill_type where cbillid = ?", @(billID)]) {
+            continue;
+        }
+        
+        NSString *billIDStr = [NSString stringWithFormat:@"%d", (int)billID];
+        NSDictionary *info = [SSJBillTypeManager sharedManager].specialBillTypes[billIDStr];
+        
+        if (![db executeUpdate:@"insert into bk_user_bill_type (cbillid, itype, cname, ccolor, cicoin) values (:ID, :expended, :name, :color, :icon)" withParameterDictionary:info]) {
+            return db.lastError;
+        }
+    }
     return nil;
 }
 
