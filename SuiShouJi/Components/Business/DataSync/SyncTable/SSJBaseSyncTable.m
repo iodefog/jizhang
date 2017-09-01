@@ -43,7 +43,6 @@
         if (error) {
             *error = [db lastError];
         }
-        SSJPRINT(@">>>SSJ warning:\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
         return nil;
     }
     
@@ -69,22 +68,19 @@
         if (error) {
             *error = [db lastError];
         }
-        SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }
     
     if (newVersion == SSJ_INVALID_SYNC_VERSION) {
-        SSJPRINT(@">>>SSJ warning: invalid sync version");
         return NO;
     }
     
-    NSString *update = [NSString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION = %lld and CUSERID = '%@'", [self tableName], newVersion, version + 2, userId];
+    NSString *update = [NSString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION >= %lld and CUSERID = '%@'", [self tableName], newVersion, version + 2, userId];
     BOOL success = [db executeUpdate:update];
     if (!success) {
         if (error) {
             *error = [db lastError];
         }
-        SSJPRINT(@">>>SSJ warning:an error occured when update sync version of record that is modified during synchronization to the newest version\n message:%@\n error:%@", [db lastErrorMessage], [db lastError]);
     }
     
     return success;
@@ -94,9 +90,8 @@
     for (NSDictionary *record in records) {
         if (![record isKindOfClass:[NSDictionary class]]) {
             if (error) {
-                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"record that is being merged is not kind of NSDictionary class"}];
+                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"合并的数据格式错误"}];
             }
-            SSJPRINT(@">>>SSJ warning: record needed to merge is not subclass of NSDictionary\n record:%@", record);
             return NO;
         }
         
@@ -163,7 +158,7 @@
             }
             
             if (localOperatorType == 0 || localOperatorType == 1) {
-                //  如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
+                // 如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
                 NSMutableString *condition = [necessaryCondition mutableCopy];
                 if (opertoryValue == 0 || opertoryValue == 1) {
                     [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
