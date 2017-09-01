@@ -23,6 +23,10 @@
     return nil;
 }
 
++ (BOOL)subjectToDeletion {
+    return YES;
+}
+
 + (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     return YES;
 }
@@ -131,49 +135,38 @@
         NSString *necessaryCondition = [keyValues componentsJoinedByString:@" and "];
         
         // 检测表中是否存在将要合并的记录
-        FMResultSet *resultSet = [db executeQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
-        
-        if (!resultSet) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return NO;
-        }
+        NSString *operatorTypeStr = [db stringForQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [self tableName], necessaryCondition]];
         
         BOOL isExisted = NO;
         int localOperatorType = 0;
+        
+        if (operatorTypeStr) {
+            isExisted = YES;
+            localOperatorType = [operatorTypeStr intValue];
+        }
+        
         NSString *statement = nil;
         NSMutableDictionary *mergeRecord = [NSMutableDictionary dictionary];
         
-        while ([resultSet next]) {
-            isExisted = YES;
-            localOperatorType = [resultSet intForColumn:@"operatortype"];
-        }
-        [resultSet close];
-        
         if (isExisted) {
-            
-            if (localOperatorType == 2) {
+            if ([self subjectToDeletion] && localOperatorType == 2) {
                 continue;
             }
             
-            if (localOperatorType == 0 || localOperatorType == 1) {
-                // 如果将要合并的记录操作类型是删除，就不需要根据操作时间决定保留哪条记录，直接合并
-                NSMutableString *condition = [necessaryCondition mutableCopy];
-                if (opertoryValue == 0 || opertoryValue == 1) {
-                    [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
-                }
-                
-                NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
-                [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                    if ([[self columns] containsObject:key]) {
-                        [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
-                        [mergeRecord setObject:obj forKey:key];
-                    }
-                }];
-                NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
-                statement = [NSString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, condition];
+            NSMutableString *condition = [necessaryCondition mutableCopy];
+            if (([self subjectToDeletion] && opertoryValue != 2) || ![self subjectToDeletion]) {
+                [condition appendFormat:@" and cwritedate < '%@'", recordInfo[@"cwritedate"]];
             }
+            
+            NSMutableArray *keyValues = [NSMutableArray arrayWithCapacity:recordInfo.count];
+            [recordInfo enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                if ([[self columns] containsObject:key]) {
+                    [keyValues addObject:[NSString stringWithFormat:@"%@ = :%@", key, key]];
+                    [mergeRecord setObject:obj forKey:key];
+                }
+            }];
+            NSString *keyValuesStr = [keyValues componentsJoinedByString:@", "];
+            statement = [NSString stringWithFormat:@"update %@ set %@ where %@", [self tableName], keyValuesStr, condition];
             
         } else {
             NSMutableArray *columns = [NSMutableArray arrayWithCapacity:[recordInfo count]];

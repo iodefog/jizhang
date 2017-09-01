@@ -36,6 +36,10 @@
     return @[@"cfundid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 + (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
     int64_t version = [SSJSyncTable lastSuccessSyncVersionForUserId:userId inDatabase:db];
     if (version == SSJ_INVALID_SYNC_VERSION) {
