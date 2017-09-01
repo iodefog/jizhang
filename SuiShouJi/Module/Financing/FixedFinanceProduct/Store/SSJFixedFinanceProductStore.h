@@ -81,6 +81,17 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                  success:(void (^)(void))success
                                  failure:(void (^)(NSError *error))failure;
 
+/**
+ 删除固收理财产品
+ 
+ @param model 模型
+ @param success 成功
+ @param failure 失败
+ */
++ (void)deleteFixedFinanceProductAccountWithModel:(SSJFixedFinanceProductItem *)model
+                                   success:(void (^)(void))success
+                                   failure:(void (^)(NSError *error))failure;
+
 
 
 /**
@@ -106,7 +117,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
              inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
                   error:(NSError **)error;
-
 
 #pragma mark - 固定理财流水
 
@@ -170,6 +180,38 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                      chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
                                           success:(void (^)(void))success
                                           failure:(void (^)(NSError *error))failure;
+
+
+/**
+ 删除某个理财产品的所有流水（等同删除某个理财产品）
+
+ @param model 理财产品model
+ @param db db
+ @param userId
+ @param writeDate 为保持writhDate一致
+ @param needcreateRecycleRecord 是否加入到回收站
+ @param error <#error description#>
+ @return <#return value description#>
+ */
++ (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
+                            inDatabase:(FMDatabase *)db
+                             forUserId:(NSString *)userId
+                             writeDate:(NSString *)writeDate
+               needcreateRecycleRecord:(BOOL)needcreateRecycleRecord
+                                 error:(NSError **)error;
+
+
+
+/**
+ 重新设置某个理财产品的所有流水（等同删除某个理财产品）
+
+ @param model
+ @param db <#db description#>
+ @param needcreateRecycleRecord <#needcreateRecycleRecord description#>
+ */
++ (void)reSetFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model needcreateRecycleRecord:(BOOL)needcreateRecycleRecord;
+
+
 
 /**
  查询流水cid后缀最大值

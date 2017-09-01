@@ -59,5 +59,15 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
 
+
+/**
+ 两个时间之间有多少天
+
+ @param startDate <#startDate description#>
+ @param endDate <#endDate description#>
+ @return <#return value description#>
+ */
+- (NSInteger)getDifferenceWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate;
+
 @end
 NS_ASSUME_NONNULL_END

@@ -20,6 +20,8 @@
 
 @property (nonatomic, copy) NSString *amountStr;
 
+@property (nonatomic, copy) NSAttributedString *bottomTitle;
+
 /**是否显示时间*/
 @property (nonatomic, assign) BOOL isShowTime;
 
