@@ -367,7 +367,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 surplus -= model.money;
                 break;
             case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
-                surplus -= model.money;
+                surplus += model.money;
                 break;
                 
             case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息

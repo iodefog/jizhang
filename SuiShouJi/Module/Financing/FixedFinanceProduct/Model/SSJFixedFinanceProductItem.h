@@ -41,6 +41,12 @@ NS_ASSUME_NONNULL_BEGIN
 /**投资金额*/
 @property (nonatomic, copy) NSString *money;
 
+/**余额变更前的金额*/
+@property (nonatomic, copy) NSString *oldMoney;
+
+/**余额变更的差额*/
+@property (nonatomic, assign) double difMoney;
+
 /**备注*/
 @property (nonatomic, copy, nullable) NSString *memo;
 
@@ -77,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
- 1:余额转入，由少变多，0:余额转出，由多变少
+ 2:余额转入，由少变多，1:余额转出，由多变少，0：金额没有变动
  */
 @property (nonatomic, assign) NSInteger balanceOutOrIn;
 

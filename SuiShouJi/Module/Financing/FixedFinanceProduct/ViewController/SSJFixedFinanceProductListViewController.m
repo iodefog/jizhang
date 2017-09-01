@@ -191,7 +191,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerSegmentView.frame), self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM-self.headerSegmentView.height) style:UITableViewStyleGrouped];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.headerSegmentView.frame), self.view.width, self.view.height - SSJ_NAVIBAR_BOTTOM-self.headerSegmentView.height - self.addBtn.height) style:UITableViewStyleGrouped];
         _tableView.dataSource = self;
         _tableView.delegate = self;
         _tableView.backgroundView = nil;

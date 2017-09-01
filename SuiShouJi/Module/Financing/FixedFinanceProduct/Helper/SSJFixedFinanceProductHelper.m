@@ -165,7 +165,7 @@
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 12;
+                        interest = money * rate * 0.01 / 30;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:

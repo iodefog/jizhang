@@ -12,7 +12,7 @@
 @implementation SSJFixedFinanceDetailCellItem
 + (instancetype)cellItemWithChargeModel:(SSJFixedFinanceProductChargeItem *)model {
     SSJFixedFinanceDetailCellItem *item = [[SSJFixedFinanceDetailCellItem alloc] init];
-    item.titmeStr = [model.writeDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    item.titmeStr = [model.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *icon = @"";
     NSString *name = @"";
     NSString *money = @"";
@@ -41,14 +41,14 @@
             name = @"固收理财余额变更";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             surplus += model.money;
-            [self bottomTitleWithOldMoney:surplus];
+            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
             icon = @"fixed_finance_edit";
             name = @"固收理财余额变更";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
-            [self bottomTitleWithOldMoney:surplus];
+            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
             icon = @"fixed_finance_lixi";
