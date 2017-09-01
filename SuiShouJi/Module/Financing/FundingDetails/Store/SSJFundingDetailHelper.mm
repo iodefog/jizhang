@@ -734,7 +734,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         NSString *str = SSJUserChargeTable.chargeId.getDescription();
         NSString *tableName = [statement getTableNameAtIndex:i];
         if (value) {
-
             if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()]
                 && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.ID = (NSString *)value;
