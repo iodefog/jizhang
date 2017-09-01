@@ -35,4 +35,8 @@
     return @{@"cicoin":@"cicon"};
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 @end

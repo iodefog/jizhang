@@ -33,4 +33,8 @@
     return @[@"cremindid"];
 }
 
++ (BOOL)subjectToDeletion {
+    return NO;
+}
+
 @end

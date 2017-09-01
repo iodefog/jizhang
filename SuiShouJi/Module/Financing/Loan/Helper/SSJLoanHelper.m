@@ -1254,28 +1254,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return YES;
 }
 
-+ (void)queryMaxLoanChargeSuffixWithLoanID:(NSString *)loanID
-                                   success:(void (^)(int suffix))success
-                                   failure:(nullable void (^)(NSError *error))failure {
-    
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        int maxSuffix = 0;
-        FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where cid like ? || '_%' and ichargetype = ?", loanID, @(SSJChargeIdTypeLoan)];
-        while ([rs next]) {
-            NSString *cid = [rs stringForColumn:@"cid"];
-            int suffix = [[[cid componentsSeparatedByString:@"_"] lastObject] intValue];
-            maxSuffix = MAX(maxSuffix, suffix);
-        }
-        [rs close];
-        
-        SSJDispatchMainAsync(^{
-            if (success) {
-                success(maxSuffix);
-            }
-        });
-    }];
-}
-
 + (BOOL)deleteLoanDataRelatedToFundID:(NSString *)fundID
                             writeDate:(NSString *)writeDate
                              database:(FMDatabase *)db
