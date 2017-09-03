@@ -20,7 +20,7 @@
 
 @property (nonatomic, retain) NSString* startDate;
 
-@property (nonatomic, retain) NSString* state;
+@property (nonatomic, assign) BOOL state;
 
 @property (nonatomic, assign) long long version;
 
@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) int type;
 
-@property (nonatomic, assign) int cycle;
+@property (nonatomic, assign) SSJCyclePeriodType cycle;
 
 @property (nonatomic, assign) int isEnd;
 
