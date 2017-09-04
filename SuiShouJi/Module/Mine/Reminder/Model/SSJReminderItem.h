@@ -23,7 +23,7 @@
 @property(nonatomic, copy) NSString *remindContent;
 
 // 提醒周期(0为每天,1为工作日,2为每周末,3为每周,4为每月,5为每月最后一天,6为每年,7为仅一次)
-@property(nonatomic) NSInteger remindCycle;
+@property(nonatomic) SSJCyclePeriodType remindCycle;
 
 // 提醒类别(0为其他,1为记账,2为信用卡,3为借贷,4愿望提醒，5固定理财)
 @property(nonatomic) SSJReminderType remindType;

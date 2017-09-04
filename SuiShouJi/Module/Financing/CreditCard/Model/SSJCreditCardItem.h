@@ -8,6 +8,7 @@
 
 #import "SSJBaseCellItem.h"
 #import "SSJFinancingItem.h"
+#import "SSJReminderItem.h"
 
 @interface SSJCreditCardItem : SSJBaseCellItem<SSJFinancingItemProtocol>
 
@@ -55,12 +56,7 @@
 /**
  提醒id
  */
-@property(nonatomic, strong) NSString *remindId;
-
-/**
- 提醒状态
- */
-@property(nonatomic) BOOL remindState;
+@property(nonatomic, strong) SSJReminderItem *remindItem;
 
 /**
  流水条数
@@ -69,6 +65,8 @@
 
 @property(nonatomic) BOOL hasMadeInstalment;
 
+
 @property(nonatomic) SSJCrediteCardType cardType;
+
 
 @end

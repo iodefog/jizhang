@@ -125,13 +125,7 @@
     if ([title isEqualToString:@"选择颜色"]) {
         SSJColorSelectViewController *colorSelectVC = [[SSJColorSelectViewController alloc]init];
         
-        SSJFinancingGradientColorItem *colorItem = [[SSJFinancingGradientColorItem alloc] init];
-        colorItem.startColor = self.item.startColor;
-        colorItem.endColor = self.item.endColor;
-        
-        colorSelectVC.fundingColor = colorItem;
-        colorSelectVC.fundingAmount = [_amountTextField.text doubleValue];
-        colorSelectVC.fundingName = _nameTextField.text;
+        colorSelectVC.fundingItem = self.item;
         __weak typeof(self) weakSelf = self;
         colorSelectVC.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
             weakSelf.item.startColor = selectColor.startColor;

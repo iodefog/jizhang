@@ -10,10 +10,9 @@
 #import "SSJCreditCardItem.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJReminderItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJCreditCardStore : NSObject
-
-+ (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId;
 
 + (NSError *)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
                              inDatabase:(FMDatabase *)db;
@@ -25,7 +24,7 @@
                            Success:(void (^)(NSInteger operatortype))success
                            failure:(void (^)(NSError *error))failure ;
 
-+ (BOOL)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
++ (BOOL)deleteCreditCardWithCardItem:(SSJFinancingHomeitem *)item
                           inDatabase:(FMDatabase *)db
                            forUserId:(NSString *)userId
                                error:(NSError **)error;

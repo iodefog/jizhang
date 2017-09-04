@@ -10,6 +10,7 @@
 #import "SSJGradientColorSelectCollectionViewCell.h"
 #import "SSJFinancingColorSelectHeader.h"
 
+
 @interface SSJColorSelectViewController ()
 
 @property (nonatomic,strong) UICollectionView *collectionView;
@@ -40,10 +41,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (!self.fundingColor) {
+    if (!self.fundingItem) {
         _selectColor = _colorArray[0];
     }else{
-        _selectColor = self.fundingColor;
+        _selectColor = [SSJFinancingGradientColorItem gradientColorWithStartColor:self.fundingItem.startColor EndColor:self.fundingItem.endColor];
     }
     for (SSJFinancingGradientColorItem *item in _colorArray) {
         if ([_selectColor isEqual:item]) {
@@ -129,8 +130,8 @@
     if (!_headerView) {
         _headerView = [[SSJFinancingColorSelectHeader alloc]init];
 //        _headerView.backgroundColor = [UIColor ssj_colorWithHex:_selectColor];
-        _headerView.fundName = self.fundingName;
-        _headerView.fundBalance = [NSString stringWithFormat:@"%.2f",self.fundingAmount];
+        _headerView.fundName = self.fundingItem.fundingName;
+        _headerView.fundBalance = [NSString stringWithFormat:@"%.2f",self.fundingItem.fundingAmount];
         _headerView.item = _selectColor;
     }
     return _headerView;

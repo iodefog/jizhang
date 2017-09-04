@@ -7,18 +7,14 @@
 //
 
 #import "SSJBaseViewController.h"
+#import "SSJFinancingHomeitem.h"
 #import "SSJFinancingGradientColorItem.h"
 
 @interface SSJColorSelectViewController : SSJBaseViewController<UICollectionViewDataSource,UICollectionViewDelegate>
 
-//资金账户余额
-@property (nonatomic) double fundingAmount;
 
-//资金账户名称
-@property (nonatomic,strong) NSString *fundingName;
-
-//资金账户颜色
-@property (nonatomic,strong) SSJFinancingGradientColorItem *fundingColor;
+//资金账户model
+@property (nonatomic,strong) SSJFinancingHomeitem *fundingItem;
 
 
 typedef void (^colorSelectedBlock)(SSJFinancingGradientColorItem *selectColor);

@@ -332,8 +332,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 -(void)rightButtonClicked:(id)sender{
     if (self.item.cardItem) {
         SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)self.item;
-        creditCardVc.cardId = cardItem.fundingID;
+        creditCardVc.financingItem = self.item;
         [self.navigationController pushViewController:creditCardVc animated:YES];
     }else{
         SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
@@ -425,7 +424,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.fundingID;
+            creditCardVc.financingItem = self.item;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -439,7 +438,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.fundingID;
+            creditCardVc.financingItem = self.item;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -465,7 +464,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.fundingID;
+            creditCardVc.financingItem = self.item;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];
@@ -479,7 +478,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         __weak typeof(self) weakSelf = self;
         UIAlertAction *comfirm = [UIAlertAction actionWithTitle:@"去设置" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             SSJNewCreditCardViewController *creditCardVc = [[SSJNewCreditCardViewController alloc]init];
-            creditCardVc.cardId = self.cardItem.fundingID;
+            creditCardVc.financingItem = self.item;
             [weakSelf.navigationController pushViewController:creditCardVc animated:YES];
         }];
         [alert addAction:cancel];

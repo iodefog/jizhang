@@ -21,6 +21,7 @@
 #import "SSJUserRemindTable.h"
 #import "SSJLoanTable.h"
 #import "SSJCreditRepaymentTable.h"
+#import "SSJReminderItem.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
@@ -679,10 +680,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         cardItem.settleAtRepaymentDay = credit.billDateSettlement;
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
-        cardItem.remindId = credit.remindId;
-        cardItem.remindState = [[db getOneValueOnResult:SSJUserRemindTable.state
-                                              fromTable:@"bk_user_remind"
-                                                  where:SSJUserRemindTable.remindId == credit.remindId] boolValue];
+        cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
         item.cardItem = cardItem;
     }
 
@@ -810,6 +808,19 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         chargeItem.money = [NSString stringWithFormat:@"+%@",moneyStr];
     }
     return chargeItem;
+}
+
+
++ (SSJReminderItem *)getRemindItemWithRemindId:(NSString *)remindId indataBase:(WCTDatabase *)db {
+    SSJReminderItem *item = [[SSJReminderItem alloc] init];
+    SSJUserRemindTable *userRemindTable = [db getOneObjectOfClass:SSJUserRemindTable.class fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == remindId];
+    item.remindId = userRemindTable.remindId;
+    item.remindName = userRemindTable.remindName;
+    item.remindMemo = userRemindTable.memo;
+    item.remindCycle = userRemindTable.cycle;
+    item.remindType = userRemindTable.type;
+    item.remindState = userRemindTable.state;
+    return item;
 }
 
 

@@ -34,7 +34,8 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
         dispatch_queue_set_specific(self.ormDatabaseQueue, kSSJOrmDatabaseQueueSpecificKey, (__bridge void *)self, NULL);
         [WCTStatistics SetGlobalErrorReport:^(WCTError *error) {
             if (error && error.type != WCTErrorTypeSQLiteGlobal && error.type != WCTErrorTypeWarning && error.type != WCTErrorTypeAbort) {
-                NSString *desc = [NSString stringWithFormat:@"code:%@  description:%@  sql:%@", [error infoForKey:WCTErrorKeyExtendedCode], error.localizedDescription, [error infoForKey:WCTErrorKeySQL]];
+                NSString *desc = [NSString stringWithFormat:@"code:%@  description:%@  sql:%@", [error infoForKey:WCTErrorKeyExtendedCode], [error infoForKey:WCTErrorKeyMessage], [error infoForKey:WCTErrorKeySQL]];
+                NSLog(@"%@",desc);
                 NSError *customError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:desc}];
                 [SSJDatabaseErrorHandler handleError:customError];
             }
