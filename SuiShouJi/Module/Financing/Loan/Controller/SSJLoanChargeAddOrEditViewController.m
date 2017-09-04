@@ -568,24 +568,25 @@ static NSUInteger kDateTag = 1005;
                 break;
         }
         
-        NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
         NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         NSDate *billDate = [today compare:self.loanModel.borrowDate] == NSOrderedAscending ? self.loanModel.borrowDate : today;
         
+        NSString *preChargeID = SSJUUID();
+        
         _compoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
-        _compoundModel.chargeModel.chargeId = SSJUUID();
+        _compoundModel.chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, chargeBillId];
         _compoundModel.chargeModel.fundId = self.loanModel.fundID;
         _compoundModel.chargeModel.billId = chargeBillId;
-        _compoundModel.chargeModel.loanId = loanID;
+        _compoundModel.chargeModel.loanId = self.loanModel.ID;
         _compoundModel.chargeModel.userId = SSJUSERID();
         _compoundModel.chargeModel.billDate = billDate;
         _compoundModel.chargeModel.chargeType = self.chargeType;
         
         _compoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
-        _compoundModel.targetChargeModel.chargeId = SSJUUID();
+        _compoundModel.targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, targetChargeBillId];
         _compoundModel.targetChargeModel.fundId = self.loanModel.targetFundID;
         _compoundModel.targetChargeModel.billId = targetChargeBillId;
-        _compoundModel.targetChargeModel.loanId = loanID;
+        _compoundModel.targetChargeModel.loanId = self.loanModel.ID;
         _compoundModel.targetChargeModel.userId = SSJUSERID();
         _compoundModel.targetChargeModel.billDate = billDate;
         _compoundModel.targetChargeModel.chargeType = self.chargeType;
@@ -596,10 +597,10 @@ static NSUInteger kDateTag = 1005;
             && self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
             
             _compoundModel.interestChargeModel = [[SSJLoanChargeModel alloc] init];
-            _compoundModel.interestChargeModel.chargeId = SSJUUID();
+            _compoundModel.interestChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, interestChargeBillId];
             _compoundModel.interestChargeModel.fundId = self.loanModel.targetFundID;
             _compoundModel.interestChargeModel.billId = interestChargeBillId;
-            _compoundModel.interestChargeModel.loanId = loanID;
+            _compoundModel.interestChargeModel.loanId = self.loanModel.ID;
             _compoundModel.interestChargeModel.userId = SSJUSERID();
             _compoundModel.interestChargeModel.billDate = billDate;
             _compoundModel.interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
