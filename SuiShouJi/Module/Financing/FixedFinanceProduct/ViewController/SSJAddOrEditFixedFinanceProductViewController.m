@@ -996,21 +996,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     if (!_createCompoundModel) {
             NSString *chargeBillId = @"3";
             NSString *targetChargeBillId = @"4";
-            
+            NSString *uuid = SSJUUID();
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-            chargeModel.chargeId = SSJUUID();
+            chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,chargeBillId]];
             chargeModel.fundId = self.model.thisfundid;
             chargeModel.billId = chargeBillId;
             chargeModel.userId = SSJUSERID();
-            chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.model.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.model.productid]];
+//            chargeModel.cid = [NSString stringWithFormat:@"%@_%@",self.model.productid,[NSString stringWithFormat:@"%@_%@",uuid,]];
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-            targetChargeModel.chargeId = SSJUUID();
+            targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,targetChargeBillId]];;
             targetChargeModel.fundId = self.model.targetfundid;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.userId = SSJUSERID();
-            targetChargeModel.cid = chargeModel.cid;
+//            targetChargeModel.cid = chargeModel.cid;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];

@@ -59,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (double)interestWithPrincipal:(double)principal rate:(double)rate days:(int)days;
 
++ (int)chargeIdWithModel:(SSJFixedFinanceProductChargeItem *)model;
+
 
 /**
  两个时间之间有多少天

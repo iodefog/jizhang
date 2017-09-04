@@ -431,6 +431,46 @@
     return 0;
 }
 
++ (int)chargeIdWithModel:(SSJFixedFinanceProductChargeItem *)model {
+    int suindex = 0;
+        switch (model.chargeType) {
+            case SSJFixedFinCompoundChargeTypeCreate://新建
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeAdd://追加
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeRedemption://赎回
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
+                suindex = 3;;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
+                suindex = 3;
+                break;
+                
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeCloseOut://结清
+                break;
+                suindex = 3;
+            default:
+                break;
+        }
+    return suindex;
+}
+
 
 
 - (NSInteger)getDifferenceWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {

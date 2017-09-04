@@ -347,54 +347,52 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     double interest = 0;    // 产生利息
     double payment = 0;     // 预期利息
 
-//    for (SSJFixedFinanceProductChargeItem *model in self.chargeModels) {
-//        switch (model.chargeType) {
-//            case SSJFixedFinCompoundChargeTypeCreate://新建
-//                surplus += model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeAdd://追加
-//                surplus += model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeRedemption://赎回
-//                surplus -= model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-//                surplus += model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-//                surplus -= model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
-//                surplus += model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
-//                surplus -= model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
-//                surplus += model.money;
-//                break;
-//                
-//            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
-//                surplus -= model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeCloseOut://结清
-//                break;
-//                surplus -= model.money;
-//            default:
-//                break;
-//        }
-//    }
-
-    
-    //一次性付息
-    //按日付息
-    //每月
-    
-    surplus = [SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels];
+    for (SSJFixedFinanceProductChargeItem *model in self.chargeModels) {
+        switch (model.chargeType) {
+            case SSJFixedFinCompoundChargeTypeCreate://新建
+                surplus += model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeAdd://追加
+                surplus += model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeRedemption://赎回
+                surplus -= model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+                surplus += model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+                surplus -= model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
+                surplus += model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
+                surplus -= model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
+                surplus += model.money;
+                break;
+                
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
+                surplus -= model.money;
+                break;
+            case SSJFixedFinCompoundChargeTypeCloseOut://结清
+                break;
+                surplus -= model.money;
+            default:
+                break;
+        }
+    }
+//+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID
+    interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+//    double benj = [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid];
+//    interest = [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"interest"] doubleValue];
+//    surplus = interest + [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"money"] doubleValue];
     NSString *surplusTitle = @"当前余额";
     NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
     self.currentMoney = surplus;
-    
+    payment = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.financeModel.rate rateType:self.financeModel.ratetype time:self.financeModel.time timetype:self.financeModel.timetype money:[self.financeModel.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:self.financeModel.startdate] objectForKey:@"interest"] doubleValue];
     //
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
@@ -431,26 +429,26 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                                                                                            contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *interestItem = nil;
-    if (interest > 0) {
-        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:interestTitle
+//    if (interest > 0) {
+        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
                                                                topTitleColor:topTitleColor
                                                             bottomTitleColor:bottomTitleColor
                                                                 topTitleFont:topTitleFont
                                                              bottomTitleFont:bottomTitleFont2
                                                                contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-    } else {
-        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
-                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
-                                                               topTitleColor:topTitleColor
-                                                            bottomTitleColor:bottomTitleColor
-                                                                topTitleFont:topTitleFont
-                                                             bottomTitleFont:bottomTitleFont2
-                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-    }
+//    } else {
+//        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
+//                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
+//                                                               topTitleColor:topTitleColor
+//                                                            bottomTitleColor:bottomTitleColor
+//                                                                topTitleFont:topTitleFont
+//                                                             bottomTitleFont:bottomTitleFont2
+//                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+//    }
     
     SSJFinancingDetailHeadeViewCellItem *lenderItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:lenderTitle
-                                                                                                bottomTitle:self.financeModel.productName
+                                                                                                bottomTitle:[NSString stringWithFormat:@"%.2f",payment]
                                                                                               topTitleColor:topTitleColor
                                                                                            bottomTitleColor:bottomTitleColor
                                                                                                topTitleFont:topTitleFont
