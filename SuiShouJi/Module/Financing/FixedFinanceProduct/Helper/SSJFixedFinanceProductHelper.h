@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param models 借贷生成的流水记录
  @return 计算结果
  */
-+ (double)caculateInterestUntilDate:(NSDate *)untilDate model:(SSJFixedFinanceProductItem *)model chargeModels:(NSArray <SSJFixedFinanceProductChargeItem *>*)models;
++ (NSMutableDictionary *)caculateInterestWithModel:(SSJFixedFinanceProductItem *)item chargeModels:(NSArray <SSJFixedFinanceProductChargeItem *>*)models;
 
 /**
  计算固定本金产生的利息

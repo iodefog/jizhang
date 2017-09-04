@@ -273,6 +273,20 @@
     }];
 }
 
+/**
+ 查询当前本金
+ 
+ *  @param fixedFinanceProductID    理财产品id
+ @return 本金
+ */
++ (double)queryForFixedFinanceProduceCurrentMoneyWothWithProductID:(NSString *)fixedFinanceProductID {
+    __block double money = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        money = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cproductid = ? and cuserid = ? and operatortype != 2",fixedFinanceProductID,SSJUSERID()];
+    }];
+    return money;
+}
+
 
 /**
  删除固收理财账户
@@ -459,7 +473,7 @@
             model.targetChargeModel.writeDate = writeDate;
             model.interestChargeModel.writeDate = writeDate;
             lastDate = writeDate;
-            if (type != 0) {//追加或者赎回
+//            if (type != 0) {//追加或者赎回
                 //修改投资金额
                 //查询原来金额
                 double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",productModel.userid,productModel.productid];
@@ -468,6 +482,8 @@
                     newMoney = oldMoney + model.chargeModel.money;
                 } else if (type == 2) {//赎回
                     newMoney = oldMoney - model.chargeModel.money - model.interestChargeModel.money;
+                } else if (type == 0) { //结算
+                    
                 }
                 
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -479,7 +495,7 @@
                     }
                     return;
                 }
-            }
+//            }
             
             //保存流水//存储流水记录
             if (![self saveFixedFinanceProductChargeWithModel:model inDatabase:db error:&error]) {

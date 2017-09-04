@@ -28,6 +28,7 @@
 #import "SSJLoanChangeChargeSelectionControl.h"
 
 #import "SSJFixedFinanceProductStore.h"
+#import "SSJFixedFinanceProductHelper.h"
 
 static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
@@ -346,47 +347,55 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     double interest = 0;    // 产生利息
     double payment = 0;     // 预期利息
 
-    for (SSJFixedFinanceProductChargeItem *model in self.chargeModels) {
-        switch (model.chargeType) {
-            case SSJFixedFinCompoundChargeTypeCreate://新建
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeAdd://追加
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeRedemption://赎回
-                surplus -= model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-                surplus -= model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
-                surplus -= model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
-                surplus += model.money;
-                break;
-                
-            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
-                surplus -= model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeCloseOut://结清
-                break;
-                surplus -= model.money;
-            default:
-                break;
-        }
-    }
+//    for (SSJFixedFinanceProductChargeItem *model in self.chargeModels) {
+//        switch (model.chargeType) {
+//            case SSJFixedFinCompoundChargeTypeCreate://新建
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeAdd://追加
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeRedemption://赎回
+//                surplus -= model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//                surplus -= model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
+//                surplus -= model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
+//                surplus += model.money;
+//                break;
+//                
+//            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
+//                surplus -= model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeCloseOut://结清
+//                break;
+//                surplus -= model.money;
+//            default:
+//                break;
+//        }
+//    }
 
+    
+    //一次性付息
+    //按日付息
+    //每月
+    
+    surplus = [SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels];
     NSString *surplusTitle = @"当前余额";
     NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
     self.currentMoney = surplus;
+    
+    //
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
     NSString *paymentTitle = @"已产生利息";
