@@ -13,6 +13,21 @@
 		405B1292827C0532A2E6541D /* libPods-BeiKeJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C46684FB3B915A8D4F8FBBBD /* libPods-BeiKeJiZhang.a */; };
 		40B605E97FB37EB92043A8DD /* libPods-MaYiJiZhang.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FE65A111B06CF68CBE1E931 /* libPods-MaYiJiZhang.a */; };
 		486A89A1F048342BF34208E4 /* libPods-YouYuJiZhangLiCai.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 259B7E0CCF1F097EA7B135E7 /* libPods-YouYuJiZhangLiCai.a */; };
+		677B3081F2D203B6F4829484 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B30EBF536F9C77765C04C /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3101872D95B5413A767C /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B31D2D2523759EF3B1D3F /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3267A402DDDE30D7C0E1 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B32AFED93DCC636F78F38 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B347EE2AE4A240682B4A9 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B349CAD03BEEE52C39F5C /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B34A7A927B2EDE8639D81 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B34E50A59924E17EDC619 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3644FBA81DAB741C86C8 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B38DBA4FB25B9F197C53C /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3A113F82F474B1F9453D /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3AD8B793B59590EA2BF3 /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
+		677B3CFB14149A94C8259B9C /* SSJCreditCardListFirstLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */; };
 		6F26618EF6C0B60F19ABA4F9 /* libPods-YouYuJiZhangBen.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FBB860472808AAC7486169C /* libPods-YouYuJiZhangBen.a */; };
 		7D00D8051DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
 		7D00D8081DFA9CC00007A8FB /* SSJReportFormsChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D00D8041DFA9CC00007A8FB /* SSJReportFormsChartCell.m */; };
@@ -12236,6 +12251,8 @@
 		628909002EA24646446F4F85 /* Pods-SuiShouJiTests.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiTests.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiTests/Pods-SuiShouJiTests.debug-production.xcconfig"; sourceTree = "<group>"; };
 		6534E1884B88B3410A9AFE6E /* Pods-SuiShouJiEnterprise.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiEnterprise.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiEnterprise/Pods-SuiShouJiEnterprise.debug-production.xcconfig"; sourceTree = "<group>"; };
 		673779A6BF41CEF580DB5CE6 /* Pods-SuiShouJiTests.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SuiShouJiTests.release-test.xcconfig"; path = "Pods/Target Support Files/Pods-SuiShouJiTests/Pods-SuiShouJiTests.release-test.xcconfig"; sourceTree = "<group>"; };
+		677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJCreditCardListFirstLineItem.m; sourceTree = "<group>"; };
+		677B3F3D2F5D6B4572DEE82A /* SSJCreditCardListFirstLineItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJCreditCardListFirstLineItem.h; sourceTree = "<group>"; };
 		68D06DDEC347B191CEB2DFA1 /* libPods-YouYuJiZhangPro.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-YouYuJiZhangPro.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6914A4671174AA5C297802D2 /* Pods-YouYuJiZhang.release-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhang.release-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhang/Pods-YouYuJiZhang.release-production.xcconfig"; sourceTree = "<group>"; };
 		69D2F0A471A04C17E16C7FEB /* Pods-YouYuJiZhangPro.debug-production.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YouYuJiZhangPro.debug-production.xcconfig"; path = "Pods/Target Support Files/Pods-YouYuJiZhangPro/Pods-YouYuJiZhangPro.debug-production.xcconfig"; sourceTree = "<group>"; };
@@ -16807,6 +16824,8 @@
 				9C94714E1CEB224C00D69079 /* SSJFundingListDayItem.m */,
 				9C5377211D75202E002B230A /* SSJCreditCardListDetailItem.h */,
 				9C5377221D75202E002B230A /* SSJCreditCardListDetailItem.m */,
+				677B3F3D2F5D6B4572DEE82A /* SSJCreditCardListFirstLineItem.h */,
+				677B344164B81ED2781C50A3 /* SSJCreditCardListFirstLineItem.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -21170,6 +21189,7 @@
 				7D08A2A61E4999D30085A8FB /* SSJPageControl.m in Sources */,
 				7DA6436C1F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				7D08A2A71E4999D30085A8FB /* SSJNickNameModifyView.m in Sources */,
+				677B347EE2AE4A240682B4A9 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -21932,6 +21952,7 @@
 				7DA13BFD1E35AED7000490A4 /* SSJPageControl.m in Sources */,
 				7DA6436B1F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				7DA13BFE1E35AED7000490A4 /* SSJNickNameModifyView.m in Sources */,
+				677B34A7A927B2EDE8639D81 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -22694,6 +22715,7 @@
 				7DBB3C901E55C2EE0075E638 /* SSJPageControl.m in Sources */,
 				7DA6436D1F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				7DBB3C911E55C2EE0075E638 /* SSJNickNameModifyView.m in Sources */,
+				677B38DBA4FB25B9F197C53C /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -23456,6 +23478,7 @@
 				7DBB412B1E55C4E00075E638 /* SSJPageControl.m in Sources */,
 				7DA643681F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				7DBB412C1E55C4E00075E638 /* SSJNickNameModifyView.m in Sources */,
+				677B3AD8B793B59590EA2BF3 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24218,6 +24241,7 @@
 				7DFB18941EB0341E00292DD3 /* SRRefreshView.m in Sources */,
 				7DFB18951EB0341E00292DD3 /* SSJPageControl.m in Sources */,
 				7DFB18961EB0341E00292DD3 /* SSJNickNameModifyView.m in Sources */,
+				677B349CAD03BEEE52C39F5C /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -24979,6 +25003,7 @@
 				9C13F70F1E8267D300AC5FA9 /* SSJPageControl.m in Sources */,
 				7DA6436E1F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				9C13F7101E8267D300AC5FA9 /* SSJNickNameModifyView.m in Sources */,
+				677B32AFED93DCC636F78F38 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -25738,6 +25763,7 @@
 				9C23D2721F209D8A008C7500 /* SRRefreshView.m in Sources */,
 				9C23D2731F209D8A008C7500 /* SSJPageControl.m in Sources */,
 				9C23D2741F209D8A008C7500 /* SSJNickNameModifyView.m in Sources */,
+				677B3CFB14149A94C8259B9C /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -26500,6 +26526,7 @@
 				9C4C223B1E9E30C8000C5F15 /* SRRefreshView.m in Sources */,
 				9C4C223C1E9E30C8000C5F15 /* SSJPageControl.m in Sources */,
 				9C4C223D1E9E30C8000C5F15 /* SSJNickNameModifyView.m in Sources */,
+				677B3101872D95B5413A767C /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -27262,6 +27289,7 @@
 				7D8952CF1EB2ED5300FF6D04 /* SSJButtonConentView.m in Sources */,
 				7D68257A1F1F802A00A7587D /* SSJTextFieldToolbarManager.m in Sources */,
 				9C7D2F211E8DF8A80093001F /* SSJNickNameModifyView.m in Sources */,
+				677B31D2D2523759EF3B1D3F /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -28024,6 +28052,7 @@
 				7D8952D61EB2ED5700FF6D04 /* SSJButtonConentView.m in Sources */,
 				7D6825821F1F802A00A7587D /* SSJTextFieldToolbarManager.m in Sources */,
 				9C7D31981E8DF96B0093001F /* SSJNickNameModifyView.m in Sources */,
+				677B30EBF536F9C77765C04C /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -28786,6 +28815,7 @@
 				9C80FEDA1E95E88E00B1BAAC /* SRRefreshView.m in Sources */,
 				9C80FEDB1E95E88E00B1BAAC /* SSJPageControl.m in Sources */,
 				9C80FEDC1E95E88E00B1BAAC /* SSJNickNameModifyView.m in Sources */,
+				677B3644FBA81DAB741C86C8 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -29547,6 +29577,7 @@
 				9C9CF09A1EA5F73A007657FE /* SRRefreshView.m in Sources */,
 				9C9CF09B1EA5F73A007657FE /* SSJPageControl.m in Sources */,
 				9C9CF09C1EA5F73A007657FE /* SSJNickNameModifyView.m in Sources */,
+				677B3A113F82F474B1F9453D /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -30296,6 +30327,7 @@
 				9CDB4C051EF3ABBC0097E09D /* SRRefreshView.m in Sources */,
 				9CDB4C061EF3ABBC0097E09D /* SSJPageControl.m in Sources */,
 				9CDB4C071EF3ABBC0097E09D /* SSJNickNameModifyView.m in Sources */,
+				677B3081F2D203B6F4829484 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -31058,6 +31090,7 @@
 				9C17B54C1DEED8A1000D6C99 /* SSJSummaryBooksHeaderView.m in Sources */,
 				7DA6436A1F219E0600D2B9E9 /* SSJCreateOrEditBillTypeTopView.m in Sources */,
 				9CECFC981D6D41A700DB2C8B /* SSJNickNameModifyView.m in Sources */,
+				677B34E50A59924E17EDC619 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -31822,6 +31855,7 @@
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 				7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */,
 				9CD9BC381CFD2DAA0061803B /* SSJNickNameModifyView.m in Sources */,
+				677B3267A402DDDE30D7C0E1 /* SSJCreditCardListFirstLineItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
