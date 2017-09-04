@@ -60,38 +60,12 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-//        // 到期未结算
-//        NSMutableArray *list1 = [NSMutableArray array];
-//        
-//        // 未到期已结算
-//        NSMutableArray *list2 = [NSMutableArray array];
-//        
-//        // 其他
-//        NSMutableArray *list3 = [NSMutableArray array];
-        
         NSMutableArray *list = [[NSMutableArray alloc] init];
-        
         while ([result next]) {
             SSJLoanModel *model = [SSJLoanModel modelWithResultSet:result];
             [list addObject:model];
-            
-//            NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-            
-//            // 排序顺序：1.到期未结算 2.未到期已结算 3.其他
-//            if (!model.closeOut && [model.repaymentDate compare:nowDate] != NSOrderedAscending) {
-//                [list1 addObject:model];
-//            } else if (model.closeOut && [model.repaymentDate compare:nowDate] == NSOrderedAscending) {
-//                [list2 addObject:model];
-//            } else {
-//                [list3 addObject:model];
-//            }
         }
-        
         [result close];
-        
-//        [list addObjectsFromArray:list1];
-//        [list addObjectsFromArray:list2];
-//        [list addObjectsFromArray:list3];
         
         if (success) {
             SSJDispatchMainAsync(^{
