@@ -28,7 +28,7 @@
 
 @property (nonatomic, retain) NSString* writeDate;
 
-@property (nonatomic, assign) int type;
+@property (nonatomic, assign) SSJReminderType type;
 
 @property (nonatomic, assign) SSJCyclePeriodType cycle;
 

@@ -34,6 +34,4 @@
 // 流水id
 @property (nonatomic, copy) NSString *ID;
 
-
-
 @end

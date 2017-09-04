@@ -7,13 +7,13 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJCreditCardItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJNewCreditCardViewController : SSJBaseViewController
 
-@property(nonatomic, strong) NSString *cardId;
+@property(nonatomic, strong) SSJFinancingHomeitem *financingItem;
 
-typedef void (^addNewCardBlock)(SSJCreditCardItem *newCardItem);
+typedef void (^addNewCardBlock)(SSJFinancingHomeitem *newCardItem);
 
 @property(nonatomic,copy) addNewCardBlock addNewCardBlock;
 

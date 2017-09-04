@@ -58,10 +58,6 @@
  */
 @property(nonatomic, strong) SSJReminderItem *remindItem;
 
-@property(nonatomic) BOOL remindState;
-
-@property(nonatomic, strong) NSString *remindId;
-
 /**
  流水条数
  */

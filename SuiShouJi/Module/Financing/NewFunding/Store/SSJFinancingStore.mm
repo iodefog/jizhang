@@ -117,20 +117,18 @@
                 userCredit.writeDate = editeDate;
                 userCredit.version = SSJSyncVersion();
                 userCredit.operatorType = 1;
-                userCredit.remindId = item.cardItem.remindId;
+                userCredit.remindId = item.cardItem.remindItem.remindId;
                 userCredit.billDateSettlement = item.cardItem.settleAtRepaymentDay;
-                if ([db insertObject:userCredit into:@"bk_user_credit"]) {
-                    if (![db insertObject:userCharge into:@"bk_user_charge"]) {
-                        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey: @"插入信用卡表失败"}];
-                        if (failure) {
-                            dispatch_main_async_safe (^{
-                                failure(error);
-                            });
-                        }
-                        return NO;
-                    };
-                }
-
+                if (![db insertOrReplaceObject:userCredit into:@"bk_user_credit"]) {
+                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey: @"插入信用卡表失败"}];
+                    if (failure) {
+                        dispatch_main_async_safe (^{
+                            failure(error);
+                        });
+                    }
+                    return NO;
+                };
+                
             }
 
             if (item.cardItem.remindItem) {
@@ -140,7 +138,7 @@
                 remindTable.remindId = item.cardItem.remindItem.remindId;
                 remindTable.remindName = item.cardItem.remindItem.remindName;
                 remindTable.memo = item.cardItem.remindItem.remindMemo;
-                remindTable.startDate = [item.cardItem.remindItem.remindDate formattedDateWithFormat:@""];
+                remindTable.startDate = [item.cardItem.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
                 remindTable.state = item.cardItem.remindItem.remindState;
                 remindTable.version = SSJSyncVersion();
                 remindTable.operatorType = 1;

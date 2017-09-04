@@ -18,4 +18,6 @@
 
 + (NSArray <SSJFinancingGradientColorItem *> *)defualtColors;
 
++ (SSJFinancingGradientColorItem *)gradientColorWithStartColor:(NSString *)startColor EndColor:(NSString *)endColor;
+
 @end
