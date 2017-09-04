@@ -7,7 +7,8 @@
 //
 
 #import "SSJLoanModel.h"
-#import "FMResultSet.h"
+#import "FMDB.h"
+#import "SSJLoanHelper.h"
 
 @implementation SSJLoanModel
 
@@ -63,7 +64,6 @@
     model.userID = [resultSet stringForColumn:@"cuserid"];
     model.lender = [resultSet stringForColumn:@"lender"];
     model.image = [resultSet stringForColumn:@"cicoin"];
-    model.jMoney = [resultSet doubleForColumn:@"jmoney"];
     model.fundID = [resultSet stringForColumn:@"cthefundid"];
     model.targetFundID = [resultSet stringForColumn:@"ctargetfundid"];
     model.endTargetFundID = [resultSet stringForColumn:@"cetarget"];
@@ -82,6 +82,59 @@
     model.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     return model;
+}
+
+- (BOOL)caculateMoneyInDatabase:(FMDatabase *)db error:(NSError **)error {
+    if (!self.ID.length) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"借贷ID不能为空"}];
+        }
+        return NO;
+    }
+    
+    SSJLoanType loanType = SSJLoanTypeLend;
+    NSArray *chargeModels = [SSJLoanHelper queryLoanChargeModeListWithLoanID:self.ID database:db error:error];
+    
+    for (SSJLoanCompoundChargeModel *model in chargeModels) {
+        loanType = model.chargeModel.type;
+        
+        switch (model.chargeModel.chargeType) {
+            case SSJLoanCompoundChargeTypeCreate:
+                self.jMoney += model.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceIncrease:
+                self.jMoney += model.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceDecrease:
+                self.jMoney -= model.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeRepayment:
+                if (!model.closeOut) {
+                    self.jMoney -= model.chargeModel.money;
+                }
+                break;
+                
+            case SSJLoanCompoundChargeTypeAdd:
+                self.jMoney += model.chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeCloseOut:
+            case SSJLoanCompoundChargeTypeInterest:
+                break;
+        }
+    }
+    
+    // 借入的话转出金额>转入金额即为正数；反之为负数
+    if (loanType == SSJLoanTypeBorrow) {
+        if (self.jMoney != 0) {
+            self.jMoney = -self.jMoney;
+        }
+    }
+    
+    return YES;
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {

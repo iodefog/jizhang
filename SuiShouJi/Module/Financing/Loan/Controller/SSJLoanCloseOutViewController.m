@@ -243,7 +243,7 @@ static NSUInteger kClostOutDateTag = 1004;
 
 - (RACSignal *)loadCompoundChargeModels {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+        [SSJLoanHelper queryLoanChargeModeListWithLoanID:self.loanModel.ID success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
             self.chargeModels = list;
             [self initEndDate];
             [self initCompoundModel];

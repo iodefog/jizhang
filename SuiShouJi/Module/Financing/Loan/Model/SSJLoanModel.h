@@ -11,6 +11,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class FMDatabase;
+
 /**
  计息方式
 
@@ -92,6 +94,15 @@ typedef NS_ENUM(NSUInteger, SSJLoanInterestType) {
 @property(nonatomic, copy, nullable) NSString *endColor;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
+
+/**
+ 计算借贷余额
+
+ @param db 数据库对象
+ @param error 错误描述对象
+ @return 是否计算成功
+ */
+- (BOOL)caculateMoneyInDatabase:(FMDatabase *)db error:(NSError **)error;
 
 @end
 

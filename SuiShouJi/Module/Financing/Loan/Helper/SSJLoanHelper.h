@@ -177,15 +177,26 @@ NS_ASSUME_NONNULL_BEGIN
                                          failure:(void (^)(NSError *error))failure;
 
 /**
- 查询借贷产生的流水列表
+ 同步查询借贷产生的流水列表
+ 
+ @param loanID 借贷ID
+ @param db 数据库对象
+ @param error 错误描述对象
+ */
++ (NSArray<SSJLoanCompoundChargeModel *> *)queryLoanChargeModeListWithLoanID:(NSString *)loanID
+                                                                    database:(FMDatabase *)db
+                                                                       error:(NSError **)error;
 
- @param loanModel 借贷模型
+/**
+ 异步查询借贷产生的流水列表
+
+ @param loanID 借贷ID
  @param success 成功的回调
  @param failure 失败的回调
  */
-+ (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
-                                     success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
-                                     failure:(void (^)(NSError *error))failure;
++ (void)queryLoanChargeModeListWithLoanID:(NSString *)loanID
+                                  success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
+                                  failure:(void (^)(NSError *error))failure;
 
 /**
  删除借贷产生的流水
@@ -226,6 +237,18 @@ NS_ASSUME_NONNULL_BEGIN
                             writeDate:(NSString *)writeDate
                              database:(FMDatabase *)db
                                 error:(NSError **)error;
+
+/**
+ <#Description#>
+
+ @param loanType <#loanType description#>
+ @param billID <#billID description#>
+ @param error <#error description#>
+ @return <#return value description#>
+ */
++ (SSJLoanCompoundChargeType)loanChargeTypeWithLoanType:(SSJLoanType)loanType
+                                                 billID:(NSString *)billID
+                                                  error:(NSError **)error;
 
 @end
 
