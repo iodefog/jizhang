@@ -23,7 +23,9 @@
 #import "SSJFundingDailySumCell.h"
 #import "SSJFundingDetailNoDataView.h"
 #import "SSJCreditCardDetailHeader.h"
-#import "SSJCreditCardListCell.h"
+#import "SSJCreditCardListFirstLineItem.h"
+
+#import "SSJFundingDetailListFirstLineCell.h"
 #import "SSJLoanChangeChargeSelectionControl.h"
 
 #import "SSJLoanChargeDetailViewController.h"
@@ -89,7 +91,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     self.tableView.sectionHeaderHeight = 40;
     [self.tableView registerClass:[SSJFundingDetailCell class] forCellReuseIdentifier:kFundingDetailCellID];
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
-    [self.tableView registerClass:[SSJCreditCardListCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
+    [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
     [self.tableView addSubview:self.noDataHeader];
     if (self.item.cardItem) {
         [self.view addSubview:self.repaymentButton];
@@ -125,24 +127,30 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     SSJBaseCellItem *item;
     item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
-    if ([item isKindOfClass:[SSJFundingListDayItem class]]){
+    if ([item isKindOfClass:[SSJFundingListDayItem class]]) {
         SSJFundingDailySumCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingListDailySumCellID forIndexPath:indexPath];
-        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
+        cell.item = [((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
         return cell;
-    }else if([item isKindOfClass:[SSJBillingChargeCellItem class]]){
+    } else if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
         SSJFundingDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:kFundingDetailCellID forIndexPath:indexPath];
-        cell.item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
-        if (indexPath.row < [[((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]) chargeArray] count]) {
-            SSJBaseCellItem *nextItem = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
+        cell.item = [((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
+        if (indexPath.row
+            < [[((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]) chargeArray] count]) {
+            SSJBaseCellItem *nextItem = [((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]).chargeArray ssj_safeObjectAtIndex:indexPath.row];
             if ([nextItem isKindOfClass:[SSJFundingListDayItem class]]) {
-                cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+                cell.separatorInset = UIEdgeInsetsMake(0 , 0 , 0 , 0);
             } else {
-                cell.separatorInset = UIEdgeInsetsMake(0, 15, 0, 15);
+                cell.separatorInset = UIEdgeInsetsMake(0 , 15 , 0 , 15);
             }
         } else {
-            cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
+            cell.separatorInset = UIEdgeInsetsMake(0 , 0 , 0 , 0);
         }
         return cell;
+    } else if ([item isKindOfClass:[SSJCreditCardListFirstLineItem class]]) {
+        SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kCreditCardListFirstLineCellID forIndexPath:indexPath];
+        cell.item = [((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
+        return cell;
+
     }
     return [UITableViewCell new];
 }

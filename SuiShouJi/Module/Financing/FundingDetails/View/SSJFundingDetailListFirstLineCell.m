@@ -9,8 +9,8 @@
 #import "SSJFundingDetailListFirstLineCell.h"
 
 @interface SSJFundingDetailListFirstLineCell()
-@property(nonatomic, strong) UILabel *incomeLabel;
-@property(nonatomic, strong) UILabel *expentureLabel;
+@property(nonatomic, strong) UILabel *remaningDaysLab;
+@property(nonatomic, strong) UILabel *pariodLab;
 @end
 
 @implementation SSJFundingDetailListFirstLineCell
@@ -19,44 +19,49 @@
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:reuseIdentifier]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
-        [self.contentView addSubview:self.incomeLabel];
-        [self.contentView addSubview:self.expentureLabel];
+        [self.contentView addSubview:self.remaningDaysLab];
+        [self.contentView addSubview:self.pariodLab];
     }
     return self;
 }
 
--(void)layoutSubviews{
-    [super layoutSubviews];
-    self.incomeLabel.left = 15;
-    self.incomeLabel.centerY = self.contentView.height / 2;
-    self.expentureLabel.right = self.contentView.width - 15;
-    self.expentureLabel.centerY = self.contentView.height / 2;
+- (void)updateConstraints {
+    [self.pariodLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.mas_equalTo(15);
+        make.centerY.mas_equalTo(self);
+    }];
+
+    [self.remaningDaysLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self).offset(-15);
+        make.centerY.mas_equalTo(self);
+    }];
+
+    [super updateConstraints];
 }
 
--(UILabel *)incomeLabel{
-    if (!_incomeLabel) {
-        _incomeLabel = [[UILabel alloc]init];
-        _incomeLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _incomeLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
+-(UILabel *)remaningDaysLab{
+    if (!_remaningDaysLab) {
+        _remaningDaysLab = [[UILabel alloc]init];
+        _remaningDaysLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _remaningDaysLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
-    return _incomeLabel;
+    return _remaningDaysLab;
 }
 
--(UILabel *)expentureLabel{
-    if (!_expentureLabel) {
-        _expentureLabel = [[UILabel alloc]init];
-        _expentureLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-        _expentureLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
+-(UILabel *)pariodLab{
+    if (!_pariodLab) {
+        _pariodLab = [[UILabel alloc]init];
+        _pariodLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+        _pariodLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
     }
-    return _expentureLabel;
+    return _pariodLab;
 }
 
--(void)setItem:(SSJFundingDetailListItem *)item{
+-(void)setItem:(SSJCreditCardListFirstLineItem *)item{
     _item = item;
-    self.incomeLabel.text = [NSString stringWithFormat:@"收入:%.2f",_item.income];
-    [self.incomeLabel sizeToFit];
-    self.expentureLabel.text = [NSString stringWithFormat:@"支出:%.2f",_item.expenture];
-    [self.expentureLabel sizeToFit];
+    self.remaningDaysLab.text = _item.remainingDaysStr;
+    self.pariodLab.text = _item.period;
+    [self setNeedsUpdateConstraints];
 }
 
 /*

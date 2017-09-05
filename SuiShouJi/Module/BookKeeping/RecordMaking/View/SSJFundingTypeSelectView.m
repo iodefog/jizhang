@@ -176,7 +176,7 @@
     [_items removeAllObjects];
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance]asyncInDatabase:^(FMDatabase *db){
-        FMResultSet * rs = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent <> 11 and a.cparent <> 10 order by a.iorder",SSJUSERID()];
+        FMResultSet * rs = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent <> 11 and a.cparent <> 10 and a.cparent <> 17 order by a.iorder",SSJUSERID()];
         _items = [[NSMutableArray alloc]init];
         while ([rs next]) {
             SSJFundingItem *item = [[SSJFundingItem alloc]init];

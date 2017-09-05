@@ -7,12 +7,10 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJFundingDetailListItem.h"
-
-SSJ_DEPRECATED
+#import "SSJCreditCardListFirstLineItem.h"
 
 @interface SSJFundingDetailListFirstLineCell : SSJBaseTableViewCell
 
-@property(nonatomic, strong) SSJFundingDetailListItem *item;
+@property(nonatomic, strong) SSJCreditCardListFirstLineItem *item;
 
 @end
