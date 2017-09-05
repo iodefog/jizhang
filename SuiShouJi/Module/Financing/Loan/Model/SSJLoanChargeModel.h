@@ -48,7 +48,7 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 
 @property (nonatomic, copy) NSString *chargeId;
 
-@property (nonatomic, copy, nullable) NSString *fundId;
+@property (nonatomic, copy) NSString *fundId;
 
 @property (nonatomic, copy) NSString *billId;
 
@@ -60,9 +60,9 @@ typedef NS_ENUM(NSUInteger, SSJLoanCompoundChargeType) {
 
 @property (nonatomic, copy, nullable) NSString *icon;
 
-@property (nonatomic, copy) NSDate *billDate;
+@property (nonatomic, strong) NSDate *billDate;
 
-@property (nonatomic, copy) NSDate *writeDate;
+@property (nonatomic, strong) NSDate *writeDate;
 
 // 流水金额
 @property (nonatomic) double money;

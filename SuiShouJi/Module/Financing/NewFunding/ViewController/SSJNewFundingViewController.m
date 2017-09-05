@@ -17,6 +17,7 @@
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJFundingMergeViewController.h"
 #import "SSJFundingTypeManager.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 
 #define NUM @"+-.0123456789"
@@ -323,17 +324,22 @@
         return;
         
     }
-    __weak typeof(self) weakSelf = self;
+
+    @weakify(self);
     [SSJFinancingStore saveFundingItem:self.item Success:^(SSJFinancingHomeitem *item) {
-        if (weakSelf.addNewFundBlock) {
-            weakSelf.addNewFundBlock(item);
-        }
-        if (item.fundOperatortype == 0) {
+     
+        @strongify(self);
+
+        
+        UIViewController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        if ([lastVc isKindOfClass:[SSJFundingTypeSelectViewController class]]) {
             UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
             [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
         } else {
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-            
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
+        if (self.addNewFundBlock) {
+            self.addNewFundBlock(item);
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {

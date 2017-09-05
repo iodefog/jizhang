@@ -305,13 +305,10 @@ static NSString *SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 - (void)rightButtonClicked:(id)sender {
     SSJFundingTypeSelectViewController *fundingTypeSelectVC = [[SSJFundingTypeSelectViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
     fundingTypeSelectVC.needLoanOrNot = YES;
-    __weak typeof(self) weakSelf = self;
-    fundingTypeSelectVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
-        if ([item isKindOfClass:[SSJFundingItem class]]) {
-            weakSelf.newlyAddFundId = ((SSJFundingItem *) item).fundingID;
-        } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
-            weakSelf.newlyAddFundId = ((SSJCreditCardItem *) item).fundingID;
-        }
+    @weakify(self);
+    fundingTypeSelectVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item) {
+        @strongify(self);
+        self.newlyAddFundId = item.fundingID;
     };
     [self.navigationController pushViewController:fundingTypeSelectVC animated:YES];
 }

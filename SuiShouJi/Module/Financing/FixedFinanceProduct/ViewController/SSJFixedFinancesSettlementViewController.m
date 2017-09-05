@@ -447,12 +447,9 @@ static NSString *kTitle6 = @"结算日期";
             } else if (index == view.items.count - 1) {
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.financeModel.targetfundid = fundItem.fundingID;
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
+                        weakSelf.financeModel.targetfundid = item.fundingID;
                         [weakSelf loadData];
-                    }
 //                    else if ([item isKindOfClass:[SSJCreditCardItem class]]){
 //                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
 //                        weakSelf.financeModel.targetfundid = cardItem.cardId;

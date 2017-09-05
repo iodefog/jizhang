@@ -22,14 +22,21 @@
     NSString *borrowDate = [model.borrowDate formattedDateWithFormat:@"yyyy.MM.dd"];
     switch (model.type) {
         case SSJLoanTypeLend:
-            item.money = [NSString stringWithFormat:@"+%.2f", model.jMoney];
+            if (model.jMoney >= 0) {
+                item.money = [NSString stringWithFormat:@"+%.2f", ABS(model.jMoney)];
+            } else {
+                item.money = [NSString stringWithFormat:@"-%.2f", ABS(model.jMoney)];
+            }
             item.loanTitle = [NSString stringWithFormat:@"被%@借", model.lender];
             item.date = [NSString stringWithFormat:@"借出日期：%@", borrowDate];
-            
             break;
             
         case SSJLoanTypeBorrow:
-            item.money = [NSString stringWithFormat:@"-%.2f", model.jMoney];
+            if (model.jMoney >= 0) {
+                item.money = [NSString stringWithFormat:@"-%.2f", ABS(model.jMoney)];
+            } else {
+                item.money = [NSString stringWithFormat:@"+%.2f", ABS(model.jMoney)];
+            }
             item.loanTitle = [NSString stringWithFormat:@"欠%@钱款", model.lender];
             item.date = [NSString stringWithFormat:@"欠款日期：%@", borrowDate];
             break;

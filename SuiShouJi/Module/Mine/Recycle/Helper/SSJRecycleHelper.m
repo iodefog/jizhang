@@ -30,6 +30,8 @@
 
 @property (nonatomic, copy) NSString *ID;
 
+@property (nonatomic, copy) NSString *billID;
+
 @property (nonatomic, copy) NSString *fundID;
 
 @property (nonatomic, copy) NSString *sundryID;
@@ -607,7 +609,7 @@
     }
     
     // 查询此账户下已删除的周期转账流水
-    NSArray *chargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeLoan
+    NSArray *chargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeCyclicTransfer
                                                        clientDate:clientDate
                                                            fundID:fundID
                                                        inDatabase:db];
@@ -647,6 +649,8 @@
                                                            clientDate:clientDate
                                                                fundID:fundID
                                                            inDatabase:db];
+    
+    NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
     for (_SSJRecycleChargeModel *model in loanChargeModels) {
         // 恢复目标资金账户
         if (![self recoverTargetFundWithChargeModel:model
@@ -658,8 +662,7 @@
         }
         
         // 恢复借贷项目
-        NSString *loanID = [[model.sundryID componentsSeparatedByString:@"_"] firstObject];
-        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), loanID]) {
+        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), model.sundryID]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -667,14 +670,16 @@
         }
         
         // 恢复借贷流水
+        NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if (![self recoverChargesWithSundryID:model.sundryID
-                                    writeDate:writeDate
+                                    writeDate:chargeWriteDate
                                    clientDate:clientDate
                                    chargeType:SSJChargeIdTypeLoan
                                    inDatabase:db
                                         error:error]) {
             return NO;
         }
+        timestamp += 0.001;
     }
     
     return YES;
@@ -691,16 +696,9 @@
                                                              clientDate:clientDate
                                                                  fundID:fundID
                                                              inDatabase:db];
+    
+    NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
     for (_SSJRecycleChargeModel *model in creditChargeModels) {
-        // 恢复目标资金账户
-        if (![self recoverTargetFundWithChargeModel:model
-                                          writeDate:writeDate
-                                         chargeType:SSJChargeIdTypeRepayment
-                                         inDatabase:db
-                                              error:error]) {
-            return NO;
-        }
-        
         // 恢复还款项目
         if (![db executeUpdate:@"update bk_credit_repayment set operatortype = 1, cwritedate = ?, iversion = ? where crepaymentid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), model.sundryID]) {
             if (error) {
@@ -709,14 +707,38 @@
             return NO;
         }
         
-        // 恢复还款流水
-        if (![self recoverChargesWithSundryID:model.sundryID
-                                    writeDate:writeDate
-                                   clientDate:clientDate
-                                   chargeType:SSJChargeIdTypeRepayment
-                                   inDatabase:db
-                                        error:error]) {
-            return NO;
+        SSJSpecialBillId billID = [model.billID integerValue];
+        if (billID == SSJSpecialBillIdBalanceRollIn
+            || billID == SSJSpecialBillIdBalanceRollOut) {
+            // 恢复目标资金账户
+            if (![self recoverTargetFundWithChargeModel:model
+                                              writeDate:writeDate
+                                             chargeType:SSJChargeIdTypeRepayment
+                                             inDatabase:db
+                                                  error:error]) {
+                return NO;
+            }
+            
+            // 恢复还款流水
+            NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            if (![self recoverChargesWithSundryID:model.sundryID
+                                        writeDate:chargeWriteDate
+                                       clientDate:clientDate
+                                       chargeType:SSJChargeIdTypeRepayment
+                                       inDatabase:db
+                                            error:error]) {
+                return NO;
+            }
+            timestamp += 0.001;
+        } else if (billID == SSJSpecialBillIdCreditAgingPrincipal
+                   || billID == SSJSpecialBillIdCreditAgingPoundage) {
+            // 这两种流水不属于转入／转出类型，所以只要恢复流水
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ichargeid = ?", writeDate, @(SSJSyncVersion()), model.ID]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return NO;
+            }
         }
     }
     
@@ -774,10 +796,11 @@
                                                                 fundID:(NSString *)fundID
                                                             inDatabase:(SSJDatabase *)db {
     NSMutableArray *chargeModels = [NSMutableArray array];
-    FMResultSet *rs = [db executeQuery:@"select ichargeid, cid from bk_user_charge where cwritedate = ? and ichargetype = ? and ifunsid = ? and operatortype = 2", clientDate, @(type), fundID];
+    FMResultSet *rs = [db executeQuery:@"select ichargeid, ibillid, cid from bk_user_charge where cwritedate = ? and ichargetype = ? and ifunsid = ? and operatortype = 2", clientDate, @(type), fundID];
     while ([rs next]) {
         _SSJRecycleChargeModel *model = [[_SSJRecycleChargeModel alloc] init];
         model.ID = [rs stringForColumn:@"ichargeid"];
+        model.billID = [rs stringForColumn:@"ibillid"];
         model.sundryID = [rs stringForColumn:@"cid"];
         [chargeModels addObject:model];
     }

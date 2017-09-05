@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJFundingItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJFundingTypeSelectView : UIView<UITableViewDataSource,UITableViewDelegate>
 
-typedef void (^fundingTypeSelectBlock)(SSJFundingItem *item);
+typedef void (^fundingTypeSelectBlock)(SSJFinancingHomeitem *item);
 
 @property (nonatomic,strong) NSString *selectFundID;
 

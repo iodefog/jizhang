@@ -30,7 +30,7 @@
 
 @property (nonatomic, assign) SSJReminderType type;
 
-@property (nonatomic, assign) SSJCyclePeriodType cycle;
+@property (nonatomic, assign) int cycle;
 
 @property (nonatomic, assign) int isEnd;
 

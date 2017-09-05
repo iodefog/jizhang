@@ -59,7 +59,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
 
-        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14");
+        WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
+
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14").orderBy(orderList);
 
         WCTStatement *statement = [db prepare:statementSelect];
 
@@ -131,11 +133,22 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
             } else {
                 if ([item.billId isEqualToString:@"3"]) {
-                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId && SSJUserChargeTable.userId == userId && SSJUserChargeTable.billId == @"4"];
-                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == sourceId];
+                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
+                                                       fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId
+                                                                                         && SSJUserChargeTable.userId == userId
+                                                                                         && SSJUserChargeTable.billId == @"4"];
+                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
+                                                        fromTable:@"bk_fund_info"
+                                                            where:SSJFundInfoTable.fundId == sourceId];
                 } else if ([item.billId isEqualToString:@"4"]) {
-                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId && SSJUserChargeTable.userId == userId && SSJUserChargeTable.billId == @"3"];
-                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == sourceId];
+                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
+                                                       fromTable:@"bk_user_charge"
+                                                           where:SSJUserChargeTable.cid == item.sundryId
+                                                                 && SSJUserChargeTable.userId == userId
+                                                                 && SSJUserChargeTable.billId == @"3"];
+                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
+                                                        fromTable:@"bk_fund_info"
+                                                            where:SSJFundInfoTable.fundId == sourceId];
                 }
             }
             NSString *month = [item.billDate substringWithRange:NSMakeRange(0 , 7)];
@@ -661,9 +674,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
-        cardItem.hasMadeInstalment = [db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
+        cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
                                                    fromTable:@"bk_credit_repayment"
-                                                       where:SSJCreditRepaymentTable.cardId == cardItem.fundingID];
+                                                       where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
     }
@@ -697,9 +710,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
 + (SSJBillingChargeCellItem *)getChargeItemWithStatement:(WCTStatement *)statement {
     SSJBillingChargeCellItem *chargeItem = [[SSJBillingChargeCellItem alloc] init];
-    for (int i = 0 ; i < [statement getCount] ; ++i) {
+    for (int i = 0 ; i < [statement getColumnCount] ; ++i) {
         id value = [statement getValueAtIndex:i];
-        NSString *name = [statement getNameAtIndex:i];
+        NSString *name = [statement getColumnNameAtIndex:i];
         NSString *str = SSJUserChargeTable.chargeId.getDescription();
         NSString *tableName = [statement getTableNameAtIndex:i];
         if (value) {

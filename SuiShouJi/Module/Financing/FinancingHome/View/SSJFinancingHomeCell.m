@@ -215,6 +215,7 @@ static const CGFloat kRadius = 12.f;
         } else {
             self.cardMemoLabel.text = @"";
         }
+        [self.cardMemoLabel sizeToFit];
         self.fundingBalanceLabel.hidden = NO;
         if (self.item.cardItem.cardBillingDay != 0 && self.item.cardItem.cardRepaymentDay != 0) {
             NSDate *billDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardItem.cardBillingDay];
@@ -254,12 +255,7 @@ static const CGFloat kRadius = 12.f;
                 repaymentDate = [repaymentDate dateBySubtractingMonths:1];
                 billDate = [billDate dateBySubtractingMonths:1];
             }
-            //            if ([billDate isEarlierThanOrEqualTo:[NSDate date]] && [[NSDate date] isEarlierThanOrEqualTo:repaymentDate]) {
-            //                float sumAmount = [SSJCreditCardStore queryCreditCardBalanceForTheMonth:billDate.month billingDay:item.cardBillingDay WithCardId:item.cardId];
-            //                self.fundingMemoLabel.text = [NSString stringWithFormat:@"%ld月账单金额%.2f",billDate.month,sumAmount];
-            //            }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",self.item.cardItem.cardLimit];
-            //            }
             [self.fundingMemoLabel sizeToFit];
         }else{
             self.fundingMemoLabel.text = [NSString stringWithFormat:@"信用卡额度%.2f",self.item.cardItem.cardLimit];

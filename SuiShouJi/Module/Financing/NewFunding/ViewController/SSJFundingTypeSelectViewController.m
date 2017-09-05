@@ -25,9 +25,9 @@ static NSString *kCellID = @"cellID";
 
 @interface SSJFundingTypeSelectViewController () <SCYSlidePagingHeaderViewDelegate>
 
-@property(nonatomic, strong) SCYSlidePagingHeaderView *slideView;
+@property(nonatomic , strong) SCYSlidePagingHeaderView *slideView;
 
-@property(nonatomic, strong) NSArray *items;
+@property(nonatomic , strong) NSArray *items;
 
 @end
 
@@ -50,7 +50,7 @@ static NSString *kCellID = @"cellID";
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.slideView.leftTop = CGPointMake(0, SSJ_NAVIBAR_BOTTOM);
+    self.slideView.leftTop = CGPointMake(0 , SSJ_NAVIBAR_BOTTOM);
     self.tableView.height = self.view.height - self.slideView.bottom;
     self.tableView.top = self.slideView.bottom;
 }
@@ -60,7 +60,8 @@ static NSString *kCellID = @"cellID";
 }
 
 #pragma mark - UITableViewDelegate
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 55;
 }
 
@@ -68,7 +69,7 @@ static NSString *kCellID = @"cellID";
     return 0.1f;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 75;
 }
 
@@ -80,7 +81,7 @@ static NSString *kCellID = @"cellID";
         @strongify(self);
         if (model.subFunds.count) {
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationFade];
-      
+
         } else {
             [self popToVcWithModel:model];
         }
@@ -93,17 +94,18 @@ static NSString *kCellID = @"cellID";
     return [[UIView alloc] init];
 }
 
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:indexPath.section];
-  
+
     SSJFundingParentmodel *cellItem = [model.subFunds ssj_safeObjectAtIndex:indexPath.row];
     [self popToVcWithModel:cellItem];
 }
 
 
 #pragma mark - UITableViewDataSource
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
     if (model.expended == NO) {
         return 0;
@@ -111,49 +113,51 @@ static NSString *kCellID = @"cellID";
     return model.subFunds.count;
 }
 
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
     return self.items.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+
     SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:indexPath.section];
-    
+
     SSJFundingParentmodel *cellItem = [model.subFunds ssj_safeObjectAtIndex:indexPath.row];
-    
+
     SSJBaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellID];
-    
+
     if (!cell) {
         cell = [[SSJBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:kCellID];
         cell.backgroundColor = [UIColor clearColor];
     }
-    
+
     cell.imageView.image = [UIImage imageNamed:cellItem.icon];
-    
-    
+
+
     cell.textLabel.text = cellItem.name;
-    
+
     cell.textLabel.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_3];
-    
+
     cell.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    
+
     return cell;
 }
 
 #pragma mark - SCYSlidePagingHeaderViewDelegate
+
 - (void)slidePagingHeaderView:(SCYSlidePagingHeaderView *)headerView didSelectButtonAtIndex:(NSUInteger)index {
     [self reloadFundList];
 }
 
 #pragma mark - Getter
+
 - (SCYSlidePagingHeaderView *)slideView {
     if (!_slideView) {
-        _slideView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(self.view.width, 0, self.view.width, 40)];
+        _slideView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(self.view.width , 0 , self.view.width , 40)];
         _slideView.customDelegate = self;
         _slideView.buttonClickAnimated = NO;
-        _slideView.titles = @[@"资产账户", @"负债账户"];
-        [_slideView setTabSize:CGSizeMake(self.view.width * 0.5, 3)];
+        _slideView.titles = @[@"资产账户" , @"负债账户"];
+        [_slideView setTabSize:CGSizeMake(self.view.width * 0.5 , 3)];
         [_slideView ssj_setBorderWidth:1];
         _slideView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
@@ -163,6 +167,7 @@ static NSString *kCellID = @"cellID";
 
 
 #pragma mark - Private
+
 - (void)reloadFundList {
     if (!self.slideView.selectedIndex) {
         self.items = [SSJFundingTypeManager sharedManager].sassetsFunds;
@@ -173,66 +178,72 @@ static NSString *kCellID = @"cellID";
 }
 
 - (void)popToVcWithModel:(SSJFundingParentmodel *)model {
-  if ([model.ID isEqualToString:@"10"]) {
-    SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
-    addLoanController.type = SSJLoanTypeLend;
-    addLoanController.enterFromFundTypeList = YES;
-    [self.navigationController pushViewController:addLoanController animated:YES];
-    
-    [SSJAnaliyticsManager event:@"add_loan"];
-    
-  }else if ([model.ID isEqualToString:@"11"]){
-    SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
-    addLoanController.type = SSJLoanTypeBorrow;
-    addLoanController.enterFromFundTypeList = YES;
-    [self.navigationController pushViewController:addLoanController animated:YES];
-    [SSJAnaliyticsManager event:@"add_owed"];
-    
-  }else if ([model.ID isEqualToString:@"3"]){
-    SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
-    newCreditCardVc.cardType = SSJCrediteCardTypeCrediteCard;
-    __weak typeof(self) weakSelf = self;
-    newCreditCardVc.addNewCardBlock = ^(SSJBaseCellItem *newItem){
-      if (weakSelf.addNewFundingBlock) {
-        weakSelf.addNewFundingBlock(newItem);
-      }
-    };
-    [self.navigationController pushViewController:newCreditCardVc animated:YES];
-  } else if ([model.ID isEqualToString:@"16"]){
-    SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
-    newCreditCardVc.cardType = SSJCrediteCardTypeAlipay;
-    __weak typeof(self) weakSelf = self;
-    newCreditCardVc.addNewCardBlock = ^(SSJBaseCellItem *newItem){
-      if (weakSelf.addNewFundingBlock) {
-        weakSelf.addNewFundingBlock(newItem);
-      }
-    };
-    [self.navigationController pushViewController:newCreditCardVc animated:YES];
-  } else if ([model.ID isEqualToString:@"17"]){
-    SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
-    //        listVC.item = item;
-    [self.navigationController pushViewController:addOrEditVC animated:YES];
-  } else {
-    UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
-    if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
-      if (![model.ID isEqualToString:@"3"] && ![model.ID isEqualToString:@"9"] && ![model.ID isEqualToString:@"10"] && ![model.ID isEqualToString:@"11"]) {
-        [self.navigationController popViewControllerAnimated:YES];
-        //                if (self.fundingParentSelectBlock) {
-        //                    self.fundingParentSelectBlock(item);
-        //                }
-      }
+
+    if ([model.ID isEqualToString:@"10"]) {
+        SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
+        addLoanController.type = SSJLoanTypeLend;
+        addLoanController.enterFromFundTypeList = YES;
+        [self.navigationController pushViewController:addLoanController animated:YES];
+
+        [SSJAnaliyticsManager event:@"add_loan"];
+
+    } else if ([model.ID isEqualToString:@"11"]) {
+        SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
+        addLoanController.type = SSJLoanTypeBorrow;
+        addLoanController.enterFromFundTypeList = YES;
+        [self.navigationController pushViewController:addLoanController animated:YES];
+        [SSJAnaliyticsManager event:@"add_owed"];
+
+    } else if ([model.ID isEqualToString:@"3"]) {
+        SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc] init];
+        newCreditCardVc.cardType = SSJCrediteCardTypeCrediteCard;
+        newCreditCardVc.selectParent = model.ID;
+        __weak typeof(self) weakSelf = self;
+        newCreditCardVc.addNewCardBlock = ^(SSJFinancingHomeitem *newItem) {
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(newItem);
+            }
+        };
+        [self.navigationController pushViewController:newCreditCardVc animated:YES];
+    } else if ([model.ID isEqualToString:@"16"]) {
+        SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc] init];
+        newCreditCardVc.selectParent = model.ID;
+        newCreditCardVc.cardType = SSJCrediteCardTypeAlipay;
+        __weak typeof(self) weakSelf = self;
+        newCreditCardVc.addNewCardBlock = ^(SSJFinancingHomeitem *newItem) {
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(newItem);
+            }
+        };
+        [self.navigationController pushViewController:newCreditCardVc animated:YES];
+    } else if ([model.ID isEqualToString:@"17"]) {
+        SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
+        //        listVC.item = item;
+        [self.navigationController pushViewController:addOrEditVC animated:YES];
     } else {
-      SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
-      __weak typeof(self) weakSelf = self;
-      normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem){
-        if (weakSelf.addNewFundingBlock) {
-          weakSelf.addNewFundingBlock(newItem);
+        UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:
+                                                                                            self.navigationController.viewControllers.count
+                                                                                            - 2];
+        if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
+            if (![model.ID isEqualToString:@"3"] && ![model.ID isEqualToString:@"9"]
+                && ![model.ID isEqualToString:@"10"] && ![model.ID isEqualToString:@"11"]) {
+                [self.navigationController popViewControllerAnimated:YES];
+                //                if (self.fundingParentSelectBlock) {
+                //                    self.fundingParentSelectBlock(item);
+                //                }
+            }
+        } else {
+            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
+            __weak typeof(self) weakSelf = self;
+            normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem) {
+                if (weakSelf.addNewFundingBlock) {
+                    weakSelf.addNewFundingBlock(newItem);
+                }
+            };
+            normalFundingVc.selectParent = model.ID;
+            [self.navigationController pushViewController:normalFundingVc animated:YES];
         }
-      };
-      normalFundingVc.selectParent = model.ID;
-      [self.navigationController pushViewController:normalFundingVc animated:YES];
     }
-  }
 
 }
 
