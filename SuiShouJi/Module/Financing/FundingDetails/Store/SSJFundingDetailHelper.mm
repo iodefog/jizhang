@@ -661,9 +661,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
-        cardItem.hasMadeInstalment = [db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
+        cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
                                                    fromTable:@"bk_credit_repayment"
-                                                       where:SSJCreditRepaymentTable.cardId == cardItem.fundingID];
+                                                       where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
     }
