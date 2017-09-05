@@ -343,7 +343,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         creditCardVc.financingItem = self.item;
         [self.navigationController pushViewController:creditCardVc animated:YES];
     }else{
-        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
+        SSJFinancingHomeitem *financingItem = self.item;
         SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
@@ -376,6 +376,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }else{
                 self.noDataHeader.hidden = YES;
             }
+            self.item = cardItem;
             self.creditCardHeader.item = cardItem;
             self.title = cardItem.fundingName;
             [self.view ssj_hideLoadingIndicator];
@@ -398,6 +399,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     self.noDataHeader.hidden = YES;
                 }
                 self.creditCardHeader.item = self.item;
+                self.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {
@@ -414,6 +416,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }else{
                     self.noDataHeader.hidden = YES;
                 }
+                self.item = fundingItem;
                 self.header.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];

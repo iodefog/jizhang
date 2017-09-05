@@ -648,6 +648,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.startColor = fund.startColor;
     item.endColor = fund.endColor;
     item.fundingParent = fund.fundParent;
+    item.fundingOrder = fund.fundOrder;
 
     item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count()
                                       fromTable:@"BK_USER_CHARGE"
@@ -785,6 +786,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.remindCycle = userRemindTable.cycle;
     item.remindType = userRemindTable.type;
     item.remindState = userRemindTable.state;
+    item.remindDate = [NSDate dateWithString:userRemindTable.startDate formatString:@"yyyy-MM-dd HH:mm:ss"];
     return item;
 }
 
