@@ -87,6 +87,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
     SSJFundingParentmodel *parentModel = [[SSJFundingTypeManager sharedManager] modelForFundId:self.selectParent];
     
+    
     if (!self.financingItem.fundingID) {
         self.title = [NSString stringWithFormat:@"添加%@账户",parentModel.name];
         self.financingItem = [[SSJFinancingHomeitem alloc] init];
@@ -112,6 +113,12 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         } else {
             self.debtOrbalance = NO;
         }
+        
+        if ([self.financingItem.fundingParent isEqualToString:@"3"]) {
+            self.cardType = SSJCrediteCardTypeCrediteCard;
+        } else {
+            self.cardType = SSJCrediteCardTypeAlipay;
+        }
         if (self.financingItem.cardItem.cardBillingDay == 0) {
             self.financingItem.cardItem.cardBillingDay = 1;
         }
@@ -121,13 +128,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }
 
     
-    if (![parentModel.ID isEqualToString:@"3"]) {
-        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
-        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
-        
-    } else {
+    if (self.cardType == SSJCrediteCardTypeCrediteCard) {
         self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9,kTitle6],@[kTitle10,kTitle5]];
         self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock",@"loan_expires"],@[@"card_yanse",@"loan_memo"]];
+        
+    } else {
+        self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
+        self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
     }
     
     [self.view addSubview:self.tableView];
