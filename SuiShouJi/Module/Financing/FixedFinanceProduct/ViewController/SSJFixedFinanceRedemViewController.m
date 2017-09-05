@@ -508,7 +508,7 @@ static NSString *kTitle6 = @"备注";
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
         chargeModel.billDate = billDate;
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.productid]];
+        chargeModel.cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[chargeModel.billDate timeIntervalSince1970]];
         chargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];

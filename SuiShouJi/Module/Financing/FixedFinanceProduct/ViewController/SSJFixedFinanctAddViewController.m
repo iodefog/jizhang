@@ -425,7 +425,7 @@ static NSUInteger kDateTag = 2005;
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
         chargeModel.billDate = billDate;
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.productid]];
+        chargeModel.cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[chargeModel.billDate timeIntervalSince1970]];
         chargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];

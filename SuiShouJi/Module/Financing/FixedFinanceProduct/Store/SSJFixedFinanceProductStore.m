@@ -301,6 +301,44 @@
     return interest;
 }
 
++ (double)queryForFixedFinanceProduceJieSuanInterestiothWithProductID:(NSString *)fixedFinanceProductID {
+    __block double interest = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        double money1 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
+        //+—平账利息
+        double money2 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"23",SSJUSERID()];
+        
+       double money3 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"24",SSJUSERID()];
+        interest = money1 + money2 - money3;
+    }];
+    
+    return interest;
+}
+
+//查询说有手续费和
++ (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID {
+    double interest = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"22",SSJUSERID()];
+    }];
+    return interest;
+}
+
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+    double interest = 0;
+        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
+    return interest;
+}
+
+
++ (NSString *)queryFixedFinanceProductNewChargeBillDateWithModel:(SSJFixedFinanceProductItem *)model {
+    __block NSString *date;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        date = [db stringForQuery:@"select max(cbilldate) from bk_user_charge where operatortype != 2 and ichargetype = ? and cuserid = ? and cid like (? || '%')",@(SSJChargeIdTypeFixedFinance),SSJUSERID(),model.productid];
+    }];
+    return date;
+}
+
 
 /**
  删除固收理财账户
@@ -352,8 +390,7 @@
  @param success 成功
  @param failure 失败
  */
-+ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
-                                   success:(void (^)(void))success
++ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model success:(void (^)(void))success
                                    failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         //将理财产品operator = 2
@@ -380,6 +417,18 @@
     }];
 }
 
+
+/**
+ 删除某个固定理财账户的所有流水
+
+ @param model <#model description#>
+ @param db <#db description#>
+ @param userId <#userId description#>
+ @param writeDate <#writeDate description#>
+ @param needcreateRecycleRecord <#needcreateRecycleRecord description#>
+ @param error <#error description#>
+ @return <#return value description#>
+ */
 + (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
                             inDatabase:(FMDatabase *)db
                              forUserId:(NSString *)userId
@@ -387,7 +436,7 @@
                needcreateRecycleRecord:(BOOL)needcreateRecycleRecord
                                  error:(NSError **)error {
     // 将和固定理财相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like (? || '_%') and ichargetype = ?", @2, @(SSJSyncVersion()), writeDate, model.productid, @(SSJChargeIdTypeFixedFinance)]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like (? || '%') and ichargetype = ?", @(SSJOperatorTypeDelete), @(SSJSyncVersion()), writeDate, model.productid, @(SSJChargeIdTypeFixedFinance)]) {
         if (error) {
             *error = [db lastError];
         }
@@ -558,16 +607,156 @@
 }
 
 
-+ (void)redemptionInvestmentWithProductModel:(SSJFixedFinanceProductItem *)productModel
-                                chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
-                                     success:(void (^)(void))success
-                                     failure:(void (^)(NSError *error))failure{
+//结算
++ (void)settlementWithProductModel:(SSJFixedFinanceProductItem *)productModel
+                      chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
+                           success:(void (^)(void))success
+                           failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
+        NSDate *lastDate = [NSDate date];
+         NSInteger i = 0;
+        double newMoney = 0;
+        NSString *billDate;
+        for (SSJFixedFinanceProductCompoundItem *model in chargeModels) {
+            NSDate *writeDate = [lastDate dateByAddingSeconds:1];
+            model.chargeModel.writeDate = writeDate;
+            model.targetChargeModel.writeDate = writeDate;
+            model.interestChargeModel.writeDate = writeDate;
+            lastDate = writeDate;
+            billDate = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            
+            //原来金额+利息+手续费
+            newMoney += model.chargeModel.money;
+            newMoney -= model.interestChargeModel.money;
+            
+
+            //如果有利息时
+            if (i == 1 && model.chargeModel && model.chargeModel.money > 0) {
+               double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];
+                //如果利息收入大于预期利息：利息平账收入
+                if (model.chargeModel.money > interest) {
+                    if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatchMainAsync(^{
+                                failure(error);
+                            });
+                        }
+                        return;
+                    }
+                } else if (model.chargeModel.money < interest) {//如果利息收入小于预期利息：利息平账支出
+                    if (![self liXiPingzhangZhiChuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
+                        *rollback = YES;
+                        if (failure) {
+                            SSJDispatchMainAsync(^{
+                                failure(error);
+                            });
+                        }
+                        return;
+                    }
+                }
+            } else if(i == 0) {
+                //保存流水//存储流水记录
+                if (![self saveFixedFinanceProductChargeWithModel:model item:productModel inDatabase:db error:&error]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatchMainAsync(^{
+                            failure(error);
+                        });
+                    }
+                    return;
+                }
+            }
+            
+            i++;
+        }
+        
+        NSString *writeDateStr = [[lastDate dateByAddingSeconds:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.etargetfundid,billDate,productModel.userid,productModel.productid]) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
+}
+
++ (BOOL)addChargeModel:(SSJFixedFinanceProductChargeItem *)chargeItem inDatabase:(FMDatabase *)db error:(NSError **)error {
     
+    return YES;
 }
 
 
-
 #pragma mark - Other
+
++ (BOOL)liXiPingzhangShouRuWithModel:(SSJFixedFinanceProductItem *)productModel chargeModel:(SSJFixedFinanceProductCompoundItem *)model money:(double)money fundid:(NSString *)fundid inDatabase:(FMDatabase *)db error:(NSError **)error {
+    NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *cid = productModel.productid;
+    NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
+    NSMutableArray *valueArr = [NSMutableArray array];
+    [valueArr addObject:[NSString stringWithFormat:@"%@_%@",productModel.productid,[model.chargeModel.billDate formattedDateWithFormat:@"yyyyMMdd"]]];
+    [valueArr addObject:model.chargeModel.userId];
+    [valueArr addObject:@"23"];
+    [valueArr addObject:model.chargeModel.fundId];
+    [valueArr addObject:billDateStr];
+    [valueArr addObject:cid];
+    [valueArr addObject:@(money)];
+    [valueArr addObject:model.chargeModel.memo.length ? model.chargeModel.memo : @""];
+    [valueArr addObject:@(SSJSyncVersion())];
+    [valueArr addObject:@(SSJOperatorTypeCreate)];
+    [valueArr addObject:writeDateStr];
+    [valueArr addObject:@(SSJChargeIdTypeFixedFinance)];
+    NSDictionary *chargeInfo = [NSDictionary dictionaryWithObjects:[valueArr copy] forKeys:keyArr];
+
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:ichargeid, :cuserid, :ibillid, :ifunsid, :cbilldate, :cid, :imoney, :cmemo, :iversion, :operatortype, :cwritedate, :ichargetype)" withParameterDictionary:chargeInfo]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+
+    return YES;
+}
+
++ (BOOL)liXiPingzhangZhiChuWithModel:(SSJFixedFinanceProductItem *)productModel chargeModel:(SSJFixedFinanceProductCompoundItem *)model money:(double)money fundid:(NSString *)fundid inDatabase:(FMDatabase *)db error:(NSError **)error{
+    NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *cid = productModel.productid;
+    NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
+    NSMutableArray *valueArr = [NSMutableArray array];
+    [valueArr addObject:[NSString stringWithFormat:@"%@_%@",productModel.productid,[model.chargeModel.billDate formattedDateWithFormat:@"yyyyMMdd"]]];
+    [valueArr addObject:model.chargeModel.userId];
+    [valueArr addObject:@"24"];
+    [valueArr addObject:model.chargeModel.fundId];
+    [valueArr addObject:billDateStr];
+    [valueArr addObject:cid];
+    [valueArr addObject:@(money)];
+    [valueArr addObject:model.chargeModel.memo.length ? model.chargeModel.memo : @""];
+    [valueArr addObject:@(SSJSyncVersion())];
+    [valueArr addObject:@(SSJOperatorTypeCreate)];
+    [valueArr addObject:writeDateStr];
+    [valueArr addObject:@(SSJChargeIdTypeFixedFinance)];
+    NSDictionary *chargeInfo = [NSDictionary dictionaryWithObjects:[valueArr copy] forKeys:keyArr];
+    
+    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:ichargeid, :cuserid, :ibillid, :ifunsid, :cbilldate, :cid, :imoney, :cmemo, :iversion, :operatortype, :cwritedate, :ichargetype)" withParameterDictionary:chargeInfo]) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return NO;
+    }
+    
+    return YES;
+}
 
 /**
  查询流水cid后缀最大值
@@ -591,27 +780,14 @@
     return chargeSuffixNum;
 }
 
-
-/**
- 计算已产生利息
- 
- @param model model
- @return 利息
- */
-+ (double)caculateGenerateRateWithModel:(SSJFixedFinanceProductItem *)model {
-    return 10;
++ (NSString *)queryfundNameWithFundid:(NSString *)fundid {
+    __block NSString *fundname;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        fundname = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ?",fundid,SSJUSERID()];
+    }];
+    return fundname;
 }
 
-
-/**
- 计算预期利息
- 
- @param model model
- @return 利息
- */
-+ (double)caculateExpectedRateWithModel:(SSJFixedFinanceProductItem *)model {
-    return 20;
-}
 
 #pragma mark - Private
 + (BOOL)saveFixedFinanceProductChargeWithModel:(SSJFixedFinanceProductCompoundItem *)model item:(SSJFixedFinanceProductItem *)item inDatabase:(FMDatabase *)db error:(NSError **)error {
@@ -788,6 +964,10 @@
             item.chargeType = SSJFixedFinCompoundChargeTypeInterest;
         } else if ([item.billId isEqualToString:@"22"]) {
             item.chargeType = SSJFixedFinCompoundChargeTypeCloseOutInterest;
+        } else if ([item.billId isEqualToString:@"23"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease;
+        } else if ([item.billId isEqualToString:@"24"]) {
+            item.chargeType = SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease;
         }
         
         [compArr addObject:item];
