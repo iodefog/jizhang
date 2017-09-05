@@ -77,7 +77,7 @@
         self.item.fundingIcon = parentModel.icon;
 
     } else {
-        NSString *parentName = self.item.fundingParentName;
+        NSString *parentName = self.item.fundingName;
         if (![parentName hasSuffix:@"账户"]) {
             parentName = [NSString stringWithFormat:@"%@账户",parentName];
         }

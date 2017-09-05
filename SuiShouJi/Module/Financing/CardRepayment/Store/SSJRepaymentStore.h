@@ -28,4 +28,10 @@
 + (void)queryFirstRepaymentItemSuccess:(void (^)(SSJFinancingHomeitem *item))success
                                failure:(void (^)(NSError *error))failure;
 
+
++ (void)queryTheTotalExpenceForCardId:(NSString *)cardId
+                       cardBillingDay:(NSInteger)billingDay
+                                month:(NSDate *)currentMonth
+                              Success:(void (^)(double sumMoney))success
+                              failure:(void (^)(NSError *error))failure;
 @end

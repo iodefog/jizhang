@@ -24,6 +24,7 @@
 #import "SSJReminderItem.h"
 #import "SSJCreditCardListFirstLineItem.h"
 #import "SSJCreditRepaymentTable.h"
+#import "SSJFundingTypeManager.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
@@ -648,6 +649,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.startColor = fund.startColor;
     item.endColor = fund.endColor;
     item.fundingParent = fund.fundParent;
+    item.fundingParentName = [[SSJFundingTypeManager sharedManager] modelForFundId:fund.fundParent].name;
     item.fundingOrder = fund.fundOrder;
 
     item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count()
