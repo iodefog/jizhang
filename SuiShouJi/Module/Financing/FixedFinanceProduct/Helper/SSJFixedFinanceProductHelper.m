@@ -7,6 +7,8 @@
 //
 
 #import "SSJFixedFinanceProductHelper.h"
+#import "SSJFixedFinanceProductChargeItem.h"
+#import "SSJFixedFinanceProductItem.h"
 
 @implementation SSJFixedFinanceProductHelper
 /**
@@ -257,6 +259,119 @@
     return dict;
 }
 
+
+//money,interest
++ (NSMutableDictionary *)caculateInterestWithModel:(SSJFixedFinanceProductItem *)item chargeModels:(NSArray <SSJFixedFinanceProductChargeItem *>*)models {
+    if (models.count == 0) return 0;
+    if ([item.startDate isSameDay:[NSDate date]]) return 0;//如果是新建当日还没有利息
+    
+    //如果已到期则产生产生流水为预期流水相当于一次性返回得到的金额
+    NSDate *startDate = item.startDate;//[item.startDate dateByAddingDays:1];//开始时间
+    double money = 0;
+    double interest = 0;
+    double surplus = 0;
+    NSDate *currentDate;
+    for (SSJFixedFinanceProductChargeItem *model in models) {
+        switch (model.chargeType) {
+            case SSJFixedFinCompoundChargeTypeCreate://新建
+            {
+                money += model.money;
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:startDate model:item money:money];
+                currentDate = model.billDate;
+            }
+                
+                break;
+            case SSJFixedFinCompoundChargeTypeAdd://追加
+            {
+                money += model.money;
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+                currentDate = model.billDate;
+//                startDate = currentDate;
+            }
+                break;
+            case SSJFixedFinCompoundChargeTypeRedemption://赎回
+            {
+                money -= model.money;
+                
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+                currentDate = model.billDate;
+//                startDate = currentDate;
+            }
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+            {
+                money += model.money;
+                
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+                currentDate = model.billDate;
+//                startDate = currentDate;
+            }
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+            {
+                money += model.money;
+                
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+                currentDate = model.billDate;
+//                startDate = currentDate;
+            }
+                break;
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算,赎回利息
+            {
+                money += model.money;
+                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+//                startDate = currentDate;
+                currentDate = model.billDate;
+            }
+                break;
+            default:
+                break;
+        }
+    }
+    
+    //计算最后一条流水产生的利息
+    surplus += [self caculateInterestUntilDate:[[NSDate date] dateBySubtractingDays:1] startDate:currentDate model:item money:money];
+    
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    [dic setObject:@(money) forKey:@"money"];
+    [dic setObject:@(surplus) forKey:@"interest"];
+    //计算利息
+    return dic;
+}
+
+
+/**
+ 已产生计算利息
+ */
++ (double)caculateInterestUntilDate:(NSDate *)untilDate startDate:(NSDate *)beginDate model:(SSJFixedFinanceProductItem *)item money:(double)money {
+    if ([untilDate isSameDay:beginDate]) return 0;
+    double interest = 0;
+    NSDate *startDate = item.startDate;//开始时间
+    if (item.timetype == SSJMethodOfInterestEveryMonth) {//月
+        if ([[NSDate date] isLaterThan:[startDate dateByAddingMonths:item.time]]) {//到期
+            interest = [[[self caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:money interestType:(SSJMethodOfInterestOncePaid) startDate:item.startdate] objectForKey:@"interest"] doubleValue];
+        } else {
+            //按天计算
+            interest = [self caculateInterestForEveryDayWithRate:item.rate rateType:item.ratetype money:money] * [untilDate daysFrom:beginDate];
+        }
+    } else if (item.timetype == SSJMethodOfRateOrTimeYear) {//年
+        if ([[NSDate date] isLaterThan:[startDate dateByAddingYears:item.time]]) {//到期相当于一次性
+            interest = [[[self caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:money interestType:(SSJMethodOfInterestOncePaid) startDate:item.startdate] objectForKey:@"interest"] doubleValue];
+        } else {
+            //按天计算
+            interest = [self caculateInterestForEveryDayWithRate:item.rate rateType:item.ratetype money:money] * [untilDate daysFrom:beginDate];
+        }
+    } else if (item.timetype == SSJMethodOfRateOrTimeDay) {//天
+        if ([[NSDate date] isLaterThan:[startDate dateByAddingDays:item.time]]) {//到期相当于一次性//到期
+            interest = [[[self caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:money interestType:(SSJMethodOfInterestOncePaid) startDate:item.startdate] objectForKey:@"interest"] doubleValue];
+        } else {
+            //按天计算
+            interest = [self caculateInterestForEveryDayWithRate:item.rate rateType:item.ratetype money:money] * [untilDate daysFrom:beginDate];
+        }
+    }
+    return interest;
+}
+
 - (double)calculateInterestWithMoney:(double)money rate:(double)rate interesttype:(SSJMethodOfInterest)interesttype timetype:(SSJMethodOfRateOrTime)timetype {
     switch (interesttype) {
         case SSJMethodOfInterestEveryDay:
@@ -314,6 +429,46 @@
             break;
     }
     return 0;
+}
+
++ (int)chargeIdWithModel:(SSJFixedFinanceProductChargeItem *)model {
+    int suindex = 0;
+        switch (model.chargeType) {
+            case SSJFixedFinCompoundChargeTypeCreate://新建
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeAdd://追加
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeRedemption://赎回
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
+                suindex = 3;;
+                break;
+            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
+                suindex = 3;
+                break;
+                
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
+                suindex = 3;
+                break;
+            case SSJFixedFinCompoundChargeTypeCloseOut://结清
+                break;
+                suindex = 3;
+            default:
+                break;
+        }
+    return suindex;
 }
 
 

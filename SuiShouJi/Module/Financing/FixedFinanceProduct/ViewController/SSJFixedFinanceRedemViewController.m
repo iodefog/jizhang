@@ -355,7 +355,7 @@ static NSString *kTitle6 = @"备注";
     [self updateModel];
     //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
     if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
-        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额，可尝试结清此固定理财产品"];
+        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
         return;
     }
     

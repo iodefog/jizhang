@@ -57,6 +57,24 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 
 /**
+ 查询当前本金
+ 
+ *  @param fixedFinanceProductID    理财产品id
+ @return 本金
+ */
++ (double)queryForFixedFinanceProduceCurrentMoneyWothWithProductID:(NSString *)fixedFinanceProductID;
+
+
+/**
+ 查询当前利息和
+
+ *  @param fixedFinanceProductID    理财产品id
+ @return 利息
+ */
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID;
+
+
+/**
  保存固收理财产品（新建，编辑）
 
  @param model 模型

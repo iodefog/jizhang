@@ -59,7 +59,7 @@ typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
     SSJFixedFinCompoundChargeTypeBalanceInterestIncrease,//利息转入
     SSJFixedFinCompoundChargeTypeBalanceInterestDecrease,//利息转出
     SSJFixedFinCompoundChargeTypeInterest,//固收理财派发利息流水
-    SSJFixedFinCompoundChargeTypeCloseOutInterest,//结算利息
+    SSJFixedFinCompoundChargeTypeCloseOutInterest,//固收理财手续费率（部分赎回，结算）
     SSJFixedFinCompoundChargeTypeCloseOut//结清
 };
 

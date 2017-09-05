@@ -28,6 +28,7 @@
 #import "SSJLoanChangeChargeSelectionControl.h"
 
 #import "SSJFixedFinanceProductStore.h"
+#import "SSJFixedFinanceProductHelper.h"
 
 static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
@@ -383,10 +384,16 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 break;
         }
     }
-
+//+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID
+    interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+//    double benj = [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid];
+//    interest = [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"interest"] doubleValue];
+//    surplus = interest + [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"money"] doubleValue];
     NSString *surplusTitle = @"当前余额";
     NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
     self.currentMoney = surplus;
+    payment = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.financeModel.rate rateType:self.financeModel.ratetype time:self.financeModel.time timetype:self.financeModel.timetype money:[self.financeModel.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:self.financeModel.startdate] objectForKey:@"interest"] doubleValue];
+    //
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
     NSString *paymentTitle = @"已产生利息";
@@ -422,26 +429,26 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                                                                                            contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *interestItem = nil;
-    if (interest > 0) {
-        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:interestTitle
+//    if (interest > 0) {
+        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
                                                                  bottomTitle:[NSString stringWithFormat:@"%.2f", interest]
                                                                topTitleColor:topTitleColor
                                                             bottomTitleColor:bottomTitleColor
                                                                 topTitleFont:topTitleFont
                                                              bottomTitleFont:bottomTitleFont2
                                                                contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-    } else {
-        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
-                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
-                                                               topTitleColor:topTitleColor
-                                                            bottomTitleColor:bottomTitleColor
-                                                                topTitleFont:topTitleFont
-                                                             bottomTitleFont:bottomTitleFont2
-                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-    }
+//    } else {
+//        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
+//                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
+//                                                               topTitleColor:topTitleColor
+//                                                            bottomTitleColor:bottomTitleColor
+//                                                                topTitleFont:topTitleFont
+//                                                             bottomTitleFont:bottomTitleFont2
+//                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
+//    }
     
     SSJFinancingDetailHeadeViewCellItem *lenderItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:lenderTitle
-                                                                                                bottomTitle:self.financeModel.productName
+                                                                                                bottomTitle:[NSString stringWithFormat:@"%.2f",payment]
                                                                                               topTitleColor:topTitleColor
                                                                                            bottomTitleColor:bottomTitleColor
                                                                                                topTitleFont:topTitleFont
