@@ -875,16 +875,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             } else if (index == view.items.count - 1) {
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.model.targetfundid = fundItem.fundingID;
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
+                        weakSelf.model.targetfundid = item.fundingID;
 //                        [weakSelf loadData];
-                    } else if (0){//[item isKindOfClass:[SSJCreditCardItem class]]
-//                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-//                        weakSelf.model.targetfundid = cardItem.cardId;
-//                        [weakSelf loadData];
-                    }
+
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 return NO;

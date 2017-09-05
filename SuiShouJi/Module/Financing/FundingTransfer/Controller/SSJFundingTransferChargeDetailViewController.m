@@ -347,29 +347,14 @@ static const NSInteger kMemoTag = 1002;
     if (!_transferInFundingTypeSelect) {
         __weak typeof(self) weakSelf = self;
         _transferInFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem) {
+        _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *fundingItem) {
             if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 newFundingVC.needLoanOrNot = NO;
-                newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.item.transferInId = fundItem.fundingID;
-                        weakSelf.item.transferInName = fundItem.fundingName;
-                        weakSelf.item.transferInImage = fundItem.fundingIcon;
-                    } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.transferInId = cardItem.fundingID;
-                        weakSelf.item.transferInName = cardItem.fundingName;
-                        weakSelf.item.transferInImage = @"ft_creditcard";
-                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
-                        SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
-                        weakSelf.item.transferInId = homeItem.fundingID;
-                        weakSelf.item.transferInName = homeItem.fundingName;
-                        weakSelf.item.transferInImage = homeItem.fundingIcon;
-                    } else {
-                        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
-                    }
+                newFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item) {
+                        weakSelf.item.transferInId = item.fundingID;
+                        weakSelf.item.transferInName = item.fundingName;
+                        weakSelf.item.transferInImage = item.fundingIcon;
                     [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:newFundingVC animated:YES];
@@ -391,29 +376,14 @@ static const NSInteger kMemoTag = 1002;
     if (!_transferOutFundingTypeSelect) {
         __weak typeof(self) weakSelf = self;
         _transferOutFundingTypeSelect = [[SSJFundingTypeSelectView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
+        _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *fundingItem){
             if ([fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 SSJFundingTypeSelectViewController *newFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 newFundingVC.needLoanOrNot = NO;
-                newFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item) {
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.item.transferOutId = fundItem.fundingID;
-                        weakSelf.item.transferOutName = fundItem.fundingName;
-                        weakSelf.item.transferOutImage = fundItem.fundingIcon;
-                    } else if ([item isKindOfClass:[SSJCreditCardItem class]]) {
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.transferOutId = cardItem.fundingID;
-                        weakSelf.item.transferOutName = cardItem.fundingName;
-                        weakSelf.item.transferOutImage = @"ft_creditcard";
-                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
-                        SSJFinancingHomeitem *homeItem = (SSJFinancingHomeitem *)item;
-                        weakSelf.item.transferOutId = homeItem.fundingID;
-                        weakSelf.item.transferOutName = homeItem.fundingName;
-                        weakSelf.item.transferOutImage = homeItem.fundingIcon;
-                    } else {
-                        [CDAutoHideMessageHUD showError:[NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"为定义添加资金账户执行的逻辑"}]];
-                    }
+                newFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item) {
+                    weakSelf.item.transferOutId = item.fundingID;
+                    weakSelf.item.transferOutName = item.fundingName;
+                    weakSelf.item.transferOutImage = item.fundingIcon;
                     [weakSelf.tableView reloadData];
                 };
                 [weakSelf.navigationController pushViewController:newFundingVC animated:YES];

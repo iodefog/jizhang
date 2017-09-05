@@ -422,7 +422,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (!_fundSelectView) {
         _fundSelectView = [[SSJFundingTypeSelectView alloc]init];
         __weak typeof(self) weakSelf = self;
-        _fundSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *item){
+        _fundSelectView.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *item){
             if (item.fundingID.length) {
                 weakSelf.item.fundId = item.fundingID;
                 weakSelf.item.fundName = item.fundingName;
@@ -432,20 +432,11 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.item.fundId = fundItem.fundingID;
-                        weakSelf.item.fundName = fundItem.fundingName;
-                        weakSelf.item.fundImage = fundItem.fundingIcon;
-                        [weakSelf.tableView reloadData];
-                    }else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        weakSelf.item.fundId = cardItem.fundingID;
-                        weakSelf.item.fundName = cardItem.fundingName;
-                        weakSelf.item.fundImage = @"ft_creditcard";
-                        [weakSelf.tableView reloadData];
-                    }
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
+                    weakSelf.item.fundId = item.fundingID;
+                    weakSelf.item.fundName = item.fundingName;
+                    weakSelf.item.fundImage = item.fundingIcon;
+                    [weakSelf.tableView reloadData];
 
                 };
                 [weakSelf.fundSelectView dismiss];

@@ -131,11 +131,22 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
             } else {
                 if ([item.billId isEqualToString:@"3"]) {
-                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId && SSJUserChargeTable.userId == userId && SSJUserChargeTable.billId == @"4"];
-                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == sourceId];
+                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
+                                                       fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId
+                                                                                         && SSJUserChargeTable.userId == userId
+                                                                                         && SSJUserChargeTable.billId == @"4"];
+                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
+                                                        fromTable:@"bk_fund_info"
+                                                            where:SSJFundInfoTable.fundId == sourceId];
                 } else if ([item.billId isEqualToString:@"4"]) {
-                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId && SSJUserChargeTable.userId == userId && SSJUserChargeTable.billId == @"3"];
-                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == sourceId];
+                    NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
+                                                       fromTable:@"bk_user_charge"
+                                                           where:SSJUserChargeTable.cid == item.sundryId
+                                                                 && SSJUserChargeTable.userId == userId
+                                                                 && SSJUserChargeTable.billId == @"3"];
+                    item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
+                                                        fromTable:@"bk_fund_info"
+                                                            where:SSJFundInfoTable.fundId == sourceId];
                 }
             }
             NSString *month = [item.billDate substringWithRange:NSMakeRange(0 , 7)];

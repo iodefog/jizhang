@@ -256,7 +256,7 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     if (!_FundingTypeSelectView) {
         __weak typeof(self) weakSelf = self;
         _FundingTypeSelectView = [[SSJFundingTypeSelectView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-        _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
+        _FundingTypeSelectView.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *fundingItem){
             if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"]) {
                 weakSelf.item.fundId = fundingItem.fundingID;
                 weakSelf.item.fundName = fundingItem.fundingName;
@@ -265,29 +265,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                         [weakSelf.FundingTypeSelectView reloadDate];
-                        weakSelf.item.fundId = fundItem.fundingID;
-                        weakSelf.item.fundName = fundItem.fundingName;
+                        weakSelf.item.fundId = item.fundingID;
+                        weakSelf.item.fundName = item.fundingName;
                         weakSelf.item.fundOperatorType = 0;
                         [weakSelf updateFundingType];
-                    } else if ([item isKindOfClass:[SSJFinancingHomeitem class]]){
-                        SSJFinancingHomeitem *fundItem = (SSJFinancingHomeitem *)item;
-                        [weakSelf.FundingTypeSelectView reloadDate];
-                        weakSelf.item.fundId = fundItem.fundingID;
-                        weakSelf.item.fundName = fundItem.fundingName;
-                        weakSelf.item.fundOperatorType = 0;
-                        [weakSelf updateFundingType];
-                    } else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        [weakSelf.FundingTypeSelectView reloadDate];
-                        weakSelf.item.fundId = cardItem.fundingID;
-                        weakSelf.item.fundName = cardItem.fundingName;
-                        weakSelf.item.fundOperatorType = 0;
-                        [weakSelf updateFundingType];
-                    }
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
             }

@@ -355,14 +355,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         if (self.item != nil) {
             _transferOutFundingTypeSelect.selectFundID = self.item.transferInId;
         }
-        _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
+        _transferInFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *item){
+            if (![item.fundingName isEqualToString:@"添加新的资金账户"])
             {
-                weakSelf.transferInItem = fundingItem;
+                weakSelf.transferInItem = item;
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                     weakSelf.transferInItem = item;
                     [weakSelf.tableView reloadData];
                 };
@@ -382,14 +382,14 @@ static NSString * SSJFundingTransferEditeCellIdentifier = @"SSJFundingTransferEd
         if (self.item != nil) {
             _transferOutFundingTypeSelect.selectFundID = self.item.transferOutId;
         }
-        _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFundingItem *fundingItem){
-            if (![fundingItem.fundingName isEqualToString:@"添加新的资金账户"])
+        _transferOutFundingTypeSelect.fundingTypeSelectBlock = ^(SSJFinancingHomeitem *item){
+            if (![item.fundingName isEqualToString:@"添加新的资金账户"])
             {
-                weakSelf.transferOutItem = fundingItem;
+                weakSelf.transferOutItem = item;
             }else{
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                     weakSelf.transferOutItem = item;
                     [weakSelf.tableView reloadData];
                 };

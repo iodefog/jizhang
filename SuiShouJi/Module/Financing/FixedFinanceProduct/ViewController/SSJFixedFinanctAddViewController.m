@@ -355,18 +355,11 @@ static NSUInteger kDateTag = 2005;
             } else if (index == view.items.count - 1) {
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
-                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                     
-                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-                        weakSelf.compoundModel.targetChargeModel.fundId = fundItem.fundingID;
+                        weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
 //                        weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
-                    } else if (0){
-                        //[item isKindOfClass:[SSJCreditCardItem class]]
-//                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-//                        weakSelf.compoundModel.targetChargeModel.fundId = cardItem.cardId;
-//                        weakSelf.compoundModel.interestChargeModel.fundId = cardItem.cardId;
-                    }
+
                     
 //                    if (weakSelf.edited) {
 //                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.compoundModel.chargeModel.loanId];
