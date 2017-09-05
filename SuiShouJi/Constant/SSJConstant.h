@@ -183,29 +183,33 @@ typedef NS_ENUM(NSUInteger, SSJAdviceType) {
 
  - SSJSpecialBillIdCloseOutEarning: 平账收入
  - SSJSpecialBillIdCloseOutExpense: 平账支出
+ 
  - SSJSpecialBillIdBalanceRollIn: 转入
  - SSJSpecialBillIdBalanceRollOut: 转出
- - SSJSpecialBillIdLoanInterestEarning: 借贷利息收入
- - SSJSpecialBillIdLoanInterestExpense: 借贷利息支出
+ 
+ - SSJSpecialBillIdLoanInterestEarning: 借贷利息收入；对应目标账户
+ - SSJSpecialBillIdLoanInterestExpense: 借贷利息支出；对应目标账户
  - SSJSpecialBillIdLoanChangeEarning: 借贷变更收入
  - SSJSpecialBillIdLoanChangeExpense: 借贷变更支出
  - SSJSpecialBillIdLoanBalanceRollIn: 借贷余额转入
  - SSJSpecialBillIdLoanBalanceRollOut: 借贷余额转出
- - SSJSpecialBillIdCreditAgingPrincipal: 信用卡分期本金
- - SSJSpecialBillIdCreditAgingPoundage: 信用卡分期手续费
+ 
+ - SSJSpecialBillIdCreditAgingPrincipal: 信用卡分期本金；对应信用卡账户
+ - SSJSpecialBillIdCreditAgingPoundage: 信用卡分期手续费；对应信用卡账户
+ 
  - SSJSpecialBillIdShareBooksCloseOutEarning: 平帐收入(共享账本)
  - SSJSpecialBillIdShareBooksCloseOutExpense: 平帐支出(共享账本)
  
- - SSJSpecialBillIdFixedFinanceChangeEarning: 固收理财变更转入
- - SSJSpecialBillIdFixedFinanceChangeExpenseg: 固收理财变更转出
+ - SSJSpecialBillIdFixedFinanceChangeEarning: 固收理财变更转入（对固收理财账户而言，是追加投资）
+ - SSJSpecialBillIdFixedFinanceChangeExpenseg: 固收理财变更转出（对固收理财账户而言，是部分赎回）
  - SSJSpecialBillIdFixedFinanceBalanceRollIn: 固收理财余额转入
  - SSJSpecialBillIdFixedFinanceBalanceRollOut: 固收理财余额转出
  - SSJSpecialBillIdFixedFinanceInterestEarning: 固收理财结算利息转入
  - SSJSpecialBillIdFixedFinanceInterestExpense: 固收理财结算利息转出
- - SSJSpecialBillIdFixedFinanceInterestPay: 固收理财派发利息流水
- - SSJSpecialBillIdFixedFinanceServiceCharge: 固收理财手续费率（部分赎回，结算）
- - SSJSpecialBillIdFixedFinanceCloseOutEarning: 固收理财平账收入
- - SSJSpecialBillIdFixedFinanceCloseOutExpense: 固收理财平账支出
+ - SSJSpecialBillIdFixedFinanceInterestPay: 固收理财派发利息流水；对应固收理财账户
+ - SSJSpecialBillIdFixedFinanceServiceCharge: 固收理财手续费率（部分赎回，结算）；部分赎回对应固收理财；结算对应目标账户
+ - SSJSpecialBillIdFixedFinanceCloseOutEarning: 固收理财平账收入；对应固收理财账户
+ - SSJSpecialBillIdFixedFinanceCloseOutExpense: 固收理财平账支出；对应固收理财账户
  */
 typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     SSJSpecialBillIdCloseOutEarning = 1,
