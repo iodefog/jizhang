@@ -81,6 +81,18 @@
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             surplus -= model.money;
             break;
+        case SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease://固收理财平账收入
+            icon = @"fixed_finance_lixi";
+            name = @"利息平账收入";
+            money = [NSString stringWithFormat:@"+%.2f",model.money];
+            surplus += model.money;
+            break;
+        case SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease://固收理财平账支出
+            icon = @"fixed_finance_lixi";
+            name = @"利息平账支出";
+            money = [NSString stringWithFormat:@"-%.2f",model.money];
+            surplus -= model.money;
+            break;
             
         default:
             break;

@@ -24,6 +24,7 @@
 #import "SSJReminderItem.h"
 #import "SSJCreditCardListFirstLineItem.h"
 #import "SSJCreditRepaymentTable.h"
+#import "SSJFundingTypeManager.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
@@ -59,7 +60,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
 
-        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14");
+        WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
+
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14").orderBy(orderList);
 
         WCTStatement *statement = [db prepare:statementSelect];
 
@@ -646,6 +649,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.startColor = fund.startColor;
     item.endColor = fund.endColor;
     item.fundingParent = fund.fundParent;
+    item.fundingParentName = [[SSJFundingTypeManager sharedManager] modelForFundId:fund.fundParent].name;
+    item.fundingOrder = fund.fundOrder;
 
     item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count()
                                       fromTable:@"BK_USER_CHARGE"
@@ -783,6 +788,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.remindCycle = userRemindTable.cycle;
     item.remindType = userRemindTable.type;
     item.remindState = userRemindTable.state;
+    item.remindDate = [NSDate dateWithString:userRemindTable.startDate formatString:@"yyyy-MM-dd HH:mm:ss"];
     return item;
 }
 

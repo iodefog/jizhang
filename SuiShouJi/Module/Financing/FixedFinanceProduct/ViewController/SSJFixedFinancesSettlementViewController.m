@@ -19,6 +19,7 @@
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductCompoundItem.h"
 #import "SSJFixedFinanceProductItem.h"
+#import "SSJCreditCardItem.h"
 
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJFixedFinanceProductStore.h"
@@ -68,6 +69,8 @@ static NSString *kTitle6 = @"结算日期";
 @property (nonatomic, strong) UISwitch *liXiSwitch;
 
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *compoundModel;
+//利息
+@property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *lixicompoundModel;
 
 @property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
 
@@ -260,6 +263,7 @@ static NSString *kTitle6 = @"结算日期";
     [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productid success:^(SSJFixedFinanceProductItem * _Nonnull model) {
         weakSelf.financeModel = model;
         [weakSelf initCompoundModel];
+        [weakSelf initLixicompoundModel];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
@@ -301,13 +305,28 @@ static NSString *kTitle6 = @"结算日期";
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;
     }
+    
+    if ([self.moneyTextF.text doubleValue] > [self.financeModel.money doubleValue]) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"你结算时的本金需等于累计投资本金金额%.2f元，请重新输入",[self.financeModel.money doubleValue]] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL],nil];
+        return NO;
+    }
+    
+    if ([self.poundageTextF.text doubleValue] > [self.financeModel.money doubleValue]) {
+        [CDAutoHideMessageHUD showMessage:@"手续费不能大于本金哦"];
+        return NO;
+    }
+    
+    
     return YES;
 }
 
 - (void)updateModel {
     self.compoundModel.chargeModel.money = self.compoundModel.targetChargeModel.money = [self.moneyTextF.text doubleValue];
-    self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+    self.compoundModel.interestChargeModel.money = [self.poundageTextF.text doubleValue];//手续费
     self.compoundModel.chargeModel.memo = self.compoundModel.targetChargeModel.memo = self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
+    
+    self.lixicompoundModel.chargeModel.money = self.lixicompoundModel.targetChargeModel.money = [self.liXiTextF.text doubleValue];
+    self.lixicompoundModel.chargeModel.memo = self.lixicompoundModel.targetChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
 }
 
 #pragma mark - Action
@@ -316,10 +335,10 @@ static NSString *kTitle6 = @"结算日期";
     [self updateModel];
     MJWeakSelf;
     //保存流水
-    NSArray *chargArr = @[self.compoundModel];
-    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:0 chargeModels:chargArr success:^{
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    NSArray *chargArr = @[self.compoundModel,self.lixicompoundModel];
+    [SSJFixedFinanceProductStore settlementWithProductModel:self.financeModel chargeModels:chargArr success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
+         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
@@ -385,12 +404,17 @@ static NSString *kTitle6 = @"结算日期";
     if (!_dateSelectionView) {
         __weak typeof(self) weakSelf = self;
         _dateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
+        NSDate *newdate = [[SSJFixedFinanceProductStore queryFixedFinanceProductNewChargeBillDateWithModel:self.financeModel]
+        ssj_dateWithFormat:@"yyyy-MM-dd"];
+        
         _dateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-            if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"日期不能早于起息日期哦"];
+            if ([date compare:newdate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"日期不能早于最新流水日期哦"];
+                //日期不能早于该账户有效流水日期
+                
                 return NO;
             }
             return YES;
@@ -406,7 +430,6 @@ static NSString *kTitle6 = @"结算日期";
     return _dateSelectionView;
 }
 
-
 - (SSJLoanFundAccountSelectionView *)fundingSelectionView {
     if (!_fundingSelectionView) {
         __weak typeof(self) weakSelf = self;
@@ -415,6 +438,8 @@ static NSString *kTitle6 = @"结算日期";
             if (index < view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.compoundModel.targetChargeModel.fundId = item.ID;
+                //结算账户
+                weakSelf.financeModel.etargetfundid = item.ID;
                 weakSelf.fundingSelectionView.selectedIndex = index;
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -427,7 +452,7 @@ static NSString *kTitle6 = @"结算日期";
                         [weakSelf loadData];
 //                    else if ([item isKindOfClass:[SSJCreditCardItem class]]){
 //                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-//                        weakSelf.loanModel.targetFundID = cardItem.cardId;
+//                        weakSelf.financeModel.targetfundid = cardItem.cardId;
 //                        [weakSelf loadData];
 //                    }
                 };
@@ -459,7 +484,6 @@ static NSString *kTitle6 = @"结算日期";
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
         chargeModel.billDate = billDate;
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%ld",self.productid,[SSJFixedFinanceProductStore queryMaxChargeChargeIdSuffixWithProductId:self.productid]];
         chargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
@@ -468,7 +492,6 @@ static NSString *kTitle6 = @"结算日期";
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.userId = SSJUSERID();
         targetChargeModel.billDate = billDate;
-        targetChargeModel.cid = chargeModel.cid;
         targetChargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
         
         SSJFixedFinanceProductChargeItem *interestChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
@@ -477,13 +500,41 @@ static NSString *kTitle6 = @"结算日期";
         interestChargeModel.billId = interestChargeBillId;
         interestChargeModel.userId = SSJUSERID();
         interestChargeModel.billDate = billDate;
-        interestChargeModel.cid = chargeModel.cid;
         interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
         
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;
         _compoundModel.targetChargeModel = targetChargeModel;
         _compoundModel.interestChargeModel = interestChargeModel;
+        
+    }
+}
+
+- (void)initLixicompoundModel {
+    if (!_lixicompoundModel) {//利息
+        NSString *chargeBillId = @"20";
+        NSString *targetChargeBillId = @"19";
+        
+        NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
+        NSDate *billDate = [today compare:self.financeModel.startDate] == NSOrderedAscending ? self.financeModel.startDate : today;
+        
+        SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
+        chargeModel.chargeId = SSJUUID();
+        chargeModel.fundId = self.financeModel.thisfundid;
+        chargeModel.billId = chargeBillId;
+        chargeModel.userId = SSJUSERID();
+        chargeModel.billDate = billDate;
+        
+        SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
+        targetChargeModel.chargeId = SSJUUID();
+        targetChargeModel.fundId = self.financeModel.targetfundid;
+        targetChargeModel.billId = targetChargeBillId;
+        targetChargeModel.userId = SSJUSERID();
+        targetChargeModel.billDate = billDate;
+
+        _lixicompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
+        _lixicompoundModel.chargeModel = chargeModel;
+        _lixicompoundModel.targetChargeModel = targetChargeModel;
         
     }
 }

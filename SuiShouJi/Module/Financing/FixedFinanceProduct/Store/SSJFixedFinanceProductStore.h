@@ -73,6 +73,25 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID;
 
+//查询所有算手续费和
++ (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID;
+
+/**
+ 查询结算时输入利息
+ 
+ *  @param fixedFinanceProductID    理财产品id
+ @return 利息
+ */
++ (double)queryForFixedFinanceProduceJieSuanInterestiothWithProductID:(NSString *)fixedFinanceProductID;
+
+
+/**
+ 查询当前最新一条流水的billdate
+
+ @param model <#model description#>
+ */
++ (NSString *)queryFixedFinanceProductNewChargeBillDateWithModel:(SSJFixedFinanceProductItem *)model;
+
 
 /**
  保存固收理财产品（新建，编辑）
@@ -100,7 +119,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                  failure:(void (^)(NSError *error))failure;
 
 /**
- 删除固收理财产品
+ 删除固收理财账户
  
  @param model 模型
  @param success 成功
@@ -119,22 +138,9 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param success 成功
  @param failure 失败
  */
-+ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
-                                  success:(void (^)(void))success
++ (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure;
 
-/**
- 删除固收理财产品
- 
- @param model  模型
- @param db     db FMDatabase实例
- 
- @return 是否合并成功
- */
-+ (BOOL)deleteFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model
-             inDatabase:(FMDatabase *)db
-              forUserId:(NSString *)userId
-                  error:(NSError **)error;
 
 #pragma mark - 固定理财流水
 
@@ -199,6 +205,18 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                           success:(void (^)(void))success
                                           failure:(void (^)(NSError *error))failure;
 
+/**
+ 结算
+ 
+ @param chargeModels 追加产生的流水
+ @param success 成功
+ @param failure 失败
+ */
++ (void)settlementWithProductModel:(SSJFixedFinanceProductItem *)productModel
+                      chargeModels:(NSArray <SSJFixedFinanceProductCompoundItem *>*)chargeModels
+                           success:(void (^)(void))success
+                           failure:(void (^)(NSError *error))failure;
+
 
 /**
  删除某个理财产品的所有流水（等同删除某个理财产品）
@@ -231,33 +249,15 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 
 
-/**
- 查询流水cid后缀最大值
- 返回后缀
- @param productid <#productid description#>
- */
-+ (NSInteger)queryMaxChargeChargeIdSuffixWithProductId:(NSString *)productid;
-
+#pragma mark - Other 
 
 /**
- 计算已产生利息
+ 查询资金账户名称
 
- @param model model
- @return 利息
+ @param fundid <#fundid description#>
+ @return <#return value description#>
  */
-+ (double)caculateGenerateRateWithModel:(SSJFixedFinanceProductItem *)model;
-
-
-/**
- 计算预期利息
- 
- @param model model
- @return 利息
- */
-+ (double)caculateExpectedRateWithModel:(SSJFixedFinanceProductItem *)model;
-
-//每日利息流水
-//+ (void)
++ (NSString *)queryfundNameWithFundid:(NSString *)fundid;
 @end
 
 

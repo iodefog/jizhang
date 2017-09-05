@@ -35,7 +35,4 @@
                              failure:(void (^)(NSError *error))failure;
 
 
-+ (NSString *)fundParentNameForFundingParent:(NSString *)parent;
-
-
 @end

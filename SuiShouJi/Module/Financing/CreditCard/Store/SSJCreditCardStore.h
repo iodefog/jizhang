@@ -28,10 +28,4 @@
                           inDatabase:(FMDatabase *)db
                            forUserId:(NSString *)userId
                                error:(NSError **)error;
-
-+ (void)queryTheTotalExpenceForCardId:(NSString *)cardId
-                       cardBillingDay:(NSInteger)billingDay
-                                month:(NSDate *)currentMonth
-                              Success:(void (^)(double sumMoney))success
-                              failure:(void (^)(NSError *error))failure;
 @end

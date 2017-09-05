@@ -205,45 +205,14 @@
         NSDate *currentDate = [NSDate dateWithString:creditCardItem.month formatString:@"yyyy-MM"];
         self.monthLab.text = [NSString stringWithFormat:@"%02ld月",currentDate.month];
         self.yearLab.text = [NSString stringWithFormat:@"%04ld",currentDate.year];
+        
         self.totalMoneyLab.text = [NSString stringWithFormat:@"%@",[[NSString stringWithFormat:@"%f",creditCardItem.income - creditCardItem.expenture] ssj_moneyDecimalDisplayWithDigits:2]];
-        self.expenceLab.text = [NSString stringWithFormat:@"账单周期:%@",creditCardItem.datePeriod];
-        NSDate *billingDate = [NSDate date];
-        NSDate *repaymentDate = [NSDate date];
-        NSDate *today = [NSDate date];
-        if (creditCardItem.billingDay < creditCardItem.repaymentDay) {
-            billingDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:creditCardItem.billingDay];
-            repaymentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:creditCardItem.repaymentDay];
-        }else{
-            billingDate = [NSDate dateWithYear:currentDate.year month:currentDate.month day:creditCardItem.billingDay];
-            repaymentDate = [NSDate dateWithYear:currentDate.year month:currentDate.month + 1 day:creditCardItem.repaymentDay];
+        
+        if (!creditCardItem.instalmentMoney) {
+            self.instalmentMoneyLab.text = [[NSString stringWithFormat:@"%f",creditCardItem.instalmentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+            self.totalMoneyTitleLab.hidden = YES;
         }
-        NSInteger daysToBillingDate = [billingDate daysFrom:today] + 1;
-        NSInteger daysToRepaymentDate = [repaymentDate daysFrom:today] + 1;
-        NSInteger minmumDays = MIN(daysToBillingDate, daysToRepaymentDate);
-        if (daysToBillingDate > 0 || daysToRepaymentDate > 0) {
-            if (!daysToBillingDate) {
-                self.incomeLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate];
-            }else if(!daysToRepaymentDate){
-                self.incomeLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate];
-            }else{
-                if (minmumDays + 1 < 0) {
-                    if (daysToBillingDate + 1 > 0) {
-                        self.incomeLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate];
-                    }else if(daysToRepaymentDate > 0){
-                        self.incomeLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate];
-                    }else{
-                        self.incomeLab.text = @"";
-                    }
-                }else{
-                    if (daysToBillingDate + 1 > 0) {
-                        self.incomeLab.text = [NSString stringWithFormat:@"距账单日:%d天",(int)daysToBillingDate];
-                    }else{
-                        self.incomeLab.text = [NSString stringWithFormat:@"距还款日:%d天",(int)daysToRepaymentDate];
-                    }
-                }
-            }
-        }
-
+        
         double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney - creditCardItem.repaymentForOtherMonthMoney + creditCardItem.instalmentMoney;
         self.payOffImage.hidden = moneyNeedToRepay > 0 ? NO : YES;
 

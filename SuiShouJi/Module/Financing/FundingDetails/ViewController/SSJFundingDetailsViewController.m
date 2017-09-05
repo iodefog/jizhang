@@ -60,8 +60,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 @property(nonatomic, strong) SSJFundingDetailNoDataView *noDataHeader;
 
-@property(nonatomic, strong) SSJCreditCardItem *cardItem;
-
 @property(nonatomic, strong) SSJCreditCardDetailHeader *creditCardHeader;
 
 @property(nonatomic, strong) SSJLoanChangeChargeSelectionControl *repaymentPopView;
@@ -343,7 +341,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         creditCardVc.financingItem = self.item;
         [self.navigationController pushViewController:creditCardVc animated:YES];
     }else{
-        SSJFinancingHomeitem *financingItem = (SSJFinancingHomeitem *)self.item;
+        SSJFinancingHomeitem *financingItem = self.item;
         SSJNewFundingViewController *newFundingVC = [[SSJNewFundingViewController alloc]init];
         newFundingVC.item = financingItem;
         [self.navigationController pushViewController:newFundingVC animated:YES];
@@ -376,6 +374,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }else{
                 self.noDataHeader.hidden = YES;
             }
+            self.item = cardItem;
             self.creditCardHeader.item = cardItem;
             self.title = cardItem.fundingName;
             [self.view ssj_hideLoadingIndicator];
@@ -398,6 +397,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     self.noDataHeader.hidden = YES;
                 }
                 self.creditCardHeader.item = self.item;
+                self.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
             } failure:^(NSError *error) {
@@ -414,6 +414,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }else{
                     self.noDataHeader.hidden = YES;
                 }
+                self.item = fundingItem;
                 self.header.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
@@ -426,7 +427,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 }
 
 - (void)enterInstalmentVc {
-    if (self.cardItem.cardBillingDay == 0 && self.cardItem.cardRepaymentDay == 0) {
+    if (self.item.cardItem.cardBillingDay == 0 && self.item.cardItem.cardRepaymentDay == 0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"请先去设置账单日和还款日哦" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         __weak typeof(self) weakSelf = self;
@@ -440,7 +441,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [self.navigationController presentViewController:alert animated:YES completion:NULL];
         return;
     }
-    if (!self.cardItem.settleAtRepaymentDay) {
+    if (!self.item.cardItem.settleAtRepaymentDay) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"使用分期付款需信用卡设置为以账单日结算哦!" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         __weak typeof(self) weakSelf = self;
@@ -456,17 +457,17 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
     SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-    model.cardId = self.cardItem.fundingID;
-    model.cardName = self.cardItem.fundingName;
-    model.cardBillingDay = self.cardItem.cardBillingDay;
-    model.cardRepaymentDay = self.cardItem.cardRepaymentDay;
+    model.cardId = self.item.cardItem.fundingID;
+    model.cardName = self.item.cardItem.fundingName;
+    model.cardBillingDay = self.item.cardItem.cardBillingDay;
+    model.cardRepaymentDay = self.item.cardItem.cardRepaymentDay;
     [SSJAnaliyticsManager event:@"credit_stages_repayment"];
     instalmentVc.repaymentModel = model;
     [self.navigationController pushViewController:instalmentVc animated:YES];
 }
 
 - (void)enterRepaymentVc {
-    if (self.cardItem.cardBillingDay == 0 && self.cardItem.cardRepaymentDay == 0) {
+    if (self.item.cardItem.cardBillingDay == 0 && self.item.cardItem.cardRepaymentDay == 0) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"请先去设置账单日和还款日哦" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         __weak typeof(self) weakSelf = self;
@@ -480,7 +481,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         [self.navigationController presentViewController:alert animated:YES completion:NULL];
         return;
     }
-    if (!self.cardItem.settleAtRepaymentDay) {
+    if (!self.item.cardItem.settleAtRepaymentDay) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"使用分期付款需信用卡设置为以账单日结算哦!" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
         __weak typeof(self) weakSelf = self;
@@ -496,11 +497,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     SSJCreditCardRepaymentViewController *repaymentVC = [[SSJCreditCardRepaymentViewController alloc]init];
     SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-    SSJCreditCardItem *item = (SSJCreditCardItem *)self.item;
-    model.cardId = item.fundingID;
-    model.cardName = item.fundingName;
-    model.cardBillingDay = item.cardBillingDay;
-    model.cardRepaymentDay = item.cardRepaymentDay;
+    model.cardId = self.item.fundingID;
+    model.cardName = self.item.fundingName;
+    model.cardBillingDay = self.item.cardItem.cardBillingDay;
+    model.cardRepaymentDay = self.item.cardItem.cardRepaymentDay;
     repaymentVC.repaymentModel = model;
     [self.navigationController pushViewController:repaymentVC animated:YES];
 }
