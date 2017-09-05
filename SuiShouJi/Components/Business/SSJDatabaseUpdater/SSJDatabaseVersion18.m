@@ -110,17 +110,19 @@
     NSMutableArray *compoundModels = [NSMutableArray array];
     
     for (SSJLoanChargeModel *model in models) {
-        SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", model.fundId];
-        
-        if (fundType == SSJFinancingParentPaidLeave
-            || fundType == SSJFinancingParentDebt) {
-
-            SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-            compoundModel.chargeModel = model;
-            [compoundModels addObject:compoundModel];
+        @autoreleasepool {
+            SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", model.fundId];
             
-        } else {
-            [targetModels addObject:model];
+            if (fundType == SSJFinancingParentPaidLeave
+                || fundType == SSJFinancingParentDebt) {
+                
+                SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+                compoundModel.chargeModel = model;
+                [compoundModels addObject:compoundModel];
+                
+            } else {
+                [targetModels addObject:model];
+            }
         }
     }
     
@@ -148,50 +150,43 @@
         }
     }
     
-    __block NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
-    
     [compoundModels enumerateObjectsUsingBlock:^(SSJLoanCompoundChargeModel *compoundModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        
-        int billID = [compoundModel.chargeModel.billId intValue];
-        int targetBillID = [compoundModel.targetChargeModel.billId intValue];
-        
-        NSString *preChargeID = billID < targetBillID ? compoundModel.chargeModel.chargeId : compoundModel.targetChargeModel.chargeId;
-        NSString *writeDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        
-        NSString *chargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.chargeModel.billId];
-        if (![self upgradeChargeWithModel:compoundModel.chargeModel
-                              newChargeID:chargeID
-                                writeDate:writeDate
-                                 database:db
-                                    error:error]) {
-            *stop = YES;
-            return;
-        }
-        
-        
-        NSString *targetChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.targetChargeModel.billId];
-        if (![self upgradeChargeWithModel:compoundModel.targetChargeModel
-                              newChargeID:targetChargeID
-                                writeDate:writeDate
-                                 database:db
-                                    error:error]) {
-            *stop = YES;
-            return;
-        }
-        
-        if (compoundModel.interestChargeModel) {
-            NSString *interestChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.interestChargeModel.billId];
-            if (![self upgradeChargeWithModel:compoundModel.interestChargeModel
-                                  newChargeID:interestChargeID
-                                    writeDate:writeDate
+        @autoreleasepool {
+            int billID = [compoundModel.chargeModel.billId intValue];
+            int targetBillID = [compoundModel.targetChargeModel.billId intValue];
+            
+            NSString *preChargeID = billID < targetBillID ? compoundModel.chargeModel.chargeId : compoundModel.targetChargeModel.chargeId;
+            
+            NSString *chargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.chargeModel.billId];
+            if (![self upgradeChargeWithModel:compoundModel.chargeModel
+                                  newChargeID:chargeID
                                      database:db
                                         error:error]) {
                 *stop = YES;
                 return;
             }
+            
+            
+            NSString *targetChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.targetChargeModel.billId];
+            if (![self upgradeChargeWithModel:compoundModel.targetChargeModel
+                                  newChargeID:targetChargeID
+                                     database:db
+                                        error:error]) {
+                *stop = YES;
+                return;
+            }
+            
+            if (compoundModel.interestChargeModel) {
+                NSString *interestChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.interestChargeModel.billId];
+                if (![self upgradeChargeWithModel:compoundModel.interestChargeModel
+                                      newChargeID:interestChargeID
+                                         database:db
+                                            error:error]) {
+                    *stop = YES;
+                    return;
+                }
+            }
         }
-        
-        timestamp += 0.001;
     }];
     
     if (error && *error) {
@@ -203,11 +198,10 @@
 
 + (BOOL)upgradeChargeWithModel:(SSJLoanChargeModel *)model
                    newChargeID:(NSString *)newChargeID
-                     writeDate:(NSString *)writeDate
                       database:(FMDatabase *)db
                          error:(NSError **)error {
     
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid = ? and operatortype <> 2", @(SSJSyncVersion()), writeDate, model.chargeId]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid = ? and operatortype <> 2", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], model.chargeId]) {
         return NO;
     }
     
@@ -221,7 +215,7 @@
                              @"imoney":@(model.money),
                              @"iversion":@(SSJSyncVersion()),
                              @"operatortype":@0,
-                             @"cwritedate":writeDate};
+                             @"cwritedate":[model.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]};
     
     if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, ifunsid, ibillid, cid, cuserid, cmemo, cbilldate, imoney, iversion, operatortype, cwritedate) values (:ichargeid, :ifunsid, :ibillid, :cid, :cuserid, :cmemo, :cbilldate, :imoney, :iversion, :operatortype, :cwritedate)" withParameterDictionary:params]) {
         return NO;
