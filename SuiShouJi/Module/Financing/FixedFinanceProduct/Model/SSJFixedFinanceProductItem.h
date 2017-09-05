@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**结算日期*/
 @property (nonatomic, copy, nullable) NSString *enddate;
 
-/**是否结算*/
+/**是否结算0 未结算，1，结算*/
 @property (nonatomic, assign) NSInteger isend;
 
 /**颜色*/

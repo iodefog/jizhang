@@ -29,6 +29,7 @@
 
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJFixedFinanceProductHelper.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
@@ -264,12 +265,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         NSString *startDateStr = _financeModel.startdate;
         NSString *endDateStr = _financeModel.enddate;
         NSString *memo = _financeModel.memo;
-
+        NSString *fundName = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
         
             [self.section1Items addObjectsFromArray:
              @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"起息日期" subtitle:startDateStr bottomTitle:nil],
                [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
-               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入 账户" subtitle:@"招商" bottomTitle:nil]]];
+               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:fundName bottomTitle:nil]]];
         
             if (_financeModel.memo.length) {
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"备注" subtitle:memo bottomTitle:nil]];
@@ -342,10 +343,10 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)organiseHeaderItems {
     
-    double surplus = 0;     // 当前余额
+    double surplus = 0;     // 当前余额、到账金额
     double rate = self.financeModel.rate;     // 年化收益率
-    double interest = 0;    // 产生利息
-    double payment = 0;     // 预期利息
+    double interest = 0;    // 产生利息、利息收入
+    double payment = 0;     // 预期利息、投资本金
 
     for (SSJFixedFinanceProductChargeItem *model in self.chargeModels) {
         switch (model.chargeType) {
@@ -384,20 +385,28 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 break;
         }
     }
-//+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID
-    interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
-//    double benj = [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid];
-//    interest = [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"interest"] doubleValue];
-//    surplus = interest + [[[SSJFixedFinanceProductHelper caculateInterestWithModel:self.financeModel chargeModels:self.chargeModels] objectForKey:@"money"] doubleValue];
-    NSString *surplusTitle = @"当前余额";
-    NSString *surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
-    self.currentMoney = surplus;
-    payment = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.financeModel.rate rateType:self.financeModel.ratetype time:self.financeModel.time timetype:self.financeModel.timetype money:[self.financeModel.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:self.financeModel.startdate] objectForKey:@"interest"] doubleValue];
-    //
+
+    interest = self.financeModel.isend == 0 ?[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
+    NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"到账金额";
+    NSString *surplusValue = self.financeModel.isend == 0 ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"%.2f",[self.financeModel.money doubleValue]];
+    self.currentMoney = surplus;//可赎回最大金额
+    
+   //总利息
+    double totleIn = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
+    
+    //所有手续费
+   double totleSxf = [SSJFixedFinanceProductStore querySettmentInterestWithProductID:self.financeModel.productid];
+    
+    // 本金 = financeModel。money + 所有手续费 - 总利息
+    double benJinMoney = [self.financeModel.money doubleValue] + totleSxf - totleIn;
+    
+    payment = self.financeModel.isend == 0 ? [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.financeModel.rate rateType:self.financeModel.ratetype time:self.financeModel.time timetype:self.financeModel.timetype money:[self.financeModel.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:self.financeModel.startdate] objectForKey:@"interest"] doubleValue] : benJinMoney;//预期利息
+    
+    
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;
-    NSString *paymentTitle = @"已产生利息";
-    NSString *lenderTitle = @"预期利息";
+    NSString *paymentTitle = self.financeModel.isend == 0 ? @"已产生利息" : @"利息收入";
+    NSString *lenderTitle = self.financeModel.isend == 0 ?  @"预期利息" : @"投资本金";
     UIColor *topTitleColor = nil;
     UIColor *bottomTitleColor = nil;
     
@@ -437,15 +446,6 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                                                                 topTitleFont:topTitleFont
                                                              bottomTitleFont:bottomTitleFont2
                                                                contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-//    } else {
-//        interestItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:paymentTitle
-//                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f", payment]
-//                                                               topTitleColor:topTitleColor
-//                                                            bottomTitleColor:bottomTitleColor
-//                                                                topTitleFont:topTitleFont
-//                                                             bottomTitleFont:bottomTitleFont2
-//                                                               contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
-//    }
     
     SSJFinancingDetailHeadeViewCellItem *lenderItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:lenderTitle
                                                                                                 bottomTitle:[NSString stringWithFormat:@"%.2f",payment]
@@ -495,20 +495,21 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 }
 
 - (void)deleteBtnAction {
+    MJWeakSelf;
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.financeModel success:^{
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
+//    + (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model success:(void (^)(void))success
+//failure:(void (^)(NSError *error))failure;
 //    __weak typeof(self) wself = self;
 //    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"删除该项目后相关的账户流水数据(含转账、利息）将被彻底删除哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
 //        [wself deleteLoanModel];
 //    }], nil];
 //    
-//    switch (self.loanModel.type) {
-//        case SSJLoanTypeLend:
-//            [SSJAnaliyticsManager event:@"loan_delete"];
-//            break;
-//            
-//        case SSJLoanTypeBorrow:
-//            [SSJAnaliyticsManager event:@"owed_delete"];
-//            break;
-//    }
+
 }
 
 #pragma mark - Getter
