@@ -101,7 +101,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.financingItem.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
         self.financingItem.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
-        self.title = [NSString stringWithFormat:@"编辑%@账户",parentModel.name];
+        self.title = [NSString stringWithFormat:@"编辑%@账户",self.financingItem.fundingName];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         if (!self.financingItem.cardItem) {
@@ -313,8 +313,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         }
         
-        if (self.financingItem.cardItem.fundingAmount != 0) {
-            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.financingItem.cardItem.fundingAmount];
+        if (self.financingItem.fundingAmount != 0) {
+            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.financingItem.fundingAmount];
         }
         _balaceInput = newReminderCell.textInput;
         newReminderCell.textInput.tag = 102;
@@ -355,7 +355,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoInput = newReminderCell.textInput;
-        newReminderCell.textInput.text = self.financingItem.cardItem.fundingMemo;
+        newReminderCell.textInput.text = self.financingItem.fundingMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 103;
         newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
@@ -627,7 +627,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     }else if (textField.tag == 102){
         self.financingItem.fundingAmount = [textField.text doubleValue];
     }else if (textField.tag == 103){
-        self.financingItem.cardItem.fundingMemo = textField.text;
+        self.financingItem.fundingMemo = textField.text;
     }
 }
 

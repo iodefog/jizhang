@@ -59,7 +59,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
 
-        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14");
+        WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
+
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14").orderBy(orderList);
 
         WCTStatement *statement = [db prepare:statementSelect];
 

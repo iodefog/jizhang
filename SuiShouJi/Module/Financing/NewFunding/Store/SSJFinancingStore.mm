@@ -131,7 +131,7 @@
                 
             }
 
-            if (item.cardItem.remindItem) {
+            if (item.cardItem.remindItem.remindId.length) {
                 SSJUserRemindTable *remindTable = [[SSJUserRemindTable alloc] init];
                 remindTable.remindId = item.cardItem.remindItem.remindId;
                 remindTable.userId = userId;

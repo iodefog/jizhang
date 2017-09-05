@@ -19,7 +19,6 @@ typedef void (^addNewCardBlock)(SSJFinancingHomeitem *newCardItem);
 
 @property(nonatomic, strong) NSString *selectParent;
 
-
 @property(nonatomic) SSJCrediteCardType cardType;
 
 @end
