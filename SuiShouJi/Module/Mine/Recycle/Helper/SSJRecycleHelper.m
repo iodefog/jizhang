@@ -607,7 +607,7 @@
     }
     
     // 查询此账户下已删除的周期转账流水
-    NSArray *chargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeLoan
+    NSArray *chargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeCyclicTransfer
                                                        clientDate:clientDate
                                                            fundID:fundID
                                                        inDatabase:db];
@@ -647,6 +647,8 @@
                                                            clientDate:clientDate
                                                                fundID:fundID
                                                            inDatabase:db];
+    
+    NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
     for (_SSJRecycleChargeModel *model in loanChargeModels) {
         // 恢复目标资金账户
         if (![self recoverTargetFundWithChargeModel:model
@@ -658,8 +660,7 @@
         }
         
         // 恢复借贷项目
-        NSString *loanID = [[model.sundryID componentsSeparatedByString:@"_"] firstObject];
-        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), loanID]) {
+        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), model.sundryID]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -667,14 +668,16 @@
         }
         
         // 恢复借贷流水
+        NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if (![self recoverChargesWithSundryID:model.sundryID
-                                    writeDate:writeDate
+                                    writeDate:chargeWriteDate
                                    clientDate:clientDate
                                    chargeType:SSJChargeIdTypeLoan
                                    inDatabase:db
                                         error:error]) {
             return NO;
         }
+        timestamp += 0.001;
     }
     
     return YES;
