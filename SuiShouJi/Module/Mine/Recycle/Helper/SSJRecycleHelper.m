@@ -671,12 +671,11 @@
         
         // 恢复借贷流水
         NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![self recoverChargesWithSundryID:model.sundryID
-                                    writeDate:chargeWriteDate
-                                   clientDate:clientDate
-                                   chargeType:SSJChargeIdTypeLoan
-                                   inDatabase:db
-                                        error:error]) {
+        NSString *preChargeID = [[model.ID componentsSeparatedByString:@"_"] firstObject];
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, iversion = ?, cwritedate = ? where ichargeid like ? || '_%' and ichargetype = ? and operatortype = 2", @(SSJSyncVersion()), chargeWriteDate, preChargeID, @(SSJChargeIdTypeLoan)]) {
+            if (error) {
+                *error = [db lastError];
+            }
             return NO;
         }
         timestamp += 0.001;
