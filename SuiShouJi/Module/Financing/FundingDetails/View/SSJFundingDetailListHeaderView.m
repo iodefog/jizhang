@@ -244,6 +244,9 @@
             }
         }
 
+        double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney - creditCardItem.repaymentForOtherMonthMoney + creditCardItem.instalmentMoney;
+        self.payOffImage.hidden = moneyNeedToRepay > 0 ? NO : YES;
+
         if (creditCardItem.isExpand) {
             self.arrowImage.layer.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
         } else {

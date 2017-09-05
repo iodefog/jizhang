@@ -697,9 +697,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
 + (SSJBillingChargeCellItem *)getChargeItemWithStatement:(WCTStatement *)statement {
     SSJBillingChargeCellItem *chargeItem = [[SSJBillingChargeCellItem alloc] init];
-    for (int i = 0 ; i < [statement getCount] ; ++i) {
+    for (int i = 0 ; i < [statement getColumnCount] ; ++i) {
         id value = [statement getValueAtIndex:i];
-        NSString *name = [statement getNameAtIndex:i];
+        NSString *name = [statement getColumnNameAtIndex:i];
         NSString *str = SSJUserChargeTable.chargeId.getDescription();
         NSString *tableName = [statement getTableNameAtIndex:i];
         if (value) {
