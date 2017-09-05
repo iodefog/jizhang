@@ -284,7 +284,7 @@
 }
 
 /**
- 升级借贷流水；如果流水cid不是loanid_timestamp格式的话，要改成这种格式
+ 升级借贷流水；如果流水chargeid不是UUID_billID格式的话，要改成这种格式
  */
 + (void)upgradeLoanCharges:(NSArray<NSDictionary *> *)charges {
     NSMutableArray *chargeModels = [NSMutableArray array];
@@ -294,7 +294,7 @@
             continue;
         }
         
-        if ([chargeInfo[@"cid"] containsString:@"_"]) {
+        if ([chargeInfo[@"ichargeid"] containsString:@"_"]) {
             continue;
         }
         
@@ -304,6 +304,8 @@
         model.fundId = chargeInfo[@"ifunsid"];
         model.loanId = chargeInfo[@"cid"];
         model.userId = chargeInfo[@"cuserid"];
+        model.money = [chargeInfo[@"imoney"] doubleValue];
+        model.memo = chargeInfo[@"cmemo"];
         model.billDate = [NSDate dateWithString:chargeInfo[@"cbilldate"] formatString:@"yyyy-MM-dd"];
         model.writeDate = [NSDate dateWithString:chargeInfo[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         [chargeModels addObject:model];
