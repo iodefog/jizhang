@@ -13,48 +13,49 @@
 #import "SSJLocalNotificationStore.h"
 #import "SSJLoanModel.h"
 #import "SSJLoanHelper.h"
+#import "SSJReminderItem.h"
 
 @implementation SSJCreditCardStore
 
-+ (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId {
-    SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
-    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
-        NSString *userId = SSJUSERID();
-        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.iquota, b.ibilldatesettlement, b.crepaymentdate, b.cbilldate, b.cremindid, b.itype from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?",cardId,userId];
-        if (!resultSet) {
-            return;
-        }
-        while([resultSet next]){
-            item.fundingID = cardId;
-            item.fundingName = [resultSet stringForColumn:@"cacctname"];
-            item.cardLimit = [resultSet doubleForColumn:@"iquota"];
-            item.settleAtRepaymentDay = [resultSet boolForColumn:@"ibilldatesettlement"];
-            item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
-            item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
-            item.fundingMemo = [resultSet stringForColumn:@"cmemo"];
-            item.cardColor = [resultSet stringForColumn:@"ccolor"];
-            item.remindId = [resultSet stringForColumn:@"cremindid"];
-            item.cardOder = [resultSet intForColumn:@"iorder"];
-            item.startColor = [resultSet stringForColumn:@"cstartColor"];
-            item.endColor = [resultSet stringForColumn:@"cendColor"];
-            item.cardType = [resultSet intForColumn:@"itype"];
-            if (item.cardType == SSJCrediteCardTypeAlipay) {
-                item.settleAtRepaymentDay = YES;
-            }
-        }
-        [resultSet close];
-        item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
-        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
-        item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ?, bk_user_bill_type b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userId,userId,currentDate,@(SSJChargeIdTypeLoan),cardId,@(SSJShareBooksMemberStateNormal)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ?, bk_user_bill_type as b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userId,userId,currentDate,@(SSJChargeIdTypeLoan),cardId,@(SSJShareBooksMemberStateNormal)] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardId = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId];
-        item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",cardId,userId];
-        if ([db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and ccardId = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId]) {
-            item.hasMadeInstalment = YES;
-        } else {
-            item.hasMadeInstalment = NO;
-        }
-    }];
-    return item;
-}
+//+ (SSJCreditCardItem *)queryCreditCardDetailWithCardId:(NSString *)cardId {
+//    SSJCreditCardItem *item = [[SSJCreditCardItem alloc]init];
+//    [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
+//        NSString *userId = SSJUSERID();
+//        FMResultSet *resultSet = [db executeQuery:@"select a.*, b.iquota, b.ibilldatesettlement, b.crepaymentdate, b.cbilldate, b.cremindid, b.itype from bk_fund_info a left join bk_user_credit b on a.cfundid = b.cfundid where a.cfundid = ? and a.cuserid = ?",cardId,userId];
+//        if (!resultSet) {
+//            return;
+//        }
+//        while([resultSet next]){
+//            item.fundingID = cardId;
+//            item.fundingName = [resultSet stringForColumn:@"cacctname"];
+//            item.cardLimit = [resultSet doubleForColumn:@"iquota"];
+//            item.settleAtRepaymentDay = [resultSet boolForColumn:@"ibilldatesettlement"];
+//            item.cardBillingDay = [resultSet intForColumn:@"cbilldate"];
+//            item.cardRepaymentDay = [resultSet intForColumn:@"crepaymentdate"];
+//            item.fundingMemo = [resultSet stringForColumn:@"cmemo"];
+//            item.cardColor = [resultSet stringForColumn:@"ccolor"];
+//            item.remindId = [resultSet stringForColumn:@"cremindid"];
+//            item.cardOder = [resultSet intForColumn:@"iorder"];
+//            item.startColor = [resultSet stringForColumn:@"cstartColor"];
+//            item.endColor = [resultSet stringForColumn:@"cendColor"];
+//            item.cardType = [resultSet intForColumn:@"itype"];
+//            if (item.cardType == SSJCrediteCardTypeAlipay) {
+//                item.settleAtRepaymentDay = YES;
+//            }
+//        }
+//        [resultSet close];
+//        item.remindState = [db boolForQuery:@"select istate from bk_user_remind where cremindid = ? and cuserid = ?",item.remindId,userId];
+//        NSString *currentDate = [[NSDate date]formattedDateWithFormat:@"yyyy-MM-dd"];
+//        item.fundingAmount = [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ?, bk_user_bill_type b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 0 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userId,userId,currentDate,@(SSJChargeIdTypeLoan),cardId,@(SSJShareBooksMemberStateNormal)] - [db doubleForQuery:@"select sum(a.imoney) from bk_user_charge a left join bk_share_books_member c on c.cbooksid = a.cbooksid and c.cmemberid = ?, bk_user_bill_type as b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.cuserid = ? and a.operatortype <> 2 and (a.cbilldate <= ? or ichargetype = ?) and b.itype = 1 and a.ifunsid = ? and (c.istate = ? or c.istate is null or a.ibillid in ('13','14'))",userId,userId,currentDate,@(SSJChargeIdTypeLoan),cardId,@(SSJShareBooksMemberStateNormal)] + [db doubleForQuery:@"select sum(repaymentmoney) from bk_credit_repayment where cuserid = ? and ccardId = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId];
+//        item.chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2",cardId,userId];
+//        if ([db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and ccardId = ? and operatortype <> 2 and iinstalmentcount > 0",userId,cardId]) {
+//            item.hasMadeInstalment = YES;
+//        } else {
+//            item.hasMadeInstalment = NO;
+//        }
+//    }];
+//    return item;
+//}
 
 + (void)syncSaveCreditCardWithCardItem:(SSJCreditCardItem *)item
                                    Error:(NSError **)error {
@@ -92,7 +93,7 @@
 }
 
 + (NSError *)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
-                               inDatabase:(FMDatabase *)db {
+                               inDatabase:(FMDatabase *)db  {
     NSString *editeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     NSString *userId = SSJUSERID();
@@ -139,7 +140,7 @@
         }
         
         // 插入信用卡表
-        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.fundingID,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
+        if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.fundingID,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindItem.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
             return [db lastError];
         }
     }else{
@@ -170,11 +171,11 @@
         // 查询在信用卡表中有没有数据,如果没有则插入一条(对老的信用卡账户)
         if (![db intForQuery:@"select count(1) from bk_user_credit where cfundid = ? and cuserid = ? and operatortype <> 2",item.fundingID,userId]) {
             // 插入信用卡表
-            if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.fundingID,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
+            if (![db executeUpdate:@"insert into bk_user_credit (cfundid, iquota, cbilldate, crepaymentdate, cuserid, cwritedate, iversion, operatortype, cremindid, ibilldatesettlement, itype) values (?,?,?,?,?,?,?,0,?,?,?)",item.fundingID,@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),userId,editeDate,@(SSJSyncVersion()),item.remindItem.remindId,@(item.settleAtRepaymentDay),@(item.cardType)]) {
                 return [db lastError];
             }
         }else{
-            if (![db executeUpdate:@"update bk_user_credit set iquota = ?, cbilldate = ?, crepaymentdate = ?,  cwritedate = ?, iversion = ?, operatortype = 1, cremindid = ?, ibilldatesettlement = ? where cfundid = ? and cuserid = ?",@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),editeDate,@(SSJSyncVersion()),item.remindId,@(item.settleAtRepaymentDay),item.fundingID,userId]) {
+            if (![db executeUpdate:@"update bk_user_credit set iquota = ?, cbilldate = ?, crepaymentdate = ?,  cwritedate = ?, iversion = ?, operatortype = 1, cremindid = ?, ibilldatesettlement = ? where cfundid = ? and cuserid = ?",@(item.cardLimit),@(item.cardBillingDay),@(item.cardRepaymentDay),editeDate,@(SSJSyncVersion()),item.remindItem.remindId,@(item.settleAtRepaymentDay),item.fundingID,userId]) {
                 return [db lastError];
             }
         }
@@ -249,7 +250,7 @@
     }];
 }
 
-+ (BOOL)deleteCreditCardWithCardItem:(SSJCreditCardItem *)item
++ (BOOL)deleteCreditCardWithCardItem:(SSJFinancingHomeitem *)item
              inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
                   error:(NSError **)error{
@@ -271,17 +272,15 @@
         return NO;
     }
     //删除提醒表
-    if (item.remindId.length) {
-        if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.remindId]) {
+    if (item.cardItem.remindItem) {
+        if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?",writeDate,@(SSJSyncVersion()),userId,item.cardItem.remindItem.remindId]) {
             if (error) {
                 *error = [db lastError];
             }
             return NO;
         }
         //取消提醒
-        SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
-        remindItem.remindId = item.remindId;
-        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+        [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item.cardItem.remindItem];
     }
     
     // 删除和此信用卡账户有关的借贷数据
@@ -320,7 +319,7 @@
             }
             return;
         };
-        if (item.remindId.length) {
+        if (item.remindItem) {
             remindItem.fundId = item.fundingID;
             terror = [SSJLocalNotificationStore saveReminderWithReminderItem:remindItem inDatabase:db];
             if (terror) {
@@ -340,4 +339,5 @@
         }
     }];
 }
+
 @end

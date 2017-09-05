@@ -49,8 +49,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 @property (nonatomic,strong) TPKeyboardAvoidingTableView *tableView;
 
-@property (nonatomic, strong) SSJCreditCardItem *item;
-
 // 提醒开关
 @property (nonatomic, strong) UISwitch *remindStateButton;
 
@@ -60,8 +58,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 @property (nonatomic, strong) SSJBillingDaySelectView *billingDateSelectView;
 
 @property (nonatomic, strong) SSJBillingDaySelectView *repaymentDateSelectView;
-
-@property (nonatomic, strong) SSJReminderItem *remindItem;
 
 @property (nonatomic, strong) UIView *saveFooterView;
 
@@ -87,39 +83,38 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    if (!self.cardId.length) {
+    if (!self.financingItem) {
         if (self.cardType == SSJCrediteCardTypeCrediteCard) {
             self.title = @"添加信用卡账户";
         } else {
             self.title = @"添加蚂蚁花呗账户";
         }
-        self.item = [[SSJCreditCardItem alloc]init];
-        self.item.settleAtRepaymentDay = YES;
-        self.item.cardBillingDay = 1;
-        self.item.cardRepaymentDay = 10;
-        self.item.cardType = self.cardType;
-        self.item.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
-        self.item.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
+        self.financingItem = [[SSJFinancingHomeitem alloc] init];
+        self.financingItem.cardItem = [[SSJCreditCardItem alloc] init];
+        self.financingItem.cardItem.settleAtRepaymentDay = YES;
+        self.financingItem.cardItem.cardBillingDay = 1;
+        self.financingItem.cardItem.cardRepaymentDay = 10;
+        self.financingItem.cardItem.cardType = self.cardType;
+        self.financingItem.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
+        self.financingItem.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
-        self.item = [SSJCreditCardStore queryCreditCardDetailWithCardId:self.cardId];
-        if (self.item.fundingAmount > 0) {
+        if (!self.financingItem.cardItem) {
+            self.financingItem.cardItem = [[SSJCreditCardItem alloc] init];
+        }
+        if (self.financingItem.fundingAmount > 0) {
             self.debtOrbalance = YES;
         } else {
             self.debtOrbalance = NO;
         }
-        if (self.item.cardBillingDay == 0) {
-            self.item.cardBillingDay = 1;
+        if (self.financingItem.cardItem.cardBillingDay == 0) {
+            self.financingItem.cardItem.cardBillingDay = 1;
         }
-        if (self.item.cardRepaymentDay == 0) {
-            self.item.cardRepaymentDay = 10;
+        if (self.financingItem.cardItem.cardRepaymentDay == 0) {
+            self.financingItem.cardItem.cardRepaymentDay = 10;
         }
     }
-    if (self.item.remindId.length) {
-        self.remindItem = [SSJLocalNotificationStore queryReminderItemForID:self.item.remindId];
-    }
-    self.cardType = self.item.cardType;
     if (self.cardType == SSJCrediteCardTypeCrediteCard) {
         self.title = @"编辑信用卡账户";
     } else {
@@ -176,28 +171,28 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     //账单日
     if ([title isEqualToString:kTitle7] && self.cardType != SSJCrediteCardTypeAlipay) {
-        if (self.item.hasMadeInstalment) {
+        if (self.financingItem.cardItem.hasMadeInstalment) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",不能更改账单日,否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
             [alert addAction:comfirmAction];
             [self.navigationController presentViewController:alert animated:YES completion:NULL];
         } else {
             [SSJAnaliyticsManager event:@"credit_bill_date"];
-            self.billingDateSelectView.currentDate = self.item.cardBillingDay;
+            self.billingDateSelectView.currentDate = self.financingItem.cardItem.cardBillingDay;
             [self.billingDateSelectView show];
         }
     }
     
     //还款日
     if ([title isEqualToString:kTitle8]) {
-        if (self.item.hasMadeInstalment) {
+        if (self.financingItem.cardItem.hasMadeInstalment) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",不能更改还款日,否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
             [alert addAction:comfirmAction];
             [self.navigationController presentViewController:alert animated:YES completion:NULL];
         } else {
             [SSJAnaliyticsManager event:@"credit_payment_date"];
-            self.repaymentDateSelectView.currentDate = self.item.cardRepaymentDay;
+            self.repaymentDateSelectView.currentDate = self.financingItem.cardItem.cardRepaymentDay;
             [self.repaymentDateSelectView show];
         }
     }
@@ -206,33 +201,26 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         SSJColorSelectViewController *colorSelectVc = [[SSJColorSelectViewController alloc]init];
         __weak typeof(self) weakSelf = self;
         colorSelectVc.colorSelectedBlock = ^(SSJFinancingGradientColorItem *selectColor){
-            weakSelf.item.startColor = selectColor.startColor;
-            weakSelf.item.endColor = selectColor.endColor;
+            weakSelf.financingItem.startColor = selectColor.startColor;
+            weakSelf.financingItem.endColor = selectColor.endColor;
             [weakSelf.tableView reloadData];
         };
-        colorSelectVc.fundingAmount = self.item.fundingAmount;
-        colorSelectVc.fundingName = self.item.fundingName;
-        SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-        item.startColor = self.item.startColor;
-        item.endColor = self.item.endColor;
-        colorSelectVc.fundingColor = item;
+        colorSelectVc.fundingItem = self.financingItem;
         [self.navigationController pushViewController:colorSelectVc animated:YES];
     }
     
     if ([title isEqualToString:kTitle9]) {
-        if (self.item.remindId.length) {
+        if (self.financingItem.cardItem.remindItem) {
             SSJReminderEditeViewController *remindEditeVc = [[SSJReminderEditeViewController alloc]init];
             remindEditeVc.needToSave = NO;
-            remindEditeVc.item = self.remindItem;
+            remindEditeVc.item = self.financingItem.cardItem.remindItem;
             __weak typeof(self) weakSelf = self;
             remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item){
-                weakSelf.remindItem = item;
-                weakSelf.item.remindState = 1;
-                weakSelf.item.remindId = item.remindId;
+                weakSelf.financingItem.cardItem.remindItem = item;
                 [weakSelf.tableView reloadData];
             };
             remindEditeVc.deleteReminderAction = ^(){
-                weakSelf.remindItem = nil;
+                weakSelf.financingItem.cardItem.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
             [self.navigationController pushViewController:remindEditeVc animated:YES];
@@ -267,7 +255,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeTextField;
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入账户名称" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        newReminderCell.textInput.text = self.item.fundingName;
+        newReminderCell.textInput.text = self.financingItem.fundingName;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 100;
         newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
@@ -303,8 +291,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
         }
         newReminderCell.textInput.keyboardType = UIKeyboardTypeDecimalPad;
-        if (self.item.cardLimit != 0) {
-            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.cardLimit];
+        if (self.financingItem.cardItem.cardLimit != 0) {
+            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.financingItem.cardItem.cardLimit];
         }
         newReminderCell.textInput.tag = 101;
         newReminderCell.textInput.delegate = self;
@@ -325,8 +313,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         }
         
-        if (self.item.fundingAmount != 0) {
-            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.item.fundingAmount];
+        if (self.financingItem.cardItem.fundingAmount != 0) {
+            newReminderCell.textInput.text = [NSString stringWithFormat:@"%.2f",self.financingItem.cardItem.fundingAmount];
         }
         _balaceInput = newReminderCell.textInput;
         newReminderCell.textInput.tag = 102;
@@ -343,14 +331,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
                     cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入欠款" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
                     if (cell.textInput.text.length) {
                         cell.textInput.text = [[NSString stringWithFormat:@"%f",-currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
-                        self.item.fundingAmount = -currentMoney;
+                        self.financingItem.cardItem.fundingAmount = -currentMoney;
                     }
                 } else {
                     cell.cellTitle = @"当前余额";
                     cell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"输入余额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
                     if (cell.textInput.text.length) {
                         cell.textInput.text = [[NSString stringWithFormat:@"%f",currentMoney] ssj_moneyDecimalDisplayWithDigits:2];
-                        self.item.fundingAmount = currentMoney;
+                        self.financingItem.cardItem.fundingAmount = currentMoney;
                     }
 
                 }
@@ -367,7 +355,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         newReminderCell.textInput.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         _memoInput = newReminderCell.textInput;
-        newReminderCell.textInput.text = self.item.fundingMemo;
+        newReminderCell.textInput.text = self.financingItem.cardItem.fundingMemo;
         newReminderCell.textInput.delegate = self;
         newReminderCell.textInput.tag = 103;
         newReminderCell.textInput.returnKeyType = UIReturnKeyDone;
@@ -380,7 +368,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.type = SSJCreditCardCellTypeSubTitle;
         newReminderCell.cellTitle = title;
         newReminderCell.cellSubTitle = @"开启后资金账户详情列表以账单日结算";
-        self.billDateSettleMentButton.on = self.item.settleAtRepaymentDay;
+        self.billDateSettleMentButton.on = self.financingItem.cardItem.settleAtRepaymentDay;
         newReminderCell.accessoryView = self.billDateSettleMentButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -390,10 +378,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle7]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellTitle = title;
-        NSString *detail = [NSString stringWithFormat:@"每月%ld日",(long)self.item.cardBillingDay];
+        NSString *detail = [NSString stringWithFormat:@"每月%ld日",(long)self.financingItem.cardItem.cardBillingDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",(long)self.item.cardBillingDay]]];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",(long)self.financingItem.cardItem.cardBillingDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, detail.length)];
         newReminderCell.cellAtrributedDetail = attributeddetail;
         if (self.cardType == SSJCrediteCardTypeAlipay) {
@@ -408,10 +396,10 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     if ([title isEqualToString:kTitle8]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
         newReminderCell.cellTitle = title;
-        NSString *detail = [NSString stringWithFormat:@"每月%ld日",(long)self.item.cardRepaymentDay];
+        NSString *detail = [NSString stringWithFormat:@"每月%ld日",(long)self.financingItem.cardItem.cardRepaymentDay];
         NSMutableAttributedString *attributeddetail = [[NSMutableAttributedString alloc]initWithString:detail];
         [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor] range:NSMakeRange(0, detail.length)];
-        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",(long)self.item.cardRepaymentDay]]];
+        [attributeddetail addAttribute:NSForegroundColorAttributeName value:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] range:[detail rangeOfString:[NSString stringWithFormat:@"%ld",(long)self.financingItem.cardItem.cardRepaymentDay]]];
         [attributeddetail addAttribute:NSFontAttributeName value:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3] range:NSMakeRange(0, detail.length)];
         newReminderCell.cellAtrributedDetail = attributeddetail;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -420,9 +408,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     // 还款日提醒
     if ([title isEqualToString:kTitle9]) {
         newReminderCell.type = SSJCreditCardCellTypeassertedDetail;
-        newReminderCell.cellDetail = [self.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        newReminderCell.cellDetail = [self.financingItem.cardItem.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd"];
         newReminderCell.cellTitle = title;
-        self.remindStateButton.on = self.remindItem.remindState;
+        self.remindStateButton.on = self.financingItem.cardItem.remindItem.remindState;
         newReminderCell.accessoryView = self.remindStateButton;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryNone;
         newReminderCell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -434,8 +422,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         newReminderCell.cellTitle = title;
         newReminderCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         SSJFinancingGradientColorItem *item = [[SSJFinancingGradientColorItem alloc] init];
-        item.startColor = self.item.startColor;
-        item.endColor = self.item.endColor;
+        item.startColor = self.financingItem.startColor;
+        item.endColor = self.financingItem.endColor;
         newReminderCell.colorItem = item;
     }
     return newReminderCell;
@@ -444,53 +432,36 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 #pragma mark - Event
 - (void)saveButtonClicked:(id)sender{
     [self.view endEditing:YES];
-    self.item.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
+    self.financingItem.cardItem.settleAtRepaymentDay = self.billDateSettleMentButton.isOn;
     NSString* number=@"^(\\-)?\\d+(\\.\\d{1,2})?$";
     NSPredicate *numberPre = [NSPredicate predicateWithFormat:@"SELF MATCHES %@",number];
-    self.item.fundingName = _nameInput.text;
-    self.item.fundingMemo = _memoInput.text;
-    self.item.cardType = self.cardType;
+    self.financingItem.cardItem.fundingName = _nameInput.text;
+    self.financingItem.cardItem.fundingMemo = _memoInput.text;
+    self.financingItem.cardItem.cardType = self.cardType;
     if (![numberPre evaluateWithObject:_balaceInput.text] && [_balaceInput.text doubleValue] != 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入正确金额"];
         return;
-    } else if (!self.item.fundingName.length) {
+    } else if (!self.financingItem.cardItem.fundingName.length) {
         [CDAutoHideMessageHUD showMessage:@"请输入信用卡名称"];
         return;
-    } else if (self.item.fundingName.length > 13) {
+    } else if (self.financingItem.cardItem.fundingName.length > 13) {
         [CDAutoHideMessageHUD showMessage:@"账户名称不能超过13个字"];
         return;
-    } else if (self.item.cardLimit == 0) {
+    } else if (self.financingItem.cardItem.cardLimit == 0) {
         [CDAutoHideMessageHUD showMessage:@"信用卡额度不能为0"];
         return;
-    } else if (self.item.fundingMemo.length > 15) {
+    } else if (self.financingItem.cardItem.fundingMemo.length > 15) {
         [CDAutoHideMessageHUD showMessage:@"信用卡备注不能超过15个字"];
         return;
     }
     
-    if (!self.remindItem.remindId.length) {
-        self.item.remindId = self.remindItem.remindId;
-    }
-    if (!self.item.remindId.length) {
-        if (self.item.fundingName) {
-            self.remindItem.remindName = [NSString stringWithFormat:@"%@还款日",self.item.fundingName];
-        }
-        if (self.item.fundingMemo) {
-            self.remindItem.remindMemo = self.item.fundingMemo;
-        }
-    }
-    
     @weakify(self);
     
-    [SSJCreditCardStore saveCreditCardWithCardItem:self.item remindItem:self.remindItem Success:^(NSInteger operatortype){
+    [SSJFinancingStore saveFundingItem:self.financingItem Success:^(SSJFinancingHomeitem *item) {
         @strongify(self);
-        if (!operatortype) {
-            UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 3];
-            [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
-        }else{
-            [self.navigationController popViewControllerAnimated:YES];
-        }
+        [self.navigationController popViewControllerAnimated:YES];
         if (self.addNewCardBlock) {
-            self.addNewCardBlock(self.item);
+            self.addNewCardBlock(self.financingItem);
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
@@ -502,7 +473,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     __weak typeof(self) weakSelf = self;
     @weakify(self);
     
-    [SSJFinancingStore fundHasDataOrNotWithFundid:self.item.fundingID Success:^(BOOL hasData) {
+    [SSJFinancingStore fundHasDataOrNotWithFundid:self.financingItem.fundingID Success:^(BOOL hasData) {
         @strongify(self);
         if (hasData) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金账户，其对应的记账数据将一并删除" preferredStyle:UIAlertControllerStyleAlert];
@@ -514,7 +485,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 @strongify(self);
                 SSJFundingMergeViewController *mergeVc = [[SSJFundingMergeViewController alloc] init];
-                mergeVc.transferOutFundItem = self.item;
+                mergeVc.transferOutFundItem = self.financingItem;
                 mergeVc.transferOutType = SSJFundsTransferTypeCreditCard;
                 mergeVc.transferInSelectable = YES;
                 mergeVc.transferOutSelectable = NO;
@@ -543,8 +514,8 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)remindSwitchChange:(id)sender{
-    if (self.remindItem) {
-        self.remindItem.remindState = self.remindStateButton.isOn;
+    if (self.financingItem.cardItem.remindItem.remindId.length) {
+        self.financingItem.cardItem.remindItem.remindState = self.remindStateButton.isOn;
     }else{
         if (self.remindStateButton.isOn) {
             [SSJAnaliyticsManager event:@"credit_remind"];
@@ -553,28 +524,26 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             SSJReminderItem *item = [[SSJReminderItem alloc]init];
             item.remindCycle = 4;
             item.remindType = SSJReminderTypeCreditCard;
-            if (self.item.fundingName) {
-                item.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.item.fundingName];
+            if (self.financingItem.fundingName) {
+                item.remindName = [NSString stringWithFormat:@"%@还款日提醒",self.financingItem.fundingName];
             }
-            if (self.item.fundingMemo) {
-                item.remindMemo = self.item.fundingMemo;
+            if (self.financingItem.fundingMemo) {
+                item.remindMemo = self.financingItem.fundingMemo;
             }
-            if ([NSDate date].day > self.item.cardRepaymentDay) {
-                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.item.cardRepaymentDay hour:12 minute:0 second:0];
+            if ([NSDate date].day > self.financingItem.cardItem.cardRepaymentDay) {
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month + 1 day:self.financingItem.cardItem.cardRepaymentDay hour:12 minute:0 second:0];
             }else{
-                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.item.cardRepaymentDay hour:12 minute:0 second:0];
+                item.remindDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:self.financingItem.cardItem.cardRepaymentDay hour:12 minute:0 second:0];
             }
             item.remindState = 1;
             remindEditeVc.item = item;
             __weak typeof(self) weakSelf = self;
             remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item){
-                weakSelf.remindItem = item;
-                weakSelf.item.remindState = 1;
-                weakSelf.item.remindId = item.remindId;
+                weakSelf.financingItem.cardItem.remindItem = item;
                 [weakSelf.tableView reloadData];
             };
             remindEditeVc.deleteReminderAction = ^(){
-                weakSelf.remindItem = nil;
+                self.financingItem.cardItem.remindItem = nil;
                 [weakSelf.tableView reloadData];
             };
             
@@ -584,7 +553,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 }
 
 - (void)billDateSettleMentButtonClicked{
-    if (!self.billDateSettleMentButton.isOn && self.item.hasMadeInstalment) {
+    if (!self.billDateSettleMentButton.isOn && self.financingItem.cardItem.hasMadeInstalment) {
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"您使用了\"分期还款功能\",需\"以账单日结算\",否则每月账单会错乱哦" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:NULL];
         [alert addAction:comfirmAction];
@@ -619,7 +588,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     if (textField.tag == 101){
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
-        self.item.cardLimit = [text doubleValue];
+        self.financingItem.cardItem.cardLimit = [text doubleValue];
         return NO;
     }
     if (textField.tag == 102){
@@ -636,7 +605,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         } else {
             textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         }
-        self.item.fundingAmount = [textField.text doubleValue];
+        self.financingItem.cardItem.fundingAmount = [textField.text doubleValue];
         return NO;
     }
 
@@ -646,13 +615,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     if (textField.tag == 100) {
-        self.item.fundingName = textField.text;
+        self.financingItem.cardItem.fundingName = textField.text;
     }else if (textField.tag == 101){
-        self.item.cardLimit = [textField.text doubleValue];
+        self.financingItem.cardItem.cardLimit = [textField.text doubleValue];
     }else if (textField.tag == 102){
-        self.item.fundingAmount = [textField.text doubleValue];
+        self.financingItem.fundingAmount = [textField.text doubleValue];
     }else if (textField.tag == 103){
-        self.item.fundingMemo = textField.text;
+        self.financingItem.cardItem.fundingMemo = textField.text;
     }
 }
 
@@ -682,7 +651,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
         __weak typeof(self) weakSelf = self;
         _billingDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
-            weakSelf.item.cardBillingDay = selectedDay;
+            weakSelf.financingItem.cardItem.cardBillingDay = selectedDay;
             [weakSelf.tableView reloadData];
         };
     }
@@ -698,13 +667,13 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         }
         __weak typeof(self) weakSelf = self;
         _repaymentDateSelectView.dateSetBlock = ^(NSInteger selectedDay){
-            if (selectedDay != weakSelf.remindItem.remindDate.day && weakSelf.item.remindId.length) {
+            if (selectedDay != weakSelf.financingItem.cardItem.remindItem.remindDate.day && weakSelf.financingItem.cardItem.remindItem.remindId.length) {
                 [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"还款日已改，是否需要更改提醒时间"  action:[SSJAlertViewAction actionWithTitle:@"暂不更改" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即更改" handler:^(SSJAlertViewAction *action) {
-                    weakSelf.remindItem.remindDate = [NSDate dateWithYear:weakSelf.remindItem.remindDate.year month:weakSelf.remindItem.remindDate.month day:selectedDay hour:weakSelf.remindItem.remindDate.hour minute:weakSelf.remindItem.remindDate.minute second:weakSelf.remindItem.remindDate.second];
+                    weakSelf.financingItem.cardItem.remindItem.remindDate = [NSDate dateWithYear:weakSelf.financingItem.cardItem.remindItem.remindDate.year month:weakSelf.financingItem.cardItem.remindItem.remindDate.month day:selectedDay hour:weakSelf.financingItem.cardItem.remindItem.remindDate.hour minute:weakSelf.financingItem.cardItem.remindItem.remindDate.minute second:weakSelf.financingItem.cardItem.remindItem.remindDate.second];
                     [weakSelf.tableView reloadData];
                 }],nil];
             }
-            weakSelf.item.cardRepaymentDay = selectedDay;
+            weakSelf.financingItem.cardItem.cardRepaymentDay = selectedDay;
             [weakSelf.tableView reloadData];
         };
     }
@@ -750,7 +719,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         __weak typeof(self) wself = self;
         _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
         _authCodeAlertView.finishVerification = ^{
-            [wself deleteFundingItem:wself.item type:1];
+            [wself deleteFundingItem:wself.financingItem type:1];
         };
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineSpacing = 5;

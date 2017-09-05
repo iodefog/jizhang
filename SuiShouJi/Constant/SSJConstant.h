@@ -195,22 +195,45 @@ typedef NS_ENUM(NSUInteger, SSJAdviceType) {
  - SSJSpecialBillIdCreditAgingPoundage: 信用卡分期手续费
  - SSJSpecialBillIdShareBooksCloseOutEarning: 平帐收入(共享账本)
  - SSJSpecialBillIdShareBooksCloseOutExpense: 平帐支出(共享账本)
+ 
+ - SSJSpecialBillIdFixedFinanceChangeEarning: 固收理财变更转入
+ - SSJSpecialBillIdFixedFinanceChangeExpenseg: 固收理财变更转出
+ - SSJSpecialBillIdFixedFinanceBalanceRollIn: 固收理财余额转入
+ - SSJSpecialBillIdFixedFinanceBalanceRollOut: 固收理财余额转出
+ - SSJSpecialBillIdFixedFinanceInterestEarning: 固收理财结算利息转入
+ - SSJSpecialBillIdFixedFinanceInterestExpense: 固收理财结算利息转出
+ - SSJSpecialBillIdFixedFinanceInterestPay: 固收理财派发利息流水
+ - SSJSpecialBillIdFixedFinanceServiceCharge: 固收理财手续费率（部分赎回，结算）
  */
 typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     SSJSpecialBillIdCloseOutEarning = 1,
     SSJSpecialBillIdCloseOutExpense = 2,
+    
     SSJSpecialBillIdBalanceRollIn = 3,
     SSJSpecialBillIdBalanceRollOut = 4,
+    
     SSJSpecialBillIdLoanInterestEarning = 5,
     SSJSpecialBillIdLoanInterestExpense = 6,
     SSJSpecialBillIdLoanChangeEarning = 7,
     SSJSpecialBillIdLoanChangeExpense = 8,
     SSJSpecialBillIdLoanBalanceRollIn = 9,
     SSJSpecialBillIdLoanBalanceRollOut = 10,
+    
     SSJSpecialBillIdCreditAgingPrincipal = 11,
     SSJSpecialBillIdCreditAgingPoundage = 12,
+    
     SSJSpecialBillIdShareBooksCloseOutEarning = 13,
-    SSJSpecialBillIdShareBooksCloseOutExpense = 14
+    SSJSpecialBillIdShareBooksCloseOutExpense = 14,
+    
+    //--------------- v2.8.0新增  ---------------//
+    SSJSpecialBillIdFixedFinanceChangeEarning = 15,
+    SSJSpecialBillIdFixedFinanceChangeExpenseg = 16,
+    SSJSpecialBillIdFixedFinanceBalanceRollIn = 17,
+    SSJSpecialBillIdFixedFinanceBalanceRollOut = 18,
+    SSJSpecialBillIdFixedFinanceInterestEarning = 19,
+    SSJSpecialBillIdFixedFinanceInterestExpense = 20,
+    SSJSpecialBillIdFixedFinanceInterestPay = 21,
+    SSJSpecialBillIdFixedFinanceServiceCharge = 22,
 };
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {

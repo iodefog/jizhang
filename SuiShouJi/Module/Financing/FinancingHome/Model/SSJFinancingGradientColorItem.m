@@ -41,4 +41,11 @@
     return colorArray;
 }
 
++ (SSJFinancingGradientColorItem *)gradientColorWithStartColor:(NSString *)startColor EndColor:(NSString *)endColor {
+    SSJFinancingGradientColorItem *gradientColor = [[SSJFinancingGradientColorItem alloc] init];
+    gradientColor.startColor = startColor;
+    gradientColor.endColor = endColor;
+    return gradientColor;
+}
+
 @end

@@ -125,14 +125,14 @@
     }];
 }
 
-+ (void)deleteFundingWithFundingItem:(SSJBaseCellItem *)item
++ (void)deleteFundingWithFundingItem:(SSJFinancingHomeitem *)item
                           deleteType:(BOOL)type
                              Success:(void (^)())success
                              failure:(void (^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db , BOOL *rollback) {
         NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if ([item isKindOfClass:[SSJFinancingHomeitem class]]) {
+        if (!item.cardItem) {
             // 如果是借贷
             SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *) item;
             if ([fundingItem.fundingParent isEqualToString:@"10"] || [fundingItem.fundingParent isEqualToString:@"11"]) {
@@ -257,8 +257,8 @@
                     return;
                 };
                 //删掉提醒
-                if (cardItem.remindId.length) {
-                    if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?" , writeDate , @(SSJSyncVersion()) , userId , cardItem.remindId]) {
+                if (cardItem.remindItem) {
+                    if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?" , writeDate , @(SSJSyncVersion()) , userId , cardItem.remindItem.remindId]) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{
                             if (failure) {
@@ -268,9 +268,7 @@
                         });
                     }
                     //取消提醒
-                    SSJReminderItem *remindItem = [[SSJReminderItem alloc] init];
-                    remindItem.remindId = cardItem.remindId;
-                    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+                    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:cardItem.remindItem];
                 }
             } else {
                 // 删掉账户所对应的转账
@@ -284,7 +282,7 @@
                     return;
                 }
 
-                if (![SSJCreditCardStore deleteCreditCardWithCardItem:cardItem inDatabase:db forUserId:userId error:NULL]) {
+                if (![SSJCreditCardStore deleteCreditCardWithCardItem:item inDatabase:db forUserId:userId error:NULL]) {
                     *rollback = YES;
                     SSJDispatch_main_async_safe(^{
                         if (failure) {
@@ -502,11 +500,7 @@
     cardItem.settleAtRepaymentDay = userCredit.billDateSettlement;
     cardItem.cardRepaymentDay = userCredit.repaymentDate;
     cardItem.cardBillingDay = userCredit.billingDate;
-    cardItem.remindId = userCredit.remindId;
-    if (cardItem.remindId.length) {
-        cardItem.remindState
-                = [[db getOneValueOnResult:SSJUserRemindTable.state fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == cardItem.remindId] boolValue];
-    }
+    cardItem.remindItem = [self getRemindItemWithRemindId:userCredit.remindId indataBase:db];
     return cardItem;
 }
 
@@ -545,6 +539,19 @@
     return currentBalance;
 
 }
+
++ (SSJReminderItem *)getRemindItemWithRemindId:(NSString *)remindId indataBase:(WCTDatabase *)db {
+    SSJReminderItem *item = [[SSJReminderItem alloc] init];
+    SSJUserRemindTable *userRemindTable = [db getOneObjectOfClass:SSJUserRemindTable.class fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == remindId];
+    item.remindId = userRemindTable.remindId;
+    item.remindName = userRemindTable.remindName;
+    item.remindMemo = userRemindTable.memo;
+    item.remindCycle = userRemindTable.cycle;
+    item.remindType = userRemindTable.type;
+    item.remindState = userRemindTable.state;
+    return item;
+}
+
 
 
 @end

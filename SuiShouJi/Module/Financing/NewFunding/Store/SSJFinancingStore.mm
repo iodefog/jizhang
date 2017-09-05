@@ -15,6 +15,9 @@
 #import "SSJShareBooksMemberTable.h"
 #import "SSJUserBillTypeTable.h"
 #import "SSJUserCreditTable.h"
+#import "SSJUserRemindTable.h"
+#import "SSJLocalNotificationStore.h"
+#import "SSJLocalNotificationHelper.h"
 
 @implementation SSJFinancingStore
 
@@ -36,7 +39,7 @@
                 item.fundingOrder = [[db getOneValueOnResult:SSJFundInfoTable.fundOrder.max()
                                                    fromTable:@"bk_fund_info"
                                                        where:SSJFundInfoTable.userId == userId
-                                                             && SSJFundInfoTable.operatorType != 2] integerValue] + 1;
+                                                               && SSJFundInfoTable.operatorType != 2] integerValue] + 1;
             }
 
 
@@ -76,7 +79,7 @@
             userCharge.chargeId = SSJUUID();
             userCharge.userId = userId;
             userCharge.money
-                    = [[NSString stringWithFormat:@"%f" , ABS(differentMoney)] ssj_moneyDecimalDisplayWithDigits:2];
+                    = [[NSString stringWithFormat:@"%f", ABS(differentMoney)] ssj_moneyDecimalDisplayWithDigits:2];
             userCharge.writeDate = editeDate;
             userCharge.version = SSJSyncVersion();
             userCharge.operatorType = 1;
@@ -114,19 +117,48 @@
                 userCredit.writeDate = editeDate;
                 userCredit.version = SSJSyncVersion();
                 userCredit.operatorType = 1;
-                userCredit.remindId = item.cardItem.remindId;
+                userCredit.remindId = item.cardItem.remindItem.remindId;
                 userCredit.billDateSettlement = item.cardItem.settleAtRepaymentDay;
-                if ([db insertObject:userCredit into:@"bk_user_credit"]) {
-                    if (![db insertObject:userCharge into:@"bk_user_charge"]) {
-                        NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey: @"插入信用卡表失败"}];
-                        if (failure) {
-                            dispatch_main_async_safe (^{
-                                failure(error);
-                            });
-                        }
-                        return NO;
-                    };
+                if (![db insertOrReplaceObject:userCredit into:@"bk_user_credit"]) {
+                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey: @"插入信用卡表失败"}];
+                    if (failure) {
+                        dispatch_main_async_safe (^{
+                            failure(error);
+                        });
+                    }
+                    return NO;
+                };
+                
+            }
+
+            if (item.cardItem.remindItem) {
+                SSJUserRemindTable *remindTable = [[SSJUserRemindTable alloc] init];
+                remindTable.remindId = item.cardItem.remindItem.remindId;
+                remindTable.userId = userId;
+                remindTable.remindId = item.cardItem.remindItem.remindId;
+                remindTable.remindName = item.cardItem.remindItem.remindName;
+                remindTable.memo = item.cardItem.remindItem.remindMemo;
+                remindTable.startDate = [item.cardItem.remindItem.remindDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss"];
+                remindTable.state = item.cardItem.remindItem.remindState;
+                remindTable.version = SSJSyncVersion();
+                remindTable.operatorType = 1;
+                remindTable.writeDate = editeDate;
+                remindTable.type = item.cardItem.remindItem.remindType;
+                remindTable.cycle = item.cardItem.remindItem.remindCycle;
+                remindTable.isEnd = item.cardItem.remindItem.remindAtTheEndOfMonth;
+                if (![db insertOrReplaceObject:remindTable into:@"bk_user_remind"]) {
+                    NSError *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey: @"插入提醒失败"}];
+                    if (failure) {
+                        dispatch_main_async_safe (^{
+                            failure(error);
+                        });
+                    }
+                    return NO;
                 }
+
+                [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item.cardItem.remindItem];
+
+                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item.cardItem.remindItem];
             }
 
 
@@ -153,7 +185,7 @@
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
 
         FMResultSet *fundSet
-                = [db executeQuery:@"select * from bk_fund_info where cparent = 'root' and itype = ? order by iorder" , @(type)];
+                = [db executeQuery:@"select * from bk_fund_info where cparent = 'root' and itype = ? order by iorder", @(type)];
 
         if (!fundSet) {
             if (failure) {
@@ -196,7 +228,7 @@
         NSString *userId = SSJUSERID();
         NSString *fundid = item.fundingID ?: @"";
         NSInteger count
-                = [db intForQuery:@"select count(1) from bk_fund_info where cuserid = ? and CACCTNAME = ? and cfundid <> ? and operatortype <> 2" , userId , item.fundingName , fundid];
+                = [db intForQuery:@"select count(1) from bk_fund_info where cuserid = ? and CACCTNAME = ? and cfundid <> ? and operatortype <> 2", userId, item.fundingName, fundid];
         if (count > 0) {
             exsit = YES;
         } else {
@@ -213,11 +245,11 @@
         BOOL hasData;
         NSString *userId = SSJUSERID();
         NSInteger chargeCount
-                = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and ifunsid = ? and operatortype <> 2" , userId , fundId];
+                = [db intForQuery:@"select count(1) from bk_user_charge where cuserid = ? and ifunsid = ? and operatortype <> 2", userId, fundId];
         NSInteger periodCount
-                = [db intForQuery:@"select count(1) from bk_charge_period_config where cuserid = ? and ifunsid = ? and operatortype <> 2" , userId , fundId];
+                = [db intForQuery:@"select count(1) from bk_charge_period_config where cuserid = ? and ifunsid = ? and operatortype <> 2", userId, fundId];
         NSInteger periodTransferCount
-                = [db intForQuery:@"select count(1) from bk_transfer_cycle where cuserid = ? and (ctransferinaccountid = ? or ctransferoutaccountid = ?) and operatortype <> 2" , userId , fundId , fundId];
+                = [db intForQuery:@"select count(1) from bk_transfer_cycle where cuserid = ? and (ctransferinaccountid = ? or ctransferoutaccountid = ?) and operatortype <> 2", userId, fundId, fundId];
 
         NSInteger totalCount = chargeCount + periodCount + periodTransferCount;
 
@@ -242,26 +274,26 @@
     WCTResultList resultList = {SSJUserChargeTable.money.inTable(@"bk_user_charge").sum()};
 
     WCDB::JoinClause
-            joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type" , WCDB::JoinClause::Type::Inner).
+            joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type", WCDB::JoinClause::Type::Inner).
             on(SSJUserChargeTable.billId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.billId.inTable(@"bk_user_bill_type")
-               && ((SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.booksId.inTable(@"bk_user_bill_type")
-                    && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.userId.inTable(@"bk_user_bill_type")
-                   )
-                   || SSJUserBillTypeTable.billId.length() < 4
-               )
-               && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID()
-               && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
-               && SSJUserBillTypeTable.billType == type
-               && SSJUserChargeTable.fundId == fundId);
+            && ((SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.booksId.inTable(@"bk_user_bill_type")
+            && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.userId.inTable(@"bk_user_bill_type")
+    )
+            || SSJUserBillTypeTable.billId.length() < 4
+    )
+            && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID()
+            && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+            && SSJUserBillTypeTable.billType == type
+            && SSJUserChargeTable.fundId == fundId);
 
-    joinClause.join("bk_share_books_member" , WCDB::JoinClause::Type::Left).
+    joinClause.join("bk_share_books_member", WCDB::JoinClause::Type::Left).
             on(SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJShareBooksMemberTable.booksId.inTable(@"bk_share_books_member"));
 
     WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).
             where(SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member") == SSJShareBooksMemberStateNormal
-                  || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull()
-                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
-                  || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14");
+            || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull()
+            || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
+            || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14");
 
     WCTStatement *statement = [db prepare:statementSelect];
 
