@@ -204,6 +204,8 @@ typedef NS_ENUM(NSUInteger, SSJAdviceType) {
  - SSJSpecialBillIdFixedFinanceInterestExpense: 固收理财结算利息转出
  - SSJSpecialBillIdFixedFinanceInterestPay: 固收理财派发利息流水
  - SSJSpecialBillIdFixedFinanceServiceCharge: 固收理财手续费率（部分赎回，结算）
+ - SSJSpecialBillIdFixedFinanceCloseOutEarning: 固收理财平账收入
+ - SSJSpecialBillIdFixedFinanceCloseOutExpense: 固收理财平账支出
  */
 typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     SSJSpecialBillIdCloseOutEarning = 1,
@@ -234,6 +236,8 @@ typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     SSJSpecialBillIdFixedFinanceInterestExpense = 20,
     SSJSpecialBillIdFixedFinanceInterestPay = 21,
     SSJSpecialBillIdFixedFinanceServiceCharge = 22,
+    SSJSpecialBillIdFixedFinanceCloseOutEarning = 23,
+    SSJSpecialBillIdFixedFinanceCloseOutExpense = 24
 };
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
