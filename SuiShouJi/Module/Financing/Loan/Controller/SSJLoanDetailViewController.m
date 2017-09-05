@@ -265,6 +265,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
     switch (self.loanModel.type) {
         case SSJLoanTypeLend: {
             surplusTitle = @"剩余借出款";
+            if (surplus >= 0) {
+                surplusValue = [NSString stringWithFormat:@"%.2f", ABS(surplus)];
+            } else {
+                surplusValue = [NSString stringWithFormat:@"-%.2f", ABS(surplus)];
+            }
             surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
             sumTitle = @"借出总额";
             interestTitle = self.loanModel.closeOut ? @"利息收入" : @"已收利息";
@@ -275,7 +280,11 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
             
         case SSJLoanTypeBorrow: {
             surplusTitle = @"剩余欠款";
-            surplusValue = (surplus == 0) ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"-%.2f", surplus];
+            if (surplus > 0) {
+                surplusValue = [NSString stringWithFormat:@"-%.2f", ABS(surplus)];
+            } else {
+                surplusValue = [NSString stringWithFormat:@"%.2f", ABS(surplus)];
+            }
             sumTitle = @"欠款总额";
             interestTitle = self.loanModel.closeOut ? @"利息支出" : @"已还利息";
             paymentTitle = @"已还金额";
@@ -498,7 +507,7 @@ static NSString *const kSSJLoanDetailCellID = @"SSJLoanDetailCell";
         return nil;
     }] then:^RACSignal *{
         return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+            [SSJLoanHelper queryLoanChargeModeListWithLoanID:self.loanModel.ID success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
                 self.chargeModels = list;
                 [subscriber sendCompleted];
             } failure:^(NSError * _Nonnull error) {

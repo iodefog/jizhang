@@ -243,7 +243,7 @@ static NSUInteger kClostOutDateTag = 1004;
 
 - (RACSignal *)loadCompoundChargeModels {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJLoanHelper queryLoanChargeModeListWithLoanModel:self.loanModel success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
+        [SSJLoanHelper queryLoanChargeModeListWithLoanID:self.loanModel.ID success:^(NSArray<SSJLoanCompoundChargeModel *> * _Nonnull list) {
             self.chargeModels = list;
             [self initEndDate];
             [self initCompoundModel];
@@ -343,32 +343,32 @@ static NSUInteger kClostOutDateTag = 1004;
                 break;
         }
         
-        NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
+        NSString *preChargeID = SSJUUID();
         
         _compoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
-        _compoundModel.chargeModel.chargeId = SSJUUID();
+        _compoundModel.chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, chargeBillId];
         _compoundModel.chargeModel.fundId = self.loanModel.fundID;
         _compoundModel.chargeModel.billId = chargeBillId;
         _compoundModel.chargeModel.userId = SSJUSERID();
-        _compoundModel.chargeModel.loanId = loanID;
+        _compoundModel.chargeModel.loanId = self.loanModel.ID;
         _compoundModel.chargeModel.billDate = self.loanModel.endDate;
         _compoundModel.chargeModel.money = self.loanModel.jMoney;
         
         _compoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
-        _compoundModel.targetChargeModel.chargeId = SSJUUID();
+        _compoundModel.targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, targetChargeBillId];
         _compoundModel.targetChargeModel.fundId = self.loanModel.endTargetFundID;
         _compoundModel.targetChargeModel.billId = targetChargeBillId;
         _compoundModel.targetChargeModel.userId = SSJUSERID();
-        _compoundModel.targetChargeModel.loanId = loanID;
+        _compoundModel.targetChargeModel.loanId = self.loanModel.ID;
         _compoundModel.targetChargeModel.billDate = self.loanModel.endDate;
         _compoundModel.targetChargeModel.money = self.loanModel.jMoney;
         
         _compoundModel.interestChargeModel = [[SSJLoanChargeModel alloc] init];
-        _compoundModel.interestChargeModel.chargeId = SSJUUID();
+        _compoundModel.interestChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, interestChargeBillId];
         _compoundModel.interestChargeModel.fundId = self.loanModel.endTargetFundID;
         _compoundModel.interestChargeModel.billId = interestChargeBillId;
         _compoundModel.interestChargeModel.userId = SSJUSERID();
-        _compoundModel.interestChargeModel.loanId = loanID;
+        _compoundModel.interestChargeModel.loanId = self.loanModel.ID;
         _compoundModel.interestChargeModel.billDate = self.loanModel.endDate;
     }
 }

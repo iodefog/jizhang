@@ -27,10 +27,6 @@
     return nil;
 }
 
-+ (BOOL)subjectToDeletion {
-    return YES;
-}
-
 + (instancetype)table {
     return [[SSJBaseSyncTable alloc] init];
 }

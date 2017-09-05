@@ -60,38 +60,24 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             return;
         }
         
-//        // 到期未结算
-//        NSMutableArray *list1 = [NSMutableArray array];
-//        
-//        // 未到期已结算
-//        NSMutableArray *list2 = [NSMutableArray array];
-//        
-//        // 其他
-//        NSMutableArray *list3 = [NSMutableArray array];
-        
         NSMutableArray *list = [[NSMutableArray alloc] init];
-        
         while ([result next]) {
             SSJLoanModel *model = [SSJLoanModel modelWithResultSet:result];
             [list addObject:model];
-            
-//            NSDate *nowDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-            
-//            // 排序顺序：1.到期未结算 2.未到期已结算 3.其他
-//            if (!model.closeOut && [model.repaymentDate compare:nowDate] != NSOrderedAscending) {
-//                [list1 addObject:model];
-//            } else if (model.closeOut && [model.repaymentDate compare:nowDate] == NSOrderedAscending) {
-//                [list2 addObject:model];
-//            } else {
-//                [list3 addObject:model];
-//            }
         }
-        
         [result close];
         
-//        [list addObjectsFromArray:list1];
-//        [list addObjectsFromArray:list2];
-//        [list addObjectsFromArray:list3];
+        NSError *error = nil;
+        for (SSJLoanModel *model in list) {
+            if (![model caculateMoneyInDatabase:db error:&error]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
         
         if (success) {
             SSJDispatchMainAsync(^{
@@ -140,8 +126,8 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                               failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        NSString *sundryID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ? and ichargetype = ?", chargeID, @(SSJChargeIdTypeLoan)];
-        if (!sundryID) {
+        NSString *loanID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ? and ichargetype = ?", chargeID, @(SSJChargeIdTypeLoan)];
+        if (!loanID) {
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"查询不到此借贷流水"}]);
@@ -151,7 +137,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         
         NSError *error = nil;
-        NSString *loanID = [[sundryID componentsSeparatedByString:@"_"] firstObject];
         SSJLoanModel *model = [self queryForLoanModelWithLoanID:loanID database:db error:&error];
         if (error) {
             if (failure) {
@@ -179,7 +164,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         model.ID = [rs stringForColumn:@"loanid"];
         model.userID = [rs stringForColumn:@"cuserid"];
         model.lender = [rs stringForColumn:@"lender"];
-        model.jMoney = [rs doubleForColumn:@"jmoney"];
         model.fundID = [rs stringForColumn:@"cthefundid"];
         model.targetFundID = [rs stringForColumn:@"ctargetfundid"];
         model.endTargetFundID = [rs stringForColumn:@"cetarget"];
@@ -201,20 +185,93 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     [rs close];
     
+    [model caculateMoneyInDatabase:db error:error];
+    
     return model;
 }
 
-+ (void)queryLoanChargeModeListWithLoanModel:(SSJLoanModel *)loanModel
-                                     success:(void (^)(NSArray <SSJLoanCompoundChargeModel *>*list))success
-                                     failure:(void (^)(NSError *error))failure {
++ (NSArray<SSJLoanCompoundChargeModel *> *)queryLoanChargeModeListWithLoanID:(NSString *)loanID
+                                                                    database:(FMDatabase *)db
+                                                                       error:(NSError **)error {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    NSString *userID = nil;
+    NSString *fundID = nil;
+    SSJLoanType loanType = SSJLoanTypeLend;
+    
+    FMResultSet *rs = [db executeQuery:@"select cuserid, cthefundid, itype from bk_loan where loanid = ?", loanID];
+    while ([rs next]) {
+        userID = [rs stringForColumn:@"cuserid"];
+        fundID = [rs stringForColumn:@"cthefundid"];
+        loanType = [rs intForColumn:@"itype"];
+    }
+    [rs close];
+    
+    NSMutableArray *compoundModels = [NSMutableArray array];
+    double surplus = 0; // 剩余金额
+    
+    // 查询依赖借贷的转帐流水
+    rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cuserid = ? and ifunsid = ? and cid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", userID, fundID, loanID, @(SSJChargeIdTypeLoan)];
+    
+    while ([rs next]) {
+        SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+        chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
+        chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
+        chargeModel.billId = [rs stringForColumn:@"ibillid"];
+        chargeModel.loanId = [rs stringForColumn:@"cid"];
+        chargeModel.userId = userID;
+        chargeModel.icon = SSJBillTypeModel(chargeModel.billId).icon;
+        chargeModel.memo = [rs stringForColumn:@"cmemo"];
+        chargeModel.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+        chargeModel.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        chargeModel.money = [rs doubleForColumn:@"imoney"];
+        chargeModel.oldMoney = surplus;
+        chargeModel.type = loanType;
         
-        NSMutableArray *compoundModels = [NSMutableArray array];
-        double surplus = 0; // 剩余金额
+        chargeModel.chargeType = [self loanChargeTypeWithLoanType:chargeModel.type
+                                                           billID:chargeModel.billId
+                                                            error:error];
+        if (*error) {
+            return nil;
+        }
         
-        // 查询依赖借贷的转帐流水
-        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cuserid = ? and ifunsid = ? and cid like ? || '_%' and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", loanModel.userID, loanModel.fundID, loanModel.ID, @(SSJChargeIdTypeLoan)];
+        switch (chargeModel.chargeType) {
+            case SSJLoanCompoundChargeTypeCreate:
+                surplus = chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceIncrease:
+            case SSJLoanCompoundChargeTypeAdd:
+                surplus += chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeBalanceDecrease:
+            case SSJLoanCompoundChargeTypeRepayment:
+            case SSJLoanCompoundChargeTypeCloseOut:
+                surplus -= chargeModel.money;
+                break;
+                
+            case SSJLoanCompoundChargeTypeInterest:
+                break;
+        }
+        
+        SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        compoundModel.chargeModel = chargeModel;
+        if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
+            // 确保创建的流水在数组中第一个
+            [compoundModels insertObject:compoundModel atIndex:0];
+        } else {
+            [compoundModels addObject:compoundModel];
+        }
+    }
+    [rs close];
+    
+    
+    // 查询和第一次查询结果匹配的流水（例第一次查询结果是转入，这次查询就是转出、利息，反之一样）
+    for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {
+        
+        NSString *preChargeID = [[compoundModel.chargeModel.chargeId componentsSeparatedByString:@"_"] firstObject];
+        
+        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and ichargeid like ? || '_%' and cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, preChargeID, loanID, compoundModel.chargeModel.userId, @(SSJChargeIdTypeLoan)];
         
         while ([rs next]) {
             SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
@@ -222,89 +279,52 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
             chargeModel.billId = [rs stringForColumn:@"ibillid"];
             chargeModel.loanId = [rs stringForColumn:@"cid"];
-            chargeModel.userId = loanModel.userID;
-            chargeModel.icon = SSJBillTypeModel(chargeModel.billId).icon;
             chargeModel.memo = [rs stringForColumn:@"cmemo"];
             chargeModel.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
-            chargeModel.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
             chargeModel.money = [rs doubleForColumn:@"imoney"];
-            chargeModel.oldMoney = surplus;
-            chargeModel.type = loanModel.type;
-            
-            [self updateChargeTypeWithModel:chargeModel];
-            
-            switch (chargeModel.chargeType) {
-                case SSJLoanCompoundChargeTypeCreate:
-                    surplus = chargeModel.money;
-                    break;
-                    
-                case SSJLoanCompoundChargeTypeBalanceIncrease:
-                case SSJLoanCompoundChargeTypeAdd:
-                    surplus += chargeModel.money;
-                    break;
-                    
-                case SSJLoanCompoundChargeTypeBalanceDecrease:
-                case SSJLoanCompoundChargeTypeRepayment:
-                case SSJLoanCompoundChargeTypeCloseOut:
-                    surplus -= chargeModel.money;
-                    break;
-                    
-                case SSJLoanCompoundChargeTypeInterest:
-                    break;
-            }
-            
-            SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-            compoundModel.chargeModel = chargeModel;
-            if (compoundModel.chargeModel.chargeType == SSJLoanCompoundChargeTypeCreate) {
-                // 确保创建的流水在数组中第一个
-                [compoundModels insertObject:compoundModel atIndex:0];
+            chargeModel.userId = compoundModel.chargeModel.userId;
+            chargeModel.writeDate = compoundModel.chargeModel.writeDate;
+            chargeModel.type = compoundModel.chargeModel.type;
+            chargeModel.chargeType = [self loanChargeTypeWithLoanType:chargeModel.type
+                                                               billID:chargeModel.billId
+                                                                error:error];
+            if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
+                compoundModel.interestChargeModel = chargeModel;
             } else {
-                [compoundModels addObject:compoundModel];
+                compoundModel.targetChargeModel = chargeModel;
             }
         }
         [rs close];
         
-        
-        // 查询和第一次查询结果匹配的流水（例第一次查询结果是转入，这次查询就是转出、利息，反之一样）
-        for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {
-            
-            NSString *billDateStr = [compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            NSString *writeDateStr = [compoundModel.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            
-            FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cid, cmemo, cbilldate, imoney from bk_user_charge where ichargeid <> ? and cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2", compoundModel.chargeModel.chargeId, compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId,@(SSJChargeIdTypeLoan)];
-            
-            while ([rs next]) {
-                SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
-                chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
-                chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
-                chargeModel.billId = [rs stringForColumn:@"ibillid"];
-                chargeModel.loanId = [rs stringForColumn:@"cid"];
-                chargeModel.memo = [rs stringForColumn:@"cmemo"];
-                chargeModel.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
-                chargeModel.money = [rs doubleForColumn:@"imoney"];
-                chargeModel.userId = compoundModel.chargeModel.userId;
-                chargeModel.writeDate = compoundModel.chargeModel.writeDate;
-                chargeModel.type = compoundModel.chargeModel.type;
-                [self updateChargeTypeWithTargetModel:chargeModel];
-                if (chargeModel.chargeType == SSJLoanCompoundChargeTypeInterest) {
-                    compoundModel.interestChargeModel = chargeModel;
-                } else {
-                    compoundModel.targetChargeModel = chargeModel;
-                }
-            }
-            [rs close];
-            
-            rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ? and cuserid = ?", compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId];
-            while ([rs next]) {
-                compoundModel.lender = [rs stringForColumn:@"lender"];
-                compoundModel.closeOut = [rs boolForColumn:@"iend"];
-            }
-            [rs close];
+        rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ? and cuserid = ?", compoundModel.chargeModel.loanId, compoundModel.chargeModel.userId];
+        while ([rs next]) {
+            compoundModel.lender = [rs stringForColumn:@"lender"];
+            compoundModel.closeOut = [rs boolForColumn:@"iend"];
         }
-        
-        if (success) {
+        [rs close];
+    }
+    
+    return compoundModels;
+}
+
++ (void)queryLoanChargeModeListWithLoanID:(NSString *)loanID
+                                  success:(void (^)(NSArray<SSJLoanCompoundChargeModel *> *list))success
+                                  failure:(void (^)(NSError *error))failure {
+    
+    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        NSError *error = nil;
+        NSArray *list = [self queryLoanChargeModeListWithLoanID:loanID database:db error:&error];
+        if (error) {
             SSJDispatchMainAsync(^{
-                success(compoundModels);
+                if (failure) {
+                    failure(error);
+                }
+            });
+        } else {
+            SSJDispatchMainAsync(^{
+                if (success) {
+                    success(list);
+                }
             });
         }
     }];
@@ -478,7 +498,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     }
     
     // 将和借贷相关的流水operatortype改为2
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = ?, iversion = ?, cwritedate = ? where cid like ? || '_%' and ichargetype = ? and operatortype <> 2", @2, @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where cid = ? and ichargetype = ? and operatortype <> 2", @(SSJSyncVersion()), writeDate, model.ID, @(SSJChargeIdTypeLoan)]) {
         if (error) {
             *error = [db lastError];
         }
@@ -759,9 +779,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                          failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *sundryID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ?", chargeID];
+        NSString *loanID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ?", chargeID];
         
-        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cid = ? and ichargetype = ? and operatortype <> 2", sundryID, @(SSJChargeIdTypeLoan)];
+        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cid = ? and ichargetype = ? and operatortype <> 2", loanID, @(SSJChargeIdTypeLoan)];
         
         NSMutableArray *chargeModels = [NSMutableArray array];
         while ([rs next]) {
@@ -769,7 +789,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             model.chargeId = [rs stringForColumn:@"ichargeid"];
             model.fundId = [rs stringForColumn:@"ifunsid"];
             model.billId = [rs stringForColumn:@"ibillid"];
-            model.loanId = sundryID;
+            model.loanId = loanID;
             model.userId = [rs stringForColumn:@"cuserid"];
             model.memo = [rs stringForColumn:@"cmemo"];
             model.money = [rs doubleForColumn:@"imoney"];
@@ -778,8 +798,6 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             [chargeModels addObject:model];
         }
         [rs close];
-        
-        NSString *loanID = [[sundryID componentsSeparatedByString:@"_"] firstObject];
         
         rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ?", loanID];
         
@@ -792,9 +810,20 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
             NSString *rootId = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?", chargeModel.fundId];
-            if ([rootId isEqualToString:@"10"] || [rootId isEqualToString:@"11"]) {
+            if ([rootId isEqualToString:@"10"]
+                || [rootId isEqualToString:@"11"]) {
+                
                 chargeModel.type = [rootId isEqualToString:@"10"] ? SSJLoanTypeLend : SSJLoanTypeBorrow;
-                [self updateChargeTypeWithModel:chargeModel];
+                NSError *error = nil;
+                chargeModel.chargeType = [self loanChargeTypeWithLoanType:chargeModel.type billID:chargeModel.billId error:&error];
+                if (error) {
+                    SSJDispatchMainAsync(^{
+                        if (failure) {
+                            failure(error);
+                        }
+                    });
+                    return;
+                }
                 compoundModel.chargeModel = chargeModel;
             } else {
                 [self updateChargeTypeWithTargetModel:chargeModel];
@@ -1081,52 +1110,64 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     return YES;
 }
 
-+ (void)updateChargeTypeWithModel:(SSJLoanChargeModel *)model {
-    switch (model.type) {
++ (SSJLoanCompoundChargeType)loanChargeTypeWithLoanType:(SSJLoanType)loanType
+                                                 billID:(NSString *)billID
+                                                  error:(NSError **)error {
+    SSJLoanCompoundChargeType chargeType = SSJLoanCompoundChargeTypeCreate;
+    switch (loanType) {
         case SSJLoanTypeLend:
-            if ([model.billId isEqualToString:@"3"]) {
+            if ([billID isEqualToString:@"3"]) {
                 // 创建
-                model.chargeType = SSJLoanCompoundChargeTypeCreate;
-            } else if ([model.billId isEqualToString:@"4"]) {
+                chargeType = SSJLoanCompoundChargeTypeCreate;
+            } else if ([billID isEqualToString:@"4"]) {
                 // 结清
-                model.chargeType = SSJLoanCompoundChargeTypeCloseOut;
-            } else if ([model.billId isEqualToString:@"7"]) {
+                chargeType = SSJLoanCompoundChargeTypeCloseOut;
+            } else if ([billID isEqualToString:@"7"]) {
                 // 追加借出
-                model.chargeType = SSJLoanCompoundChargeTypeAdd;
-            } else if ([model.billId isEqualToString:@"8"]) {
+                chargeType = SSJLoanCompoundChargeTypeAdd;
+            } else if ([billID isEqualToString:@"8"]) {
                 // 收款
-                model.chargeType = SSJLoanCompoundChargeTypeRepayment;
-            } else if ([model.billId isEqualToString:@"9"]) {
+                chargeType = SSJLoanCompoundChargeTypeRepayment;
+            } else if ([billID isEqualToString:@"9"]) {
                 // 余额增加
-                model.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-            } else if ([model.billId isEqualToString:@"10"]) {
+                chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+            } else if ([billID isEqualToString:@"10"]) {
                 // 余额减少
-                model.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+                chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+            } else {
+                if (error) {
+                    *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数billID的值无效"}];
+                }
             }
             break;
             
         case SSJLoanTypeBorrow:
-            if ([model.billId isEqualToString:@"3"]) {
+            if ([billID isEqualToString:@"3"]) {
                 // 结清
-                model.chargeType = SSJLoanCompoundChargeTypeCloseOut;
-            } else if ([model.billId isEqualToString:@"4"]) {
+                chargeType = SSJLoanCompoundChargeTypeCloseOut;
+            } else if ([billID isEqualToString:@"4"]) {
                 // 创建
-                model.chargeType = SSJLoanCompoundChargeTypeCreate;
-            } else if ([model.billId isEqualToString:@"7"]) {
+                chargeType = SSJLoanCompoundChargeTypeCreate;
+            } else if ([billID isEqualToString:@"7"]) {
                 // 还款
-                model.chargeType = SSJLoanCompoundChargeTypeRepayment;
-            } else if ([model.billId isEqualToString:@"8"]) {
+                chargeType = SSJLoanCompoundChargeTypeRepayment;
+            } else if ([billID isEqualToString:@"8"]) {
                 // 追加欠款
-                model.chargeType = SSJLoanCompoundChargeTypeAdd;
-            } else if ([model.billId isEqualToString:@"9"]) {
+                chargeType = SSJLoanCompoundChargeTypeAdd;
+            } else if ([billID isEqualToString:@"9"]) {
                 // 余额减少
-                model.chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
-            } else if ([model.billId isEqualToString:@"10"]) {
+                chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+            } else if ([billID isEqualToString:@"10"]) {
                 // 余额增加
-                model.chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+                chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+            } else {
+                if (error) {
+                    *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数billID的值无效"}];
+                }
             }
             break;
     }
+    return chargeType;
 }
 
 + (void)updateChargeTypeWithTargetModel:(SSJLoanChargeModel *)model {
@@ -1261,8 +1302,7 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
     NSMutableSet *loanIDs = [NSMutableSet set];
     FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where ifunsid = ? and operatortype <> 2 and ichargetype = ?", fundID, @(SSJChargeIdTypeLoan)];
     while ([rs next]) {
-        NSString *loanID = [[[rs stringForColumn:@"cid"] componentsSeparatedByString:@"_"] firstObject];
-        [loanIDs addObject:loanID];
+        [loanIDs addObject:[rs stringForColumn:@"cid"]];
     }
     [rs close];
     

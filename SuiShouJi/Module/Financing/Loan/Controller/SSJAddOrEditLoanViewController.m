@@ -499,12 +499,11 @@ const int kMemoMaxLength = 15;
         if (_edited) {
             // 1.编辑可能会更改目标账户、日期，所以要保存所有余额变更流水
             // 2.因为详情页面中流水列表是根据billdate、writedate排序的，如果只update余额变更流水，顺序就会乱掉，所以要update所有流水
-            for (SSJLoanCompoundChargeModel *compoundModel in self.chargeModels) {
-                [saveChargeModels addObject:compoundModel];
-            }
+            [saveChargeModels addObjectsFromArray:self.chargeModels];
             
             // 如果有新的余额变更流水，就保存
             if (self.changeCompoundModel.chargeModel.money > 0) {
+                [self setCompoundChargeID:self.changeCompoundModel];
                 [saveChargeModels addObject:self.changeCompoundModel];
             }
         }
@@ -1052,6 +1051,12 @@ const int kMemoMaxLength = 15;
     }
 }
 
+- (void)setCompoundChargeID:(SSJLoanCompoundChargeModel *)compoundModel {
+    NSString *preChargeID = SSJUUID();
+    compoundModel.chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.chargeModel.billId];
+    compoundModel.targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.targetChargeModel.billId];
+}
+
 #pragma mark - Getter
 - (SSJLoanModel *)loanModel {
     if (!_loanModel) {
@@ -1104,23 +1109,21 @@ const int kMemoMaxLength = 15;
                     break;
             }
             
-            NSString *loanID = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
-            
             _createCompoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
-            _createCompoundModel.chargeModel.chargeId = SSJUUID();
             _createCompoundModel.chargeModel.billId = chargeBillId;
-            _createCompoundModel.chargeModel.loanId = loanID;
+            _createCompoundModel.chargeModel.loanId = self.loanModel.ID;
             _createCompoundModel.chargeModel.userId = SSJUSERID();
             _createCompoundModel.chargeModel.type = _type;
             _createCompoundModel.chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
-            _createCompoundModel.targetChargeModel.chargeId = SSJUUID();
             _createCompoundModel.targetChargeModel.billId = targetChargeBillId;
-            _createCompoundModel.targetChargeModel.loanId = loanID;
+            _createCompoundModel.targetChargeModel.loanId = self.loanModel.ID;
             _createCompoundModel.targetChargeModel.userId = SSJUSERID();
             _createCompoundModel.targetChargeModel.type = _type;
             _createCompoundModel.targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
+            
+            [self setCompoundChargeID:_createCompoundModel];
         }
     }
     return _createCompoundModel;
@@ -1130,18 +1133,14 @@ const int kMemoMaxLength = 15;
     if (!_changeCompoundModel) {
         _changeCompoundModel = [[SSJLoanCompoundChargeModel alloc] init];
         
-        NSString *cid = [NSString stringWithFormat:@"%@_%lld", self.loanModel.ID, SSJMilliTimestamp()];
-        
         _changeCompoundModel.chargeModel = [[SSJLoanChargeModel alloc] init];
-        _changeCompoundModel.chargeModel.chargeId = SSJUUID();
         _changeCompoundModel.chargeModel.userId = SSJUSERID();
-        _changeCompoundModel.chargeModel.loanId = cid;
+        _changeCompoundModel.chargeModel.loanId = self.loanModel.ID;
         _changeCompoundModel.chargeModel.type = self.loanModel.type;
         
         _changeCompoundModel.targetChargeModel = [[SSJLoanChargeModel alloc] init];
-        _changeCompoundModel.targetChargeModel.chargeId = SSJUUID();
         _changeCompoundModel.targetChargeModel.userId = SSJUSERID();
-        _changeCompoundModel.targetChargeModel.loanId = cid;
+        _changeCompoundModel.targetChargeModel.loanId = self.loanModel.ID;
         _changeCompoundModel.targetChargeModel.type = self.loanModel.type;
     }
     return _changeCompoundModel;

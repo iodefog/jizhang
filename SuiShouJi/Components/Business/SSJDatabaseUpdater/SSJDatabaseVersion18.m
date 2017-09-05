@@ -53,6 +53,9 @@
     return nil;
 }
 
+/**
+ 插入固收理财特殊类别
+ */
 + (NSError *)insertSpecialBillTypeWithDatabase:(FMDatabase *)db {
     for (SSJSpecialBillId billID = SSJSpecialBillIdFixedFinanceChangeEarning;
          billID <= SSJSpecialBillIdFixedFinanceServiceCharge;
@@ -72,16 +75,21 @@
     return nil;
 }
 
+/**
+ 升级借贷流水；将原有的流水改为删除状态，重新生成一份新的流水，chargeid用新的拼接格式
+ */
 + (NSError *)updateLoanChargesWithDatabase:(FMDatabase *)db {
     NSMutableArray *chargeModels = [NSMutableArray array];
-    FMResultSet *rs = [db executeQuery:@"select ichargeid, ibillid, ifunsid, cid, cuserid, cbilldate, cwritedate from bk_user_charge where ichargetype = ? and operatortype <> 2 order by cwritedate", @(SSJChargeIdTypeLoan)];
+    FMResultSet *rs = [db executeQuery:@"select * from bk_user_charge where ichargetype = ? and operatortype <> 2 order by cwritedate", @(SSJChargeIdTypeLoan)];
     while ([rs next]) {
         SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
         model.chargeId = [rs stringForColumn:@"ichargeid"];
-        model.billId = [rs stringForColumn:@"ibillid"];
         model.fundId = [rs stringForColumn:@"ifunsid"];
+        model.billId = [rs stringForColumn:@"ibillid"];
         model.loanId = [rs stringForColumn:@"cid"];
         model.userId = [rs stringForColumn:@"cuserid"];
+        model.money = [rs doubleForColumn:@"money"];
+        model.memo = [rs stringForColumn:@"cmemo"];
         model.billDate = [NSDate dateWithString:[rs stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
         model.writeDate = [NSDate dateWithString:[rs stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
         [chargeModels addObject:model];
@@ -102,19 +110,19 @@
     NSMutableArray *compoundModels = [NSMutableArray array];
     
     for (SSJLoanChargeModel *model in models) {
-
-        NSString *loanOutFundID = [NSString stringWithFormat:@"%@-5", model.userId];
-        NSString *borrowFundID = [NSString stringWithFormat:@"%@-6", model.userId];
-        
-        if ([model.fundId isEqualToString:loanOutFundID]
-            || [model.fundId isEqualToString:borrowFundID]) {
+        @autoreleasepool {
+            SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", model.fundId];
             
-            SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
-            compoundModel.chargeModel = model;
-            [compoundModels addObject:compoundModel];
-            
-        } else {
-            [targetModels addObject:model];
+            if (fundType == SSJFinancingParentPaidLeave
+                || fundType == SSJFinancingParentDebt) {
+                
+                SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+                compoundModel.chargeModel = model;
+                [compoundModels addObject:compoundModel];
+                
+            } else {
+                [targetModels addObject:model];
+            }
         }
     }
     
@@ -142,48 +150,77 @@
         }
     }
     
-    __block NSError *tError = nil;
-    __block int64_t timestamp = SSJMilliTimestamp();
     [compoundModels enumerateObjectsUsingBlock:^(SSJLoanCompoundChargeModel *compoundModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        timestamp += idx;
-        NSString *cid = [NSString stringWithFormat:@"%@_%lld", compoundModel.chargeModel.loanId, timestamp];
-        
-        if (![self updateLoanChargeWithModel:compoundModel.chargeModel cid:cid db:db error:&tError]) {
-            return;
-        }
-        
-        if (![self updateLoanChargeWithModel:compoundModel.targetChargeModel cid:cid db:db error:&tError]) {
-            return;
-        }
-        
-        if (compoundModel.interestChargeModel) {
-            if (![self updateLoanChargeWithModel:compoundModel.interestChargeModel cid:cid db:db error:&tError]) {
+        @autoreleasepool {
+            int billID = [compoundModel.chargeModel.billId intValue];
+            int targetBillID = [compoundModel.targetChargeModel.billId intValue];
+            
+            NSString *preChargeID = billID < targetBillID ? compoundModel.chargeModel.chargeId : compoundModel.targetChargeModel.chargeId;
+            
+            NSString *chargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.chargeModel.billId];
+            if (![self upgradeChargeWithModel:compoundModel.chargeModel
+                                  newChargeID:chargeID
+                                     database:db
+                                        error:error]) {
+                *stop = YES;
                 return;
+            }
+            
+            
+            NSString *targetChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.targetChargeModel.billId];
+            if (![self upgradeChargeWithModel:compoundModel.targetChargeModel
+                                  newChargeID:targetChargeID
+                                     database:db
+                                        error:error]) {
+                *stop = YES;
+                return;
+            }
+            
+            if (compoundModel.interestChargeModel) {
+                NSString *interestChargeID = [NSString stringWithFormat:@"%@_%@", preChargeID, compoundModel.interestChargeModel.billId];
+                if (![self upgradeChargeWithModel:compoundModel.interestChargeModel
+                                      newChargeID:interestChargeID
+                                         database:db
+                                            error:error]) {
+                    *stop = YES;
+                    return;
+                }
             }
         }
     }];
     
-    if (tError) {
-        if (error) {
-            *error = tError;
-        }
+    if (error && *error) {
         return NO;
     }
     
     return YES;
 }
 
-+ (BOOL)updateLoanChargeWithModel:(SSJLoanChargeModel *)model
-                              cid:(NSString *)cid
-                               db:(FMDatabase *)db
-                            error:(NSError **)error {
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    if (![db executeUpdate:@"update bk_user_charge set cid = ?, operatortype = 1, iversion = ?, cwritedate = ? where ichargeid = ? and operatortype <> 2", cid, @(SSJSyncVersion()), writeDate, model.chargeId]) {
-        if (error) {
-            *error = [db lastError];
-        }
++ (BOOL)upgradeChargeWithModel:(SSJLoanChargeModel *)model
+                   newChargeID:(NSString *)newChargeID
+                      database:(FMDatabase *)db
+                         error:(NSError **)error {
+    
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid = ? and operatortype <> 2", @(SSJSyncVersion()), [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"], model.chargeId]) {
         return NO;
     }
+    
+    NSDictionary *params = @{@"ichargeid":newChargeID,
+                             @"ifunsid":model.fundId,
+                             @"ibillid":model.billId,
+                             @"cid":model.loanId,
+                             @"cuserid":model.userId,
+                             @"cmemo":model.memo,
+                             @"cbilldate":model.billDate,
+                             @"imoney":@(model.money),
+                             @"iversion":@(SSJSyncVersion()),
+                             @"operatortype":@0,
+                             @"cwritedate":[model.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]};
+    
+    if (![db executeUpdate:@"insert into bk_user_charge (ichargeid, ifunsid, ibillid, cid, cuserid, cmemo, cbilldate, imoney, iversion, operatortype, cwritedate) values (:ichargeid, :ifunsid, :ibillid, :cid, :cuserid, :cmemo, :cbilldate, :imoney, :iversion, :operatortype, :cwritedate)" withParameterDictionary:params]) {
+        return NO;
+    }
+    
     return YES;
 }
 
