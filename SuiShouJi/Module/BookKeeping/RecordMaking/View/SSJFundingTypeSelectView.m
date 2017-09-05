@@ -8,9 +8,9 @@
 
 #import "SSJFundingTypeSelectView.h"
 #import "SSJFundingTypeTableViewCell.h"
-#import "SSJFundingItem.h"
+#import "SSJFinancingHomeitem.h"
 #import "SSJDatabaseQueue.h"
-#import "FMDB.h"
+#import "SSJDatabaseQueue.h"
 
 @interface SSJFundingTypeSelectView()
 @property (nonatomic,strong) UIView *titleView;
@@ -179,7 +179,7 @@
         FMResultSet * rs = [db executeQuery:@"select a.* from bk_fund_info  a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent <> 11 and a.cparent <> 10 and a.cparent <> 17 order by a.iorder",SSJUSERID()];
         _items = [[NSMutableArray alloc]init];
         while ([rs next]) {
-            SSJFundingItem *item = [[SSJFundingItem alloc]init];
+            SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
             item.fundingColor = [rs stringForColumn:@"CCOLOR"];
             item.fundingIcon = [rs stringForColumn:@"CICOIN"];
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
@@ -189,7 +189,7 @@
                 [_items addObject:item];
             }
         }
-        SSJFundingItem *item = [[SSJFundingItem alloc]init];
+        SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc]init];
         item.fundingName = @"添加新的资金账户";
         item.fundingIcon = @"add";
         [_items addObject:item];

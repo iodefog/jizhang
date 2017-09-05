@@ -25,6 +25,8 @@
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJListMenu.h"
 #import "SSJFinancingStore.h"
+#import "SSJFundingTypeManager.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #define NUM @"+-.0123456789"
 
@@ -83,13 +85,14 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    if (!self.financingItem) {
-        if (self.cardType == SSJCrediteCardTypeCrediteCard) {
-            self.title = @"添加信用卡账户";
-        } else {
-            self.title = @"添加蚂蚁花呗账户";
-        }
+    SSJFundingParentmodel *parentModel = [[SSJFundingTypeManager sharedManager] modelForFundId:self.selectParent];
+    
+    if (!self.financingItem.fundingID) {
+        self.title = [NSString stringWithFormat:@"添加%@账户",parentModel.name];
         self.financingItem = [[SSJFinancingHomeitem alloc] init];
+        self.financingItem.fundingParent = parentModel.ID;
+        self.financingItem.fundingParentName = parentModel.name;
+        self.financingItem.fundingIcon = parentModel.icon;
         self.financingItem.cardItem = [[SSJCreditCardItem alloc] init];
         self.financingItem.cardItem.settleAtRepaymentDay = YES;
         self.financingItem.cardItem.cardBillingDay = 1;
@@ -98,6 +101,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
         self.financingItem.startColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].startColor;
         self.financingItem.endColor = [[SSJFinancingGradientColorItem defualtColors] firstObject].endColor;
     }else{
+        self.title = [NSString stringWithFormat:@"编辑%@账户",parentModel.name];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(rightButtonClicked:)];
         self.navigationItem.rightBarButtonItem = rightItem;
         if (!self.financingItem.cardItem) {
@@ -115,13 +119,9 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             self.financingItem.cardItem.cardRepaymentDay = 10;
         }
     }
-    if (self.cardType == SSJCrediteCardTypeCrediteCard) {
-        self.title = @"编辑信用卡账户";
-    } else {
-        self.title = @"编辑蚂蚁花呗账户";
-    }
+
     
-    if (self.cardType == SSJCrediteCardTypeAlipay) {
+    if (![parentModel.ID isEqualToString:@"3"]) {
         self.titles = @[@[kTitle1,kTitle3,kTitle4],@[kTitle7,kTitle8],@[kTitle9],@[kTitle10,kTitle5]];
         self.images = @[@[@"loan_person",@"loan_yield",@"loan_money"],@[@"loan_zhangdanri",@"loan_huankuanri"],@[@"loan_clock"  ],@[@"card_yanse",@"loan_memo"]];
         
@@ -459,9 +459,15 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     
     [SSJFinancingStore saveFundingItem:self.financingItem Success:^(SSJFinancingHomeitem *item) {
         @strongify(self);
-        [self.navigationController popViewControllerAnimated:YES];
+        UIViewController *lastVc = [self.navigationController.viewControllers objectAtIndex:self.navigationController.viewControllers.count - 2];
+        if ([lastVc isKindOfClass:[SSJFundingTypeSelectViewController class]]) {
+            UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
+            [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
+        } else {
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
         if (self.addNewCardBlock) {
-            self.addNewCardBlock(self.financingItem);
+            self.addNewCardBlock(item);
         }
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError *error) {
@@ -615,7 +621,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     if (textField.tag == 100) {
-        self.financingItem.cardItem.fundingName = textField.text;
+        self.financingItem.fundingName = textField.text;
     }else if (textField.tag == 101){
         self.financingItem.cardItem.cardLimit = [textField.text doubleValue];
     }else if (textField.tag == 102){

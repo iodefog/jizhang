@@ -173,6 +173,7 @@ static NSString *kCellID = @"cellID";
 }
 
 - (void)popToVcWithModel:(SSJFundingParentmodel *)model {
+  
   if ([model.ID isEqualToString:@"10"]) {
     SSJAddOrEditLoanViewController *addLoanController = [[SSJAddOrEditLoanViewController alloc] init];
     addLoanController.type = SSJLoanTypeLend;
@@ -191,8 +192,9 @@ static NSString *kCellID = @"cellID";
   }else if ([model.ID isEqualToString:@"3"]){
     SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
     newCreditCardVc.cardType = SSJCrediteCardTypeCrediteCard;
+    newCreditCardVc.selectParent = model.ID;
     __weak typeof(self) weakSelf = self;
-    newCreditCardVc.addNewCardBlock = ^(SSJBaseCellItem *newItem){
+    newCreditCardVc.addNewCardBlock = ^(SSJFinancingHomeitem *newItem){
       if (weakSelf.addNewFundingBlock) {
         weakSelf.addNewFundingBlock(newItem);
       }
@@ -200,9 +202,10 @@ static NSString *kCellID = @"cellID";
     [self.navigationController pushViewController:newCreditCardVc animated:YES];
   } else if ([model.ID isEqualToString:@"16"]){
     SSJNewCreditCardViewController *newCreditCardVc = [[SSJNewCreditCardViewController alloc]init];
+    newCreditCardVc.selectParent = model.ID;
     newCreditCardVc.cardType = SSJCrediteCardTypeAlipay;
     __weak typeof(self) weakSelf = self;
-    newCreditCardVc.addNewCardBlock = ^(SSJBaseCellItem *newItem){
+    newCreditCardVc.addNewCardBlock = ^(SSJFinancingHomeitem *newItem){
       if (weakSelf.addNewFundingBlock) {
         weakSelf.addNewFundingBlock(newItem);
       }
