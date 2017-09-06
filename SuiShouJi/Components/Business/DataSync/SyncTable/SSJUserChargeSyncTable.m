@@ -59,7 +59,7 @@
            forUserId:(NSString *)userId
           inDatabase:(FMDatabase *)db
                error:(NSError **)error {
-    
+
     FMResultSet *rs = [db executeQuery:@"select cbooksid from bk_share_books_member where cmemberid = ? and istate != ?", userId, @(SSJShareBooksMemberStateNormal)];
     while ([rs next]) {
         [self.quitBooks addObject:[rs stringForColumn:@"cbooksid"]];
@@ -97,29 +97,26 @@
             return NO;
         }
         
-        NSInteger operatortype = [record[@"operatortype"] integerValue];
-        if (operatortype != 2) {
-            // 查询本地是否有相同configid和billdate的其它有效流水
-            FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and cid = ? and ichargetype = ? and cuserid = ? and ichargeid <> ? and operatortype <> 2", record[@"cbilldate"], record[@"cid"], @(SSJChargeIdTypeCircleConfig) , userId, record[@"ichargeid"]];
-            if (!resultSet) {
+        // 查询本地是否有相同configid和billdate的其它有效流水
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, operatortype, cwritedate from bk_user_charge where cbilldate = ? and cid = ? and ichargetype = ? and cuserid = ? and ichargeid <> ? and operatortype <> 2", record[@"cbilldate"], record[@"cid"], @(SSJChargeIdTypeCircleConfig), userId, record[@"ichargeid"]];
+        if (!resultSet) {
+            return NO;
+        }
+        
+        // 本地有相同configid和billdate的流水
+        while ([resultSet next]) {
+            // 保留修改时间最新的记录
+            NSString *localDateStr = [resultSet stringForColumn:@"cwritedate"];
+            NSDate *localDate = [NSDate dateWithString:localDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            NSDate *mergeDate = [NSDate dateWithString:record[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            if ([mergeDate compare:localDate] == NSOrderedAscending) {
+                [resultSet close];
                 return NO;
             }
             
-            // 本地有相同configid和billdate的流水
-            while ([resultSet next]) {
-                // 保留修改时间最新的记录
-                NSString *localDateStr = [resultSet stringForColumn:@"cwritedate"];
-                NSDate *localDate = [NSDate dateWithString:localDateStr formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                NSDate *mergeDate = [NSDate dateWithString:record[@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                if ([mergeDate compare:localDate] == NSOrderedAscending) {
-                    [resultSet close];
-                    return NO;
-                }
-                
-                [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
-            }
-            [resultSet close];
+            [db executeUpdate:@"update bk_user_charge set operatortype = 2 where ichargeid = ?", [resultSet stringForColumn:@"ichargeid"]];
         }
+        [resultSet close];
     }
     
     return YES;
