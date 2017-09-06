@@ -7,7 +7,7 @@ def shared_pods
     pod 'AFNetworking', '~> 2.5.4'
     pod 'YYKeyboardManager'
     pod 'YYText'
-    pod 'Meiqia', '~> 3.3.1'
+    pod 'Meiqia', '~> 3.3.8'
     pod 'MLeaksFinder'
 #    pod 'JSPatch'
 #    pod 'JSPatch/Extensions'

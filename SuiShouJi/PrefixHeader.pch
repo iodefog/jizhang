@@ -51,7 +51,8 @@
 #import <ReactiveCocoa/RACEXTScope.h>
 #import <ReactiveCocoa/RACReturnSignal.h>
 
-#import <YYWebImage/YYWebImage.h>
+#import "YYImage.h"
+#import "YYCache.h"
 
 #import "MBProgressHUD.h"
 

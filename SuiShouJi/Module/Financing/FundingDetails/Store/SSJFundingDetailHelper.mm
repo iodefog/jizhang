@@ -673,12 +673,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]) {
         SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc] init];
         cardItem.cardLimit = credit.cardQuota;
-        cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        if (![item.fundingParent isEqualToString:@"3"]) {
+            cardItem.settleAtRepaymentDay = YES;
+        } else {
+            cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        }
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
         cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
-                                                   fromTable:@"bk_credit_repayment"
+                                                   fromTable:@"bk_credit_repayme"
                                                        where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
