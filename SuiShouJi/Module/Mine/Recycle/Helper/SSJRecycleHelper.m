@@ -774,8 +774,6 @@
         SSJSpecialBillId billID = [model.billID integerValue];
         if (billID == SSJSpecialBillIdFixedFinanceChangeEarning
             || billID == SSJSpecialBillIdFixedFinanceChangeExpenseg
-            || billID == SSJSpecialBillIdFixedFinanceBalanceRollIn
-            || billID == SSJSpecialBillIdFixedFinanceBalanceRollOut
             || billID == SSJSpecialBillIdFixedFinanceInterestEarning
             || billID == SSJSpecialBillIdFixedFinanceInterestExpense) {
             

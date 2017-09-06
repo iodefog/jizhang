@@ -202,8 +202,6 @@ typedef NS_ENUM(NSUInteger, SSJAdviceType) {
  
  - SSJSpecialBillIdFixedFinanceChangeEarning: 固收理财变更转入（对固收理财账户而言，是追加投资）
  - SSJSpecialBillIdFixedFinanceChangeExpenseg: 固收理财变更转出（对固收理财账户而言，是部分赎回）
- - SSJSpecialBillIdFixedFinanceBalanceRollIn: 固收理财余额转入
- - SSJSpecialBillIdFixedFinanceBalanceRollOut: 固收理财余额转出
  - SSJSpecialBillIdFixedFinanceInterestEarning: 固收理财结算利息转入
  - SSJSpecialBillIdFixedFinanceInterestExpense: 固收理财结算利息转出
  - SSJSpecialBillIdFixedFinanceInterestPay: 固收理财派发利息流水；对应固收理财账户
@@ -234,14 +232,12 @@ typedef NS_ENUM(NSUInteger, SSJSpecialBillId) {
     //--------------- v2.8.0新增  ---------------//
     SSJSpecialBillIdFixedFinanceChangeEarning = 15,
     SSJSpecialBillIdFixedFinanceChangeExpenseg = 16,
-    SSJSpecialBillIdFixedFinanceBalanceRollIn = 17,
-    SSJSpecialBillIdFixedFinanceBalanceRollOut = 18,
-    SSJSpecialBillIdFixedFinanceInterestEarning = 19,
-    SSJSpecialBillIdFixedFinanceInterestExpense = 20,
-    SSJSpecialBillIdFixedFinanceInterestPay = 21,
-    SSJSpecialBillIdFixedFinanceServiceCharge = 22,
-    SSJSpecialBillIdFixedFinanceCloseOutEarning = 23,
-    SSJSpecialBillIdFixedFinanceCloseOutExpense = 24
+    SSJSpecialBillIdFixedFinanceInterestEarning = 17,
+    SSJSpecialBillIdFixedFinanceInterestExpense = 18,
+    SSJSpecialBillIdFixedFinanceInterestPay = 19,
+    SSJSpecialBillIdFixedFinanceServiceCharge = 20,
+    SSJSpecialBillIdFixedFinanceCloseOutEarning = 21,
+    SSJSpecialBillIdFixedFinanceCloseOutExpense = 22
 };
 
 typedef NS_ENUM(NSInteger, SSJReminderType) {
