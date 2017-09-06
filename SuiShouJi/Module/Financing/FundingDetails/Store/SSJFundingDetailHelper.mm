@@ -802,8 +802,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([repaymentDate isEarlierThanOrEqualTo:billdate]) {
         repaymentDate = [repaymentDate dateBySubtractingMonths:1];
     }
-    NSInteger daysFromBillDay = [billdate daysFrom:today] + 1 > 0 ? [billdate daysFrom:today] : 0;
-    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] + 1 > 0 ? [repaymentDate daysFrom:today] : 0;
+    NSInteger daysFromBillDay = [billdate daysFrom:today] + 1 > 0 ? [billdate daysFrom:today] + 1 : 0;
+    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] + 1 > 0 ? [repaymentDate daysFrom:today] + 1 : 0;
     NSInteger minumDay = MIN(daysFromBillDay , daysFromRepaymentDay);
     if (daysFromRepaymentDay == 0 && daysFromBillDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBillDay];
