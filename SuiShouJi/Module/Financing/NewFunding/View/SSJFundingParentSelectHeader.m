@@ -69,7 +69,7 @@
     
     [self.seperatorView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self);
-        make.height.mas_equalTo(1).dividedBy([UIScreen mainScreen].scale);
+        make.height.mas_equalTo(1 / [UIScreen mainScreen].scale);
         make.bottom.mas_equalTo(self);
     }];
     
@@ -105,7 +105,7 @@
     if (!_arrowImage) {
         _arrowImage = [[UIImageView alloc] init];
         _arrowImage.image = [[UIImage imageNamed:@"ft_arrow"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _arrowImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+        _arrowImage.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
     }
     return _arrowImage;
 }

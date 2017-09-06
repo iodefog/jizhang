@@ -369,16 +369,15 @@
         NSString *userid = SSJUSERID();
         SSJFundInfoTable *fundInfoTable = [db getOneObjectOfClass:SSJFundInfoTable.class
                                                         fromTable:@"bk_fund_info"
-                                                            where:SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"16"])
+                                                            where:SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"16",@"17"])
                                                                   && SSJFundInfoTable.userId == SSJUSERID()
                                                                   && SSJFundInfoTable.operatorType != 2
-                                                          orderBy:SSJFundInfoTable.fundOrder.order(WCTOrderedDescending)
-                                                           offset:1];
+                                                          orderBy:SSJFundInfoTable.fundOrder.order(WCTOrderedAscending)];
         SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
         item.fundingColor = fundInfoTable.fundColor;
         item.fundingIcon = fundInfoTable.fundIcon;
         item.fundingID = fundInfoTable.fundId;
-        item.fundingName = fundInfoTable.fundColor;
+        item.fundingName = fundInfoTable.fundName;
         item.fundingParent = fundInfoTable.fundParent;
         item.fundingMemo = fundInfoTable.memo;
         item.fundingOrder = fundInfoTable.fundOrder;

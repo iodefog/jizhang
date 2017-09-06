@@ -434,9 +434,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 listItem.repaymentForOtherMonthMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
                                                                       fromTable:@"bk_credit_repayment"
                                                                           where:SSJCreditRepaymentTable.userId == userId
-                                                                                && SSJCreditRepaymentTable.repaymentMonth == listItem.month
+                                                                                && SSJCreditRepaymentTable.repaymentMonth != listItem.month
                                                                                 && SSJCreditRepaymentTable.cardId == cardId
-                                                                                && SSJCreditRepaymentTable.operatorType == 2
+                                                                                && SSJCreditRepaymentTable.operatorType != 2
                                                                                 && SSJCreditRepaymentTable.instalmentCount == 0
                                                                                 && SSJCreditRepaymentTable.applyDate.between([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
                                                             doubleValue];
