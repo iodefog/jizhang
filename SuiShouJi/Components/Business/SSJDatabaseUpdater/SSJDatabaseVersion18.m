@@ -23,6 +23,11 @@
         return error;
     }
     
+    error = [self createFixedFinanceProductTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
     error = [self insertSpecialBillTypeWithDatabase:db];
     if (error) {
         return error;
@@ -50,6 +55,35 @@
         return [db lastError];
     }
     
+    return nil;
+}
+
++ (NSError *)createFixedFinanceProductTableWithDatabase:(FMDatabase *)db {
+    if (![db executeUpdate:@"CREATE TABLE IF TABLE BK_FIXED_FINANCE_PRODUCT (\
+                                                   CPRODUCTID TEXT NOT NULL,\
+                                                   CUSERID TEXT NOT NULL,\
+                                                   CPRODUCTNAME TEXT NOT NULL,\
+                                                   CMEMO TEXT,\
+                                                   CTHISFUNDID TEXT NOT NULL,\
+                                                   CTARGETFUNDID TEXT NOT NULL,\
+                                                   CETARGETFUNDID TEXT,\
+                                                   IMONEY TEXT NOT NULL,\
+                                                   IRATE NUMERIC,\
+                                                   IRATETYPE INTEGER NOT NULL,\
+                                                   ITIME NUMERIC NOT NULL,\
+                                                   ITIMETYPE INTEGER,\
+                                                   INTERESTTYPE INTEGER,\
+                                                   CSTARTDATE TEXT NOT NULL,\
+                                                   CENDDATE TEXT,\
+                                                   ISEND INTEGER,\
+                                                   CREMINDID TEXT,\
+                                                   CWRITEDATE TEXT NOT NULL,\
+                                                   IVERSION INTEGER NOT NULL,\
+                                                   OPERATORTYPE INTEGER NOT NULL,\
+                                                   PRIMARY KEY(CPRODUCTID)\
+                                                   )"]) {
+        return [db lastError];
+    }
     return nil;
 }
 
