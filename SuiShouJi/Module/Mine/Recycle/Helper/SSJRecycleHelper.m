@@ -614,6 +614,7 @@
                                                            fundID:fundID
                                                        inDatabase:db];
     
+    NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
     for (_SSJRecycleChargeModel *model in chargeModels) {
         // 恢复目标资金账户
         if (![self recoverTargetFundWithChargeModel:model
@@ -623,14 +624,16 @@
                                               error:error]) {
             return NO;
         }
-    }
-    
-    // 恢复所有和此账户关联的周期转账流水
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ichargetype = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), @(SSJChargeIdTypeCyclicTransfer), clientDate]) {
-        if (error) {
-            *error = [db lastError];
+        
+        // 恢复周期转账流水；因为老版本（2.8.0之前）周期转账流水是通过writedate匹配的，所以要兼容老版本writedate不能完全相同
+        NSString *increaseWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, iversion = ?, cwritedate = ? where cid = ? and ichargetype = ? and cwritedate = ? and operatortype = 2", @(SSJSyncVersion()), increaseWriteDate, model.sundryID, @(SSJChargeIdTypeCyclicTransfer), clientDate]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
         }
-        return NO;
+        timestamp += 0.001;
     }
     
     return YES;
