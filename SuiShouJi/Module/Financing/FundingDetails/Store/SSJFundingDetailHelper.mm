@@ -673,12 +673,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]) {
         SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc] init];
         cardItem.cardLimit = credit.cardQuota;
-        cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        if (![item.fundingParent isEqualToString:@"3"]) {
+            cardItem.settleAtRepaymentDay = YES;
+        } else {
+            cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        }
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
         cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
-                                                   fromTable:@"bk_credit_repayment"
+                                                   fromTable:@"bk_credit_repayme"
                                                        where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
@@ -802,8 +806,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([repaymentDate isEarlierThanOrEqualTo:billdate]) {
         repaymentDate = [repaymentDate dateBySubtractingMonths:1];
     }
-    NSInteger daysFromBillDay = [billdate daysFrom:today] + 1 > 0 ? [billdate daysFrom:today] : 0;
-    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] + 1 > 0 ? [repaymentDate daysFrom:today] : 0;
+    NSInteger daysFromBillDay = [billdate daysFrom:today] + 1 > 0 ? [billdate daysFrom:today] + 1 : 0;
+    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] + 1 > 0 ? [repaymentDate daysFrom:today] + 1 : 0;
     NSInteger minumDay = MIN(daysFromBillDay , daysFromRepaymentDay);
     if (daysFromRepaymentDay == 0 && daysFromBillDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBillDay];

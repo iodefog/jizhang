@@ -14,6 +14,8 @@
 #import "LOTAnimationCache.h"
 #import "LOTCompositionContainer.h"
 
+static NSString * const kCompContainerAnimationKey = @"play";
+
 @implementation LOTAnimationView {
   LOTCompositionContainer *_compContainer;
   NSNumber *_playRangeStartFrame;
@@ -31,28 +33,8 @@
 }
 
 + (nonnull instancetype)animationNamed:(nonnull NSString *)animationName inBundle:(nonnull NSBundle *)bundle {
-  NSArray *components = [animationName componentsSeparatedByString:@"."];
-  animationName = components.firstObject;
-  
-  LOTComposition *comp = [[LOTAnimationCache sharedCache] animationForKey:animationName];
-  if (comp) {
-    return [[LOTAnimationView alloc] initWithModel:comp inBundle:bundle];
-  }
-  
-  NSError *error;
-  NSString *filePath = [bundle pathForResource:animationName ofType:@"json"];
-  NSData *jsonData = [[NSData alloc] initWithContentsOfFile:filePath];
-  NSDictionary  *JSONObject = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                         options:0 error:&error] : nil;
-  if (JSONObject && !error) {
-    LOTComposition *laScene = [[LOTComposition alloc] initWithJSON:JSONObject withAssetBundle:bundle];
-    [[LOTAnimationCache sharedCache] addAnimation:laScene forKey:animationName];
-    LOTAnimationView *animationView = [[LOTAnimationView alloc] initWithModel:laScene inBundle:bundle];
-    animationView.cacheKey = animationName;
-    return animationView;
-  }
-  NSLog(@"%s: Animation Not Found", __PRETTY_FUNCTION__);
-  return [[LOTAnimationView alloc] initWithModel:nil inBundle:nil];
+  LOTComposition *comp = [LOTComposition animationNamed:animationName inBundle:bundle];
+  return [[LOTAnimationView alloc] initWithModel:comp inBundle:bundle];
 }
 
 + (nonnull instancetype)animationFromJSON:(nonnull NSDictionary *)animationJSON {
@@ -60,33 +42,13 @@
 }
 
 + (nonnull instancetype)animationFromJSON:(nullable NSDictionary *)animationJSON inBundle:(nullable NSBundle *)bundle {
-  LOTComposition *laScene = [[LOTComposition alloc] initWithJSON:animationJSON withAssetBundle:bundle];
-  return [[LOTAnimationView alloc] initWithModel:laScene inBundle:bundle];
+  LOTComposition *comp = [LOTComposition animationFromJSON:animationJSON inBundle:bundle];
+  return [[LOTAnimationView alloc] initWithModel:comp inBundle:bundle];
 }
 
 + (nonnull instancetype)animationWithFilePath:(nonnull NSString *)filePath {
-  NSString *animationName = filePath;
-  
-  LOTComposition *comp = [[LOTAnimationCache sharedCache] animationForKey:animationName];
-  if (comp) {
-    return [[LOTAnimationView alloc] initWithModel:comp inBundle:[NSBundle mainBundle]];
-  }
-  
-  NSError *error;
-  NSData *jsonData = [[NSData alloc] initWithContentsOfFile:filePath];
-  NSDictionary  *JSONObject = jsonData ? [NSJSONSerialization JSONObjectWithData:jsonData
-                                                                         options:0 error:&error] : nil;
-  if (JSONObject && !error) {
-    LOTComposition *laScene = [[LOTComposition alloc] initWithJSON:JSONObject withAssetBundle:[NSBundle mainBundle]];
-    laScene.rootDirectory = [filePath stringByDeletingLastPathComponent];
-    [[LOTAnimationCache sharedCache] addAnimation:laScene forKey:animationName];
-    LOTAnimationView *animationView = [[LOTAnimationView alloc] initWithModel:laScene inBundle:[NSBundle mainBundle]];
-    animationView.cacheKey = animationName;
-    return animationView;
-  }
-  
-  NSLog(@"%s: Animation Not Found", __PRETTY_FUNCTION__);
-  return [[LOTAnimationView alloc] initWithModel:nil inBundle:nil];
+  LOTComposition *comp = [LOTComposition animationWithFilePath:filePath];
+  return [[LOTAnimationView alloc] initWithModel:comp inBundle:[NSBundle mainBundle]];
 }
 
 # pragma mark - Initializers
@@ -97,7 +59,7 @@
     [self _commonInit];
     LOTComposition *laScene = [[LOTAnimationCache sharedCache] animationForKey:url.absoluteString];
     if (laScene) {
-      self.cacheKey = url.absoluteString;
+      laScene.cacheKey = url.absoluteString;
       [self _initializeAnimationContainer];
       [self _setupWithSceneModel:laScene];
     } else {
@@ -116,7 +78,7 @@
         LOTComposition *laScene = [[LOTComposition alloc] initWithJSON:animationJSON withAssetBundle:[NSBundle mainBundle]];
         dispatch_async(dispatch_get_main_queue(), ^(void){
           [[LOTAnimationCache sharedCache] addAnimation:laScene forKey:url.absoluteString];
-          self.cacheKey = url.absoluteString;
+          laScene.cacheKey = url.absoluteString;
           [self _initializeAnimationContainer];
           [self _setupWithSceneModel:laScene];
         });
@@ -137,9 +99,17 @@
   return self;
 }
 
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    [self _commonInit];
+  }
+  return self;
+}
+
 # pragma mark - Internal Methods
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 
 - (void)_initializeAnimationContainer {
   self.clipsToBounds = YES;
@@ -218,6 +188,11 @@
   return @(((_sceneModel.endFrame.floatValue - _sceneModel.startFrame.floatValue) * progress) + _sceneModel.startFrame.floatValue);
 }
 
+- (BOOL)_isSpeedNegative {
+  // If the animation speed is negative, then we're moving backwards.
+  return _animationSpeed >= 0;
+}
+
 # pragma mark - Completion Block
 
 - (void)_callCompletionIfNecessary:(BOOL)complete {
@@ -293,10 +268,13 @@
     return;
   }
   NSNumber *currentFrame = [self _frameForProgress:_animationProgress];
-  
+
   currentFrame = @(MAX(MIN(currentFrame.floatValue, toEndFrame.floatValue), fromStartFrame.floatValue));
-  if (currentFrame.floatValue == toEndFrame.floatValue) {
+  BOOL playingForward = [self _isSpeedNegative];
+  if (currentFrame.floatValue == toEndFrame.floatValue && playingForward) {
     currentFrame = fromStartFrame;
+  } else if (currentFrame.floatValue == fromStartFrame.floatValue && !playingForward) {
+    currentFrame = toEndFrame;
   }
   _animationProgress = [self _progressForFrame:currentFrame];
   
@@ -312,8 +290,10 @@
   animation.autoreverses = _autoReverseAnimation;
   animation.delegate = self;
   animation.removedOnCompletion = NO;
-  animation.beginTime = CACurrentMediaTime() - offset;
-  [_compContainer addAnimation:animation forKey:@"play"];
+  if (offset != 0) {
+    animation.beginTime = CACurrentMediaTime() - offset;
+  }
+  [_compContainer addAnimation:animation forKey:kCompContainerAnimationKey];
   _isAnimationPlaying = YES;
 }
 
@@ -386,30 +366,24 @@
 
 - (void)setCacheEnable:(BOOL)cacheEnable{
   _cacheEnable = cacheEnable;
-  if (!self.cacheKey) {
+  if (!self.sceneModel.cacheKey) {
     return;
   }
   if (cacheEnable) {
-    [[LOTAnimationCache sharedCache] addAnimation:_sceneModel forKey:self.cacheKey];
+    [[LOTAnimationCache sharedCache] addAnimation:_sceneModel forKey:self.sceneModel.cacheKey];
   }else {
-    [[LOTAnimationCache sharedCache] removeAnimationForKey:self.cacheKey];
-  }
-}
-
-- (void)setCacheKey:(NSString *)cacheKey {
-  _cacheKey = cacheKey;
-  if (cacheKey) {
-    _cacheEnable = YES;
+    [[LOTAnimationCache sharedCache] removeAnimationForKey:self.sceneModel.cacheKey];
   }
 }
 
 # pragma mark - External Methods - Other
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 
 - (void)addSubview:(nonnull LOTView *)view
       toLayerNamed:(nonnull NSString *)layer
     applyTransform:(BOOL)applyTransform {
+  [self _layout];
   CGRect viewRect = view.frame;
   LOTView *wrapperView = [[LOTView alloc] initWithFrame:viewRect];
   view.frame = view.bounds;
@@ -417,9 +391,6 @@
   [wrapperView addSubview:view];
   [self addSubview:wrapperView];
   [_compContainer addSublayer:wrapperView.layer toLayerNamed:layer applyTransform:applyTransform];
-  CGRect newRect = [self.layer convertRect:viewRect toLayer:wrapperView.layer.superlayer];
-  wrapperView.layer.frame = newRect;
-  view.frame = newRect;
 }
 
 #else
@@ -434,12 +405,20 @@
   [wrapperView addSubview:view];
   [self addSubview:wrapperView];
   [_compContainer addSublayer:wrapperView.layer toLayerNamed:layer applyTransform:applyTransform];
-  CGRect newRect = [self.layer convertRect:viewRect toLayer:wrapperView.layer.superlayer];
-  wrapperView.layer.frame = newRect;
-  view.frame = newRect;
 }
 
 #endif
+
+- (CGRect)convertRect:(CGRect)rect
+         toLayerNamed:(NSString *_Nullable)layerName {
+  [self _layout];
+  if (layerName == nil) {
+    return [self.layer convertRect:rect toLayer:_compContainer];
+  }
+  return [_compContainer convertRect:rect fromLayer:self.layer toLayerNamed:layerName];
+}
+
+
 - (void)setValue:(nonnull id)value
       forKeypath:(nonnull NSString *)keypath
          atFrame:(nullable NSNumber *)frame{
@@ -458,13 +437,23 @@
   [_compContainer logHierarchyKeypathsWithParent:nil];
 }
 
+# pragma mark - Semi-Private Methods
+
+- (CALayer * _Nullable)layerForKey:(NSString * _Nonnull)keyname {
+  return _compContainer.childMap[keyname];
+}
+
+- (NSArray * _Nonnull)compositionLayers {
+  return _compContainer.childLayers;
+}
+
 # pragma mark - Getters and Setters
 
 - (CGFloat)animationDuration {
   if (!_sceneModel) {
     return 0;
   }
-  CAAnimation *play = [_compContainer animationForKey:@"play"];
+  CAAnimation *play = [_compContainer animationForKey:kCompContainerAnimationKey];
   if (play) {
     return play.duration;
   }
@@ -482,7 +471,7 @@
 
 # pragma mark - Overrides
 
-#if TARGET_OS_IPHONE || TARGET_IPHONE_SIMULATOR
+#if TARGET_OS_IPHONE || TARGET_OS_SIMULATOR
 
 #define LOTViewContentMode UIViewContentMode
 #define LOTViewContentModeScaleToFill UIViewContentModeScaleToFill
@@ -499,9 +488,18 @@
 #define LOTViewContentModeBottomLeft UIViewContentModeBottomLeft
 #define LOTViewContentModeBottomRight UIViewContentModeBottomRight
 
-- (void)removeFromSuperview {
-  [super removeFromSuperview];
-  [self _callCompletionIfNecessary:NO];
+- (CGSize)intrinsicContentSize {
+  if (!_sceneModel) {
+    return CGSizeMake(UIViewNoIntrinsicMetric, UIViewNoIntrinsicMetric);
+  }
+  return _sceneModel.compBounds.size;
+}
+
+- (void)didMoveToSuperview {
+  [super didMoveToSuperview];
+  if (self.superview == nil) {
+    [self _callCompletionIfNecessary:NO];
+  }
 }
 
 - (void)setContentMode:(LOTViewContentMode)contentMode {
@@ -551,10 +549,6 @@
 
 #endif
 
-- (CGSize)intrinsicContentSize {
-  return _sceneModel.compBounds.size;
-}
-
 - (void)_layout {
   CGPoint centerPoint = LOT_RectGetCenterPoint(self.bounds);
   CATransform3D xform;
@@ -596,12 +590,14 @@
 # pragma mark - CAANimationDelegate
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)complete {
-  if ([_compContainer animationForKey:@"play"] == anim &&
+  if ([_compContainer animationForKey:kCompContainerAnimationKey] == anim &&
       [anim isKindOfClass:[CABasicAnimation class]]) {
     CABasicAnimation *playAnimation = (CABasicAnimation *)anim;
     NSNumber *frame = _compContainer.presentationLayer.currentFrame;
     if (complete) {
-      frame = (NSNumber *)playAnimation.toValue;
+      // Set the final frame based on the animation to/from values. If playing forward, use the
+      // toValue otherwise we want to end on the fromValue.
+      frame = [self _isSpeedNegative] ? (NSNumber *)playAnimation.toValue : (NSNumber *)playAnimation.fromValue;
     }
     [self _removeCurrentAnimationIfNecessary];
     [self setProgressWithFrame:frame callCompletionIfNecessary:NO];

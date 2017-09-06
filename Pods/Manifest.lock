@@ -48,14 +48,14 @@ PODS:
   - libwebp/utils (0.6.0):
     - libwebp/core
   - libwebp/webp (0.6.0)
-  - lottie-ios (2.0.5)
+  - lottie-ios (2.1.3)
   - Masonry (1.0.2)
   - MBProgressHUD (1.0.0)
-  - Meiqia (3.3.8):
-    - Meiqia/MeiqiaSDK (= 3.3.8)
-    - Meiqia/MQChatViewController (= 3.3.8)
-  - Meiqia/MeiqiaSDK (3.3.8)
-  - Meiqia/MQChatViewController (3.3.8):
+  - Meiqia (3.3.9):
+    - Meiqia/MeiqiaSDK (= 3.3.9)
+    - Meiqia/MQChatViewController (= 3.3.9)
+  - Meiqia/MeiqiaSDK (3.3.9)
+  - Meiqia/MQChatViewController (3.3.9):
     - Meiqia/MeiqiaSDK
   - MJExtension (3.0.13)
   - MLeaksFinder (0.2.1):
@@ -82,7 +82,7 @@ PODS:
   - SDWebImage/WebP (4.1.0):
     - libwebp
     - SDWebImage/Core
-  - SSZipArchive (2.0.3)
+  - SSZipArchive (2.0.4)
   - UMengAnalytics (4.2.4)
   - UMengUShare/Core (6.3.0):
     - UMengUShare/Network
@@ -110,12 +110,12 @@ PODS:
 DEPENDENCIES:
   - AFNetworking (~> 2.5.4)
   - DateTools
-  - FLAnimatedImage (~> 1.0)
+  - FLAnimatedImage
   - GTSDK
   - lottie-ios
   - Masonry
   - MBProgressHUD
-  - Meiqia (~> 3.3.1)
+  - Meiqia (~> 3.3.8)
   - MJExtension
   - MLeaksFinder
   - MMDrawerController (~> 0.5.7)
@@ -150,16 +150,16 @@ SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   GTSDK: 10882452fbd63e738334ea9463a7d59cbb172622
   libwebp: 1d5a07c2eb97f9c31bd5f154bb82efc0ea67c6a2
-  lottie-ios: d574e45532c6c06ac03c6d6649f759fb1137297b
+  lottie-ios: 8c150606598931621e927377f1426d2d3e99282d
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
-  Meiqia: 454438d87dad9c125eb561d9309a67b2d838b1fd
+  Meiqia: 33af5683f44e1424f4e87a89ff3b26d54d62c84e
   MJExtension: 5932755f451458eefa24239358817f8d291240c7
   MLeaksFinder: 0850e2f2abc7227adc4d4e2d1992b431264eb4d5
   MMDrawerController: 7a4cf8e25596bf2434e03ce50d22a8608ddee6a1
   ReactiveCocoa: f89f2e009a87951b50321bf9feb958823fcc617e
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
-  SSZipArchive: b6648b70a36303ca5be9f0351174b347e1886236
+  SSZipArchive: c77fc6ec8194f4e6d57876da1348e46cd63b90ba
   UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
   UMengUShare: b208ac3bcf1f63d11a100b359990e9d77a0f2085
   WCDB: 1f32cb4d3fa59ec36afdf827614e9f014fa5bce4
@@ -170,6 +170,6 @@ SPEC CHECKSUMS:
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 9ecbf0da758850c8ab0af2e6aeec5ffe67c11855
+PODFILE CHECKSUM: 331c56a280b747e09ecbd1e7ebbb9a52ffbaf228
 
 COCOAPODS: 1.3.1
