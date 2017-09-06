@@ -27,6 +27,7 @@
 #import "SSJWishSyncTable.h"
 #import "SSJWishChargeSyncTable.h"
 #import "SSJRecycleSyncTable.h"
+#import "SSJFixedFinanceProductSyncTable.h"
 
 #import "SSJSyncTable.h"
 #import "SSJDataSynchronizeExtraProcesser.h"
@@ -81,6 +82,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigSyncTable table],
                                                   [SSJTransferCycleSyncTable table],
                                                   [SSJLoanSyncTable table],
+                                                  [SSJFixedFinanceProductSyncTable table],
                                                   [SSJShareBooksSyncTable table],
                                                   [SSJShareBooksMemberSyncTable table],
                                                   [SSJShareBooksFriendMarkSyncTable table],
