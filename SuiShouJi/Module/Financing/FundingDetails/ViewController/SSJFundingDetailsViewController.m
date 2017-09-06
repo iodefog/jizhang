@@ -457,8 +457,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     }
     SSJInstalmentEditeViewController *instalmentVc = [[SSJInstalmentEditeViewController alloc]init];
     SSJRepaymentModel *model = [[SSJRepaymentModel alloc]init];
-    model.cardId = self.item.cardItem.fundingID;
-    model.cardName = self.item.cardItem.fundingName;
+    model.cardId = self.item.fundingID;
+    model.cardName = self.item.fundingName;
     model.cardBillingDay = self.item.cardItem.cardBillingDay;
     model.cardRepaymentDay = self.item.cardItem.cardRepaymentDay;
     [SSJAnaliyticsManager event:@"credit_stages_repayment"];

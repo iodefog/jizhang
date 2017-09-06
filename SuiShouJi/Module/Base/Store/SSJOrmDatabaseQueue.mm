@@ -41,9 +41,9 @@ static const void * kSSJOrmDatabaseQueueSpecificKey = &kSSJOrmDatabaseQueueSpeci
             }
         }];
         
-//        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
-//            NSLog(@"SQL: %@", sql);
-//        }];
+        [WCTStatistics SetGlobalSQLTrace:^(NSString *sql) {
+            NSLog(@"SQL: %@", sql);
+        }];
     }
     return self;
 }

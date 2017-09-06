@@ -91,7 +91,7 @@
     
     [self.instalmentMoneyLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.arrowImage.mas_left).offset(-12);
-        make.centerY.mas_equalTo(self.monthLab);
+        make.centerY.mas_equalTo(self.yearLab);
     }];
     
     [self.payOffImage mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -157,7 +157,7 @@
 }
 
 - (SSJStrikeLineLabel *)instalmentMoneyLab {
-    if (!!_instalmentMoneyLab) {
+    if (!_instalmentMoneyLab) {
         _instalmentMoneyLab = [[SSJStrikeLineLabel alloc] init];
         _instalmentMoneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
         _instalmentMoneyLab.font = [UIFont systemFontOfSize:SSJ_FONT_SIZE_4];
@@ -208,13 +208,14 @@
         
         self.totalMoneyLab.text = [NSString stringWithFormat:@"%@",[[NSString stringWithFormat:@"%f",creditCardItem.income - creditCardItem.expenture] ssj_moneyDecimalDisplayWithDigits:2]];
         
-        if (!creditCardItem.instalmentMoney) {
+        if (creditCardItem.instalmentMoney) {
             self.instalmentMoneyLab.text = [[NSString stringWithFormat:@"%f",creditCardItem.instalmentMoney] ssj_moneyDecimalDisplayWithDigits:2];
+            [self.instalmentMoneyLab sizeToFit];
             self.totalMoneyTitleLab.hidden = YES;
         }
         
         double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney - creditCardItem.repaymentForOtherMonthMoney + creditCardItem.instalmentMoney;
-        self.payOffImage.hidden = moneyNeedToRepay > 0 ? NO : YES;
+        self.payOffImage.hidden = moneyNeedToRepay >= 0 ? NO : YES;
 
         if (creditCardItem.isExpand) {
             self.arrowImage.layer.transform = CATransform3DMakeRotation(M_PI, 0, 0, 1);
