@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *oldMoney;
 
 /**余额变更的差额*/
-@property (nonatomic, assign) double difMoney;
+//@property (nonatomic, assign) double difMoney;
 
 /**备注*/
 @property (nonatomic, copy, nullable) NSString *memo;
@@ -85,7 +85,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  2:余额转入，由少变多，1:余额转出，由多变少，0：金额没有变动
  */
-@property (nonatomic, assign) NSInteger balanceOutOrIn;
+//@property (nonatomic, assign) NSInteger balanceOutOrIn;
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 
@@ -94,3 +94,38 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
+
+
+// /**
+// * 固收理财变更转入（对固收理财账户而言，是追加投资）
+// **/
+//public static final String FIXED_FIN_PRODUCT_CHANGE_IN_ID = "15";
+///**
+// * 固收理财变更转出（对固收理财账户而言，是部分赎回）
+// **/
+//public static final String FIXED_FIN_PRODUCT_CHANGE_OUT_ID = "16";
+///**
+// * 固收理财结算利息转入
+// **/
+//public static final String FIXED_FIN_PRODUCT_INTEREST_IN_ID = "17";
+///**
+// * 固收理财结算利息转出
+// **/
+//public static final String FIXED_FIN_PRODUCT_INTEREST_OUT_ID = "18";
+///**
+// * 固收理财派发利息流水
+// **/
+//public static final String FIXED_FIN_PRODUCT_INTEREST_ID = "19";
+///**
+// * 固收理财手续费率（部分赎回，结算）
+// **/
+//public static final String FIXED_FIN_PRODUCT_POUNDAGE_ID = "20";
+///**
+// * 固收理财平账收入
+// **/
+//public static final String FIXED_FIN_PRODUCT_MATCH_ACCOUNT_IN_ID = "21";
+///**
+// * 固收理财平账支出
+// **/
+//public static final String FIXED_FIN_PRODUCT_MATCH_ACCOUNT_OUT_ID = "22";
+//

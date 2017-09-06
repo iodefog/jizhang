@@ -53,6 +53,10 @@
     item.money = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:model.productid]+ [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
     
     item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];
+    item.showStamp = model.isend;
+    item.imageName = @"fixed_jiesuan";
+    item.showStateL = [[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThan:[NSDate date]];
+    //[[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] compare:[NSDate date]];
     return item;
 }
 

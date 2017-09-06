@@ -35,20 +35,20 @@
             name = @"固收理财部分赎回";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
-            break;
-        case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-            icon = @"fixed_finance_edit";
-            name = @"固收理财余额变更";
-            money = [NSString stringWithFormat:@"+%.2f",model.money];
-            surplus += model.money;
-            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
-            break;
-        case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-            icon = @"fixed_finance_edit";
-            name = @"固收理财余额变更";
-            money = [NSString stringWithFormat:@"-%.2f",model.money];
-            surplus -= model.money;
-            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
+//            break;
+//        case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//            icon = @"fixed_finance_edit";
+//            name = @"固收理财余额变更";
+//            money = [NSString stringWithFormat:@"+%.2f",model.money];
+//            surplus += model.money;
+//            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
+//            break;
+//        case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//            icon = @"fixed_finance_edit";
+//            name = @"固收理财余额变更";
+//            money = [NSString stringWithFormat:@"-%.2f",model.money];
+//            surplus -= model.money;
+//            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
             icon = @"fixed_finance_lixi";
@@ -71,14 +71,14 @@
             
         case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
             icon = @"fixed_finance_lixi";
-            name = @"部分赎回手续费";
+            name = @"固收理财手续费";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
             break;
         case SSJFixedFinCompoundChargeTypeCloseOut://结清
             icon = @"fixed_finance_lixi";
             name = @"固收理财结算";
-            money = [NSString stringWithFormat:@"+%.2f",model.money];
+            money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
             break;
         case SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease://固收理财平账收入

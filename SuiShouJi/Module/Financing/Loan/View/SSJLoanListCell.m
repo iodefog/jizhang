@@ -22,13 +22,16 @@
 
 @property (nonatomic, strong) UIImageView *stamp;
 
+/**stateLabel*/
+@property (nonatomic, strong) UILabel *stateLabel;
+
 @end
 
 @implementation SSJLoanListCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        
+        [self.contentView addSubview:self.stateLabel];
         _stamp = [[UIImageView alloc] initWithImage:[UIImage ssj_themeImageWithName:@"loan_stamp"]];
         _stamp.size = CGSizeMake(72, 72);
 //        _stamp.alpha = 0.4;
@@ -52,6 +55,7 @@
         _dateLab = [[UILabel alloc] init];
         _dateLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [self.contentView addSubview:_dateLab];
+//        [self.contentView clipsToBounds];
         
         [self updateAppearance];
     }
@@ -92,6 +96,22 @@
     _dateLab.rightTop = CGPointMake(self.contentView.width - 18, 56);
     
     _memoLab.width = (_dateLab.left - _memoLab.left - 10);
+    
+    self.stateLabel.size = CGSizeMake(100, 70);
+    self.stateLabel.centerX = self.contentView.width - 20;
+    self.stateLabel.centerY = 20;
+}
+
+- (UILabel *)stateLabel {
+    if (!_stateLabel) {
+        _stateLabel = [[UILabel alloc] init];
+        _stateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        _stateLabel.textAlignment = NSTextAlignmentCenter;
+        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
+        _stateLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
+        _stateLabel.text = @"已到期";
+    }
+    return _stateLabel;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
@@ -107,14 +127,26 @@
     _moneyLab.text = item.money;
     _dateLab.text = item.date;
     _stamp.hidden = !item.showStamp;
+    if (item.imageName.length) {
+        _stamp.image = [UIImage imageNamed:item.imageName];
+        [_stamp sizeToFit];
+    }
+
+    if (_stamp.hidden == NO) {
+        self.stateLabel.hidden = YES;
+    } else {
+        self.stateLabel.hidden = !item.showStateL;
+    }
     [self setNeedsLayout];
 }
 
 - (void)updateAppearance {
     _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
+    _stateLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
     _memoLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _moneyLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _dateLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.stateLabel.backgroundColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].borderColor];
 }
 
 @end

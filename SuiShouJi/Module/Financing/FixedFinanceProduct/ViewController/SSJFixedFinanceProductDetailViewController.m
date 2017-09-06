@@ -363,12 +363,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             case SSJFixedFinCompoundChargeTypeRedemption://赎回
                 surplus -= model.money;
                 break;
-            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-                surplus -= model.money;
-                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//                surplus -= model.money;
+//                break;
             case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
                 surplus += model.money;
                 break;

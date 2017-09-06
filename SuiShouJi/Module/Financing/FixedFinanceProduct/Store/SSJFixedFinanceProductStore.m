@@ -136,6 +136,19 @@
             return;
         }
         
+        //如果是编辑并且改动了金额的情况下则删除原来那条本金的流水记录重新生成本金记录
+        //更新第一条本金的billdate
+        if (isEdit) {// && [model.money doubleValue] != [model.oldMoney doubleValue
+            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?, iversion = ?, operatortype = 2, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",model.startdate,@(SSJSyncVersion()),writeDate,model.productid]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
+        
             //存储固定理财记录
             NSMutableArray *objectArr = [NSMutableArray array];
             [objectArr addObject:model.productid];
@@ -181,19 +194,6 @@
         
         //存储流水记录
         NSDate *lastDate = [NSDate date];
-        
-        //更新第一条本金的billdate
-        if (isEdit) {
-            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?, iversion = ?, operatortype = 1, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",model.startdate,@(SSJSyncVersion()),[lastDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"],model.productid]) {
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure(error);
-                    });
-                }
-                return;
-            }
-        }
-        
         for (SSJFixedFinanceProductCompoundItem *cmodel in chargeModels) {
             NSDate *writeDate = [lastDate dateByAddingSeconds:1];
             cmodel.chargeModel.writeDate = writeDate;
@@ -315,19 +315,25 @@
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID {
     __block double interest = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
+        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
     }];
+    return interest;
+}
+
++ (double)queryForFixedFinanceProduceLixiWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+    double interest = 0;
+        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
     return interest;
 }
 
 + (double)queryForFixedFinanceProduceJieSuanInterestiothWithProductID:(NSString *)fixedFinanceProductID {
     __block double interest = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        double money1 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
+        double money1 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
         //+—平账利息
-        double money2 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"23",SSJUSERID()];
+        double money2 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
         
-       double money3 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"24",SSJUSERID()];
+       double money3 = [db doubleForQuery:@"select imoney from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"22",SSJUSERID()];
         interest = money1 + money2 - money3;
     }];
     
@@ -338,14 +344,14 @@
 + (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID {
     double interest = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"22",SSJUSERID()];
+        [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"20",SSJUSERID()];
     }];
     return interest;
 }
 
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
     double interest = 0;
-        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"21",SSJUSERID()];
+        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
     return interest;
 }
 
@@ -571,7 +577,7 @@
  追加或赎回投资
  
  @param model model
- param type 1追加2赎回0结算
+ param type 1追加2赎回
  @param chargeModels 追加产生的流水
  @param success 成功
  @param failure 失败
@@ -590,7 +596,6 @@
             model.targetChargeModel.writeDate = writeDate;
             model.interestChargeModel.writeDate = writeDate;
             lastDate = writeDate;
-//            if (type != 0) {//追加或者赎回
                 //修改投资金额
                 //查询原来金额
                 double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",productModel.userid,productModel.productid];
@@ -600,13 +605,11 @@
                     
                 } else if (type == 2) {//赎回
                     newMoney = oldMoney - model.chargeModel.money - model.interestChargeModel.money;
-                } else if (type == 0) { //结算
-                    
                 }
             
             if (type != 0) {
                 //删除以前派发的利息流水//重新派发利息流水
-                    if (![self deleteDistributedInterestWithModel:productModel untilDate:[model.chargeModel.billDate dateByAddingDays:2] inDatabase:db error:&error]) {
+                    if (![self deleteDistributedInterestWithModel:productModel untilDate:[model.chargeModel.billDate dateByAddingDays:1] inDatabase:db error:&error]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatchMainAsync(^{
@@ -617,7 +620,14 @@
                     }
                 
                 //重新生成新的历史派发流水
-                if (![self interestRecordWithModel:productModel investmentDate:[model.chargeModel.billDate dateByAddingDays:1] endDate:[NSDate date] newMoney:newMoney inDatabase:db error:&error]) {
+                NSDate *endDate;
+                if ([[NSDate date] compare:[[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+                    endDate = [NSDate date];
+                } else {
+                    endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+                }
+                
+                if (![self interestRecordWithModel:productModel investmentDate:model.chargeModel.billDate endDate:endDate newMoney:newMoney inDatabase:db error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatchMainAsync(^{
@@ -761,7 +771,7 @@
     NSMutableArray *valueArr = [NSMutableArray array];
     [valueArr addObject:[NSString stringWithFormat:@"%@_%@",productModel.productid,[model.chargeModel.billDate formattedDateWithFormat:@"yyyyMMdd"]]];
     [valueArr addObject:model.chargeModel.userId];
-    [valueArr addObject:@"23"];
+    [valueArr addObject:@"21"];
     [valueArr addObject:model.chargeModel.fundId];
     [valueArr addObject:billDateStr];
     [valueArr addObject:cid];
@@ -791,7 +801,7 @@
     NSMutableArray *valueArr = [NSMutableArray array];
     [valueArr addObject:[NSString stringWithFormat:@"%@_%@",productModel.productid,[model.chargeModel.billDate formattedDateWithFormat:@"yyyyMMdd"]]];
     [valueArr addObject:model.chargeModel.userId];
-    [valueArr addObject:@"24"];
+    [valueArr addObject:@"22"];
     [valueArr addObject:model.chargeModel.fundId];
     [valueArr addObject:billDateStr];
     [valueArr addObject:cid];
@@ -973,7 +983,7 @@
 + (BOOL)deleteDistributedInterestWithModel:(SSJFixedFinanceProductItem *)model untilDate:(NSDate *)untilDate inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     if (untilDate) {
-        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ? and cbilldate >= ? and cid = %@",writeDateStr,@(SSJOperatorTypeDelete),@(21),SSJUSERID(),[untilDate formattedDateWithFormat:@"yyyy-MM-dd"],model.productid]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ? and cbilldate >= ? and cid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID(),[untilDate formattedDateWithFormat:@"yyyy-MM-dd"],model.productid]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -981,7 +991,7 @@
         }
 
     } else {
-        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(21),SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID()]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -1015,27 +1025,23 @@
     for (SSJFixedFinanceProductChargeItem *item in chargeArr) {
         if ([item.billId isEqualToString:@"3"]) {// 创建
             item.chargeType = SSJFixedFinCompoundChargeTypeCreate;
-        } else if ([item.billId isEqualToString:@"4"]) {//全部赎回
+        } else if ([item.billId isEqualToString:@"4"]) {//结算
             item.chargeType = SSJFixedFinCompoundChargeTypeCloseOut;
         } else if ([item.billId isEqualToString:@"15"]) {//固收理财变更转入（对固收理财账户而言，是追加投资）
             item.chargeType = SSJFixedFinCompoundChargeTypeAdd;
         } else if ([item.billId isEqualToString:@"16"]) {//固收理财变更转出（对固收理财账户而言，是部分赎回）
             item.chargeType = SSJFixedFinCompoundChargeTypeRedemption;
-        } else if ([item.billId isEqualToString:@"17"]) {
-            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceIncrease;
-        } else if ([item.billId isEqualToString:@"18"]) {
-            item.chargeType = SSJFixedFinCompoundChargeTypeBalanceDecrease;
-        } else if ([item.billId isEqualToString:@"19"]) {
+        } else if ([item.billId isEqualToString:@"17"]) {//固收理财结算利息转入
             item.chargeType = SSJFixedFinCompoundChargeTypeBalanceInterestIncrease;
-        } else if ([item.billId isEqualToString:@"20"]) {
+        } else if ([item.billId isEqualToString:@"18"]) {//固收理财结算利息转出
             item.chargeType = SSJFixedFinCompoundChargeTypeBalanceInterestDecrease;
-        } else if ([item.billId isEqualToString:@"21"]) {
+        } else if ([item.billId isEqualToString:@"19"]) {// 固收理财派发利息流水
             item.chargeType = SSJFixedFinCompoundChargeTypeInterest;
-        } else if ([item.billId isEqualToString:@"22"]) {
+        } else if ([item.billId isEqualToString:@"20"]) {//固收理财手续费率（部分赎回，结算）
             item.chargeType = SSJFixedFinCompoundChargeTypeCloseOutInterest;
-        } else if ([item.billId isEqualToString:@"23"]) {
+        } else if ([item.billId isEqualToString:@"21"]) {//固收理财平账收入
             item.chargeType = SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease;
-        } else if ([item.billId isEqualToString:@"24"]) {
+        } else if ([item.billId isEqualToString:@"22"]) {//固收理财平账支出
             item.chargeType = SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease;
         }
         
@@ -1077,13 +1083,14 @@
     
     NSDate *currentDate = [NSDate date];
     
-    NSString *billId = @"21";
+    NSString *billId = @"19";
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSString *fundid = item.thisfundid;
     NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
     //生成利息
     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
     double interest = [[interestDic objectForKey:@"interest"] doubleValue];
+    NSString *cid = item.productid;
     switch (item.interesttype) {//计息方式
         case SSJMethodOfInterestOncePaid://一次性
             switch (item.timetype) {
@@ -1099,8 +1106,6 @@
                     if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
                     
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-                    NSString *cid = item.productid;
-                    
                     NSMutableArray *valueArr = [NSMutableArray array];
                     NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[billDate formattedDateWithFormat:@"yyyyMMdd"]];
                     [valueArr addObject:chargeid];
@@ -1136,8 +1141,6 @@
                     }
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                     //生成利息
-                    NSString *cid = [NSString stringWithFormat:@"%@_%ld",item.productid,[self queryMaxChargeChargeIdSuffixWithProductId:item.productid inDatabase:db error:error]];
-                    
                     NSMutableArray *valueArr = [NSMutableArray array];
                     [valueArr addObject:SSJUUID()];
                     [valueArr addObject:SSJUSERID()];
@@ -1172,8 +1175,6 @@
                     }
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                     //生成利息
-                    NSString *cid = [NSString stringWithFormat:@"%@_%ld",item.productid,[self queryMaxChargeChargeIdSuffixWithProductId:item.productid inDatabase:db error:error]];
-                    
                     NSMutableArray *valueArr = [NSMutableArray array];
                     [valueArr addObject:SSJUUID()];
                     [valueArr addObject:SSJUSERID()];
@@ -1215,7 +1216,6 @@
                         if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
                         NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                         //生成利息
-                        NSString *cid = [NSString stringWithFormat:@"%@_%ld",item.productid,[self queryMaxChargeChargeIdSuffixWithProductId:item.productid inDatabase:db error:error]];
                         
                         NSMutableArray *valueArr = [NSMutableArray array];
                         [valueArr addObject:SSJUUID()];
@@ -1265,9 +1265,6 @@
                 if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
                 NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                 //生成利息
-                
-                NSString *cid = [NSString stringWithFormat:@"%@_%ld",item.productid,[self queryMaxChargeChargeIdSuffixWithProductId:item.productid inDatabase:db error:error]];
-                
                 NSMutableArray *valueArr = [NSMutableArray array];
                 [valueArr addObject:SSJUUID()];
                 [valueArr addObject:SSJUSERID()];
@@ -1304,7 +1301,7 @@
  */
 + (NSDate *)queryPaiFalLastBillDateWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(SSJDatabase *)db {
     __block NSString *newDate;
-    newDate = [db stringForQuery:@"select max(cbilldate) from bk_user_charge where operatortype != 2 and ichargetype = ? and cuserid = ? and cid = ? and ibillid = 21 ",@(SSJChargeIdTypeFixedFinance),SSJUSERID(),model.productid];
+    newDate = [db stringForQuery:@"select max(cbilldate) from bk_user_charge where operatortype != 2 and ichargetype = ? and cuserid = ? and cid = ? and ibillid = 19",@(SSJChargeIdTypeFixedFinance),SSJUSERID(),model.productid];
     if (!newDate.length) {//如果不存在派发则是model的billdate
         return model.startDate;
     }

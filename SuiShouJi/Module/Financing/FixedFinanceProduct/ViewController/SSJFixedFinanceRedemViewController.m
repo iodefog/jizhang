@@ -178,7 +178,7 @@ static NSString *kTitle6 = @"备注";
             cell.additionalIcon.image = nil;
             cell.subtitleLabel.text = @"请选择账户";
         }
-        
+        cell.subtitleLabel.hidden = NO;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -207,6 +207,7 @@ static NSString *kTitle6 = @"备注";
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
         cell.additionalIcon.image = nil;
+        cell.subtitleLabel.hidden = NO;
         cell.subtitleLabel.text = self.compoundModel.chargeModel.billDate ? [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"] : [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
@@ -221,6 +222,7 @@ static NSString *kTitle6 = @"备注";
         cell.additionalIcon.image = nil;
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.switchControl.hidden = NO;
+        cell.subtitleLabel.hidden = YES;
         [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         cell.switchControl.on = _isLiXiOn;
         [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
@@ -498,7 +500,7 @@ static NSString *kTitle6 = @"备注";
         NSString *interestChargeBillId = nil;
         chargeBillId = @"16";
         targetChargeBillId = @"15";
-        interestChargeBillId = @"22";
+        interestChargeBillId = @"20";
         NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         NSDate *billDate = [today compare:self.financeModel.startDate] == NSOrderedAscending ? self.financeModel.startDate : today;
         

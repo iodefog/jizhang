@@ -297,24 +297,24 @@
                 currentDate = model.billDate;
 //                startDate = currentDate;
             }
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-            {
-                money += model.money;
-                
-                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
-                currentDate = model.billDate;
-//                startDate = currentDate;
-            }
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-            {
-                money += model.money;
-                
-                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
-                currentDate = model.billDate;
-//                startDate = currentDate;
-            }
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//            {
+//                money += model.money;
+//                
+//                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+//                currentDate = model.billDate;
+////                startDate = currentDate;
+//            }
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//            {
+//                money += model.money;
+//                
+//                surplus += [self caculateInterestUntilDate:model.billDate startDate:currentDate model:item money:money];
+//                currentDate = model.billDate;
+////                startDate = currentDate;
+//            }
                 break;
             case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算,赎回利息
             {
@@ -443,12 +443,12 @@
             case SSJFixedFinCompoundChargeTypeRedemption://赎回
                 suindex = 3;
                 break;
-            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-                suindex = 3;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-                suindex = 3;
-                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//                suindex = 3;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//                suindex = 3;
+//                break;
             case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
                 suindex = 3;;
                 break;

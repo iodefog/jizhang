@@ -469,7 +469,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)updateChargeModels {
     self.model.oldMoney = self.model.money;
     self.model.money = self.moneyTextF.text;
-    self.model.difMoney = ABS([self.model.money doubleValue] - [self.model.oldMoney doubleValue]);
     self.model.memo = self.memoTextF.text;
     self.model.rate = [self.liLvTextF.text doubleValue];
     self.model.time = [self.qiXianTextF.text doubleValue];
@@ -482,30 +481,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         self.model.remindid = self.reminderItem.remindId;
     }
     
-    if (_edited) {//编辑
-        self.model.balanceOutOrIn = 0;
-        if ([self.model.oldMoney doubleValue] < [self.model.money doubleValue]) {//增加
-            self.model.balanceOutOrIn = 2;
-            self.createCompoundModel.chargeModel.billId = @"17";
-            self.createCompoundModel.targetChargeModel.billId = @"18";
-            self.createCompoundModel.chargeModel.money = self.createCompoundModel.targetChargeModel.money = self.model.difMoney;
-            
-        } else if ([self.model.oldMoney doubleValue] > [self.model.money doubleValue]) {//减少
-            self.createCompoundModel.chargeModel.billId = @"18";
-            self.createCompoundModel.targetChargeModel.billId = @"17";
-            self.model.balanceOutOrIn = 1;
-            self.createCompoundModel.chargeModel.money = self.createCompoundModel.targetChargeModel.money = self.model.difMoney;
-        } else {
-            self.model.balanceOutOrIn = 0;
-        }
-    } else {//新建
-        self.model.balanceOutOrIn = 2;
-        self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
-        self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
-    }
+    self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
+    self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
     
     self.createCompoundModel.chargeModel.memo = self.model.memo;
-
+    
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
@@ -942,11 +922,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _jiXiMethodSelectionView.title = @"派息方式";
         _jiXiMethodSelectionView.items = itemArr;
         _jiXiMethodSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
+            if (weakSelf.qiXiansegmentControl.selectedSegmentIndex == 2 && index == 2) {
+                [CDAutoHideMessageHUD showMessage:@"期限为日则不能选择每月付息派息方式"];
+                return NO;
+            }
+            
             if (index <= view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.model.interesttype = index;
                 weakSelf.jiXiMethodSelectionView.selectedIndex = index;
-                //计算计息金额
+                
                 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];

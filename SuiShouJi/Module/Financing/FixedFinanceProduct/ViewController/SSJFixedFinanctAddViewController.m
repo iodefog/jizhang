@@ -259,7 +259,7 @@ static NSUInteger kDateTag = 2005;
 - (BOOL)checkIfNeedClick {
     UITextField *moneyF = [self.view viewWithTag:kMoneyTag];
     UITextField *memoF = [self.view viewWithTag:kMemoTag];
-    if (moneyF.text.length <=0 && [moneyF.text doubleValue] <=0) {
+    if (moneyF.text.length <=0 || [moneyF.text doubleValue] <=0) {
         [CDAutoHideMessageHUD showMessage:@"请输入追购金额"];
         return NO;
     }
@@ -386,16 +386,26 @@ static NSUInteger kDateTag = 2005;
         _dateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
-//        _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-//            if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
-               //                return NO;
-//            }
-//            return YES;
-//        };
+        _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
+            if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
+                [CDAutoHideMessageHUD showMessage:@"时间不能早于开始时间"];
+                return NO;
+            }
+            
+            if ([date compare:[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"时间不能晚于结束时间"];
+                return NO;
+            }
+            
+            if ([date compare:[NSDate date]] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"时间不能晚于当前时间"];
+                return NO;
+            }
+            return YES;
+        };
         _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.compoundModel.chargeModel.billDate = view.date;
             weakSelf.compoundModel.targetChargeModel.billDate = view.date;
-//            weakSelf.compoundModel.interestChargeModel.billDate = view.date;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
             [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         };
