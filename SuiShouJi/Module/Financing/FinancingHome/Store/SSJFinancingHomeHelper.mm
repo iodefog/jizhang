@@ -220,7 +220,7 @@
                     }
 
                     //删除资金账户所对应的周期记账
-                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID , @(SSJChargeIdTypeShareBooks) , userId , @(SSJShareBooksMemberStateNormal)]) {
+                    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{

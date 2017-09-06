@@ -250,6 +250,11 @@
     if (![SSJLoanHelper deleteLoanDataRelatedToFundID:item.fundingID writeDate:writeDate database:db error:error]) {
         return NO;
     }
+
+    //删除资金账户所对应的周期记账
+    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
+        return NO;
+    };
     
     //删除流水表
     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and ifunsid = ? and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))",writeDate,@(SSJSyncVersion()),userId,item.fundingID,@(SSJChargeIdTypeShareBooks),userId,@(SSJShareBooksMemberStateNormal)]) {

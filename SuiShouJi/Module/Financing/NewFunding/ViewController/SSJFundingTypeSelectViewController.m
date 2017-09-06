@@ -232,25 +232,15 @@ static NSString *kCellID = @"cellID";
         UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:
                                                                                             self.navigationController.viewControllers.count
                                                                                             - 2];
-        if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
-            if (![model.ID isEqualToString:@"3"] && ![model.ID isEqualToString:@"9"]
-                && ![model.ID isEqualToString:@"10"] && ![model.ID isEqualToString:@"11"]) {
-                [self.navigationController popViewControllerAnimated:YES];
-                //                if (self.fundingParentSelectBlock) {
-                //                    self.fundingParentSelectBlock(item);
-                //                }
+        SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
+        __weak typeof(self) weakSelf = self;
+        normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem) {
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(newItem);
             }
-        } else {
-            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
-            __weak typeof(self) weakSelf = self;
-            normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem) {
-                if (weakSelf.addNewFundingBlock) {
-                    weakSelf.addNewFundingBlock(newItem);
-                }
-            };
-            normalFundingVc.selectParent = model.ID;
-            [self.navigationController pushViewController:normalFundingVc animated:YES];
-        }
+        };
+        normalFundingVc.selectParent = model.ID;
+        [self.navigationController pushViewController:normalFundingVc animated:YES];
     }
 
 }
