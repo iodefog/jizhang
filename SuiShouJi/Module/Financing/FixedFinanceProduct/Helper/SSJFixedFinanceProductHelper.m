@@ -472,6 +472,23 @@
 }
 
 
++ (NSDate *)endDateWithStartDate:(NSDate *)startDate time:(NSInteger)time timeType:(SSJMethodOfRateOrTime)timeType {
+    switch (timeType) {
+        case SSJMethodOfRateOrTimeDay:
+            return [startDate dateByAddingDays:time];
+            break;
+        case SSJMethodOfRateOrTimeMonth:
+            return [startDate dateByAddingMonths:time];
+            break;
+        case SSJMethodOfRateOrTimeYear:
+            return [startDate dateByAddingYears:time];
+            break;
+            
+        default:
+            break;
+    }
+}
+
 
 - (NSInteger)getDifferenceWithStartDate:(NSDate *)startDate endDate:(NSDate *)endDate {
 //    [endDate dateByAddingDays:<#(NSInteger)#>]

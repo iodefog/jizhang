@@ -77,6 +77,11 @@ static NSString *kTitle6 = @"结算日期";
 /**是否计算利息*/
 @property (nonatomic, assign) BOOL isLiXiOn;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *moneyStr;
+
+@property (nonatomic, copy) NSString *lixiStr;
+
 @end
 
 @implementation SSJFixedFinancesSettlementViewController
@@ -87,6 +92,7 @@ static NSString *kTitle6 = @"结算日期";
     [self orangeData];
     [self loadData];
     [self setUpNav];
+    [self setBind];
     [self updateAppearance];
 }
 
@@ -97,6 +103,10 @@ static NSString *kTitle6 = @"结算日期";
 - (void)orangeData {
     self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle5,kTitle6]];
     self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money"]];
+}
+
+- (void)setBind {
+    
 }
 
 #pragma mark - Theme
@@ -117,7 +127,32 @@ static NSString *kTitle6 = @"结算日期";
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+    if (self.moneyTextF == textField || self.poundageTextF == textField) {
+        if (self.moneyTextF == textField) {
+            self.moneyStr = text;
+            [self updateSubTitle];
+        } else {
+            [self updateSubTitle];
+        }
+        return NO;
+    }
+    
+    if (self.liXiTextF == textField) {
+        self.lixiStr = text;
+        return NO;
+    }
+    return YES;
+}
 
+- (void)updateSubTitle {
+    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] - [self.poundageTextF.text doubleValue])];
+    NSString *oldStr = [NSString stringWithFormat:@"到账金额为：%@元",targetStr];
+    self.subL.attributedText = [oldStr attributeStrWithTargetStr:targetStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+}
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.titleItems.count;
@@ -143,8 +178,10 @@ static NSString *kTitle6 = @"结算日期";
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         if ([title isEqualToString:kTitle1]) {
+            cell.textField.text = self.moneyStr;
             self.moneyTextF = cell.textField;
         } else if([title isEqualToString:kTitle2]) {
+            cell.textField.text = self.lixiStr;
             self.liXiTextF = cell.textField;
         }
         
@@ -210,9 +247,6 @@ static NSString *kTitle6 = @"结算日期";
         cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.chargeModel.money];
         self.poundageTextF = cell.textField;
         cell.nameL.text = title;
-        NSString *oldStr = [NSString stringWithFormat:@"每月10号该账户将生成50.00元的利息流水"];
-        cell.subNameL.text = oldStr;
-        //    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
         cell.hasPercentageL = NO;
         cell.hasNotSegment = YES;
         self.subL = cell.subNameL;
@@ -472,8 +506,8 @@ static NSString *kTitle6 = @"结算日期";
         NSString *chargeBillId = nil;
         NSString *targetChargeBillId = nil;
         NSString *interestChargeBillId = nil;
-        chargeBillId = @"16";
-        targetChargeBillId = @"15";
+        chargeBillId = @"4";
+        targetChargeBillId = @"3";
         interestChargeBillId = @"22";
         NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
         NSDate *billDate = [today compare:self.financeModel.startDate] == NSOrderedAscending ? self.financeModel.startDate : today;

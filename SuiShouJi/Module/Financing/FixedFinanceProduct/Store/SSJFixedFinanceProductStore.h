@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class SSJReminderItem;
 @class SSJFixedFinanceProductCompoundItem;
 @class FMDatabase;
+@class SSJDatabase;
 
 /**
  固定收益理财状态
@@ -125,9 +126,8 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param success 成功
  @param failure 失败
  */
-+ (void)deleteFixedFinanceProductAccountWithModel:(SSJFixedFinanceProductItem *)model
-                                   success:(void (^)(void))success
-                                   failure:(void (^)(NSError *error))failure;
++ (void)deleteFixedFinanceProductAccountWithModel:(NSArray <SSJFixedFinanceProductItem *> *)model success:(void (^)(void))success
+                                          failure:(void (^)(NSError *error))failure ;
 
 
 
@@ -258,6 +258,32 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (NSString *)queryfundNameWithFundid:(NSString *)fundid;
+
+
+/**
+ 通过remindid查找
+
+ @param remindid <#remindid description#>
+ @return <#return value description#>
+ */
++ (NSString *)queryProductIdWithRemindId:(NSString *)remindid;
+
+/**
+ 查询某个理财账户最新一条派发流水时间
+ 
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (NSDate *)queryPaiFalLastBillDateWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db;
+
+/**
+ 生成某个理财产品在起止时间内的利息派发流水  每日流水
+ 
+ @param item <#item description#>
+ @param investmentDate <#startDate description#>
+ @param endDate <#endDate description#>
+ */
++ (BOOL)interestRecordWithModel:(SSJFixedFinanceProductItem *)item investmentDate:(NSDate *)investmentDate endDate:(NSDate *)endDate newMoney:(double)newMoney inDatabase:(FMDatabase *)db error:(NSError **)error;
 @end
 
 

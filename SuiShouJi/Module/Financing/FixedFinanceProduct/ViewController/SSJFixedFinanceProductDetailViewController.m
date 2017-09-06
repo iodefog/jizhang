@@ -183,7 +183,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     return [UIView new];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1) {
+        
+    }
+}
 
 
 #pragma mark - SSJSeparatorFormViewDataSource

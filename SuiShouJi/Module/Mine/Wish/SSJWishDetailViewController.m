@@ -381,6 +381,7 @@
         __weak typeof(self) weakSelf = self;
         remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
             weakSelf.remindSwitch.on = YES;
+            item.remindState = YES;
             item.remindType = SSJReminderTypeWish;
             weakSelf.reminderItem = item;
         };

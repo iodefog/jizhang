@@ -63,6 +63,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /**
+ 根据开始日期和时间
+
+ @param startDate <#startDate description#>
+ @param time <#time description#>
+ @param getDifferenceWithStartDate <#getDifferenceWithStartDate description#>
+ @param startDate <#startDate description#>
+ @param endDate <#endDate description#>
+ @return <#return value description#>
+ */
++ (NSDate *)endDateWithStartDate:(NSDate *)startDate time:(NSInteger)time timeType:(SSJMethodOfRateOrTime)timeType;
+
+
+/**
  两个时间之间有多少天
 
  @param startDate <#startDate description#>

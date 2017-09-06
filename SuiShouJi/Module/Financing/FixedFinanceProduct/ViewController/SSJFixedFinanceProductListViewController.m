@@ -19,6 +19,7 @@
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFinancingHomeitem.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductListCellId";
 
@@ -88,7 +89,30 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 #pragma mark - Action
 - (void)deleteAction {
-//    [SSJFixedFinanceProductStore deleteFixedFinanceProductAccountWithModel:[self.dataItems ssj] success:<#^(void)success#> failure:<#^(NSError * _Nonnull error)failure#>
+    [self.view ssj_showLoadingIndicator];
+    MJWeakSelf;
+    [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:self.item.fundingID Type:SSJFixedFinanceStateAll success:^(NSArray<SSJFixedFinanceProductItem *> * _Nonnull resultList) {
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJFixedFinanceProductStore deleteFixedFinanceProductAccountWithModel:resultList success:^{
+            [weakSelf.view ssj_hideLoadingIndicator];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [weakSelf.navigationController popToRootViewControllerAnimated:YES];
+        } failure:^(NSError * _Nonnull error) {
+            [weakSelf.view ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    } failure:^(NSError * _Nonnull error) {
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+    
+    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        return nil;
+    }] then:^RACSignal *{
+        
+        return nil;
+    }];
+
     
 }
 - (void)addAction {

@@ -34,6 +34,7 @@
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJGeTuiManager.h"
 #import "NSString+MoneyDisplayFormat.h"
+#import "SSJLocalNotificationHelper.h"
 
 
 static NSString *KTitle1 = @"投资名称";
@@ -111,9 +112,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
-    if (_model.remindid.length) {
-        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_model.remindid];
-    }
+    [self getWishRemindDetailFromDB];
     
     [self updateTitle];
     [self loadData];
@@ -126,6 +125,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
     [self updateAppearance];
 }
+
+- (void)getWishRemindDetailFromDB {
+    if (self.model.remindid.length) {
+        self.reminderItem = [SSJLocalNotificationStore queryReminderItemForID:self.model.remindid];
+        if (self.model.remindid.length && self.reminderItem.remindState == 1) {
+            self.remindSwitch.on = YES;
+        }
+    }
+}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -396,6 +405,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             }
         }
         self.navigationController.viewControllers = [array copy];
+//        [self saveRemind];
         
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
@@ -403,6 +413,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [weakSelf.sureButton ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
+    
+
+}
+
+- (void)saveRemind {
+    //保存提醒
+    MJWeakSelf;
+    if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
+        weakSelf.model.remindid = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
+        weakSelf.reminderItem.remindState = 1;
+        weakSelf.reminderItem.remindType = SSJReminderTypeWish;
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 - (BOOL)checkFixedFinModelIsValid {
@@ -450,6 +478,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.model.timetype = [self switchRateType:self.qiXiansegmentControl.selectedSegmentIndex rate:NO];
     self.createCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     
+    if (self.reminderItem.remindId.length) {
+        self.model.remindid = self.reminderItem.remindId;
+    }
+    
     if (_edited) {//编辑
         self.model.balanceOutOrIn = 0;
         if ([self.model.oldMoney doubleValue] < [self.model.money doubleValue]) {//增加
@@ -477,7 +509,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
-
+    
+    self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
 }
 
 
@@ -490,6 +523,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         __weak typeof(self) weakSelf = self;
         remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
             weakSelf.remindSwitch.on = YES;
+            item.remindState = YES;
             item.remindType = SSJFixedFinaProduct;
             weakSelf.reminderItem = item;
         };
@@ -527,7 +561,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     reminderVC.item = tmpRemindItem;
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
-        wself.model.remindid = item.remindId;
+        wself.model.remindid = wself.model.productid;
         [wself.tableView reloadData];
     };
     reminderVC.deleteReminderAction = ^{
@@ -751,7 +785,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.additionalIcon.image = nil;
     cell.customAccessoryType = UITableViewCellAccessoryNone;
     cell.switchControl.hidden = NO;
-    cell.switchControl.on = _reminderItem.remindState;
+    cell.switchControl.on = _reminderItem.remindState && _reminderItem.remindId.length;
     [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
     [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
     cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
