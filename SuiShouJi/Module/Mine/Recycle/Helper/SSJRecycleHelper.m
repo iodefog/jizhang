@@ -675,7 +675,7 @@
             return NO;
         }
         
-        // 恢复借贷流水
+        // 恢复借贷流水；因为老版本（2.8.0之前）借贷流水是通过writedate匹配的，所以要兼容老版本writedate不能完全相同
         NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *preChargeID = [[model.ID componentsSeparatedByString:@"_"] firstObject];
         if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, iversion = ?, cwritedate = ? where ichargeid like ? || '_%' and ichargetype = ? and operatortype = 2", @(SSJSyncVersion()), chargeWriteDate, preChargeID, @(SSJChargeIdTypeLoan)]) {
@@ -724,7 +724,7 @@
                 return NO;
             }
             
-            // 恢复还款流水
+            // 恢复还款流水；因为老版本（2.8.0之前）还款流水是通过writedate匹配的，所以要兼容老版本writedate不能完全相同
             NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
             if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cid = ? and ichargetype = ? and cwritedate = ? and operatortype = 2", chargeWriteDate, @(SSJSyncVersion()), model.sundryID, @(SSJChargeIdTypeRepayment), clientDate]) {
                 if (error) {
