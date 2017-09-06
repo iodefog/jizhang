@@ -20,7 +20,7 @@ def shared_pods
 #    pod 'FMDB'
     pod 'DateTools'
     pod 'ZYCornerRadius', '~> 0.5.1'
-    pod 'FLAnimatedImage', '~> 1.0'
+    pod 'FLAnimatedImage'
     pod 'SSZipArchive'
     pod 'GTSDK'
     pod 'Masonry'

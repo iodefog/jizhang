@@ -396,7 +396,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 }else{
                     self.noDataHeader.hidden = YES;
                 }
-                self.creditCardHeader.item = self.item;
+                self.creditCardHeader.item = fundingItem;
                 self.item = fundingItem;
                 self.title = fundingItem.fundingName;
                 [self.view ssj_hideLoadingIndicator];
@@ -510,10 +510,8 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.header updateAfterThemeChange];
     if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
         [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
-        
     } else {
         [_repaymentButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
-        
     }
     
     [_repaymentButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
