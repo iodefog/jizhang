@@ -623,16 +623,14 @@
                                               error:error]) {
             return NO;
         }
-        
-        // 恢复所有和此账户关联的周期转账流水
-        if (![self recoverChargesWithSundryID:model.sundryID
-                                    writeDate:writeDate
-                                   clientDate:clientDate
-                                   chargeType:SSJChargeIdTypeCyclicTransfer
-                                   inDatabase:db
-                                        error:error]) {
-            return NO;
+    }
+    
+    // 恢复所有和此账户关联的周期转账流水
+    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where ichargetype = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), @(SSJChargeIdTypeCyclicTransfer), clientDate]) {
+        if (error) {
+            *error = [db lastError];
         }
+        return NO;
     }
     
     return YES;
@@ -728,14 +726,13 @@
             
             // 恢复还款流水
             NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-            if (![self recoverChargesWithSundryID:model.sundryID
-                                        writeDate:chargeWriteDate
-                                       clientDate:clientDate
-                                       chargeType:SSJChargeIdTypeRepayment
-                                       inDatabase:db
-                                            error:error]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cid = ? and ichargetype = ? and cwritedate = ? and operatortype = 2", chargeWriteDate, @(SSJSyncVersion()), model.sundryID, @(SSJChargeIdTypeRepayment), clientDate]) {
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
+            
             timestamp += 0.001;
         } else if (billID == SSJSpecialBillIdCreditAgingPrincipal
                    || billID == SSJSpecialBillIdCreditAgingPoundage) {
@@ -864,22 +861,6 @@
             }
             return NO;
         }
-    }
-    
-    return YES;
-}
-#pragma mark - 恢复转账／借贷／信用卡／固收理财流水
-+ (BOOL)recoverChargesWithSundryID:(NSString *)sundryID
-                         writeDate:(NSString *)writeDate
-                        clientDate:(NSString *)clientDate
-                        chargeType:(SSJChargeIdType)chargeType
-                        inDatabase:(SSJDatabase *)db
-                             error:(NSError **)error {
-    if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, cwritedate = ?, iversion = ? where cid = ? and ichargetype = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), sundryID, @(chargeType), clientDate]) {
-        if (error) {
-            *error = [db lastError];
-        }
-        return NO;
     }
     
     return YES;
