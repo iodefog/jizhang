@@ -394,8 +394,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     if (item.incomeOrExpence) {
                         lastDayItem.expenture = lastDayItem.expenture + money;
                     } else {
-                        lastDayItem.income = lastDayItem.income + money;
-                    }
+`                    }
                 } else {
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
                     lastDayItem = dayItem;
