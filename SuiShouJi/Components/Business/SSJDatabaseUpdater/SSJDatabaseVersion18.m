@@ -244,7 +244,7 @@
                              @"ibillid":model.billId,
                              @"cid":model.loanId,
                              @"cuserid":model.userId,
-                             @"cmemo":model.memo,
+                             @"cmemo":model.memo ?: @"",
                              @"cbilldate":model.billDate,
                              @"imoney":@(model.money),
                              @"iversion":@(SSJSyncVersion()),

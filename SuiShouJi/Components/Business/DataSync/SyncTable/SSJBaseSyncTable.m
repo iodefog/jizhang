@@ -28,7 +28,7 @@
 }
 
 + (instancetype)table {
-    return [[SSJBaseSyncTable alloc] init];
+    return [[self alloc] init];
 }
 
 - (instancetype)init {
