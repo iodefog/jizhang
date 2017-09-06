@@ -80,7 +80,7 @@
     
     NSString *billId = record[@"ibillid"];
     NSString *fundId = record[@"ifunsid"];
-    NSString *configId = record[@"cid"];  //  定期记账配置id可已为空（仅一次）
+    NSString *configId = record[@"cid"];  //  定期记账配置id可已为空（仅一次转账情况下）
     SSJChargeIdType idtype = [record[@"ichargetype"] integerValue];
     if (!billId || !fundId) {
         if (error) {
