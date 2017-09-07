@@ -176,8 +176,9 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param failure 删除失败的回调，error code为1代表删除流水后借贷剩余金额会小于0
  */
 + (void)deleteFixedFinanceProductChargeWithModel:(SSJFixedFinanceProductChargeItem *)model
-                              success:(void (^)(void))success
-                              failure:(void (^)(NSError *error))failure;
+                                    productModel:(SSJFixedFinanceProductItem *)productModel
+                                         success:(void (^)(void))success
+                                         failure:(void (^)(NSError *error))failure;
 
 /**
  新增或修改固定理财的某个流水
@@ -267,8 +268,24 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(SSJFixedFinanceProductChargeItem *charegItem))success failure:(void (^)(NSError *error))failure;
+/**
+ 通过一条chareitem查找对应的另外一条流水
+ 
+ @param oneChargeItem <#oneChargeItem description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 
+/**
+ 根据一条流水查找对应流水chargeid
+
+ @param oneChargeItem <#oneChargeItem description#>
+ @param db <#db description#>
+ @param error <#error description#>
+ @return <#return value description#>
+ */
++ (NSString *)queryChargeIdWithChargeItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem inDatabase:(FMDatabase *)db error:(NSError **)error;
 /**
  通过remindid查找
 

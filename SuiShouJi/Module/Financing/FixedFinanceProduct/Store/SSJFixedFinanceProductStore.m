@@ -565,6 +565,22 @@
     }];
 }
 
++ (BOOL)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem inDatabase:(FMDatabase *)db error:(NSError **)error {
+    
+    return YES;
+}
+
+/**
+ 根据一条流水查找对应流水chargeid
+ */
++ (NSString *)queryChargeIdWithChargeItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem inDatabase:(FMDatabase *)db error:(NSError **)error {
+    __block NSString *charegid;
+    NSString *uuid = [[oneChargeItem.chargeId componentsSeparatedByString:@"_"] firstObject];
+    if (!uuid.length) return @"";
+       charegid = [db stringForQuery:@"select ichargeid from bk_user_charge where ichargeid like (? || '_%') and cuserid = ? and cid = ? and operatortype != 2",uuid,SSJUSERID(),oneChargeItem.cid];
+    return charegid;
+}
+
 #pragma mark - 固定理财流水
 
 /**
@@ -610,9 +626,10 @@
  @param failure 删除失败的回调，error code为1代表删除流水后借贷剩余金额会小于0
  */
 + (void)deleteFixedFinanceProductChargeWithModel:(SSJFixedFinanceProductChargeItem *)model
+                                    productModel:(SSJFixedFinanceProductItem *)productModel
                                          success:(void (^)(void))success
                                          failure:(void (^)(NSError *error))failure {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSError *error = nil;
 
@@ -620,7 +637,7 @@
         if (model.chargeType == SSJFixedFinCompoundChargeTypeInterest || model.chargeType == SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease || model.chargeType == SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease) {
             //单向面流水
             if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),model.chargeId]) {
-                
+                *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
                         failure(error);
@@ -629,7 +646,85 @@
                 return;
             }
         } else if (model.chargeType == SSJFixedFinCompoundChargeTypeAdd) {//追加
-        
+        //删除追加流水
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),model.chargeId]) {
+                 *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        //删除追加对应的流水
+            //1,查询对应流水的chargeid
+            NSString *charegId = [self queryChargeIdWithChargeItem:model inDatabase:db error:&error];
+            if (!charegId.length) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),charegId]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        //删除派发流水
+            
+        //重新生成派发流水
+            
+        //修改本金
+            //删除以前派发的利息流水//重新派发利息流水
+            if (![self deleteDistributedInterestWithModel:productModel untilDate:[model.billDate dateByAddingDays:1] inDatabase:db error:&error]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            
+            //重新生成新的历史派发流水
+            NSDate *endDate;
+            if ([[NSDate date] compare:[[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+                endDate = [NSDate date];
+            } else {
+                endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+            }
+            //按照新的金额重新派发流水
+            //查询原始本金
+            double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",SSJUSERID(),productModel.productid];
+            double newMoney = oldMoney;
+            newMoney = oldMoney - model.money;
+            
+            if (![self interestRecordWithModel:productModel investmentDate:model.billDate endDate:endDate newMoney:newMoney inDatabase:db error:&error]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure([db lastError]);
+                    });
+                }
+                return;
+            }
+            
+            //修改本金
+            if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
         } else if (model.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {//赎回
             
         }  else {//手续费，利息，追加，赎回（手续费1赎回，2结算）
@@ -674,10 +769,10 @@
                 double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",productModel.userid,productModel.productid];
                 double newMoney = oldMoney;
                 if (type == 1) {//追加
-                    newMoney = oldMoney + model.chargeModel.money;
+                    newMoney = oldMoney + model.chargeModel.oldMoney;
                     
                 } else if (type == 2) {//赎回
-                    newMoney = oldMoney - model.chargeModel.money - model.interestChargeModel.money;
+                    newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.money;
                 }
             
             if (type != 0) {
@@ -719,7 +814,6 @@
                     }
                     return;
                 }
-//            }
             
             //保存流水//存储流水记录
             if (![self saveFixedFinanceProductChargeWithModel:model item:productModel inDatabase:db error:&error]) {

@@ -52,6 +52,9 @@ static NSUInteger kDateTag = 2005;
 @property (nonatomic, strong) NSArray *cellTags;
 
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherChareItem;
+
+/**编辑的时候输入框的金额*/
+@property (nonatomic, assign) double oldMoney;
 @end
 
 @implementation SSJFixedFinanctAddViewController
@@ -66,6 +69,7 @@ static NSUInteger kDateTag = 2005;
     if (!self.chargeItem) {
         [self initCompoundModel];
     }
+    self.oldMoney = self.chargeItem.money;
     [self updateAppearance];
 }
 
@@ -77,18 +81,21 @@ static NSUInteger kDateTag = 2005;
         //通过另一条流水的fundid查找名称
         [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
             weakSelf.otherChareItem = charegItem;
+            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
             [self initEditCompoundModel];
-            [weakSelf fund];
+            [weakSelf funditem:funditem];
             
         } failure:^(NSError * _Nonnull error) {
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
+    } else {
+        [self funditem:nil];
     }
 }
 
-- (void)fund {
+- (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
     MJWeakSelf;
-    SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
+    
     //查询转出账户列表
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         weakSelf.tableView.hidden = NO;
@@ -134,10 +141,9 @@ static NSUInteger kDateTag = 2005;
 
 - (void)deleteButtonClicked {
     MJWeakSelf;
-    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem success:^{
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem productModel:self.financeModel success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
-        
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
@@ -352,12 +358,22 @@ static NSUInteger kDateTag = 2005;
     }
     
     self.compoundModel.chargeModel.money = [moneyF.text doubleValue];
+    self.compoundModel.chargeModel.oldMoney = self.compoundModel.chargeModel.money;
     self.compoundModel.chargeModel.memo = memoF.text.length ? memoF.text : @"";
     self.compoundModel.chargeModel.fundId = self.financeModel.thisfundid;
     
     self.compoundModel.targetChargeModel.money = [moneyF.text doubleValue];
+    self.compoundModel.targetChargeModel.oldMoney = self.compoundModel.targetChargeModel.money;
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
-    
+    //如果是编辑的时候
+    if (self.chargeItem) {
+        if (self.oldMoney >= [moneyF.text doubleValue]) {//为负数
+            self.compoundModel.chargeModel.oldMoney = [moneyF.text doubleValue] - self.oldMoney;
+        } else {
+            self.compoundModel.chargeModel.oldMoney = [moneyF.text doubleValue] - self.oldMoney;
+        }
+        
+    }
     if (!self.chargeItem) {
         NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
         self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = cid;
@@ -368,6 +384,7 @@ static NSUInteger kDateTag = 2005;
 #pragma mark - Action
 - (void)sureButtonAction {
     if (![self checkIfNeedClick]) return;
+    
     MJWeakSelf;
     //保存流水
     NSMutableArray *saveChargeModels = [@[self.compoundModel] mutableCopy];

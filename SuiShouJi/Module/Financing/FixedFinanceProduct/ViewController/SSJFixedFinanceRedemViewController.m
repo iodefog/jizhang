@@ -512,19 +512,21 @@ static NSString *kTitle6 = @"备注";
         chargeModel.fundId = self.financeModel.thisfundid;
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
+        chargeModel.billDate = [NSDate date];
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,targetChargeBillId];
         targetChargeModel.fundId = self.financeModel.targetfundid;
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.userId = SSJUSERID();
-
+        targetChargeModel.billDate = [NSDate date];
         
         SSJFixedFinanceProductChargeItem *interestChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         interestChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,interestChargeBillId];
         interestChargeModel.fundId = self.financeModel.thisfundid;
         interestChargeModel.billId = interestChargeBillId;
         interestChargeModel.userId = SSJUSERID();
+        interestChargeModel.billDate = [NSDate date];
         
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;

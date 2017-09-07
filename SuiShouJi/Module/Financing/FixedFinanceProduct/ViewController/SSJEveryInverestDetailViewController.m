@@ -86,7 +86,7 @@ static  NSString *kTitle3 = @"投资名称";
 
 - (void)setUpNav {
     
-    if (self.productItem.isend != 1 && self.chargeItem.chargeType != SSJFixedFinCompoundChargeTypeCreate) {
+    if (self.productItem.isend != 1 && self.chargeItem.chargeType != SSJFixedFinCompoundChargeTypeCreate && self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeInterest) {
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
     }
@@ -94,15 +94,13 @@ static  NSString *kTitle3 = @"投资名称";
 
 - (void)deleteButtonClicked {
     MJWeakSelf;
-    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem success:^{
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem productModel:self.productItem success:^{
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         [weakSelf.navigationController popViewControllerAnimated:YES];
-        
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 }
-
 
 
 #pragma mark - UITableViewDataSource
