@@ -22,6 +22,7 @@
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
 #import "SSJShareBooksMemberTable.h"
+#import "SSJRecycleHelper.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -132,6 +133,21 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db , BOOL *rollback) {
         NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSError *error;
+        
+        [SSJRecycleHelper createRecycleRecordWithID:item.fundingID recycleType:SSJRecycleTypeFund writeDate:writeDate database:db error:&error];
+        
+        if (error) {
+            *rollback = YES;
+            if (failure) {
+                dispatch_main_async_safe(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
         if (!item.cardItem) {
             // 如果是借贷
             SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *) item;
@@ -337,12 +353,12 @@
         NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([item.billId isEqualToString:@"3"]) {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4" , userId , item.billDate , minDateStr , maxDateStr , item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4" , writeDate, @(SSJSyncVersion()), userId, item.billDate, minDateStr, maxDateStr, item.money]) {
                 error = [db lastError];
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3" , userId , item.billDate , minDateStr , maxDateStr , item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3" , writeDate, @(SSJSyncVersion()) ,userId ,item.billDate ,minDateStr ,maxDateStr ,item.money]) {
                 error = [db lastError];
                 return NO;
             }
