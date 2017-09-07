@@ -143,7 +143,7 @@
             if (failure) {
                 dispatch_main_async_safe(^{
                     failure([db lastError]);
-                });
+                }); 
             }
             return;
         }
