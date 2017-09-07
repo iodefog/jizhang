@@ -194,15 +194,17 @@
     
     NSMutableArray *subtitles = [NSMutableArray array];
     
-    FMResultSet *rs = [db executeQuery:@"select fi.cicoin, fi.cacctname, fi.ccolor, fi.cparent, count(uc.ichargeid) as chargecount from bk_fund_info as fi, bk_user_charge as uc where fi.cfundid = uc.ifunsid and uc.operatortype <> 2 and fi.cfundid = ?", model.sundryID];
+    FMResultSet *rs = [db executeQuery:@"select cicoin, cacctname, ccolor, cparent from bk_fund_info where cfundid = ?", model.sundryID];
     while ([rs next]) {
         iconName = [rs stringForColumn:@"cicoin"];
         colorValue = [rs stringForColumn:@"ccolor"];
         fundName = [rs stringForColumn:@"cacctname"];
         parent = [rs intForColumn:@"cparent"];
-        [subtitles addObject:[NSString stringWithFormat:@"%d条流水", [rs intForColumn:@"chargecount"]]];
     }
     [rs close];
+    
+    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
     
     if ([db boolForQuery:@"select count(*) from bk_charge_period_config where ifunsid = ?", model.sundryID]) {
         [subtitles addObject:@"周期记账"];
