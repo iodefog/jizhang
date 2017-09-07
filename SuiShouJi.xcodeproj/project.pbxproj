@@ -32502,6 +32502,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -33004,6 +33005,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -33142,6 +33144,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -33246,6 +33249,7 @@
 					"COCOAPODS=1",
 					"SD_WEBP=1",
 				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "$(SRCROOT)/SuiShouJi/Resource/Plist/YouYuJiZhangLiCai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

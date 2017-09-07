@@ -209,7 +209,7 @@
                     }
 
                     // 删掉账户所对应的转账
-                    if (![self deleteTransferChargeInDataBase:db withFundId:fundingItem.fundingID userId:userId error:NULL]) {
+                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:fundingItem.fundingID userId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -283,7 +283,7 @@
                 }
             } else {
                 // 删掉账户所对应的转账
-                if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.fundingID userId:userId error:NULL]) {
+                if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:cardItem.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{
@@ -293,7 +293,7 @@
                     return;
                 }
 
-                if (![SSJCreditCardStore deleteCreditCardWithCardItem:item inDatabase:db forUserId:userId error:NULL]) {
+                if (![SSJCreditCardStore deleteCreditCardWithCardItem:item writeDate:writeDate inDatabase:db forUserId:userId error:NULL]) {
                     *rollback = YES;
                     SSJDispatch_main_async_safe(^{
                         if (failure) {
@@ -312,7 +312,7 @@
     }];
 }
 
-+ (BOOL)deleteTransferChargeInDataBase:(FMDatabase *)db withFundId:(NSString *)fundId userId:(NSString *)userId error:(NSError *)error {
++ (BOOL)deleteTransferChargeInDataBase:(FMDatabase *)db writeDate:(NSString *)writeDate withFundId:(NSString *)fundId userId:(NSString *)userId error:(NSError *)error {
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     FMResultSet *transferResult
             = [db executeQuery:@"select * from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2 and ibillid in (3,4)" , fundId , userId];

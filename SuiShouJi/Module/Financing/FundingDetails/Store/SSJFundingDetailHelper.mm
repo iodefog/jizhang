@@ -427,7 +427,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                                                                    && SSJCreditRepaymentTable.repaymentMonth == listItem.month
                                                                    && SSJCreditRepaymentTable.cardId == cardId
                                                                    && SSJCreditRepaymentTable.operatorType != 2
-                                                                   && SSJCreditRepaymentTable.instalmentCount = 0] doubleValue];
+                                                                   && SSJCreditRepaymentTable.instalmentCount == 0] doubleValue];
                 NSDate *currentMonth = [NSDate dateWithString:currentMonthStr formatString:@"yyyy-MM"];
                 NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateBySubtractingMonths:1];
                 NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateByAddingDays:1];

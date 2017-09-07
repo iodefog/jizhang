@@ -214,12 +214,11 @@
 }
 
 + (BOOL)deleteCreditCardWithCardItem:(SSJFinancingHomeitem *)item
+                           writeDate:(NSString *)writeDate
              inDatabase:(FMDatabase *)db
               forUserId:(NSString *)userId
                   error:(NSError **)error{
-    
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    
+
     //删除信用卡表
     if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cfundid = ?",writeDate,@(SSJSyncVersion()),userId,item.fundingID]) {
         if (error) {
