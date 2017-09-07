@@ -33,9 +33,9 @@ WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, repaymentMoney, "REPAYMENTMONEY"
 WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, poudageRate, "IPOUNDAGERATE")
 WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, memo, "CMEMO")
 WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, userId, "CUSERID")
-WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, version, "OPERATORTYPE")
+WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, version, "IVERSION")
 WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, writeDate, "CWRITEDATE")
-WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, operatorType, "IVERSION")
+WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, operatorType, "OPERATORTYPE")
 WCDB_SYNTHESIZE_COLUMN(SSJCreditRepaymentTable, repaymentMonth, "CREPAYMENTMONTH")
 
 WCDB_PRIMARY(SSJCreditRepaymentTable, repaymentId)

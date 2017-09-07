@@ -164,7 +164,7 @@ static NSString *SSJFinancingAddCellIdentifier = @"financingHomeAddCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
 
-    SSJBaseCellItem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
+    SSJFinancingHomeitem *item = [self.items ssj_safeObjectAtIndex:indexPath.row];
     __weak typeof(self) weakSelf = self;
     SSJFinancingHomeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:SSJFinancingNormalCellIdentifier forIndexPath:indexPath];
     cell.item = item;

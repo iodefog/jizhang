@@ -520,7 +520,7 @@ static NSString *const kTitle6 = @"分期申请日";
 }
 
 - (void)updateFenqiLab{
-    [SSJCreditCardStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
+    [SSJRepaymentStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
         if (sumMoney > 0) {
             sumMoney = 0;
         }

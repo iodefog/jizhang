@@ -8,6 +8,13 @@
 
 #import "SSJRepaymentStore.h"
 #import "SSJDatabaseQueue.h"
+#import "SSJOrmDatabaseQueue.h"
+#import "SSJUserChargeTable.h"
+#import "SSJUserBillTypeTable.h"
+#import "SSJCreditRepaymentTable.h"
+#import "SSJFundInfoTable.h"
+#import "SSJShareBooksMemberTable.h"
+
 
 @implementation SSJRepaymentStore
 
@@ -273,6 +280,74 @@
     }];
 }
 
++ (void)queryTheTotalExpenceForCardId:(NSString *)cardId
+                       cardBillingDay:(NSInteger)billingDay
+                                month:(NSDate *)currentMonth
+                              Success:(void (^)(double))success
+                              failure:(void (^)(NSError *))failure {
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
+        double sumMoney = 0;
+        NSString *currentDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+        NSString *userId = SSJUSERID();
+
+        NSString *cardParent = [db getOneValueOnResult:SSJFundInfoTable.fundParent fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == cardId];
+
+        NSDate *firstDate;
+        
+        NSDate *seconDate;
+        
+        if ([cardParent isEqualToString:@"16"]) {
+            firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateBySubtractingMonths:1];
+            seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateBySubtractingDays:1];
+        } else {
+            firstDate = [[[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay] dateBySubtractingMonths:1] dateByAddingDays:1];
+            seconDate = [NSDate dateWithYear:currentMonth.year month:currentMonth.month day:billingDay];
+        }
+        double currentIncome = [[self getFundBalanceWithFundId:cardId
+                                                         type:SSJBillTypeIncome
+                                                     startDate:[firstDate formattedDateWithFormat:@"yyyy-MM-dd"]
+                                                       endDate:[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]
+                                                   inDataBase:db] doubleValue];
+        double currentExpence = [[self getFundBalanceWithFundId:cardId
+                                                           type:SSJBillTypePay
+                                                      startDate:[firstDate formattedDateWithFormat:@"yyyy-MM-dd"]
+                                                        endDate:[seconDate formattedDateWithFormat:@"yyyy-MM-dd"]
+                                                     inDataBase:db] doubleValue];
+
+        double currentRepaymentMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
+                                                     fromTable:@"bk_credit_repayment"
+                                                         where:SSJCreditRepaymentTable.repaymentMonth == [currentMonth formattedDateWithFormat:@"yyyy-MM"]
+                                                               && SSJCreditRepaymentTable.userId == userId
+                                                               && SSJCreditRepaymentTable.operatorType != 2
+                                                               && SSJCreditRepaymentTable.instalmentCount == 0]
+                                            doubleValue];
+
+        double currentInstalMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
+                                                     fromTable:@"bk_credit_repayment"
+                                                         where:SSJCreditRepaymentTable.repaymentMonth == [currentMonth formattedDateWithFormat:@"yyyy-MM"]
+                                                               && SSJCreditRepaymentTable.userId == userId
+                                                               && SSJCreditRepaymentTable.operatorType != 2
+                                                               && SSJCreditRepaymentTable.instalmentCount > 0]
+                                         doubleValue];
+
+        double currentRepaymentForOtherMonth = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
+                                                  fromTable:@"bk_credit_repayment"
+                                                      where:SSJCreditRepaymentTable.repaymentMonth != [currentMonth formattedDateWithFormat:@"yyyy-MM"]
+                                                            && SSJCreditRepaymentTable.userId == userId
+                                                            && SSJCreditRepaymentTable.operatorType != 2
+                                                            && SSJCreditRepaymentTable.instalmentCount > 0
+                                                            && SSJCreditRepaymentTable.applyDate.notBetween([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
+                                                    doubleValue];
+        sumMoney = currentIncome - currentExpence + currentRepaymentMoney + currentInstalMoney - currentRepaymentForOtherMonth;
+        SSJDispatch_main_async_safe(^{
+            if (success) {
+                success(sumMoney);
+            }
+        });
+    }];
+}
+
+
 + (BOOL)checkTheMoneyIsValidForTheRepaymentWithRepaymentModel:(SSJRepaymentModel *)model{
     __block BOOL isInvalid = YES;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
@@ -290,26 +365,64 @@
 
 + (void)queryFirstRepaymentItemSuccess:(void (^)(SSJFinancingHomeitem *item))success
                                failure:(void (^)(NSError *error))failure  {
-    [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
         NSString *userid = SSJUSERID();
-        FMResultSet *result = [db executeQuery:@"select a.* from bk_fund_info a where a.cparent != 'root' and a.operatortype <> 2 and a.cuserid = ? and a.cparent not in ('3','10','11','16') order by a.iorder limit 1",userid];
+        SSJFundInfoTable *fundInfoTable = [db getOneObjectOfClass:SSJFundInfoTable.class
+                                                        fromTable:@"bk_fund_info"
+                                                            where:SSJFundInfoTable.fundParent.notIn(@[@"3",@"10",@"11",@"16",@"17"])
+                                                                  && SSJFundInfoTable.userId == SSJUSERID()
+                                                                  && SSJFundInfoTable.operatorType != 2
+                                                          orderBy:SSJFundInfoTable.fundOrder.order(WCTOrderedAscending)];
         SSJFinancingHomeitem *item = [[SSJFinancingHomeitem alloc] init];
-
-        while ([result next]) {
-            item.fundingColor = [result stringForColumn:@"CCOLOR"];
-            item.fundingIcon = [result stringForColumn:@"CICOIN"];
-            item.fundingID = [result stringForColumn:@"CFUNDID"];
-            item.fundingName = [result stringForColumn:@"CACCTNAME"];
-            item.fundingParent = [result stringForColumn:@"CPARENT"];
-            item.fundingMemo = [result stringForColumn:@"CMEMO"];
-            item.fundingOrder = [result intForColumn:@"IORDER"];
-        }
+        item.fundingColor = fundInfoTable.fundColor;
+        item.fundingIcon = fundInfoTable.fundIcon;
+        item.fundingID = fundInfoTable.fundId;
+        item.fundingName = fundInfoTable.fundName;
+        item.fundingParent = fundInfoTable.fundParent;
+        item.fundingMemo = fundInfoTable.memo;
+        item.fundingOrder = fundInfoTable.fundOrder;
     
         if (success) {
             success(item);
         }
-
     }];
 }
+
++ (NSNumber *)getFundBalanceWithFundId:(NSString *)fundId type:(SSJBillType)type startDate:(NSString *)startDate endDate:(NSString *)endDate inDataBase:(WCTDatabase *)db {
+    NSNumber *currentBalance = 0;
+    
+    WCTResultList resultList = {SSJUserChargeTable.money.inTable(@"bk_user_charge").sum()};
+    
+    WCDB::JoinClause joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type" , WCDB::JoinClause::Type::Inner).
+    on(SSJUserChargeTable.billId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.billId.inTable(@"bk_user_bill_type")
+       && ((SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.booksId.inTable(@"bk_user_bill_type")
+            && SSJUserChargeTable.userId.inTable(@"bk_user_charge") == SSJUserBillTypeTable.userId.inTable(@"bk_user_bill_type")
+            )
+           || SSJUserBillTypeTable.billId.length() < 4
+           )
+       && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID()
+       && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
+       && SSJUserBillTypeTable.billType == type
+       && SSJUserChargeTable.fundId == fundId);
+    
+    joinClause.join("bk_share_books_member" , WCDB::JoinClause::Type::Left).
+    on(SSJUserChargeTable.booksId.inTable(@"bk_user_charge") == SSJShareBooksMemberTable.booksId.inTable(@"bk_share_books_member"));
+    
+    WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).
+    where((SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member") == SSJShareBooksMemberStateNormal
+           || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull()
+           || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
+           || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14") && SSJUserChargeTable.billDate.between(startDate , endDate));
+    
+    WCTStatement *statement = [db prepare:statementSelect];
+    
+    while ([statement step]) {
+        currentBalance = (NSNumber *) [statement getValueAtIndex:0];
+    }
+    
+    return currentBalance;
+    
+}
+
 
 @end

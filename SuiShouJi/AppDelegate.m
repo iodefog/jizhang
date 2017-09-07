@@ -382,7 +382,7 @@ NSDate *SCYEnterBackgroundTime() {
             NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
             SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
             if (remindItem.remindType == SSJReminderTypeCreditCard) {
-                SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc]init];
+                SSJFinancingHomeitem *cardItem = [[SSJFinancingHomeitem alloc]init];
                 if (!remindItem.fundId.length) {
                     [self getCreditCardIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
                         remindItem.fundId = cardId;

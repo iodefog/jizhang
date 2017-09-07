@@ -418,7 +418,7 @@ static NSString *const kTitle6 = @"还款账单月份";
 }
 
 - (void)updateFenqiLab {
-    [SSJCreditCardStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
+    [SSJRepaymentStore queryTheTotalExpenceForCardId:self.repaymentModel.cardId cardBillingDay:self.repaymentModel.cardBillingDay month:self.repaymentModel.repaymentMonth Success:^(double sumMoney) {
         if (sumMoney > 0) {
             sumMoney = 0;
         }
@@ -426,7 +426,7 @@ static NSString *const kTitle6 = @"还款账单月份";
         NSString *oldStr = [NSString stringWithFormat:@"该账单周期内总欠款为%@元" , totalArrearStr];
         _fenQiLab.attributedText = [oldStr attributeStrWithTargetStr:totalArrearStr range:NSMakeRange(0 , 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];;
         [_fenQiLab sizeToFit];
-    }                                         failure:^(NSError *error) {
+    }failure:^(NSError *error) {
 
     }];
 

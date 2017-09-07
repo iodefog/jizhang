@@ -24,6 +24,7 @@
 #import "SSJReminderItem.h"
 #import "SSJCreditCardListFirstLineItem.h"
 #import "SSJCreditRepaymentTable.h"
+#import "SSJFundingTypeManager.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
@@ -61,7 +62,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
 
-        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14").orderBy(orderList);
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where((SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14") && (SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE") <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"])).orderBy(orderList);
 
         WCTStatement *statement = [db prepare:statementSelect];
 
@@ -252,7 +253,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
         
-        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14").orderBy(orderList);
+        WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where((SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14") && (SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE") <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"])).orderBy(orderList);
 
         WCTStatement *statement = [db prepare:statementSelect];
 
@@ -417,7 +418,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                                                           fromTable:@"bk_credit_repayment"
                                                               where:SSJCreditRepaymentTable.userId == userId
                                                                     && SSJCreditRepaymentTable.repaymentMonth == listItem.month
-                                                                    && SSJCreditRepaymentTable.operatorType == 2
+                                                                    && SSJCreditRepaymentTable.operatorType != 2
                                                                     && SSJCreditRepaymentTable.cardId == cardId
                                                                     && SSJCreditRepaymentTable.instalmentCount > 0] doubleValue];
                 listItem.repaymentMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
@@ -425,17 +426,17 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                                                              where:SSJCreditRepaymentTable.userId == userId
                                                                    && SSJCreditRepaymentTable.repaymentMonth == listItem.month
                                                                    && SSJCreditRepaymentTable.cardId == cardId
-                                                                   && SSJCreditRepaymentTable.operatorType == 2
-                                                                   && SSJCreditRepaymentTable.instalmentCount = 0] doubleValue];
+                                                                   && SSJCreditRepaymentTable.operatorType != 2
+                                                                   && SSJCreditRepaymentTable.instalmentCount == 0] doubleValue];
                 NSDate *currentMonth = [NSDate dateWithString:currentMonthStr formatString:@"yyyy-MM"];
                 NSDate *firstDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateBySubtractingMonths:1];
                 NSDate *seconDate = [[NSDate dateWithYear:currentMonth.year month:currentMonth.month day:newItem.cardItem.cardBillingDay] dateByAddingDays:1];
                 listItem.repaymentForOtherMonthMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
                                                                       fromTable:@"bk_credit_repayment"
                                                                           where:SSJCreditRepaymentTable.userId == userId
-                                                                                && SSJCreditRepaymentTable.repaymentMonth == listItem.month
+                                                                                && SSJCreditRepaymentTable.repaymentMonth != listItem.month
                                                                                 && SSJCreditRepaymentTable.cardId == cardId
-                                                                                && SSJCreditRepaymentTable.operatorType == 2
+                                                                                && SSJCreditRepaymentTable.operatorType != 2
                                                                                 && SSJCreditRepaymentTable.instalmentCount == 0
                                                                                 && SSJCreditRepaymentTable.applyDate.between([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
                                                             doubleValue];
@@ -648,6 +649,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.startColor = fund.startColor;
     item.endColor = fund.endColor;
     item.fundingParent = fund.fundParent;
+    item.fundingParentName = [[SSJFundingTypeManager sharedManager] modelForFundId:fund.fundParent].name;
+    item.fundingOrder = fund.fundOrder;
 
     item.chargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count()
                                       fromTable:@"BK_USER_CHARGE"
@@ -670,12 +673,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]) {
         SSJCreditCardItem *cardItem = [[SSJCreditCardItem alloc] init];
         cardItem.cardLimit = credit.cardQuota;
-        cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        if (![item.fundingParent isEqualToString:@"3"]) {
+            cardItem.settleAtRepaymentDay = YES;
+        } else {
+            cardItem.settleAtRepaymentDay = credit.billDateSettlement;
+        }
         cardItem.cardBillingDay = credit.billingDate;
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
         cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
-                                                   fromTable:@"bk_credit_repayment"
+                                                   fromTable:@"bk_credit_repayme"
                                                        where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
@@ -785,6 +792,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     item.remindCycle = userRemindTable.cycle;
     item.remindType = userRemindTable.type;
     item.remindState = userRemindTable.state;
+    item.remindDate = [NSDate dateWithString:userRemindTable.startDate formatString:@"yyyy-MM-dd HH:mm:ss"];
     return item;
 }
 
@@ -798,8 +806,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     if ([repaymentDate isEarlierThanOrEqualTo:billdate]) {
         repaymentDate = [repaymentDate dateBySubtractingMonths:1];
     }
-    NSInteger daysFromBillDay = [billdate daysFrom:today] > 0 ? [billdate daysFrom:today] : 0;
-    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] > 0 ? [repaymentDate daysFrom:today] : 0;
+    NSInteger daysFromBillDay = [billdate daysFrom:today] + 1 > 0 ? [billdate daysFrom:today] + 1 : 0;
+    NSInteger daysFromRepaymentDay = [repaymentDate daysFrom:today] + 1 > 0 ? [repaymentDate daysFrom:today] + 1 : 0;
     NSInteger minumDay = MIN(daysFromBillDay , daysFromRepaymentDay);
     if (daysFromRepaymentDay == 0 && daysFromBillDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBillDay];

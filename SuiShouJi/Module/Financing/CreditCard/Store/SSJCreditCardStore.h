@@ -22,16 +22,11 @@
 + (void)saveCreditCardWithCardItem:(SSJCreditCardItem *)item
                         remindItem:(SSJReminderItem *)remindItem
                            Success:(void (^)(NSInteger operatortype))success
-                           failure:(void (^)(NSError *error))failure ;
+                           failure:(void (^)(NSError *error))failure;
 
 + (BOOL)deleteCreditCardWithCardItem:(SSJFinancingHomeitem *)item
+                           writeDate:(NSString *)writeDate
                           inDatabase:(FMDatabase *)db
                            forUserId:(NSString *)userId
                                error:(NSError **)error;
-
-+ (void)queryTheTotalExpenceForCardId:(NSString *)cardId
-                       cardBillingDay:(NSInteger)billingDay
-                                month:(NSDate *)currentMonth
-                              Success:(void (^)(double sumMoney))success
-                              failure:(void (^)(NSError *error))failure;
 @end

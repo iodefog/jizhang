@@ -267,7 +267,28 @@
     self.backLayer.shadowColor = [UIColor ssj_colorWithHex:_item.startColor].CGColor;
 }
 
-
+- (void)updateAfterThemeChange {
+    self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
+    if (SSJ_CURRENT_THEME.financingDetailSecondaryColor.length) {
+        _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        _balanceLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        _limitTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        _limitLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+        _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailSecondaryColor alpha:SSJ_CURRENT_THEME.financingDetailSecondaryAlpha];
+        _billingDayLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.financingDetailMainColor alpha:SSJ_CURRENT_THEME.financingDetailMainAlpha];
+    } else {
+        _balanceTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        _balanceLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        _limitTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        _limitLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        _repaymentDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        _repaymentDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+        _billingDayTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
+        _billingDayLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff"];
+    }
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.

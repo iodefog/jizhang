@@ -70,7 +70,12 @@ static NSString *kCellID = @"cellID";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 75;
+    SSJFundingParentmodel *model = [self.items ssj_safeObjectAtIndex:section];
+    if (model.memo.length) {
+        return 75;
+
+    }
+    return 55;
 }
 
 - (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -159,6 +164,9 @@ static NSString *kCellID = @"cellID";
         _slideView.titles = @[@"资产账户" , @"负债账户"];
         [_slideView setTabSize:CGSizeMake(self.view.width * 0.5 , 3)];
         [_slideView ssj_setBorderWidth:1];
+        [_slideView ssj_setBorderStyle:SSJBorderStyleBottom];
+        [_slideView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+
         _slideView.selectedTitleColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor];
         _slideView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     }
@@ -224,25 +232,15 @@ static NSString *kCellID = @"cellID";
         UINavigationController *lastVc = [self.navigationController.viewControllers objectAtIndex:
                                                                                             self.navigationController.viewControllers.count
                                                                                             - 2];
-        if ([lastVc isKindOfClass:[SSJNewFundingViewController class]]) {
-            if (![model.ID isEqualToString:@"3"] && ![model.ID isEqualToString:@"9"]
-                && ![model.ID isEqualToString:@"10"] && ![model.ID isEqualToString:@"11"]) {
-                [self.navigationController popViewControllerAnimated:YES];
-                //                if (self.fundingParentSelectBlock) {
-                //                    self.fundingParentSelectBlock(item);
-                //                }
+        SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
+        __weak typeof(self) weakSelf = self;
+        normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem) {
+            if (weakSelf.addNewFundingBlock) {
+                weakSelf.addNewFundingBlock(newItem);
             }
-        } else {
-            SSJNewFundingViewController *normalFundingVc = [[SSJNewFundingViewController alloc] init];
-            __weak typeof(self) weakSelf = self;
-            normalFundingVc.addNewFundBlock = ^(SSJFinancingHomeitem *newItem) {
-                if (weakSelf.addNewFundingBlock) {
-                    weakSelf.addNewFundingBlock(newItem);
-                }
-            };
-            normalFundingVc.selectParent = model.ID;
-            [self.navigationController pushViewController:normalFundingVc animated:YES];
-        }
+        };
+        normalFundingVc.selectParent = model.ID;
+        [self.navigationController pushViewController:normalFundingVc animated:YES];
     }
 
 }

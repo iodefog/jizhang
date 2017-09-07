@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJFundingMergeSelectView : UIView
 
-@property (nonatomic,strong) SSJBaseCellItem *fundingItem;
+@property (nonatomic,strong) SSJFinancingHomeitem *fundingItem;
 
 @property (nonatomic) BOOL selectable;
 

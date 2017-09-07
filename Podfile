@@ -7,7 +7,7 @@ def shared_pods
     pod 'AFNetworking', '~> 2.5.4'
     pod 'YYKeyboardManager'
     pod 'YYText'
-    pod 'Meiqia', '~> 3.3.1'
+    pod 'Meiqia', '~> 3.3.8'
     pod 'MLeaksFinder'
 #    pod 'JSPatch'
 #    pod 'JSPatch/Extensions'
@@ -20,7 +20,7 @@ def shared_pods
 #    pod 'FMDB'
     pod 'DateTools'
     pod 'ZYCornerRadius', '~> 0.5.1'
-    pod 'FLAnimatedImage', '~> 1.0'
+    pod 'FLAnimatedImage'
     pod 'SSZipArchive'
     pod 'GTSDK'
     pod 'Masonry'
@@ -40,7 +40,7 @@ def shared_pods
     pod 'MBProgressHUD'
     
     pod 'WCDB', :git => 'https://github.com/Tencent/wcdb.git', :commit => '9d8555273d633655461e457c0ae8f8d0e9c4c87b'
-    
+
 end
 
 target 'SuiShouJi'  do

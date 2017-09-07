@@ -444,7 +444,7 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
 }
 
 + (NSArray <SSJFundingTransferDetailItem *>*)queryNewTransferChargesInDatabase:(FMDatabase *)db error:(NSError **)error {
-    FMResultSet *resultSet = [db executeQuery:@"select uc.*, fi.cacctname, fi.cfundid, fi.cicoin, fi.operatortype as fundoperatortype, fi.cparent from bk_user_charge as uc, bk_fund_info as fi where uc.ibillid in (3,4) and uc.operatortype != 2 and uc.cuserid = ? and uc.cuserid = fi.cuserid and uc.ifunsid = fi.cfundid and uc.ichargetype = 5 order by uc.cid", SSJUSERID()];
+    FMResultSet *resultSet = [db executeQuery:@"select uc.*, fi.cacctname, fi.cfundid, fi.cicoin, fi.operatortype as fundoperatortype, fi.cparent from bk_user_charge as uc, bk_fund_info as fi where uc.ibillid in (3,4) and uc.operatortype != 2 and uc.cuserid = ? and uc.cuserid = fi.cuserid and uc.ifunsid = fi.cfundid and uc.ichargetype = ? order by uc.cid", SSJUSERID(), @(SSJChargeIdTypeCyclicTransfer)];
     
     if (!resultSet) {
         if (error) {

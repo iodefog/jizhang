@@ -40,7 +40,11 @@
             && [db executeUpdate:@"delete from bk_user_remind where cuserid = ?", userId]
             && [db executeUpdate:@"delete from bk_share_books where cbooksid in (select cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
             && [db executeUpdate:@"delete from bk_share_books_member where cmemberid || cbooksid in (select cfriendid || cbooksid from bk_share_books_friends_mark where cuserid = ?)", userId]
-            && [db executeUpdate:@"delete from bk_share_books_friends_mark where cuserid = ?", userId]) {
+            && [db executeUpdate:@"delete from bk_share_books_friends_mark where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_wish where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_wish_charge where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_recycle where cuserid = ?", userId]
+            && [db executeUpdate:@"delete from bk_fixed_finance_product where cuserid = ?", userId]) {
             
             [[SSJDataSynchronizer shareInstance] startSyncWithSuccess:^(SSJDataSynchronizeType type) {
                 if (type == SSJDataSynchronizeTypeData) {

@@ -41,6 +41,8 @@
     [self upgradeOldTransferCharges:userID];
     
     [self upgradeLoanCharges:data[@"bk_user_charge"]];
+    
+    [self removeDuplicateTransferCharges:userID];
 }
 
 /**
@@ -315,6 +317,64 @@
         NSError *error = nil;
         if (![SSJDatabaseVersion18 updateLoanChargesWithModels:chargeModels database:db error:&error]) {
             *rollback = YES;
+        }
+    }];
+}
+
+/**
+ 对周期转账流水进行排重
+ */
++ (void)removeDuplicateTransferCharges:(NSString *)userID {
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        NSMutableArray *cids = [NSMutableArray array];
+        FMResultSet *rs = [db executeQuery:@"select cid from bk_user_charge where operatortype <> 2 and cuserid = ? and ichargetype = ? group by cid having count(cid) > 2", userID, @(SSJChargeIdTypeCyclicTransfer)];
+        while ([rs next]) {
+            [cids addObject:[rs stringForColumn:@"cid"]];
+        }
+        [rs close];
+        
+        for (NSString *cid in cids) {
+            NSMutableArray *reserveInfo = [NSMutableArray array];
+            NSMutableArray *reserveCids = [NSMutableArray array];
+            NSMutableArray *removedCids = [NSMutableArray array];
+            
+            rs = [db executeQuery:@"select ichargeid, cbilldate, imoney from bk_user_charge where cid = ? and cuserid = ? and ichargetype = ? and operatortype <> 2 order by cbilldate, imoney, cwritedate", cid, userID, @(SSJChargeIdTypeCyclicTransfer)];
+            while ([rs next]) {
+                NSString *chargeID = [rs stringForColumn:@"ichargeid"];
+                if (reserveCids.count < 2) {
+                    [reserveCids addObject:chargeID];
+                    NSDictionary *info = @{@"cbilldate":[rs stringForColumn:@"cbilldate"],
+                                           @"imoney":[rs stringForColumn:@"imoney"]};
+                    [reserveInfo addObject:info];
+                } else {
+                    [removedCids addObject:chargeID];
+                }
+            }
+            [rs close];
+            
+            for (NSString *chargeID in removedCids) {
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid = ?", chargeID]) {
+                    *rollback = YES;
+                    return;
+                }
+            }
+            
+            NSDictionary *info_1 = [reserveInfo firstObject];
+            NSDictionary *info_2 = [reserveInfo lastObject];
+            NSString *billDate_1 = info_1[@"cbilldate"];
+            NSString *billDate_2 = info_2[@"cbilldate"];
+            NSString *money_1 = info_1[@"imoney"];
+            NSString *money_2 = info_2[@"imoney"];
+            
+            if (![billDate_1 isEqualToString:billDate_2]
+                || [money_1 doubleValue] != [money_2 doubleValue]) {
+                for (NSString *chargeID in reserveCids) {
+                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, iversion = ?, cwritedate = ? where ichargeid = ?", chargeID]) {
+                        *rollback = YES;
+                        return;
+                    }
+                }
+            }
         }
     }];
 }

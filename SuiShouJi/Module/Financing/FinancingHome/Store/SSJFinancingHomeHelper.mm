@@ -22,6 +22,7 @@
 #import "SSJUserCreditTable.h"
 #import "SSJUserRemindTable.h"
 #import "SSJShareBooksMemberTable.h"
+#import "SSJRecycleHelper.h"
 
 @implementation SSJFinancingHomeHelper
 
@@ -132,6 +133,21 @@
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db , BOOL *rollback) {
         NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        
+        NSError *error;
+        
+        [SSJRecycleHelper createRecycleRecordWithID:item.fundingID recycleType:SSJRecycleTypeFund writeDate:writeDate database:db error:&error];
+        
+        if (error) {
+            *rollback = YES;
+            if (failure) {
+                dispatch_main_async_safe(^{
+                    failure([db lastError]);
+                }); 
+            }
+            return;
+        }
+        
         if (!item.cardItem) {
             // 如果是借贷
             SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *) item;
@@ -209,7 +225,7 @@
                     }
 
                     // 删掉账户所对应的转账
-                    if (![self deleteTransferChargeInDataBase:db withFundId:fundingItem.fundingID userId:userId error:NULL]) {
+                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:fundingItem.fundingID userId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -220,7 +236,7 @@
                     }
 
                     //删除资金账户所对应的周期记账
-                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID , @(SSJChargeIdTypeShareBooks) , userId , @(SSJShareBooksMemberStateNormal)]) {
+                    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -283,7 +299,7 @@
                 }
             } else {
                 // 删掉账户所对应的转账
-                if (![self deleteTransferChargeInDataBase:db withFundId:cardItem.fundingID userId:userId error:NULL]) {
+                if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:cardItem.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{
@@ -293,7 +309,7 @@
                     return;
                 }
 
-                if (![SSJCreditCardStore deleteCreditCardWithCardItem:item inDatabase:db forUserId:userId error:NULL]) {
+                if (![SSJCreditCardStore deleteCreditCardWithCardItem:item writeDate:writeDate inDatabase:db forUserId:userId error:NULL]) {
                     *rollback = YES;
                     SSJDispatch_main_async_safe(^{
                         if (failure) {
@@ -312,7 +328,7 @@
     }];
 }
 
-+ (BOOL)deleteTransferChargeInDataBase:(FMDatabase *)db withFundId:(NSString *)fundId userId:(NSString *)userId error:(NSError *)error {
++ (BOOL)deleteTransferChargeInDataBase:(FMDatabase *)db writeDate:(NSString *)writeDate withFundId:(NSString *)fundId userId:(NSString *)userId error:(NSError *)error {
     NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
     FMResultSet *transferResult
             = [db executeQuery:@"select * from bk_user_charge where ifunsid = ? and cuserid = ? and operatortype <> 2 and ibillid in (3,4)" , fundId , userId];
@@ -337,12 +353,12 @@
         NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if ([item.billId isEqualToString:@"3"]) {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4" , userId , item.billDate , minDateStr , maxDateStr , item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4" , writeDate, @(SSJSyncVersion()), userId, item.billDate, minDateStr, maxDateStr, item.money]) {
                 error = [db lastError];
                 return NO;
             }
         } else {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3" , userId , item.billDate , minDateStr , maxDateStr , item.money]) {
+            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3" , writeDate, @(SSJSyncVersion()) ,userId ,item.billDate ,minDateStr ,maxDateStr ,item.money]) {
                 error = [db lastError];
                 return NO;
             }

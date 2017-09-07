@@ -28,7 +28,7 @@
 }
 
 + (instancetype)table {
-    return [[SSJBaseSyncTable alloc] init];
+    return [[self alloc] init];
 }
 
 - (instancetype)init {
@@ -36,13 +36,6 @@
         self.subjectToDeletion = YES;
     }
     return self;
-}
-
-- (BOOL)shouldMergeRecord:(NSDictionary *)record
-                forUserId:(NSString *)userId
-               inDatabase:(FMDatabase *)db
-                    error:(NSError **)error {
-    return YES;
 }
 
 - (NSArray *)queryRecordsNeedToSyncWithUserId:(NSString *)userId
@@ -56,7 +49,7 @@
         return nil;
     }
     
-    NSString *query = [NSString stringWithFormat:@"select * from %@ where IVERSION > %lld and CUSERID = '%@'", [[self class] tableName], version, userId];
+    NSString *query = [NSString stringWithFormat:@"select * from %@ where iversion > %lld and cuserid = '%@'", [[self class] tableName], version, userId];
     
     FMResultSet *result = [db executeQuery:query];
     if (!result) {
@@ -68,15 +61,16 @@
     
     NSMutableArray *syncRecords = [NSMutableArray array];
     while ([result next]) {
-        NSMutableDictionary *recordInfo = [NSMutableDictionary dictionaryWithCapacity:[[self class] columns].count];
-        for (NSString *column in [[self class] columns]) {
-            NSString *value = [result stringForColumn:column];
-            NSString *mappedKey = [[[self class] fieldMapping] objectForKey:column];
-            [recordInfo setObject:(value ?: @"") forKey:(mappedKey ?: column)];
+        @autoreleasepool {
+            NSMutableDictionary *recordInfo = [NSMutableDictionary dictionaryWithCapacity:[[self class] columns].count];
+            for (NSString *column in [[self class] columns]) {
+                NSString *value = [result stringForColumn:column];
+                NSString *mappedKey = [[[self class] fieldMapping] objectForKey:column];
+                [recordInfo setObject:(value ?: @"") forKey:(mappedKey ?: column)];
+            }
+            [syncRecords addObject:recordInfo];
         }
-        [syncRecords addObject:recordInfo];
     }
-    
     [result close];
     
     return syncRecords;
@@ -88,88 +82,97 @@
                error:(NSError **)error {
     
     for (NSDictionary *record in records) {
-        if (![record isKindOfClass:[NSDictionary class]]) {
-            if (error) {
-                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"合并的数据格式错误"}];
-            }
-            return NO;
-        }
-        
-        NSMutableDictionary *recordInfo = [record mutableCopy];
-        NSDictionary *mapping = [[self class] fieldMapping];
-        if (mapping) {
-            [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-                id value = recordInfo[obj];
-                if (value) {
-                    [recordInfo removeObjectForKey:obj];
-                    [recordInfo setObject:value forKey:key];
+        @autoreleasepool {
+            if (![record isKindOfClass:[NSDictionary class]]) {
+                if (error) {
+                    *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"合并的数据格式错误"}];
                 }
-            }];
-        }
-        
-        // 0添加  1修改  2删除
-        int opertoryValue = [recordInfo[@"operatortype"] intValue];
-        if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
-            continue;
-        }
-        
-        if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
-            if (error && *error) {
                 return NO;
             }
-            continue;
-        }
-        
-        NSMutableArray *PKValues = [NSMutableArray arrayWithCapacity:[[self class] primaryKeys].count];
-        for (NSString *key in [[self class] primaryKeys]) {
-            id value = recordInfo[key];
-            if (value) {
-                [PKValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
+            
+            NSMutableDictionary *recordInfo = [record mutableCopy];
+            NSDictionary *mapping = [[self class] fieldMapping];
+            if (mapping) {
+                [mapping enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+                    id value = recordInfo[obj];
+                    if (value) {
+                        [recordInfo removeObjectForKey:obj];
+                        [recordInfo setObject:value forKey:key];
+                    }
+                }];
             }
-        }
-        
-        if (!PKValues.count) {
-            if (error) {
-                *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"合并的数据缺少主键"}];
-            }
-            return NO;
-        }
-        
-        NSString *necessaryCondition = [PKValues componentsJoinedByString:@" and "];
-        
-        // 检测表中是否存在将要合并的记录
-        NSString *operatorTypeStr = [db stringForQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [[self class] tableName], necessaryCondition]];
-        
-        BOOL existed = NO;
-        int localOperatorType = 0;
-        
-        if (operatorTypeStr) {
-            existed = YES;
-            localOperatorType = [operatorTypeStr intValue];
-        }
-        
-        if (existed) {
-            if ([self subjectToDeletion] && localOperatorType == 2) {
+            
+            // 0添加  1修改  2删除
+            int opertoryValue = [recordInfo[@"operatortype"] intValue];
+            if (opertoryValue != 0 && opertoryValue != 1 && opertoryValue != 2) {
                 continue;
             }
             
-            if (![self updateRecord:recordInfo
-                         condition:necessaryCondition
-                         forUserId:userId
-                        inDatabase:db
-                             error:error]) {
+            if (![self shouldMergeRecord:recordInfo forUserId:userId inDatabase:db error:error]) {
+                if (error && *error) {
+                    return NO;
+                }
+                continue;
+            }
+            
+            NSMutableArray *PKValues = [NSMutableArray arrayWithCapacity:[[self class] primaryKeys].count];
+            for (NSString *key in [[self class] primaryKeys]) {
+                id value = recordInfo[key];
+                if (value) {
+                    [PKValues addObject:[NSString stringWithFormat:@"%@ = '%@'", key, value]];
+                }
+            }
+            
+            if (!PKValues.count) {
+                if (error) {
+                    *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"合并的数据缺少主键"}];
+                }
                 return NO;
             }
-        } else {
-            if (![self insertRecord:recordInfo
-                         forUserId:userId
-                        inDatabase:db
-                             error:error]) {
-                return NO;
+            
+            NSString *necessaryCondition = [PKValues componentsJoinedByString:@" and "];
+            
+            // 检测表中是否存在将要合并的记录
+            NSString *operatorTypeStr = [db stringForQuery:[NSString stringWithFormat:@"select operatortype from %@ where %@", [[self class] tableName], necessaryCondition]];
+            
+            BOOL existed = NO;
+            int localOperatorType = 0;
+            
+            if (operatorTypeStr) {
+                existed = YES;
+                localOperatorType = [operatorTypeStr intValue];
+            }
+            
+            if (existed) {
+                if (self.subjectToDeletion && localOperatorType == 2) {
+                    continue;
+                }
+                
+                if (![self updateRecord:recordInfo
+                              condition:necessaryCondition
+                              forUserId:userId
+                             inDatabase:db
+                                  error:error]) {
+                    return NO;
+                }
+            } else {
+                if (![self insertRecord:recordInfo
+                              forUserId:userId
+                             inDatabase:db
+                                  error:error]) {
+                    return NO;
+                }
             }
         }
     }
     
+    return YES;
+}
+
+- (BOOL)shouldMergeRecord:(NSDictionary *)record
+                forUserId:(NSString *)userId
+               inDatabase:(FMDatabase *)db
+                    error:(NSError **)error {
     return YES;
 }
 
@@ -180,7 +183,7 @@
                error:(NSError **)error {
     
     NSMutableString *fullCondition = [condition mutableCopy];
-    if (([self subjectToDeletion] && [record[@"operatortype"] intValue] != 2) || ![self subjectToDeletion]) {
+    if ((self.subjectToDeletion && [record[@"operatortype"] intValue] != 2) || !self.subjectToDeletion) {
         [fullCondition appendFormat:@" and cwritedate < '%@'", record[@"cwritedate"]];
     }
     
@@ -256,7 +259,7 @@
         return NO;
     }
     
-    NSString *update = [NSString stringWithFormat:@"update %@ set IVERSION = %lld where IVERSION >= %lld and CUSERID = '%@'", [[self class] tableName], newVersion, version + 2, userId];
+    NSString *update = [NSString stringWithFormat:@"update %@ set iversion = %lld where iversion >= %lld and cuserid = '%@'", [[self class] tableName], newVersion, version + 2, userId];
     BOOL success = [db executeUpdate:update];
     if (!success) {
         if (error) {
