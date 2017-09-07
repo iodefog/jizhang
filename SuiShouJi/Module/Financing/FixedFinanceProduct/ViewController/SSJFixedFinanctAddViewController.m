@@ -17,6 +17,8 @@
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductCompoundItem.h"
+#import "SSJFixedFinanceProductChargeItem.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
 
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJFixedFinanceProductStore.h"
@@ -39,8 +41,6 @@ static NSUInteger kDateTag = 2005;
 // 日期选择控件
 @property (nonatomic, strong) SSJHomeDatePickerView *dateSelectionView;
 
-@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
-
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *compoundModel;
 
 //@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeModel;
@@ -50,28 +50,42 @@ static NSUInteger kDateTag = 2005;
 @property (nonatomic, strong) UIView *footerView;
 
 @property (nonatomic, strong) NSArray *cellTags;
+
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherChareItem;
 @end
 
 @implementation SSJFixedFinanctAddViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"追加购买";
     [self organiseCellTags];
     [self.view addSubview:self.tableView];
     [self loadData];
+    [self setUpNav];
+    [self updateUI];
     [self initCompoundModel];
     [self updateAppearance];
 }
 
 - (void)loadData {
     MJWeakSelf;
-    [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productid success:^(SSJFixedFinanceProductItem * _Nonnull model) {
-        weakSelf.financeModel = model;
-    } failure:^(NSError * _Nonnull error) {
-         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
-    
+
+    if (self.chargeItem) {
+        //查询当前charid对应的另外一跳流水
+        //通过另一条流水的fundid查找名称
+        [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
+            weakSelf.otherChareItem = charegItem;
+            [weakSelf fund];
+            
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    }
+}
+
+- (void)fund {
+    MJWeakSelf;
+    SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
     //查询转出账户列表
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         weakSelf.tableView.hidden = NO;
@@ -79,8 +93,14 @@ static NSUInteger kDateTag = 2005;
         
         // 新建借贷设置默认账户
         weakSelf.fundingSelectionView.items = items;
-        weakSelf.fundingSelectionView.selectedIndex = -1;
-//        [weakSelf.tableView reloadData];
+        if (!weakSelf.chargeItem) {
+            weakSelf.fundingSelectionView.selectedIndex = -1;
+        }else {
+            weakSelf.fundingSelectionView.selectedIndex = [items indexOfObject:funditem];
+            weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
     } failure:^(NSError * _Nonnull error) {
         _tableView.hidden = NO;
@@ -88,6 +108,36 @@ static NSUInteger kDateTag = 2005;
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
 
+}
+
+- (void)setUpNav {
+    if (self.chargeItem) {
+        self.title = @"追加购买详情";
+    } else {
+        self.title = @"追加购买";
+    }
+    //不是新建并且没有结算的时候
+    if (self.financeModel.isend != 1 && self.chargeItem) {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
+}
+
+- (void)updateUI {
+    if (self.financeModel.isend != 1) {
+        self.tableView.tableFooterView = self.footerView;
+    }
+}
+
+- (void)deleteButtonClicked {
+    MJWeakSelf;
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem success:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
 }
 
 #pragma mark - Theme
@@ -158,7 +208,7 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = [NSString stringWithFormat:@"¥%.2f", self.compoundModel.chargeModel.money];
+        cell.textField.text = [NSString stringWithFormat:@"%.2f", self.chargeItem.money];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
@@ -173,14 +223,22 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_account"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         
-        if (self.fundingSelectionView.selectedIndex >= 0) {
-            SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:self.fundingSelectionView.selectedIndex];
-            cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
-            cell.subtitleLabel.text = selectedFundItem.title;
-        } else {
-            cell.additionalIcon.image = nil;
-            cell.subtitleLabel.text = @"请选择账户";
-        }
+//        if (self.chargeItem) {
+//            //查询当前charid对应的另外一跳流水
+//            //通过另一条流水的fundid查找名称
+//            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
+//            cell.subtitleLabel.text = funditem.title;
+//        } else {
+            if (self.fundingSelectionView.selectedIndex >= 0) {
+                SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:self.fundingSelectionView.selectedIndex];
+                cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
+                cell.subtitleLabel.text = selectedFundItem.title;
+            } else {
+                cell.additionalIcon.image = nil;
+                cell.subtitleLabel.text = @"请选择账户";
+            }
+//        }
+        
         
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
@@ -194,7 +252,7 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"最多可输入10个字符" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = self.compoundModel.chargeModel.memo;
+        cell.textField.text = self.chargeItem.memo;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.returnKeyType = UIReturnKeyDone;
         cell.textField.clearsOnBeginEditing = NO;
@@ -210,7 +268,12 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_calendar"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.additionalIcon.image = nil;
-        cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        if (self.chargeItem) {
+            cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        } else {
+            cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
+        
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -276,12 +339,20 @@ static NSUInteger kDateTag = 2005;
         return NO;
     }
     
+    if (memoF.text.length > 10) {
+        [CDAutoHideMessageHUD showMessage:@"备注最大可输入10个字符"];
+        return NO;
+    }
+    
     self.compoundModel.chargeModel.money = [moneyF.text doubleValue];
     self.compoundModel.chargeModel.memo = memoF.text.length ? memoF.text : @"";
     self.compoundModel.chargeModel.fundId = self.financeModel.thisfundid;
     
     self.compoundModel.targetChargeModel.money = [moneyF.text doubleValue];
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
+    
+    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
+    self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = cid;
     return YES;
 }
 
@@ -312,7 +383,6 @@ static NSUInteger kDateTag = 2005;
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditFinanceLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditFinanceTextFieldCellId];
         _tableView.sectionFooterHeight = 0;
-        _tableView.tableFooterView = self.footerView;
     }
     return _tableView;
 }
@@ -320,7 +390,7 @@ static NSUInteger kDateTag = 2005;
 - (UIButton *)sureButton {
     if (!_sureButton) {
         _sureButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_sureButton setTitle:@"结算" forState:UIControlStateNormal];
+        [_sureButton setTitle:@"确定" forState:UIControlStateNormal];
         [_sureButton setTitle:@"" forState:UIControlStateDisabled];
         [_sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_sureButton addTarget:self action:@selector(sureButtonAction) forControlEvents:UIControlEventTouchUpInside];
@@ -420,24 +490,16 @@ static NSUInteger kDateTag = 2005;
         
         chargeBillId = @"15";
         targetChargeBillId = @"16";
-        NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        NSDate *billDate = [today compare:self.financeModel.startDate] == NSOrderedAscending ? self.financeModel.startDate : today;
-
+        NSString *uuid = SSJUUID();
         SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        chargeModel.chargeId = SSJUUID();
+        chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,chargeBillId];
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
-        chargeModel.billDate = billDate;
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[chargeModel.billDate timeIntervalSince1970]];
-        chargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
-        
+
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        targetChargeModel.chargeId = SSJUUID();
+        targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,targetChargeBillId];
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.billDate = billDate;
-        targetChargeModel.cid = chargeModel.cid;
-        targetChargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
         
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;

@@ -349,6 +349,8 @@ static NSString *kTitle6 = @"备注";
     
     self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
+    self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
 }
 
 #pragma mark - Action
@@ -440,6 +442,11 @@ static NSString *kTitle6 = @"备注";
                 [CDAutoHideMessageHUD showMessage:@"日期不能早于起息日期哦"];
                 return NO;
             }
+            //不能晚于当前日期
+            if ([date compare:[NSDate date]] == NSOrderedDescending) {
+                [CDAutoHideMessageHUD showMessage:@"日期不能晚于当前日期哦"];
+                return NO;
+            }
             return YES;
         };
         _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
@@ -495,41 +502,29 @@ static NSString *kTitle6 = @"备注";
 
 - (void)initCompoundModel {
     if (!_compoundModel) {
-        NSString *chargeBillId = nil;
-        NSString *targetChargeBillId = nil;
-        NSString *interestChargeBillId = nil;
-        chargeBillId = @"16";
-        targetChargeBillId = @"15";
-        interestChargeBillId = @"20";
-        NSDate *today = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
-        NSDate *billDate = [today compare:self.financeModel.startDate] == NSOrderedAscending ? self.financeModel.startDate : today;
+        NSString *chargeBillId = @"16";
+        NSString *targetChargeBillId = @"15";
+        NSString *interestChargeBillId = @"20";
+        NSString *uuid = SSJUUID();
         
         SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        chargeModel.chargeId = SSJUUID();
+        chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,chargeBillId];
         chargeModel.fundId = self.financeModel.thisfundid;
         chargeModel.billId = chargeBillId;
         chargeModel.userId = SSJUSERID();
-        chargeModel.billDate = billDate;
-        chargeModel.cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[chargeModel.billDate timeIntervalSince1970]];
-        chargeModel.chargeType = SSJLoanCompoundChargeTypeRepayment;
         
         SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        targetChargeModel.chargeId = SSJUUID();
+        targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,targetChargeBillId];
         targetChargeModel.fundId = self.financeModel.targetfundid;
         targetChargeModel.billId = targetChargeBillId;
         targetChargeModel.userId = SSJUSERID();
-        targetChargeModel.billDate = billDate;
-        targetChargeModel.cid = chargeModel.cid;
-//        targetChargeModel.chargeType = SSJLoanCompoundChargeTypeAdd;
+
         
         SSJFixedFinanceProductChargeItem *interestChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
-        interestChargeModel.chargeId = SSJUUID();
+        interestChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,interestChargeBillId];
         interestChargeModel.fundId = self.financeModel.thisfundid;
         interestChargeModel.billId = interestChargeBillId;
         interestChargeModel.userId = SSJUSERID();
-        interestChargeModel.billDate = billDate;
-        interestChargeModel.cid = chargeModel.cid;
-//        interestChargeModel.chargeType = SSJLoanCompoundChargeTypeInterest;
         
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;

@@ -491,6 +491,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
     
     self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSDate *billDate = self.model.startDate;
+    NSString *cid = [NSString stringWithFormat:@"%@_%.2f",self.model.productid,[billDate timeIntervalSince1970]];
+    self.createCompoundModel.chargeModel.cid = self.createCompoundModel.targetChargeModel.cid = cid;
 }
 
 
@@ -1010,12 +1013,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             NSString *chargeBillId = @"3";
             NSString *targetChargeBillId = @"4";
             NSString *uuid = SSJUUID();
+            NSDate *billDate = self.model.startDate;
+        
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,chargeBillId]];
             chargeModel.fundId = self.model.thisfundid;
             chargeModel.billId = chargeBillId;
             chargeModel.userId = SSJUSERID();
-//            chargeModel.cid = [NSString stringWithFormat:@"%@_%@",self.model.productid,[NSString stringWithFormat:@"%@_%@",uuid,]];
+//            chargeModel.cid = cid;
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
@@ -1023,7 +1028,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             targetChargeModel.fundId = self.model.targetfundid;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.userId = SSJUSERID();
-//            targetChargeModel.cid = chargeModel.cid;
+//            targetChargeModel.cid = cid;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];

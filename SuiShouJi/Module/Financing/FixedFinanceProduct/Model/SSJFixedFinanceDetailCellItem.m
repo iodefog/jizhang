@@ -53,13 +53,13 @@
         case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
             icon = @"fixed_finance_lixi";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
-            name = @"固收理财日息";
+            name = @"固收理财利息转入";
             surplus += model.money;
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             icon = @"fixed_finance_lixi";
-            name = @"固收理财日息";
+            name = @"固收理财利息转出";
             surplus -= model.money;
             break;
         case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水

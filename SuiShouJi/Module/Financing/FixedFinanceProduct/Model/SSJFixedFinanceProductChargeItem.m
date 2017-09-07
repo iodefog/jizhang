@@ -13,7 +13,17 @@
 
 + (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
 {
-    return nil;
+    SSJFixedFinanceProductChargeItem *item = [[SSJFixedFinanceProductChargeItem alloc] init];
+    item.chargeId = [resultSet stringForColumn:@"ichargeid"];
+    item.fundId = [resultSet stringForColumn:@"ifunsid"];
+    item.billId = [resultSet stringForColumn:@"ibillid"];
+    item.userId = [resultSet stringForColumn:@"cuserid"];
+    item.memo = [resultSet stringForColumn:@"cmemo"];
+    item.billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
+    item.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    item.money = [resultSet doubleForColumn:@"imoney"];
+    item.cid = [resultSet stringForColumn:@"cid"];
+    return item;
 }
 
 - (id)copyWithZone:(nullable NSZone *)zone {

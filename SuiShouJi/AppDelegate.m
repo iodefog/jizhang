@@ -183,7 +183,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    + (void)regularDistributedInterestSuccess:(void (^)())success
 //failure:(void (^)(NSError * error))failure
     [SSJRegularManager regularDistributedInterestSuccess:^{
-        
+         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];

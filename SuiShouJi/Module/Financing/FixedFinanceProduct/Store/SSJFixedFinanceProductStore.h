@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class SSJFixedFinanceProductCompoundItem;
 @class FMDatabase;
 @class SSJDatabase;
+@class SSJLoanFundAccountSelectionViewItem;
 
 /**
  固定收益理财状态
@@ -168,7 +169,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                                  failure:(void (^)(NSError *error))failure;
 
 /**
- 删除固定理财的某个流水
+ 删除固定理财的某个流水(单个流水，每日利息，手续费，利息平账)
  
  @param model 流水模型
  @param success 删除成功的回调
@@ -237,7 +238,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                  error:(NSError **)error;
 
 
-
 /**
  重新设置某个理财产品的所有流水（等同删除某个理财产品）
 
@@ -257,7 +257,16 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param fundid <#fundid description#>
  @return <#return value description#>
  */
-+ (NSString *)queryfundNameWithFundid:(NSString *)fundid;
++ (SSJLoanFundAccountSelectionViewItem *)queryfundNameWithFundid:(NSString *)fundid;
+
+
+/**
+ 通过一条chareitem查找对应的另外一条流水
+
+ @param oneChargeItem <#oneChargeItem description#>
+ @return <#return value description#>
+ */
++ (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(SSJFixedFinanceProductChargeItem *charegItem))success failure:(void (^)(NSError *error))failure;
 
 
 /**
