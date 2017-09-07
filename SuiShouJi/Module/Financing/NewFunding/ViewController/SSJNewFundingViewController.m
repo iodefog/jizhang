@@ -336,7 +336,7 @@
             UIViewController *viewControllerNeedToPop = [self.navigationController.viewControllers ssj_safeObjectAtIndex:self.navigationController.viewControllers.count - 3];
             [self.navigationController popToViewController:viewControllerNeedToPop animated:YES];
         } else {
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
         }
         if (self.addNewFundBlock) {
             self.addNewFundBlock(item);
