@@ -220,7 +220,10 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             case SSJFixedFinCompoundChargeTypeCloseOut://结算本金
                 //手续费SSJFixedFinCompoundChargeTypeCloseOutInterest
             {
-                
+                SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
+                vc.financeModel = self.financeModel;
+                vc.chargeItem = item;
+                [self.navigationController pushViewController:vc animated:YES];
             }
                 break;
                 
@@ -544,7 +547,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)closeOutBtnAction {
     SSJFixedFinancesSettlementViewController *closeOutVC = [[SSJFixedFinancesSettlementViewController alloc] init];
-    closeOutVC.productid = self.productID;
+    closeOutVC.financeModel = self.financeModel;
     [self.navigationController pushViewController:closeOutVC animated:YES];
 }
 

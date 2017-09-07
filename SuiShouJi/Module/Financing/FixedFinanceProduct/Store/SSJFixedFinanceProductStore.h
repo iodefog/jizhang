@@ -253,7 +253,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 #pragma mark - Other 
 
 /**
- 查询资金账户名称
+ 查询资金账户模型
 
  @param fundid <#fundid description#>
  @return <#return value description#>
@@ -301,6 +301,32 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (NSDate *)queryPaiFalLastBillDateWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db;
+
+
+/**
+ 查询是否由赎回或者追加
+
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model;
+
+
+/**
+ 查询结算的时候是否有手续费
+
+ @param productItem <#productItem description#>
+ @param chargeItem <#chargeItem description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryHasPoundageWithProduct:(SSJFixedFinanceProductItem *)productItem chargeItem:(SSJFixedFinanceProductChargeItem *)chargeItem;
+
+
+/**
+ 查询结算的时候的手续费是多少
+
+ */
++ (double)queryPoundageWithProduct:(SSJFixedFinanceProductItem *)productItem chargeItem:(SSJFixedFinanceProductChargeItem *)chargeIte;
 
 /**
  生成某个理财产品在起止时间内的利息派发流水  每日流水

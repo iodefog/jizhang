@@ -1571,4 +1571,38 @@
 }
 
 
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model {
+    __block BOOL allow = NO;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+       allow = [db boolForQuery:@"select count(*) from bk_user_charge where (ibillid = 15 or ibillid = 16) and cid like (? || '_%') and cuserid = ? and operatortype != 2",model.productid,SSJUSERID()];
+    }];
+    return !allow;
+}
+
+/**
+ 查询结算的时候是否有手续费
+ 
+ @param productItem <#productItem description#>
+ @param chargeItem <#chargeItem description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryHasPoundageWithProduct:(SSJFixedFinanceProductItem *)productItem chargeItem:(SSJFixedFinanceProductChargeItem *)chargeItem {
+    __block BOOL has = NO;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        has = [db boolForQuery:@"select count(*) from bk_user_charge where ibillid = 20 and cid = ? and cuserid = ? and operatortype != 2",chargeItem.cid,SSJUSERID()];
+    }];
+
+    return has;
+}
+
++ (double)queryPoundageWithProduct:(SSJFixedFinanceProductItem *)productItem chargeItem:(SSJFixedFinanceProductChargeItem *)chargeItem {
+    __block double poundage;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        poundage = [db doubleForQuery:@"select imoney from bk_user_charge where ibillid = 20 and cid = ? and cuserid = ? and operatortype != 2",chargeItem.cid,SSJUSERID()];
+    }];
+    
+    return poundage;
+}
+
+
 @end

@@ -7,8 +7,14 @@
 //
 
 #import "SSJBaseViewController.h"
+@class SSJFixedFinanceProductItem;
+@class SSJFixedFinanceProductChargeItem;
 
 @interface SSJFixedFinancesSettlementViewController : SSJBaseViewController
+
 /**<#注释#>*/
-@property (nonatomic, copy) NSString *productid;
+@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
+
+/**编辑*/
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeItem;
 @end

@@ -103,6 +103,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 // 原始的借贷金额，只有在编辑记录此金额
 @property (nonatomic) double originalMoney;
 
+/**是否让金额更改 当有赎回或者追加金额的时候不让*/
+@property (nonatomic, assign) BOOL allowMoneyChanged;
+
 @end
 
 @implementation SSJAddOrEditFixedFinanceProductViewController
@@ -285,6 +288,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
+    self.allowMoneyChanged = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
     
     if (_edited) {
         self.jiXiMethodSelectionView.selectedIndex = [self switchJiXiMethodWithType:self.model.interesttype];
@@ -648,6 +652,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.nameTextF = cell.textField;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -664,6 +669,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
+    //通过是否有赎回或者追加的记录
+    cell.userInteractionEnabled = self.allowMoneyChanged;
     return cell;
 }
 
@@ -684,6 +691,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.switchControl.hidden = YES;
     cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -698,7 +706,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.switchControl.hidden = YES;
     cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -720,6 +728,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.liLvTextL = cell.subNameL;
     
     cell.hasPercentageL = YES;
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -739,7 +748,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     } else {
         cell.segmentControl.selectedSegmentIndex = 2;
     }
-    
+    cell.userInteractionEnabled = YES;
     
     return cell;
 }
@@ -756,6 +765,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     }
     self.jixiTextL = cell.subtitleLabel;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
@@ -774,7 +784,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
     self.remindSwitch = cell.switchControl;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
@@ -792,7 +802,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.delegate = self;
     self.memoTextF = cell.textField;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
