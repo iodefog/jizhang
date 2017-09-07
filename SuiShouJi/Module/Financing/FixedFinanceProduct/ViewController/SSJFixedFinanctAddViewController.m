@@ -63,7 +63,9 @@ static NSUInteger kDateTag = 2005;
     [self loadData];
     [self setUpNav];
     [self updateUI];
-    [self initCompoundModel];
+    if (!self.chargeItem) {
+        [self initCompoundModel];
+    }
     [self updateAppearance];
 }
 
@@ -75,6 +77,7 @@ static NSUInteger kDateTag = 2005;
         //通过另一条流水的fundid查找名称
         [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
             weakSelf.otherChareItem = charegItem;
+            [self initEditCompoundModel];
             [weakSelf fund];
             
         } failure:^(NSError * _Nonnull error) {
@@ -215,6 +218,7 @@ static NSUInteger kDateTag = 2005;
         cell.textField.tag = kMoneyTag;
         [cell.textField ssj_installToolbar];
         [cell setNeedsLayout];
+        cell.userInteractionEnabled = !self.financeModel.isend;
         return cell;
         
     } else if (tag == kAccountTag) {
@@ -244,6 +248,7 @@ static NSUInteger kDateTag = 2005;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
+        cell.userInteractionEnabled = !self.financeModel.isend;
         return cell;
         
     } else if (tag == kMemoTag) {
@@ -260,6 +265,7 @@ static NSUInteger kDateTag = 2005;
         cell.textField.delegate = self;
         cell.textField.tag = kMemoTag;
         [cell setNeedsLayout];
+        cell.userInteractionEnabled = !self.financeModel.isend;
         return cell;
         
     } else if (tag == kDateTag) {
@@ -278,6 +284,7 @@ static NSUInteger kDateTag = 2005;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
+        cell.userInteractionEnabled = !self.financeModel.isend;
         return cell;
         
     } else {
@@ -351,8 +358,10 @@ static NSUInteger kDateTag = 2005;
     self.compoundModel.targetChargeModel.money = [moneyF.text doubleValue];
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
     
-    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
-    self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = cid;
+    if (!self.chargeItem) {
+        NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
+        self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = cid;
+    }
     return YES;
 }
 
@@ -362,6 +371,7 @@ static NSUInteger kDateTag = 2005;
     MJWeakSelf;
     //保存流水
     NSMutableArray *saveChargeModels = [@[self.compoundModel] mutableCopy];
+    
     [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel   type:1 chargeModels:saveChargeModels success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
@@ -383,6 +393,7 @@ static NSUInteger kDateTag = 2005;
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditFinanceLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditFinanceTextFieldCellId];
         _tableView.sectionFooterHeight = 0;
+        [_tableView ssj_clearExtendSeparator];
     }
     return _tableView;
 }
@@ -485,11 +496,9 @@ static NSUInteger kDateTag = 2005;
 
 - (void)initCompoundModel {
     if (!_compoundModel) {
-        NSString *chargeBillId = nil;
-        NSString *targetChargeBillId = nil;
-        
-        chargeBillId = @"15";
-        targetChargeBillId = @"16";
+        NSString *chargeBillId = @"15";
+        NSString *targetChargeBillId = @"16";
+
         NSString *uuid = SSJUUID();
         SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
         chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,chargeBillId];
@@ -504,6 +513,14 @@ static NSUInteger kDateTag = 2005;
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = chargeModel;
         _compoundModel.targetChargeModel = targetChargeModel;
+    }
+}
+
+- (void)initEditCompoundModel {
+    if (!_compoundModel) {
+        _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
+        _compoundModel.chargeModel = self.chargeItem;
+        _compoundModel.targetChargeModel = self.otherChareItem;
     }
 }
 
