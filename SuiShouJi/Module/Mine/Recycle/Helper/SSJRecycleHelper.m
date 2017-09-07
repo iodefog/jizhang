@@ -446,7 +446,7 @@
     }
     
     // 恢复周期记账依赖的账本
-    if (![db executeUpdate:@"udpate bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cbooksid in (select cbooksid from bk_charge_period_config where cwritedate = ? and ifunsid = ? and operatortype = 2)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+    if (![db executeUpdate:@"update bk_books_type set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cbooksid in (select cbooksid from bk_charge_period_config where cwritedate = ? and ifunsid = ? and operatortype = 2)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
         if (error) {
             *error = [db lastError];
         }
