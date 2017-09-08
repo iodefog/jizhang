@@ -42,6 +42,8 @@
 #import "SSJCreditCardRepaymentViewController.h"
 #import "SSJLoanChangeChargeSelectionControl.h"
 #import "SSJFixedFinanctAddViewController.h"
+#import "SSJFixedFinanceRedemViewController.h"
+#import "SSJFixedFinancesSettlementViewController.h"
 
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
@@ -205,23 +207,31 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 [self.navigationController pushViewController:editController animated:YES];
             }
         } else if (cellItem.idType == SSJChargeIdTypeFixedFinance) {
-            SSJFixedFinanceProductChargeItem *fixedFinanceItem = [[SSJFixedFinanceProductChargeItem alloc] init];
-            fixedFinanceItem.chargeId = cellItem.ID;
-            fixedFinanceItem.fundId = cellItem.fundId;
-            fixedFinanceItem.money = [cellItem.money doubleValue];
-            fixedFinanceItem.billId = cellItem.billId;
-            fixedFinanceItem.memo = cellItem.chargeMemo;
-            fixedFinanceItem.icon = cellItem.chargeImage;
-            fixedFinanceItem.thumIcon = cellItem.chargeThumbImage;
-            fixedFinanceItem.billDate = [NSDate dateWithString:cellItem.billDate formatString:@"yyyy-MM-dd"];
-            fixedFinanceItem.cid = cellItem.sundryId;
-            if (billId == 15) {
-                SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
-                addvc.chargeItem = fixedFinanceItem;
-                [self.navigationController pushViewController:addvc animated:YES];
-            } else if (billId == 3 || billId == 4) {
-                
-            }
+            [SSJFundingDetailHelper queryfixedFinanceDateWithChargeItem:cellItem success:^(SSJFixedFinanceProductItem *productItem, SSJFixedFinanceProductChargeItem *chargeItem) {
+                if (billId == 15) {
+                    SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
+                    addvc.chargeItem = chargeItem;
+                    addvc.financeModel = productItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
+                } else if (billId == 16 || billId == 20) {
+                    SSJFixedFinanceRedemViewController *vc = [[SSJFixedFinanceRedemViewController alloc] init];
+                    vc.financeModel = productItem;
+                    vc.chargeModel = chargeItem;
+                    [self.navigationController pushViewController:vc animated:YES];
+                } else if (billId == 17 || billId == 18 || billId == 19) {
+                    SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
+                    vc.financeModel = productItem;
+                    vc.chargeItem = chargeItem;
+                    [self.navigationController pushViewController:vc animated:YES];
+                } else if (billId == 3 || billId == 4) {
+                    
+                } else if (billId == 3 || billId == 4) {
+                    
+                } else if (billId == 3 || billId == 4) {
+                    
+                }
+            } failure:NULL];
+
         } else if(cellItem.idType == SSJChargeIdTypeRepayment) {
             if (billId == 3 || billId == 4) {
                 // 如果是转账,则是还款,跳转到还款页面

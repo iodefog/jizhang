@@ -25,6 +25,7 @@
 #import "SSJCreditCardListFirstLineItem.h"
 #import "SSJCreditRepaymentTable.h"
 #import "SSJFundingTypeManager.h"
+#import "SSJFixedFinanceProductTable.h"
 
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
@@ -823,5 +824,45 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
     return remainningDaysStr;
 }
 
++ (void)queryfixedFinanceDateWithChargeItem:(SSJBillingChargeCellItem *)item
+                     success:(void (^)(SSJFixedFinanceProductItem *productItem, SSJFixedFinanceProductChargeItem *chargeItem))success
+                     failure:(void (^)(NSError *error))failure {
 
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
+        SSJFixedFinanceProductTable *fixedFinanceProduct = [db getOneObjectOfClass:SSJFixedFinanceProductTable.class fromTable:@"BK_FIXED_FINANCE_PRODUCT" where:SSJFixedFinanceProductTable.productId == item.sundryId];
+        SSJUserChargeTable *userCharge = [db getOneObjectOfClass:SSJUserChargeTable.class fromTable:@"BK_USER_CHARGE" where:SSJUserChargeTable.chargeId == item.ID];
+        SSJFundInfoTable *fundInfo = [db getOneObjectOfClass:SSJFundInfoTable.class fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == item.fundId];
+        SSJFixedFinanceProductItem *productItem = [[SSJFixedFinanceProductItem alloc] init];
+        productItem.productid = fixedFinanceProduct.productId;
+        productItem.productName = fixedFinanceProduct.productName;
+        productItem.productIcon = fundInfo.fundIcon;
+        productItem.userid = SSJUSERID();
+        productItem.remindid = fixedFinanceProduct.remindId;
+        productItem.thisfundid = fixedFinanceProduct.thisFundid;
+        productItem.targetfundid = fixedFinanceProduct.targetFundid;
+        productItem.etargetfundid = fixedFinanceProduct.etargetFundid;
+        productItem.money = fixedFinanceProduct.money;
+        productItem.memo = fixedFinanceProduct.memo;
+        productItem.rate = fixedFinanceProduct.rate;
+        productItem.ratetype = fixedFinanceProduct.rateType;
+        productItem.time = fixedFinanceProduct.time;
+        productItem.timetype = fixedFinanceProduct.timeType;
+        productItem.interesttype = fixedFinanceProduct.interestType;
+        productItem.startdate = fixedFinanceProduct.startDate;
+        productItem.enddate = fixedFinanceProduct.endDate;
+        SSJFixedFinanceProductChargeItem *chargeItem = [[SSJFixedFinanceProductChargeItem alloc] init];
+        chargeItem.chargeId = userCharge.chargeId;
+        chargeItem.fundId = userCharge.fundId;
+        chargeItem.money = [userCharge.money doubleValue];
+        chargeItem.billId = userCharge.billId;
+        chargeItem.userId = userCharge.userId;
+        chargeItem.memo = userCharge.chargeId;
+        chargeItem.icon = userCharge.chargeId;
+        chargeItem.billDate = [NSDate dateWithString:userCharge.billDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        chargeItem.cid = userCharge.cid;
+        if (success) {
+            success(productItem,chargeItem);
+        }
+    }];
+}
 @end
