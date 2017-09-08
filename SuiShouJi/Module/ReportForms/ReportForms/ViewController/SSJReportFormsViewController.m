@@ -509,14 +509,8 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         //  收入、支出
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
         circleItem.scale = item.scale / scaleAmount;
-        circleItem.imageName = item.imageName;
-        circleItem.colorValue = item.colorValue;
-        circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-        circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
-        circleItem.imageBorderShowed = YES;
-        if (item.isMember) {
-            circleItem.customView = [self chartAdditionalViewWithMemberName:item.name colorValue:item.colorValue];
-        }
+        circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
+        circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
         [chartItems addObject:circleItem];
     }
     
@@ -687,19 +681,6 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     } else {
         return SSJBillTypeUnknown;
     }
-}
-
-- (UILabel *)chartAdditionalViewWithMemberName:(NSString *)name colorValue:(NSString *)colorValue {
-    UILabel *lab = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 26, 26)];
-    lab.layer.borderColor = [UIColor ssj_colorWithHex:colorValue].CGColor;
-    lab.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
-    lab.layer.cornerRadius = lab.width * 0.5;
-    lab.text = name.length >= 1 ? [name substringToIndex:1] : @"";
-    lab.textColor = [UIColor ssj_colorWithHex:colorValue];
-    lab.textAlignment = NSTextAlignmentCenter;
-    lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-    
-    return lab;
 }
 
 - (void)enterCalendarVC {

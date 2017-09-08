@@ -8,7 +8,6 @@
 
 #import "SSJBudgetDatabaseHelper.h"
 #import "SSJDatabaseQueue.h"
-#import "SSJPercentCircleViewItem.h"
 #import "MJExtension.h"
 #import "SSJDatePeriod.h"
 #import "SSJUserTableManager.h"
@@ -16,6 +15,7 @@
 #import "SSJBudgetListCellItem.h"
 #import "SSJReportFormsItem.h"
 #import "SSJBudgetDetailHeaderViewItem.h"
+#import "SSJPercentCircleView.h"
 
 NSString *const SSJBudgetModelKey = @"SSJBudgetModelKey";
 NSString *const SSJBudgetDetailHeaderViewItemKey = @"SSJBudgetDetailHeaderViewItemKey";
@@ -364,11 +364,8 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 [moneyArr addObject:@(money)];
                 
                 SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-                circleItem.colorValue = [resultSet stringForColumn:@"ccolor"];
-                circleItem.imageName = [resultSet stringForColumn:@"cicoin"];
-                circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", scale * 100];
-                circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
-                circleItem.imageBorderShowed = YES;
+                circleItem.color = [UIColor ssj_colorWithHex:[resultSet stringForColumn:@"ccolor"]];
+                circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", [resultSet stringForColumn:@"cname"], scale * 100];
                 [circleItemArr addObject:circleItem];
             }
             
