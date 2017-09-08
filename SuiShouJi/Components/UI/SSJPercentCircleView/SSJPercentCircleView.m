@@ -33,7 +33,7 @@
 
 @property (nonatomic, strong) UIView *contentView;
 
-@property (nonatomic, strong) UIImageView *skinView;
+@property (nonatomic, strong) UIView *skinView;
 
 @property (nonatomic) NSUInteger animateCounter;
 
@@ -90,10 +90,6 @@
         self.circleNode.radius = self.radius - self.thickness * 0.5;
         self.circleNode.thickness = self.thickness;
         [self.contentView addSubview:self.circleNode];
-        
-        self.skinView = [[UIImageView alloc] initWithFrame:self.bounds];
-        self.skinView.hidden = YES;
-        [self addSubview:self.skinView];
         
         self.composer = [SSJPercentCircleAdditionNodeComposer composer];
     }
@@ -191,8 +187,6 @@
     
     _reloadFailedCauseByEmptyFrame = NO;
     
-    self.skinView.hidden = YES;
-    
     NSUInteger numberOfComponents = [self.dataSource numberOfComponentsInPercentCircle:self];
     NSMutableArray *circleNodeItems = [NSMutableArray arrayWithCapacity:numberOfComponents];
     CGFloat overlapScale = 0;
@@ -258,6 +252,7 @@
     NSArray *additionNodeItems = [self.composer composeNodeItems];
     
     self.contentView.hidden = NO;
+    [self.skinView removeFromSuperview];
 //    [self.circleNode stopAnimation];
     [self.additionGroupNode cleanUpAdditionNodes];
     
@@ -271,18 +266,10 @@
                 return;
             }
             
-            //  渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                UIImage *screentShot = [weakSelf ssj_takeScreenShotWithSize:weakSelf.size opaque:NO scale:0];
-//                [UIImagePNGRepresentation(screentShot) writeToFile:@"/Users/oldlang/Desktop/screenshot/test.png" atomically:YES];
-                dispatch_sync(dispatch_get_main_queue(), ^{
-                    weakSelf.skinView.hidden = NO;
-                    weakSelf.skinView.image = screentShot;
-                    weakSelf.skinView.size = screentShot.size;
-                    
-                    weakSelf.contentView.hidden = YES;
-                });
-            });
+            // 渲染成图片，铺在表面上，隐藏其它的界面元素，以提高流畅度
+            weakSelf.skinView = [weakSelf.contentView snapshotViewAfterScreenUpdates:YES];
+            [weakSelf addSubview:weakSelf.skinView];
+            weakSelf.contentView.hidden = YES;
         }];
     }];
 }
