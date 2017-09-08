@@ -6,14 +6,9 @@
 //  Copyright © 2015年 ___9188___. All rights reserved.
 //
 
-#import "SSJCreditCardListDetailItem.h"
-#import "SSJFundingDetailListItem.h"
-#import "SSJBillingChargeCellItem.h"
-#import "SSJRepaymentModel.h"
 
 #import "SSJFundingDetailHelper.h"
 #import "SSJFundingDetailListHeaderView.h"
-#import "SSJCreditCardRepaymentViewController.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJCreditCardStore.h"
 
@@ -21,12 +16,16 @@
 #import "SSJFundingDetailCell.h"
 #import "SSJFundingDetailListFirstLineCell.h"
 #import "SSJFundingDailySumCell.h"
+#import "SSJFundingDetailListFirstLineCell.h"
 #import "SSJFundingDetailNoDataView.h"
 #import "SSJCreditCardDetailHeader.h"
-#import "SSJCreditCardListFirstLineItem.h"
 
-#import "SSJFundingDetailListFirstLineCell.h"
-#import "SSJLoanChangeChargeSelectionControl.h"
+#import "SSJCreditCardListFirstLineItem.h"
+#import "SSJCreditCardListDetailItem.h"
+#import "SSJFundingDetailListItem.h"
+#import "SSJBillingChargeCellItem.h"
+#import "SSJFixedFinanceProductChargeItem.h"
+#import "SSJRepaymentModel.h"
 
 #import "SSJLoanChargeDetailViewController.h"
 #import "SSJLoanChargeAddOrEditViewController.h"
@@ -40,8 +39,9 @@
 #import "SSJBalenceChangeDetailViewController.h"
 #import "SSJNewFundingViewController.h"
 #import "SSJDeleteBooksDetailViewController.h"
-
-#import "FMDB.h"
+#import "SSJCreditCardRepaymentViewController.h"
+#import "SSJLoanChangeChargeSelectionControl.h"
+#import "SSJFixedFinanctAddViewController.h"
 
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
@@ -148,7 +148,6 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
         SSJFundingDetailListFirstLineCell *cell = [tableView dequeueReusableCellWithIdentifier:kCreditCardListFirstLineCellID forIndexPath:indexPath];
         cell.item = [((SSJFundingDetailListItem *) [self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
         return cell;
-
     }
     return [UITableViewCell new];
 }
@@ -204,6 +203,24 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                 editController.edited = YES;
                 editController.chargeId = cellItem.ID;
                 [self.navigationController pushViewController:editController animated:YES];
+            }
+        } else if (cellItem.idType == SSJChargeIdTypeFixedFinance) {
+            SSJFixedFinanceProductChargeItem *fixedFinanceItem = [[SSJFixedFinanceProductChargeItem alloc] init];
+            fixedFinanceItem.chargeId = cellItem.ID;
+            fixedFinanceItem.fundId = cellItem.fundId;
+            fixedFinanceItem.money = [cellItem.money doubleValue];
+            fixedFinanceItem.billId = cellItem.billId;
+            fixedFinanceItem.memo = cellItem.chargeMemo;
+            fixedFinanceItem.icon = cellItem.chargeImage;
+            fixedFinanceItem.thumIcon = cellItem.chargeThumbImage;
+            fixedFinanceItem.billDate = [NSDate dateWithString:cellItem.billDate formatString:@"yyyy-MM-dd"];
+            fixedFinanceItem.cid = cellItem.sundryId;
+            if (billId == 15) {
+                SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
+                addvc.chargeItem = fixedFinanceItem;
+                [self.navigationController pushViewController:addvc animated:YES];
+            } else if (billId == 3 || billId == 4) {
+                
             }
         } else if(cellItem.idType == SSJChargeIdTypeRepayment) {
             if (billId == 3 || billId == 4) {

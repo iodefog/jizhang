@@ -68,12 +68,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.view addSubview:self.launchView];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.view addSubview:self.launchView];
     [self requestStartAPI];
     [self.startLunchService requestUserSign];
     
@@ -118,6 +118,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     }
     return _launchView;
 }
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    
+}
+
 
 #pragma mark - Private
 // 请求启动接口，检测是否有更新、苹果是否正在审核、
