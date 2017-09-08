@@ -66,13 +66,14 @@ static NSString *kTitle6 = @"备注";
 
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *compoundModel;
 
-@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
-
 /**是否计算利息*/
 @property (nonatomic, assign) BOOL isLiXiOn;
 
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *moneyStr;
+
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *otherFundid;
 
 @end
 
@@ -83,17 +84,54 @@ static NSString *kTitle6 = @"备注";
     [self.view addSubview:self.tableView];
     [self orangeData];
     [self loadData];
+    [self initCompoundModel];
     [self setUpNav];
     [self updateAppearance];
 }
 
 - (void)setUpNav {
-    self.title = @"部分赎回";
+    self.title = self.chargeModel ? @"部分赎回详情" : @"部分赎回";
+    //不是新建并且没有结算的时候
+    if (self.financeModel.isend != 1 && self.chargeModel) {
+        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+        self.navigationItem.rightBarButtonItem = rightItem;
+    }
+
+}
+
+- (void)deleteButtonClicked {
+    MJWeakSelf;
+//    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem productModel:self.financeModel success:^{
+//        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//        [weakSelf.navigationController popViewControllerAnimated:YES];
+//    } failure:^(NSError * _Nonnull error) {
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//    }];
 }
 
 - (void)orangeData {
-    self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-    self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+    if (self.chargeModel) {
+        self.isLiXiOn = [SSJFixedFinanceProductStore queryHasPoundageWithProduct:self.financeModel chargeItem:self.chargeModel];
+        if (_isLiXiOn) {
+            self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
+            self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        } else {
+            self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
+            self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        }
+        
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",self.chargeModel.money];
+        [self updateSubTitle];
+        
+    } else {
+        self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
+        self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+    }
+    if (self.financeModel.isend) {
+        self.tableView.userInteractionEnabled = NO;
+    } else {
+        self.tableView.tableFooterView = self.footerView;
+    }
 }
 
 
@@ -178,6 +216,11 @@ static NSString *kTitle6 = @"备注";
             cell.additionalIcon.image = nil;
             cell.subtitleLabel.text = @"请选择账户";
         }
+        if (self.chargeModel) {
+            SSJLoanFundAccountSelectionViewItem *item = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherFundid];
+            cell.subtitleLabel.text = item.title;
+            cell.additionalIcon.image = [UIImage imageNamed:item.image];
+        }
         cell.subtitleLabel.hidden = NO;
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
@@ -197,6 +240,9 @@ static NSString *kTitle6 = @"备注";
         cell.textField.clearsOnBeginEditing = NO;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
+        if (self.chargeModel) {
+            cell.textField.text = self.chargeModel.memo;
+        }
         self.memoTextF = cell.textField;
         [cell setNeedsLayout];
         return cell;
@@ -212,6 +258,9 @@ static NSString *kTitle6 = @"备注";
         cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        if (self.chargeModel) {
+            cell.subtitleLabel.text = [self.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+        }
         [cell setNeedsLayout];
         return cell;
         
@@ -239,11 +288,11 @@ static NSString *kTitle6 = @"备注";
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        if (self.chargeModel) {
+            cell.textField.text = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryPoundageWithProduct:self.financeModel chargeItem:self.chargeModel]];
+        }
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
-//        NSString *oldStr = [NSString stringWithFormat:@"实际扣除金额为"];
-//        cell.subNameL.text = oldStr;
-        //    cell.subtitleLabel.attributedText = [NSMutableAttributedString attr];
         cell.hasPercentageL = NO;
         cell.hasNotSegment = YES;
         self.subL = cell.subNameL;
@@ -296,14 +345,6 @@ static NSString *kTitle6 = @"备注";
 #pragma mark - Private
 - (void)loadData {
     MJWeakSelf;
-    [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productid success:^(SSJFixedFinanceProductItem * _Nonnull model) {
-        weakSelf.financeModel = model;
-        [weakSelf initCompoundModel];
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
-
-    
     [self.view ssj_showLoadingIndicator];
     [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
         _tableView.hidden = NO;
@@ -319,6 +360,16 @@ static NSString *kTitle6 = @"备注";
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
+    
+    
+    [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeModel success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
+        weakSelf.otherFundid = charegItem.fundId;
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+
 }
 
 
@@ -349,7 +400,7 @@ static NSString *kTitle6 = @"备注";
     
     self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
-    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
+    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
     self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
 }
 
@@ -402,7 +453,6 @@ static NSString *kTitle6 = @"备注";
         [_tableView registerClass:[SSJAddOrEditLoanLabelCell class] forCellReuseIdentifier:kAddOrEditFixedFinanceProLabelCellId];
         [_tableView registerClass:[SSJAddOrEditLoanTextFieldCell class] forCellReuseIdentifier:kAddOrEditFixedFinanceProTextFieldCellId];
         [_tableView registerClass:[SSJFixedFinanceProDetailTableViewCell class] forCellReuseIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId];
-        _tableView.tableFooterView = self.footerView;
     }
     return _tableView;
 }

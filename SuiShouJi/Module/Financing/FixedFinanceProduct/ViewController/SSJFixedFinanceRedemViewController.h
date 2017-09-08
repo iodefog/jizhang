@@ -7,10 +7,15 @@
 //
 
 #import "SSJBaseViewController.h"
+@class SSJFixedFinanceProductItem;
+@class SSJFixedFinanceProductChargeItem;
 
 @interface SSJFixedFinanceRedemViewController : SSJBaseViewController
-/**productid*/
-@property (nonatomic, copy) NSString *productid;
+/**必传*/
+@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
+
+/**编辑的时候传*/
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeModel;
 
 /**可赎回金额*/
 @property (nonatomic, assign) double canRedemMoney;
