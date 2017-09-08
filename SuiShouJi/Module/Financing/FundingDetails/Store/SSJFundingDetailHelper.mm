@@ -502,11 +502,14 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         NSMutableArray *tempDateArr = [NSMutableArray arrayWithCapacity:0];
         NSString *sql = [NSString stringWithFormat:@"select substr(a.cbilldate,1,7) as cmonth , a.* , a.cwritedate as chargedate , a.cid as sundryid, b.cicoin, b.cname, b.ccolor, b.itype from BK_USER_CHARGE a, BK_USER_BILL_TYPE b where a.ibillid = b.cbillid and ((a.cuserid = b.cuserid and a.cbooksid = b.cbooksid) or length(b.cbillid) < 4) and a.IFUNSID = '%@' and a.operatortype <> 2 and a.cbooksid  = '%@' and a.cbilldate <= '%@' and a.ibillid <> '13' and a.ibillid <> '14' order by cmonth desc ,a.cbilldate desc ,a.cwritedate desc" , ID , booksId , [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"]];
         FMResultSet *resultSet = [db executeQuery:sql];
-        if (!resultSet) {
-            if (failure) {
-                failure([db lastError]);
+        dispatch_main_async_safe(^{
+            if (!resultSet) {
+                if (failure) {
+                    failure([db lastError]);
+                }
             }
-        }
+        });
+
         NSMutableArray *result = [NSMutableArray array];
         NSString *lastDate = @"";
         NSString *lastDetailDate = @"";
@@ -829,7 +832,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                      failure:(void (^)(NSError *error))failure {
 
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
-        SSJFixedFinanceProductTable *fixedFinanceProduct = [db getOneObjectOfClass:SSJFixedFinanceProductTable.class fromTable:@"BK_FIXED_FINANCE_PRODUCT" where:SSJFixedFinanceProductTable.productId == item.sundryId];
+        SSJFixedFinanceProductTable *fixedFinanceProduct = [db getOneObjectOfClass:SSJFixedFinanceProductTable.class fromTable:@"BK_FIXED_FINANCE_PRODUCT" where:SSJFixedFinanceProductTable.productId == [[item.sundryId componentsSeparatedByString:@"_"] firstObject]];
         SSJUserChargeTable *userCharge = [db getOneObjectOfClass:SSJUserChargeTable.class fromTable:@"BK_USER_CHARGE" where:SSJUserChargeTable.chargeId == item.ID];
         SSJFundInfoTable *fundInfo = [db getOneObjectOfClass:SSJFundInfoTable.class fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == item.fundId];
         SSJFixedFinanceProductItem *productItem = [[SSJFixedFinanceProductItem alloc] init];
@@ -858,10 +861,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         chargeItem.userId = userCharge.userId;
         chargeItem.memo = userCharge.chargeId;
         chargeItem.icon = userCharge.chargeId;
-        chargeItem.billDate = [NSDate dateWithString:userCharge.billDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        chargeItem.billDate = [NSDate dateWithString:userCharge.billDate formatString:@"yyyy-MM-dd"];
         chargeItem.cid = userCharge.cid;
         if (success) {
-            success(productItem,chargeItem);
+            dispatch_main_async_safe(^{
+                success(productItem,chargeItem);
+            });
         }
     }];
 }

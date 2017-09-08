@@ -224,7 +224,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     vc.financeModel = productItem;
                     vc.chargeItem = chargeItem;
                     [self.navigationController pushViewController:vc animated:YES];
-                } else if (billId == 3 || billId == 4) {
+                } else if (billId == 21 || billId == 22 || billId == 3 || billId == 4) {
                     SSJEveryInverestDetailViewController *vc = [[SSJEveryInverestDetailViewController alloc] init];
                     vc.chargeItem = chargeItem;
                     vc.productItem = productItem;
