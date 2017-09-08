@@ -64,6 +64,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
++ (void)regularDistributedInterestSuccess:(void (^)())success failure:(void (^)(NSError * error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

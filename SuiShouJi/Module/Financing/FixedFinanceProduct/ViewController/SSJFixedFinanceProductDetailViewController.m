@@ -11,12 +11,14 @@
 #import "SSJFixedFinanceRedemViewController.h"
 #import "SSJFixedFinancesSettlementViewController.h"
 #import "SSJAddOrEditFixedFinanceProductViewController.h"
+#import "SSJEveryInverestDetailViewController.h"
 
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductDetailItem.h"
 #import "SSJFixedFinanceProductCompoundItem.h"
 #import "SSJLoanDetailCellItem.h"
 #import "SSJFixedFinanceDetailCellItem.h"
+#import "SSJLoanFundAccountSelectionViewItem.h"
 
 #import "SSJFixedFinanceProductDetailCell.h"
 #import "SSJFixedFinanceDetailTableViewCell.h"
@@ -183,8 +185,71 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     return [UIView new];
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {}
-
+//SSJFixedFinCompoundChargeTypeCreate,//新建
+//SSJFixedFinCompoundChargeTypeAdd,//追加
+//SSJFixedFinCompoundChargeTypeRedemption,//赎回
+//SSJFixedFinCompoundChargeTypeBalanceInterestIncrease,//利息转入
+//SSJFixedFinCompoundChargeTypeBalanceInterestDecrease,//利息转出
+//SSJFixedFinCompoundChargeTypeInterest,//固收理财派发利息流水
+//SSJFixedFinCompoundChargeTypeCloseOutInterest,//固收理财手续费率（部分赎回，结算）
+//SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease,//固收理财平账收入
+//SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease,//固收理财平账支出
+//SSJFixedFinCompoundChargeTypeCloseOut//结清
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 1) {
+        SSJFixedFinanceProductChargeItem *item = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
+        switch (item.chargeType) {
+            case SSJFixedFinCompoundChargeTypeAdd://追加
+            {
+                SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
+                addvc.financeModel = self.financeModel;
+                addvc.chargeItem = item;
+                [self.navigationController pushViewController:addvc animated:YES];
+            }
+                break;
+                //赎回
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://部分赎回手续费（不考虑结算手续费在target账户中生成流水）流水详情和赎回流水同样进入赎回详情页面
+            case SSJFixedFinCompoundChargeTypeRedemption://赎回金额
+            {
+                SSJFixedFinanceRedemViewController *vc = [[SSJFixedFinanceRedemViewController alloc] init];
+                vc.financeModel = self.financeModel;
+                vc.chargeModel = item;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+                
+                //只有结算的时候才涉及到利息转入，转出
+                //不可编辑
+            case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
+            case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息支出
+            case SSJFixedFinCompoundChargeTypeCloseOut://结算本金
+                //手续费SSJFixedFinCompoundChargeTypeCloseOutInterest
+            {
+                SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
+                vc.financeModel = self.financeModel;
+                vc.chargeItem = item;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+                
+                //不可编辑
+            case SSJFixedFinCompoundChargeTypeCreate:
+            case SSJFixedFinCompoundChargeTypeInterest:
+            case SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease:
+            case SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease:
+            {
+                SSJEveryInverestDetailViewController *vc = [[SSJEveryInverestDetailViewController alloc] init];
+                vc.chargeItem = item;
+                vc.productItem = self.financeModel;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+            
+            default:
+                break;
+        }
+    }
+}
 
 #pragma mark - SSJSeparatorFormViewDataSource
 - (NSUInteger)numberOfRowsInSeparatorFormView:(SSJFinancingDetailHeadeView *)view {
@@ -265,12 +330,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         NSString *startDateStr = _financeModel.startdate;
         NSString *endDateStr = _financeModel.enddate;
         NSString *memo = _financeModel.memo;
-        NSString *fundName = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
+        SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
         
             [self.section1Items addObjectsFromArray:
              @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"起息日期" subtitle:startDateStr bottomTitle:nil],
                [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
-               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:fundName bottomTitle:nil]]];
+               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:funditem.ID bottomTitle:nil]]];
         
             if (_financeModel.memo.length) {
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"备注" subtitle:memo bottomTitle:nil]];
@@ -359,12 +424,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             case SSJFixedFinCompoundChargeTypeRedemption://赎回
                 surplus -= model.money;
                 break;
-            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-                surplus += model.money;
-                break;
-            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-                surplus -= model.money;
-                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
+//                surplus += model.money;
+//                break;
+//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
+//                surplus -= model.money;
+//                break;
             case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
                 surplus += model.money;
                 break;
@@ -486,7 +551,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)closeOutBtnAction {
     SSJFixedFinancesSettlementViewController *closeOutVC = [[SSJFixedFinancesSettlementViewController alloc] init];
-    closeOutVC.productid = self.productID;
+    closeOutVC.financeModel = self.financeModel;
     [self.navigationController pushViewController:closeOutVC animated:YES];
 }
 
@@ -608,13 +673,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:0]]) {
                 SSJFixedFinanctAddViewController *addVC = [[SSJFixedFinanctAddViewController alloc] init];
                 //            addVC.edited = NO;
-                addVC.productid = wself.productID;
+                addVC.financeModel = wself.financeModel;
                 
                 [wself.navigationController pushViewController:addVC animated:YES];
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
                 SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
-                redVC.productid = weakSelf.productID;
-                redVC.canRedemMoney = weakSelf.currentMoney;
+                redVC.financeModel = weakSelf.financeModel;
                 [wself.navigationController pushViewController:redVC animated:YES];
             }
         };

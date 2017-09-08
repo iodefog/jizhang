@@ -34,6 +34,7 @@
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJGeTuiManager.h"
 #import "NSString+MoneyDisplayFormat.h"
+#import "SSJLocalNotificationHelper.h"
 
 
 static NSString *KTitle1 = @"投资名称";
@@ -102,6 +103,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 // 原始的借贷金额，只有在编辑记录此金额
 @property (nonatomic) double originalMoney;
 
+/**是否让金额更改 当有赎回或者追加金额的时候不让*/
+@property (nonatomic, assign) BOOL allowMoneyChanged;
+
 @end
 
 @implementation SSJAddOrEditFixedFinanceProductViewController
@@ -111,9 +115,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     [self.view addSubview:self.tableView];
     self.tableView.tableFooterView = self.footerView;
-    if (_model.remindid.length) {
-        _reminderItem = [SSJLocalNotificationStore queryReminderItemForID:_model.remindid];
-    }
+    [self getWishRemindDetailFromDB];
     
     [self updateTitle];
     [self loadData];
@@ -126,6 +128,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
     [self updateAppearance];
 }
+
+- (void)getWishRemindDetailFromDB {
+    if (self.model.remindid.length) {
+        self.reminderItem = [SSJLocalNotificationStore queryReminderItemForID:self.model.remindid];
+        if (self.model.remindid.length && self.reminderItem.remindState == 1) {
+            self.remindSwitch.on = YES;
+        }
+    }
+}
+
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -276,6 +288,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
+    self.allowMoneyChanged = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
     
     if (_edited) {
         self.jiXiMethodSelectionView.selectedIndex = [self switchJiXiMethodWithType:self.model.interesttype];
@@ -396,6 +409,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             }
         }
         self.navigationController.viewControllers = [array copy];
+//        [self saveRemind];
         
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
@@ -403,6 +417,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [weakSelf.sureButton ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
+    
+
+}
+
+- (void)saveRemind {
+    //保存提醒
+    MJWeakSelf;
+    if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
+        weakSelf.model.remindid = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
+        weakSelf.reminderItem.remindState = 1;
+        weakSelf.reminderItem.remindType = SSJReminderTypeWish;
+        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
+            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            
+        }];
+    }
 }
 
 - (BOOL)checkFixedFinModelIsValid {
@@ -441,7 +473,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)updateChargeModels {
     self.model.oldMoney = self.model.money;
     self.model.money = self.moneyTextF.text;
-    self.model.difMoney = ABS([self.model.money doubleValue] - [self.model.oldMoney doubleValue]);
     self.model.memo = self.memoTextF.text;
     self.model.rate = [self.liLvTextF.text doubleValue];
     self.model.time = [self.qiXianTextF.text doubleValue];
@@ -450,34 +481,23 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.model.timetype = [self switchRateType:self.qiXiansegmentControl.selectedSegmentIndex rate:NO];
     self.createCompoundModel.chargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     
-    if (_edited) {//编辑
-        self.model.balanceOutOrIn = 0;
-        if ([self.model.oldMoney doubleValue] < [self.model.money doubleValue]) {//增加
-            self.model.balanceOutOrIn = 2;
-            self.createCompoundModel.chargeModel.billId = @"17";
-            self.createCompoundModel.targetChargeModel.billId = @"18";
-            self.createCompoundModel.chargeModel.money = self.createCompoundModel.targetChargeModel.money = self.model.difMoney;
-            
-        } else if ([self.model.oldMoney doubleValue] > [self.model.money doubleValue]) {//减少
-            self.createCompoundModel.chargeModel.billId = @"18";
-            self.createCompoundModel.targetChargeModel.billId = @"17";
-            self.model.balanceOutOrIn = 1;
-            self.createCompoundModel.chargeModel.money = self.createCompoundModel.targetChargeModel.money = self.model.difMoney;
-        } else {
-            self.model.balanceOutOrIn = 0;
-        }
-    } else {//新建
-        self.model.balanceOutOrIn = 2;
-        self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
-        self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
+    if (self.reminderItem.remindId.length) {
+        self.model.remindid = self.reminderItem.remindId;
     }
     
+    self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
+    self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
+    
     self.createCompoundModel.chargeModel.memo = self.model.memo;
-
+    
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     self.createCompoundModel.targetChargeModel.memo = self.model.memo;
-
+    
+    self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSDate *billDate = self.model.startDate;
+    NSString *cid = [NSString stringWithFormat:@"%@_%.2f",self.model.productid,[billDate timeIntervalSince1970]];
+    self.createCompoundModel.chargeModel.cid = self.createCompoundModel.targetChargeModel.cid = cid;
 }
 
 
@@ -490,6 +510,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         __weak typeof(self) weakSelf = self;
         remindEditeVc.addNewReminderAction = ^(SSJReminderItem *item) {
             weakSelf.remindSwitch.on = YES;
+            item.remindState = YES;
             item.remindType = SSJFixedFinaProduct;
             weakSelf.reminderItem = item;
         };
@@ -527,7 +548,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     reminderVC.item = tmpRemindItem;
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
-        wself.model.remindid = item.remindId;
+        wself.model.remindid = wself.model.productid;
         [wself.tableView reloadData];
     };
     reminderVC.deleteReminderAction = ^{
@@ -631,6 +652,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.nameTextF = cell.textField;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -647,6 +669,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
+    //通过是否有赎回或者追加的记录
+    cell.userInteractionEnabled = self.allowMoneyChanged;
     return cell;
 }
 
@@ -667,6 +691,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.switchControl.hidden = YES;
     cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -681,7 +706,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.switchControl.hidden = YES;
     cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -703,6 +728,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.liLvTextL = cell.subNameL;
     
     cell.hasPercentageL = YES;
+    cell.userInteractionEnabled = YES;
     return cell;
 }
 
@@ -722,7 +748,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     } else {
         cell.segmentControl.selectedSegmentIndex = 2;
     }
-    
+    cell.userInteractionEnabled = YES;
     
     return cell;
 }
@@ -739,6 +765,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     }
     self.jixiTextL = cell.subtitleLabel;
     [cell setNeedsLayout];
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
@@ -751,13 +778,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.additionalIcon.image = nil;
     cell.customAccessoryType = UITableViewCellAccessoryNone;
     cell.switchControl.hidden = NO;
-    cell.switchControl.on = _reminderItem.remindState;
+    cell.switchControl.on = _reminderItem.remindState && _reminderItem.remindId.length;
     [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
     [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
     cell.selectionStyle = _reminderItem ? SSJ_CURRENT_THEME.cellSelectionStyle : UITableViewCellSelectionStyleNone;
     self.remindSwitch = cell.switchControl;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
@@ -775,7 +802,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.delegate = self;
     self.memoTextF = cell.textField;
     [cell setNeedsLayout];
-    
+    cell.userInteractionEnabled = YES;
     return cell;
 
 }
@@ -908,11 +935,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _jiXiMethodSelectionView.title = @"派息方式";
         _jiXiMethodSelectionView.items = itemArr;
         _jiXiMethodSelectionView.shouldSelectAccountAction = ^BOOL(SSJLoanFundAccountSelectionView *view, NSUInteger index) {
+            if (weakSelf.qiXiansegmentControl.selectedSegmentIndex == 2 && index == 2) {
+                [CDAutoHideMessageHUD showMessage:@"期限为日则不能选择每月付息派息方式"];
+                return NO;
+            }
+            
             if (index <= view.items.count - 1) {
                 SSJLoanFundAccountSelectionViewItem *item = [view.items objectAtIndex:index];
                 weakSelf.model.interesttype = index;
                 weakSelf.jiXiMethodSelectionView.selectedIndex = index;
-                //计算计息金额
+                
                 
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:3 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -991,12 +1023,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             NSString *chargeBillId = @"3";
             NSString *targetChargeBillId = @"4";
             NSString *uuid = SSJUUID();
+            NSDate *billDate = self.model.startDate;
+        
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,chargeBillId]];
             chargeModel.fundId = self.model.thisfundid;
             chargeModel.billId = chargeBillId;
             chargeModel.userId = SSJUSERID();
-//            chargeModel.cid = [NSString stringWithFormat:@"%@_%@",self.model.productid,[NSString stringWithFormat:@"%@_%@",uuid,]];
+//            chargeModel.cid = cid;
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
@@ -1004,7 +1038,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             targetChargeModel.fundId = self.model.targetfundid;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.userId = SSJUSERID();
-//            targetChargeModel.cid = chargeModel.cid;
+//            targetChargeModel.cid = cid;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];

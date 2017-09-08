@@ -25,6 +25,12 @@
 
 @property (nonatomic) BOOL showStamp;
 
+/**<#注释#>*/
+@property (nonatomic, assign) BOOL showStateL;
+
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *imageName;
+
 + (instancetype)itemWithLoanModel:(SSJLoanModel *)model;
 
 + (instancetype)itemForFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model;

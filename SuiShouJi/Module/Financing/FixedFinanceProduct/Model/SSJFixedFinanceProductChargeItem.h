@@ -54,8 +54,6 @@ typedef NS_ENUM(NSUInteger, SSJFixedFinCompoundChargeType) {
     SSJFixedFinCompoundChargeTypeCreate,//新建
     SSJFixedFinCompoundChargeTypeAdd,//追加
     SSJFixedFinCompoundChargeTypeRedemption,//赎回
-    SSJFixedFinCompoundChargeTypeBalanceIncrease,//余额转入
-    SSJFixedFinCompoundChargeTypeBalanceDecrease,//余额转出
     SSJFixedFinCompoundChargeTypeBalanceInterestIncrease,//利息转入
     SSJFixedFinCompoundChargeTypeBalanceInterestDecrease,//利息转出
     SSJFixedFinCompoundChargeTypeInterest,//固收理财派发利息流水

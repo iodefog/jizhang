@@ -7,15 +7,17 @@
 //
 
 #import "SSJBaseViewController.h"
-#import "SSJFixedFinanceProductChargeItem.h"
+
+@class SSJFixedFinanceProductChargeItem;
+@class SSJFixedFinanceProductItem;
 
 @interface SSJFixedFinanctAddViewController : SSJBaseViewController
 
-/**productid*/
-@property (nonatomic, copy) NSString *productid;
-/**
- 指定是追加还是还款，只有SSJLoanCompoundChargeTypeRepayment和SSJLoanCompoundChargeTypeAdd两个值有效
- 注意：新建必传，编辑不传
- */
-//@property (nonatomic) SSJFixedFinCompoundChargeType chargeType;
+///**productid*/
+//@property (nonatomic, copy) NSString *productid;
+
+@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
+
+/**点击进入详情的时候必须传新建不用传*/
+@property (nonatomic, strong)  SSJFixedFinanceProductChargeItem *chargeItem;
 @end

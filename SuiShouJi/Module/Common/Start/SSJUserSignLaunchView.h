@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @class SSJStartLunchItem;
+
 @interface SSJUserSignLaunchView : UIView
+
 typedef void(^SSJSkipBtnBlock)(UIButton *btn);
 
 @property (nonatomic, copy) SSJSkipBtnBlock skipBtnBlock;

@@ -1,8 +1,8 @@
 //
-//  SSJFixedFinancesSettlementViewController.h
+//  SSJEveryInverestDetailViewController.h
 //  SuiShouJi
 //
-//  Created by yi cai on 2017/8/28.
+//  Created by yi cai on 2017/9/6.
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
@@ -10,11 +10,12 @@
 @class SSJFixedFinanceProductItem;
 @class SSJFixedFinanceProductChargeItem;
 
-@interface SSJFixedFinancesSettlementViewController : SSJBaseViewController
+@interface SSJEveryInverestDetailViewController : SSJBaseViewController
 
 /**<#注释#>*/
-@property (nonatomic, strong) SSJFixedFinanceProductItem *financeModel;
-
-/**编辑*/
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeItem;
+
+/**<#注释#>*/
+@property (nonatomic, strong) SSJFixedFinanceProductItem *productItem;
+
 @end

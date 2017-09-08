@@ -25,6 +25,7 @@
 #import "SSJFundingDetailsViewController.h"
 #import "SSJLoanDetailViewController.h"
 #import "SSJWishProgressViewController.h"
+#import "SSJFixedFinanceProductDetailViewController.h"
 
 #import "UIViewController+SSJMotionPassword.h"
 
@@ -51,6 +52,7 @@
 #import "SSJAnaliyticsManager.h"
 #import "SSJCustomThemeManager.h"
 #import "SSJWishHelper.h"
+#import "SSJFixedFinanceProductStore.h"
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
 #import <UserNotifications/UserNotifications.h>
@@ -171,10 +173,20 @@ NSDate *SCYEnterBackgroundTime() {
     //保存app启动时间，判断是否为新用户
 //    [SSJAPPEvaluatePopView evaluatePopViewConfiguration];
     
+    
     // 如果自定义主题有升级的话，会先移除之前的主题包，导致启动后4个tab图标消失，延迟执行会避免这个问题（令人费解的机制）
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [SSJCustomThemeManager initializeCustomTheme];
     });
+    
+    //派发利息流水
+//    + (void)regularDistributedInterestSuccess:(void (^)())success
+//failure:(void (^)(NSError * error))failure
+    [SSJRegularManager regularDistributedInterestSuccess:^{
+         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showError:error];
+    }];
     
     return YES;
 }
@@ -398,6 +410,11 @@ NSDate *SCYEnterBackgroundTime() {
                     wishProgressVC.wishId = [SSJWishHelper queryWishIdWithRemindId:remindItem.remindId];
                     [currentVc.navigationController pushViewController:wishProgressVC animated:YES];
                 }
+            }else if (remindItem.remindType == SSJFixedFinaProduct) {
+                
+                SSJFixedFinanceProductDetailViewController *finDeVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                finDeVC.productID = [SSJFixedFinanceProductStore queryProductIdWithRemindId:remindItem.remindId];
+                [currentVc.navigationController pushViewController:finDeVC animated:YES];
             }
         }
     }

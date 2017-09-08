@@ -11,6 +11,8 @@
 #import "SSJDatabaseQueue.h"
 #import "SSJDatePeriod.h"
 #import "DTTimePeriod.h"
+#import "SSJFixedFinanceProductStore.h"
+#import "SSJFixedFinanceProductItem.h"
 
 static NSString *const SSJRegularManagerNotificationIdKey = @"SSJRegularManagerNotificationIdKey";
 static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManagerNotificationIdValue";
@@ -599,5 +601,53 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             break;
     }
 }
+
+
+//派发利息生成步骤
+//1.查询所有为删除为结算的理财产品
+//2.查询最新一次派发时间
+//3.继续派发从最新一次派发时间到当天的利息
+
++ (void)regularDistributedInterestSuccess:(void (^)())success
+                                  failure:(void (^)(NSError * error))failure {
+    NSString *fundid = [NSString stringWithFormat:@"%@-8",SSJUSERID()];
+    [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:fundid Type:SSJFixedFinanceStateNoSettlement success:^(NSArray<SSJFixedFinanceProductItem *> * _Nonnull resultList) {
+        for (SSJFixedFinanceProductItem *item in resultList) {
+            
+            [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+                //查询最新时间
+                NSError *error = nil;
+                NSDate *date = [SSJFixedFinanceProductStore queryPaiFalLastBillDateWithPorductModel:item inDatabase:db];
+                NSDate *endDate;
+                if ([[NSDate date] compare:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+                    endDate = [NSDate date];
+                } else {
+                    endDate = [[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+                }
+                
+                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:date endDate:endDate newMoney:0 inDatabase:db error:&error]) {
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatchMainAsync(^{
+                            failure(error);
+                        });
+                    }
+                    return;
+                }
+                if (success) {
+                    SSJDispatchMainAsync(^{
+                        success();
+                    });
+                }
+            }];
+        }
+        
+    } failure:^(NSError * _Nonnull error) {
+        if (failure) {
+            failure(error);
+        }
+    }];
+}
+
 
 @end
