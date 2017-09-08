@@ -181,7 +181,7 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
         }
         
         CGFloat side = pow(CGRectGetWidth(self.circleFrame) * 0.5, 2) - pow((item.breakPoint.y - CGRectGetMidY(self.circleFrame)), 2);
-        CGFloat breakPointX = CGRectGetMidX(self.circleFrame) - sqrt(side) + 5;
+        CGFloat breakPointX = CGRectGetMidX(self.circleFrame) - sqrt(side) - 5;
         if (item.breakPoint.x > breakPointX) {
             CGFloat offset = item.breakPoint.x - breakPointX;
             item.breakPoint = CGPointMake(item.breakPoint.x - offset, item.breakPoint.y);
@@ -189,7 +189,6 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
         }
     }
 }
-
 
 - (void)composeRightNodeItems {
     // 检测是否有重叠的节点，有的话依次排开
