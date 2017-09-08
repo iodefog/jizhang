@@ -23,7 +23,7 @@ static const CGFloat kMaxSpeed = 100;
 
 @property (nonatomic, strong) NSIndexPath *originalMovedIndexPath;
 
-@property (nonatomic, strong) UIImageView *movedCell;
+@property (nonatomic, strong) UIView *cellSnapshot;
 
 @property (nonatomic) CGPoint touchPointInCell;
 
@@ -52,10 +52,6 @@ static const CGFloat kMaxSpeed = 100;
         _shouldPerformSelectAction = YES;
         
         _movedCellScale = 1;
-        
-        _movedCell = [[UIImageView alloc] init];
-        _movedCell.hidden = YES;
-        [self addSubview:_movedCell];
         
         _longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(beginEditingWhenLongPressBegin)];
         _longPressGesture.delegate = self;
@@ -189,11 +185,12 @@ static const CGFloat kMaxSpeed = 100;
         
         _touchPointInCell = [_longPressGesture locationInView:touchedCell];
         
-        _movedCell.frame = touchedCell.frame;
-        [_movedCell setImage:[touchedCell.layer.presentationLayer ssj_takeScreenShotWithSize:_movedCell.size opaque:NO scale:0]];
-        _movedCell.hidden = NO;
+        _cellSnapshot = [touchedCell snapshotViewAfterScreenUpdates:YES];
+        _cellSnapshot.frame = touchedCell.frame;
+        [self addSubview:_cellSnapshot];
+        
         [UIView animateWithDuration:0.25 animations:^{
-            _movedCell.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
+            _cellSnapshot.transform = CGAffineTransformMakeScale(_movedCellScale, _movedCellScale);
         }];
         touchedCell.hidden = YES;
     }
@@ -202,10 +199,10 @@ static const CGFloat kMaxSpeed = 100;
 - (void)beginMoving {
     if (_moving) {
         CGPoint touchPoint = [_panGesture locationInView:self];
-        _movedCell.leftTop = CGPointMake(touchPoint.x - _touchPointInCell.x, touchPoint.y - _touchPointInCell.y);
+        _cellSnapshot.leftTop = CGPointMake(touchPoint.x - _touchPointInCell.x, touchPoint.y - _touchPointInCell.y);
         
         [self checkIfHasIntersectantCells];
-        _fixedPoint = CGPointMake(_movedCell.left, _movedCell.top - self.contentOffset.y);
+        _fixedPoint = CGPointMake(_cellSnapshot.left, _cellSnapshot.top - self.contentOffset.y);
         [self keepCurrentMovedCellVisible];
     }
 }
@@ -223,7 +220,7 @@ static const CGFloat kMaxSpeed = 100;
 
 // 将当前移动的cell保持在可视范围内
 - (void)keepCurrentMovedCellVisible {
-    if (!_moving || !_currentMovedIndexPath || !_movedCell) {
+    if (!_moving || !_currentMovedIndexPath || !_cellSnapshot) {
         return;
     }
     
@@ -236,15 +233,15 @@ static const CGFloat kMaxSpeed = 100;
         });
         
         CGFloat axisY = _fixedPoint.y + self.contentOffset.y;
-        _movedCell.leftTop = CGPointMake(_fixedPoint.x, axisY);
+        _cellSnapshot.leftTop = CGPointMake(_fixedPoint.x, axisY);
         
         CGFloat speedFactor = 2;
-        if (_movedCell.top < self.contentOffset.y && self.contentOffset.y > 0) {
+        if (_cellSnapshot.top < self.contentOffset.y && self.contentOffset.y > 0) {
             CGFloat speed = MIN(ABS(_fixedPoint.y) * speedFactor, kMaxSpeed);
             CGFloat contentOffSetY = MAX(self.contentOffset.y - speed, 0);
             [self setContentOffset:CGPointMake(self.contentOffset.x, contentOffSetY) animated:YES];
-        } else if (_movedCell.bottom > self.contentOffset.y + self.height && self.contentOffset.y < self.contentSize.height - self.height) {
-            CGFloat speed = (_fixedPoint.y + _movedCell.height - self.height) * speedFactor;
+        } else if (_cellSnapshot.bottom > self.contentOffset.y + self.height && self.contentOffset.y < self.contentSize.height - self.height) {
+            CGFloat speed = (_fixedPoint.y + _cellSnapshot.height - self.height) * speedFactor;
             speed = MIN(speed, kMaxSpeed);
             CGFloat contentOffSetY = self.contentOffset.y + speed;
             contentOffSetY = MIN(contentOffSetY, self.contentSize.height - self.height);
@@ -255,46 +252,46 @@ static const CGFloat kMaxSpeed = 100;
 
 // 检测是否有与当前移动的cell相交的cell
 - (void)checkIfHasIntersectantCells {
-    if (!_shouldCheckIntersection || !_currentMovedIndexPath || !_movedCell) {
+    if (!_shouldCheckIntersection || !_currentMovedIndexPath || !_cellSnapshot) {
         return;
     }
     
-    NSIndexPath *topIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.centerX, _movedCell.top)];
+    NSIndexPath *topIndex = [self indexPathForItemAtPoint:CGPointMake(_cellSnapshot.centerX, _cellSnapshot.top)];
     if ([self moveCellToIndexPathIfNeeded:topIndex]) {
         return;
     }
     
-    NSIndexPath *leftTopIndex = [self indexPathForItemAtPoint:_movedCell.leftTop];
+    NSIndexPath *leftTopIndex = [self indexPathForItemAtPoint:_cellSnapshot.leftTop];
     if ([self moveCellToIndexPathIfNeeded:leftTopIndex]) {
         return;
     }
     
-    NSIndexPath *leftIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.left, _movedCell.centerY)];
+    NSIndexPath *leftIndex = [self indexPathForItemAtPoint:CGPointMake(_cellSnapshot.left, _cellSnapshot.centerY)];
     if ([self moveCellToIndexPathIfNeeded:leftIndex]) {
         return;
     }
     
-    NSIndexPath *leftBottomIndex = [self indexPathForItemAtPoint:_movedCell.leftBottom];
+    NSIndexPath *leftBottomIndex = [self indexPathForItemAtPoint:_cellSnapshot.leftBottom];
     if ([self moveCellToIndexPathIfNeeded:leftBottomIndex]) {
         return;
     }
     
-    NSIndexPath *bottomIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.centerX, _movedCell.bottom)];
+    NSIndexPath *bottomIndex = [self indexPathForItemAtPoint:CGPointMake(_cellSnapshot.centerX, _cellSnapshot.bottom)];
     if ([self moveCellToIndexPathIfNeeded:bottomIndex]) {
         return;
     }
     
-    NSIndexPath *bottomRightIndex = [self indexPathForItemAtPoint:_movedCell.rightBottom];
+    NSIndexPath *bottomRightIndex = [self indexPathForItemAtPoint:_cellSnapshot.rightBottom];
     if ([self moveCellToIndexPathIfNeeded:bottomRightIndex]) {
         return;
     }
     
-    NSIndexPath *rightIndex = [self indexPathForItemAtPoint:CGPointMake(_movedCell.right, _movedCell.centerY)];
+    NSIndexPath *rightIndex = [self indexPathForItemAtPoint:CGPointMake(_cellSnapshot.right, _cellSnapshot.centerY)];
     if ([self moveCellToIndexPathIfNeeded:rightIndex]) {
         return;
     }
     
-    NSIndexPath *rightTopIndex = [self indexPathForItemAtPoint:_movedCell.rightTop];
+    NSIndexPath *rightTopIndex = [self indexPathForItemAtPoint:_cellSnapshot.rightTop];
     if ([self moveCellToIndexPathIfNeeded:rightTopIndex]) {
         return;
     }
@@ -311,7 +308,7 @@ static const CGFloat kMaxSpeed = 100;
         return NO;
     }
     
-    CGRect exchangeCellRegion1 = UIEdgeInsetsInsetRect(_movedCell.frame, _exchangeCellRegion);
+    CGRect exchangeCellRegion1 = UIEdgeInsetsInsetRect(_cellSnapshot.frame, _exchangeCellRegion);
     
     UICollectionViewCell *anotherCell = [self cellForItemAtIndexPath:toIndexPath];
     CGRect exchangeCellRegion2 = UIEdgeInsetsInsetRect(anotherCell.frame, _exchangeCellRegion);
@@ -359,10 +356,12 @@ static const CGFloat kMaxSpeed = 100;
     
     UICollectionViewLayoutAttributes *attributes = [self layoutAttributesForItemAtIndexPath:_currentMovedIndexPath];
     [UIView animateWithDuration:0.25 animations:^{
-        _movedCell.transform = CGAffineTransformMakeScale(1, 1);
-        _movedCell.frame = attributes.frame;
+        _cellSnapshot.transform = CGAffineTransformMakeScale(1, 1);
+        _cellSnapshot.frame = attributes.frame;
     } completion:^(BOOL finished) {
-        _movedCell.hidden = YES;
+        [_cellSnapshot removeFromSuperview];
+        _cellSnapshot = nil;
+        
         UICollectionViewCell *cell = [self cellForItemAtIndexPath:_currentMovedIndexPath];
         cell.hidden = NO;
         
