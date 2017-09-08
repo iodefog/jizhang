@@ -81,6 +81,9 @@ static NSString *kTitle6 = @"备注";
 /**编辑的时候手续费的金额*/
 @property (nonatomic, assign) double oldPoundageMoney;
 
+/**可赎回金额*/
+@property (nonatomic, assign) double canRedemMoney;
+
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherMoneyChareItem;
 
 //@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *liXiChareItem;

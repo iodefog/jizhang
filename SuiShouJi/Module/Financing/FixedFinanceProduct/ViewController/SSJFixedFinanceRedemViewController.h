@@ -16,4 +16,6 @@
 
 /**编辑的时候传*/
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeModel;
+
+
 @end
