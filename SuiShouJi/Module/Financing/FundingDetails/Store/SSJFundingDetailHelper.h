@@ -10,6 +10,8 @@
 #import "SSJFundingDetailListItem.h"
 #import "SSJCreditCardItem.h"
 #import "SSJFinancingHomeitem.h"
+#import "SSJFixedFinanceProductItem.h"
+#import "SSJFixedFinanceProductChargeItem.h"
 
 @class SSJBillingChargeCellItem;
 @class WCTStatement;
@@ -46,6 +48,10 @@ extern NSString *const SSJFundingDetailSumKey;
                   FundTypeID:(NSString *)ID
                      success:(void (^)(NSMutableArray <SSJFundingDetailListItem *> *data))success
                      failure:(void (^)(NSError *error))failure;
+
++ (void)queryfixedFinanceDateWithChargeItem:(SSJBillingChargeCellItem *)item
+                                    success:(void (^)(SSJFixedFinanceProductItem *productItem, SSJFixedFinanceProductChargeItem *chargeItem))success
+                                    failure:(void (^)(NSError *error))failure;
 
 + (BOOL)queryCloseOutStateWithLoanId:(NSString *)loanId;
 
