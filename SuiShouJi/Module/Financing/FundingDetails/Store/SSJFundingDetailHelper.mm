@@ -832,8 +832,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                      failure:(void (^)(NSError *error))failure {
 
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
-        SSJFixedFinanceProductTable *fixedFinanceProduct = [db getOneObjectOfClass:SSJFixedFinanceProductTable.class fromTable:@"BK_FIXED_FINANCE_PRODUCT" where:SSJFixedFinanceProductTable.productId == [[item.sundryId componentsSeparatedByString:@"_"] firstObject]];
-        SSJUserChargeTable *userCharge = [db getOneObjectOfClass:SSJUserChargeTable.class fromTable:@"BK_USER_CHARGE" where:SSJUserChargeTable.chargeId == item.ID];
+        SSJFixedFinanceProductTable *fixedFinanceProduct = [db getOneObjectOfClass:SSJFixedFinanceProductTable.class
+                                                                         fromTable:@"BK_FIXED_FINANCE_PRODUCT"
+                                                                             where:SSJFixedFinanceProductTable.productId == [[item.sundryId componentsSeparatedByString:@"_"] firstObject]];
+        SSJUserChargeTable *userCharge = [db getOneObjectOfClass:SSJUserChargeTable.class
+                                                       fromTable:@"BK_USER_CHARGE"
+                                                           where:SSJUserChargeTable.chargeId == item.ID];
         SSJFundInfoTable *fundInfo = [db getOneObjectOfClass:SSJFundInfoTable.class fromTable:@"bk_fund_info" where:SSJFundInfoTable.fundId == item.fundId];
         SSJFixedFinanceProductItem *productItem = [[SSJFixedFinanceProductItem alloc] init];
         productItem.productid = fixedFinanceProduct.productId;
