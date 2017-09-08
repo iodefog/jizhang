@@ -75,12 +75,12 @@ static NSUInteger kDateTag = 2005;
 
 - (void)loadData {
     MJWeakSelf;
-
     if (self.chargeItem) {
         //查询当前charid对应的另外一跳流水
         //通过另一条流水的fundid查找名称
-        [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
-            weakSelf.otherChareItem = charegItem;
+        [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(NSArray<SSJFixedFinanceProductChargeItem *> * _Nonnull charegItemArr) {
+            SSJFixedFinanceProductChargeItem *chargeItem = [charegItemArr lastObject];
+            weakSelf.otherChareItem = chargeItem;
             SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
             [self initEditCompoundModel];
             [weakSelf funditem:funditem];
@@ -88,8 +88,6 @@ static NSUInteger kDateTag = 2005;
         } failure:^(NSError * _Nonnull error) {
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
-    } else {
-        [self funditem:nil];
     }
 }
 

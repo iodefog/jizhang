@@ -44,6 +44,7 @@
 #import "SSJFixedFinanctAddViewController.h"
 #import "SSJFixedFinanceRedemViewController.h"
 #import "SSJFixedFinancesSettlementViewController.h"
+#import "SSJEveryInverestDetailViewController.h"
 
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
@@ -224,11 +225,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     vc.chargeItem = chargeItem;
                     [self.navigationController pushViewController:vc animated:YES];
                 } else if (billId == 3 || billId == 4) {
-                    
-                } else if (billId == 3 || billId == 4) {
-                    
-                } else if (billId == 3 || billId == 4) {
-                    
+                    SSJEveryInverestDetailViewController *vc = [[SSJEveryInverestDetailViewController alloc] init];
+                    vc.chargeItem = chargeItem;
+                    vc.productItem = productItem;
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
             } failure:NULL];
 

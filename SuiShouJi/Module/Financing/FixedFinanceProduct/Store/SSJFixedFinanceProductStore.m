@@ -533,17 +533,15 @@
 
 
 /**
- 通过一条chareitem查找对应的另外一条流水
- 
+ 通过一条chareitem查找对应的另外几条流水
  @param oneChargeItem <#oneChargeItem description#>
  @return <#return value description#>
  */
-+ (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(SSJFixedFinanceProductChargeItem *charegItem))success failure:(void (^)(NSError *error))failure {
++ (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(NSArray <SSJFixedFinanceProductChargeItem *> * charegItemArr))success failure:(void (^)(NSError *error))failure {
     NSString *uuid = [[oneChargeItem.chargeId componentsSeparatedByString:@"_"] firstObject];
     if (!uuid.length) return;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
        FMResultSet *result = [db executeQuery:@"select * from bk_user_charge where ichargeid like (? || '_%') and cuserid = ? and cid = ? and operatortype != 2",uuid,SSJUSERID(),oneChargeItem.cid];
-        SSJFixedFinanceProductChargeItem *charegItem;
         if (!result) {
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -552,14 +550,15 @@
             }
             return;
         }
+        NSMutableArray *tempArr = [NSMutableArray array];
         while ([result next]) {
             SSJFixedFinanceProductChargeItem *item = [SSJFixedFinanceProductChargeItem modelWithResultSet:result];
-            charegItem = item;
+            [tempArr addObject:item];
         }
         [result close];
         if (success) {
             SSJDispatchMainAsync(^{
-                success(charegItem);
+                success(tempArr);
             });
         }
     }];
@@ -740,6 +739,90 @@
         }
     }];
 }
+
+
+/**
+ 删除赎回流水
+ 
+ @param model 流水模型
+ @param success 删除成功的回调
+ @param failure 删除失败的回调，error code为1代表删除流水后借贷剩余金额会小于0
+ */
++ (void)deleteFixedFinanceProductRedemChargeWithModel:(NSArray<SSJFixedFinanceProductChargeItem *> *)modelArr
+                                    productModel:(SSJFixedFinanceProductItem *)productModel
+                                         success:(void (^)(void))success
+                                              failure:(void (^)(NSError *error))failure {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
+        NSDate *billDate;
+        NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        for (SSJFixedFinanceProductChargeItem *item in modelArr) {
+            billDate = item.billDate;
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),item.chargeId]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
+        //删除派发流水
+        //重新生成派发流水
+        //修改本金
+        //删除以前派发的利息流水//重新派发利息流水
+        if (![self deleteDistributedInterestWithModel:productModel untilDate:[billDate dateByAddingDays:1] inDatabase:db error:&error]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        //重新生成新的历史派发流水
+        NSDate *endDate;
+        if ([[NSDate date] compare:[[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+            endDate = [NSDate date];
+        } else {
+            endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+        }
+        //按照新的金额重新派发流水
+        //查询原始本金
+        double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",SSJUSERID(),productModel.productid];
+        double newMoney = oldMoney;
+        newMoney = oldMoney + [productModel.oldMoney doubleValue];
+        
+        if (![self interestRecordWithModel:productModel investmentDate:billDate endDate:endDate newMoney:newMoney inDatabase:db error:&error]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        //修改本金
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+            return;
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
+        }
+    }];
+}
+
 
 /**
  追加或赎回投资
@@ -1602,6 +1685,30 @@
     }];
     
     return poundage;
+}
+
+/**
+ 计算当前余额
+ 
+ @param productItem <#productItem description#>
+ @return <#return value description#>
+ */
++ (double)caluclateTheBalanceOfCurrentWithModel:(SSJFixedFinanceProductItem *)productItem {
+    //本金 + 利息 - 赎回- 赎回手续费
+    __block double money = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        //利息
+       double money1 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",productItem.productid,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
+        
+        //赎回
+        double money2 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",productItem.productid,@(SSJChargeIdTypeFixedFinance),@"16",SSJUSERID()];
+        
+        //赎回手续费
+        double money3 = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '_%') and ichargetype = ? and ibillid = ? and cuserid = ?",productItem.productid,@(SSJChargeIdTypeFixedFinance),@"20",SSJUSERID()];
+        money = [productItem.money doubleValue] + money1 - money2 - money3;
+    }];
+    
+    return money;
 }
 
 

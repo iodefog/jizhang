@@ -210,7 +210,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 //赎回
             case SSJFixedFinCompoundChargeTypeCloseOutInterest://部分赎回手续费（不考虑结算手续费在target账户中生成流水）流水详情和赎回流水同样进入赎回详情页面
             case SSJFixedFinCompoundChargeTypeRedemption://赎回金额
-                
+            {
+                SSJFixedFinanceRedemViewController *vc = [[SSJFixedFinanceRedemViewController alloc] init];
+                vc.financeModel = self.financeModel;
+                vc.chargeModel = item;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
                 break;
                 
                 //只有结算的时候才涉及到利息转入，转出
@@ -245,7 +250,6 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         }
     }
 }
-
 
 #pragma mark - SSJSeparatorFormViewDataSource
 - (NSUInteger)numberOfRowsInSeparatorFormView:(SSJFinancingDetailHeadeView *)view {
@@ -674,8 +678,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 [wself.navigationController pushViewController:addVC animated:YES];
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
                 SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
-                redVC.productid = weakSelf.productID;
-                redVC.canRedemMoney = weakSelf.currentMoney;
+                redVC.financeModel = weakSelf.financeModel;
                 [wself.navigationController pushViewController:redVC animated:YES];
             }
         };
