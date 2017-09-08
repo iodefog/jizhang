@@ -70,6 +70,7 @@
         self.lineLength1 = lineLength1;
         self.lineLength2 = lineLength2;
         self.addtionTextFont = [UIFont systemFontOfSize:12];
+        self.addtionTextColor = [UIColor lightGrayColor];
         
         self.contentView = [[UIView alloc] initWithFrame:self.bounds];
         [self addSubview:self.contentView];
@@ -246,8 +247,8 @@
             additionViewItem.endPoint = endPoint;
             additionViewItem.borderColor = item.color;
             additionViewItem.text = item.text;
-            additionViewItem.font = item.font ?: self.addtionTextFont;
-            additionViewItem.textColor = [UIColor blackColor];
+            additionViewItem.font = self.addtionTextFont;
+            additionViewItem.textColor = self.addtionTextColor;
             [self.composer addNodeItem:additionViewItem];
             
             overlapScale += item.scale;

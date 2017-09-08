@@ -266,6 +266,8 @@ static const CGFloat kBottomViewHeight = 348;
     [_bottomView ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
     
     _dashLine.strokeColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha].CGColor;
+    
+    _circleView.addtionTextColor = SSJ_SECONDARY_COLOR;
 }
 
 #pragma mark - Getter

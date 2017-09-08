@@ -366,7 +366,6 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                 circleItem.color = [UIColor ssj_colorWithHex:[resultSet stringForColumn:@"ccolor"]];
                 circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", [resultSet stringForColumn:@"cname"], scale * 100];
-                circleItem.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
                 [circleItemArr addObject:circleItem];
             }
             

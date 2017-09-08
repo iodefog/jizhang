@@ -41,9 +41,9 @@
     
     for (int idx = 0; idx < items.count; idx ++) {
         SSJPercentCircleAdditionNodeItem *item = items[idx];
-        SSJPercentCircleAdditionNode *currentNode = [[SSJPercentCircleAdditionNode alloc] initWithItem:item];
-        [self addSubview:currentNode];
-        [self.additionNodes addObject:currentNode];
+        SSJPercentCircleAdditionNode *node = [[SSJPercentCircleAdditionNode alloc] initWithItem:item];
+        [self addSubview:node];
+        [self.additionNodes addObject:node];
     }
     
     for (int i = 0; i < self.additionNodes.count; i ++) {

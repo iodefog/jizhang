@@ -100,9 +100,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSDictionary *bottomTitleAttribute;
 
 /**
- 圆环周围的文字字体；如果percentCircle:itemForComponentAtIndex:返回的SSJPercentCircleViewItem对象中设置了font，就会忽略此属性
+ 圆环周围的文字字体，默认系统12号字；如果percentCircle:itemForComponentAtIndex:返回的SSJPercentCircleViewItem对象中设置了font，就会忽略此属性
  */
 @property (nonatomic, strong, nullable) UIFont *addtionTextFont;
+
+/**
+ 圆环周围的文字颜色，默认light gray
+ */
+@property (nonatomic, strong, nullable) UIColor *addtionTextColor;
 
 /**
  数据源协议
@@ -127,9 +132,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 附加文本
 @property (nonatomic, copy) NSString *text;
-
-// 附加文本
-@property (nonatomic, strong) UIFont *font;
 
 @end
 

@@ -115,7 +115,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         _brokenLineLayer = [CAShapeLayer layer];
         _brokenLineLayer.contentsScale = [[UIScreen mainScreen] scale];
         _brokenLineLayer.lineWidth = 1;
-        _brokenLineLayer.fillColor = [UIColor whiteColor].CGColor;
+        _brokenLineLayer.fillColor = [UIColor clearColor].CGColor;
         _brokenLineLayer.strokeEnd = 0;
     }
     return _brokenLineLayer;

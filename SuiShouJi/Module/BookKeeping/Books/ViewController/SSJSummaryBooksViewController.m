@@ -413,7 +413,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         circleItem.scale = item.scale / scaleAmount;
         circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
         circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
-        circleItem.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
         [self.circleItems addObject:circleItem];
     }
     

@@ -74,6 +74,7 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
+    _chartView.addtionTextColor = SSJ_SECONDARY_COLOR;
     _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5],
