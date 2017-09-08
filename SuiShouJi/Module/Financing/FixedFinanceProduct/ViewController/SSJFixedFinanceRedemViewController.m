@@ -75,6 +75,22 @@ static NSString *kTitle6 = @"备注";
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *otherFundid;
 
+/**编辑的时候输入框的金额*/
+@property (nonatomic, assign) double oldMoney;
+
+/**编辑的时候手续费的金额*/
+@property (nonatomic, assign) double oldPoundageMoney;
+
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherMoneyChareItem;
+
+//@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *liXiChareItem;
+//
+//@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherLiXiChareItem;
+
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *poundageChareItem;
+
+/**所有流水信息*/
+@property (nonatomic, strong) NSArray<SSJFixedFinanceProductChargeItem *> *allCharegeItems;
 @end
 
 @implementation SSJFixedFinanceRedemViewController
@@ -84,7 +100,10 @@ static NSString *kTitle6 = @"备注";
     [self.view addSubview:self.tableView];
     [self orangeData];
     [self loadData];
-    [self initCompoundModel];
+    
+    if (!self.chargeModel) {
+        [self initCompoundModel];
+    }
     [self setUpNav];
     [self updateAppearance];
 }
@@ -101,12 +120,13 @@ static NSString *kTitle6 = @"备注";
 
 - (void)deleteButtonClicked {
     MJWeakSelf;
-//    [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem productModel:self.financeModel success:^{
-//        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-//        [weakSelf.navigationController popViewControllerAnimated:YES];
-//    } failure:^(NSError * _Nonnull error) {
-//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-//    }];
+    self.financeModel.oldMoney = [NSString stringWithFormat:@"%.2f",self.chargeModel.money];//用于修改本金
+    [SSJFixedFinanceProductStore deleteFixedFinanceProductRedemChargeWithModel:self.allCharegeItems productModel:self.financeModel success:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(NSError * _Nonnull error) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
 }
 
 - (void)orangeData {
@@ -120,7 +140,7 @@ static NSString *kTitle6 = @"备注";
             self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
         }
         
-        self.moneyStr = [NSString stringWithFormat:@"%.2f",self.chargeModel.money];
+//
         [self updateSubTitle];
         
     } else {
@@ -217,7 +237,7 @@ static NSString *kTitle6 = @"备注";
             cell.subtitleLabel.text = @"请选择账户";
         }
         if (self.chargeModel) {
-            SSJLoanFundAccountSelectionViewItem *item = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherFundid];
+            SSJLoanFundAccountSelectionViewItem *item = [self.fundingSelectionView.items objectAtIndex:self.fundingSelectionView.selectedIndex];
             cell.subtitleLabel.text = item.title;
             cell.additionalIcon.image = [UIImage imageNamed:item.image];
         }
@@ -289,7 +309,7 @@ static NSString *kTitle6 = @"备注";
         [cell.textField ssj_installToolbar];
         cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
         if (self.chargeModel) {
-            cell.textField.text = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryPoundageWithProduct:self.financeModel chargeItem:self.chargeModel]];
+            cell.textField.text = [NSString stringWithFormat:@"%.2f",self.poundageChareItem.money];
         }
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
@@ -345,33 +365,79 @@ static NSString *kTitle6 = @"备注";
 #pragma mark - Private
 - (void)loadData {
     MJWeakSelf;
-    [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-        _tableView.hidden = NO;
-        [self.view ssj_hideLoadingIndicator];
-        
-        // 设置默认账户
-        self.fundingSelectionView.items = items;
-        self.fundingSelectionView.selectedIndex = -1;
-        [_tableView reloadData];
-        
-    } failure:^(NSError * _Nonnull error) {
-        _tableView.hidden = NO;
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+//    [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeModel success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
+//        weakSelf.otherFundid = charegItem.fundId;
+//        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+//        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//    } failure:^(NSError * _Nonnull error) {
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//    }];
     
-    
-    [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeModel success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
-        weakSelf.otherFundid = charegItem.fundId;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
-        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    if (self.chargeModel) {
+        //查询当前charid对应的另外一跳流水
+        //通过另一条流水的fundid查找名称
+        [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeModel success:^(NSArray<SSJFixedFinanceProductChargeItem *> * _Nonnull charegItemArr) {
+            self.allCharegeItems = charegItemArr;
+            for (SSJFixedFinanceProductChargeItem *item in charegItemArr) {
+                if ([item.billId isEqualToString:@"15"]) {
+                    self.otherMoneyChareItem = item;
+                    self.oldMoney = item.money;
+                    self.moneyStr = [NSString stringWithFormat:@"%.2f",item.money];
+                } else if ([item.billId isEqualToString:@"20"]) {
+                    self.poundageChareItem = item;
+                    self.liXiTextF.text = [NSString stringWithFormat:@"%.2f",item.money];
+                    self.oldPoundageMoney = item.money;
+                } else if ([item.billId isEqualToString:@"16"]) {
+                    
+                }
+            }
+            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherMoneyChareItem.fundId];
+            [self initEditCompoundModel];
+            [weakSelf funditem:funditem];
+            [weakSelf.tableView reloadData];
+            
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    } else {
+        [self funditem:nil];
+    }
+
 
 }
 
+- (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
+    MJWeakSelf;
+    
+    //查询转出账户列表
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        weakSelf.tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        
+        // 新建借贷设置默认账户
+        weakSelf.fundingSelectionView.items = items;
+        if (!weakSelf.chargeModel) {
+            weakSelf.fundingSelectionView.selectedIndex = -1;
+        }else {
+            for (SSJLoanFundAccountSelectionViewItem *fund in items) {
+                if ([fund.ID isEqualToString:funditem.ID]) {
+                    weakSelf.fundingSelectionView.selectedIndex = [items indexOfObject:fund];
+                    break;
+                }
+            }
+            
+            weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+    
+}
 
 
 - (BOOL)checkIfNeedCheck {
@@ -400,14 +466,27 @@ static NSString *kTitle6 = @"备注";
     
     self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
-    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
-    self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
+    if (!self.chargeModel) {
+        NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
+        self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
+    }
+    //如果是编辑的时候
+    if (self.chargeModel) {
+        if (self.oldMoney >= [self.moneyTextF.text doubleValue]) {//为负数
+            self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
+        } else {
+            self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
+        }
+        
+    }
 }
 
 #pragma mark - Action
 - (void)sureButtonAction {
     if (![self checkIfNeedCheck]) return;
     [self updateModel];
+    double money = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+    _canRedemMoney = [self.financeModel.money doubleValue] + money + self.oldMoney + self.oldPoundageMoney;
     //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
     if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
         [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
@@ -583,6 +662,14 @@ static NSString *kTitle6 = @"备注";
         _compoundModel.targetChargeModel = targetChargeModel;
         _compoundModel.interestChargeModel = interestChargeModel;
         
+    }
+}
+
+- (void)initEditCompoundModel {
+    if (!_compoundModel) {
+        _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
+        _compoundModel.chargeModel = self.chargeModel;
+        _compoundModel.targetChargeModel = self.otherMoneyChareItem;
     }
 }
 

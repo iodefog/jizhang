@@ -85,10 +85,13 @@ static  NSString *kTitle3 = @"投资名称";
 }
 
 - (void)setUpNav {
-    
-    if (self.productItem.isend != 1 && self.chargeItem.chargeType != SSJFixedFinCompoundChargeTypeCreate && self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeInterest) {
-        UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
-        self.navigationItem.rightBarButtonItem = rightItem;
+    if (self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate || self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeInterest) {
+        
+    } else {
+        if (self.productItem.isend != 1) {
+            UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
+            self.navigationItem.rightBarButtonItem = rightItem;
+        }
     }
 }
 

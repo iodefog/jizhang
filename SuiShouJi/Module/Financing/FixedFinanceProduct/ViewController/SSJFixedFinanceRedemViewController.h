@@ -16,7 +16,4 @@
 
 /**编辑的时候传*/
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeModel;
-
-/**可赎回金额*/
-@property (nonatomic, assign) double canRedemMoney;
 @end

@@ -679,7 +679,6 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             } else if ([title isEqualToString:[[titles ssj_safeObjectAtIndex:0] ssj_safeObjectAtIndex:1]]){
                 SSJFixedFinanceRedemViewController *redVC = [[SSJFixedFinanceRedemViewController alloc] init];
                 redVC.financeModel = weakSelf.financeModel;
-                redVC.canRedemMoney = weakSelf.currentMoney;
                 [wself.navigationController pushViewController:redVC animated:YES];
             }
         };

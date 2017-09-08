@@ -181,6 +181,18 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                          failure:(void (^)(NSError *error))failure;
 
 /**
+ 删除赎回流水
+ 
+ @param model 流水模型
+ @param success 删除成功的回调
+ @param failure 删除失败的回调，error code为1代表删除流水后借贷剩余金额会小于0
+ */
++ (void)deleteFixedFinanceProductRedemChargeWithModel:(NSArray<SSJFixedFinanceProductChargeItem *> *)modelArr
+                                         productModel:(SSJFixedFinanceProductItem *)productModel
+                                              success:(void (^)(void))success
+                                              failure:(void (^)(NSError *error))failure;
+
+/**
  新增或修改固定理财的某个流水
  
  @param model 借贷产生的流水
@@ -267,7 +279,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @param oneChargeItem <#oneChargeItem description#>
  @return <#return value description#>
  */
-+ (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(SSJFixedFinanceProductChargeItem *charegItem))success failure:(void (^)(NSError *error))failure;
++ (void)queryOtherFixedFinanceProductChargeItemWithChareItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem success:(void (^)(NSArray <SSJFixedFinanceProductChargeItem *> * charegItemArr))success failure:(void (^)(NSError *error))failure;
 /**
  通过一条chareitem查找对应的另外一条流水
  
@@ -328,6 +340,14 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (double)queryPoundageWithProduct:(SSJFixedFinanceProductItem *)productItem chargeItem:(SSJFixedFinanceProductChargeItem *)chargeIte;
 
+
+/**
+ 计算当前余额
+
+ @param productItem <#productItem description#>
+ @return <#return value description#>
+ */
++ (double)caluclateTheBalanceOfCurrentWithModel:(SSJFixedFinanceProductItem *)productItem;
 /**
  生成某个理财产品在起止时间内的利息派发流水  每日流水
  

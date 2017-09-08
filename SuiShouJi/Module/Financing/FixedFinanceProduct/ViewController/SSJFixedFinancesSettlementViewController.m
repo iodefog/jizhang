@@ -347,15 +347,7 @@ static NSString *kTitle6 = @"结算日期";
         [self.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-    
-//    SSJLoanFundAccountSelectionViewItem *item =
-    [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(SSJFixedFinanceProductChargeItem * _Nonnull charegItem) {
-        weakSelf.otherFundid = charegItem.fundId;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
-        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+
 }
 
 
