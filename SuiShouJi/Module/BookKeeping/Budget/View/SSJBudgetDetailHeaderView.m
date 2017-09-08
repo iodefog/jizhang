@@ -25,7 +25,7 @@ static const CGFloat kCurrentSecondaryMiddleViewHeight = 180;
 
 static const CGFloat kHistorySecondaryMiddleViewHeight = 140;
 
-static const CGFloat kBottomViewHeight = 398;
+static const CGFloat kBottomViewHeight = 348;
 
 @interface SSJBudgetDetailHeaderView () <SSJReportFormsPercentCircleDataSource>
 
@@ -174,7 +174,7 @@ static const CGFloat kBottomViewHeight = 398;
         self.billTypeLab.left = 24;
     }
     
-    self.circleView.frame = CGRectMake(0, 70, self.width, 320);
+    self.circleView.frame = CGRectMake(0, 70, self.width, 270);
 }
 
 #pragma mark - SSJReportFormsPercentCircleDataSource
@@ -435,7 +435,7 @@ static const CGFloat kBottomViewHeight = 398;
 
 - (SSJPercentCircleView *)circleView {
     if (!_circleView) {
-        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 320) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
+        _circleView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero radius:64 thickness:15 lineLength1:10 lineLength2:5];
         _circleView.backgroundColor = [UIColor clearColor];
         _circleView.dataSource = self;
     }
