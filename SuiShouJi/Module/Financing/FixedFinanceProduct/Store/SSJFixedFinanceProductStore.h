@@ -331,6 +331,13 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model;
 
+/**
+ 查询是否有赎回或者追加
+ 
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  查询最早一条赎回时间

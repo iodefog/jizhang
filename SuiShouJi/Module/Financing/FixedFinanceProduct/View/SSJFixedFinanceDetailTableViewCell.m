@@ -67,7 +67,9 @@
     [super setCellItem:cellItem];
     if ([cellItem isKindOfClass:[SSJFixedFinanceProductChargeItem class]]) {
         SSJFixedFinanceProductChargeItem *model = cellItem;
-        SSJFixedFinanceDetailCellItem *item = [SSJFixedFinanceDetailCellItem cellItemWithChargeModel:model];
+//        SSJFixedFinanceDetailCellItem 
+        SSJFixedFinanceDetailCellItem *item = [SSJFixedFinanceDetailCellItem cellItemWithChargeModel:model productItem:self.productItem];
+        
         self.timeL.text = [item.titmeStr ssj_dateStringFromFormat:@"yyyy-MM-dd" toFormat:@"MM月dd日 EEE"];
         self.imageView.image = [UIImage imageNamed:item.iconStr];
         self.textLabel.text = item.nameStr;

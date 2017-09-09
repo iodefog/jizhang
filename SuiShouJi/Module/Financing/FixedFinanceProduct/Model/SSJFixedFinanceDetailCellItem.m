@@ -8,9 +8,10 @@
 
 #import "SSJFixedFinanceDetailCellItem.h"
 #import "SSJFixedFinanceProductChargeItem.h"
+#import "SSJFixedFinanceProductItem.h"
 
 @implementation SSJFixedFinanceDetailCellItem
-+ (instancetype)cellItemWithChargeModel:(SSJFixedFinanceProductChargeItem *)model {
++ (instancetype)cellItemWithChargeModel:(SSJFixedFinanceProductChargeItem *)model productItem:(SSJFixedFinanceProductItem *)productItem {
     SSJFixedFinanceDetailCellItem *item = [[SSJFixedFinanceDetailCellItem alloc] init];
     item.titmeStr = [model.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *icon = @"";
@@ -20,64 +21,63 @@
     switch (model.chargeType) {
         case SSJFixedFinCompoundChargeTypeCreate://新建
             icon = @"fixed_finance_benjin";
-            name = @"固收理财本金";
+            name = @"投资本金";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             surplus += model.money;
             break;
         case SSJFixedFinCompoundChargeTypeAdd://追加
             icon = @"fixed_finance_add";
-            name = @"固收理财追加购买";
+            name = @"追加投资";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             surplus += model.money;
             break;
         case SSJFixedFinCompoundChargeTypeRedemption://赎回
             icon = @"fixed_finance_shu";
-            name = @"固收理财部分赎回";
+            name = @"部分赎回";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
-//            break;
-//        case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-//            icon = @"fixed_finance_edit";
-//            name = @"固收理财余额变更";
-//            money = [NSString stringWithFormat:@"+%.2f",model.money];
-//            surplus += model.money;
-//            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
-//            break;
-//        case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-//            icon = @"fixed_finance_edit";
-//            name = @"固收理财余额变更";
-//            money = [NSString stringWithFormat:@"-%.2f",model.money];
-//            surplus -= model.money;
-//            item.bottomTitle = [self bottomTitleWithOldMoney:surplus];
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
             icon = @"fixed_finance_lixi";
             money = [NSString stringWithFormat:@"+%.2f",model.money];
-            name = @"固收理财利息转入";
+            name = @"结算利息转入";
             surplus += model.money;
             break;
         case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             icon = @"fixed_finance_lixi";
-            name = @"固收理财利息转出";
+            name = @"结算利息转出";
             surplus -= model.money;
             break;
         case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
             icon = @"fixed_finance_lixi";
-            name = @"到期利息";
+                switch (productItem.interesttype) {
+                    case SSJMethodOfInterestEveryDay:
+                        name = @"每日利息";
+                        break;
+                    case SSJMethodOfInterestOncePaid:
+                        name = @"到期利息";
+                        break;
+                    case SSJMethodOfInterestEveryMonth:
+                        name = @"每月利息";
+                        break;
+                        
+                    default:
+                        break;
+                }
             money = [NSString stringWithFormat:@"+%.2f",model.money];
             surplus -= model.money;
             break;
             
         case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
             icon = @"fixed_finance_lixi";
-            name = @"固收理财手续费";
+            name = @"手续费";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
             break;
         case SSJFixedFinCompoundChargeTypeCloseOut://结清
             icon = @"fixed_finance_lixi";
-            name = @"固收理财结算";
+            name = @"结算本金";
             money = [NSString stringWithFormat:@"-%.2f",model.money];
             surplus -= model.money;
             break;

@@ -193,23 +193,26 @@
                 return;
             }
         
+        BOOL hasAddOrRed = [self queryIsChangeMoneyWithProductModel:model inDatabase:db error:&error];
         //存储流水记录
-        NSDate *lastDate = [NSDate date];
-        for (SSJFixedFinanceProductCompoundItem *cmodel in chargeModels) {
-            NSDate *writeDate = [lastDate dateByAddingSeconds:1];
-            cmodel.chargeModel.writeDate = writeDate;
-            cmodel.targetChargeModel.writeDate = writeDate;
-            cmodel.interestChargeModel.writeDate = writeDate;
-            lastDate = writeDate;
-            
-            if (![self saveFixedFinanceProductChargeWithModel:cmodel item:model inDatabase:db error:&error]) {
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure(error);
-                    });
+        if (!isEdit || (isEdit && hasAddOrRed)) {//新建或者没有追加或者赎回的时候
+            NSDate *lastDate = [NSDate date];
+            for (SSJFixedFinanceProductCompoundItem *cmodel in chargeModels) {
+                NSDate *writeDate = [lastDate dateByAddingSeconds:1];
+                cmodel.chargeModel.writeDate = writeDate;
+                cmodel.targetChargeModel.writeDate = writeDate;
+                cmodel.interestChargeModel.writeDate = writeDate;
+                lastDate = writeDate;
+                
+                if (![self saveFixedFinanceProductChargeWithModel:cmodel item:model inDatabase:db error:&error]) {
+                    *rollback = YES;
+                    if (failure) {
+                        SSJDispatchMainAsync(^{
+                            failure(error);
+                        });
+                    }
+                    return;
                 }
-                return;
             }
         }
         
@@ -1256,7 +1259,7 @@
         }
 
     } else {
-        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID()]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ? and cid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID(),model.productid]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -1680,6 +1683,10 @@
        allow = [db boolForQuery:@"select count(*) from bk_user_charge where (ibillid = 15 or ibillid = 16) and cid like (? || '_%') and cuserid = ? and operatortype != 2",model.productid,SSJUSERID()];
     }];
     return !allow;
+}
+
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
+    return ![db boolForQuery:@"select count(*) from bk_user_charge where (ibillid = 15 or ibillid = 16) and cid like (? || '_%') and cuserid = ? and operatortype != 2",model.productid,SSJUSERID()];
 }
 
 /**

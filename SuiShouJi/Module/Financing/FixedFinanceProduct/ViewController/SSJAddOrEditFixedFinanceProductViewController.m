@@ -390,34 +390,68 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     NSArray *saveChargeModels = @[self.createCompoundModel];
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
-
-    //保存固定收益理财
-    [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
-        weakSelf.sureButton.enabled = YES;
-        
-        //调转到详情页面
-        SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
-        detailVC.productID = weakSelf.model.productid;
-        [weakSelf.navigationController pushViewController:detailVC animated:YES];
-        
-        //将当期页面从占中删除
-        NSMutableArray *array = [self.navigationController.viewControllers mutableCopy];
-        for (UIViewController *vc in array) {
-            if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
-                [array removeObject:vc];
-                break;
+    if (_edited) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"修改后已有的相关流水会被抹清后重新计算生成，您确定要修改吗" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [weakSelf.sureButton ssj_hideLoadingIndicator];
+            return ;
+        }],[SSJAlertViewAction actionWithTitle:@"确定修改" handler:^(SSJAlertViewAction * _Nonnull action) {
+            //保存固定收益理财
+            [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+                weakSelf.sureButton.enabled = YES;
+                
+                //调转到详情页面
+                SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                detailVC.productID = weakSelf.model.productid;
+                [weakSelf.navigationController pushViewController:detailVC animated:YES];
+                
+                //将当期页面从占中删除
+                NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
+                for (UIViewController *vc in array) {
+                    if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                        [array removeObject:vc];
+                        break;
+                    }
+                }
+                weakSelf.navigationController.viewControllers = [array copy];
+                //        [self saveRemind];
+                
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                weakSelf.sureButton.enabled = YES;
+                [weakSelf.sureButton ssj_hideLoadingIndicator];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
+            
+        }],nil];
+    } else {
+        //保存固定收益理财
+        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+            weakSelf.sureButton.enabled = YES;
+            
+            //调转到详情页面
+            SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+            detailVC.productID = weakSelf.model.productid;
+            [weakSelf.navigationController pushViewController:detailVC animated:YES];
+            
+            //将当期页面从占中删除
+            NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
+            for (UIViewController *vc in array) {
+                if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                    [array removeObject:vc];
+                    break;
+                }
             }
-        }
-        self.navigationController.viewControllers = [array copy];
-//        [self saveRemind];
-        
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
-        weakSelf.sureButton.enabled = YES;
-        [weakSelf.sureButton ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
-    
+            weakSelf.navigationController.viewControllers = [array copy];
+            //        [self saveRemind];
+            
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            weakSelf.sureButton.enabled = YES;
+            [weakSelf.sureButton ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+
+    }
 
 }
 

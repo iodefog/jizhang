@@ -139,6 +139,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         return cell;
     } else if (indexPath.section == 1) {
         SSJFixedFinanceDetailTableViewCell *cell = [SSJFixedFinanceDetailTableViewCell cellWithTableView:tableView];
+        cell.productItem = self.financeModel;
         cell.cellItem = [self.section2Items ssj_safeObjectAtIndex:indexPath.row];
         return cell;
     }
