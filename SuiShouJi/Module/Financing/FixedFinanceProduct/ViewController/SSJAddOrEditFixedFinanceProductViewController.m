@@ -501,6 +501,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [CDAutoHideMessageHUD showMessage:@"请选择派息方式"];
         return NO;
     }
+    
+    if (self.fundingSelectionView.selectedIndex < 0) {
+        [CDAutoHideMessageHUD showMessage:@"请选择账户"];
+        return NO;
+    }
     return YES;
 }
 

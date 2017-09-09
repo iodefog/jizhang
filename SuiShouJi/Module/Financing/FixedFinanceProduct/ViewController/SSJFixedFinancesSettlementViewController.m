@@ -402,7 +402,7 @@ static NSString *kTitle6 = @"结算日期";
     [self updateModel];
     MJWeakSelf;
     //保存流水
-    NSArray *chargArr = @[self.compoundModel,self.lixicompoundModel];
+    NSArray *chargArr = @[self.lixicompoundModel,self.compoundModel];
     [SSJFixedFinanceProductStore settlementWithProductModel:self.financeModel chargeModels:chargArr success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
          [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];

@@ -75,6 +75,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
     [self updateAppearance];
+    self.changeSectionHeaderView.expanded= NO;
     self.title = @"固收理财详情";
 }
 - (void)viewWillAppear:(BOOL)animated {
@@ -312,7 +313,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         item.startColor = self.financeModel.startcolor;
         item.endColor = self.financeModel.endcolor;
         self.headerView.colorItem = item;
-        
+//        self.changeChargeSelectionView.
+//        [self reorganiseSection2Items];
+//        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
         self.changeSectionHeaderView.title = [NSString stringWithFormat:@"流水记录：%d条", (int)self.chargeModels.count];
     }];
 }
@@ -332,11 +335,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         NSString *endDateStr = _financeModel.enddate;
         NSString *memo = _financeModel.memo;
         SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
-        
+        SSJLoanFundAccountSelectionViewItem *fundItem = [SSJFixedFinanceProductStore queryfundNameWithFundid:funditem.ID];
             [self.section1Items addObjectsFromArray:
              @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"起息日期" subtitle:startDateStr bottomTitle:nil],
                [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
-               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:funditem.ID bottomTitle:nil]]];
+               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:fundItem.title bottomTitle:nil]]];
         
             if (_financeModel.memo.length) {
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"备注" subtitle:memo bottomTitle:nil]];
@@ -598,7 +601,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 - (UIButton *)changeBtn {
     if (!_changeBtn) {
         _changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _changeBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.6, 50);
+        _changeBtn.frame = CGRectMake(0, self.view.height - 54, self.view.width * 0.4, 50);
         _changeBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_changeBtn setTitle:@"变更" forState:UIControlStateNormal];
         [_changeBtn addTarget:self action:@selector(changeBtnAction) forControlEvents:UIControlEventTouchUpInside];
@@ -612,7 +615,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 - (UIButton *)closeOutBtn {
     if (!_closeOutBtn) {
         _closeOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _closeOutBtn.frame = CGRectMake(self.view.width * 0.6, self.view.height - 54, self.view.width * 0.4, 50);
+        _closeOutBtn.frame = CGRectMake(self.view.width * 0.4, self.view.height - 54, self.view.width * 0.6, 50);
         _closeOutBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         [_closeOutBtn setTitle:@"结算" forState:UIControlStateNormal];
         [_closeOutBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];

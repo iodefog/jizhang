@@ -958,12 +958,23 @@
             lastDate = writeDate;
             billDate = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
+            //保存流水//存储流水记录
+            if (![self saveFixedFinanceProductChargeWithModel:model item:productModel inDatabase:db error:&error]) {
+                *rollback = YES;
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+            
             //原来金额+利息+手续费
             newMoney += model.chargeModel.money;
             newMoney -= model.interestChargeModel.money;
-
+            
             //如果有利息时
-            if (i == 1 && model.chargeModel && model.chargeModel.money > 0) {
+            if (i == 0 && model.chargeModel && model.chargeModel.money > 0) {
                double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
@@ -988,18 +999,6 @@
                     }
                 }
             }
-//            else if(i == 0) {//没有利息
-                //保存流水//存储流水记录
-                if (![self saveFixedFinanceProductChargeWithModel:model item:productModel inDatabase:db error:&error]) {
-                    *rollback = YES;
-                    if (failure) {
-                        SSJDispatchMainAsync(^{
-                            failure(error);
-                        });
-                    }
-                    return;
-                }
-//            }
             
             i++;
         }
