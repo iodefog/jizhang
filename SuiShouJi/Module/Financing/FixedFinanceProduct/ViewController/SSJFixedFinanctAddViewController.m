@@ -88,6 +88,8 @@ static NSUInteger kDateTag = 2005;
         } failure:^(NSError * _Nonnull error) {
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
+    } else {
+        [self funditem:nil];
     }
 }
 
@@ -453,7 +455,7 @@ static NSUInteger kDateTag = 2005;
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                     
-                        weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
+//                        weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
 //                        weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
 
                     
@@ -482,6 +484,7 @@ static NSUInteger kDateTag = 2005;
         _dateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
+        NSDate *compDate = [SSJFixedFinanceProductStore queryLastAddOrRedemDateWithProductModel:self.financeModel];
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"时间不能早于开始时间"];
@@ -497,6 +500,12 @@ static NSUInteger kDateTag = 2005;
                 [CDAutoHideMessageHUD showMessage:@"时间不能晚于当前时间"];
                 return NO;
             }
+            
+            if ([date isEarlierThan:compDate] && compDate) {
+                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
+                return NO;
+            }
+            
             return YES;
         };
         _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {

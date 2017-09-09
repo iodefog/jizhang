@@ -625,7 +625,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                     endDate = [[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
                 }
                 
-                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:date endDate:endDate newMoney:0 inDatabase:db error:&error]) {
+                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:date endDate:endDate newMoney:0 type:1 inDatabase:db error:&error]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatchMainAsync(^{
