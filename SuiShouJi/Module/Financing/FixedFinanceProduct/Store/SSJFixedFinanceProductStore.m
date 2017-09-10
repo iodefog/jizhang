@@ -797,6 +797,7 @@
         NSError *error = nil;
         NSDate *billDate;
         NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        double shouxufeiMoney = 0;
         for (SSJFixedFinanceProductChargeItem *item in modelArr) {
             billDate = item.billDate;
             if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),item.chargeId]) {
@@ -807,6 +808,9 @@
                     });
                 }
                 return;
+            }
+            if ([item.billId isEqualToString:@"20"]) {
+                shouxufeiMoney = item.money;
             }
         }
         //删除派发流水
@@ -833,8 +837,10 @@
         //按照新的金额重新派发流水
         //查询原始本金
         double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",SSJUSERID(),productModel.productid];
+        
+        
         double newMoney = oldMoney;
-        newMoney = oldMoney + [productModel.oldMoney doubleValue];
+        newMoney = oldMoney + [productModel.oldMoney doubleValue] + shouxufeiMoney;
         
         if (![self interestRecordWithModel:productModel investmentDate:billDate endDate:endDate newMoney:newMoney type:2 inDatabase:db error:&error]) {
             *rollback = YES;
