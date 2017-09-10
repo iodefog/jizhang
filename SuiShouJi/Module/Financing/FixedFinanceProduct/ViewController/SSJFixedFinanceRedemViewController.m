@@ -472,6 +472,14 @@ static NSString *kTitle6 = @"备注";
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;
     }
+    
+    _canRedemMoney = [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
+    self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue];
+    //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
+    if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
+        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
+        return NO;
+    }
     return YES;
 }
 
@@ -481,6 +489,7 @@ static NSString *kTitle6 = @"备注";
     
     self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+    
     if (!self.chargeModel) {
         NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
         self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
@@ -500,13 +509,7 @@ static NSString *kTitle6 = @"备注";
 - (void)sureButtonAction {
     if (![self checkIfNeedCheck]) return;
     [self updateModel];
-    _canRedemMoney = [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
-    self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue];
-    //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
-    if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
-        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
-        return;
-    }
+   
     
     MJWeakSelf;
     //保存流水
@@ -685,6 +688,7 @@ static NSString *kTitle6 = @"备注";
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
         _compoundModel.chargeModel = self.chargeModel;
         _compoundModel.targetChargeModel = self.otherMoneyChareItem;
+        _compoundModel.interestChargeModel = self.poundageChareItem;
     }
 }
 

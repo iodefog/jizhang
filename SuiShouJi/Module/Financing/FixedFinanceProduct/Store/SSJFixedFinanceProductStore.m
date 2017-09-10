@@ -137,18 +137,7 @@
             return;
         }
         
-        //如果是编辑并且改动了金额的情况下则删除原来那条本金的流水记录重新生成本金记录
-        //更新第一条本金的billdate
-        if (isEdit) {// && [model.money doubleValue] != [model.oldMoney doubleValue
-            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?, iversion = ?, operatortype = 1, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",model.startdate,@(SSJSyncVersion()),writeDate,model.productid]) {
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure(error);
-                    });
-                }
-                return;
-            }
-        }
+        
         
             //存储固定理财记录
             NSMutableArray *objectArr = [NSMutableArray array];
@@ -193,9 +182,44 @@
                 return;
             }
         
-        BOOL hasAddOrRed = [self queryIsChangeMoneyWithProductModel:model inDatabase:db error:&error];
+        BOOL hasNoAddOrRed = [self queryIsChangeMoneyWithProductModel:model inDatabase:db error:&error];
+        
+        //是编辑并且没有追加或者删除的情况则删除掉原来的重新生成
+        //更新第一条本金的billdate
+        if (isEdit && hasNoAddOrRed) {// && hasNoAddOrRed && [model.money doubleValue] != [model.oldMoney doubleValue
+            if (![db executeUpdate:@"update bk_user_charge set iversion = ?, operatortype = 2, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",@(SSJSyncVersion()),writeDate,model.productid]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
+        //如果是编辑并且有追加或者删除的情况则不跟新金额其他都更新
+        if (isEdit && !hasNoAddOrRed) {
+            //更新本账户
+            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?,cmemo = ?, iversion = ?, operatortype = 1, cwritedate = ? where cid like (? || '_%') and ibillid = 3",model.startdate,model.memo,@(SSJSyncVersion()),writeDate,model.productid]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+            //更新目标账户
+            if (![db executeUpdate:@"update bk_user_charge set ifunsid = ?, cbilldate = ?,cmemo = ?, iversion = ?, operatortype = 1, cwritedate = ? where cid like (? || '_%') and ibillid  = 4",model.targetfundid,model.startdate,model.memo,@(SSJSyncVersion()),writeDate,model.productid]) {
+                if (failure) {
+                    SSJDispatchMainAsync(^{
+                        failure(error);
+                    });
+                }
+                return;
+            }
+        }
+        
         //存储流水记录
-        if (!isEdit || (isEdit && hasAddOrRed)) {//新建或者没有追加或者赎回的时候
+        if (!isEdit || (isEdit && hasNoAddOrRed)) {//新建或者没有追加或者赎回的时候
             NSDate *lastDate = [NSDate date];
             for (SSJFixedFinanceProductCompoundItem *cmodel in chargeModels) {
                 NSDate *writeDate = [lastDate dateByAddingSeconds:1];
