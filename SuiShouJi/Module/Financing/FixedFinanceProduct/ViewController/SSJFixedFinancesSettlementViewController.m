@@ -355,6 +355,39 @@ static NSString *kTitle6 = @"结算日期";
 
 }
 
+- (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
+    MJWeakSelf;
+    
+    //查询转出账户列表
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        weakSelf.tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        
+        // 新建借贷设置默认账户
+        weakSelf.fundingSelectionView.items = items;
+        if (!funditem) {
+            weakSelf.fundingSelectionView.selectedIndex = -1;
+        }else {
+            for (NSInteger i=0; i<items.count; i++) {
+                SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
+                if ([fund.ID isEqualToString:funditem.ID]) {
+                    weakSelf.fundingSelectionView.selectedIndex = i;
+                    break;
+                }
+            }
+            weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+    
+}
+
 
 
 - (BOOL)checkIfNeedCheck {
@@ -521,15 +554,15 @@ static NSString *kTitle6 = @"结算日期";
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
-                        weakSelf.financeModel.targetfundid = item.fundingID;
-                        [weakSelf loadData];
-//                    else if ([item isKindOfClass:[SSJCreditCardItem class]]){
-//                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-//                        weakSelf.financeModel.targetfundid = cardItem.cardId;
-//                        [weakSelf loadData];
-//                    }
+                    weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
+                    SSJLoanFundAccountSelectionViewItem *funItem = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+                    funItem.title = item.fundingName;
+                    funItem.image = item.fundingIcon;
+                    funItem.ID = item.fundingID;
+                    [weakSelf funditem:funItem];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+                
                 return NO;
             } else {
                 SSJPRINT(@"警告：selectedIndex大于数组范围");
@@ -539,6 +572,7 @@ static NSString *kTitle6 = @"结算日期";
     }
     return _fundingSelectionView;
 }
+
 
 - (void)initCompoundModel {
     if (!_compoundModel) {

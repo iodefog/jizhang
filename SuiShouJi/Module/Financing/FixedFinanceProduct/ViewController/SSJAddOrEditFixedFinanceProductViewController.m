@@ -333,6 +333,40 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
 }
 
+- (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
+    MJWeakSelf;
+    
+    //查询转出账户列表
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        weakSelf.tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        
+        // 新建借贷设置默认账户
+        weakSelf.fundingSelectionView.items = items;
+        if (!funditem) {
+            weakSelf.fundingSelectionView.selectedIndex = -1;
+        }else {
+            for (NSInteger i=0; i<items.count; i++) {
+                SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
+                if ([fund.ID isEqualToString:funditem.ID]) {
+                    weakSelf.fundingSelectionView.selectedIndex = i;
+                    break;
+                }
+            }
+            weakSelf.createCompoundModel.targetChargeModel.fundId = funditem.ID;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+    
+}
+
+
 - (BOOL)remindLocation {
     //如果已经弹出过授权弹框开启通知
     if ([[NSUserDefaults standardUserDefaults] boolForKey:SSJNoticeAlertKey]) {//弹出过授权弹框
@@ -943,8 +977,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                         weakSelf.model.targetfundid = item.fundingID;
-//                        [weakSelf loadData];
-
+                    weakSelf.createCompoundModel.chargeModel.fundId = item.fundingID;
+                    SSJLoanFundAccountSelectionViewItem *funItem = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+                    funItem.title = item.fundingName;
+                    funItem.image = item.fundingIcon;
+                    funItem.ID = item.fundingID;
+                    [weakSelf funditem:funItem];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 return NO;

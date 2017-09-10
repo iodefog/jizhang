@@ -7,6 +7,7 @@
 //
 
 #import "SSJFixedFinanceRedemViewController.h"
+#import "SSJFundingTypeSelectViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
@@ -222,7 +223,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         self.moneyTextF = cell.textField;
-        if (self.chargeModel) {
+        if (self.financeModel.isend) {
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         return cell;
@@ -245,6 +246,9 @@ static NSString *kTitle6 = @"备注";
             SSJLoanFundAccountSelectionViewItem *item = [self.fundingSelectionView.items objectAtIndex:self.fundingSelectionView.selectedIndex];
             cell.subtitleLabel.text = item.title;
             cell.additionalIcon.image = [UIImage imageNamed:item.image];
+        }
+        
+        if (self.financeModel.isend) {
             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
             cell.customAccessoryType = UITableViewCellAccessoryNone;
         } else {
@@ -431,16 +435,16 @@ static NSString *kTitle6 = @"备注";
         
         // 新建借贷设置默认账户
         weakSelf.fundingSelectionView.items = items;
-        if (!weakSelf.chargeModel) {
+        if (!funditem) {
             weakSelf.fundingSelectionView.selectedIndex = -1;
         }else {
-            for (SSJLoanFundAccountSelectionViewItem *fund in items) {
+            for (NSInteger i=0; i<items.count; i++) {
+                SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
                 if ([fund.ID isEqualToString:funditem.ID]) {
-                    weakSelf.fundingSelectionView.selectedIndex = [items indexOfObject:fund];
+                    weakSelf.fundingSelectionView.selectedIndex = i;
                     break;
                 }
             }
-            
             weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
         }
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
@@ -620,30 +624,26 @@ static NSString *kTitle6 = @"备注";
                 NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:1];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
                 return YES;
-            }
-//            else if (index == view.items.count - 1) {
-//                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
-//                NewFundingVC.needLoanOrNot = NO;
-//                NewFundingVC.addNewFundingBlock = ^(SSJBaseCellItem *item){
-//                    if ([item isKindOfClass:[SSJFundingItem class]]) {
-//                        SSJFundingItem *fundItem = (SSJFundingItem *)item;
-//                        weakSelf.model.targetfundid = fundItem.fundingID;
-                        //                        [weakSelf loadData];
-//                    } else if (0){//[item isKindOfClass:[SSJCreditCardItem class]]
-                        //                        SSJCreditCardItem *cardItem = (SSJCreditCardItem *)item;
-                        //                        weakSelf.model.targetfundid = cardItem.cardId;
-                        //                        [weakSelf loadData];
-//                    }
-            return YES;
+            } else if (index == view.items.count - 1) {
+                SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
+                NewFundingVC.needLoanOrNot = NO;
+                NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
+                    weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
+                    SSJLoanFundAccountSelectionViewItem *funItem = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+                    funItem.title = item.fundingName;
+                    funItem.image = item.fundingIcon;
+                    funItem.ID = item.fundingID;
+                    [weakSelf funditem:funItem];
                 };
-//                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
-//                return NO;
-//            } else {
-//                SSJPRINT(@"警告：selectedIndex大于数组范围");
-//                return NO;
+                [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
+                
+                return NO;
+            } else {
+                SSJPRINT(@"警告：selectedIndex大于数组范围");
+                return NO;
             }
-//        };
-//    }
+        };
+    }
     return _fundingSelectionView;
 }
 

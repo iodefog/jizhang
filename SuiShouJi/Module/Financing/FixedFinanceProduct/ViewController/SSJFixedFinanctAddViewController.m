@@ -89,6 +89,7 @@ static NSUInteger kDateTag = 2005;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
     } else {
+        
         [self funditem:nil];
     }
 }
@@ -103,10 +104,16 @@ static NSUInteger kDateTag = 2005;
         
         // 新建借贷设置默认账户
         weakSelf.fundingSelectionView.items = items;
-        if (!weakSelf.chargeItem) {
+        if (!funditem) {
             weakSelf.fundingSelectionView.selectedIndex = -1;
         }else {
-            weakSelf.fundingSelectionView.selectedIndex = [items indexOfObject:funditem];
+            for (NSInteger i=0; i<items.count; i++) {
+                SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
+                if ([fund.ID isEqualToString:funditem.ID]) {
+                    weakSelf.fundingSelectionView.selectedIndex = i;
+                    break;
+                }
+            }
             weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
         }
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
@@ -222,7 +229,7 @@ static NSUInteger kDateTag = 2005;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         cell.textField.tag = kMoneyTag;
-        if (self.chargeItem) {
+        if (self.financeModel.isend) {
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         [cell.textField ssj_installToolbar];
@@ -255,7 +262,7 @@ static NSUInteger kDateTag = 2005;
             }
 //        }
         
-        if (self.chargeItem) {
+        if (self.financeModel.isend) {
             cell.customAccessoryType = UITableViewCellAccessoryNone;
         } else {
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -280,7 +287,7 @@ static NSUInteger kDateTag = 2005;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
         cell.textField.tag = kMemoTag;
-        if (self.chargeItem) {
+        if (self.financeModel.isend) {
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         [cell setNeedsLayout];
@@ -295,11 +302,15 @@ static NSUInteger kDateTag = 2005;
         cell.additionalIcon.image = nil;
         if (self.chargeItem) {
             cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
-            cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
             cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        
+        if (self.financeModel.isend) {
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
         }
         
         cell.switchControl.hidden = YES;
@@ -469,16 +480,12 @@ static NSUInteger kDateTag = 2005;
                 SSJFundingTypeSelectViewController *NewFundingVC = [[SSJFundingTypeSelectViewController alloc]initWithTableViewStyle:UITableViewStyleGrouped];
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
-                    
-//                        weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
-//                        weakSelf.compoundModel.interestChargeModel.fundId = fundItem.fundingID;
-
-                    
-//                    if (weakSelf.edited) {
-//                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.compoundModel.chargeModel.loanId];
-//                    } else {
-//                        [weakSelf loadLoanModelAndFundListWithLoanId:weakSelf.loanId];
-//                    }
+                    weakSelf.compoundModel.targetChargeModel.fundId = item.fundingID;
+                    SSJLoanFundAccountSelectionViewItem *funItem = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+                    funItem.title = item.fundingName;
+                    funItem.image = item.fundingIcon;
+                    funItem.ID = item.fundingID;
+                    [weakSelf funditem:funItem];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 
