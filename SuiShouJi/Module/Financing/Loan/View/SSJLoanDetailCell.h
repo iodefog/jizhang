@@ -10,5 +10,5 @@
 #import "SSJLoanDetailCellItem.h"
 
 @interface SSJLoanDetailCell : SSJBaseTableViewCell
-
+@property (nonatomic, strong) UILabel *rightLabel;
 @end

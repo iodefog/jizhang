@@ -10,7 +10,7 @@
 
 @interface SSJLoanDetailCell ()
 
-@property (nonatomic, strong) UILabel *rightLabel;
+//@property (nonatomic, strong) UILabel *rightLabel;
 
 @property (nonatomic, strong) UILabel *bottomLabel;
 
@@ -46,7 +46,7 @@
     self.imageView.centerY = self.contentView.height * 0.5;
     
     [self.textLabel sizeToFit];
-    self.textLabel.left = self.imageView.right + 12;
+    self.textLabel.left = self.imageView.image ? self.imageView.right + 12 : 15;
     self.textLabel.centerY = self.contentView.height * 0.5;
     
     [_bottomLabel sizeToFit];

@@ -40,7 +40,7 @@
 static NSString *KTitle1 = @"投资名称";
 static NSString *KTitle2 = @"投资金额";
 static NSString *KTitle3 = @"转出账户";
-static NSString *KTitle4 = @"起息时间";
+static NSString *KTitle4 = @"投资时间";
 static NSString *KTitle5 = @"利率";
 static NSString *KTitle6 = @"期限";
 static NSString *KTitle7 = @"派息方式";
@@ -1038,7 +1038,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (NSArray<NSString *> *)imageItems {
     if (!_imageItems) {
-        _imageItems = @[@[@"loan_person",@"loan_money",@"loan_account"],@[@"loan_account",@"loan_account",@"loan_account",@"loan_account"],@[@"loan_remind",@"loan_memo"]];
+        _imageItems = @[@[@"loan_person",@"loan_money",@"fixed_finance_out"],@[@"fixed_finance_qixi",@"fixed_finance_lixi",@"fixed_finance_time_qixian",@"fixed_finance_paixi_method"],@[@"loan_remind",@"loan_memo"]];
     }
     return _imageItems;
 }

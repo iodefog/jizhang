@@ -1135,6 +1135,14 @@
     return productid;
 }
 
++ (NSString *)queryRemindDateWithRemindid:(NSString *)remindid {
+    __block NSString *remindDate;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        remindDate = [db stringForQuery:@"select cstartdate from bk_user_remind where cremindid = ? and cuserid = ?",remindid,SSJUSERID()];
+    }];
+    return remindDate;
+}
+
 
 #pragma mark - Private
 + (BOOL)saveFixedFinanceProductChargeWithModel:(SSJFixedFinanceProductCompoundItem *)model item:(SSJFixedFinanceProductItem *)item inDatabase:(FMDatabase *)db error:(NSError **)error {

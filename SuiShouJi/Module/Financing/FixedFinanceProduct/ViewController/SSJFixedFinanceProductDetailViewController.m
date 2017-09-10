@@ -100,13 +100,13 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     
     _closeOutBtn.backgroundColor = _deleteBtn.backgroundColor  = _changeBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
     
-    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
-        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
-        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
-    } else {
+//    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+//        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+//        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
+//    } else {
         [_closeOutBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
         [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    }
+//    }
     
     [_changeBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
     [_changeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
@@ -135,6 +135,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         SSJLoanDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         if (!cell) {
             cell = [[SSJLoanDetailCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            cell.rightLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+            cell.textLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+            cell.rightLabel.textColor = cell.textLabel.textColor = SSJ_SECONDARY_COLOR;
         }
         cell.cellItem = [self.section1Items ssj_safeObjectAtIndex:indexPath.row];
         return cell;
@@ -157,7 +160,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         }
         return 0;
     }
-    return 44;
+    return 30;
     
 }
 
@@ -337,12 +340,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
         SSJLoanFundAccountSelectionViewItem *fundItem = [SSJFixedFinanceProductStore queryfundNameWithFundid:funditem.ID];
             [self.section1Items addObjectsFromArray:
-             @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"起息日期" subtitle:startDateStr bottomTitle:nil],
-               [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
-               [SSJLoanDetailCellItem itemWithImage:@"loan_closeOut" title:@"结算转入账户" subtitle:fundItem.title bottomTitle:nil]]];
+             @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"投资日期" subtitle:startDateStr bottomTitle:nil],
+               [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
+               [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算转入账户" subtitle:fundItem.title bottomTitle:nil]]];
         
             if (_financeModel.memo.length) {
-                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"备注" subtitle:memo bottomTitle:nil]];
+                [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:memo bottomTitle:nil]];
             }
             
             if (completion) {
@@ -356,13 +359,14 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         NSString *endDateStr = _financeModel.enddate;
         NSString *memo = _financeModel.memo;
         [self.section1Items addObjectsFromArray:
-         @[[SSJLoanDetailCellItem itemWithImage:@"loan_calendar" title:@"起息日期" subtitle:startDateStr bottomTitle:nil]]];
+         @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"投资日期" subtitle:startDateStr bottomTitle:nil]]];
         if (_financeModel.remindid.length) {
+           NSString *remindDate = [[SSJFixedFinanceProductStore queryRemindDateWithRemindid:_financeModel.remindid] ssj_dateStringFromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"yyyy-MM-dd"];
             [self.section1Items addObject:
-             [SSJLoanDetailCellItem itemWithImage:@"loan_expires" title:@"提醒日期" subtitle:endDateStr bottomTitle:nil]];
+             [SSJLoanDetailCellItem itemWithImage:@"" title:@"提醒日期" subtitle:remindDate bottomTitle:nil]];
         }
         if (_financeModel.memo.length) {
-            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"loan_account" title:@"备注" subtitle:memo bottomTitle:nil]];
+            [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:memo bottomTitle:nil]];
         }
         
         if (completion) {
@@ -695,6 +699,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     if (!_changeSectionHeaderView) {
         __weak typeof(self) wself = self;
         _changeSectionHeaderView = [[SSJLoanDetailChargeChangeHeaderView alloc] init];
+        _changeSectionHeaderView.titleFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _changeSectionHeaderView.expanded = YES;
         _changeSectionHeaderView.tapHandle = ^(SSJLoanDetailChargeChangeHeaderView *view) {
             [wself reorganiseSection2Items];

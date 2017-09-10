@@ -314,6 +314,15 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (NSString *)queryProductIdWithRemindId:(NSString *)remindid;
 
+
+/**
+ 通过提醒id查找提醒时间
+
+ @param remindid <#remindid description#>
+ @return <#return value description#>
+ */
++ (NSString *)queryRemindDateWithRemindid:(NSString *)remindid;
+
 /**
  查询某个理财账户最新一条派发流水时间
  

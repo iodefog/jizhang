@@ -137,10 +137,10 @@ static NSString *kTitle6 = @"备注";
         self.isLiXiOn = [SSJFixedFinanceProductStore queryHasPoundageWithProduct:self.financeModel chargeItem:self.chargeModel];
         if (_isLiXiOn) {
             self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
-            self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+            self.imageItems = @[@[@"loan_money",@"fixed_finance_fei",@"fixed_finance_jin"],@[@"fixed_finance_in",@"fixed_finance_qixi",@"loan_memo"]];
         } else {
             self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-            self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+            self.imageItems = @[@[@"loan_money",@"fixed_finance_fei"],@[@"fixed_finance_in",@"fixed_finance_qixi",@"loan_memo"]];
         }
         
 //
@@ -148,7 +148,7 @@ static NSString *kTitle6 = @"备注";
         
     } else {
         self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-        self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        self.imageItems = @[@[@"loan_money",@"fixed_finance_fei"],@[@"fixed_finance_in",@"fixed_finance_qixi",@"loan_memo"]];
     }
     if (self.financeModel.isend) {
         self.tableView.userInteractionEnabled = NO;
@@ -222,7 +222,9 @@ static NSString *kTitle6 = @"备注";
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         self.moneyTextF = cell.textField;
-        
+        if (self.chargeModel) {
+            cell.textField.textColor = SSJ_SECONDARY_COLOR;
+        }
         return cell;
         
     } else if ([title isEqualToString:kTitle4]) {
@@ -243,9 +245,13 @@ static NSString *kTitle6 = @"备注";
             SSJLoanFundAccountSelectionViewItem *item = [self.fundingSelectionView.items objectAtIndex:self.fundingSelectionView.selectedIndex];
             cell.subtitleLabel.text = item.title;
             cell.additionalIcon.image = [UIImage imageNamed:item.image];
+            cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+        } else {
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.subtitleLabel.hidden = NO;
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
@@ -265,6 +271,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.delegate = self;
         if (self.chargeModel) {
             cell.textField.text = self.chargeModel.memo;
+            cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         self.memoTextF = cell.textField;
         [cell setNeedsLayout];
@@ -278,11 +285,15 @@ static NSString *kTitle6 = @"备注";
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.hidden = NO;
         cell.subtitleLabel.text = self.compoundModel.chargeModel.billDate ? [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"] : [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         if (self.chargeModel) {
             cell.subtitleLabel.text = [self.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
+        } else {
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         [cell setNeedsLayout];
         return cell;
@@ -313,6 +324,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
         if (self.chargeModel) {
             cell.textField.text = [NSString stringWithFormat:@"%.2f",self.poundageChareItem.money];
+            cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
@@ -511,10 +523,10 @@ static NSString *kTitle6 = @"备注";
     _isLiXiOn = !_isLiXiOn;
     if (_isLiXiOn) {
         self.titleItems = @[@[kTitle1,kTitle2,kTitle3],@[kTitle4,kTitle5,kTitle6]];
-        self.imageItems = @[@[@"loan_money",@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        self.imageItems = @[@[@"loan_money",@"fixed_finance_fei",@"fixed_finance_jin"],@[@"fixed_finance_in",@"fixed_finance_qixi",@"loan_memo"]];
     } else {
         self.titleItems = @[@[kTitle1,kTitle2],@[kTitle4,kTitle5,kTitle6]];
-        self.imageItems = @[@[@"loan_money",@"loan_money"],@[@"loan_money",@"loan_money",@"loan_money"]];
+        self.imageItems = @[@[@"loan_money",@"fixed_finance_fei"],@[@"fixed_finance_in",@"fixed_finance_qixi",@"loan_memo"]];
     }
     
     [self.tableView beginUpdates];
@@ -571,7 +583,7 @@ static NSString *kTitle6 = @"备注";
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"日期不能早于起息日期哦"];
+                [CDAutoHideMessageHUD showMessage:@"日期不能早于投资日期哦"];
                 return NO;
             }
             //不能晚于当前日期
