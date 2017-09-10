@@ -7,20 +7,48 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJPercentCircleAdditionNodeItem.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+@class SSJPercentCircleAdditionNodeItem;
 
 @interface SSJPercentCircleAdditionNode : UIView
 
 @property (nonatomic, readonly, strong) SSJPercentCircleAdditionNodeItem *item;
 
-- (nullable instancetype)initWithItem:(SSJPercentCircleAdditionNodeItem *)item;
-
-- (BOOL)testOverlap:(SSJPercentCircleAdditionNode *)view;
+- (instancetype)initWithItem:(SSJPercentCircleAdditionNodeItem *)item;
 
 - (void)beginDrawWithCompletion:(void (^)(void))completion;
     
+@end
+
+
+typedef NS_ENUM(NSInteger, SSJRadianRange) {
+    SSJRadianRangeTop,
+    SSJRadianRangeRight,
+    SSJRadianRangeBottom,
+    SSJRadianRangeLeft
+};
+
+
+@interface SSJPercentCircleAdditionNodeItem : NSObject
+
+@property (nonatomic) SSJRadianRange range;
+
+@property (nonatomic) CGPoint startPoint;
+
+@property (nonatomic) CGPoint breakPoint;
+
+@property (nonatomic) CGPoint endPoint;
+
+@property (nonatomic, strong) UIColor *borderColor;
+
+@property (nonatomic, copy) NSString *text;
+
+@property (nonatomic, strong) UIFont *font;
+
+@property (nonatomic, strong) UIColor *textColor;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -28,7 +28,6 @@
 @synthesize endDate;
 @synthesize isEnd;
 
-
 //The order of the definitions is the order of the fields in the database
 WCDB_IMPLEMENTATION(SSJFixedFinanceProductTable)
 

@@ -74,6 +74,7 @@
 
 #pragma mark - Private
 - (void)updateAppearance {
+    _chartView.addtionTextColor = SSJ_SECONDARY_COLOR;
     _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5],
@@ -130,7 +131,7 @@
 #pragma mark - Getter
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
+        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectZero radius:64 thickness:15 lineLength1:10 lineLength2:5];
         _chartView.dataSource = self;
         _chartView.backgroundColor = [UIColor clearColor];
     }

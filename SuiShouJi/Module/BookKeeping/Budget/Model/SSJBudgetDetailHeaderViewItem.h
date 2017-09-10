@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SSJPercentCircleViewItem.h"
 
 @class SSJBudgetModel;
+@class SSJPercentCircleViewItem;
 
 // 类别名称key
 extern NSString *const SSJBudgetDetailBillInfoNameKey;

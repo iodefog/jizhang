@@ -8,15 +8,15 @@
 
 #import "SSJPercentCircleNode.h"
 
+@implementation SSJPercentCircleNodeItem
+
+@end
+
+
+
 static NSString *const kAnimationKey = @"kAnimationKey";
 
 @interface SSJPercentCircleNode () <CAAnimationDelegate>
-
-@property (nonatomic) CGPoint centerPoint;
-
-@property (nonatomic) CGFloat radius;
-
-@property (nonatomic) CGFloat lineWith;
 
 @property (nonatomic, strong) UIColor *fillColor;
 
@@ -34,12 +34,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 
 @implementation SSJPercentCircleNode
 
-+ (instancetype)nodeWithCenter:(CGPoint)center radius:(CGFloat)radius lineWith:(CGFloat)lineWith {
-    SSJPercentCircleNode *node = [[SSJPercentCircleNode alloc] initWithFrame:CGRectZero];
-    node.centerPoint = center;
-    node.radius = radius;
-    node.lineWith = lineWith;
-    return node;
++ (instancetype)node {
+    return [[SSJPercentCircleNode alloc] initWithFrame:CGRectZero];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -97,7 +93,12 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         return;
     }
     
-    UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:self.centerPoint radius:self.radius startAngle:-M_PI_2 endAngle:M_PI * 1.5 clockwise:YES];
+    CGPoint center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+    UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center
+                                                              radius:self.radius
+                                                          startAngle:-M_PI_2
+                                                            endAngle:M_PI * 1.5
+                                                           clockwise:YES];
     
     for (int idx = 0; idx < self.items.count; idx ++) {
         SSJPercentCircleNodeItem *item = self.items[idx];
@@ -106,15 +107,15 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         layer.contentsScale = [[UIScreen mainScreen] scale];
         layer.path = circlePath.CGPath;
         layer.fillColor = _fillColor.CGColor;
-        layer.lineWidth = self.lineWith;
-        layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        layer.lineWidth = self.thickness;
+        layer.strokeColor = item.color.CGColor;
         layer.strokeEnd = 0;
         layer.zPosition = self.items.count - idx;
         [self.layer addSublayer:layer];
         
         [self.circleLayers addObject:layer];
         
-        //  给圆环添加动画
+        // 给圆环添加动画
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"strokeEnd"];
         animation.toValue = @(item.endAngle / (M_PI * 2));
         animation.duration = 0.4;
@@ -126,19 +127,25 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     }
 }
 
+// 之前的layerlayer之间有重叠区域，直接截图的话会有问题，所以先移除之前的layer，再重建没有重叠区域的layer然后截图
 - (void)reloadShootLayers {
     [self.circleLayers makeObjectsPerformSelector:@selector(removeFromSuperlayer)];
     [self.circleLayers removeAllObjects];
     
     for (SSJPercentCircleNodeItem *item in self.items) {
-        UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:self.centerPoint radius:self.radius startAngle:(item.startAngle - M_PI_2) endAngle:(item.endAngle - M_PI_2) clockwise:YES];
+        CGPoint center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
+        UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center
+                                                                  radius:self.radius
+                                                              startAngle:(item.startAngle - M_PI_2)
+                                                                endAngle:(item.endAngle - M_PI_2)
+                                                               clockwise:YES];
         
         CAShapeLayer *layer = [CAShapeLayer layer];
         layer.contentsScale = [[UIScreen mainScreen] scale];
         layer.path = circlePath.CGPath;
         layer.fillColor = _fillColor.CGColor;
-        layer.lineWidth = self.lineWith;
-        layer.strokeColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;
+        layer.lineWidth = self.thickness;
+        layer.strokeColor = item.color.CGColor;
         [self.layer addSublayer:layer];
         
         [self.shootLayers addObject:layer];

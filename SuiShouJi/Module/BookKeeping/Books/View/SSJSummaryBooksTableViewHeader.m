@@ -82,9 +82,9 @@
     return _periodControl;
 }
 
-- (SSJPercentCircleView *)chartView{
+- (SSJPercentCircleView *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 0, self.width, 344) insets:UIEdgeInsetsMake(80, 80, 80, 80) thickness:20];
+        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 270) radius:64 thickness:15 lineLength1:10 lineLength2:5];
         _chartView.backgroundColor = [UIColor clearColor];
     }
     return _chartView;
@@ -287,6 +287,7 @@
     self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     self.backColorView.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainBackGroundColor alpha:SSJ_CURRENT_THEME.backgroundAlpha];
     
+    _chartView.addtionTextColor = SSJ_SECONDARY_COLOR;
     _chartView.topTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_1],
                                      NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor]};
     _chartView.bottomTitleAttribute = @{NSFontAttributeName:[UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5],

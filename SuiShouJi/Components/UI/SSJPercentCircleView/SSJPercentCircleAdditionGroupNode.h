@@ -13,7 +13,7 @@
 
 + (instancetype)node;
 
-- (void)setItems:(NSArray *)items completion:(void (^)(void))completion;
+- (void)setItems:(NSArray<SSJPercentCircleAdditionNodeItem *> *)items completion:(void (^)(void))completion;
 
 - (void)cleanUpAdditionNodes;
 

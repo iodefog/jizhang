@@ -8,8 +8,6 @@
 
 #import "SSJServerLaunchView.h"
 
-
-
 @interface SSJServerLaunchView ()
 
 @property (nonatomic, strong) UIImageView *defaultView;

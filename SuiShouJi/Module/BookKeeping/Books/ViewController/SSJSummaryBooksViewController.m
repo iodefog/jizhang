@@ -72,7 +72,7 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 #pragma mark - Getter
 - (SSJSummaryBooksTableViewHeader *)header{
     if (!_header) {
-        _header = [[SSJSummaryBooksTableViewHeader alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 1162)];
+        _header = [[SSJSummaryBooksTableViewHeader alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 1112)];
         [_header ssj_setBorderStyle:SSJBorderStyleBottom];
         [_header ssj_setBorderWidth:1];
         [_header ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
@@ -411,11 +411,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         //  收入、支出
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
         circleItem.scale = item.scale / scaleAmount;
-        circleItem.imageName = item.imageName;
-        circleItem.colorValue = item.colorValue;
-        circleItem.additionalText = [NSString stringWithFormat:@"%.0f％", item.scale * 100];
-        circleItem.additionalFont = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_5];
-        circleItem.imageBorderShowed = YES;
+        circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
+        circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
         [self.circleItems addObject:circleItem];
     }
     

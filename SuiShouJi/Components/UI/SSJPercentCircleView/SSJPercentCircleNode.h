@@ -7,12 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SSJPercentCircleNodeItem.h"
 
 @interface SSJPercentCircleNode : UIView
 
-+ (instancetype)nodeWithCenter:(CGPoint)center radius:(CGFloat)radius lineWith:(CGFloat)lineWith;
++ (instancetype)node;
+
+@property (nonatomic) CGPoint centerPoint;
+
+@property (nonatomic) CGFloat radius;
+
+@property (nonatomic) CGFloat thickness;
 
 - (void)setItems:(NSArray *)items completion:(void (^)(void))completion;
+
+@end
+
+
+@interface SSJPercentCircleNodeItem : NSObject
+
+@property (nonatomic) CGFloat startAngle;
+
+@property (nonatomic) CGFloat endAngle;
+
+@property (nonatomic, strong) UIColor *color;
 
 @end

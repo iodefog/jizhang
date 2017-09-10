@@ -61,7 +61,6 @@
                 } else if ([item.fundingParent isEqualToString:@"3"]) {
                     item.cardItem.cardType = SSJCrediteCardTypeCrediteCard;
                 }
-
             }
 
 

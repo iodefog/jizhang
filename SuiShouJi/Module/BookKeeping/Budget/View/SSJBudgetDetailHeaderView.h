@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJBudgetDetailHeaderViewItem.h"
-#import "SSJPercentCircleViewItem.h"
+
+@class SSJBudgetDetailHeaderViewItem;
 
 @interface SSJBudgetDetailHeaderView : UIView
 
