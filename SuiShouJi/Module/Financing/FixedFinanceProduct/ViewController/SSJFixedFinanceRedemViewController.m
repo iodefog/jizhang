@@ -476,14 +476,27 @@ static NSString *kTitle6 = @"备注";
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;
     }
+    double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
     
-    _canRedemMoney = [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
     self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue];
-    //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
-    if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
-        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
-        return NO;
+    if (!self.chargeModel) {
+        double old = [self.financeModel.money doubleValue];
+        double new = [self.moneyTextF.text doubleValue] + [self.liXiTextF.text doubleValue];
+        if (old < new) {
+            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
+            return NO;
+        }
+    } else {
+        _canRedemMoney = [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
+        
+        //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
+        if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
+            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
+            return NO;
+        }
     }
+    
+    
     return YES;
 }
 
@@ -498,12 +511,21 @@ static NSString *kTitle6 = @"备注";
         NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
         self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
     }
+    self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+    self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue];
+    
     //如果是编辑的时候
     if (self.chargeModel) {
         if (self.oldMoney >= [self.moneyTextF.text doubleValue]) {//为负数
             self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
         } else {
             self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
+        }
+        
+        if (self.oldPoundageMoney >= [self.liXiTextF.text doubleValue]) {//为负数
+            self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue] - self.oldPoundageMoney;
+        } else {
+            self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue] - self.oldPoundageMoney;
         }
         
     }

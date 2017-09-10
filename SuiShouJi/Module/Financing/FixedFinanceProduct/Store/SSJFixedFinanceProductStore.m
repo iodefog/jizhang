@@ -896,7 +896,7 @@
                     newMoney = oldMoney + model.chargeModel.oldMoney;
                     
                 } else if (type == 2) {//赎回
-                    newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.money;
+                    newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.oldMoney;
                 }
             
             if (type != 0) {
@@ -929,6 +929,7 @@
                     return;
                 }
             }
+            //更新固定理财金额
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
                 if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
                     if (failure) {
