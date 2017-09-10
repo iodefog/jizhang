@@ -140,7 +140,7 @@
         //如果是编辑并且改动了金额的情况下则删除原来那条本金的流水记录重新生成本金记录
         //更新第一条本金的billdate
         if (isEdit) {// && [model.money doubleValue] != [model.oldMoney doubleValue
-            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?, iversion = ?, operatortype = 2, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",model.startdate,@(SSJSyncVersion()),writeDate,model.productid]) {
+            if (![db executeUpdate:@"update bk_user_charge set cbilldate = ?, iversion = ?, operatortype = 1, cwritedate = ? where cid like (? || '_%') and (ibillid = 3 or ibillid = 4) ",model.startdate,@(SSJSyncVersion()),writeDate,model.productid]) {
                 if (failure) {
                     SSJDispatchMainAsync(^{
                         failure(error);
@@ -973,9 +973,9 @@
             newMoney += model.chargeModel.money;
             newMoney -= model.interestChargeModel.money;
             
-            //如果有利息时
-            if (i == 0 && model.chargeModel && model.chargeModel.money > 0) {
-               double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];
+            double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];//所有派发利息的和
+            //如果有利息时并且利息和派发利息不同的时候
+            if (i == 0 && model.chargeModel && model.chargeModel.money != interest) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
                     if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {

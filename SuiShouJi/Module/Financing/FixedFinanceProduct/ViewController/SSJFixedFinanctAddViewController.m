@@ -501,8 +501,11 @@ static NSUInteger kDateTag = 2005;
                 return NO;
             }
             
-            if ([date isLaterThan:compDate] && compDate) {
+            if ([date isEarlierThan:compDate] && compDate && !self.chargeItem) {//非编辑
                 [CDAutoHideMessageHUD showMessage:@"时间不能晚于最新一条追加或者赎回时间"];
+                return NO;
+            } else if(self.chargeItem && [date isLaterThan:compDate] && compDate){ //编辑
+                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
                 return NO;
             }
             
