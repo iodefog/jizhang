@@ -98,10 +98,30 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-@implementation SSJBorderLayer
+@interface _SSJBorderLayer : CALayer
+
+//  边框线类型
+@property (nonatomic, assign) SSJBorderStyle customBorderStyle;
+
+@property (nonatomic, assign) UIRectCorner cornerStyle;
+
+@property (nonatomic, assign) CGFloat customCornerRadius;
+
+//  边框线宽度 dufault 1.0
+@property (nonatomic, assign) CGFloat customBorderWidth;
+
+//  边框线颜色 default black
+@property (nonatomic, strong) UIColor *customBorderColor;
+
+//  边框线内凹
+@property (nonatomic, assign) UIEdgeInsets borderInsets;
+
+@end
+
+@implementation _SSJBorderLayer
 
 + (instancetype)layer {
-    SSJBorderLayer *layer = [super layer];
+    _SSJBorderLayer *layer = [super layer];
     layer.backgroundColor = [UIColor clearColor].CGColor;
     layer.customBorderColor = [UIColor blackColor];
     layer.customBorderWidth = 1.0;
@@ -298,7 +318,7 @@ static const void *kBorderLayerKey = &kBorderLayerKey;
 
 - (void)ssj_setBounds:(CGRect)bounds {
     [self ssj_setBounds:bounds];
-    SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
+    _SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
     if (layer) {
         layer.frame = self.bounds;
     }
@@ -356,10 +376,10 @@ static const void *kBorderLayerKey = &kBorderLayerKey;
     [self ssj_borderLayer].frame = self.bounds;
 }
 
-- (SSJBorderLayer *)ssj_borderLayer {
-    SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
+- (_SSJBorderLayer *)ssj_borderLayer {
+    _SSJBorderLayer *layer = objc_getAssociatedObject(self, kBorderLayerKey);
     if (!layer) {
-        layer = [SSJBorderLayer layer];
+        layer = [_SSJBorderLayer layer];
         layer.frame = self.bounds;
         [self addSublayer:layer];
         objc_setAssociatedObject(self, kBorderLayerKey, layer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);

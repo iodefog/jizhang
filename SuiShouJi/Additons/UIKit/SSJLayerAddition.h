@@ -53,33 +53,36 @@ typedef NS_OPTIONS(NSUInteger, SSJBorderStyle) {
     SSJBorderStyleAll     = SSJBorderStyleTop | SSJBorderStyleLeft | SSJBorderStyleBottom | SSJBorderStyleRight //  所有边框线
 };
 
-@interface SSJBorderLayer : CALayer
-
-//  边框线类型
-@property (nonatomic, assign) SSJBorderStyle customBorderStyle;
-
-@property (nonatomic, assign) UIRectCorner cornerStyle;
-
-@property (nonatomic, assign) CGFloat customCornerRadius;
-
-//  边框线宽度 dufault 1.0
-@property (nonatomic, assign) CGFloat customBorderWidth;
-
-//  边框线颜色 default black
-@property (nonatomic, strong) UIColor *customBorderColor;
-
-//  边框线内凹
-@property (nonatomic, assign) UIEdgeInsets borderInsets;
-
-@end
 
 @interface CALayer (SSJBorder)
 
-@property (nonatomic, readonly, getter=ssj_borderLayer) SSJBorderLayer *borderLayer;
+/**
+ 获取圆角类型
 
-@property (nonatomic, getter=ssj_cornerStyle, setter=ssj_setCornerStyle:) UIRectCorner cornerStyle;
+ @return <#return value description#>
+ */
+- (UIRectCorner)ssj_cornerStyle;
 
-@property (nonatomic, getter=ssj_cornerRadius, setter=ssj_setCornerRadius:) CGFloat cornerRadius;
+/**
+ 设置圆角类型
+
+ @param cornerStyle <#cornerStyle description#>
+ */
+- (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle;
+
+/**
+ 获取圆角半径
+
+ @return <#return value description#>
+ */
+- (CGFloat)ssj_cornerRadius;
+
+/**
+ 设置圆角半径
+
+ @param cornerRadius <#cornerRadius description#>
+ */
+- (void)ssj_setCornerRadius:(CGFloat)cornerRadius;
 
 //  设置边框线类型
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle;
