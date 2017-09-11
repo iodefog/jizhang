@@ -24,6 +24,7 @@
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductCompoundItem.h"
 #import "SSJReminderItem.h"
+#import "SSJFixedFinanceProductChargeItem.h"
 
 #import "SSJLoanHelper.h"
 #import "SSJFixedFinanceProductStore.h"
@@ -762,7 +763,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.delegate = self;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.nameTextF = cell.textField;
-    cell.textField.text = self.title1;
+    cell.textField.text = self.edited == YES ? self.model.productName : self.title1;
     [cell setNeedsLayout];
     cell.userInteractionEnabled = YES;
     return cell;
@@ -778,7 +779,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
-    self.moneyTextF.text = self.title2;
+    if (self.edited == YES) {
+        self.moneyTextF.text = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
+    } else {
+        self.moneyTextF.text = self.title2;
+    }
+    
     self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
@@ -829,7 +835,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.delegate = self;
-    cell.textField.text = self.title3;
+    cell.textField.text = self.edited ? [NSString stringWithFormat:@"%.2f",self.model.rate] : self.title3;
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
     cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.rateType];
@@ -847,7 +853,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.keyboardType = UIKeyboardTypeNumberPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
-    cell.textField.text = self.title4;
+    cell.textField.text = self.edited ? [NSString stringWithFormat:@"%.f",self.model.time] : self.title4;
     self.qiXianTextF = cell.textField;
     self.qiXiansegmentControl = cell.segmentControl;
     cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -901,7 +907,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.textLabel.text = @"备注";
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    cell.textField.text = self.title5;
+    cell.textField.text = self.edited ? self.model.memo : self.title5;
     cell.textField.keyboardType = UIKeyboardTypeDefault;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearsOnBeginEditing = NO;

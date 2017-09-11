@@ -8,6 +8,7 @@
 
 #import "SSJBaseViewController.h"
 @class SSJFixedFinanceProductCompoundItem;
+@class SSJFixedFinanceProductChargeItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
  注意：新建不用传，编辑必须传
  */
 @property (nonatomic, strong, nullable) NSArray <SSJFixedFinanceProductCompoundItem *>*chargeModels;
+
+@property (nonatomic, strong, nullable) SSJFixedFinanceProductChargeItem *chargeItem;
 
 // 是否是编辑
 @property (nonatomic) BOOL edited;
