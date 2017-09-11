@@ -52,6 +52,10 @@ static NSString *cellId = @"SSJFundingTypeCell";
     self.closeButton.left = 10;
 }
 
+-(CGSize)sizeThatFits:(CGSize)size{
+    return CGSizeMake([UIApplication sharedApplication].keyWindow.width, 245);
+}
+
 - (void)showWithSelectBooksId:(NSString *)booksId {
     if (self.superview) {
         return;

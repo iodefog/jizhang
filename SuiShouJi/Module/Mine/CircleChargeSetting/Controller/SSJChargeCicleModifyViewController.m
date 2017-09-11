@@ -251,7 +251,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         }
     }
     if ([title isEqualToString:kTitle1]) {
-        
+        [SSJCircleChargeStore getBooksForCircleChargeWithsuccess:^(NSArray *books) {
+            self.booksSelectView.booksArr = books;
+            [self.booksSelectView showWithSelectBooksId:self.item.booksId];
+        } failure:NULL];
     }
 }
 
@@ -311,6 +314,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
     if ([title isEqualToString:kTitle1]) {
         circleModifyCell.cellDetail = self.item.booksName;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }else if ([title isEqualToString:kTitle2]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.incomeOrExpence) {
@@ -577,8 +581,17 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 - (SSJChargeCircleBooksSelectView *)booksSelectView {
     if (!_booksSelectView) {
         _booksSelectView = [[SSJChargeCircleBooksSelectView alloc] init];
+        @weakify(self);
         _booksSelectView.didSelectBooksItem = ^(SSJBooksTypeItem *booksItem) {
-            
+            @strongify(self);
+            self.item.booksId = booksItem.booksId;
+            self.item.booksName = booksItem.booksName;
+            [SSJCircleChargeStore getFirstBillItemForBooksId:booksItem.booksId billType:self.item.incomeOrExpence withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
+                self.item.billId = billItem.ID;
+                self.item.typeName = billItem.title;
+                self.item.imageName = billItem.imageName;
+                [self.tableView reloadData];
+            } failure:NULL];
         };
     }
     return _booksSelectView;
