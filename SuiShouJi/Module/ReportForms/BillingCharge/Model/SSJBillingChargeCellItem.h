@@ -105,6 +105,9 @@
 //借贷产生的流水类型
 @property(nonatomic) SSJLoanCompoundChargeType loanChargeType;
 
+// 固收理财产生的流水
+@property(nonatomic) SSJFixedFinCompoundChargeType fixedFinanceChargeType;
+
 //对应的借贷是借出还是欠款
 @property(nonatomic) SSJLoanType loanType;
 

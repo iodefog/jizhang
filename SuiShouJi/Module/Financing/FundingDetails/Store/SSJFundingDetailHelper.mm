@@ -133,12 +133,27 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                         item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
                     }
                 }
+            } else if (item.idType == SSJChargeIdTypeFixedFinance) {
+                if ([item.billId isEqualToString:@"3"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCloseOut;
+                } else if ([item.billId isEqualToString:@"4"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCreate;
+                } else if ([item.billId isEqualToString:@"15"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeRedemption;
+                } else if ([item.billId isEqualToString:@"16"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeAdd;
+                } else if ([item.billId isEqualToString:@"17"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeBalanceInterestIncrease;
+                } else if ([item.billId isEqualToString:@"20"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCloseOutInterest;
+                }
             } else {
                 if ([item.billId isEqualToString:@"3"]) {
                     NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
-                                                       fromTable:@"bk_user_charge" where:SSJUserChargeTable.cid == item.sundryId
-                                                                                         && SSJUserChargeTable.userId == userId
-                                                                                         && SSJUserChargeTable.billId == @"4"];
+                                                       fromTable:@"bk_user_charge"
+                                                           where:SSJUserChargeTable.cid == item.sundryId
+                                          && SSJUserChargeTable.userId == userId
+                                          && SSJUserChargeTable.billId == @"4"];
                     item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
                                                         fromTable:@"bk_fund_info"
                                                             where:SSJFundInfoTable.fundId == sourceId];
@@ -146,13 +161,15 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     NSString *sourceId = [db getOneValueOnResult:SSJUserChargeTable.fundId
                                                        fromTable:@"bk_user_charge"
                                                            where:SSJUserChargeTable.cid == item.sundryId
-                                                                 && SSJUserChargeTable.userId == userId
-                                                                 && SSJUserChargeTable.billId == @"3"];
+                                          && SSJUserChargeTable.userId == userId
+                                          && SSJUserChargeTable.billId == @"3"];
                     item.transferSource = [db getOneValueOnResult:SSJFundInfoTable.fundName
                                                         fromTable:@"bk_fund_info"
                                                             where:SSJFundInfoTable.fundId == sourceId];
                 }
+                
             }
+
             NSString *month = [item.billDate substringWithRange:NSMakeRange(0 , 7)];
             double money = ABS([item.money doubleValue]);
             if ([month isEqualToString:lastDate]) {
@@ -276,7 +293,6 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         while ([statement step]) {
             SSJBillingChargeCellItem *chargeItem = [self getChargeItemWithStatement:statement];
             [chargeArr addObject:chargeItem];
-            NSLog(@"%@" , [chargeItem ssj_debugDescription]);
         }
 
         for (SSJBillingChargeCellItem *item in chargeArr) {
@@ -327,6 +343,20 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                             item.loanChargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
                         }
                         break;
+                }
+            } else if (item.idType == SSJChargeIdTypeFixedFinance) {
+                if ([item.billId isEqualToString:@"3"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCloseOut;
+                } else if ([item.billId isEqualToString:@"4"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCreate;
+                } else if ([item.billId isEqualToString:@"15"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeRedemption;
+                } else if ([item.billId isEqualToString:@"16"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeAdd;
+                } else if ([item.billId isEqualToString:@"17"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeBalanceInterestIncrease;
+                } else if ([item.billId isEqualToString:@"20"]) {
+                    item.fixedFinanceChargeType = SSJFixedFinCompoundChargeTypeCloseOutInterest;
                 }
             } else {
                 if ([item.billId isEqualToString:@"3"]) {
