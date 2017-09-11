@@ -18,31 +18,22 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
-
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <WCDB/WCTStatement.h>
 
-@interface NSDictionary (WCTColumnCoding) <WCTColumnCoding>
-@end
+@interface WCTStatement (Compatible)
 
-@implementation NSDictionary (WCTColumnCoding)
+/**
+ @brief The wrapper of sqlite3_column_count.
+ @return Count of column result.
+ */
+- (int)getCount DEPRECATED_MSG_ATTRIBUTE("-getCount is deprecated since v1.0.4. Use -getColumnCount instead");
 
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
+/**
+ @brief The wrapper of sqlite3_column_name. Use -getColumNameAtIndex: instead.
+ @param index Begin with 0.
+ @return The description of column result.
+ */
+- (NSString *)getNameAtIndex:(int)index DEPRECATED_MSG_ATTRIBUTE("-getNameAtIndex: is deprecated since v1.0.4. Use -getColumNameAtIndex: instead");
 
 @end
-
-#endif //WCDB_BUILTIN_COLUMN_CODING

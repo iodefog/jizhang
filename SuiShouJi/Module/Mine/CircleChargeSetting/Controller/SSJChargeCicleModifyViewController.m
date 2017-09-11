@@ -44,6 +44,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJTextFieldToolbarManager.h"
+#import "SSJChargeCircleBooksSelectView.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -64,6 +65,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
+
+@property (nonatomic, strong) SSJChargeCircleBooksSelectView *booksSelectView;
 
 @property(nonatomic, strong) UIImage *selectedImage;
 
@@ -569,6 +572,16 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _memberSelectView;
+}
+
+- (SSJChargeCircleBooksSelectView *)booksSelectView {
+    if (!_booksSelectView) {
+        _booksSelectView = [[SSJChargeCircleBooksSelectView alloc] init];
+        _booksSelectView.didSelectBooksItem = ^(SSJBooksTypeItem *booksItem) {
+            
+        };
+    }
+    return _booksSelectView;
 }
 
 #pragma mark - Event

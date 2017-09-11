@@ -27,8 +27,6 @@ public:
     WCTExpr();
     WCTExpr(const WCTProperty &column);
 
-    operator WCTExprList() const;
-
     WCTExpr(WCTValue *value);
 
     WCTExpr(WCTSelectBase *select);
@@ -49,7 +47,7 @@ public:
                 &value,
             int size);
 
-    WCTResult as(const WCTProperty &column);
+    WCTResult as(const WCTProperty &property);
 
     WCTResultList distinct() const;
 
@@ -159,4 +157,11 @@ public:
 protected:
     Class m_cls;
     std::string literalValue(WCTValue *value);
+};
+
+class WCTExprList : public std::list<const WCTExpr> {
+public:
+    WCTExprList();
+    WCTExprList(const WCTExpr &expr);
+    WCTExprList(std::initializer_list<const WCTExpr> il);
 };
