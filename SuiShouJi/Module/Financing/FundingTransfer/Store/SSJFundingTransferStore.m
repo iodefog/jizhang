@@ -555,16 +555,23 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
         if ([chargeItem.billId integerValue] == 3) {
             tansferItem.transferDate = chargeItem.billDate;
             tansferItem.transferInId = chargeItem.fundId;
-            tansferItem.transferOutId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ? limit 1",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
             NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
             tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
             tansferItem.transferInName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferInId];
-            tansferItem.transferOutName = chargeItem.transferSource;
             tansferItem.transferInImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferInId];
-            tansferItem.transferOutImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferInId];
             tansferItem.transferMemo = chargeItem.chargeMemo;
             tansferItem.transferInChargeId = chargeItem.ID;
-            tansferItem.transferOutChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferInId];
+            
+            // 查询转出流水数据
+            tansferItem.transferOutName = chargeItem.transferSource;
+            FMResultSet *rs = [db executeQuery:@"select uc.ichargeid, uc.ifunsid, fi.cicoin from bk_user_charge uc, bk_fund_info fi where uc.ifunsid = fi.cfundid and uc.cid = ? and uc.ichargetype = ? and uc.ichargeid <> ?", chargeItem.sundryId, @(SSJChargeIdTypeCyclicTransfer), chargeItem.ID];
+            while ([rs next]) {
+                tansferItem.transferOutChargeId = [rs stringForColumn:@"ichargeid"];
+                tansferItem.transferOutId = [rs stringForColumn:@"ifunsid"];
+                tansferItem.transferOutImage = [rs stringForColumn:@"cicoin"];
+            }
+            [rs close];
+            
 //            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
 //            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
             
@@ -573,14 +580,21 @@ NSString *SSJFundingTransferStoreListKey = @"SSJFundingTransferStoreListKey";
             tansferItem.transferOutId = chargeItem.fundId;
             NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"+-"];
             tansferItem.transferMoney = [chargeItem.money stringByTrimmingCharactersInSet:set];
-            tansferItem.transferInId = [db stringForQuery:@"select ifunsid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
-            tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
-            tansferItem.transferInName = chargeItem.transferSource;
+            
+            tansferItem.transferOutName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",chargeItem.fundId];
             tansferItem.transferOutImage = [db stringForQuery:@"select cicoin from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
-            tansferItem.transferInImage = [db stringForQuery:@"select a.cicoin from bk_fund_info a, bk_user_charge b where a.cfundid = b.ifunsid and substr(b.cwritedate,1,19) = ? and a.cfundid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],tansferItem.transferOutId];
             tansferItem.transferMemo = chargeItem.chargeMemo;
             tansferItem.transferOutChargeId = chargeItem.ID;
-            tansferItem.transferInChargeId = [db stringForQuery:@"select ichargeid from bk_user_charge where substr(cwritedate,1,19) = ? and cuserid = ? and ifunsid <> ?",[chargeItem.editeDate substringWithRange:NSMakeRange(0, 19)],userId,tansferItem.transferOutId];
+            tansferItem.transferInName = chargeItem.transferSource;
+            
+            // 查询转入流水数据
+            FMResultSet *rs = [db executeQuery:@"select uc.ichargeid, uc.ifunsid, fi.cicoin from bk_user_charge uc, bk_fund_info fi where uc.ifunsid = fi.cfundid and uc.cid = ? and uc.ichargetype = ? and uc.ichargeid <> ?", chargeItem.sundryId, @(SSJChargeIdTypeCyclicTransfer), chargeItem.ID];
+            while ([rs next]) {
+                tansferItem.transferInChargeId = [rs stringForColumn:@"ichargeid"];
+                tansferItem.transferInId = [rs stringForColumn:@"ifunsid"];
+                tansferItem.transferInImage = [rs stringForColumn:@"cicoin"];
+            }
+            [rs close];
 //            NSString *transferInParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferInId];
 //            NSString *transferOutParent = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?",tansferItem.transferOutId];
         }
