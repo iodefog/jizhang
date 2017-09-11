@@ -35,7 +35,6 @@
     [self.gifImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.center.mas_equalTo(self.view);
     }];
-    
     [super updateViewConstraints];
     
 }

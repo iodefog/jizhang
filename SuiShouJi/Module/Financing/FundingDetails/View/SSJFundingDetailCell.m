@@ -297,7 +297,7 @@
         } else if (item.idType == SSJChargeIdTypeFixedFinance){
             if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOut) {
                 self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
-                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_fei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_benjin"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                 self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#f1658c"].CGColor;
                 self.typeLabel.text = @"结算本金";
                 [self.typeLabel sizeToFit];

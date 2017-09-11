@@ -38,6 +38,30 @@
 }
 
 - (void)updateConstraints {
+    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.centerX.mas_equalTo(self);
+        make.top.mas_equalTo(self).offset(160);
+    }];
+    
+    [self.newerImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.titleLab).offset(85);
+        make.right.mas_equalTo(self.mas_centerX).offset(-12.5);
+    }];
+    
+    [self.olderImage mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.titleLab).offset(85);
+        make.right.mas_equalTo(self.mas_centerX).offset(12.5);
+    }];
+    
+    [self.newerLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.newerImage).offset(25);
+        make.centerX.mas_equalTo(self.newerImage.mas_centerX);
+    }];
+    
+    [self.olderLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.olderImage).offset(25);
+        make.centerX.mas_equalTo(self.olderImage.mas_centerX);
+    }];
     
     [super updateConstraints];
 }
@@ -71,14 +95,14 @@
 
 - (UIImageView *)newerImage {
     if (!_newerImage) {
-        _newerImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+        _newerImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"neweruserimage"]];
     }
     return _newerImage;
 }
 
 - (UIImageView *)olderImage {
     if (!_olderImage) {
-        _olderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@""]];
+        _olderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"olderuserimage"]];
     }
     return _olderImage;
 }
