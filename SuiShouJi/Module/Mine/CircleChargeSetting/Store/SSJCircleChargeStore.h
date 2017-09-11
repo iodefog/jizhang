@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "SSJBillingChargeCellItem.h"
+#import "SSJRecordMakingBillTypeSelectionCellItem.h"
 
 @interface SSJCircleChargeStore : NSObject
 + (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success

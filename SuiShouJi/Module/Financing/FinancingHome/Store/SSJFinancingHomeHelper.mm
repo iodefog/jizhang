@@ -223,17 +223,6 @@
                         return;
                     }
 
-                    // 删掉账户所对应的转账
-                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:fundingItem.fundingID userId:userId error:NULL]) {
-                        if (failure) {
-                            *rollback = YES;
-                            SSJDispatch_main_async_safe(^{
-                                failure([db lastError]);
-                            });
-                        }
-                        return;
-                    }
-
                     //删除资金账户所对应的周期记账
                     if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
                         if (failure) {
@@ -244,6 +233,17 @@
                         }
                         return;
                     };
+                    
+                    // 删掉账户所对应的转账
+                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:fundingItem.fundingID userId:userId error:NULL]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatch_main_async_safe(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    }
 
                     //删除资金账户所对应的流水
                     if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID , @(SSJChargeIdTypeShareBooks) , userId , @(SSJShareBooksMemberStateNormal)]) {
@@ -341,26 +341,15 @@
         item.editeDate = [transferResult stringForColumn:@"cwritedate"];
         item.billDate = [transferResult stringForColumn:@"cbilldate"];
         item.money = [transferResult stringForColumn:@"imoney"];
+        item.sundryId = [transferResult stringForColumn:@"cid"];
         [tempArr addObject:item];
     }
     [transferResult close];
 
     for (SSJBillingChargeCellItem *item in tempArr) {
-        NSDate *writeDate = [NSDate dateWithString:item.editeDate formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSDate *maxDate = [writeDate dateByAddingSeconds:1];
-        NSDate *minDate = [writeDate dateBySubtractingSeconds:1];
-        NSString *maxDateStr = [maxDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSString *minDateStr = [minDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if ([item.billId isEqualToString:@"3"]) {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 4" , writeDate, @(SSJSyncVersion()), userId, item.billDate, minDateStr, maxDateStr, item.money]) {
-                error = [db lastError];
-                return NO;
-            }
-        } else {
-            if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, cwritedate = ?, iversion = ? where cuserid = ? and cbilldate = ? and (cwritedate between ? and ?) and imoney = ? and ibillid = 3" , writeDate, @(SSJSyncVersion()) ,userId ,item.billDate ,minDateStr ,maxDateStr ,item.money]) {
-                error = [db lastError];
-                return NO;
-            }
+        if (![db executeUpdate:@"update bk_user_charge set operatortype = 2, cwritedate = ?, iversion = ? where cuserid = ? and cid = ?" , writeDate, @(SSJSyncVersion()), userId, item.sundryId]) {
+            error = [db lastError];
+            return NO;
         }
     }
 
