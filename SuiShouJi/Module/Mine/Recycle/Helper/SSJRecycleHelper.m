@@ -190,7 +190,7 @@
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *fundName = nil;
-    int parent = 0;
+    SSJFinancingParent parent = 0;
     
     NSMutableArray *subtitles = [NSMutableArray array];
     
@@ -203,24 +203,25 @@
     }
     [rs close];
     
-    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    NSString *clientDate = [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, clientDate];
     [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
     
-    if ([db boolForQuery:@"select count(*) from bk_charge_period_config where ifunsid = ?", model.sundryID]) {
+    if ([db boolForQuery:@"select count(*) from bk_charge_period_config where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, clientDate]) {
         [subtitles addObject:@"周期记账"];
     }
     
     if (parent == SSJFinancingParentPaidLeave
         || parent == SSJFinancingParentDebt) {
-        if ([db boolForQuery:@"select count(*) from bk_loan where cthefundid = ? and length(cremindid) > 0", model.sundryID]) {
+        if ([db boolForQuery:@"select count(ur.cremindid) from bk_loan as l, bk_user_remind as ur where l.cremindid = ur.cremindid and l.cthefundid = ? and ur.cwritedate = ? and ur.operatortype = 2", model.sundryID, clientDate]) {
             [subtitles addObject:@"提醒"];
         }
     } else if (parent == SSJFinancingParentCreditCard) {
-        if ([db boolForQuery:@"select count(*) from bk_user_credit where cfundid = ? and length(cremindid) > 0", model.sundryID]) {
+        if ([db boolForQuery:@"select count(uc.cremindid) from bk_user_credit as uc, bk_user_remind as ur where uc.cfundid = ? and uc.cremindid = ur.cremindid and ur.cwritedate = ? and ur.operatortype = 2", model.sundryID, clientDate]) {
             [subtitles addObject:@"提醒"];
         }
     } else if (parent == SSJFinancingParentFixedEarnings) {
-        if ([db boolForQuery:@"select count(*) from bk_fixed_finance_product where cthisfundid = ? and length(cremindid) > 0", model.sundryID]) {
+        if ([db boolForQuery:@"select count(fp.cremindid) from bk_fixed_finance_product as fp, bk_user_remind as ur where fp.cthisfundid = ? and fp.cremindid = ur.cremindid and ur.cwritedate = ? and ur.operatortype = 2", model.sundryID, clientDate]) {
             [subtitles addObject:@"提醒"];
         }
     }
@@ -251,11 +252,15 @@
     }
     [rs close];
     
-    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cbooksid = ? and cwritedate = ? and operatortype = 2 and length(ibillid) >= 4", model.sundryID, [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"]];
+    NSString *clientDate = [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where cbooksid = ? and cwritedate = ? and operatortype = 2 and length(ibillid) >= 4", model.sundryID, clientDate];
     [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
     [subtitles addObject:@"个人账本"];
     
-    
+    if ([db boolForQuery:@"select count(*) from bk_charge_period_config where cbooksid = ? and cwritedate = ? and operatortype = 2", model.sundryID, clientDate]) {
+        [subtitles addObject:@"周期记账"];
+    }
     
     SSJRecycleListCellItem *item = [SSJRecycleListCellItem itemWithRecycleID:model.ID
                                                                         icon:[UIImage imageNamed:iconName]
