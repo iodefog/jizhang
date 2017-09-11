@@ -83,7 +83,7 @@
 - (UIColor *)ssj_borderColor;
 
 //  设置边框线宽度
-- (void)ssj_setBorderWidth:(CGFloat)with;
+- (void)ssj_setBorderWidth:(CGFloat)width;
 
 //  边框线宽度
 - (CGFloat)ssj_borderWidth;
