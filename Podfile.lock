@@ -127,7 +127,7 @@ DEPENDENCIES:
   - UMengUShare/Social/Sina
   - UMengUShare/Social/WeChat
   - UMengUShare/UI
-  - WCDB (from `https://github.com/Tencent/wcdb.git`, commit `58d58e2c8d9b1bb371c4bb09b09d7335be943801`)
+  - WCDB (from `https://github.com/Tencent/wcdb.git`, commit `9d8555273d633655461e457c0ae8f8d0e9c4c87b`)
   - YYKeyboardManager
   - YYText
   - YYWebImage
@@ -135,12 +135,12 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   WCDB:
-    :commit: 58d58e2c8d9b1bb371c4bb09b09d7335be943801
+    :commit: 9d8555273d633655461e457c0ae8f8d0e9c4c87b
     :git: https://github.com/Tencent/wcdb.git
 
 CHECKOUT OPTIONS:
   WCDB:
-    :commit: 58d58e2c8d9b1bb371c4bb09b09d7335be943801
+    :commit: 9d8555273d633655461e457c0ae8f8d0e9c4c87b
     :git: https://github.com/Tencent/wcdb.git
 
 SPEC CHECKSUMS:
@@ -170,6 +170,6 @@ SPEC CHECKSUMS:
   YYWebImage: 5f7f36aee2ae293f016d418c7d6ba05c4863e928
   ZYCornerRadius: 526dfd5b860008e57abf7be4a887f4630c3018f0
 
-PODFILE CHECKSUM: 561cb8c357202c3e2a5335bf2e6946bf1ac23640
+PODFILE CHECKSUM: eb90b1939d1c92b040017d6c84fdf6aa7f68dd38
 
 COCOAPODS: 1.3.1

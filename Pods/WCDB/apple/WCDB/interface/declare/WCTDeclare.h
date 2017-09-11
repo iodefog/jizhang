@@ -70,7 +70,7 @@ class WCTExpr;
 typedef std::list<const WCTExpr> WCTExprList;
 class WCTAnyProperty;
 class WCTProperty;
-class WCTPropertyList;
+typedef std::list<const WCTProperty> WCTPropertyList;
 class WCTResult;
 class WCTResultList;
 typedef WCTExpr WCTCondition;
