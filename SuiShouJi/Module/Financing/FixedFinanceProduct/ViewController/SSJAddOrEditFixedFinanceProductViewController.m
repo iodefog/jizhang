@@ -98,7 +98,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 @property (nonatomic, strong) SSJSegmentedControl *qiXiansegmentControl;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *title1;
 
+@property (nonatomic, copy) NSString *title2;
+
+@property (nonatomic, copy) NSString *title3;
+
+@property (nonatomic, copy) NSString *title4;
+
+@property (nonatomic, copy) NSString *title5;
+
+/**lilv*/
+@property (nonatomic, assign) SSJMethodOfRateOrTime rateType;
+
+@property (nonatomic, assign) SSJMethodOfRateOrTime timeType;
 
 // 原始的借贷金额，只有在编辑记录此金额
 @property (nonatomic) double originalMoney;
@@ -148,10 +162,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     MJWeakSelf;
     [RACObserve(self, liLvSegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
         [weakSelf updateDayLiXiWithRate:[weakSelf.liLvTextF.text doubleValue] interstType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[weakSelf.moneyTextF.text doubleValue]];
+        weakSelf.rateType = weakSelf.liLvSegmentControl.selectedSegmentIndex;
         [weakSelf updateJiXi];
     }];
 
     [RACObserve(self, qiXiansegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
+        weakSelf.timeType = weakSelf.qiXiansegmentControl.selectedSegmentIndex;
         [weakSelf updateJiXi];
     }];
     
@@ -216,6 +232,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return SSJMethodOfRateOrTimeDay;
     }
     
+}
+
+- (NSInteger)indexWithType:(SSJMethodOfRateOrTime)type
+{
+    switch (type) {
+        case SSJMethodOfRateOrTimeYear:
+            return 0;
+            break;
+        case SSJMethodOfRateOrTimeMonth:
+            return 1;
+            break;
+        case SSJMethodOfRateOrTimeDay:
+            return 2;
+            break;
+            
+        default:
+            break;
+    }
 }
 /**计息方式（一次性付清:0，每日付息到期还本:1，每月付息到期还本:2）*/
 //@property (nonatomic, assign) SSJMethodOfInterest interesttype;
@@ -288,12 +322,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    self.allowMoneyChanged = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
+    self.allowMoneyChanged = YES;// [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
     
     if (_edited) {
         self.jiXiMethodSelectionView.selectedIndex = [self switchJiXiMethodWithType:self.model.interesttype];
+        self.rateType = self.model.ratetype;
+        self.timeType = self.model.timetype;
     } else {
         self.jiXiMethodSelectionView.selectedIndex = -1;
+        self.rateType = SSJMethodOfRateOrTimeYear;
+        self.timeType = SSJMethodOfRateOrTimeDay;
     }
     
     MJWeakSelf;
@@ -724,6 +762,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.delegate = self;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.nameTextF = cell.textField;
+    cell.textField.text = self.title1;
     [cell setNeedsLayout];
     cell.userInteractionEnabled = YES;
     return cell;
@@ -739,6 +778,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
+    self.moneyTextF.text = self.title2;
     self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
@@ -789,14 +829,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.delegate = self;
-    cell.textField.text = [NSString stringWithFormat:@"%.2f",self.model.rate];
+    cell.textField.text = self.title3;
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
-    if (_edited) { //编辑
-       cell.segmentControl.selectedSegmentIndex = [self switchRateType:self.model.ratetype rate:YES];
-    } else {
-        cell.segmentControl.selectedSegmentIndex = 0;
-    }
+    cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.rateType];
     self.liLvSegmentControl = cell.segmentControl;
     self.liLvTextL = cell.subNameL;
     
@@ -811,16 +847,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.keyboardType = UIKeyboardTypeNumberPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
-    cell.textField.text = [NSString stringWithFormat:@"%.f",self.model.time];
+    cell.textField.text = self.title4;
     self.qiXianTextF = cell.textField;
     self.qiXiansegmentControl = cell.segmentControl;
     cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.nameL.text = @"期限";
-    if (_edited) {
-        cell.segmentControl.selectedSegmentIndex = [self switchRateType:self.model.timetype rate:NO];
-    } else {
-        cell.segmentControl.selectedSegmentIndex = 2;
-    }
+
+    cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.timeType];
+
     cell.userInteractionEnabled = YES;
     
     return cell;
@@ -867,7 +901,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.textLabel.text = @"备注";
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    cell.textField.text = self.model.memo;
+    cell.textField.text = self.title5;
     cell.textField.keyboardType = UIKeyboardTypeDefault;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearsOnBeginEditing = NO;
@@ -907,9 +941,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (self.nameTextF == textField) {
+        self.title1 = text;
+    } else if (self.moneyTextF == textField) {
+        self.title2 = [text ssj_reserveDecimalDigits:2 intDigits:9];
+    } else if (self.liLvTextF == textField) {
+        self.title3 = [text ssj_reserveDecimalDigits:2 intDigits:9];
+    } else if (self.qiXianTextF == textField) {
+        self.title4 = text;
+    } else if (self.memoTextF == textField) {
+        self.title5 = text;
+    }
+    
+    
     if (self.moneyTextF == textField || self.liLvTextF == textField) {
-        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        
         //计算利息
         [self updateDayLiXiWithRate:[self.liLvTextF.text doubleValue] interstType:[self switchRateType:self.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[self.moneyTextF.text doubleValue]];
         return NO;
