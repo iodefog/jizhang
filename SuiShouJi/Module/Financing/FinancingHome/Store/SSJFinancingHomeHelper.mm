@@ -399,14 +399,16 @@
     while ([statement step]) {
         currentBalance = (NSNumber *) [statement getValueAtIndex:0];
     }
-
+    
     return currentBalance;
 
 }
 
 + (SSJReminderItem *)getRemindItemWithRemindId:(NSString *)remindId indataBase:(WCTDatabase *)db {
     SSJReminderItem *item = [[SSJReminderItem alloc] init];
-    SSJUserRemindTable *userRemindTable = [db getOneObjectOfClass:SSJUserRemindTable.class fromTable:@"bk_user_remind" where:SSJUserRemindTable.remindId == remindId];
+    SSJUserRemindTable *userRemindTable = [db getOneObjectOfClass:SSJUserRemindTable.class
+                                                        fromTable:@"bk_user_remind"
+                                                            where:SSJUserRemindTable.remindId == remindId];
     item.remindId = userRemindTable.remindId;
     item.remindName = userRemindTable.remindName;
     item.remindMemo = userRemindTable.memo;
