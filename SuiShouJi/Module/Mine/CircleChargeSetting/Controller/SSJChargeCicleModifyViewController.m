@@ -46,15 +46,25 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJTextFieldToolbarManager.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
 @property(nonatomic, strong) NSArray *titles;
+
 @property(nonatomic, strong) TPKeyboardAvoidingTableView *tableView;
+
 @property(nonatomic, strong) UIView *saveFooterView;
+
 @property(nonatomic, strong) SSJFundingTypeSelectView *fundSelectView;
+
 @property(nonatomic, strong) SSJChargeCircleSelectView *circleSelectView;
+
 @property(nonatomic, strong) SSJHomeDatePickerView *chargeCircleTimeView;
+
 @property(nonatomic, strong) SSJHomeDatePickerView *chargeCircleEndTimeView;
+
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
+
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
+
 @property(nonatomic, strong) UIImage *selectedImage;
 
 @end

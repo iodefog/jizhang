@@ -11,6 +11,7 @@
 #import "SSJChargeMemberItem.h"
 #import "SSJBooksTypeItem.h"
 #import "SSJBooksTypeTable.h"
+#import "SSJUserBillTypeTable.h"
 #import "SSJOrmDatabaseQueue.h"
 
 @implementation SSJCircleChargeStore
@@ -276,8 +277,24 @@
 }
 
 + (void)getFirstBillItemForBooksId:(NSString *)booksId
-                       withSuccess:(void(^)(NSArray *books))success
+                       withSuccess:(void(^)(SSJRecordMakingBillTypeSelectionCellItem *billItem))success
                            failure:(void (^)(NSError *error))failure {
-    
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
+        SSJUserBillTypeTable *userBillType = [db getOneObjectOfClass:SSJUserBillTypeTable.class
+                                                             fromTable:@"bk_user_bill_type"
+                                                                 where:SSJUserBillTypeTable.booksId == booksId
+                                                                       && SSJUserBillTypeTable.userId == SSJUSERID()
+                                                               orderBy:SSJUserBillTypeTable.billOrder.order(WCTOrderedDescending)];
+        SSJRecordMakingBillTypeSelectionCellItem *billItem = [[SSJRecordMakingBillTypeSelectionCellItem alloc] init];
+        billItem.imageName = userBillType.billIcon;
+        billItem.title = userBillType.billName;
+        billItem.colorValue = userBillType.billColor;
+        billItem.ID = userBillType.billId;
+        if (success) {
+            dispatch_main_async_safe(^{
+                success(billItem);
+            });
+        }
+    }];
 }
 @end

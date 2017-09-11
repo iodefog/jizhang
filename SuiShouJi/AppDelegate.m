@@ -385,25 +385,25 @@ NSDate *SCYEnterBackgroundTime() {
                 SSJFinancingHomeitem *cardItem = [[SSJFinancingHomeitem alloc]init];
                 if (!remindItem.fundId.length) {
                     [self getCreditCardIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
-                        remindItem.fundId = cardId;
+                        cardItem.fundingID = remindItem.fundId;
+                        SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
+                        creditCardVc.item = cardItem;
+                        [currentVc.navigationController pushViewController:creditCardVc animated:YES];
                     } failure:NULL];
                 }
-                cardItem.fundingID = remindItem.fundId;
-                SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
-                creditCardVc.item = cardItem;
-                [currentVc.navigationController pushViewController:creditCardVc animated:YES];
+
             }else if(remindItem.remindType == SSJReminderTypeBorrowing){
                 if (!remindItem.fundId.length) {
                     [self getLoanIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
-                        remindItem.fundId = cardId;
+                        [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId completion:^(NSString * _Nonnull color) {
+                            SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
+                            loanVc.loanID = cardId;
+                            loanVc.fundColor = color;
+                            [currentVc.navigationController pushViewController:loanVc animated:YES];
+                        }];
                     } failure:NULL];
                 }
-                [SSJLoanHelper queryForFundColorWithLoanId:remindItem.fundId completion:^(NSString * _Nonnull color) {
-                    SSJLoanDetailViewController *loanVc = [[SSJLoanDetailViewController alloc]init];
-                    loanVc.loanID = remindItem.fundId;
-                    loanVc.fundColor = color;
-                    [currentVc.navigationController pushViewController:loanVc animated:YES];
-                }];
+
             } else if (remindItem.remindType == SSJReminderTypeWish) {//愿望
                 if (remindItem.remindId.length) {
                     SSJWishProgressViewController *wishProgressVC = [[SSJWishProgressViewController alloc] init];
