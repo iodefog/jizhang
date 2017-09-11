@@ -44,9 +44,9 @@ static  NSString *kTitle3 = @"投资名称";
         self.title = @"投资本金";
         [self.titleArray addObjectsFromArray:@[@"投资本金",@"转出账户",@"时间",@"投资名称"]];
         
-        [self.dataArray addObject:[NSString stringWithFormat:@"+%.2f",[self.productItem.money doubleValue]]];
+        [self.dataArray addObject:[NSString stringWithFormat:@"%.2f",self.chargeItem.money]];
         SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.productItem.targetfundid];
-        [self.dataArray addObject:funditem.ID];
+        [self.dataArray addObject:funditem.title];
         [self.dataArray addObject:[self.chargeItem.billDate ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
         [self.dataArray addObject:self.productItem.productName];
         
@@ -162,6 +162,7 @@ static  NSString *kTitle3 = @"投资名称";
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.userInteractionEnabled = NO;
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
     }
     return _tableView;

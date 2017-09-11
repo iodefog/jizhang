@@ -40,7 +40,7 @@
 static NSString *KTitle1 = @"投资名称";
 static NSString *KTitle2 = @"投资金额";
 static NSString *KTitle3 = @"转出账户";
-static NSString *KTitle4 = @"起息时间";
+static NSString *KTitle4 = @"投资时间";
 static NSString *KTitle5 = @"利率";
 static NSString *KTitle6 = @"期限";
 static NSString *KTitle7 = @"派息方式";
@@ -98,7 +98,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 @property (nonatomic, strong) SSJSegmentedControl *qiXiansegmentControl;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *title1;
 
+@property (nonatomic, copy) NSString *title2;
+
+@property (nonatomic, copy) NSString *title3;
+
+@property (nonatomic, copy) NSString *title4;
+
+@property (nonatomic, copy) NSString *title5;
+
+/**lilv*/
+@property (nonatomic, assign) SSJMethodOfRateOrTime rateType;
+
+@property (nonatomic, assign) SSJMethodOfRateOrTime timeType;
 
 // 原始的借贷金额，只有在编辑记录此金额
 @property (nonatomic) double originalMoney;
@@ -148,10 +162,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     MJWeakSelf;
     [RACObserve(self, liLvSegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
         [weakSelf updateDayLiXiWithRate:[weakSelf.liLvTextF.text doubleValue] interstType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[weakSelf.moneyTextF.text doubleValue]];
+        weakSelf.rateType = weakSelf.liLvSegmentControl.selectedSegmentIndex;
         [weakSelf updateJiXi];
     }];
 
     [RACObserve(self, qiXiansegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
+        weakSelf.timeType = weakSelf.qiXiansegmentControl.selectedSegmentIndex;
         [weakSelf updateJiXi];
     }];
     
@@ -216,6 +232,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return SSJMethodOfRateOrTimeDay;
     }
     
+}
+
+- (NSInteger)indexWithType:(SSJMethodOfRateOrTime)type
+{
+    switch (type) {
+        case SSJMethodOfRateOrTimeYear:
+            return 0;
+            break;
+        case SSJMethodOfRateOrTimeMonth:
+            return 1;
+            break;
+        case SSJMethodOfRateOrTimeDay:
+            return 2;
+            break;
+            
+        default:
+            break;
+    }
 }
 /**计息方式（一次性付清:0，每日付息到期还本:1，每月付息到期还本:2）*/
 //@property (nonatomic, assign) SSJMethodOfInterest interesttype;
@@ -288,12 +322,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    self.allowMoneyChanged = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
+    self.allowMoneyChanged = YES;// [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:self.model];
     
     if (_edited) {
         self.jiXiMethodSelectionView.selectedIndex = [self switchJiXiMethodWithType:self.model.interesttype];
+        self.rateType = self.model.ratetype;
+        self.timeType = self.model.timetype;
     } else {
         self.jiXiMethodSelectionView.selectedIndex = -1;
+        self.rateType = SSJMethodOfRateOrTimeYear;
+        self.timeType = SSJMethodOfRateOrTimeDay;
     }
     
     MJWeakSelf;
@@ -332,6 +370,40 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     }];
     
 }
+
+- (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
+    MJWeakSelf;
+    
+    //查询转出账户列表
+    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+        weakSelf.tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        
+        // 新建借贷设置默认账户
+        weakSelf.fundingSelectionView.items = items;
+        if (!funditem) {
+            weakSelf.fundingSelectionView.selectedIndex = -1;
+        }else {
+            for (NSInteger i=0; i<items.count; i++) {
+                SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
+                if ([fund.ID isEqualToString:funditem.ID]) {
+                    weakSelf.fundingSelectionView.selectedIndex = i;
+                    break;
+                }
+            }
+            weakSelf.createCompoundModel.targetChargeModel.fundId = funditem.ID;
+        }
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
+        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+    } failure:^(NSError * _Nonnull error) {
+        _tableView.hidden = NO;
+        [weakSelf.view ssj_hideLoadingIndicator];
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+    }];
+    
+}
+
 
 - (BOOL)remindLocation {
     //如果已经弹出过授权弹框开启通知
@@ -390,34 +462,68 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     NSArray *saveChargeModels = @[self.createCompoundModel];
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
-
-    //保存固定收益理财
-    [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:self.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
-        weakSelf.sureButton.enabled = YES;
-        
-        //调转到详情页面
-        SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
-        detailVC.productID = weakSelf.model.productid;
-        [weakSelf.navigationController pushViewController:detailVC animated:YES];
-        
-        //将当期页面从占中删除
-        NSMutableArray *array = [self.navigationController.viewControllers mutableCopy];
-        for (UIViewController *vc in array) {
-            if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
-                [array removeObject:vc];
-                break;
+    if (_edited) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"修改后已有的相关流水会被抹清后重新计算生成，您确定要修改吗" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [weakSelf.sureButton ssj_hideLoadingIndicator];
+            return ;
+        }],[SSJAlertViewAction actionWithTitle:@"确定修改" handler:^(SSJAlertViewAction * _Nonnull action) {
+            //保存固定收益理财
+            [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+                weakSelf.sureButton.enabled = YES;
+                
+                //调转到详情页面
+                SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                detailVC.productID = weakSelf.model.productid;
+                [weakSelf.navigationController pushViewController:detailVC animated:YES];
+                
+                //将当期页面从占中删除
+                NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
+                for (UIViewController *vc in array) {
+                    if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                        [array removeObject:vc];
+                        break;
+                    }
+                }
+                weakSelf.navigationController.viewControllers = [array copy];
+                //        [self saveRemind];
+                
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                weakSelf.sureButton.enabled = YES;
+                [weakSelf.sureButton ssj_hideLoadingIndicator];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
+            
+        }],nil];
+    } else {
+        //保存固定收益理财
+        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+            weakSelf.sureButton.enabled = YES;
+            
+            //调转到详情页面
+            SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+            detailVC.productID = weakSelf.model.productid;
+            [weakSelf.navigationController pushViewController:detailVC animated:YES];
+            
+            //将当期页面从占中删除
+            NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
+            for (UIViewController *vc in array) {
+                if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
+                    [array removeObject:vc];
+                    break;
+                }
             }
-        }
-        self.navigationController.viewControllers = [array copy];
-//        [self saveRemind];
-        
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
-        weakSelf.sureButton.enabled = YES;
-        [weakSelf.sureButton ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
-    
+            weakSelf.navigationController.viewControllers = [array copy];
+            //        [self saveRemind];
+            
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError * _Nonnull error) {
+            weakSelf.sureButton.enabled = YES;
+            [weakSelf.sureButton ssj_hideLoadingIndicator];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+
+    }
 
 }
 
@@ -465,6 +571,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     if (self.jiXiMethodSelectionView.selectedIndex < 0) {
         [CDAutoHideMessageHUD showMessage:@"请选择派息方式"];
+        return NO;
+    }
+    
+    if (self.fundingSelectionView.selectedIndex < 0) {
+        [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;
     }
     return YES;
@@ -651,6 +762,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.delegate = self;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     self.nameTextF = cell.textField;
+    cell.textField.text = self.title1;
     [cell setNeedsLayout];
     cell.userInteractionEnabled = YES;
     return cell;
@@ -666,6 +778,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
+    self.moneyTextF.text = self.title2;
     self.moneyTextF = cell.textField;
     [cell setNeedsLayout];
     [cell.textField ssj_installToolbar];
@@ -716,14 +829,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.delegate = self;
-    cell.textField.text = [NSString stringWithFormat:@"%.2f",self.model.rate];
+    cell.textField.text = self.title3;
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
-    if (_edited) { //编辑
-       cell.segmentControl.selectedSegmentIndex = [self switchRateType:self.model.ratetype rate:YES];
-    } else {
-        cell.segmentControl.selectedSegmentIndex = 0;
-    }
+    cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.rateType];
     self.liLvSegmentControl = cell.segmentControl;
     self.liLvTextL = cell.subNameL;
     
@@ -738,16 +847,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.keyboardType = UIKeyboardTypeNumberPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.delegate = self;
-    cell.textField.text = [NSString stringWithFormat:@"%.f",self.model.time];
+    cell.textField.text = self.title4;
     self.qiXianTextF = cell.textField;
     self.qiXiansegmentControl = cell.segmentControl;
     cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.nameL.text = @"期限";
-    if (_edited) {
-        cell.segmentControl.selectedSegmentIndex = [self switchRateType:self.model.timetype rate:NO];
-    } else {
-        cell.segmentControl.selectedSegmentIndex = 2;
-    }
+
+    cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.timeType];
+
     cell.userInteractionEnabled = YES;
     
     return cell;
@@ -794,7 +901,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.textLabel.text = @"备注";
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    cell.textField.text = self.model.memo;
+    cell.textField.text = self.title5;
     cell.textField.keyboardType = UIKeyboardTypeDefault;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearsOnBeginEditing = NO;
@@ -834,9 +941,24 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    
+    if (self.nameTextF == textField) {
+        self.title1 = text;
+    } else if (self.moneyTextF == textField) {
+        self.title2 = [text ssj_reserveDecimalDigits:2 intDigits:9];
+    } else if (self.liLvTextF == textField) {
+        self.title3 = [text ssj_reserveDecimalDigits:2 intDigits:9];
+    } else if (self.qiXianTextF == textField) {
+        self.title4 = text;
+    } else if (self.memoTextF == textField) {
+        self.title5 = text;
+    }
+    
+    
     if (self.moneyTextF == textField || self.liLvTextF == textField) {
-        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        
         //计算利息
         [self updateDayLiXiWithRate:[self.liLvTextF.text doubleValue] interstType:[self switchRateType:self.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[self.moneyTextF.text doubleValue]];
         return NO;
@@ -904,8 +1026,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 NewFundingVC.needLoanOrNot = NO;
                 NewFundingVC.addNewFundingBlock = ^(SSJFinancingHomeitem *item){
                         weakSelf.model.targetfundid = item.fundingID;
-//                        [weakSelf loadData];
-
+                    weakSelf.createCompoundModel.chargeModel.fundId = item.fundingID;
+                    SSJLoanFundAccountSelectionViewItem *funItem = [[SSJLoanFundAccountSelectionViewItem alloc] init];
+                    funItem.title = item.fundingName;
+                    funItem.image = item.fundingIcon;
+                    funItem.ID = item.fundingID;
+                    [weakSelf funditem:funItem];
                 };
                 [weakSelf.navigationController pushViewController:NewFundingVC animated:YES];
                 return NO;
@@ -964,12 +1090,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         __weak typeof(self) wself = self;
         _borrowDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
         
+        NSDate *compDate = [SSJFixedFinanceProductStore queryFirstAddOrRedemDateWithProductModel:self.model];
         _borrowDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
-//        _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-//            return [wself validateBorrowDate:date];
-//            return [NSDate date];
-//        };
+        _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
+            //时间不能超过大于最早的一条追加或者赎回时间
+            if ([date isLaterThan:compDate]) {
+                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
+                return NO;
+            }
+            if ([date isLaterThan:[NSDate date]]) {
+                [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+                return NO;
+            }
+            return YES;
+        };
         _borrowDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             
             wself.model.startDate = view.date;
@@ -990,7 +1125,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (NSArray<NSString *> *)imageItems {
     if (!_imageItems) {
-        _imageItems = @[@[@"loan_person",@"loan_money",@"loan_account"],@[@"loan_account",@"loan_account",@"loan_account",@"loan_account"],@[@"loan_remind",@"loan_memo"]];
+        _imageItems = @[@[@"loan_person",@"loan_money",@"fixed_finance_out"],@[@"fixed_finance_qixi",@"fixed_finance_lixi",@"fixed_finance_time_qixian",@"fixed_finance_paixi_method"],@[@"loan_remind",@"loan_memo"]];
     }
     return _imageItems;
 }

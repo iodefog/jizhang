@@ -63,6 +63,13 @@
     }
 }
 
+- (void)setTitleFont:(UIFont *)titleFont {
+    if (![_titleFont isEqual:titleFont]) {
+        _titleFont = titleFont;
+        _titleLab.font = titleFont;
+    }
+}
+
 - (void)updateAppearance {
     _titleLab.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     _arrow.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];

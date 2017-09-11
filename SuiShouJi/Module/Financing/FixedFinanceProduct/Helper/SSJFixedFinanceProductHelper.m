@@ -53,7 +53,7 @@
  @param startDate 气息时间
  @return 预期利息key：interest，key：desc
  */
-+ (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:( NSString *)startDate {
++ (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:(NSString *)startDate {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     double interest = 0;
     NSString *desc = @"";

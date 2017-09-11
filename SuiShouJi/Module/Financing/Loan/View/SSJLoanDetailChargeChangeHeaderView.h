@@ -14,6 +14,9 @@
 
 @property (nonatomic, copy) NSString *title;
 
+/**titlefont*/
+@property (nonatomic, strong) UIFont *titleFont;
+
 @property (nonatomic, copy) void (^tapHandle)(SSJLoanDetailChargeChangeHeaderView *);
 
 - (void)updateAppearance;

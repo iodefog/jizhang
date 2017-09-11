@@ -75,6 +75,14 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID;
 
+/**
+ 查询一定时间内利息和
+ 
+ *  @param fixedFinanceProductID    理财产品id
+ @return 利息
+ */
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID startDate:(NSString *)startDate endDate:(NSString *)endDate;
+
 //查询所有算手续费和
 + (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID;
 
@@ -306,6 +314,15 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (NSString *)queryProductIdWithRemindId:(NSString *)remindid;
 
+
+/**
+ 通过提醒id查找提醒时间
+
+ @param remindid <#remindid description#>
+ @return <#return value description#>
+ */
++ (NSString *)queryRemindDateWithRemindid:(NSString *)remindid;
+
 /**
  查询某个理财账户最新一条派发流水时间
  
@@ -316,12 +333,54 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 
 /**
- 查询是否由赎回或者追加
+ 查询是否有赎回或者追加
 
  @param model <#model description#>
  @return <#return value description#>
  */
 + (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model;
+
+/**
+ 查询是否有赎回或者追加
+ 
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
+
+/**
+ 查询最早一条赎回时间
+
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (NSDate *)queryFirstRedemDateWithProductModel:(SSJFixedFinanceProductItem *)model;
+
+
+/**
+ 查询最早一条添加时间
+
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (NSDate *)queryFirstAddDateWithProductModel:(SSJFixedFinanceProductItem *)model;
+
+
+/**
+ 查询最早一条添加或者赎回时间
+
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (NSDate *)queryFirstAddOrRedemDateWithProductModel:(SSJFixedFinanceProductItem *)model;
+
+/**
+ 查询最晚一条添加或者赎回时间
+ 
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (NSDate *)queryLastAddOrRedemDateWithProductModel:(SSJFixedFinanceProductItem *)model;
 
 
 /**
@@ -348,14 +407,17 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (double)caluclateTheBalanceOfCurrentWithModel:(SSJFixedFinanceProductItem *)productItem;
+
+
 /**
  生成某个理财产品在起止时间内的利息派发流水  每日流水
  
  @param item <#item description#>
- @param investmentDate <#startDate description#>
+ @param startDate <#startDate description#>
+ @param type 3:追加  2：赎回  1：每日派息以及新建时候派息
  @param endDate <#endDate description#>
  */
-+ (BOOL)interestRecordWithModel:(SSJFixedFinanceProductItem *)item investmentDate:(NSDate *)investmentDate endDate:(NSDate *)endDate newMoney:(double)newMoney inDatabase:(FMDatabase *)db error:(NSError **)error;
++ (BOOL)interestRecordWithModel:(SSJFixedFinanceProductItem *)item investmentDate:(NSDate *)investmentDate endDate:(NSDate *)endDate newMoney:(double)newMoney type:(NSInteger)type inDatabase:(FMDatabase *)db error:(NSError **)error;
 @end
 
 
