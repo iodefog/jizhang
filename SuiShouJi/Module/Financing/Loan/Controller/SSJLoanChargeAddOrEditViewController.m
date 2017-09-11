@@ -441,7 +441,6 @@ static NSUInteger kDateTag = 1005;
 #pragma mark - Private
 - (void)loadData {
     [self.view ssj_showLoadingIndicator];
-    
     [[[[self loadLoanModel] then:^RACSignal *{
         return [self loadCompoundChargeModel];
     }] then:^RACSignal *{
@@ -450,6 +449,11 @@ static NSUInteger kDateTag = 1005;
         [self.view ssj_hideLoadingIndicator];
         [CDAutoHideMessageHUD showError:error];
     } completed:^{
+        [self updateTitle];
+        [self organiseCellTags];
+        self.tableView.hidden = NO;
+        [self.tableView reloadData];
+        [self updateSurplusIfNeeded];
         [self.view ssj_hideLoadingIndicator];
     }];
 }
@@ -496,19 +500,6 @@ static NSUInteger kDateTag = 1005;
 - (RACSignal *)loadFundModelList {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-            if (self.surplus == 0) {
-                if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
-                    self.surplus = self.loanModel.jMoney + self.compoundModel.chargeModel.money;
-                } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
-                    self.surplus = self.loanModel.jMoney - self.compoundModel.chargeModel.money;
-                }
-            }
-            
-            [self updateTitle];
-            [self organiseCellTags];
-            [self.tableView reloadData];
-            self.tableView.hidden = NO;
-            
             self.fundingSelectionView.items = items;
             self.fundingSelectionView.selectedIndex = -1;
             
@@ -721,6 +712,16 @@ static NSUInteger kDateTag = 1005;
         
         if ([self.tableView numberOfRowsInSection:0] > 1) {
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+}
+
+- (void)updateSurplusIfNeeded {
+    if (self.surplus == 0) {
+        if (self.chargeType == SSJLoanCompoundChargeTypeRepayment) {
+            self.surplus = self.loanModel.jMoney + self.compoundModel.chargeModel.money;
+        } else if (self.chargeType == SSJLoanCompoundChargeTypeAdd) {
+            self.surplus = self.loanModel.jMoney - self.compoundModel.chargeModel.money;
         }
     }
 }

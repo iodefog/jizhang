@@ -127,12 +127,12 @@
         }
     }
     
-    // 借入的话转出金额>转入金额即为正数；反之为负数
-    if (loanType == SSJLoanTypeBorrow) {
-        if (self.jMoney != 0) {
-            self.jMoney = -self.jMoney;
-        }
-    }
+//    // 借入的话转出金额>转入金额即为正数；反之为负数
+//    if (loanType == SSJLoanTypeBorrow) {
+//        if (self.jMoney != 0) {
+//            self.jMoney = -self.jMoney;
+//        }
+//    }
     
     return YES;
 }
