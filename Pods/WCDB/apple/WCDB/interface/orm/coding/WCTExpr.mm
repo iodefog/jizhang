@@ -81,6 +81,11 @@ WCTExpr::WCTExpr(const WCDB::Expr &expr)
 {
 }
 
+WCTExpr::operator WCTExprList() const
+{
+    return {*this};
+}
+
 WCTResult WCTExpr::as(const WCTProperty &property)
 {
     return WCTResult(*this).as(property);
@@ -447,19 +452,4 @@ std::string WCTExpr::literalValue(WCTValue *value)
 WCTExpr WCTExpr::Case(const WCTExpr &case_, const std::list<std::pair<WCTExpr, WCTExpr>> &when, const std::list<WCTExpr> &else_)
 {
     return WCTExpr(Expr::Case(case_, when, else_));
-}
-
-WCTExprList::WCTExprList()
-    : std::list<const WCTExpr>()
-{
-}
-
-WCTExprList::WCTExprList(const WCTExpr &expr)
-    : std::list<const WCTExpr>({expr})
-{
-}
-
-WCTExprList::WCTExprList(std::initializer_list<const WCTExpr> il)
-    : std::list<const WCTExpr>(il.begin(), il.end())
-{
 }

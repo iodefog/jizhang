@@ -29,6 +29,8 @@ public:
                 Class cls,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
 
+    operator WCTPropertyList() const;
+
     //distinct
     WCTResultList distinct() const;
 
@@ -132,13 +134,4 @@ protected:
     WCTProperty(const WCDB::Column &column,
                 Class cls,
                 const std::shared_ptr<WCTColumnBinding> &columnBinding);
-};
-
-class WCTPropertyList : public std::list<const WCTProperty> {
-public:
-    WCTPropertyList();
-    WCTPropertyList(const WCTProperty &property);
-    WCTPropertyList(std::initializer_list<const WCTProperty> il);
-
-    WCTPropertyList inTable(NSString *tableName) const;
 };

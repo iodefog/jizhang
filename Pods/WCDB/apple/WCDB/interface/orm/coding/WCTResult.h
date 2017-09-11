@@ -19,8 +19,6 @@
  */
 
 #import <WCDB/WCTDeclare.h>
-#import <WCDB/WCTExpr.h>
-#import <WCDB/WCTProperty.h>
 #import <WCDB/WCTPropertyBase.h>
 
 class WCTResult : public WCDB::ColumnResult, public WCTPropertyBase {
@@ -31,29 +29,19 @@ public:
 
     WCTResultList distinct() const;
 
+    operator WCTResultList() const;
+
     NSString *getDescription() const;
 };
 
 class WCTResultList : public std::list<const WCTResult> {
 public:
     WCTResultList();
-
-    template <typename T>
-    WCTResultList(
-        const T &value,
-        typename std::enable_if<
-            std::is_constructible<WCTResult, T>::value>::type * = nullptr)
-        : std::list<const WCTResult>({WCTResult(value)}), m_distinct(false)
-    {
-    }
-
-    WCTResultList(std::initializer_list<const WCTExpr> il);
-    WCTResultList(std::initializer_list<const WCTProperty> il);
-
+    WCTResultList(const WCTProperty &property);
+    WCTResultList(const WCTExpr &expr);
     WCTResultList(const WCTPropertyList &propertyList);
     WCTResultList(const WCTExprList &exprList);
-
-    WCTResultList(std::initializer_list<const WCTPropertyList> il);
+    WCTResultList(std::initializer_list<const WCTResult> il);
 
     WCTResultList &distinct();
 

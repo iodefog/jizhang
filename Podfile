@@ -39,7 +39,7 @@ def shared_pods
     
     pod 'MBProgressHUD'
     
-    pod 'WCDB', :git => 'https://github.com/Tencent/wcdb.git', :commit => 'fd264eb5fb4cbca75ed0f1d5c9677c0785005560'
+    pod 'WCDB', :git => 'https://github.com/Tencent/wcdb.git', :commit => '9d8555273d633655461e457c0ae8f8d0e9c4c87b'
 
 end
 
