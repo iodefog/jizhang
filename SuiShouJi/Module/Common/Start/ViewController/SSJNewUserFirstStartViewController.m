@@ -20,13 +20,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.gifImageView addObserver:self forKeyPath:@"currentIsPlayingAnimation" options:NSKeyValueObservingOptionNew context:nil];
     [self.view addSubview:self.gifImageView];
+    
     // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)updateViewConstraints {
+    [self.gifImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(self.view);
+    }];
+    
+    [super updateViewConstraints];
+    
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (!self.gifImageView.currentIsPlayingAnimation && self.gifImageView.currentAnimatedImageIndex == self.gifImage.animatedImageFrameCount) {
+        
+    }
 }
 
 #pragma mark - Getter
