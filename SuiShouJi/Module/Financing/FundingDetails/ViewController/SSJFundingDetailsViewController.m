@@ -209,27 +209,38 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }
         } else if (cellItem.idType == SSJChargeIdTypeFixedFinance) {
             [SSJFundingDetailHelper queryfixedFinanceDateWithChargeItem:cellItem success:^(SSJFixedFinanceProductItem *productItem, SSJFixedFinanceProductChargeItem *chargeItem) {
-                if (billId == 15) {
-                    SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
-                    addvc.chargeItem = chargeItem;
+                if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOut) {
+                    SSJFixedFinancesSettlementViewController *addvc = [[SSJFixedFinancesSettlementViewController alloc] init];
                     addvc.financeModel = productItem;
+                    addvc.chargeItem = chargeItem;
                     [self.navigationController pushViewController:addvc animated:YES];
-                } else if (billId == 16 || billId == 20) {
-                    SSJFixedFinanceRedemViewController *vc = [[SSJFixedFinanceRedemViewController alloc] init];
-                    vc.financeModel = productItem;
-                    vc.chargeModel = chargeItem;
-                    [self.navigationController pushViewController:vc animated:YES];
-                } else if (billId == 17 || billId == 18 || billId == 19) {
-                    SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
-                    vc.financeModel = productItem;
-                    vc.chargeItem = chargeItem;
-                    [self.navigationController pushViewController:vc animated:YES];
-                } else if (billId == 21 || billId == 22 || billId == 3 || billId == 4) {
-                    SSJEveryInverestDetailViewController *vc = [[SSJEveryInverestDetailViewController alloc] init];
-                    vc.chargeItem = chargeItem;
-                    vc.productItem = productItem;
-                    [self.navigationController pushViewController:vc animated:YES];
+                } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCreate) {
+                    SSJEveryInverestDetailViewController *addvc = [[SSJEveryInverestDetailViewController alloc] init];
+                    addvc.productItem = productItem;
+                    addvc.chargeItem = chargeItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
+                } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                    SSJFixedFinanceRedemViewController *addvc = [[SSJFixedFinanceRedemViewController alloc] init];
+                    addvc.financeModel = productItem;
+                    addvc.chargeModel = chargeItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
+                } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                    SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
+                    addvc.financeModel = productItem;
+                    addvc.chargeItem = chargeItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
+                } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeBalanceInterestIncrease) {
+                    SSJFixedFinancesSettlementViewController *addvc = [[SSJFixedFinancesSettlementViewController alloc] init];
+                    addvc.financeModel = productItem;
+                    addvc.chargeItem = chargeItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
+                } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOutInterest) {
+                    SSJFixedFinanceRedemViewController *addvc = [[SSJFixedFinanceRedemViewController alloc] init];
+                    addvc.financeModel = productItem;
+                    addvc.chargeModel = chargeItem;
+                    [self.navigationController pushViewController:addvc animated:YES];
                 }
+                
             } failure:NULL];
 
         } else if(cellItem.idType == SSJChargeIdTypeRepayment) {

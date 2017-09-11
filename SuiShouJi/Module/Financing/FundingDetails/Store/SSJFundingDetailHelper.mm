@@ -887,6 +887,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         productItem.interesttype = fixedFinanceProduct.interestType;
         productItem.startdate = fixedFinanceProduct.startDate;
         productItem.enddate = fixedFinanceProduct.endDate;
+        productItem.isend = fixedFinanceProduct.isEnd;
         SSJFixedFinanceProductChargeItem *chargeItem = [[SSJFixedFinanceProductChargeItem alloc] init];
         chargeItem.chargeId = userCharge.chargeId;
         chargeItem.fundId = userCharge.fundId;

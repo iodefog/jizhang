@@ -92,6 +92,7 @@
         item.billDetailDate = @"00:00";
         item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? order by iorder limit 1", userid, @(incomeOrExpence), booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
+        item.booksId = booksId;
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 order by iorder limit 1",userid];
         item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ?",item.fundId];
@@ -260,7 +261,11 @@
 + (void)getBooksForCircleChargeWithsuccess:(void(^)(NSArray *books))success
                                    failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
-        NSArray *books = [db getObjectsOfClass:SSJBooksTypeTable.class fromTable:@"bk_books_type" where:SSJBooksTypeTable.userId == SSJUSERID() && SSJBooksTypeTable.operatorType != 2];
+        NSArray *books = [db getObjectsOfClass:SSJBooksTypeTable.class
+                                     fromTable:@"bk_books_type"
+                                         where:SSJBooksTypeTable.userId == SSJUSERID()
+                                               && SSJBooksTypeTable.operatorType != 2
+                                       orderBy:SSJBooksTypeTable.booksOrder.order(WCTOrderedAscending)];
         NSMutableArray *booksArr = [NSMutableArray arrayWithCapacity:0];
         for (SSJBooksTypeTable *bookstype in books) {
             SSJBooksTypeItem *item = [[SSJBooksTypeItem alloc] init];
@@ -277,6 +282,7 @@
 }
 
 + (void)getFirstBillItemForBooksId:(NSString *)booksId
+                        billType:(SSJBillType)billType
                        withSuccess:(void(^)(SSJRecordMakingBillTypeSelectionCellItem *billItem))success
                            failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
@@ -284,7 +290,8 @@
                                                              fromTable:@"bk_user_bill_type"
                                                                  where:SSJUserBillTypeTable.booksId == booksId
                                                                        && SSJUserBillTypeTable.userId == SSJUSERID()
-                                                               orderBy:SSJUserBillTypeTable.billOrder.order(WCTOrderedDescending)];
+                                                                       && SSJUserBillTypeTable.billType == billType
+                                                               orderBy:SSJUserBillTypeTable.billOrder.order(WCTOrderedAscending)];
         SSJRecordMakingBillTypeSelectionCellItem *billItem = [[SSJRecordMakingBillTypeSelectionCellItem alloc] init];
         billItem.imageName = userBillType.billIcon;
         billItem.title = userBillType.billName;
