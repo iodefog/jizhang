@@ -272,6 +272,7 @@
     NSNumber *currentBalance = 0;
 
     WCTResultList resultList = {SSJUserChargeTable.money.inTable(@"bk_user_charge").sum()};
+    
 
     WCDB::JoinClause
             joinClause = WCDB::JoinClause("bk_user_charge").join("bk_user_bill_type", WCDB::JoinClause::Type::Inner).

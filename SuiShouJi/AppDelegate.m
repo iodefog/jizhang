@@ -26,6 +26,7 @@
 #import "SSJLoanDetailViewController.h"
 #import "SSJWishProgressViewController.h"
 #import "SSJFixedFinanceProductDetailViewController.h"
+#import "SSJNewUserFirstStartViewController.h"
 
 #import "UIViewController+SSJMotionPassword.h"
 
@@ -38,6 +39,7 @@
 #import "SSJStartViewManager.h"
 #import <UShareUI/UMSocialUIManager.h>
 #import "SSJShareBooksUrlHandle.h"
+#import "SSJStartLauncherViewController.h"
 
 //#import "SSJPatchUpdateService.h"
 //#import "SSJJspatchAnalyze.h"
@@ -132,7 +134,6 @@ NSDate *SCYEnterBackgroundTime() {
     [self.window makeKeyAndVisible];
     
     [self setRootViewController];
-    [SSJThemeSetting updateTabbarAppearance];
     
     //如果第一次打开记录当前时间
     if (SSJLaunchTimesForCurrentVersion() == 1) {
@@ -147,25 +148,25 @@ NSDate *SCYEnterBackgroundTime() {
     //微信登录
     [WXApi registerApp:SSJDetailSettingForSource(@"WeiXinKey")];
     
-    _startViewManager = [[SSJStartViewManager alloc] init];
-    [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
-        [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified) {
-            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-            UINavigationController *navi = [tabVC.viewControllers firstObject];
-            UIViewController *vc = [navi.viewControllers firstObject];
-            if (![vc isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-                return;
-            }
-            SSJBookKeepingHomeViewController *homeVC = (SSJBookKeepingHomeViewController *)vc;
-            if (isVerified) {
-                homeVC.allowRefresh = YES;
-                homeVC.hasLoad = NO;
-            } else {
-                [homeVC reloadWithAnimation];
-            }
-        } animated:NO];
-        manager = nil;
-    }];
+//    _startViewManager = [[SSJStartViewManager alloc] init];
+//    [_startViewManager showWithCompletion:^(SSJStartViewManager *manager){
+//        [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified) {
+//            UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
+//            UINavigationController *navi = [tabVC.viewControllers firstObject];
+//            UIViewController *vc = [navi.viewControllers firstObject];
+//            if (![vc isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
+//                return;
+//            }
+//            SSJBookKeepingHomeViewController *homeVC = (SSJBookKeepingHomeViewController *)vc;
+//            if (isVerified) {
+//                homeVC.allowRefresh = YES;
+//                homeVC.hasLoad = NO;
+//            } else {
+//                [homeVC reloadWithAnimation];
+//            }
+//        } animated:NO];
+//        manager = nil;
+//    }];
     
     [SSJDomainManager requestDomain];
     // 美恰sdk设置
@@ -232,13 +233,7 @@ NSDate *SCYEnterBackgroundTime() {
 //    [MQManager registerDeviceToken:deviceToken];
 //}
 
-#pragma mark - Getter
-- (SSJGradientMaskView *)maskView{
-    if (!_maskView) {
-        _maskView = [[SSJGradientMaskView alloc]initWithFrame:CGRectMake(0, 0, SSJSCREENWITH, SSJSCREENHEIGHT)];
-    }
-    return _maskView;
-}
+
 
 #pragma mark - Private
 // 初始化用户数据
@@ -302,50 +297,17 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 设置根控制器
 - (void)setRootViewController {
-    SSJBookKeepingHomeViewController *bookKeepingVC = [[SSJBookKeepingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    SSJNavigationController *bookKeepingNavi = [[SSJNavigationController alloc] initWithRootViewController:bookKeepingVC];
-    bookKeepingNavi.tabBarItem.title = @"记账";
-    
-    SSJReportFormsViewController *reportFormsVC = [[SSJReportFormsViewController alloc] initWithNibName:nil bundle:nil];
-    SSJNavigationController *reportFormsNavi = [[SSJNavigationController alloc] initWithRootViewController:reportFormsVC];
-    reportFormsNavi.tabBarItem.title = @"报表";
-    
-    SSJFinancingHomeViewController *financingVC = [[SSJFinancingHomeViewController alloc] initWithNibName:nil bundle:nil];
-    SSJNavigationController *financingNavi = [[SSJNavigationController alloc] initWithRootViewController:financingVC];
-    financingNavi.tabBarItem.title = @"资金";
-    
-    SSJNewMineHomeViewController *moreVC = [[SSJNewMineHomeViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
-    SSJNavigationController *moreNavi = [[SSJNavigationController alloc] initWithRootViewController:moreVC];
-    moreNavi.tabBarItem.title = @"我的";
-    
-    UITabBarController *tabBarVC = [[UITabBarController alloc] initWithNibName:nil bundle:nil];
-    tabBarVC.viewControllers = @[bookKeepingNavi, reportFormsNavi, financingNavi, moreNavi];
-    
-    SSJBooksTypeSelectViewController *booksTypeVC = [[SSJBooksTypeSelectViewController alloc]init];
-    SSJNavigationController *booksNav = [[SSJNavigationController alloc] initWithRootViewController:booksTypeVC];
-
-    MMDrawerController *drawerController = [[MMDrawerController alloc]
-                             initWithCenterViewController:tabBarVC
-                             leftDrawerViewController:booksNav
-                             rightDrawerViewController:nil];
-    [drawerController setShowsShadow:NO];
-    [drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
-    [drawerController setOpenDrawerGestureModeMask:MMOpenDrawerGestureModeAll];
-    [drawerController setCloseDrawerGestureModeMask:MMCloseDrawerGestureModeAll];
-    drawerController.view.backgroundColor = [UIColor whiteColor];
-    
-
-//    drawerController.showsShadow = YES;
-    [drawerController setDrawerVisualStateBlock:^(MMDrawerController *drawerController, MMDrawerSide drawerSide, CGFloat percentVisible) {
-        self.maskView.currentAplha = percentVisible;
-        if (percentVisible > 0.f) {
-            [drawerController.centerViewController.view addSubview:self.maskView];
-        }else{
-            [self.maskView removeFromSuperview];
-        }
-    }];
-    
-    [UIApplication sharedApplication].keyWindow.rootViewController = drawerController;
+    if (SSJLaunchTimesForAllVersion() == 1) {
+        SSJNewUserFirstStartViewController *newUserVc = [[SSJNewUserFirstStartViewController alloc] initWithNibName:nil bundle:nil];
+        SSJNavigationController *newUserNavi = [[SSJNavigationController alloc] initWithRootViewController:newUserVc];
+        [UIApplication sharedApplication].keyWindow.rootViewController = newUserNavi;
+    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
+        
+    } else {
+        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
+        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];
+        [UIApplication sharedApplication].keyWindow.rootViewController = launcherNavi;
+    }
 }
     
 #pragma mark - qq快登

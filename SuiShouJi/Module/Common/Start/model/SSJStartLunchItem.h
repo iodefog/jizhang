@@ -21,7 +21,7 @@
 @property (readonly, nonatomic, copy) NSString *animImageUrl;
 
 //是否下发 0 调用本地图片 1 使用下发type判断
-@property (nonatomic, copy) NSString *open;
+@property (nonatomic, assign) NSInteger open;
 
 //0:静态图片,1:动态图片,2:图文
 @property (nonatomic, assign) NSInteger type;

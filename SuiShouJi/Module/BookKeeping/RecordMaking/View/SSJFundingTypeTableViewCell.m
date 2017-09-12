@@ -69,7 +69,7 @@
     }
 }
 
--(void)setItem:(SSJFundingItem *)item{
+-(void)setItem:(SSJFinancingHomeitem *)item{
     _item = item;
     if ([_item.fundingParent isEqualToString:@"root"]) {
         if (_item.fundingMemo == nil) {

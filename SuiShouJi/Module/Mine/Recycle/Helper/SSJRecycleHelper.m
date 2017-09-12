@@ -12,6 +12,7 @@
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleListCell.h"
 #import "SSJBooksTypeItem.h"
+#import "SSJLoanCompoundChargeModel.h"
 
 @interface _SSJRecycleTransferModel : NSObject
 
@@ -41,6 +42,22 @@
 @implementation _SSJRecycleChargeModel
 @end
 
+
+@interface _SSJLoanModel : NSObject
+
+@property (nonatomic, copy) NSString *ID;
+
+@property (nonatomic) SSJLoanType type;
+
+@property (nonatomic, copy) NSString *fundID;
+
+@property (nonatomic, copy) NSArray<SSJLoanCompoundChargeModel *> *chargeModels;
+
+@end
+
+@implementation _SSJLoanModel
+
+@end
 
 
 @implementation SSJRecycleHelper
@@ -334,7 +351,7 @@
     }];
 }
 
-#pragma mark - 恢复流水
+#pragma mark - 恢复流水及其相关数据
 + (void)recoverChargeWithRecycleModel:(SSJRecycleModel *)recycleModel
                            inDatabase:(SSJDatabase *)db
                                 error:(NSError **)error {
@@ -355,24 +372,12 @@
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
     // 如果流水依赖的资金账户也被删除了，先恢复资金账户
-    SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", recycleModel.sundryID];
-    if (fundType == SSJFinancingParentPaidLeave
-        || fundType == SSJFinancingParentDebt
-        || fundType == SSJFinancingParentFixedEarnings) {
-        // 借贷和固收理财账户的删除状态是用idisplay表示的
-        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, cwritedate = ?, iversion = ? where cfundid = (select ifunsid from bk_user_charge where ichargeid = ?) and idisplay = 0", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return;
-        }
-    } else {
-        if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = (select ifunsid from bk_user_charge where ichargeid = ?) and operatortype = 2", writeDateStr, @(SSJSyncVersion()), recycleModel.sundryID]) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return;
-        }
+    NSString *fundID = [db stringForQuery:@"select ifunsid from bk_user_charge where ichargeid = ?", recycleModel.sundryID];
+    if (![self recoverFundWithID:fundID
+                       writeDate:writeDateStr
+                        database:db
+                           error:error]) {
+        return;
     }
     
     // 如果流水依赖的个人账本也被删除了，先恢复账本
@@ -400,7 +405,7 @@
     }
 }
 
-#pragma mark - 恢复资金账户
+#pragma mark - 恢复资金账户及其相关数据
 + (void)recoverFundWithRecycleModel:(SSJRecycleModel *)recycleModel
                          inDatabase:(SSJDatabase *)db
                               error:(NSError **)error {
@@ -408,24 +413,11 @@
     NSString *clientDate = [db stringForQuery:@"select clientadddate from bk_recycle where rid = ?", recycleModel.ID];
     
     // 恢复资金账户
-    SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", recycleModel.sundryID];
-    if (fundType == SSJFinancingParentPaidLeave
-        || fundType == SSJFinancingParentDebt
-        || fundType == SSJFinancingParentFixedEarnings) {
-        // 借贷和固收理财账户的删除状态是用idisplay表示的
-        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, cwritedate = ?, iversion = ? where cfundid = ? and cwritedate = ? and idisplay = 0", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate]) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return;
-        }
-    } else {
-        if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = ? and cwritedate = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), recycleModel.sundryID, clientDate]) {
-            if (error) {
-                *error = [db lastError];
-            }
-            return;
-        }
+    if (![self recoverFundWithID:recycleModel.sundryID
+                       writeDate:writeDate
+                        database:db
+                           error:error]) {
+        return;
     }
     
     // 如果此账户是信用卡账户，还要恢复信用卡表中的记录
@@ -529,7 +521,7 @@
     }
 }
 
-#pragma mark - 恢复账本
+#pragma mark - 恢复账本及其相关数据
 + (void)recoverBookWithRecycleModel:(SSJRecycleModel *)recycleModel
                          inDatabase:(SSJDatabase *)db
                               error:(NSError **)error {
@@ -552,21 +544,21 @@
         return;
     }
     
-    // 恢复此账户下流水依赖的资金账户
+    // 恢复此账本下流水依赖的资金账户
     // 注意：过滤特殊流水，例如：平账、转账等等；因为老版本对这些特殊流水也写入了booksid
     SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", recycleModel.sundryID];
     if (fundType == SSJFinancingParentPaidLeave
         || fundType == SSJFinancingParentDebt
         || fundType == SSJFinancingParentFixedEarnings) {
         // 借贷和固收理财账户的删除状态是用idisplay表示的
-        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, cwritedate = ?, iversion = ? where idisplay = 0 and cfundid in (select ifunsid from bk_user_charge where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, cwritedate = ?, iversion = ? where idisplay = 0 and cfundid in (select ifunsid from bk_user_charge where cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), recycleModel.sundryID]) {
             if (error) {
                 *error = [db lastError];
             }
             return;
         }
     } else {
-        if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cfundid in (select ifunsid from bk_user_charge where cwritedate = ? and cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), clientDate, recycleModel.sundryID]) {
+        if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where operatortype = 2 and cfundid in (select ifunsid from bk_user_charge where cbooksid = ? and operatortype = 2 and length(ibillid) >= 4)", writeDate, @(SSJSyncVersion()), recycleModel.sundryID]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -704,49 +696,129 @@
                     writeDate:(NSString *)writeDate
                    inDatabase:(SSJDatabase *)db
                         error:(NSError **)error {
-    // 查询此账户下已删除的借贷流水
-    NSArray *loanChargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeLoan
-                                                           clientDate:clientDate
-                                                               fundID:fundID
-                                                           inDatabase:db];
+    
+    // 查询要恢复的借贷项目
+    NSMutableArray *loanModels = [NSMutableArray array];
+    FMResultSet *rs = [db executeQuery:@"select loanid, cthefundid, itype from bk_loan where cwritedate = ? and operatortype = 2", clientDate];
+    while ([rs next]) {
+        _SSJLoanModel *model = [[_SSJLoanModel alloc] init];
+        model.ID = [rs stringForColumn:@"loanid"];
+        model.fundID = [rs stringForColumn:@"cthefundid"];
+        model.type = [rs intForColumn:@"itype"];
+        [loanModels addObject:model];
+    }
+    [rs close];
+    
+    // 查询每个借贷项目要恢复的流水
+    for (_SSJLoanModel *loanModel in loanModels) {
+        NSMutableArray *compoundModels = [NSMutableArray array];
+        // 查询借贷账户流水
+        rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid from bk_user_charge where cid = ? and cwritedate = ? and ifunsid = ? and ichargetype = ? and operatortype = 2", loanModel.ID, clientDate, loanModel.fundID, @(SSJChargeIdTypeLoan)];
+        while ([rs next]) {
+            SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+            chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
+            chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
+            chargeModel.billId = [rs stringForColumn:@"ibillid"];
+            
+            SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+            compoundModel.chargeModel = chargeModel;
+            [compoundModels addObject:compoundModel];
+        }
+        [rs close];
+        
+        // 查询目标账户流水
+        rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid from bk_user_charge where cid = ? and cwritedate = ? and ifunsid <> ? and ichargetype = ? and operatortype = 2", loanModel.ID, clientDate, loanModel.fundID, @(SSJChargeIdTypeLoan)];
+        while ([rs next]) {
+            SSJLoanChargeModel *chargeModel = [[SSJLoanChargeModel alloc] init];
+            chargeModel.chargeId = [rs stringForColumn:@"ichargeid"];
+            chargeModel.fundId = [rs stringForColumn:@"ifunsid"];
+            chargeModel.billId = [rs stringForColumn:@"ibillid"];
+            
+            // 根据chargeid匹配复合流水
+            for (SSJLoanCompoundChargeModel *compoundModel in compoundModels) {
+                NSString *preChargeID_1 = [[compoundModel.chargeModel.chargeId componentsSeparatedByString:@"_"] firstObject];
+                NSString *preChargeID_2 = [[chargeModel.chargeId componentsSeparatedByString:@"_"] firstObject];
+                if ([preChargeID_1 isEqualToString:preChargeID_2]) {
+                    SSJSpecialBillId billID = [chargeModel.billId integerValue];
+                    if (billID == SSJSpecialBillIdLoanInterestEarning
+                        || billID == SSJSpecialBillIdLoanInterestExpense) {
+                        compoundModel.interestChargeModel = chargeModel;
+                    } else {
+                        compoundModel.targetChargeModel = chargeModel;
+                    }
+                    break;
+                }
+            }
+        }
+        [rs close];
+        
+        loanModel.chargeModels = compoundModels;
+    }
     
     NSTimeInterval timestamp = [NSDate date].timeIntervalSince1970;
-    for (_SSJRecycleChargeModel *model in loanChargeModels) {
-        SSJSpecialBillId billID = [model.billID integerValue];
-        if (billID == SSJSpecialBillIdBalanceRollIn
-            || billID == SSJSpecialBillIdBalanceRollOut
-            || billID == SSJSpecialBillIdLoanChangeEarning
-            || billID == SSJSpecialBillIdLoanChangeExpense
-            || billID == SSJSpecialBillIdLoanBalanceRollIn
-            || billID == SSJSpecialBillIdLoanBalanceRollOut) {
-            // 恢复目标资金账户
-            if (![self recoverTargetFundWithChargeModel:model
-                                              writeDate:writeDate
-                                             chargeType:SSJChargeIdTypeLoan
-                                             inDatabase:db
-                                                  error:error]) {
+    for (_SSJLoanModel *loanModel in loanModels) {
+        // 恢复借贷项目
+        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), loanModel.ID]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+        
+        for (SSJLoanCompoundChargeModel *compoundModel in loanModel.chargeModels) {
+            NSString *updateDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            // 恢复本账户流水
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ?", updateDate, @(SSJSyncVersion()), compoundModel.chargeModel.chargeId]) {
+                if (error) {
+                    *error = [db lastError];
+                }
                 return NO;
             }
-        }
-        
-        // 恢复借贷项目
-        if (![db executeUpdate:@"update bk_loan set operatortype = 1, cwritedate = ?, iversion = ? where loanid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), model.sundryID]) {
-            if (error) {
-                *error = [db lastError];
+            
+            // 恢复本账户流水的资金账户
+            if (![self recoverFundWithID:compoundModel.chargeModel.fundId
+                               writeDate:writeDate
+                                database:db
+                                   error:error]) {
+                return NO;
             }
-            return NO;
-        }
-        
-        // 恢复借贷流水；因为老版本（2.8.0之前）借贷流水是通过writedate匹配的，所以要兼容老版本writedate不能完全相同
-        NSString *chargeWriteDate = [[NSDate dateWithTimeIntervalSince1970:timestamp] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        NSString *preChargeID = [[model.ID componentsSeparatedByString:@"_"] firstObject];
-        if (![db executeUpdate:@"update bk_user_charge set operatortype = 1, iversion = ?, cwritedate = ? where ichargeid like ? || '_%' and ichargetype = ? and operatortype = 2", @(SSJSyncVersion()), chargeWriteDate, preChargeID, @(SSJChargeIdTypeLoan)]) {
-            if (error) {
-                *error = [db lastError];
+            
+            // 恢复目标账户流水
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ?", updateDate, @(SSJSyncVersion()), compoundModel.targetChargeModel.chargeId]) {
+                if (error) {
+                    *error = [db lastError];
+                }
+                return NO;
             }
-            return NO;
+            
+            // 恢复目标账户
+            if (![self recoverFundWithID:compoundModel.targetChargeModel.fundId
+                               writeDate:writeDate
+                                database:db
+                                   error:error]) {
+                return NO;
+            }
+            
+            if (compoundModel.interestChargeModel) {
+                // 恢复利息流水
+                if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 1 where ichargeid = ?", updateDate, @(SSJSyncVersion()), compoundModel.interestChargeModel.chargeId]) {
+                    if (error) {
+                        *error = [db lastError];
+                    }
+                    return NO;
+                }
+                
+                // 恢复利息流水资金账户
+                if (![self recoverFundWithID:compoundModel.interestChargeModel.fundId
+                                   writeDate:writeDate
+                                    database:db
+                                       error:error]) {
+                    return NO;
+                }
+            }
+            
+            timestamp += 0.001;
         }
-        timestamp += 0.001;
     }
     
     return YES;
@@ -856,6 +928,35 @@
             *error = [db lastError];
         }
         return NO;
+    }
+    
+    return YES;
+}
+
+#pragma mark - 恢复资金账户
++ (BOOL)recoverFundWithID:(NSString *)fundID
+                writeDate:(NSString *)writeDate
+                 database:(FMDatabase *)db
+                    error:(NSError **)error {
+    
+    SSJFinancingParent fundType = [db intForQuery:@"select cparent from bk_fund_info where cfundid = ?", fundID];
+    if (fundType == SSJFinancingParentPaidLeave
+        || fundType == SSJFinancingParentDebt
+        || fundType == SSJFinancingParentFixedEarnings) {
+        // 借贷和固收理财账户的删除状态是用idisplay表示的
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 1, cwritedate = ?, iversion = ? where cfundid = ? and idisplay = 0", writeDate, @(SSJSyncVersion()), fundID]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
+    } else {
+        if (![db executeUpdate:@"update bk_fund_info set operatortype = 1, cwritedate = ?, iversion = ? where cfundid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), fundID]) {
+            if (error) {
+                *error = [db lastError];
+            }
+            return NO;
+        }
     }
     
     return YES;

@@ -195,7 +195,7 @@ static const CGFloat kRadius = 12.f;
     [CATransaction commit];
     self.fundingNameLabel.text = item.fundingName;
     [self.fundingNameLabel sizeToFit];
-    self.fundingBalanceLabel.text = [NSString stringWithFormat:@"%.2f",item.fundingAmount];
+    self.fundingBalanceLabel.text = [[NSString stringWithFormat:@"%f",item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
     [self.fundingBalanceLabel sizeToFit];
     self.fundingImage.image = [[UIImage imageNamed:item.fundingIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     if (!self.item.cardItem) {

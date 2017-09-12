@@ -10,4 +10,8 @@
 
 @interface SSJStartChoiceView : UIView
 
+@property (nonatomic, copy) void(^jumpOutButtonClickBlock)();
+
+- (void)startAnimating;
+
 @end
