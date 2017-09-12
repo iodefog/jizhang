@@ -415,8 +415,8 @@ static NSString *kTitle6 = @"结算日期";
     }
     
     if (_isLiXiOn) {
-        if (!self.poundageTextF.text.length) {
-            [CDAutoHideMessageHUD showMessage:@"请输入金额"];
+        if (!self.poundageTextF.text.length && [self.poundageTextF.text doubleValue] <= 0) {
+            [CDAutoHideMessageHUD showMessage:@"请输入手续费"];
             return NO;
         }
     }
