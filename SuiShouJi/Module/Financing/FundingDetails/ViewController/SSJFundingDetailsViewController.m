@@ -235,9 +235,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
                     addvc.chargeItem = chargeItem;
                     [self.navigationController pushViewController:addvc animated:YES];
                 } else if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOutInterest) {
-                    SSJFixedFinanceRedemViewController *addvc = [[SSJFixedFinanceRedemViewController alloc] init];
+                    SSJFixedFinancesSettlementViewController *addvc = [[SSJFixedFinancesSettlementViewController alloc] init];
                     addvc.financeModel = productItem;
-                    addvc.chargeModel = chargeItem;
+                    addvc.chargeItem = chargeItem;
                     [self.navigationController pushViewController:addvc animated:YES];
                 }
                 
