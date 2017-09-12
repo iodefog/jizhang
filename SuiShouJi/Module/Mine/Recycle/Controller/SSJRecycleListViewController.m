@@ -12,8 +12,11 @@
 #import "SSJRecycleRecoverClearCell.h"
 #import "SSJRecycleListHeaderView.h"
 #import "SSJBudgetNodataRemindView.h"
+#import "SSJRecycleRecoverAlertView.h"
+#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleHelper.h"
+#import "SSJRewardViewController.h"
 
 static NSString *const kHeaderID = @"kHeaderID";
 static NSString *const kRecycleListCellID = @"SSJRecycleListCell";
@@ -32,6 +35,10 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 @property (nonatomic, strong) UIBarButtonItem *editButtonItem;
 
 @property (nonatomic, strong) SSJBudgetNodataRemindView *noDataRemindView;
+
+@property (nonatomic, strong) SSJRecycleRecoverAlertView *rewardAlertView;
+
+@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @end
 
@@ -145,19 +152,29 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
                 item.recoverBtnLoading = NO;
                 if (success) {
                     [self deleteCellsWithRecycleIDs:@[item.recycleID]];
+                    
+                    static BOOL rewardAlertShowed = NO;
+                    if (!rewardAlertShowed) {
+                        rewardAlertShowed = YES;
+                        [self.rewardAlertView show];
+                    }
                 }
             }];
         };
         cell.deleteBtnDidClick = ^(SSJRecycleRecoverClearCell *cell) {
             @strongify(self);
-            SSJRecycleRecoverClearCellItem *item = cell.cellItem;
-            item.recoverBtnLoading = YES;
-            [self clearData:@[item.recycleID] completion:^(BOOL success) {
-                item.recoverBtnLoading = NO;
-                if (success) {
-                    [self deleteCellsWithRecycleIDs:@[item.recycleID]];
-                }
-            }];
+            [self.authCodeAlertView show];
+            self.authCodeAlertView.finishVerification = ^{
+                @strongify(self);
+                SSJRecycleRecoverClearCellItem *item = cell.cellItem;
+                item.recoverBtnLoading = YES;
+                [self clearData:@[item.recycleID] completion:^(BOOL success) {
+                    item.recoverBtnLoading = NO;
+                    if (success) {
+                        [self deleteCellsWithRecycleIDs:@[item.recycleID]];
+                    }
+                }];
+            };
         };
         return cell;
         
@@ -230,11 +247,12 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
 }
 
 - (void)updateAppearance {
-    [_warningHeaderView updateAppearanceAccordingToTheme];
-    _deleteBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
-    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    [_deleteBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
-    [_noDataRemindView updateAppearance];
+    [self.warningHeaderView updateAppearanceAccordingToTheme];
+    self.deleteBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
+    [self.deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    [self.deleteBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    [self.noDataRemindView updateAppearance];
+    [self.rewardAlertView updateAppearanceAccordingToTheme];
 }
 
 - (void)rightBarItemAction {
@@ -410,25 +428,29 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
         @weakify(self);
         [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *button) {
             @strongify(self);
-            NSMutableArray *selectedIDs = [NSMutableArray array];
-            for (SSJRecycleListModel *model in self.listModels) {
-                for (SSJRecycleListCellItem *cellItem in model.cellItems) {
-                    if (![cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
-                        continue;
-                    }
-                    if (cellItem.state == SSJRecycleListCellStateSelected) {
-                        [selectedIDs addObject:cellItem.recycleID];
+            [self.authCodeAlertView show];
+            self.authCodeAlertView.finishVerification = ^{
+                @strongify(self);
+                NSMutableArray *selectedIDs = [NSMutableArray array];
+                for (SSJRecycleListModel *model in self.listModels) {
+                    for (SSJRecycleListCellItem *cellItem in model.cellItems) {
+                        if (![cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
+                            continue;
+                        }
+                        if (cellItem.state == SSJRecycleListCellStateSelected) {
+                            [selectedIDs addObject:cellItem.recycleID];
+                        }
                     }
                 }
-            }
-            
-            [button ssj_showLoadingIndicator];
-            [self clearData:selectedIDs completion:^(BOOL success) {
-                [button ssj_hideLoadingIndicator];
-                if (success) {
-                    [self deleteCellsWithRecycleIDs:selectedIDs];
-                }
-            }];
+                
+                [button ssj_showLoadingIndicator];
+                [self clearData:selectedIDs completion:^(BOOL success) {
+                    [button ssj_hideLoadingIndicator];
+                    if (success) {
+                        [self deleteCellsWithRecycleIDs:selectedIDs];
+                    }
+                }];
+            };
         }];
     }
     return _deleteBtn;
@@ -448,6 +470,31 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
         _noDataRemindView.title = @"空空如也～";
     }
     return _noDataRemindView;
+}
+
+- (SSJRecycleRecoverAlertView *)rewardAlertView {
+    if (!_rewardAlertView) {
+        _rewardAlertView = [SSJRecycleRecoverAlertView alertView];
+        @weakify(self);
+        _rewardAlertView.confirmBlock = ^{
+            @strongify(self);
+            SSJRewardViewController *rewardVC = [[SSJRewardViewController alloc] init];
+            [self.navigationController pushViewController:rewardVC animated:YES];
+        };
+    }
+    return _rewardAlertView;
+}
+
+- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
+    if (!_authCodeAlertView) {
+        __weak typeof(self) wself = self;
+        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 5;
+        style.alignment = NSTextAlignmentCenter;
+        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"数据将彻底删除，无法恢复！\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
+    }
+    return _authCodeAlertView;
 }
 
 @end
