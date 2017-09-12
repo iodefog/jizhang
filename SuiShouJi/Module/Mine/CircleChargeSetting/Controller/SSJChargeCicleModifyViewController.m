@@ -358,6 +358,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.fundName;
         circleModifyCell.cellTypeImageName = self.item.fundImage;
+        
     }else if ([title isEqualToString:kTitle10]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
@@ -451,6 +452,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 weakSelf.item.fundId = item.fundingID;
                 weakSelf.item.fundName = item.fundingName;
                 weakSelf.item.fundImage = item.fundingIcon;
+                weakSelf.item.colorValue = item.fundingColor;
                 [weakSelf.tableView reloadData];
                 [weakSelf.fundSelectView dismiss];
             }else{
@@ -460,6 +462,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                     weakSelf.item.fundId = item.fundingID;
                     weakSelf.item.fundName = item.fundingName;
                     weakSelf.item.fundImage = item.fundingIcon;
+                    weakSelf.item.colorValue = item.fundingColor;
                     [weakSelf.tableView reloadData];
 
                 };

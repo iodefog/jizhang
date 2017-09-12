@@ -185,6 +185,9 @@
             item.fundingID = [rs stringForColumn:@"CFUNDID"];
             item.fundingName = [rs stringForColumn:@"CACCTNAME"];
             item.fundingParent = [rs stringForColumn:@"CPARENT"];
+            item.startColor = [rs stringForColumn:@"CSTARTCOLOR"];
+            item.endColor = [rs stringForColumn:@"CENDCOLOR"];
+
             if (!(!self.needCreditOrNot && ([item.fundingParent isEqualToString:@"3"] || [item.fundingParent isEqualToString:@"16"]))) {
                 [_items addObject:item];
             }

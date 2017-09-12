@@ -31,4 +31,6 @@
 
 @property(nonatomic, strong) NSString *cellTypeImageName;
 
+@property (nonatomic, strong) NSString *cellTypeImageColor;
+
 @end
