@@ -102,7 +102,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
 - (void)startSyncWithSuccess:(void (^)(void))success failure:(void (^)(NSError *error))failure {
     __block NSError *tError = nil;
     
-    //  获取上次同步成功的版本号
+    // 获取上次同步成功的版本号
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         self.lastSuccessSyncVersion = [SSJSyncTable lastSuccessSyncVersionForUserId:self.userId inDatabase:db];
         if (self.lastSuccessSyncVersion == SSJ_INVALID_SYNC_VERSION) {
@@ -117,7 +117,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         return;
     }
     
-    //  查询要同步的数据
+    // 查询要同步的数据
     NSData *data = [self getDataToSyncWithError:&tError];
     if (tError) {
         if (failure) {
@@ -134,7 +134,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         return;
     }
     
-    //  压缩文件，准备上传
+    // 压缩文件，准备上传
     NSData *zipData = [self zipData:data error:&tError];
     
     if (tError) {
@@ -145,7 +145,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         return;
     }
     
-    //  上传数据
+    // 上传数据
     [self uploadData:zipData completionHandler:^(NSURLResponse *response, id responseObject, NSError *error) {
         // 因为请求回调是在主线程队列中执行，所以在放到同步队列里执行以下操作
         dispatch_async(self.syncQueue, ^{
@@ -175,7 +175,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 return;
             }
             
-            //  返回未知数据
+            // 返回未知数据
             if (![contentType isEqualToString:@"APPLICATION/OCTET-STREAM"]) {
                 SSJPRINT(@">>> SSJ warning:sync response unknown content type:%@", contentType);
                 tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeDataSyncFailed userInfo:@{NSLocalizedDescriptionKey:@"sync response unknown content type"}];
@@ -186,8 +186,8 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             }
             
             
-            //  返回的是zip压缩包
-            //  将数据解压
+            // 返回的是zip压缩包
+            // 将数据解压
             NSError *tError = nil;
             NSData *jsonData = [self unzipData:responseObject error:&tError];
             
@@ -199,7 +199,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 return;
             }
             
-            //  解析json数据
+            // 解析json数据
             NSDictionary *tableInfo = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&tError];
             if (tError) {
                 SSJPRINT(@">>> SSJ warning:an error occured when parse json data\n error:%@", tError);
@@ -221,7 +221,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
                 return;
             }
             
-            //  合并数据
+            // 合并数据
             if (![self mergeData:tableInfo error:&tError]) {
                 tError = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:[tError localizedDescription]}];
                 SSJPRINT(@">>> SSJ warning:server response an error:%@", tError);
@@ -241,15 +241,15 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     }];
 }
 
-//  获取要上传的数据
+// 获取要上传的数据
 - (NSData *)getDataToSyncWithError:(NSError * __autoreleasing *)error {
     NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
     
-    //  查询要同步的表中的数据
+    // 查询要同步的表中的数据
 //    __block NSString *userId = nil;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         
-        //  更新当前的版本号
+        // 更新当前的版本号
         SSJUpdateSyncVersion(self.lastSuccessSyncVersion + 2);
         
         for (NSSet *layer in self.syncTables) {
@@ -272,7 +272,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         return nil;
     }
     
-    //  将查询得到的结果放入字典中，转换成json数据
+    // 将查询得到的结果放入字典中，转换成json数据
     NSData *syncData = [NSJSONSerialization dataWithJSONObject:jsonObject
                                                        options:NSJSONWritingPrettyPrinted
                                                          error:error];
@@ -288,10 +288,9 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     return syncData;
 }
 
-//  上传文件
+// 上传文件
 - (void)uploadData:(NSData *)data completionHandler:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completionHandler {
-    
-    //  创建请求
+    // 创建请求
     NSError *tError = nil;
     NSMutableURLRequest *request = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:SSJURLWithAPI(@"/sync/syncdata.go") parameters:nil constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         NSString *fileName = [NSString stringWithFormat:@"ios_sync_data_%lld.zip", SSJMilliTimestamp()];
@@ -305,7 +304,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         return;
     }
     
-    //  封装参数，传入请求头
+    // 封装参数，传入请求头
     NSString *userId = self.userId;
     NSString *imei = [UIDevice currentDevice].identifierForVendor.UUIDString;
     NSString *timestamp = [NSString stringWithFormat:@"%lld", SSJMilliTimestamp()];
@@ -328,13 +327,12 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     
     request.timeoutInterval = kTimeoutInterval;
     
-    //  开始上传
-    
+    // 开始上传
     NSURLSessionUploadTask *task = [self.sessionManager uploadTaskWithStreamedRequest:request progress:nil completionHandler:completionHandler];
     [task resume];
 }
 
-//  合并json数据
+// 合并json数据
 - (BOOL)mergeData:(NSDictionary *)tableInfo error:(NSError **)error {
     
     if (![tableInfo isKindOfClass:[NSDictionary class]]) {
@@ -417,7 +415,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     return mergeSuccess;
 }
 
-//  将data进行zip压缩
+// 将data进行zip压缩
 - (NSData *)zipData:(NSData *)data error:(NSError **)error {
     NSString *syncFilePath = [[self syncFileDirectory] stringByAppendingPathComponent:kUploadSyncFileName];
     if (![data writeToFile:syncFilePath options:NSDataWritingAtomic error:error]) {
@@ -435,7 +433,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
     return [NSData dataWithContentsOfFile:zipPath];
 }
 
-//  将data进行解压
+// 将data进行解压
 - (NSData *)unzipData:(NSData *)data error:(NSError **)error {
     NSString *zipFilePath = [[self syncFileDirectory] stringByAppendingPathComponent:kDownloadSyncZipFileName];
     if (![data writeToFile:zipFilePath options:NSDataWritingAtomic error:error]) {
@@ -552,7 +550,7 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
         NSDictionary *data = [NSJSONSerialization JSONObjectWithData:jsonData options:0 error:&error];
         SSJDataSynchronizeTask *task = [SSJDataSynchronizeTask task];
         task.userId = SSJUSERID();
-        //  合并数据
+        // 合并数据
         if ([task mergeData:data error:&error]) {
             [SSJDataSynchronizeExtraProcesser extraProcessWithUserID:task.userId data:data];
             [subscriber sendCompleted];

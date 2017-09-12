@@ -21,6 +21,8 @@
 
 @end
 
+static const CGFloat kSpace = 8;
+
 @implementation _SSJRecycleListCellSeparatorView
 
 - (void)dealloc {
@@ -30,6 +32,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.labels = [NSMutableArray array];
+        self.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
 }
@@ -37,16 +40,21 @@
 - (void)updateConstraints {
     [self.labels enumerateObjectsUsingBlock:^(UILabel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [obj mas_remakeConstraints:^(MASConstraintMaker *make) {
-            if (idx == 0) {
+            if (idx == 0) { 
                 make.left.mas_equalTo(self);
             } else {
                 UILabel *preLab = self.labels[idx - 1];
-                make.left.mas_equalTo(preLab.mas_right);
+                make.left.mas_equalTo(preLab.mas_right).offset(kSpace * 2);
             }
             make.top.and.bottom.mas_equalTo(self);
-            
-            CGFloat wdith = [obj.text sizeWithAttributes:@{NSFontAttributeName:obj.font}].width + 10;
-            make.width.mas_equalTo(wdith);
+            CGFloat width = [obj.text sizeWithAttributes:@{NSFontAttributeName:obj.font}].width;
+            CGFloat maxWidth = 100;
+            if (idx == self.titles.count - 1) {
+                make.width.mas_equalTo(MIN(width, maxWidth)).priorityLow();
+                make.right.mas_lessThanOrEqualTo(self);
+            } else {
+                make.width.mas_equalTo(MIN(width, maxWidth));
+            }
         }];
     }];
     [super updateConstraints];
@@ -61,9 +69,9 @@
             UILabel *lab = [[UILabel alloc] init];
             lab.textColor = SSJ_SECONDARY_COLOR;
             lab.textAlignment = NSTextAlignmentCenter;
-            [lab ssj_setBorderWidth:2];
+            [lab ssj_setBorderWidth:1];
             [lab ssj_setBorderColor:SSJ_BORDER_COLOR];
-            [lab ssj_setBorderInsets:UIEdgeInsetsMake(2, 0, 2, 0)];
+            [lab ssj_setBorderInsets:UIEdgeInsetsMake(2, -kSpace, 2, -kSpace)];
             lab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
             [self.labels addObject:lab];
             [self addSubview:lab];
@@ -134,6 +142,7 @@
         [self.contentView addSubview:self.arrowBtn];
         [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
+        self.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
 }
@@ -158,7 +167,7 @@
     
     [_subtitleView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_titleLab.mas_bottom).offset(8);
-        make.left.mas_equalTo(_icon.mas_right).offset(5);
+        make.left.mas_equalTo(_titleLab);
         make.right.mas_equalTo(self.contentView).offset(-15);
         make.height.mas_equalTo(13);
     }];
