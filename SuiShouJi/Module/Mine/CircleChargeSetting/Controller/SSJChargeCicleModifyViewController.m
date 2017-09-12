@@ -196,6 +196,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         __weak typeof(self) weakSelf = self;
         billTypeSelectVC.incomeOrExpenture = self.item.incomeOrExpence;
         billTypeSelectVC.selectedId = self.item.billId;
+        billTypeSelectVC.booksId = self.item.booksId;
         billTypeSelectVC.typeSelectBlock = ^(SSJRecordMakingBillTypeSelectionCellItem *item){
             weakSelf.item.typeName = item.title;
             weakSelf.item.billId = item.ID;

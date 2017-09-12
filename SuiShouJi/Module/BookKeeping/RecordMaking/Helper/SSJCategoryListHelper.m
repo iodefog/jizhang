@@ -33,9 +33,6 @@ const int SSJImmovableOrder = INT_MAX;
         NSString *booksID = booksId;
         if (!booksId.length) {
             booksID = [db stringForQuery:@"select ccurrentbooksid from bk_user where cuserid = ?",userId];
-            if (!booksID.length) {
-                booksID = userId;
-            }
         }
         NSMutableArray *categoryList =[NSMutableArray array];
         FMResultSet *result = [db executeQuery:@"select cname, ccolor, cicoin, cwritedate, cbillid, iorder from bk_user_bill_type where itype = ? and cuserid = ? and cbooksid = ? and operatortype <> 2 order by iorder, cwritedate, cbillid", @(billType), userId, booksID];

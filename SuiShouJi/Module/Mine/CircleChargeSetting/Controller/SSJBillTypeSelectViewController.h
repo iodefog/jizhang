@@ -10,12 +10,14 @@
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
 
 @interface SSJBillTypeSelectViewController : SSJNewBaseTableViewController
-@property (nonatomic) BOOL incomeOrExpenture;
-@property(nonatomic, strong) NSString *selectedId;
 
+@property (nonatomic) BOOL incomeOrExpenture;
+
+@property(nonatomic, strong) NSString *selectedId;
 
 typedef void (^typeSelectBlock)(SSJRecordMakingBillTypeSelectionCellItem *item);
 
+@property (nonatomic, strong) NSString *booksId;
 
 @property(nonatomic, copy) typeSelectBlock typeSelectBlock;
 
