@@ -164,6 +164,11 @@
     [self setNeedsLayout];
 }
 
+- (void)setCellTypeImageColor:(NSString *)cellTypeImageColor {
+    _cellTypeImageColor = cellTypeImageColor;
+    self.typeImageView.tintColor = [UIColor ssj_colorWithHex:_cellTypeImageColor];
+}
+
 - (void)updateCellAppearanceAfterThemeChanged{
     [super updateCellAppearanceAfterThemeChanged];
     self.cellTitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
