@@ -204,7 +204,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
         _headerSegmentView = [[SCYSlidePagingHeaderView alloc] initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 36)];
         _headerSegmentView.customDelegate = self;
         _headerSegmentView.buttonClickAnimated = YES;
-        _headerSegmentView.titles = @[@"未结清", @"已结清", @"全部"];
+        _headerSegmentView.titles = @[@"未结算", @"已结算", @"全部"];
         [_headerSegmentView setTabSize:CGSizeMake(_headerSegmentView.width / _headerSegmentView.titles.count, 3)];
         [_headerSegmentView ssj_setBorderWidth:1];
         [_headerSegmentView ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
