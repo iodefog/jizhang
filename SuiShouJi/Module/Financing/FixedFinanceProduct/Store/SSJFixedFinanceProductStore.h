@@ -433,6 +433,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 + (double)caluclateTheBalanceOfCurrentWithModel:(SSJFixedFinanceProductItem *)productItem;
 
 
+#pragma mark - 定期派发流水
 /**
  生成某个理财产品在起止时间内的利息派发流水  每日流水
  
