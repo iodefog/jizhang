@@ -38,6 +38,33 @@
     return [NSSet setWithObject:@"cfundid"];
 }
 
++ (NSSet *)fundTypes {
+    static dispatch_once_t onceToken;
+    static NSSet *types = nil;
+    dispatch_once(&onceToken, ^{
+        types = [NSSet setWithObjects:
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentCash],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentDepositCard],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentCreditCard],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentInvestment],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentFunds],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentValueCard],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentOnlineAccount],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentHousingFund],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentReceivableMoney],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentPaidLeave],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentDebt],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentSocialSecurity],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentWeiXin],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentAlipay],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentOthers],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentHuabei],
+                 [NSString stringWithFormat:@"%d", (int)SSJFinancingParentFixedEarnings],
+                 nil];
+    });
+    return types;
+}
+
 - (instancetype)init {
     if (self = [super init]) {
         self.subjectToDeletion = NO;
@@ -125,7 +152,7 @@
 }
 
 - (BOOL)shouldMergeRecord:(NSDictionary *)record forUserId:(NSString *)userId inDatabase:(FMDatabase *)db error:(NSError **)error {
-    return [db boolForQuery:@"select count(*) from BK_FUND_INFO where CFUNDID = ?", record[@"cparent"]];
+    return [[[self class] fundTypes] containsObject:record[@"cparent"]];
 }
 
 @end
