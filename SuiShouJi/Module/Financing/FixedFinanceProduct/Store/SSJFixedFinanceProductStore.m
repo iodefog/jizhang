@@ -1884,7 +1884,7 @@
                 for (NSInteger i=0; i<addAndRedemChargeItems.count; i++) {
                     SSJFixedFinanceProductChargeItem *chaItem = [addAndRedemChargeItems ssj_safeObjectAtIndex:i];
                     //如果当日生成利息的时间早于变动时间那么就返回上一次的利息和本金
-                    if ([billDate isEarlierThan:chaItem.billDate]) {
+                    if ([billDate isEarlierThanOrEqualTo:chaItem.billDate]) {
                         lixi = lastLixi;
                         break;
                     }
