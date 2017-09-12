@@ -84,6 +84,7 @@ static NSString *kTitle6 = @"结算日期";
 
 @property (nonatomic, copy) NSString *lixiStr;
 
+@property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherChareItem;
 @end
 
 @implementation SSJFixedFinancesSettlementViewController
@@ -238,8 +239,6 @@ static NSString *kTitle6 = @"结算日期";
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
 
-        
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         [cell setNeedsLayout];
@@ -252,12 +251,14 @@ static NSString *kTitle6 = @"结算日期";
         cell.textLabel.text = title;
         cell.additionalIcon.image = nil;
         cell.subtitleLabel.text = self.compoundModel.chargeModel.billDate ? [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"] : [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
-        cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         
         if (self.chargeItem) {
             cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
+        } else {
+            cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         [cell setNeedsLayout];
         return cell;
@@ -338,20 +339,37 @@ static NSString *kTitle6 = @"结算日期";
 - (void)loadData {
     MJWeakSelf;
     [self.view ssj_showLoadingIndicator];
-    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
-        _tableView.hidden = NO;
-        [self.view ssj_hideLoadingIndicator];
+    if (self.chargeItem) {
+        //查询当前charid对应的另外一跳流水
+        //通过另一条流水的fundid查找名称
+        [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(NSArray<SSJFixedFinanceProductChargeItem *> * _Nonnull charegItemArr) {
+            SSJFixedFinanceProductChargeItem *chargeItem = [charegItemArr lastObject];
+            weakSelf.otherChareItem = chargeItem;
+            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
+            [weakSelf funditem:funditem];
+            
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    } else {
         
-        // 设置默认账户
-        self.fundingSelectionView.items = items;
-        self.fundingSelectionView.selectedIndex = -1;
-        [_tableView reloadData];
-        
-    } failure:^(NSError * _Nonnull error) {
-        _tableView.hidden = NO;
-        [self.view ssj_hideLoadingIndicator];
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+        [self funditem:nil];
+    }
+
+//    [SSJLoanHelper queryFundModelListWithSuccess:^(NSArray <SSJLoanFundAccountSelectionViewItem *>*items) {
+//        _tableView.hidden = NO;
+//        [self.view ssj_hideLoadingIndicator];
+//        
+//        // 设置默认账户
+//        self.fundingSelectionView.items = items;
+//        self.fundingSelectionView.selectedIndex = -1;
+//        [_tableView reloadData];
+//        
+//    } failure:^(NSError * _Nonnull error) {
+//        _tableView.hidden = NO;
+//        [self.view ssj_hideLoadingIndicator];
+//        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+//    }];
 
 }
 
@@ -401,6 +419,11 @@ static NSString *kTitle6 = @"结算日期";
             [CDAutoHideMessageHUD showMessage:@"请输入金额"];
             return NO;
         }
+    }
+    
+    if (!self.liXiTextF.text.length || [self.liXiTextF.text doubleValue] < 0) {
+        [CDAutoHideMessageHUD showMessage:@"请输入利息"];
+        return NO;
     }
     
     if (self.fundingSelectionView.selectedIndex < 0) {

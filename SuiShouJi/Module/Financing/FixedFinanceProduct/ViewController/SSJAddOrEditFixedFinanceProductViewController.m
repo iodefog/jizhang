@@ -39,7 +39,7 @@
 
 
 static NSString *KTitle1 = @"投资名称";
-static NSString *KTitle2 = @"投资金额";
+static NSString *KTitle2 = @"原始本金";
 static NSString *KTitle3 = @"转出账户";
 static NSString *KTitle4 = @"投资时间";
 static NSString *KTitle5 = @"利率";
@@ -76,7 +76,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 // 创建时产生的流水
 @property (nonatomic, strong) SSJFixedFinanceProductCompoundItem *createCompoundModel;
-
 
 @property (nonatomic, strong) UITextField *nameTextF;
 
@@ -136,11 +135,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     [self loadData];
     
     if (_edited) {
+        [self initEditCreateCompoundModel];
         self.originalMoney = [_model.money doubleValue];
         UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteButtonClicked)];
         self.navigationItem.rightBarButtonItem = rightItem;
+    } else {
+        [self initCreateCompoundModel];
     }
-
     [self updateAppearance];
 }
 
@@ -774,15 +775,15 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.textLabel.text = title;
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-    cell.textField.text = [NSString stringWithFormat:@"%.2f", [self.model.money doubleValue]];
+//    cell.textField.text = [NSString stringWithFormat:@"%.2f", [self.model.money doubleValue]];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.returnKeyType = UIReturnKeyDone;
     cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     cell.textField.delegate = self;
     if (self.edited == YES) {
-        self.moneyTextF.text = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
+        cell.textField.text = [NSString stringWithFormat:@"%@",[SSJFixedFinanceProductStore queryOrangeMoneyWithProductModel:self.model]];
     } else {
-        self.moneyTextF.text = self.title2;
+        cell.textField.text = self.title2;
     }
     
     self.moneyTextF = cell.textField;
@@ -1140,19 +1141,16 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     return _remindSwitch;
 }
 
-- (SSJFixedFinanceProductCompoundItem *)createCompoundModel {
+- (void)initCreateCompoundModel {
     if (!_createCompoundModel) {
             NSString *chargeBillId = @"3";
             NSString *targetChargeBillId = @"4";
             NSString *uuid = SSJUUID();
-            NSDate *billDate = self.model.startDate;
-        
             SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
             chargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,chargeBillId]];
             chargeModel.fundId = self.model.thisfundid;
             chargeModel.billId = chargeBillId;
             chargeModel.userId = SSJUSERID();
-//            chargeModel.cid = cid;
             chargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
@@ -1160,14 +1158,38 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             targetChargeModel.fundId = self.model.targetfundid;
             targetChargeModel.billId = targetChargeBillId;
             targetChargeModel.userId = SSJUSERID();
-//            targetChargeModel.cid = cid;
             targetChargeModel.chargeType = SSJLoanCompoundChargeTypeCreate;
             
             _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
             _createCompoundModel.chargeModel = chargeModel;
             _createCompoundModel.targetChargeModel = targetChargeModel;
     }
-    return _createCompoundModel;
+}
+
+- (void)initEditCreateCompoundModel {
+    if (!_createCompoundModel) {
+        NSString *chargeBillId = @"3";
+        NSString *targetChargeBillId = @"4";
+
+        SSJFixedFinanceProductChargeItem *chargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
+       SSJFixedFinanceProductChargeItem *chargeItem =[SSJFixedFinanceProductStore queryChargeItemOfOrangeMoneyWithProductModel:self.model];
+        chargeModel.chargeId = chargeItem.chargeId;
+        chargeModel.fundId = self.model.thisfundid;
+        chargeModel.billId = chargeBillId;
+        chargeModel.userId = SSJUSERID();
+
+        SSJFixedFinanceProductChargeItem *targetChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
+        NSString *uuid = [[chargeItem.chargeId componentsSeparatedByString:@"_"] firstObject];
+        targetChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,[NSString stringWithFormat:@"%@_%@",uuid,targetChargeBillId]];;
+        targetChargeModel.fundId = self.model.targetfundid;
+        targetChargeModel.billId = targetChargeBillId;
+        targetChargeModel.userId = SSJUSERID();
+
+        
+        _createCompoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
+        _createCompoundModel.chargeModel = chargeModel;
+        _createCompoundModel.targetChargeModel = targetChargeModel;
+    }
 }
 
 - (SSJFixedFinanceProductItem *)model {
