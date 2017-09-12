@@ -922,25 +922,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 }
 
 #pragma mark - UITextFieldDelegate
-// 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-//    if (textField.tag == kLenderTag) {
-//        self.loanModel.lender = @"";
-//        [self updateRemindName];
-//    } else if (textField.tag == kMoneyTag) {
-//        self.loanModel.jMoney = 0;
-//        [self updateRemindName];
-//        [self updateInterest];
-//    } else if (textField.tag == kMemoTag) {
-//        self.loanModel.memo = @"";
-//    } else if (textField.tag == kRateTag) {
-//        self.loanModel.rate = 0;
-//        [self updateInterest];
-//    }
-    
-    return YES;
-}
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
     return YES;

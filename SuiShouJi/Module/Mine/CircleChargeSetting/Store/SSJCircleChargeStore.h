@@ -22,7 +22,10 @@
                      success:(void(^)())success
                      failure:(void (^)(NSError *error))failure;
 
++ (void)getBooksForCircleChargeWithsuccess:(void (^)(NSArray *books))success failure:(void (^)(NSError *error))failure;
+
 + (void)getFirstBillItemForBooksId:(NSString *)booksId
-                       withSuccess:(void (^)(SSJRecordMakingBillTypeSelectionCellItem *billItem))success
+                          billType:(SSJBillType)billType
+                       withSuccess:(void(^)(SSJRecordMakingBillTypeSelectionCellItem *billItem))success
                            failure:(void (^)(NSError *error))failure;
 @end

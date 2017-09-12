@@ -44,13 +44,13 @@
             
             [button ssj_setBorderWidth:1];
             [button ssj_setBorderStyle:SSJBorderStyleAll];
-            CGFloat inset = 0.5;
+            CGFloat inset = 0;
             if (i == 0) {
-                button.cornerRadius = 3;
+                [button ssj_setCornerRadius:3];
                 [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, inset, inset, 0)];
                 [button ssj_setCornerStyle:(UIRectCornerTopLeft | UIRectCornerBottomLeft)];
             } else if (i == items.count - 1) {
-                button.cornerRadius = 3;
+                [button ssj_setCornerRadius:3];
                 [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, inset)];
                 [button ssj_setCornerStyle:(UIRectCornerTopRight | UIRectCornerBottomRight)];
             } else {

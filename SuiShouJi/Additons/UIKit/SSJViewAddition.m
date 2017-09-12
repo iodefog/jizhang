@@ -154,55 +154,55 @@
 @implementation UIView (SSJBorder)
 
 - (void)ssj_setCornerStyle:(UIRectCorner)cornerStyle {
-    [[self.layer ssj_borderLayer] setCornerStyle:cornerStyle];
+    [self.layer ssj_setCornerStyle:cornerStyle];
 }
 
 - (UIRectCorner)ssj_cornerStyle {
-    return [[self.layer ssj_borderLayer] cornerStyle];
+    return [self.layer ssj_cornerStyle];
 }
 
 - (void)ssj_setCornerRadius:(CGFloat)cornerRadius {
-    [self.layer ssj_borderLayer].customCornerRadius = cornerRadius;
+    [self.layer ssj_setCornerRadius:cornerRadius];
 }
 
 - (CGFloat)ssj_cornerRadius {
-    return [self.layer ssj_borderLayer].customCornerRadius;
+    return [self.layer ssj_cornerRadius];
 }
 
 - (void)ssj_setBorderStyle:(SSJBorderStyle)customBorderStyle {
-    [[self.layer ssj_borderLayer] setCustomBorderStyle:customBorderStyle];
+    [self.layer ssj_setBorderStyle:customBorderStyle];
 }
 
 - (SSJBorderStyle)ssj_borderStyle {
-    return [[self.layer ssj_borderLayer] customBorderStyle];
+    return [self.layer ssj_borderStyle];
 }
 
 - (void)ssj_setBorderColor:(UIColor *)color {
-    [[self.layer ssj_borderLayer] setCustomBorderColor:color];
+    [self.layer ssj_setBorderColor:color];
 }
 
 - (UIColor *)ssj_borderColor {
-    return [[self.layer ssj_borderLayer] customBorderColor];
+    return [self.layer ssj_borderColor];
 }
 
-- (void)ssj_setBorderWidth:(CGFloat)with {
-    [[self.layer ssj_borderLayer] setCustomBorderWidth:with];
+- (void)ssj_setBorderWidth:(CGFloat)width {
+    [self.layer ssj_setBorderWidth:width];
 }
 
 - (CGFloat)ssj_borderWidth {
-    return [[self.layer ssj_borderLayer] customBorderWidth];
+    return [self.layer ssj_borderWidth];
 }
 
 - (void)ssj_setBorderInsets:(UIEdgeInsets)insets {
-    [[self.layer ssj_borderLayer] setBorderInsets:insets];
+    [self.layer ssj_setBorderInsets:insets];
 }
 
 - (UIEdgeInsets)ssj_borderInsets {
-    return [[self.layer ssj_borderLayer] borderInsets];
+    return [self.layer ssj_borderInsets];
 }
 
 - (void)ssj_relayoutBorder {
-    [self.layer ssj_borderLayer].frame = self.layer.bounds;
+    [self.layer ssj_relayoutBorder];
 }
 
 @end

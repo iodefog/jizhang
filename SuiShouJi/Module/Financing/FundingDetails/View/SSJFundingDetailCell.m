@@ -294,7 +294,45 @@
                         break;
                 }
             }
-        }else{
+        } else if (item.idType == SSJChargeIdTypeFixedFinance){
+            if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOut) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_benjin"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#f1658c"].CGColor;
+                self.typeLabel.text = @"结算本金";
+                [self.typeLabel sizeToFit];
+            } else if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCreate) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_benjin"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#4ab0e5"].CGColor;
+                self.typeLabel.text = @"投资本金";
+                [self.typeLabel sizeToFit];
+            } else if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_shu"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#f1658c"].CGColor;
+                self.typeLabel.text = @"部分赎回";
+                [self.typeLabel sizeToFit];
+            } else if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_add"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
+                self.typeLabel.text = @"追加投资";
+                [self.typeLabel sizeToFit];
+            } else if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeBalanceInterestIncrease) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_lixi"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#32c68c"].CGColor;
+                self.typeLabel.text = @"结算利息转入";
+                [self.typeLabel sizeToFit];
+            } else if (item.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOutInterest) {
+                self.imageView.tintColor = [UIColor ssj_colorWithHex:@"#32c68c"];
+                self.imageView.image = [[UIImage imageNamed:@"fixed_finance_fei"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:@"#5a98de"].CGColor;
+                self.typeLabel.text = @"手续费";
+                [self.typeLabel sizeToFit];
+            }
+        } else {
             self.imageView.tintColor = [UIColor ssj_colorWithHex:_item.colorValue];
             self.imageView.image = [[UIImage imageNamed:item.imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             self.imageView.layer.borderColor = [UIColor ssj_colorWithHex:item.colorValue].CGColor;

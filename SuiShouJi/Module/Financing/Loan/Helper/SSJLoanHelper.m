@@ -779,17 +779,28 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                          failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *loanID = [db stringForQuery:@"select cid from bk_user_charge where ichargeid = ?", chargeID];
         
-        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cuserid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where cid = ? and ichargetype = ? and operatortype <> 2", loanID, @(SSJChargeIdTypeLoan)];
+        SSJChargeIdType chargeType = [db intForQuery:@"select ichargetype from bk_user_charge where ichargeid = ?", chargeID];
+        if (chargeType != SSJChargeIdTypeLoan) {
+            SSJDispatchMainAsync(^{
+                if (failure) {
+                    failure([NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"此流水不是借贷流水"}]);
+                }
+            });
+            return;
+        }
         
+        NSString *loanID = nil;
         NSMutableArray *chargeModels = [NSMutableArray array];
+        
+        NSString *preChargeID = [[chargeID componentsSeparatedByString:@"_"] firstObject];
+        FMResultSet *rs = [db executeQuery:@"select ichargeid, ifunsid, ibillid, cuserid, cid, imoney, cmemo, cbilldate, cwritedate from bk_user_charge where ichargeid like ? || '_%' and ichargetype = ? and operatortype <> 2", preChargeID, @(SSJChargeIdTypeLoan)];
         while ([rs next]) {
             SSJLoanChargeModel *model = [[SSJLoanChargeModel alloc] init];
             model.chargeId = [rs stringForColumn:@"ichargeid"];
             model.fundId = [rs stringForColumn:@"ifunsid"];
             model.billId = [rs stringForColumn:@"ibillid"];
-            model.loanId = loanID;
+            model.loanId = loanID = [rs stringForColumn:@"cid"];
             model.userId = [rs stringForColumn:@"cuserid"];
             model.memo = [rs stringForColumn:@"cmemo"];
             model.money = [rs doubleForColumn:@"imoney"];
@@ -799,9 +810,9 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         }
         [rs close];
         
-        rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ?", loanID];
-        
         SSJLoanCompoundChargeModel *compoundModel = [[SSJLoanCompoundChargeModel alloc] init];
+        
+        rs = [db executeQuery:@"select lender, iend from bk_loan where loanid = ?", loanID];
         while ([rs next]) {
             compoundModel.lender = [rs stringForColumn:@"lender"];
             compoundModel.closeOut = [rs boolForColumn:@"iend"];
@@ -810,10 +821,11 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
         
         for (SSJLoanChargeModel *chargeModel in chargeModels) {
             NSString *rootId = [db stringForQuery:@"select cparent from bk_fund_info where cfundid = ?", chargeModel.fundId];
-            if ([rootId isEqualToString:@"10"]
-                || [rootId isEqualToString:@"11"]) {
+            SSJFinancingParent parentType = [rootId integerValue];
+            if (parentType == SSJFinancingParentPaidLeave
+                || parentType == SSJFinancingParentDebt) {
                 
-                chargeModel.type = [rootId isEqualToString:@"10"] ? SSJLoanTypeLend : SSJLoanTypeBorrow;
+                chargeModel.type = parentType == SSJFinancingParentPaidLeave ? SSJLoanTypeLend : SSJLoanTypeBorrow;
                 NSError *error = nil;
                 chargeModel.chargeType = [self loanChargeTypeWithLoanType:chargeModel.type billID:chargeModel.billId error:&error];
                 if (error) {

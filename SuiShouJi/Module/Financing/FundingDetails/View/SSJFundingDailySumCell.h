@@ -10,5 +10,7 @@
 #import "SSJFundingListDayItem.h"
 
 @interface SSJFundingDailySumCell : SSJBaseTableViewCell
+
 @property(nonatomic, strong) SSJFundingListDayItem *item;
+
 @end

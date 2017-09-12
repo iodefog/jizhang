@@ -44,6 +44,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 #import "SSJDataSynchronizer.h"
 #import "SSJCreditCardItem.h"
 #import "SSJTextFieldToolbarManager.h"
+#import "SSJChargeCircleBooksSelectView.h"
 
 @interface SSJChargeCicleModifyViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -64,6 +65,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 @property(nonatomic, strong) SSJCircleChargeTypeSelectView *chargeTypeSelectView;
 
 @property(nonatomic, strong) SSJMemberSelectView *memberSelectView;
+
+@property (nonatomic, strong) SSJChargeCircleBooksSelectView *booksSelectView;
 
 @property(nonatomic, strong) UIImage *selectedImage;
 
@@ -248,7 +251,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         }
     }
     if ([title isEqualToString:kTitle1]) {
-        
+        [SSJCircleChargeStore getBooksForCircleChargeWithsuccess:^(NSArray *books) {
+            self.booksSelectView.booksArr = books;
+            [self.booksSelectView showWithSelectBooksId:self.item.booksId];
+        } failure:NULL];
     }
 }
 
@@ -308,6 +314,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     }
     if ([title isEqualToString:kTitle1]) {
         circleModifyCell.cellDetail = self.item.booksName;
+        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }else if ([title isEqualToString:kTitle2]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (self.item.incomeOrExpence) {
@@ -569,6 +576,25 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         };
     }
     return _memberSelectView;
+}
+
+- (SSJChargeCircleBooksSelectView *)booksSelectView {
+    if (!_booksSelectView) {
+        _booksSelectView = [[SSJChargeCircleBooksSelectView alloc] init];
+        @weakify(self);
+        _booksSelectView.didSelectBooksItem = ^(SSJBooksTypeItem *booksItem) {
+            @strongify(self);
+            self.item.booksId = booksItem.booksId;
+            self.item.booksName = booksItem.booksName;
+            [SSJCircleChargeStore getFirstBillItemForBooksId:booksItem.booksId billType:self.item.incomeOrExpence withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
+                self.item.billId = billItem.ID;
+                self.item.typeName = billItem.title;
+                self.item.imageName = billItem.imageName;
+                [self.tableView reloadData];
+            } failure:NULL];
+        };
+    }
+    return _booksSelectView;
 }
 
 #pragma mark - Event
