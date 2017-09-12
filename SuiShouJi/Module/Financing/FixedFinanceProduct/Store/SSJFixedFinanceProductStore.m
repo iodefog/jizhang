@@ -1040,18 +1040,7 @@
                     newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.oldMoney;
                 }
             
-            if (type != 0) {
                 //删除以前派发的利息流水//重新派发利息流水
-//                    if (![self deleteDistributedInterestWithModel:productModel untilDate:[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] inDatabase:db error:&error]) {
-//                        *rollback = YES;
-//                        if (failure) {
-//                            SSJDispatchMainAsync(^{
-//                                failure([db lastError]);
-//                            });
-//                        }
-//                        return;
-//                    }
-                
                 if (![self deleteDistributedInterestWithModel:productModel untilDate:nil inDatabase:db error:&error]) {
                     *rollback = YES;
                     if (failure) {
@@ -1090,7 +1079,7 @@
                     }
                     return;
                 }
-            }
+            
             //更新固定理财金额
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
                 if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
@@ -1101,8 +1090,6 @@
                     }
                     return;
                 }
-            
-            
         }
         
         
@@ -2530,7 +2517,7 @@
  @param redemModel <#redemModel description#>
  */
 + (double)queryRedemPoundageMoneyWithRedmModel:(SSJFixedFinanceProductChargeItem *)redemModel inDatabase:(FMDatabase *)db error:(NSError **)error {
-    double poundage = [db doubleForQuery:@"select imoney from bk_user_charge where cid = ? and cuserid = ? and ibillid = 20 and operatortype <> 2"];
+    double poundage = [db doubleForQuery:@"select imoney from bk_user_charge where cid = ? and cuserid = ? and ibillid = 20 and operatortype <> 2",redemModel.cid,SSJUSERID()];
     return poundage;
 }
 /**
