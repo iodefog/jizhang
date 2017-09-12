@@ -364,6 +364,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
            NSString *remindDate = [[SSJFixedFinanceProductStore queryRemindDateWithRemindid:_financeModel.remindid] ssj_dateStringFromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"yyyy-MM-dd"];
             [self.section1Items addObject:
              [SSJLoanDetailCellItem itemWithImage:@"" title:@"提醒日期" subtitle:remindDate bottomTitle:nil]];
+        } else {
+            [self.section1Items addObject:
+             [SSJLoanDetailCellItem itemWithImage:@"" title:@"到期日期" subtitle:endDateStr bottomTitle:nil]];
         }
         if (_financeModel.memo.length) {
             [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:memo bottomTitle:nil]];

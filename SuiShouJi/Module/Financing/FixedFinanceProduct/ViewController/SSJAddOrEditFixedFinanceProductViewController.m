@@ -1077,16 +1077,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     if (!_borrowDateSelectionView) {
         __weak typeof(self) wself = self;
         _borrowDateSelectionView = [[SSJHomeDatePickerView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 244)];
-        
-        NSDate *compDate = [SSJFixedFinanceProductStore queryFirstAddOrRedemDateWithProductModel:self.model];
         _borrowDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-            //时间不能超过大于最早的一条追加或者赎回时间
-            if ([date isLaterThan:compDate]) {
-                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
-                return NO;
-            }
             if ([date isLaterThan:[NSDate date]]) {
                 [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
                 return NO;

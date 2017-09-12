@@ -71,19 +71,7 @@
     [SSJThemeSetting updateTabbarAppearance];
     
     [UIViewController verifyMotionPasswordIfNeeded:^(BOOL isVerified) {
-        UITabBarController *tabVC = (UITabBarController *)((MMDrawerController *)[UIApplication sharedApplication].keyWindow.rootViewController).centerViewController;
-        UINavigationController *navi = [tabVC.viewControllers firstObject];
-        UIViewController *vc = [navi.viewControllers firstObject];
-        if (![vc isKindOfClass:[SSJBookKeepingHomeViewController class]]) {
-            return;
-        }
-        SSJBookKeepingHomeViewController *homeVC = (SSJBookKeepingHomeViewController *)vc;
-        if (isVerified) {
-            homeVC.allowRefresh = YES;
-            homeVC.hasLoad = NO;
-        } else {
-            [homeVC reloadWithAnimation];
-        }
+ 
     } animated:NO];
 }
 

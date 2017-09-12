@@ -415,8 +415,8 @@ static NSString *kTitle6 = @"结算日期";
     }
     
     if (_isLiXiOn) {
-        if (!self.poundageTextF.text.length) {
-            [CDAutoHideMessageHUD showMessage:@"请输入金额"];
+        if (!self.poundageTextF.text.length && [self.poundageTextF.text doubleValue] <= 0) {
+            [CDAutoHideMessageHUD showMessage:@"请输入手续费"];
             return NO;
         }
     }
@@ -541,7 +541,16 @@ static NSString *kTitle6 = @"结算日期";
             if ([date compare:newdate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"日期不能早于最新流水日期哦"];
                 //日期不能早于该账户有效流水日期
-                
+                return NO;
+            }
+            
+            if ([date isLaterThan:[NSDate date]]) {
+                [CDAutoHideMessageHUD showMessage:@"日期不能晚于当前日期哦"];
+                return NO;
+            }
+            
+            if ([date isLaterThan:[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]]) {
+                [CDAutoHideMessageHUD showMessage:@"日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;

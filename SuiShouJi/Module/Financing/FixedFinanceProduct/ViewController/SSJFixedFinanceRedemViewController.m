@@ -124,13 +124,19 @@ static NSString *kTitle6 = @"备注";
 
 - (void)deleteButtonClicked {
     MJWeakSelf;
-    self.financeModel.oldMoney = [NSString stringWithFormat:@"%.2f",self.chargeModel.money];//用于修改本金
-    [SSJFixedFinanceProductStore deleteFixedFinanceProductRedemChargeWithModel:self.allCharegeItems productModel:self.financeModel success:^{
-        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-    }];
+    [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您确定要删除此条流水吗？" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
+        
+        weakSelf.financeModel.oldMoney = [NSString stringWithFormat:@"%.2f",weakSelf.chargeModel.money];//用于修改本金
+        [SSJFixedFinanceProductStore deleteFixedFinanceProductRedemChargeWithModel:weakSelf.allCharegeItems productModel:self.financeModel success:^{
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        } failure:^(NSError * _Nonnull error) {
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+        }];
+    }],[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+        [weakSelf.sureButton ssj_hideLoadingIndicator];
+        return ;
+    }],nil];
 }
 
 - (void)orangeData {
