@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID startDate:(NSString *)startDate endDate:(NSString *)endDate;
 
-//查询所有算手续费和
+//查询所有结算手续费和
 + (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID;
 
 /**
@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (NSString *)queryFixedFinanceProductNewChargeBillDateWithModel:(SSJFixedFinanceProductItem *)model;
 
-
+#pragma mark - 编辑理财产品，新建
 /**
  保存固收理财产品（新建，编辑）
 
@@ -114,6 +114,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                             chargeModels:(NSArray <SSJFixedFinanceProductChargeItem *>*)chargeModels
                              remindModel:(nullable SSJReminderItem *)remindModel success:(void (^)(void))success
                                  failure:(void (^)(NSError *error))failure;
+
 
 /**
  结算固收理财产品
@@ -200,6 +201,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                               success:(void (^)(void))success
                                               failure:(void (^)(NSError *error))failure;
 
+
 /**
  新增或修改固定理财的某个流水
  
@@ -210,6 +212,15 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 + (void)saveFinanceCompoundChargeModel:(SSJFixedFinanceProductChargeItem *)model
                             success:(void (^)(void))success
                             failure:(void (^)(NSError *error))failure;
+
+
+/**
+ 查找某个理财产品原始本金的流水记录3or4
+
+ @param productItem <#productItem description#>
+ @return <#return value description#>
+ */
++ (SSJFixedFinanceProductChargeItem *)queryChargeItemOfOrangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)productItem;
 
 
 /**
@@ -306,6 +317,17 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (NSString *)queryChargeIdWithChargeItem:(SSJFixedFinanceProductChargeItem *)oneChargeItem inDatabase:(FMDatabase *)db error:(NSError **)error;
+
+
+/**
+ 通过理财产品查找原始本金
+
+ @param productModel <#productModel description#>
+ @return <#return value description#>
+ */
++ (NSString *)queryOrangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)productModel;
+
+
 /**
  通过remindid查找
 
@@ -339,6 +361,8 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model;
+
++ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  查询是否有赎回或者追加
