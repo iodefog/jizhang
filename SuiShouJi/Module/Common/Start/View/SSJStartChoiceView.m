@@ -12,9 +12,9 @@
 
 @property (nonatomic, strong) UILabel *titleLab;
 
-@property (nonatomic, strong) UIImageView *olderImage;
+@property (nonatomic, strong) UIButton *olderButton;
 
-@property (nonatomic, strong) UIImageView *newerImage;
+@property (nonatomic, strong) UIButton *newerButton;
 
 @property (nonatomic, strong) UILabel *newerLab;
 
@@ -29,8 +29,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.titleLab];
-        [self addSubview:self.olderImage];
-        [self addSubview:self.newerImage];
+        [self addSubview:self.olderButton];
+        [self addSubview:self.newerButton];
         [self addSubview:self.olderLab];
         [self addSubview:self.newerLab];
     }
@@ -43,24 +43,24 @@
         make.top.mas_equalTo(self).offset(160);
     }];
     
-    [self.newerImage mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.newerButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab).offset(85);
         make.right.mas_equalTo(self.mas_centerX).offset(-12.5);
     }];
     
-    [self.olderImage mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.olderButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab).offset(85);
         make.right.mas_equalTo(self.mas_centerX).offset(12.5);
     }];
     
     [self.newerLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.newerImage).offset(25);
-        make.centerX.mas_equalTo(self.newerImage.mas_centerX);
+        make.top.mas_equalTo(self.newerButton).offset(25);
+        make.centerX.mas_equalTo(self.newerButton.mas_centerX);
     }];
     
     [self.olderLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.olderImage).offset(25);
-        make.centerX.mas_equalTo(self.olderImage.mas_centerX);
+        make.top.mas_equalTo(self.olderButton).offset(25);
+        make.centerX.mas_equalTo(self.olderButton.mas_centerX);
     }];
     
     [super updateConstraints];
@@ -93,18 +93,30 @@
     return _olderLab;
 }
 
-- (UIImageView *)newerImage {
-    if (!_newerImage) {
-        _newerImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"neweruserimage"]];
+- (UIButton *)newerButton {
+    if (!_newerButton) {
+        _newerButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_newerButton setImage:[UIImage imageNamed:@"newerimage"] forState:UIControlStateNormal];
+        [_newerButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _newerImage;
+    return _newerButton;
 }
 
-- (UIImageView *)olderImage {
-    if (!_olderImage) {
-        _olderImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"olderuserimage"]];
+- (UIButton *)olderButton {
+    if (!_olderButton) {
+        _olderButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_olderButton setImage:[UIImage imageNamed:@"olderimage"] forState:UIControlStateNormal];
+        [_olderButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _olderImage;
+    return _olderButton;
+}
+
+- (void)buttonClicked:(id)sender {
+    if (sender == self.newerButton) {
+        
+    } else {
+
+    }
 }
 
 /*
