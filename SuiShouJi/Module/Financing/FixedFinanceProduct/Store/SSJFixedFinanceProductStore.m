@@ -1662,7 +1662,7 @@
                     NSDate *billDate = [writeDate dateBySubtractingDays:1];
                     //如果一定到了结束日期了就返回
                     if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                        return 0;
+                        return YES;
                     }
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                     //月，一次性
