@@ -7,14 +7,14 @@
 //
 
 #import "SSJBaseTableViewCell.h"
-#import "SSJFundingItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJFundingTypeTableViewCell : SSJBaseTableViewCell
 
 //是否选中
 @property (nonatomic) BOOL selectedOrNot;
 
-@property (nonatomic,strong) SSJFundingItem *item;
+@property (nonatomic,strong) SSJFinancingHomeitem *item;
 
 @property (nonatomic,strong) NSString *cellTitle;
 

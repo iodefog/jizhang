@@ -198,7 +198,7 @@
             if (!self.selectFundID || self.selectFundID.length == 0) {
                 [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
             } else {
-                [_items enumerateObjectsUsingBlock:^(SSJFundingItem *item, NSUInteger idx, BOOL * _Nonnull stop) {
+                [_items enumerateObjectsUsingBlock:^(SSJFinancingHomeitem *item, NSUInteger idx, BOOL * _Nonnull stop) {
                     if ([item.fundingID isEqualToString:self.selectFundID]) {
                         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:idx inSection:0] atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
                         *stop = YES;

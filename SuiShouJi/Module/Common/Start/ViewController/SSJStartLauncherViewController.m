@@ -6,15 +6,17 @@
 //  Copyright © 2017年 ___9188___. All rights reserved.
 //
 
-#import "SSJStartViewController.h"
+#import "SSJStartLauncherViewController.h"
 #import "SSJServerLaunchView.h"
 #import "SSJBookkeepingTreeView.h"
 #import "SSJGuideView.h"
 #import "SSJUserSignLaunchView.h"
+#import "SSJNavigationController.h"
 
 #import "SSJStartChecker.h"
 #import "SSJBookkeepingTreeCheckInModel.h"
 #import "SSJStartLunchItem.h"
+#import "SSJStartViewHelper.h"
 
 #import "SSJBookkeepingTreeCheckInService.h"
 #import "SSJUserSignNetworkService.h"
@@ -40,13 +42,11 @@ static const NSTimeInterval kLoadTreeImgTimeout = 60;
 static const NSTimeInterval kTransitionDuration = 0.3;
 
 
-@interface SSJStartViewController ()
+@interface SSJStartLauncherViewController ()
 
 @property (nonatomic, strong) SSJServerLaunchView *launchView;
 
 //@property (nonatomic, strong) SSJBookkeepingTreeView *treeView;
-
-@property (nonatomic, strong) SSJGuideView *guideView;
 
 @property (nonatomic, strong) SSJBookkeepingTreeCheckInService *checkInService;
 
@@ -64,11 +64,20 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
 @end
 
-@implementation SSJStartViewController
+@implementation SSJStartLauncherViewController
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesNavigationBarWhenPushed = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    return self;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.launchView];
+    [self.view addSubview:self.userSignLaunchView];
     // Do any additional setup after loading the view.
 }
 
@@ -84,6 +93,19 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             [self requestCheckIn];
         }
     }];
+    
+    @weakify(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        @strongify(self);
+        if (self.startLunchService.state != SSJNetworkServiceStateSuccessful) {
+            [self jumpOutToRootView];
+        }
+    });
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+
 }
 
 - (void)didReceiveMemoryWarning {
@@ -106,7 +128,8 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 
         @weakify(self);
         _userSignLaunchView.skipBtnBlock = ^(UIButton *btn) {
-
+            @strongify(self);
+            [self jumpOutToRootView];
         };
     }
     return _userSignLaunchView;
@@ -149,7 +172,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         }
     } else if (service == self.startLunchService) {
         if (SSJLaunchTimesForCurrentVersion() == 1) {
-            
+            [self jumpOutToRootView];
             return;
         };
         if (![self.startLunchService.returnCode isEqualToString:@"1"]) return;
@@ -157,30 +180,39 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         if (!self.startLunchItem) return;
         
         __weak typeof(self) wself = self;
-        if ([self.startLunchItem.open isEqualToString:@"0"]) {//是否下发 0 调用本地图片 1 使用下发type判断
+        if (!self.startLunchItem.open) {//是否下发 0 调用本地图片 1 使用下发type判断
             //本地图片
-
+            [self jumpOutToRootView];
             return;
         }
         
         if (self.startLunchItem.type == 0) {//0:静态图片,1:动态图片,2:图文
             [self.launchView downloadImgWithUrl:self.startLunchItem.startImageUrl timeout:kLoadStartImgTimeout completion:^{
-
+                [self jumpOutToRootView];
             }];
         } else if (self.startLunchItem.type == 2) {
-            UIWindow *window = [UIApplication sharedApplication].keyWindow;
             if (self.launchView.superview) {
                 [self.launchView removeFromSuperview];
             }
-            [window addSubview:self.userSignLaunchView];
+            
+            [self.view addSubview:self.userSignLaunchView];
             
             [self.userSignLaunchView showWith:self.startLunchItem timeout:kLoadStartImgTimeout completion:^{
-
+                [self jumpOutToRootView];
             }];
             
         }
     }
 
+}
+
+- (void)server:(SSJBaseNetworkService *)service didFailLoadWithError:(NSError *)error {
+#ifdef DEBUG
+    [CDAutoHideMessageHUD showMessage:[NSString stringWithFormat:@"签到接口请求失败,error:%@", [error localizedDescription]]];
+#endif
+    if (service == self.startLunchService) {
+        [self jumpOutToRootView];
+    }
 }
 
 
@@ -190,18 +222,9 @@ static const NSTimeInterval kTransitionDuration = 0.3;
 - (void)requestStartAPI {
     __weak typeof(self) wself = self;
     [[SSJStartChecker sharedInstance] checkWithTimeoutInterval:kLoadStartAPITimeout success:^(BOOL isInReview, SSJAppUpdateType type) {
-        //        NSString *startImgUrl = [SSJStartChecker sharedInstance].startImageUrl;
-        //        if (!startImgUrl) {
-        //            [wself showGuideViewIfNeeded];
-        //            return;
-        //        }
-        //
-        //        [wself.launchView downloadImgWithUrl:startImgUrl timeout:kLoadStartImgTimeout completion:^{
-        //            [wself showGuideViewIfNeededWithFirstView:self.launchView];
-        //        }];
-        
+
     } failure:^(NSString *message) {
-        //        [wself showGuideViewIfNeeded];
+
     }];
 }
 
@@ -230,6 +253,10 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         // 加载记账树gif图片
         [SSJBookkeepingTreeHelper loadTreeGifImageDataWithUrlPath:_checkInModel.treeGifUrl finish:NULL];
     }
+}
+
+- (void)jumpOutToRootView {
+    [SSJStartViewHelper jumpOutOnViewController:self];
 }
 
 /*

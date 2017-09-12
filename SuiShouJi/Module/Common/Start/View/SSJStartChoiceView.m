@@ -7,6 +7,7 @@
 //
 
 #import "SSJStartChoiceView.h"
+#import "SSJStartViewHelper.h"
 
 @interface SSJStartChoiceView()
 
@@ -33,8 +34,14 @@
         [self addSubview:self.newerButton];
         [self addSubview:self.olderLab];
         [self addSubview:self.newerLab];
+        [self setNeedsUpdateConstraints];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    NSLog(@"%@",self.titleLab);
 }
 
 - (void)updateConstraints {
@@ -46,26 +53,29 @@
     [self.newerButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab).offset(85);
         make.right.mas_equalTo(self.mas_centerX).offset(-12.5);
+        make.size.mas_equalTo(CGSizeMake(130, 130));
     }];
     
     [self.olderButton mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab).offset(85);
-        make.right.mas_equalTo(self.mas_centerX).offset(12.5);
+        make.left.mas_equalTo(self.mas_centerX).offset(12.5);
+        make.size.mas_equalTo(CGSizeMake(130, 130));
     }];
     
     [self.newerLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.newerButton).offset(25);
+        make.top.mas_equalTo(self.newerButton.mas_bottom).offset(25);
         make.centerX.mas_equalTo(self.newerButton.mas_centerX);
     }];
     
     [self.olderLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.olderButton).offset(25);
+        make.top.mas_equalTo(self.olderButton.mas_bottom).offset(25);
         make.centerX.mas_equalTo(self.olderButton.mas_centerX);
     }];
     
     [super updateConstraints];
 }
 
+#pragma mark - Getter
 - (UILabel *)titleLab {
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
@@ -96,7 +106,7 @@
 - (UIButton *)newerButton {
     if (!_newerButton) {
         _newerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_newerButton setImage:[UIImage imageNamed:@"newerimage"] forState:UIControlStateNormal];
+        [_newerButton setImage:[UIImage imageNamed:@"neweruserimage"] forState:UIControlStateNormal];
         [_newerButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _newerButton;
@@ -105,18 +115,50 @@
 - (UIButton *)olderButton {
     if (!_olderButton) {
         _olderButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_olderButton setImage:[UIImage imageNamed:@"olderimage"] forState:UIControlStateNormal];
+        [_olderButton setImage:[UIImage imageNamed:@"olderuserimage"] forState:UIControlStateNormal];
         [_olderButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _olderButton;
 }
 
+#pragma mark - Event
 - (void)buttonClicked:(id)sender {
     if (sender == self.newerButton) {
-        
+
     } else {
 
     }
+}
+
+- (void)jumpOutButtonClicked:(id)sender {
+    if (self) {
+        self.jumpOutButtonClickBlock();
+    }
+}
+
+#pragma mark - Private
+- (void)startAnimating {
+    self.newerLab.alpha = 0;
+    self.olderLab.alpha = 0;
+    self.newerButton.enabled = NO;
+    self.olderButton.enabled = NO;
+    [UIView animateWithDuration:2.f animations:^(void){
+        self.newerLab.alpha = 1.f;
+        self.olderLab.alpha = 1.f;
+    } completion:NULL];
+    
+    [UIView animateWithDuration:1.5f animations:^(void){
+        self.newerButton.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
+        self.olderButton.transform = CGAffineTransformMakeScale(1.2f, 1.2f);
+    } completion:^(BOOL finished){
+        [UIView animateWithDuration:1.5f animations:^(void){
+            self.newerButton.transform = CGAffineTransformMakeScale(1.f, 1.f);
+            self.olderButton.transform = CGAffineTransformMakeScale(1.f, 1.f);
+        } completion:^(BOOL finished){
+            self.newerButton.enabled = YES;
+            self.olderButton.enabled = YES;
+        }];
+    }];
 }
 
 /*
