@@ -8,12 +8,13 @@
 
 #import "SSJBaseViewController.h"
 #import "SSJFundAccountMergeHelper.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJFundingMergeViewController : SSJBaseViewController
 
-@property (nonatomic, strong) SSJBaseCellItem *transferInFundItem;
+@property (nonatomic, strong) SSJFinancingHomeitem *transferInFundItem;
 
-@property (nonatomic, strong) SSJBaseCellItem *transferOutFundItem;
+@property (nonatomic, strong) SSJFinancingHomeitem *transferOutFundItem;
 
 @property (nonatomic) BOOL transferInSelectable;
 

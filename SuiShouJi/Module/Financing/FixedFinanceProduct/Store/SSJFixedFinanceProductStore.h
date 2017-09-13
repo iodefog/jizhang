@@ -178,6 +178,21 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                                  failure:(void (^)(NSError *error))failure;
 
 /**
+ 查询某个固定理财所有的追加和赎回流水列表以及创建
+ */
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model error:(NSError **)error;
+
+
+/**
+ 查询某一天中所有的流水记录
+
+ @param model <#model description#>
+ @param error <#error description#>
+ @return <#return value description#>
+ */
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model billDate:(NSDate *)date error:(NSError **)error;
+
+/**
  删除固定理财的某个流水(单个流水，每日利息，手续费，利息平账)
  
  @param model 流水模型
@@ -188,6 +203,20 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                     productModel:(SSJFixedFinanceProductItem *)productModel
                                          success:(void (^)(void))success
                                          failure:(void (^)(NSError *error))failure;
+
+/**
+ 根据赎回流水查找赎回手续费
+ 
+ @param redemModel <#redemModel description#>
+ */
++ (double)queryRedemPoundageMoneyWithRedmModel:(SSJFixedFinanceProductChargeItem *)redemModel inDatabase:(FMDatabase *)db error:(NSError **)error;
+
++ (double)queryRedemPoundageMoneyWithRedmModel:(SSJFixedFinanceProductChargeItem *)redemModel error:(NSError **)error;
+
+/**
+ 查询某个固定理财所有的追加和赎回流水列表以及创建
+ */
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
 
 /**
  删除赎回流水

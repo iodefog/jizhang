@@ -355,10 +355,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 break;
         }
     }else if ([title isEqualToString:kTitle9]) {
-        circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        circleModifyCell.cellDetail = self.item.fundName;
-        circleModifyCell.cellTypeImageName = self.item.fundImage;
-        
+        [SSJCircleChargeStore getFinancingItemWithFundingId:self.item.fundId success:^(SSJFinancingHomeitem *fundingItem) {
+            circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            circleModifyCell.cellDetail = fundingItem.fundingName;
+            circleModifyCell.cellTypeImageName = fundingItem.fundingIcon;
+            circleModifyCell.cellTypeImageColor = fundingItem.fundingColor;
+        } failure:NULL];
     }else if ([title isEqualToString:kTitle10]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.billDate;
