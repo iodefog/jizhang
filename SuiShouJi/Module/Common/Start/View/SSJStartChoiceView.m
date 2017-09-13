@@ -80,7 +80,7 @@
     if (!_titleLab) {
         _titleLab = [[UILabel alloc] init];
         _titleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
-        _titleLab.text = @"小鱼儿询问下,你属于哪类记账者?";
+        _titleLab.text = @"点击下方头像,选择您的记账角色";
     }
     return _titleLab;
 }

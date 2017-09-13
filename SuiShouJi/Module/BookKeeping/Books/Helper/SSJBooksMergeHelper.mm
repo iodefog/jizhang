@@ -141,6 +141,7 @@
                     }
                     userCharge.chargeId = SSJUUID();
                     userCharge.operatorType = 1;
+                    userCharge.chargeType = SSJChargeIdTypeNormal;
                     if (![db insertOrReplaceObject:userCharge into:@"BK_USER_CHARGE"]) {
                         dispatch_main_async_safe(^{
                             if (failure) {

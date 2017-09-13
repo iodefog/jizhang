@@ -1045,6 +1045,8 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
     self.allowRefresh = YES;
     self.hasLoad = NO;
     [self getDataFromDataBase];
+    [self updateNavigationBar];
+    [self updateBooksItem];
 }
 
 - (void)stopLoading {
