@@ -149,6 +149,79 @@ static NSUInteger kDateTag = 2005;
 - (void)deleteButtonClicked {
     MJWeakSelf;
     
+    //判断是否可以删除此条追加
+    //查询所有可以影响到本金变化
+    //1、查询出当前日期之前的所有本金和 --- a
+    //2、（查询出此billdate日期中的除了本条赎回以外所有追加和赎回的和并入之前的本金中可为正负）----b
+    //3、以及当前日期后的第一条追加之间的所有赎回金额的和 ---c
+    //判断条件 a+b >= c
+    
+    NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    double benjin = 0;
+    for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+        
+        if ([self.chargeItem.billDate isSameDay:chargeItem.billDate]) {
+            break;
+        }
+        
+        if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
+            benjin += chargeItem.money;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+            benjin += chargeItem.money;
+            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+            benjin -= poundage;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+            benjin += chargeItem.money;
+        }
+        
+    }
+    
+    //查询某一天的所有流水
+    NSArray *oneDayChargeArr = [SSJFixedFinanceProductStore queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel billDate:self.chargeItem.billDate error:nil];
+    double oneDaybenjin = 0;
+    for (SSJFixedFinanceProductChargeItem *chargeItem in oneDayChargeArr) {
+        if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
+            oneDaybenjin += chargeItem.money;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+            oneDaybenjin -= chargeItem.money;
+            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+            oneDaybenjin -= poundage;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+            oneDaybenjin += chargeItem.money;
+        }
+    }
+    //本天的金额总和（除去将要删除的流水金额，可正可负）归入积累本金中
+    double oneDayMoney = oneDaybenjin - self.chargeItem.money;
+    double lastTotalMoney = oneDayMoney + benjin;
+    
+//    以及当前日期后的第一条追加之间的所有赎回金额的和
+    double redemMoney = 0;
+    if (addAndRedChargeArr.count == 1) {
+        SSJFixedFinanceProductChargeItem *chargeItem = [addAndRedChargeArr firstObject];
+        if ((chargeItem.money - self.chargeItem.money) < 0) {
+            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+            return;
+        }
+    } else if(addAndRedChargeArr.count > 1) {
+        for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+            if ([self.chargeItem.billDate isLaterThanOrEqualTo:chargeItem.billDate]) {
+                continue;
+            }
+            if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                break;
+            }
+            
+            if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                redemMoney += chargeItem.money;
+            }
+        }
+        
+        if ((lastTotalMoney + redemMoney) < 0) {
+            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+            return;
+        }
+    }
+
     [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您确定要删除此条流水吗？" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction * _Nonnull action) {
         
         [SSJFixedFinanceProductStore deleteFixedFinanceProductChargeWithModel:self.chargeItem productModel:self.financeModel success:^{
@@ -515,7 +588,7 @@ static NSUInteger kDateTag = 2005;
         _dateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _dateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
-        NSDate *compDate = [SSJFixedFinanceProductStore queryLastAddOrRedemDateWithProductModel:self.financeModel];
+//        NSDate *compDate = [SSJFixedFinanceProductStore queryLastAddOrRedemDateWithProductModel:self.financeModel];
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
                 [CDAutoHideMessageHUD showMessage:@"时间不能早于开始时间"];
@@ -532,13 +605,13 @@ static NSUInteger kDateTag = 2005;
                 return NO;
             }
             
-            if ([date isEarlierThan:compDate] && compDate && !self.chargeItem) {//非编辑
-                [CDAutoHideMessageHUD showMessage:@"时间不能晚于最新一条追加或者赎回时间"];
-                return NO;
-            } else if(self.chargeItem && [date isLaterThan:compDate] && compDate){ //编辑
-                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
-                return NO;
-            }
+//            if ([date isEarlierThan:compDate] && compDate && !self.chargeItem) {//非编辑
+//                [CDAutoHideMessageHUD showMessage:@"时间不能晚于最新一条追加或者赎回时间"];
+//                return NO;
+//            } else if(self.chargeItem && [date isLaterThan:compDate] && compDate){ //编辑
+//                [CDAutoHideMessageHUD showMessage:@"时间不能早于最新一条追加或者赎回时间"];
+//                return NO;
+//            }
             
             return YES;
         };

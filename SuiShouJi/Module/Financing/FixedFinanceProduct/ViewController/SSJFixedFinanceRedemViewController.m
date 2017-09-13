@@ -478,6 +478,32 @@ static NSString *kTitle6 = @"备注";
         }
     }
     
+    //判断是否可以赎回
+    //查询所有可以影响到本金变化
+   NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    
+    double benjin = 0;
+    for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+        if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
+            benjin += chargeItem.money;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+            benjin += chargeItem.money;
+          double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+            benjin -= poundage;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+            benjin += chargeItem.money;
+        }
+        
+        if ([self.compoundModel.chargeModel.billDate isEarlierThanOrEqualTo:chargeItem.billDate]) {
+            break;
+        }
+    }
+    
+    if (benjin < [self.moneyStr doubleValue]) {
+        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+       return NO;
+    }
+    
     if (self.fundingSelectionView.selectedIndex < 0) {
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;

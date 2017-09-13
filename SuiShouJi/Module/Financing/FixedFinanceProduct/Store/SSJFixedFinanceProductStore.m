@@ -698,7 +698,7 @@
 /**
  查询某个固定理财所有的追加和赎回流水列表以及创建
  */
-+ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error{
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
 
         FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
         NSMutableArray *chargeModels = [NSMutableArray array];
@@ -780,6 +780,65 @@
     
     return newArr;
 }
+
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model error:(NSError **)error {
+    __block NSArray *array;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+      array =  [self queryFixedFinanceProductAddAndRedemChargeListWithModel:model inDatabase:db error:error];
+        
+    }];
+    return array;
+}
+
+/**
+ 查询某一天中所有的流水记录
+ 
+ @param model <#model description#>
+ @param error <#error description#>
+ @return <#return value description#>
+ */
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model billDate:(NSDate *)date error:(NSError **)error {
+    __block NSArray *array;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+      array = [self queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:model billDate:date inDatabase:db error:nil];
+    }];
+    return array;
+}
+
++ (NSArray <SSJFixedFinanceProductChargeItem *>*)queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model billDate:(NSDate *)date inDatabase:(FMDatabase *)db error:(NSError **)error {
+    FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and cbilldate = ? and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance), [date ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
+    NSMutableArray *chargeModels = [NSMutableArray array];
+    
+    while ([resultSet next]) {
+        SSJFixedFinanceProductChargeItem *item = [SSJFixedFinanceProductChargeItem modelWithResultSet:resultSet];
+        [chargeModels addObject:item];
+    }
+    [resultSet close];
+    
+    if (!chargeModels.count) {
+        return [NSArray array];
+    }
+    NSMutableArray *array = [chargeModels mutableCopy];
+    if (array.count > 1) {
+        SSJFixedFinanceProductChargeItem *createItem;
+        for (SSJFixedFinanceProductChargeItem *item in chargeModels) {
+            if ([item.billId isEqualToString:@"3"]) {
+                createItem = item;
+                [array removeObject:item];
+                break;
+            }
+        }
+        
+        [array insertObject:createItem atIndex:0];
+    }
+    
+    
+    //分类
+    NSArray *tempArr = [self updateFinanceChargeTypeWithModel:array];
+    return tempArr;
+}
+
+
 
 /**
  删除固定理财的某个流水
@@ -2539,6 +2598,15 @@
     double poundage = [db doubleForQuery:@"select imoney from bk_user_charge where cid = ? and cuserid = ? and ibillid = 20 and operatortype <> 2",redemModel.cid,SSJUSERID()];
     return poundage;
 }
+
++ (double)queryRedemPoundageMoneyWithRedmModel:(SSJFixedFinanceProductChargeItem *)redemModel error:(NSError **)error {
+    __block double poundage;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        poundage = [db doubleForQuery:@"select imoney from bk_user_charge where cid = ? and cuserid = ? and ibillid = 20 and operatortype <> 2",redemModel.cid,SSJUSERID()];
+    }];
+    return poundage;
+}
+
 /**
  计算当前余额
  
