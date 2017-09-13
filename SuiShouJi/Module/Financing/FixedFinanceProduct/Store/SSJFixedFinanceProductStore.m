@@ -403,14 +403,18 @@
                                           success:(void (^)(void))success
                                           failure:(void (^)(NSError *error))failure {
     NSString *userId = SSJUSERID();
-        NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
+        NSError *error = nil;
         for (SSJFixedFinanceProductItem *item in model) {
-            if (![self deleteFixedFinanceProductWithModel:item inDatabase:db success:nil failure:nil]) {
+            if (![self deleteFixedFinanceProductWithModel:item
+                                                writeDate:writeDate
+                                               inDatabase:db
+                                                    error:&error]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
-                        failure([db lastError]);
+                        failure(error);
                     });
                 }
                 return;
@@ -429,7 +433,7 @@
             return;
         }
         
-        NSError *error = nil;
+        
         if (![SSJRecycleHelper createRecycleRecordWithID:fundID
                                              recycleType:SSJRecycleTypeFund
                                                writeDate:writeDate
@@ -495,30 +499,22 @@
 }
 
 + (BOOL)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
+                                 writeDate:(NSString *)writeDate
                                 inDatabase:(FMDatabase *)db
-                                   success:(void (^)(void))success
-                                   failure:(void (^)(NSError *error))failure {
+                                     error:(NSError **)error {
     //将理财产品operator = 2
-    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    NSError *error = nil;
     if (![db executeUpdate:@"update bk_fixed_finance_product set operatortype = ?, iversion = ?, cwritedate = ? where cproductid = ? and cuserid = ?", @(SSJOperatorTypeDelete), @(SSJSyncVersion()), writeDate, model.productid,SSJUSERID()]) {
-        if (failure) {
-            SSJDispatchMainAsync(^{
-                failure(error);
-            });
+        if (error) {
+            *error = [db lastError];
         }
         return NO;
     }
     
     //删除所有流水
-    if (![self deleteFixedFinanceProductModel:model inDatabase:db forUserId:SSJUSERID() writeDate:writeDate needcreateRecycleRecord:NO error:&error]) {
-        if (failure) {
-            SSJDispatchMainAsync(^{
-                failure(error);
-            });
-        }
+    if (![self deleteFixedFinanceProductModel:model inDatabase:db forUserId:SSJUSERID() writeDate:writeDate needcreateRecycleRecord:NO error:error]) {
         return NO;
     }
+    
     return YES;
 }
 
