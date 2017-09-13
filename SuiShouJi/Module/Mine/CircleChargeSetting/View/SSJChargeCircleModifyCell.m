@@ -14,6 +14,8 @@
 
 @property(nonatomic, strong) UIImageView *typeImageView;
 
+@property(nonatomic, strong) UIImageView *fundImageView;
+
 @end
 
 @implementation SSJChargeCircleModifyCell
@@ -27,7 +29,7 @@
         [self.contentView addSubview:self.cellInput];
         [self.contentView addSubview:self.cellImage];
         [self.contentView addSubview:self.typeImageView];
-
+        [self.contentView addSubview:self.fundImageView];
     }
     return self;
 }
@@ -59,6 +61,7 @@
     self.cellDetailLabel.centerY = self.height / 2;
     
     self.cellImageView.size = CGSizeMake(30, 30);
+    
     if (self.contentView.width == self.width) {
         self.cellImageView.right = self.width - 10;
     }else{
@@ -70,6 +73,8 @@
     self.cellInput.centerY = self.height / 2;
     self.typeImageView.right = self.cellDetailLabel.left - 10;
     self.typeImageView.centerY = self.height / 2;
+    self.fundImageView.right = self.cellDetailLabel.left - 10;
+    self.fundImageView.centerY = self.height / 2;
 }
 
 -(UILabel *)cellTitleLabel{
@@ -133,6 +138,13 @@
     return _cellImage;
 }
 
+- (UIImageView *)fundImageView {
+    if (!_fundImageView) {
+        _fundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
+    }
+    return _fundImageView;
+}
+
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     self.cellTitleLabel.text = _cellTitle;
@@ -164,9 +176,15 @@
     [self setNeedsLayout];
 }
 
+-(void)setCellFundImageName:(NSString *)cellFundImageName {
+    _cellFundImageName = cellFundImageName;
+    self.fundImageView.image = [[UIImage imageNamed:_cellFundImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    [self setNeedsLayout];
+}
+
 - (void)setCellTypeImageColor:(NSString *)cellTypeImageColor {
     _cellTypeImageColor = cellTypeImageColor;
-    self.typeImageView.tintColor = [UIColor ssj_colorWithHex:_cellTypeImageColor];
+    self.fundImageView.tintColor = [UIColor ssj_colorWithHex:_cellTypeImageColor];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged{

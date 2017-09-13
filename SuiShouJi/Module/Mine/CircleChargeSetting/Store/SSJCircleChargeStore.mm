@@ -13,6 +13,7 @@
 #import "SSJBooksTypeTable.h"
 #import "SSJUserBillTypeTable.h"
 #import "SSJOrmDatabaseQueue.h"
+#import "SSJFundInfoTable.h"
 
 @implementation SSJCircleChargeStore
 
@@ -304,5 +305,26 @@
             });
         }
     }];
+}
+
++ (void)getFinancingItemWithFundingId:(NSString *)fundId
+                              success:(void (^)(SSJFinancingHomeitem *fundingItem))success
+                            failure:(void (^)(NSError *error))failure {
+    [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
+        SSJFundInfoTable *fundInfo = [db getOneObjectOfClass:SSJFundInfoTable.class
+                                                   fromTable:@"bk_fund_info"
+                                                       where:SSJFundInfoTable.fundId == fundId];
+        SSJFinancingHomeitem *fundItem = [[SSJFinancingHomeitem alloc] init];
+        fundItem.fundingID = fundInfo.fundId;
+        fundItem.fundingName = fundInfo.fundName;
+        fundItem.fundingColor = fundInfo.fundColor;
+        fundItem.fundingIcon = fundInfo.fundIcon;
+        if (success) {
+            dispatch_main_async_safe(^{
+                success(fundItem);
+            });
+        }
+    }];
+    
 }
 @end

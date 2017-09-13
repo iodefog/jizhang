@@ -328,7 +328,7 @@
 }
 
 + (void)getFundingsWithType:(SSJFundsTransferType)fundType
-                  exceptFundItem:(SSJBaseCellItem *)fundItem
+                  exceptFundItem:(SSJFinancingHomeitem *)fundItem
                          Success:(void(^)(NSArray *fundList))success
                          failure:(void (^)(NSError *error))failure {
     [[SSJOrmDatabaseQueue sharedInstance] asyncInDatabase:^(WCTDatabase *db) {
@@ -337,13 +337,7 @@
         NSString *fundId;
 
         if (fundItem) {
-            if ([fundItem isKindOfClass:[SSJFinancingHomeitem class]]) {
-                SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *)fundItem;
-                fundId = fundingItem.fundingID;
-            } else if ([fundItem isKindOfClass:[SSJCreditCardItem class]]) {
-                SSJCreditCardItem *cardItem = (SSJCreditCardItem *)fundItem;
-                fundId = cardItem.fundingID;
-            }
+            fundId = fundItem.fundingID;
         } else {
             fundId = @"";
         }
