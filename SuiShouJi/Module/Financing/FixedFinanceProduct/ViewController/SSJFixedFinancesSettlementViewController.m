@@ -106,9 +106,16 @@ static NSString *kTitle6 = @"结算日期";
 }
 
 - (void)orangeData {
+    
     double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
-    double benjin = [self.financeModel.money doubleValue] - lixi;
-    self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
+    if (self.financeModel.isend) {
+        
+        double benjin = [self.financeModel.money doubleValue] - lixi;
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
+        
+    } else {
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",[self.financeModel.money doubleValue]];
+    }
     self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
     
     //
@@ -206,6 +213,7 @@ static NSString *kTitle6 = @"结算日期";
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
         if ([title isEqualToString:kTitle1]) {
+            cell.textField.userInteractionEnabled = NO;
             cell.textField.text = self.moneyStr;
             self.moneyTextF = cell.textField;
         } else if([title isEqualToString:kTitle2]) {
