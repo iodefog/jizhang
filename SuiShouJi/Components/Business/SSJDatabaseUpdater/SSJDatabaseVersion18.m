@@ -18,7 +18,12 @@
 }
 
 + (NSError *)startUpgradeInDatabase:(FMDatabase *)db {
-    NSError *error = [self createRecycleTableWithDatabase:db];
+    NSError *error = [self alterUserTableWithDatabase:db];
+    if (error) {
+        return error;
+    }
+    
+    error = [self createRecycleTableWithDatabase:db];
     if (error) {
         return error;
     }
@@ -36,6 +41,22 @@
     error = [self updateLoanChargesWithDatabase:db];
     if (error) {
         return error;
+    }
+    
+    return nil;
+}
+
++ (NSError *)alterUserTableWithDatabase:(FMDatabase *)db {
+    if (![db columnExists:@"IFUNDDELETIONREMINDED" inTableWithName:@"BK_USER"]) {
+        if (![db executeUpdate:@"alter table BK_USER add IFUNDDELETIONREMINDED INTEGER"]) {
+            return [db lastError];
+        }
+    }
+    
+    if (![db columnExists:@"IBOOKDELETIONREMINDED" inTableWithName:@"BK_USER"]) {
+        if (![db executeUpdate:@"alter table BK_USER add IBOOKDELETIONREMINDED INTEGER"]) {
+            return [db lastError];
+        }
     }
     
     return nil;

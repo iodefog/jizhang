@@ -21,12 +21,12 @@
 #import "SSJReminderEditeViewController.h"
 #import "SSJFinancingHomeHelper.h"
 #import "SSJDataSynchronizer.h"
-#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
 #import "SSJTextFieldToolbarManager.h"
 #import "SSJListMenu.h"
 #import "SSJFinancingStore.h"
 #import "SSJFundingTypeManager.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJRecycleDataDeletionAlertView.h"
 
 #define NUM @"+-.0123456789"
 
@@ -64,8 +64,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
 @property (nonatomic, strong) UIView *saveFooterView;
 
 @property (nonatomic, strong) UIView *colorSelectView;
-
-@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @property (nonatomic, strong) SSJListMenu *debtOrbalanceChoice;
 
@@ -492,7 +490,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金账户，其对应的记账数据将一并删除" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"一并删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 @strongify(self);
-                [self.authCodeAlertView show];
+                [self deleteFundingItem:self.financingItem type:1];
             }]];
             
             [alert addAction:[UIAlertAction actionWithTitle:@"迁移数据" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
@@ -512,7 +510,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"删除该资金账户，其对应的记账数据将一并删除？" preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 @strongify(self);
-                [self.authCodeAlertView show];
+                [self deleteFundingItem:self.financingItem type:1];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL]];
             [self presentViewController:alert animated:YES completion:NULL];
@@ -727,21 +725,6 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     return _billDateSettleMentButton;
 }
 
-- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
-    if (!_authCodeAlertView) {
-        __weak typeof(self) wself = self;
-        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
-        _authCodeAlertView.finishVerification = ^{
-            [wself deleteFundingItem:wself.financingItem type:1];
-        };
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineSpacing = 5;
-        style.alignment = NSTextAlignmentCenter;
-        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
-    }
-    return _authCodeAlertView;
-}
-
 - (SSJListMenu *)debtOrbalanceChoice {
     if (!_debtOrbalanceChoice) {
         _debtOrbalanceChoice = [[SSJListMenu alloc] initWithFrame:CGRectMake(0, 0, 290, 150)];
@@ -763,6 +746,7 @@ static NSString * SSJCreditCardEditeCellIdentifier = @"SSJCreditCardEditeCellIde
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
     } failure:^(NSError *error) {
         SSJPRINT(@"%@",[error localizedDescription]);
     }];
