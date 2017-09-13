@@ -187,6 +187,7 @@ static NSString *const kHeaderId = @"SSJBookKeepingHomeHeaderView";
         [self.themeModifyView show];
         _needEditeThemeModel = NO;
     }
+    
     [self getCurrentDate];
     
     if (kHasEnterBooksKeepingHome) {
