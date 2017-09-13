@@ -26,6 +26,9 @@ static  NSString *kTitle3 = @"投资名称";
 @property (nonatomic, strong) NSMutableArray *dataArray;
 
 @property (nonatomic, strong) NSMutableArray *titleArray;
+
+/**<#注释#>*/
+@property (nonatomic, strong) NSMutableArray *imageArray;
 @end
 
 @implementation SSJEveryInverestDetailViewController
@@ -47,6 +50,8 @@ static  NSString *kTitle3 = @"投资名称";
         [self.dataArray addObject:[NSString stringWithFormat:@"%.2f",self.chargeItem.money]];
         [self.dataArray addObject:[self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         [self.dataArray addObject:self.productItem.productName];
+        self.imageArray = [NSMutableArray arrayWithArray:@[@"fixed_finance_lixi",@"fixed_finance_qixi",@"loan_person"]];
+        
     } else if (self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
         self.title = @"投资本金";
         [self.titleArray addObjectsFromArray:@[@"投资本金",@"转出账户",@"时间",@"投资名称"]];
@@ -57,7 +62,7 @@ static  NSString *kTitle3 = @"投资名称";
         [self.dataArray addObject:[self.chargeItem.billDate ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
         [self.dataArray addObject:self.productItem.productName];
         
-
+        self.imageArray = [NSMutableArray arrayWithArray:@[@"loan_money",@"fixed_finance_out",@"fixed_finance_qixi",@"loan_person",@"loan_memo"]];
         if (self.productItem.memo.length) {
             [self.titleArray addObject:@"备注"];
             [self.dataArray addObject:self.productItem.memo];
@@ -70,11 +75,13 @@ static  NSString *kTitle3 = @"投资名称";
         } else if (self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease) {
             [self.dataArray addObject:[NSString stringWithFormat:@"-%.2f",self.chargeItem.money]];
         }
+        self.imageArray = [NSMutableArray arrayWithArray:@[@"loan_money",@"fixed_finance_qixi",@"loan_person"]];
         [self.dataArray addObject:[self.chargeItem.billDate ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
         [self.dataArray addObject:self.productItem.productName];
     } else if (self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCloseOut) {
         self.title = @"结算金额";
         [self.titleArray addObjectsFromArray:@[@"结算金额",@"结算账户",@"时间",@"投资名称"]];
+        self.imageArray = [NSMutableArray arrayWithArray:@[@"loan_money",@"fixed_finance_out",@"fixed_finance_qixi",@"loan_person"]];
         [self.dataArray addObject:[NSString stringWithFormat:@"%.2f",self.chargeItem.money]];
         SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.productItem.targetfundid];
         [self.dataArray addObject:funditem.ID];
@@ -122,6 +129,7 @@ static  NSString *kTitle3 = @"投资名称";
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellId = @"SSJEveryInverestDetailViewCellId";
     NSString *title = [self.titleArray ssj_safeObjectAtIndex:indexPath.row];
+    NSString *imageName = [self.imageArray ssj_safeObjectAtIndex:indexPath.row];
     NSString *value = [self.dataArray ssj_safeObjectAtIndex:indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     if (!cell) {
@@ -129,9 +137,11 @@ static  NSString *kTitle3 = @"投资名称";
         cell.textLabel.textColor = SSJ_MAIN_COLOR;
         cell.detailTextLabel.textColor = SSJ_SECONDARY_COLOR;
         cell.textLabel.font = cell.detailTextLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
+        cell.imageView.tintColor = SSJ_SECONDARY_COLOR;
     }
     cell.textLabel.text = title;
     cell.detailTextLabel.text = value;
+    cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     return cell;
 }
 
