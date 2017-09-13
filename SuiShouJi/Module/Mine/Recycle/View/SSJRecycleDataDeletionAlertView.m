@@ -7,6 +7,95 @@
 //
 
 #import "SSJRecycleDataDeletionAlertView.h"
+#import "SSJUserTableManager.h"
+
+@interface SSJRecycleDataDeletionAlertor ()
+
+@property (nonatomic) SSJRecycleDataDeletionType type;
+
+@property (nonatomic, strong) SSJRecycleDataDeletionAlertView *alertView;
+
+@end
+
+@implementation SSJRecycleDataDeletionAlertor
+
++ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type {
+    [self showAlertIfNeeded:type success:NULL falure:NULL];
+}
+
++ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type success:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure {
+    SSJRecycleDataDeletionAlertor *alertor = [[SSJRecycleDataDeletionAlertor alloc] init];
+    alertor.type = type;
+    [alertor showAlertIfNeededWithSuccess:success falure:failure];
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+    }
+    return self;
+}
+
+- (void)showAlertIfNeededWithSuccess:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure {
+    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+            [subscriber sendNext:@([[userItem valueForKey:[self propertyName]] boolValue])];
+            [subscriber sendCompleted];
+        } failure:^(NSError * _Nonnull error) {
+            [subscriber sendError:error];
+        }];
+        return nil;
+    }] flattenMap:^RACStream *(id value) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            if ([value boolValue]) {
+                [subscriber sendCompleted];
+            } else {
+                [self.alertView show];
+                
+                SSJUserItem *item = [[SSJUserItem alloc] init];
+                item.userId = SSJUSERID();
+                [item setValue:@"1" forKey:[self propertyName]];
+                [SSJUserTableManager saveUserItem:item success:^{
+                    [subscriber sendCompleted];
+                } failure:^(NSError * _Nonnull error) {
+                    [subscriber sendError:error];
+                }];
+            }
+            return nil;
+        }];
+    }] subscribeError:^(NSError *error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
+}
+
+- (NSString *)propertyName {
+    switch (self.type) {
+        case SSJRecycleDataDeletionTypeBook:
+            return @"bookDeletionReminded";
+            break;
+            
+        case SSJRecycleDataDeletionTypeFund:
+            return @"fundDeletionReminded";
+            break;
+    }
+}
+
+- (SSJRecycleDataDeletionAlertView *)alertView {
+    if (!_alertView) {
+        _alertView = [SSJRecycleDataDeletionAlertView alertView];
+        switch (self.type) {
+            case SSJRecycleDataDeletionTypeBook:
+                _alertView.message = @"该账本以及对应流水将被删除至回收站";
+                break;
+                
+            case SSJRecycleDataDeletionTypeFund:
+                _alertView.message = @"该资金账户以及对应流水将被删除至回收站";
+                break;
+        }
+    }
+    return _alertView;
+}
+
+@end
 
 static const NSTimeInterval kDuration = 0.25;
 
