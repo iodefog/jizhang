@@ -61,6 +61,9 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 @property (nonatomic, strong) NSArray <SSJFixedFinanceProductChargeItem *>*chargeModels;
 
+/**<#注释#>*/
+@property (nonatomic, strong) UIImageView *stateImageView;
+
 /**当前金额*/
 @property (nonatomic, assign) double currentMoney;
 
@@ -74,13 +77,15 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [self.view addSubview:self.changeBtn];
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
+    [self.headerView addSubview:self.stateImageView];
     [self updateAppearance];
     self.changeSectionHeaderView.expanded= NO;
     self.title = @"固收理财详情";
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+    self.stateImageView.hidden = !self.financeModel.isend;
     [self loadData];
 }
 
@@ -711,6 +716,16 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         };
     }
     return _changeSectionHeaderView;
+}
+
+- (UIImageView *)stateImageView {
+    if (!_stateImageView) {
+        _stateImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"fixed_jiesuan"]];
+        _stateImageView.hidden = YES;
+        _stateImageView.centerX = SSJSCREENWITH * 0.5;
+        _stateImageView.top = 140;
+    }
+    return _stateImageView;
 }
 
 @end

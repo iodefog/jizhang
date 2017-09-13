@@ -465,6 +465,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
     if (_edited) {
+        if (!self.remindSwitch.on) {
+            _reminderItem.remindState = 0;
+        } else {
+            _reminderItem.remindState = 1;
+        }
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"修改后已有的相关流水会被抹清后重新计算生成，您确定要修改吗" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
             [weakSelf.sureButton ssj_hideLoadingIndicator];
             return ;
@@ -499,6 +504,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         }],nil];
     } else {
         //保存固定收益理财
+        if (!self.remindSwitch.on) {
+            _reminderItem.remindState = 0;
+        } else {
+            _reminderItem.remindState = 1;
+        }
         [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             weakSelf.sureButton.enabled = YES;
             
@@ -563,6 +573,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     if (!self.liLvTextF.text.length || [self.liLvTextF.text doubleValue] <= 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入利率"];
+        return NO;
+    }
+    if ([self.liLvTextF.text doubleValue] > 100) {
+        [CDAutoHideMessageHUD showMessage:@"利率不可以大于100%哦"];
         return NO;
     }
     
@@ -673,7 +687,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 }
 
 - (NSDate *)paymentDate {
-//    return self.loanModel.repaymentDate ?: [self.loanModel.borrowDate dateByAddingMonths:1];
     return [NSDate date];
 }
 

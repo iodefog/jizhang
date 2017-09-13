@@ -119,8 +119,6 @@
             }
         }
         
-        
-        
             //存储固定理财记录（如果是编辑的时候更新本金）
         //最新本金 = 原来本金 + （原始本金之差）
         
@@ -1230,6 +1228,7 @@
             
             double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];//所有派发利息的和
             //如果有利息时并且利息和派发利息不同的时候
+            
             if (i == 0 && model.chargeModel && model.chargeModel.money != interest) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
@@ -1285,6 +1284,10 @@
 #pragma mark - Other
 
 + (BOOL)liXiPingzhangShouRuWithModel:(SSJFixedFinanceProductItem *)productModel chargeModel:(SSJFixedFinanceProductCompoundItem *)model money:(double)money fundid:(NSString *)fundid inDatabase:(FMDatabase *)db error:(NSError **)error {
+    if (money == 0) {
+        return YES;
+    }
+    
     NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSString *cid = productModel.productid;
@@ -1303,7 +1306,7 @@
     [valueArr addObject:writeDateStr];
     [valueArr addObject:@(SSJChargeIdTypeFixedFinance)];
     NSDictionary *chargeInfo = [NSDictionary dictionaryWithObjects:[valueArr copy] forKeys:keyArr];
-
+    
     if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:ichargeid, :cuserid, :ibillid, :ifunsid, :cbilldate, :cid, :imoney, :cmemo, :iversion, :operatortype, :cwritedate, :ichargetype)" withParameterDictionary:chargeInfo]) {
         if (error) {
             *error = [db lastError];
@@ -1315,6 +1318,9 @@
 }
 
 + (BOOL)liXiPingzhangZhiChuWithModel:(SSJFixedFinanceProductItem *)productModel chargeModel:(SSJFixedFinanceProductCompoundItem *)model money:(double)money fundid:(NSString *)fundid inDatabase:(FMDatabase *)db error:(NSError **)error{
+    if (money == 0) {
+        return YES;
+    }
     NSString *billDateStr = [model.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *writeDateStr = [model.chargeModel.writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     NSString *cid = productModel.productid;

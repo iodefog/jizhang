@@ -81,6 +81,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     // Do any additional setup after loading the view.
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.startLunchService cancel];
+    [self.checkInService cancel];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self requestStartAPI];
@@ -101,11 +107,6 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             [self jumpOutToRootView];
         }
     });
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-
 }
 
 - (void)didReceiveMemoryWarning {
