@@ -217,7 +217,7 @@ static NSUInteger kDateTag = 2005;
         }
         
         if ((lastTotalMoney + redemMoney) < 0) {
-            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+            [CDAutoHideMessageHUD showMessage:@"删除后金额将为负数"];
             return;
         }
     }
