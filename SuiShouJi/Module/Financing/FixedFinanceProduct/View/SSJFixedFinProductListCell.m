@@ -78,7 +78,7 @@
 - (void)updateConstraints {
     [super updateConstraints];
     [_stamp mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(22);
+        make.bottom.mas_equalTo(-22);
         make.centerX.mas_equalTo(self.contentView);
         make.size.mas_equalTo(CGSizeMake(72, 72));
     }];

@@ -63,24 +63,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 + (BOOL)supplementCycleRecordsForUserId:(NSString *)userId {
     __block BOOL successfull = NO;
     [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
-        if (![self supplementBookkeepingForUserId:userId inDatabase:db]) {
+        if (![self supplementCycleRecordsForUserId:userId inDatabase:db]) {
             *rollback = YES;
             return;
         }
-        
-        if (![self supplementBudgetForUserId:userId inDatabase:db]) {
-            *rollback = YES;
-            return;
-        }
-        
-        if (![self supplementCyclicTransferForUserId:userId inDatabase:db]) {
-            *rollback = YES;
-            return;
-        }
-        
         successfull = YES;
-        
     }];
     return successfull;
 }
@@ -88,26 +75,41 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
 + (void)supplementCycleRecordsForUserId:(NSString *)userId success:(nullable void(^)())success failure:(nullable void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
-        if (![self supplementBookkeepingForUserId:userId inDatabase:db]
-            || ![self supplementBudgetForUserId:userId inDatabase:db]
-            || ![self supplementCyclicTransferForUserId:userId inDatabase:db]) {
-            
+        if ([self supplementCycleRecordsForUserId:userId inDatabase:db]) {
+            if (success) {
+                SSJDispatch_main_async_safe(^{
+                    success();
+                });
+            }
+        } else {
             *rollback = YES;
             if (failure) {
                 SSJDispatch_main_async_safe(^{
                     failure([db lastError]);
                 });
             }
-            return;
-        }
-        
-        if (success) {
-            SSJDispatch_main_async_safe(^{
-                success();
-            });
         }
     }];
+}
+
++ (BOOL)supplementCycleRecordsForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    if (![self supplementBookkeepingForUserId:userId inDatabase:db]) {
+        return NO;
+    }
+    
+    if (![self supplementBudgetForUserId:userId inDatabase:db]) {
+        return NO;
+    }
+    
+    if (![self supplementCyclicTransferForUserId:userId inDatabase:db]) {
+        return NO;
+    }
+    
+    if (![self closeExpiredPeriodDataForUserId:userId inDatabase:db]) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 + (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
@@ -600,6 +602,23 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             return nil;
             break;
     }
+}
+
+// 关闭已过期的周期记账、转账
++ (BOOL)closeExpiredPeriodDataForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+    NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+    NSString *updateDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    
+    // 关闭已过期的周期记账
+    if (![db executeUpdate:@"update bk_charge_period_config set istate = 0, operatortype = 1, cwritedate = ?, iversion = ? where cuserid = ? and istate <> 0 and cbilldateend < ? and operatortype <> 2", updateDate, @(SSJSyncVersion()), userId, today]) {
+        return NO;
+    }
+    
+    // 关闭已过期的周期转账
+    if (![db executeUpdate:@"update bk_transfer_cycle set istate = 0, operatortype = 1, cwritedate = ?, iversion = ? where cuserid = ? and istate <> 0 and cenddate < ? and operatortype <> 2", updateDate, @(SSJSyncVersion()), userId, today]) {
+        return NO;
+    }
+    return YES;
 }
 
 
