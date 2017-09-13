@@ -79,9 +79,19 @@ static NSUInteger kDateTag = 2005;
         //查询当前charid对应的另外一跳流水
         //通过另一条流水的fundid查找名称
         [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(NSArray<SSJFixedFinanceProductChargeItem *> * _Nonnull charegItemArr) {
-            SSJFixedFinanceProductChargeItem *chargeItem = [charegItemArr lastObject];
-            weakSelf.otherChareItem = chargeItem;
-            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherChareItem.fundId];
+            for (SSJFixedFinanceProductChargeItem *chargeItem in charegItemArr) {
+                if (![chargeItem.billId isEqualToString:weakSelf.chargeItem.billId]) {
+                    weakSelf.otherChareItem = chargeItem;
+                }
+            }
+            
+            NSString *fundid;
+            if (self.isEnterFromFinance == YES) {
+                fundid = self.otherChareItem.fundId;
+            } else {
+                fundid = self.chargeItem.fundId;
+            }
+            SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:fundid];
             [self initEditCompoundModel];
             [weakSelf funditem:funditem];
             
@@ -114,7 +124,12 @@ static NSUInteger kDateTag = 2005;
                     break;
                 }
             }
-            weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
+            if (self.isEnterFromFinance) {
+                weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
+            } else {
+                weakSelf.compoundModel.chargeModel.fundId = funditem.ID;
+            }
+            
         }
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:0];
         [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -473,6 +488,10 @@ static NSUInteger kDateTag = 2005;
     self.compoundModel.targetChargeModel.money = [moneyF.text doubleValue];
     self.compoundModel.targetChargeModel.oldMoney = self.compoundModel.targetChargeModel.money;
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
+    
+    if (self.chargeItem) {
+        self.compoundModel.targetChargeModel.billDate = self.compoundModel.chargeModel.billDate = self.chargeItem.billDate;
+    }
     //如果是编辑的时候
     if (self.chargeItem) {
         if (self.oldMoney >= [moneyF.text doubleValue]) {//为负数
@@ -618,6 +637,7 @@ static NSUInteger kDateTag = 2005;
         _dateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
             weakSelf.compoundModel.chargeModel.billDate = view.date;
             weakSelf.compoundModel.targetChargeModel.billDate = view.date;
+            weakSelf.chargeItem.billDate = view.date;
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
             [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         };
@@ -650,8 +670,13 @@ static NSUInteger kDateTag = 2005;
 - (void)initEditCompoundModel {
     if (!_compoundModel) {
         _compoundModel = [[SSJFixedFinanceProductCompoundItem alloc] init];
-        _compoundModel.chargeModel = self.chargeItem;
-        _compoundModel.targetChargeModel = self.otherChareItem;
+        if (self.isEnterFromFinance) {
+            _compoundModel.chargeModel = self.chargeItem;
+            _compoundModel.targetChargeModel = self.otherChareItem;
+        } else {
+            _compoundModel.chargeModel = self.otherChareItem;
+            _compoundModel.targetChargeModel = self.chargeItem;
+        }
     }
 }
 
