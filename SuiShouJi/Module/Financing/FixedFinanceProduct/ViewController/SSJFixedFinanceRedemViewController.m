@@ -502,7 +502,6 @@ static NSString *kTitle6 = @"备注";
         }
     }
     
-    
     return YES;
 }
 
@@ -510,15 +509,36 @@ static NSString *kTitle6 = @"备注";
     self.compoundModel.chargeModel.money = self.compoundModel.targetChargeModel.money = [self.moneyTextF.text doubleValue];
     self.compoundModel.chargeModel.memo = self.compoundModel.targetChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     
-    self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
-    self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+    if (self.chargeModel) {//是编辑的时候
+        if (!self.compoundModel.interestChargeModel && _isLiXiOn) {//并且一开始不存在手续费的时候
+            NSString *interestChargeBillId = @"20";
+            SSJFixedFinanceProductChargeItem *interestChargeModel = [[SSJFixedFinanceProductChargeItem alloc] init];
+            NSString *uuid = [[self.compoundModel.chargeModel.chargeId componentsSeparatedByString:@"_"] firstObject];
+            interestChargeModel.chargeId = [NSString stringWithFormat:@"%@_%@",uuid,interestChargeBillId];
+            interestChargeModel.fundId = self.financeModel.thisfundid;
+            interestChargeModel.billId = interestChargeBillId;
+            interestChargeModel.userId = SSJUSERID();
+            interestChargeModel.billDate = self.compoundModel.chargeModel.billDate;
+            interestChargeModel.cid = self.compoundModel.chargeModel.cid;
+            self.compoundModel.interestChargeModel = interestChargeModel;
+        }
+    }
     
-    if (!self.chargeModel) {
+    self.compoundModel.interestChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
+    if (_isLiXiOn) {
+        self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
+        self.compoundModel.interestChargeModel.oldMoney = self.oldPoundageMoney;
+    } else {
+        self.liXiTextF.text = nil;
+        self.compoundModel.interestChargeModel.money = 0;
+       self.compoundModel.interestChargeModel.oldMoney = self.oldPoundageMoney;
+    }
+    
+    
+    if (!self.chargeModel) {//新建
         NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.financeModel.productid,[self.compoundModel.chargeModel.billDate timeIntervalSince1970]];
         self.compoundModel.chargeModel.cid = self.compoundModel.targetChargeModel.cid = self.compoundModel.interestChargeModel.cid = cid;
     }
-    self.compoundModel.interestChargeModel.money = [self.liXiTextF.text doubleValue];
-    self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue];
     
     //如果是编辑的时候
     if (self.chargeModel) {
@@ -542,6 +562,7 @@ static NSString *kTitle6 = @"备注";
     if (![self checkIfNeedCheck]) return;
     [self updateModel];
    
+    //如果有
     
     MJWeakSelf;
     //保存流水
@@ -707,7 +728,6 @@ static NSString *kTitle6 = @"备注";
         _compoundModel.chargeModel = chargeModel;
         _compoundModel.targetChargeModel = targetChargeModel;
         _compoundModel.interestChargeModel = interestChargeModel;
-        
     }
 }
 
