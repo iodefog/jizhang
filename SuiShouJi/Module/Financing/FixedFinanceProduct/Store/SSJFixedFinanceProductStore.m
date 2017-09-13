@@ -1664,7 +1664,7 @@
                     NSDate *billDate = [dayJixiDate dateByAddingDays:item.time];
                     //如果已经到了结束日期了就返回
                     if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                        return 0;
+                        return YES;
                     }
                     if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
                     
@@ -1739,9 +1739,9 @@
                     
                     NSDate *billDate = [writeDate dateBySubtractingDays:1];
                     //如果一定到了结束日期了就返回
-                    if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                        return YES;
-                    }
+//                    if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
+//                        return YES;
+//                    }
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                     //月，一次性
                     double investmentMoney = 0;
@@ -1795,7 +1795,7 @@
                     interest = lixi;
                     //最后一条利息
                     NSDate *endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
-                    NSInteger months = [endDate daysFrom:lastChangeDate];
+                    NSInteger months = [endDate monthsFrom:lastChangeDate];
                     NSInteger begDays = [endDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:months timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                     
@@ -1830,15 +1830,17 @@
                 case SSJMethodOfRateOrTimeYear:
                 {
                     //年一次性
-                    if ([[dayJixiDate dateByAddingYears:item.time] isLaterThanOrEqualTo:currentDate]) return YES;//如果没到时间返回
+                    if ([[currentDate dateBySubtractingDays:1]isEarlierThanOrEqualTo:[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]]) {
+                        return YES;
+                    }
                     NSDate *writeDate = [[dayJixiDate dateByAddingYears:(item.time)] dateByAddingDays:1];
-                    if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
+//                    if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
                     
                     NSDate *billDate = [writeDate dateBySubtractingDays:1];
                     //如果一定到了结束日期了就返回
-                    if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                        return 0;
-                    }
+//                    if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
+//                        return 0;
+//                    }
                     NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                     
                     //年，一次性（当做月来处理）
