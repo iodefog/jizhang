@@ -1034,7 +1034,15 @@
             endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
         }
         
-        if (![self interestRecordWithProductModel:productModel investmentDate:productModel.startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
+        NSDate *startDate;
+        if (productModel.startDate) {
+            startDate = productModel.startDate;
+        } else {
+            if (productModel.startdate.length) {
+                startDate = [productModel.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+            }
+        }
+        if (![self interestRecordWithProductModel:productModel investmentDate:startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -1130,8 +1138,16 @@
                 } else {
                     endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
                 }
-                
-                if (![self interestRecordWithProductModel:productModel investmentDate:productModel.startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
+            
+            NSDate *startDate;
+            if (productModel.startDate) {
+                startDate = productModel.startDate;
+            } else {
+                if (productModel.startdate.length) {
+                    startDate = [productModel.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+                }
+            }
+                if (![self interestRecordWithProductModel:productModel investmentDate:startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatchMainAsync(^{
