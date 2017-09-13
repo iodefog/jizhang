@@ -14,10 +14,11 @@
 #import "SSJBudgetNodataRemindView.h"
 #import "SSJLoanListSectionHeaderAmountView.h"
 
-#import "SSJLoanListCell.h"
+#import "SSJFixedFinProductListCell.h"
 
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJFixedFinanceProductItem.h"
+#import "SSJLoanListCellItem.h"
 #import "SSJFinancingHomeitem.h"
 #import "SSJDataSynchronizer.h"
 
@@ -147,7 +148,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    SSJLoanListCell *cell = [tableView dequeueReusableCellWithIdentifier:kFixedFinanceProductListCellId forIndexPath:indexPath];
+    SSJFixedFinProductListCell *cell = [SSJFixedFinProductListCell cellWithTableView:tableView];
     cell.cellItem = [SSJLoanListCellItem itemForFixedFinanceProductModel:[self.dataItems ssj_safeObjectAtIndex:indexPath.row]];
     return cell;
 }
@@ -222,8 +223,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
         _tableView.backgroundColor = [UIColor clearColor];
         [_tableView setSeparatorInset:UIEdgeInsetsZero];
         _tableView.sectionFooterHeight = 0;
-        _tableView.rowHeight = 90;
-        [_tableView registerClass:[SSJLoanListCell class] forCellReuseIdentifier:kFixedFinanceProductListCellId];
+        _tableView.rowHeight = 120;
     }
     return _tableView;
 }
