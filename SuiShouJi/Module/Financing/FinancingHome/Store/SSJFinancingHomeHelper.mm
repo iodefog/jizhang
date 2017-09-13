@@ -77,7 +77,11 @@
 
             item.fundingAmount = item.fundingIncome - item.fundingExpence;
 
-            if (fund.display || (![item.fundingParent isEqualToString:@"11"] && ![item.fundingParent isEqualToString:@"10"])) {
+            SSJFinancingParent type = (SSJFinancingParent)[item.fundingParent integerValue];
+            if (fund.display
+                || (type != SSJFinancingParentDebt
+                    && type != SSJFinancingParentPaidLeave
+                    && type != SSJFinancingParentFixedEarnings)) {
                 [fundingList addObject:item];
             }
         }
