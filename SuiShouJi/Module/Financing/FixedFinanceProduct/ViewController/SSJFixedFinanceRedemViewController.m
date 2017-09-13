@@ -586,11 +586,12 @@ static NSString *kTitle6 = @"备注";
 
 #pragma mark - Action
 - (void)sureButtonAction {
-    if (![self checkIfNeedCheck]) return;
+//    if (![self checkIfNeedCheck]) return;
     MJWeakSelf;
     if ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue]) {
         //提示结算弹框
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您部分赎回金额等于累计投资本金，是否立即结算该笔固收理财？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即结算" handler:^(SSJAlertViewAction * _Nonnull action) {
+            [weakSelf.view endEditing:YES];
             //跳转到结算页面
             SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
             [weakSelf.navigationController pushViewController:vc animated:YES];
