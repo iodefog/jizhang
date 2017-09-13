@@ -333,8 +333,8 @@
             }
             
             if (error) {
+                *rollback = YES;
                 SSJDispatchMainAsync(^{
-                    *rollback = YES;
                     if (failure) {
                         failure(error);
                     }
@@ -857,7 +857,7 @@
     for (_SSJRecycleChargeModel *model in fixedChargeModels) {
         // 恢复固收理财项目
         NSString *productID = [[model.sundryID componentsSeparatedByString:@"_"] firstObject];
-        if (![db executeUpdate:@"update bk_fixed_finance_product set operatortype = 1, cwritedate = ?, iversion = ? where crepaymentid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), productID]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set operatortype = 1, cwritedate = ?, iversion = ? where cproductid = ? and operatortype = 2", writeDate, @(SSJSyncVersion()), productID]) {
             if (error) {
                 *error = [db lastError];
             }

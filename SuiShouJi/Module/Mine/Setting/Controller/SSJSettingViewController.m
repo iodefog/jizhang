@@ -105,10 +105,9 @@ static NSString *const kRecycleTitle = @"回收站";
     
     NSString *title = [self.titles ssj_objectAtIndexPath:indexPath];
     
-    // 清除数据、回收站不需要用户登录，其他操作均要求登录
+    // 清除数据不需要用户登录，其他操作均要求登录
     if (!SSJIsUserLogined()
-        && ![title isEqualToString:kClearDataTitle]
-        && ![title isEqualToString:kRecycleTitle]) {
+        && ![title isEqualToString:kClearDataTitle]) {
         [SSJAnaliyticsManager event:@"sync_setup_tologin"];
         [self login];
         return;
