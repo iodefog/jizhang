@@ -250,7 +250,12 @@
         return NO;
     }
 
-    //删除资金账户所对应的周期记账
+    //删除资金账户所对应的周期转账
+    if (![db executeUpdate:@"update bk_transfer_cycle set operatortype = 2 , cwritedate = ? , iversion = ? where (ctransferinaccountid = ? or ctransferoutaccountid = ?) and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID , item.fundingID]) {
+        return NO;
+    };
+    
+    //删除资金帐户对应的周期记账
     if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
         return NO;
     };
