@@ -399,32 +399,49 @@
  @param success 成功
  @param failure 失败
  */
-+ (void)deleteFixedFinanceProductAccountWithModel:(NSArray <SSJFixedFinanceProductItem *> *)model success:(void (^)(void))success
++ (void)deleteFixedFinanceProductAccountWithModel:(NSArray <SSJFixedFinanceProductItem *> *)model
+                                          success:(void (^)(void))success
                                           failure:(void (^)(NSError *error))failure {
     NSString *userId = SSJUSERID();
         NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
-        NSError *error = nil;
         for (SSJFixedFinanceProductItem *item in model) {
             if (![self deleteFixedFinanceProductWithModel:item inDatabase:db success:nil failure:nil]) {
+                *rollback = YES;
                 if (failure) {
-                    *rollback = YES;
                     SSJDispatchMainAsync(^{
-                        failure(error);
+                        failure([db lastError]);
                     });
                 }
-                return ;
+                return;
             }
         }
+        
+        NSString *fundID = [NSString stringWithFormat:@"%@-8",SSJUSERID()];
         // 将固定理财的operatortype改为2
-        if (![db executeUpdate:@"update bk_fund_info set idisplay = 0， operatortype = ?, iversion = ?, cwritedate = ? where cfundid = ?", @1, @(SSJSyncVersion()), writeDate, [NSString stringWithFormat:@"%@-8",SSJUSERID()]]) {
+        if (![db executeUpdate:@"update bk_fund_info set idisplay = 0, operatortype = ?, iversion = ?, cwritedate = ? where cfundid = ?", @1, @(SSJSyncVersion()), writeDate, fundID]) {
+            *rollback = YES;
             if (failure) {
-                *rollback = YES;
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+        
+        NSError *error = nil;
+        if (![SSJRecycleHelper createRecycleRecordWithID:fundID
+                                             recycleType:SSJRecycleTypeFund
+                                               writeDate:writeDate
+                                                database:db
+                                                   error:&error]) {
+            *rollback = YES;
+            if (failure) {
                 SSJDispatchMainAsync(^{
                     failure(error);
                 });
             }
-            return ;
+            return;
         }
         
         if (success) {
