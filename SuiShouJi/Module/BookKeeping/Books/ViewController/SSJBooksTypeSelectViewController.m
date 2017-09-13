@@ -31,6 +31,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 #import "SSJBannerNetworkService.h"
 #import "SSJBooksTypeEditAlertView.h"
 #import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJRecycleDataDeletionAlertView.h"
 #import "SSJUserTableManager.h"
 #import "SSJBooksHeadeCollectionrReusableView.h"
 #import "SSJCreateOrDeleteBooksService.h"
@@ -47,7 +48,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 /**共享账本列表*/
 @property (nonatomic, strong) NSMutableArray <SSJShareBookItem *>*shareBooksDataItems;
 
-@property(nonatomic, strong) __kindof SSJBaseCellItem *editBooksItem;
+@property(nonatomic, strong) __kindof SSJBaseCellItem<SSJBooksItemProtocol> *editBooksItem;
 
 @property(nonatomic, strong) SSJEditableCollectionView *collectionView;
 
@@ -473,11 +474,13 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         };
         _editAlertView.deleteHandler = ^{
             @strongify(self);
-            SSJBooksTypeItem *persionalBook = self.editBooksItem;
-            if ([persionalBook.booksId isEqualToString:SSJUSERID()]) {
+            if ([self.editBooksItem.booksId isEqualToString:SSJUSERID()]) {
                 [CDAutoHideMessageHUD showMessage:@"日常账本无法删除"];
-            } else {
+            } else if ([self.editBooksItem isKindOfClass:[SSJBooksTypeItem class]]) {
+                [self deleteBooksWithType:1];
+            } else if ([self.editBooksItem isKindOfClass:[SSJShareBookItem class]]) {
                 [self.authCodeAlertView show];
+            } else {
             }
         };
         _editAlertView.transferHandler = ^{
@@ -499,9 +502,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
         _authCodeAlertView.finishVerification = ^{
             [wself deleteBooksWithType:1];
         };
-        
     }
-
     return _authCodeAlertView;
 }
 
@@ -663,6 +664,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [self getDateFromDB];
+            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeBook];
             
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];

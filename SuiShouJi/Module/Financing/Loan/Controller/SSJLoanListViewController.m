@@ -13,7 +13,7 @@
 #import "SSJLoanListSectionHeaderAmountView.h"
 #import "SSJLoanListCell.h"
 #import "SSJBudgetNodataRemindView.h"
-#import "SSJBooksTypeDeletionAuthCodeAlertView.h"
+#import "SSJRecycleDataDeletionAlertView.h"
 #import "SSJLoanHelper.h"
 #import "SSJFinancingHomeHelper.h"
 
@@ -33,7 +33,6 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 
 @property (nonatomic, strong) UIButton *addBtn;
 
-@property (nonatomic, strong) SSJBooksTypeDeletionAuthCodeAlertView *authCodeAlertView;
 
 @end
 
@@ -151,8 +150,15 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
 #pragma mark - Event
 - (void)deleteAction {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    @weakify(self);
     [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self.authCodeAlertView show];
+        @strongify(self);
+        [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item deleteType:1 Success:^{
+            [self.navigationController popToRootViewControllerAnimated:YES];
+            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
+        } failure:^(NSError *error) {
+            [SSJAlertViewAdapter showError:error];
+        }];
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
     [self presentViewController:alert animated:YES completion:NULL];
@@ -308,25 +314,6 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         [_addBtn ssj_setBorderStyle:SSJBorderStyleTop];
     }
     return _addBtn;
-}
-
-- (SSJBooksTypeDeletionAuthCodeAlertView *)authCodeAlertView {
-    if (!_authCodeAlertView) {
-        __weak typeof(self) wself = self;
-        _authCodeAlertView = [[SSJBooksTypeDeletionAuthCodeAlertView alloc] init];
-        _authCodeAlertView.finishVerification = ^{
-            [SSJFinancingHomeHelper deleteFundingWithFundingItem:wself.item deleteType:1 Success:^{
-                [wself.navigationController popToRootViewControllerAnimated:YES];
-            } failure:^(NSError *error) {
-                [SSJAlertViewAdapter showError:error];
-            }];
-        };
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.lineSpacing = 5;
-        style.alignment = NSTextAlignmentCenter;
-        _authCodeAlertView.message = [[NSAttributedString alloc] initWithString:@"删除后将难以恢复\n仍然删除，请输入下列验证码" attributes:@{NSParagraphStyleAttributeName:style}];
-    }
-    return _authCodeAlertView;
 }
 
 @end

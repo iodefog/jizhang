@@ -209,6 +209,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 SSJFixedFinanctAddViewController *addvc = [[SSJFixedFinanctAddViewController alloc] init];
                 addvc.financeModel = self.financeModel;
                 addvc.chargeItem = item;
+                addvc.isEnterFromFinance = YES;
                 [self.navigationController pushViewController:addvc animated:YES];
             }
                 break;

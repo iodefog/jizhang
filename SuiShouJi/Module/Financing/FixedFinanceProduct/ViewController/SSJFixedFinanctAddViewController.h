@@ -20,4 +20,8 @@
 
 /**点击进入详情的时候必须传新建不用传*/
 @property (nonatomic, strong)  SSJFixedFinanceProductChargeItem *chargeItem;
+
+//进入的入口
+/**是否是从固定理财进入的 yes是从固收理财，no是从其他资金账户*/
+@property (nonatomic, assign) BOOL isEnterFromFinance;
 @end

@@ -106,9 +106,10 @@ static NSString *kTitle6 = @"结算日期";
 }
 
 - (void)orangeData {
-    
-    self.moneyStr = self.financeModel.money;
-    self.lixiStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid]];
+    double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+    double benjin = [self.financeModel.money doubleValue] - lixi;
+    self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
+    self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
     
     //
     if (self.chargeItem) {
