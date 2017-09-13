@@ -369,7 +369,7 @@
                 }
                 
                 // 老版本的特殊流水（转账）也有账本id，所以在删除流水时需要将这些特殊流水过滤
-                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ? and length(ibillid) >= 4", writeDate, @(SSJSyncVersion()), item.booksId]) {
+                if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 ,cwritedate = ? ,iversion = ? where cbooksid = ? and length(ibillid) >= 4 and operatortype <> 2", writeDate, @(SSJSyncVersion()), item.booksId]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
