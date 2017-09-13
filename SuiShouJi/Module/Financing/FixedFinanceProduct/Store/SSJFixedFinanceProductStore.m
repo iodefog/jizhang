@@ -1642,7 +1642,7 @@
         }
     }
     
-    NSDate *currentDate = [NSDate date];
+    NSDate *currentDate = [NSDate dateWithYear:[NSDate date].year month:[NSDate date].month day:[NSDate date].day];
     
     NSString *billId = @"19";
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
@@ -1733,9 +1733,9 @@
                     //此处分度计算注意
                     //先计算出在第几月的时候余额变更的未变更的月份按照正常计算利息
                     //变更月份按照天来计算利息
-                    if ([[dayJixiDate dateByAddingMonths:item.time] isLaterThanOrEqualTo:currentDate]) return YES;//如果没到时间返回
-                    NSDate *writeDate = [[dayJixiDate dateByAddingMonths:(item.time)] dateByAddingDays:1];
-                    if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
+                    if ([[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isLaterThan:currentDate]) return YES;//如果没到时间返回
+                    NSDate *writeDate = [dayJixiDate dateByAddingDays:1];
+                    if ([writeDate isLaterThan:currentDate]) return YES;
                     
                     NSDate *billDate = [writeDate dateBySubtractingDays:1];
                     //如果一定到了结束日期了就返回
