@@ -6928,6 +6928,66 @@
 		9C2810ED1F67D6E700AE8A51 /* SSJGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2810E01F67D6E600AE8A51 /* SSJGuideViewController.m */; };
 		9C2810EE1F67D6E700AE8A51 /* SSJGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2810E01F67D6E600AE8A51 /* SSJGuideViewController.m */; };
 		9C2810EF1F67D6E700AE8A51 /* SSJGuideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2810E01F67D6E600AE8A51 /* SSJGuideViewController.m */; };
+		9C2810F21F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F31F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F41F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F51F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F61F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F71F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F81F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810F91F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FA1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FB1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FC1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FD1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FE1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2810FF1F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2811001F68E25C00AE8A51 /* newuserguide3.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */; };
+		9C2811011F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811021F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811031F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811041F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811051F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811061F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811071F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811081F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811091F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110A1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110B1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110C1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110D1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110E1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C28110F1F68E25C00AE8A51 /* newuserguide4.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */; };
+		9C2811111F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811121F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811131F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811141F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811151F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811161F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811171F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811181F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811191F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111A1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111B1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111C1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111D1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111E1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C28111F1F68E37F00AE8A51 /* newuserguide5.gif in Resources */ = {isa = PBXBuildFile; fileRef = 9C2811101F68E37F00AE8A51 /* newuserguide5.gif */; };
+		9C2811221F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811231F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811241F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811251F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811261F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811271F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811281F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811291F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112A1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112B1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112C1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112D1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112E1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C28112F1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
+		9C2811301F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */; };
 		9C2ABB8D1CF7E969002FC79E /* SSJGradientMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */; };
 		9C2B19231D3E185200B987EE /* SSJAdWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2B19221D3E185200B987EE /* SSJAdWebViewController.m */; };
 		9C2E02771CAE419600C5F764 /* SSJWeiXinLoginHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C2E02731CAE419600C5F764 /* SSJWeiXinLoginHelper.m */; };
@@ -13378,6 +13438,11 @@
 		9C2810BE1F67A9EB00AE8A51 /* SSJStarterUserGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJStarterUserGuideViewController.m; sourceTree = "<group>"; };
 		9C2810DF1F67D6E600AE8A51 /* SSJGuideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGuideViewController.h; sourceTree = "<group>"; };
 		9C2810E01F67D6E600AE8A51 /* SSJGuideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGuideViewController.m; sourceTree = "<group>"; };
+		9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = newuserguide3.gif; sourceTree = "<group>"; };
+		9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = newuserguide4.gif; sourceTree = "<group>"; };
+		9C2811101F68E37F00AE8A51 /* newuserguide5.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = newuserguide5.gif; sourceTree = "<group>"; };
+		9C2811201F68E41100AE8A51 /* SSJNewUserGifGuideView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJNewUserGifGuideView.h; sourceTree = "<group>"; };
+		9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJNewUserGifGuideView.m; sourceTree = "<group>"; };
 		9C2ABB8B1CF7E969002FC79E /* SSJGradientMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJGradientMaskView.h; sourceTree = "<group>"; };
 		9C2ABB8C1CF7E969002FC79E /* SSJGradientMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSJGradientMaskView.m; sourceTree = "<group>"; };
 		9C2B19211D3E185200B987EE /* SSJAdWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SSJAdWebViewController.h; sourceTree = "<group>"; };
@@ -16445,6 +16510,8 @@
 				9C2810511F62A62300AE8A51 /* SSJUserSignLaunchView.h */,
 				BD5FB13F1F64E3F500EC69D9 /* SSJStartChoiceView.h */,
 				BD5FB1401F64E3F500EC69D9 /* SSJStartChoiceView.m */,
+				9C2811201F68E41100AE8A51 /* SSJNewUserGifGuideView.h */,
+				9C2811211F68E41100AE8A51 /* SSJNewUserGifGuideView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -17107,6 +17174,9 @@
 				9CFBAC311E07D4DE00C55814 /* homeDefualtLoading.gif */,
 				9CAF731B1E03EAD90061ADB8 /* xiaomao.gif */,
 				9CAF731D1E03EAE50061ADB8 /* homeLoading.gif */,
+				9C2810F01F68E25C00AE8A51 /* newuserguide3.gif */,
+				9C2810F11F68E25C00AE8A51 /* newuserguide4.gif */,
+				9C2811101F68E37F00AE8A51 /* newuserguide5.gif */,
 			);
 			path = GifImage;
 			sourceTree = "<group>";
@@ -19082,6 +19152,7 @@
 				9C155F151E68572700FDFD18 /* MJRefresh.bundle in Resources */,
 				9C30AA9C1EAF6EB1008DD51D /* 1000.zip in Resources */,
 				7D08A2C01E4999D30085A8FB /* 9188.cer in Resources */,
+				9C2811071F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				7D08A2C21E4999D30085A8FB /* sr_refresh@2x.png in Resources */,
 				9C31057B1F4A89C10026E212 /* SSJFundingParent.plist in Resources */,
 				7D08A2C31E4999D30085A8FB /* SSJBookKeepingHomePopView.xib in Resources */,
@@ -19094,6 +19165,7 @@
 				9C61E3151EE6AA07001BA5F2 /* lottie_1.json in Resources */,
 				7D08A2C61E4999D30085A8FB /* Assets.xcassets in Resources */,
 				7D5520071F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
+				9C2811171F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7D08A2C81E4999D30085A8FB /* sr_refresh.png in Resources */,
 				9C2810301F629C9100AE8A51 /* newuserguide1.gif in Resources */,
 				7D08A2C91E4999D30085A8FB /* homeDefualtLoading.gif in Resources */,
@@ -19103,6 +19175,7 @@
 				7D08A2CD1E4999D30085A8FB /* Localizable.strings in Resources */,
 				7D08A2CE1E4999D30085A8FB /* SSJFinancingHomePopView.xib in Resources */,
 				9CDB49771EF38E3C0097E09D /* ani@960.webp in Resources */,
+				9C2810F81F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19120,6 +19193,7 @@
 				9C155F141E68572700FDFD18 /* MJRefresh.bundle in Resources */,
 				9C30AA9B1EAF6EB1008DD51D /* 1000.zip in Resources */,
 				7DA13C171E35AED7000490A4 /* 9188.cer in Resources */,
+				9C2811061F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				7DA13C191E35AED7000490A4 /* sr_refresh@2x.png in Resources */,
 				9C31057A1F4A89C10026E212 /* SSJFundingParent.plist in Resources */,
 				7DA13C1A1E35AED7000490A4 /* SSJBookKeepingHomePopView.xib in Resources */,
@@ -19132,6 +19206,7 @@
 				9C61E3141EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				7DA13C1D1E35AED7000490A4 /* Assets.xcassets in Resources */,
 				7D5520061F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
+				9C2811161F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7DA13C1F1E35AED7000490A4 /* sr_refresh.png in Resources */,
 				9C28102F1F629C9100AE8A51 /* newuserguide1.gif in Resources */,
 				7DA13C201E35AED7000490A4 /* homeDefualtLoading.gif in Resources */,
@@ -19141,6 +19216,7 @@
 				7DA13C241E35AED7000490A4 /* Localizable.strings in Resources */,
 				7DA13C251E35AED7000490A4 /* SSJFinancingHomePopView.xib in Resources */,
 				9CDB49761EF38E3C0097E09D /* ani@960.webp in Resources */,
+				9C2810F71F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19155,7 +19231,9 @@
 				7DBB3CA21E55C2EE0075E638 /* mydatabase.db in Resources */,
 				7DBB3CA41E55C2EE0075E638 /* 9188.cer in Resources */,
 				7DBB3CA51E55C2EE0075E638 /* sr_refresh@2x.png in Resources */,
+				9C2810F91F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				7DBB3CA61E55C2EE0075E638 /* SSJBookKeepingHomePopView.xib in Resources */,
+				9C2811181F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C61E3161EE6AA07001BA5F2 /* lottie_1.json in Resources */,
 				7D551FF81F271AC300DD8720 /* SSJCommonExpenseBillTypes.plist in Resources */,
 				7D6825211F1E170200A7587D /* SSJSpecialType.plist in Resources */,
@@ -19165,6 +19243,7 @@
 				7DBB3CA91E55C2EE0075E638 /* rain_sound.wav in Resources */,
 				7DBB3CAA1E55C2EE0075E638 /* Assets.xcassets in Resources */,
 				7D5520081F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
+				9C2811081F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				7DBB3CAB1E55C2EE0075E638 /* sr_refresh.png in Resources */,
 				9C155F161E68572700FDFD18 /* MJRefresh.bundle in Resources */,
 				9C61E3431EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
@@ -19191,6 +19270,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DBB41391E55C4E00075E638 /* pushsound.wav in Resources */,
+				9C2811021F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				7DBB413A1E55C4E00075E638 /* YouYuJiZhangBen-Info.plist in Resources */,
 				7DBB413B1E55C4E00075E638 /* xiaomao.gif in Resources */,
 				7DBB413C1E55C4E00075E638 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -19206,6 +19286,7 @@
 				9CDB49731EF38E3C0097E09D /* ani@960.webp in Resources */,
 				7DBB41421E55C4E00075E638 /* youyuwo.cer in Resources */,
 				7DBB41431E55C4E00075E638 /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C2811121F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7D8952DC1EB2F21A00FF6D04 /* 1000.zip in Resources */,
 				7DBB41441E55C4E00075E638 /* SuiShouJi-Info.plist in Resources */,
 				7DBB41451E55C4E00075E638 /* rain_sound.wav in Resources */,
@@ -19219,6 +19300,7 @@
 				7DBB41491E55C4E00075E638 /* JiZhangGuanJia-Info.plist in Resources */,
 				7DBB414A1E55C4E00075E638 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				7DBB414B1E55C4E00075E638 /* homeDefualtLoading.gif in Resources */,
+				9C2810F31F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				7DBB414C1E55C4E00075E638 /* homeLoading.gif in Resources */,
 				9C155F101E68572700FDFD18 /* MJRefresh.bundle in Resources */,
 				9C28102B1F629C9100AE8A51 /* newuserguide1.gif in Resources */,
@@ -19240,6 +19322,7 @@
 				7DFB18A81EB0341E00292DD3 /* SuiShouJiEnterprise-Info.plist in Resources */,
 				7DFB18A91EB0341E00292DD3 /* youyujizhangpro-Info.plist in Resources */,
 				7DFB18AA1EB0341E00292DD3 /* xiaomao.gif in Resources */,
+				9C2810FF1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				7DFB18AB1EB0341E00292DD3 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7DFB18AC1EB0341E00292DD3 /* 9188JiZhangBen-Info.plist in Resources */,
 				7DFB18AD1EB0341E00292DD3 /* mydatabase.db in Resources */,
@@ -19265,10 +19348,12 @@
 				7DFB18B81EB0341E00292DD3 /* 9188jizhangpro-Info.plist in Resources */,
 				7DFB18B91EB0341E00292DD3 /* JiZhangGuanJia-Info.plist in Resources */,
 				7D55200E1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
+				9C28110E1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9CDB498E1EF392FF0097E09D /* ani.webp in Resources */,
 				7DFB18BA1EB0341E00292DD3 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C61E31E1EE6AA0C001BA5F2 /* lottie_1.json in Resources */,
 				7DFB18BB1EB0341E00292DD3 /* homeDefualtLoading.gif in Resources */,
+				9C28111E1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7DFB18BC1EB0341E00292DD3 /* homeLoading.gif in Resources */,
 				7DFB18BD1EB0341E00292DD3 /* ProjectSettings.plist in Resources */,
 				7DFB18BE1EB0341E00292DD3 /* Localizable.strings in Resources */,
@@ -19284,6 +19369,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C13F71E1E8267D300AC5FA9 /* pushsound.wav in Resources */,
+				9C2811091F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C13F71F1E8267D300AC5FA9 /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C13F7201E8267D300AC5FA9 /* xiaomao.gif in Resources */,
 				9C13F7211E8267D300AC5FA9 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
@@ -19299,6 +19385,7 @@
 				9CDB49791EF38E3C0097E09D /* ani@960.webp in Resources */,
 				9C13F7271E8267D300AC5FA9 /* youyuwo.cer in Resources */,
 				9C13F7281E8267D300AC5FA9 /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C2811191F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C30AA9E1EAF6EB2008DD51D /* 1000.zip in Resources */,
 				9C13F7291E8267D300AC5FA9 /* SuiShouJi-Info.plist in Resources */,
 				9C13F72A1E8267D300AC5FA9 /* rain_sound.wav in Resources */,
@@ -19312,6 +19399,7 @@
 				9C13F72F1E8267D300AC5FA9 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C13F7301E8267D300AC5FA9 /* homeDefualtLoading.gif in Resources */,
 				9C13F7311E8267D300AC5FA9 /* homeLoading.gif in Resources */,
+				9C2810FA1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9C13F7321E8267D300AC5FA9 /* MJRefresh.bundle in Resources */,
 				9C30AA921EAF6EA7008DD51D /* 1001.zip in Resources */,
 				9C2810321F629C9200AE8A51 /* newuserguide1.gif in Resources */,
@@ -19331,6 +19419,7 @@
 				9C23D2811F209D8A008C7500 /* pushsound.wav in Resources */,
 				9C23D2821F209D8A008C7500 /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C23D2831F209D8A008C7500 /* MJRefresh.bundle in Resources */,
+				9C2811041F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C23D2841F209D8A008C7500 /* 9188JiZhangBao-info.plist in Resources */,
 				9C23D2851F209D8A008C7500 /* SuiShouJiEnterprise-Info.plist in Resources */,
 				9C23D2861F209D8A008C7500 /* youyujizhangpro-Info.plist in Resources */,
@@ -19346,8 +19435,10 @@
 				9C23D28F1F209D8A008C7500 /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C23D2901F209D8A008C7500 /* youyuwo.cer in Resources */,
 				9C23D2911F209D8A008C7500 /* YouYuJiZhangLiCai-Info.plist in Resources */,
+				9C2810F51F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9C23D2921F209D8A008C7500 /* lottie_2.json in Resources */,
 				9C23D2931F209D8A008C7500 /* 1000.zip in Resources */,
+				9C2811141F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C23D2941F209D8A008C7500 /* customBackGround.zip in Resources */,
 				9C23D2951F209D8A008C7500 /* 1001.zip in Resources */,
 				9C23D2961F209D8A008C7500 /* rain_sound.wav in Resources */,
@@ -19383,6 +19474,7 @@
 				9C4C224D1E9E30C8000C5F15 /* MJRefresh.bundle in Resources */,
 				9C4C224E1E9E30C8000C5F15 /* SuiShouJiEnterprise-Info.plist in Resources */,
 				9C4C224F1E9E30C8000C5F15 /* youyujizhangpro-Info.plist in Resources */,
+				9C2810FD1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9C4C22501E9E30C8000C5F15 /* xiaomao.gif in Resources */,
 				9C4C22511E9E30C8000C5F15 /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9C4C22531E9E30C8000C5F15 /* mydatabase.db in Resources */,
@@ -19408,10 +19500,12 @@
 				9C4C22601E9E30C8000C5F15 /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C4C22611E9E30C8000C5F15 /* homeDefualtLoading.gif in Resources */,
 				9C4C22621E9E30C8000C5F15 /* homeLoading.gif in Resources */,
+				9C28110C1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C4C22631E9E30C8000C5F15 /* ProjectSettings.plist in Resources */,
 				9C4C22641E9E30C8000C5F15 /* Localizable.strings in Resources */,
 				9C4C22651E9E30C8000C5F15 /* BeiKeJiZhang-Info.plist in Resources */,
 				9C4C22661E9E30C8000C5F15 /* YouYuJiZhangBao-Info.plist in Resources */,
+				9C28111C1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7D55200C1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
 				9CDB498C1EF392FE0097E09D /* ani.webp in Resources */,
 				7DB7E4701EBB26CA002383C5 /* customBackGround.zip in Resources */,
@@ -19450,6 +19544,7 @@
 				7D68251B1F1E170200A7587D /* SSJSpecialType.plist in Resources */,
 				9C7D2F3D1E8DF8A80093001F /* rain_sound.wav in Resources */,
 				9C30AA8C1EAF6EA4008DD51D /* 1001.zip in Resources */,
+				9C2811111F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C7D2F3E1E8DF8A80093001F /* Assets.xcassets in Resources */,
 				9C7D2F3F1E8DF8A80093001F /* sr_refresh.png in Resources */,
 				7D5520011F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
@@ -19460,12 +19555,14 @@
 				9C7D2F421E8DF8A80093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA981EAF6EAF008DD51D /* 1000.zip in Resources */,
 				9C7D2F431E8DF8A80093001F /* homeDefualtLoading.gif in Resources */,
+				9C2811011F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C7D2F441E8DF8A80093001F /* homeLoading.gif in Resources */,
 				9C7D2F451E8DF8A80093001F /* ProjectSettings.plist in Resources */,
 				9C7D2F461E8DF8A80093001F /* Localizable.strings in Resources */,
 				9C7D2F471E8DF8A80093001F /* BeiKeJiZhang-Info.plist in Resources */,
 				9C7D2F481E8DF8A80093001F /* YouYuJiZhangBao-Info.plist in Resources */,
 				9C7D2F491E8DF8A80093001F /* SSJFinancingHomePopView.xib in Resources */,
+				9C2810F21F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19497,6 +19594,7 @@
 				7D6825231F1E170200A7587D /* SSJSpecialType.plist in Resources */,
 				9C7D31B41E8DF96B0093001F /* rain_sound.wav in Resources */,
 				9C30AA931EAF6EA8008DD51D /* 1001.zip in Resources */,
+				9C28111A1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C7D31B51E8DF96B0093001F /* Assets.xcassets in Resources */,
 				9C7D31B61E8DF96B0093001F /* sr_refresh.png in Resources */,
 				7D55200A1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
@@ -19507,12 +19605,14 @@
 				9C7D31B91E8DF96B0093001F /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9C30AA9F1EAF6EB3008DD51D /* 1000.zip in Resources */,
 				9C7D31BA1E8DF96B0093001F /* homeDefualtLoading.gif in Resources */,
+				9C28110A1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C7D31BB1E8DF96B0093001F /* homeLoading.gif in Resources */,
 				9C7D31BC1E8DF96B0093001F /* ProjectSettings.plist in Resources */,
 				9C7D31BD1E8DF96B0093001F /* Localizable.strings in Resources */,
 				9C7D31BE1E8DF96B0093001F /* BeiKeJiZhang-Info.plist in Resources */,
 				9C7D31BF1E8DF96B0093001F /* YouYuJiZhangBao-Info.plist in Resources */,
 				9C7D31C01E8DF96B0093001F /* SSJFinancingHomePopView.xib in Resources */,
+				9C2810FB1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -19521,6 +19621,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C61E3381EE6B224001BA5F2 /* lottie_3.json in Resources */,
+				9C28111B1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C80FEEA1E95E88E00B1BAAC /* pushsound.wav in Resources */,
 				9C80FEEB1E95E88E00B1BAAC /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C80FEEC1E95E88E00B1BAAC /* MJRefresh.bundle in Resources */,
@@ -19535,6 +19636,7 @@
 				9C80FEF51E95E88E00B1BAAC /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C61E3461EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C80FEF61E95E88E00B1BAAC /* youyuwo.cer in Resources */,
+				9C28110B1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C80FEF71E95E88E00B1BAAC /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C61E31B1EE6AA0A001BA5F2 /* lottie_1.json in Resources */,
 				9C30AAA21EAF6EB5008DD51D /* 1000.zip in Resources */,
@@ -19551,6 +19653,7 @@
 				9C80FF001E95E88E00B1BAAC /* homeDefualtLoading.gif in Resources */,
 				9C80FF011E95E88E00B1BAAC /* homeLoading.gif in Resources */,
 				9C80FF021E95E88E00B1BAAC /* ProjectSettings.plist in Resources */,
+				9C2810FC1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9C2810341F629C9200AE8A51 /* newuserguide1.gif in Resources */,
 				9C80FF031E95E88E00B1BAAC /* Localizable.strings in Resources */,
 				9C80FF041E95E88E00B1BAAC /* BeiKeJiZhang-Info.plist in Resources */,
@@ -19569,6 +19672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C61E33A1EE6B224001BA5F2 /* lottie_3.json in Resources */,
+				9C28111D1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9C9CF0AA1EA5F73A007657FE /* pushsound.wav in Resources */,
 				9C9CF0AB1EA5F73A007657FE /* YouYuJiZhangBen-Info.plist in Resources */,
 				9C9CF0AC1EA5F73A007657FE /* MJRefresh.bundle in Resources */,
@@ -19583,6 +19687,7 @@
 				9C9CF0B51EA5F73A007657FE /* SSJBookKeepingHomePopView.xib in Resources */,
 				9C61E3481EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9C9CF0B61EA5F73A007657FE /* youyuwo.cer in Resources */,
+				9C28110D1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C9CF0B71EA5F73A007657FE /* YouYuJiZhangLiCai-Info.plist in Resources */,
 				9C61E31D1EE6AA0B001BA5F2 /* lottie_1.json in Resources */,
 				9C30AAA31EAF6EB6008DD51D /* 1000.zip in Resources */,
@@ -19599,6 +19704,7 @@
 				9C9CF0C01EA5F73A007657FE /* homeDefualtLoading.gif in Resources */,
 				9C9CF0C11EA5F73A007657FE /* homeLoading.gif in Resources */,
 				9C9CF0C21EA5F73A007657FE /* ProjectSettings.plist in Resources */,
+				9C2810FE1F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9C2810361F629C9200AE8A51 /* newuserguide1.gif in Resources */,
 				9C9CF0C31EA5F73A007657FE /* Localizable.strings in Resources */,
 				9C9CF0C41EA5F73A007657FE /* BeiKeJiZhang-Info.plist in Resources */,
@@ -19622,6 +19728,7 @@
 				9CDB4C161EF3ABBC0097E09D /* 9188JiZhangBao-info.plist in Resources */,
 				9CDB4C171EF3ABBC0097E09D /* SuiShouJiEnterprise-Info.plist in Resources */,
 				9CDB4C181EF3ABBC0097E09D /* youyujizhangpro-Info.plist in Resources */,
+				9C2811001F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9CDB4C191EF3ABBC0097E09D /* xiaomao.gif in Resources */,
 				9CDB4C1A1EF3ABBC0097E09D /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9CDB4C1B1EF3ABBC0097E09D /* 9188JiZhangBen-Info.plist in Resources */,
@@ -19647,10 +19754,12 @@
 				9CDB4C2C1EF3ABBC0097E09D /* 9188jizhangpro-Info.plist in Resources */,
 				9CDB4C2D1EF3ABBC0097E09D /* JiZhangGuanJia-Info.plist in Resources */,
 				7D55200F1F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
+				9C28110F1F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9CDB4C2E1EF3ABBC0097E09D /* ani.webp in Resources */,
 				9CDB4C2F1EF3ABBC0097E09D /* YouYuJiZhangGuanJia-Info.plist in Resources */,
 				9CDB4C301EF3ABBC0097E09D /* lottie_1.json in Resources */,
 				9CDB4C311EF3ABBC0097E09D /* homeDefualtLoading.gif in Resources */,
+				9C28111F1F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				9CDB4C321EF3ABBC0097E09D /* homeLoading.gif in Resources */,
 				9CDB4C331EF3ABBC0097E09D /* ProjectSettings.plist in Resources */,
 				9CDB4C341EF3ABBC0097E09D /* Localizable.strings in Resources */,
@@ -19666,6 +19775,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C30AA9A1EAF6EB1008DD51D /* 1000.zip in Resources */,
+				9C2811151F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
+				9C2810F61F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				9CECFD061D6D41A700DB2C8B /* pushsound.wav in Resources */,
 				9CECFD561D6D41A700DB2C8B /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				7D551FF51F271AC300DD8720 /* SSJCommonExpenseBillTypes.plist in Resources */,
@@ -19677,6 +19788,7 @@
 				9CECFDDB1D6D41A700DB2C8B /* rain_sound.wav in Resources */,
 				9C61E3401EE6B9BE001BA5F2 /* lottie_2.json in Resources */,
 				9CECFE031D6D41A700DB2C8B /* Assets.xcassets in Resources */,
+				9C2811051F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C61E3131EE6AA06001BA5F2 /* lottie_1.json in Resources */,
 				9C3105791F4A89C10026E212 /* SSJFundingParent.plist in Resources */,
 				7D5520051F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
@@ -19713,10 +19825,13 @@
 				9CAF731C1E03EAD90061ADB8 /* xiaomao.gif in Resources */,
 				7D5F33511CEAE6C10086B67E /* SSJCalenderTableViewNoDataHeader.xib in Resources */,
 				9C3849761E641D1100BF4AF9 /* 9188JiZhangBen-Info.plist in Resources */,
+				9C2811031F68E25C00AE8A51 /* newuserguide4.gif in Resources */,
 				9C3105771F4A89C10026E212 /* SSJFundingParent.plist in Resources */,
+				9C2811131F68E37F00AE8A51 /* newuserguide5.gif in Resources */,
 				7D6AAB751C3233190007C0A3 /* mydatabase.db in Resources */,
 				9C23EA4D1DDAD4FE0003C5AB /* 9188.cer in Resources */,
 				BD0432F11C1A77BB0051E7AB /* sr_refresh@2x.png in Resources */,
+				9C2810F41F68E25C00AE8A51 /* newuserguide3.gif in Resources */,
 				7D5F332C1CEAE6C10086B67E /* SSJBookKeepingHomePopView.xib in Resources */,
 				7D81DBB91E1369560072DB7E /* youyuwo.cer in Resources */,
 				7D5520031F27254200DD8720 /* SSJCommonIncomeBillTypes.plist in Resources */,
@@ -21123,6 +21238,7 @@
 				7D172F231F443EF700323D24 /* SSJMemberChargeSyncTable.m in Sources */,
 				7D08A1F51E4999D30085A8FB /* SSJBillModel.m in Sources */,
 				914DEA721F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C2811281F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C23CF381F1F265F008C7500 /* SSJMemberTableMerge.mm in Sources */,
 				7DF4F11B1EB890A90039FB2C /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7D22A3491E4F16AC00190CEB /* SSJColorAddition.m in Sources */,
@@ -21892,6 +22008,7 @@
 				7D172F221F443EF700323D24 /* SSJMemberChargeSyncTable.m in Sources */,
 				7DA13B4C1E35AED7000490A4 /* SSJBillModel.m in Sources */,
 				914DEA711F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C2811271F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C23CF371F1F265F008C7500 /* SSJMemberTableMerge.mm in Sources */,
 				7DF4F1191EB890A80039FB2C /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7D22A3481E4F16AC00190CEB /* SSJColorAddition.m in Sources */,
@@ -22661,6 +22778,7 @@
 				7D172F241F443EF800323D24 /* SSJMemberChargeSyncTable.m in Sources */,
 				9C23CF391F1F265F008C7500 /* SSJMemberTableMerge.mm in Sources */,
 				914DEA731F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C2811291F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				7DF4F11C1EB890AA0039FB2C /* SSJReportFormsScaleAxisCell.m in Sources */,
 				7DBB3BD31E55C2EE0075E638 /* SSJReportFormCurveListCell.m in Sources */,
 				7DBB3BD41E55C2EE0075E638 /* SSJNewMemberHeaderView.m in Sources */,
@@ -23430,6 +23548,7 @@
 				7D172F1F1F443EF500323D24 /* SSJMemberChargeSyncTable.m in Sources */,
 				9C23CF341F1F265F008C7500 /* SSJMemberTableMerge.mm in Sources */,
 				914DEA6D1F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C2811231F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				7DBB406B1E55C4E00075E638 /* SSJAlertViewDelegator.m in Sources */,
 				7DBB406C1E55C4E00075E638 /* SSJMineHomeTabelviewCell.m in Sources */,
 				7DBB406D1E55C4E00075E638 /* SSJBookKeepingHomeBar.m in Sources */,
@@ -24199,6 +24318,7 @@
 				7DFB17D41EB0341E00292DD3 /* SSJJsPatchItem.m in Sources */,
 				7D5DBB511F09DD3500E04555 /* SSJSyncSettingTableViewCell.m in Sources */,
 				914DEA791F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C28112F1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				7DFB17D51EB0341E00292DD3 /* AppDelegate.m in Sources */,
 				7DFB17D61EB0341E00292DD3 /* SSJThirdPartyLoginManger.m in Sources */,
 				9C56B8401F42E7C800852D39 /* SSJWishListTableViewCell.m in Sources */,
@@ -25062,6 +25182,7 @@
 				9C13F6941E8267D300AC5FA9 /* FMDatabaseAdditions.m in Sources */,
 				9C13F6951E8267D300AC5FA9 /* SSJMagicExportResultCheckMarkView.m in Sources */,
 				9C13F6981E8267D300AC5FA9 /* SSJCreditCardStore.m in Sources */,
+				9C28112A1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				7DFB164B1EAF2F0D00292DD3 /* SSJDatabaseSequence.m in Sources */,
 				9C13F6991E8267D300AC5FA9 /* SSJDatabaseUpgrader.m in Sources */,
 				9C13F69A1E8267D300AC5FA9 /* SSJBillingChargeCellItem.m in Sources */,
@@ -25338,6 +25459,7 @@
 				9C23D0141F209D8A008C7500 /* CDAutoHideMessageHUD.m in Sources */,
 				7D9C941A1F6267020061115F /* SSJPercentCircleAdditionNodeComposer.m in Sources */,
 				9C23D0151F209D8A008C7500 /* SSJPersonalDetailUserSignatureCell.m in Sources */,
+				9C2811251F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				7D5BF91B1F28A6EB00AC037F /* SSJBillTypeCategoryModel.m in Sources */,
 				9C23D0161F209D8A008C7500 /* SSJCreditRepaymentTable.mm in Sources */,
 				9C23D0171F209D8A008C7500 /* SSJBookKeepingHomeHelper.m in Sources */,
@@ -26501,6 +26623,7 @@
 				9C4C21791E9E30C8000C5F15 /* SSJDatabaseVersion4.m in Sources */,
 				7D5DBB4F1F09DD3400E04555 /* SSJSyncSettingTableViewCell.m in Sources */,
 				914DEA771F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C28112D1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C4C217A1E9E30C8000C5F15 /* UIViewController+SSJMotionPassword.m in Sources */,
 				9C4C217B1E9E30C8000C5F15 /* SSJJsPatchItem.m in Sources */,
 				9C56B83E1F42E7C700852D39 /* SSJWishListTableViewCell.m in Sources */,
@@ -27270,6 +27393,7 @@
 				9CD088781ECE8E3E0050B4EB /* SSJSharebooksMemberDetailViewController.m in Sources */,
 				9C7D2E661E8DF8A80093001F /* SSJBooksHeaderView.m in Sources */,
 				9C7D2E671E8DF8A80093001F /* FMDatabase+FTS3.m in Sources */,
+				9C2811221F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C7D2E681E8DF8A80093001F /* SSJThemeManagerViewController.m in Sources */,
 				9C7D2E691E8DF8A80093001F /* SSJCalendarViewController.m in Sources */,
 				9C7D2E6A1E8DF8A80093001F /* SSJThemeService.m in Sources */,
@@ -28039,6 +28163,7 @@
 				9CD0887F1ECE8E410050B4EB /* SSJSharebooksMemberDetailViewController.m in Sources */,
 				9C7D30DD1E8DF96B0093001F /* SSJBooksHeaderView.m in Sources */,
 				9C7D30DE1E8DF96B0093001F /* FMDatabase+FTS3.m in Sources */,
+				9C28112B1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C7D30DF1E8DF96B0093001F /* SSJThemeManagerViewController.m in Sources */,
 				9C7D30E01E8DF96B0093001F /* SSJCalendarViewController.m in Sources */,
 				9C7D30E11E8DF96B0093001F /* SSJThemeService.m in Sources */,
@@ -28808,6 +28933,7 @@
 				9C80FE1A1E95E88E00B1BAAC /* SSJJsPatchItem.m in Sources */,
 				7D5DBB4E1F09DD3400E04555 /* SSJSyncSettingTableViewCell.m in Sources */,
 				914DEA761F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C28112C1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C80FE1B1E95E88E00B1BAAC /* AppDelegate.m in Sources */,
 				9C80FE1C1E95E88E00B1BAAC /* SSJThirdPartyLoginManger.m in Sources */,
 				9C56B83D1F42E7C600852D39 /* SSJWishListTableViewCell.m in Sources */,
@@ -29671,6 +29797,7 @@
 				9C9CF02A1EA5F73A007657FE /* SSJMagicExportSelectDateView.m in Sources */,
 				9C9CF02C1EA5F73A007657FE /* SSJBudgetEditViewController.m in Sources */,
 				BD672A8B1F2D860C00FBA872 /* SSJFundAccountMergeHelper.mm in Sources */,
+				9C28112E1F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C9CF02D1EA5F73A007657FE /* SSJButtonAddition.m in Sources */,
 				9C9CF02E1EA5F73A007657FE /* SSJReportFormCurveHeaderView.m in Sources */,
 				9C18653C1F16123C0099D389 /* SSJQiuChengWebViewController.m in Sources */,
@@ -30275,6 +30402,7 @@
 				9CDB4B101EF3ABBC0097E09D /* SSJReportFormsPeriodModel.m in Sources */,
 				9CDB4B111EF3ABBC0097E09D /* SSJBookkeepingTreeHelpCell.m in Sources */,
 				9CDB4B121EF3ABBC0097E09D /* SSJBudgetEditSwitchCtrlCell.m in Sources */,
+				9C2811301F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9CDB4B131EF3ABBC0097E09D /* SSJPercentCircleAdditionGroupNode.m in Sources */,
 				9CDB4B161EF3ABBC0097E09D /* SSJLoanListSectionHeaderAmountView.m in Sources */,
 				9CDB4B181EF3ABBC0097E09D /* SSJMemberSelectView.m in Sources */,
@@ -31100,6 +31228,7 @@
 				9143C4FB1EE945040028D8D8 /* SSJInviteCodeJoinSuccessView.m in Sources */,
 				7D172F211F443EF600323D24 /* SSJMemberChargeSyncTable.m in Sources */,
 				914DEA701F4E69D50066A898 /* SSJFixedFinanceProductDetailItem.m in Sources */,
+				9C2811261F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				9C23CF361F1F265F008C7500 /* SSJMemberTableMerge.mm in Sources */,
 				9C9A0C4C1D6D96AC002AF046 /* SSJColorSelectViewController.m in Sources */,
 				9C155EB91E68572700FDFD18 /* MJRefreshHeader.m in Sources */,
@@ -32120,6 +32249,7 @@
 				9C3970221ECB022900AB267A /* SSJShareBooksHintView.m in Sources */,
 				BD0433901C1A8DA50051E7AB /* SSJLoadMoreItem.m in Sources */,
 				91633C201ECBE9D500A7A60F /* SSJBooksHeadeCollectionrReusableView.m in Sources */,
+				9C2811241F68E41100AE8A51 /* SSJNewUserGifGuideView.m in Sources */,
 				BD0432F21C1A77BB0051E7AB /* SRRefreshView.m in Sources */,
 				7D6AAB671C3130220007C0A3 /* SSJPageControl.m in Sources */,
 				9CD9BC381CFD2DAA0061803B /* SSJNickNameModifyView.m in Sources */,

@@ -110,6 +110,9 @@
         [_jumpOutButton addTarget:self action:@selector(jumpOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
         _jumpOutButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         [_jumpOutButton setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
+        _jumpOutButton.layer.cornerRadius = 4.f;
+        _jumpOutButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
+        _jumpOutButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
     }
     return _jumpOutButton;
 }

@@ -12,6 +12,10 @@
 
 @property (nonatomic, strong) UIButton *jumpOutButton;
 
+@property (nonatomic, strong) NSMutableArray *contentViews;
+
+@property (nonatomic, strong) UIScrollView *scrollView;
+
 @end
 
 @implementation SSJStarterUserGuideViewController

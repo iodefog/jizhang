@@ -190,7 +190,7 @@
                 //如果是普通资金账户
                 if (!type) {
                     // 如果保留数据只要删掉资金账户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -201,7 +201,7 @@
                     };
                 } else {
                     // 如果不保留先删掉资金账户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -255,7 +255,17 @@
                         }
                         return;
                     };
-
+                    
+                    //删除资金账户所对应的周期转账
+                    if (![db executeUpdate:@"update bk_transfer_cycle set operatortype = 2 , cwritedate = ? , iversion = ? where (ctransferinaccountid = ? or ctransferoutaccountid = ?) and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID , item.fundingID]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatch_main_async_safe(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    };
                 }
             }
         } else {
