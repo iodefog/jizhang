@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SSJBillingChargeCellItem.h"
 #import "SSJRecordMakingBillTypeSelectionCellItem.h"
+#import "SSJFinancingHomeitem.h"
 
 @interface SSJCircleChargeStore : NSObject
 + (void)queryForChargeListWithSuccess:(void(^)(NSArray<SSJBillingChargeCellItem *> *result))success
@@ -28,4 +29,8 @@
                           billType:(SSJBillType)billType
                        withSuccess:(void(^)(SSJRecordMakingBillTypeSelectionCellItem *billItem))success
                            failure:(void (^)(NSError *error))failure;
+
++ (void)getFinancingItemWithFundingId:(NSString *)fundId
+                              success:(void (^)(SSJFinancingHomeitem *fundingItem))success
+                              failure:(void (^)(NSError *error))failure;
 @end

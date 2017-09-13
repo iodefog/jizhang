@@ -53,7 +53,7 @@ static NSString *cellId = @"SSJFundingTypeCell";
     self.closeButton.left = 10;
 }
 
-- (void)showWithSelectedItem:(SSJBaseCellItem *)item {
+- (void)showWithSelectedItem:(SSJFinancingHomeitem *)item {
     if (self.superview) {
         return;
     }
