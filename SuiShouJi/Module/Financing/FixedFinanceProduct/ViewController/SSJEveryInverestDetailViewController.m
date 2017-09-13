@@ -17,7 +17,7 @@
 #import "SSJFixedFinanceProductStore.h"
 #import "SSJDataSynchronizer.h"
 
-static  NSString *kTitle1 = @"到期收益";
+static  NSString *kTitle1 = @"收益详情";
 static  NSString *kTitle2 = @"时间";
 static  NSString *kTitle3 = @"投资名称";
 @interface SSJEveryInverestDetailViewController ()<UITableViewDataSource, UITableViewDelegate>
@@ -35,8 +35,15 @@ static  NSString *kTitle3 = @"投资名称";
     [self setUpNav];
     [self.view addSubview:self.tableView];
     if (self.chargeItem.chargeType == SSJFixedFinCompoundChargeTypeInterest) {//利息流水
-        self.title = @"到期收益";
-        [self.titleArray addObjectsFromArray:@[kTitle1,kTitle2,kTitle3]];
+        self.title = @"收益详情";
+        NSString *title1;
+//        SSJMethodOfInterest interesttype;
+        if (self.productItem.interesttype == SSJMethodOfInterestOncePaid) {
+            title1 = @"到期收益";
+        } else {
+            title1 = @"每日收益";
+        }
+        [self.titleArray addObjectsFromArray:@[title1,kTitle2,kTitle3]];
         [self.dataArray addObject:[NSString stringWithFormat:@"%.2f",self.chargeItem.money]];
         [self.dataArray addObject:[self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"]];
         [self.dataArray addObject:self.productItem.productName];
