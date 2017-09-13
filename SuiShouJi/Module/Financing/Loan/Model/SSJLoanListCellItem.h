@@ -23,6 +23,9 @@
 
 @property (nonatomic, copy) NSString *date;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *descStr;
+
 @property (nonatomic) BOOL showStamp;
 
 /**<#注释#>*/
