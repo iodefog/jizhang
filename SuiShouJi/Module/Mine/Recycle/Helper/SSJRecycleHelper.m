@@ -106,6 +106,10 @@
                 return;
             }
             
+            if (!cellItem) {
+                continue;
+            }
+            
             if (lastDate && ![model.clientAddDate isSameDay:lastDate]) {
                 SSJRecycleListModel *listModel = [[SSJRecycleListModel alloc] init];
                 NSDate *now = [NSDate date];
@@ -149,9 +153,14 @@
 }
 
 #pragma mark - 查询回收站流水
-+ (SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model
-                                            inDatabase:(SSJDatabase *)db
-                                                 error:(NSError **)error {
++ (nullable SSJRecycleListCellItem *)chargeItemWithRecycleModel:(SSJRecycleModel *)model
+                                                     inDatabase:(SSJDatabase *)db
+                                                          error:(NSError **)error {
+    // 如果此流水是已退出的共享账本流水，直接返回nil
+    if ([db boolForQuery:@"select count(uc.ichargeid) from bk_user_charge as uc, bk_share_books_member as sm where uc.ichargeid = ? and uc.ichargetype = ? and sm.cmemberid = ? and sm.istate <> ? and uc.cbooksid = sm.cbooksid", model.sundryID, @(SSJChargeIdTypeShareBooks), model.userID, @(SSJShareBooksMemberStateNormal)]) {
+        return nil;
+    }
+    
     NSString *iconName = nil;
     NSString *colorValue = nil;
     NSString *billName = nil;
@@ -221,8 +230,12 @@
     [rs close];
     
     NSString *clientDate = [model.clientAddDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    int chargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, clientDate];
-    [subtitles addObject:[NSString stringWithFormat:@"%d条流水", chargeCount]];
+    // 查询非共享账本流水条数
+    int personalBookChargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and ichargetype <> ? and operatortype = 2", model.sundryID, clientDate, @(SSJChargeIdTypeShareBooks)];
+    
+    // 查询为退出的共享账本流水条数
+    int shareBookChargeCount = [db intForQuery:@"select count(1) from bk_user_charge where ifunsid = ? and cwritedate = ? and ichargetype = ? and operatortype = 2 and cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?)", model.sundryID, clientDate, @(SSJChargeIdTypeShareBooks), model.userID, @(SSJShareBooksMemberStateNormal)];
+    [subtitles addObject:[NSString stringWithFormat:@"%d条流水", personalBookChargeCount + shareBookChargeCount]];
     
     if ([db boolForQuery:@"select count(*) from bk_charge_period_config where ifunsid = ? and cwritedate = ? and operatortype = 2", model.sundryID, clientDate]) {
         [subtitles addObject:@"周期记账"];
@@ -626,7 +639,7 @@
         }
     }
     
-    // 查询此账户下已删除的周期转账流水
+    // 查询需要恢复的周期转账流水
     NSArray *chargeModels = [self queryChargeModelsWithChargeType:SSJChargeIdTypeCyclicTransfer
                                                        clientDate:clientDate
                                                            fundID:fundID

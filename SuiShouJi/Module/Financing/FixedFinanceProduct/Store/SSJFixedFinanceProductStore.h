@@ -382,7 +382,7 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (NSDate *)queryPaiFalLastBillDateWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db;
 
-
++ (nullable NSString *)queryPaiFalLastBillDateStrWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(SSJDatabase *)db;
 /**
  查询是否有赎回或者追加
 

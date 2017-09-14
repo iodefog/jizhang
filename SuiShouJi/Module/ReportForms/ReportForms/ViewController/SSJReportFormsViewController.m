@@ -518,7 +518,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
             SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
             circleItem.scale = item.scale / scaleAmount;
             circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
-            circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
+            circleItem.text = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale * 100];
             [chartItems addObject:circleItem];
         }
     }
@@ -528,7 +528,7 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
         circleItem.scale = scale / scaleAmount;
         circleItem.color = [UIColor ssj_colorWithHex:@"#565656"];
-        circleItem.text = [NSString stringWithFormat:@"其它类别 %.0f％", scale * 100];
+        circleItem.text = [NSString stringWithFormat:@"其它类别 %.1f％", scale * 100];
         [chartItems addObject:circleItem];
     }
     

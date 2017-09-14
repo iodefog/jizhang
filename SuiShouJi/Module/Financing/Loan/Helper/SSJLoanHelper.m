@@ -1126,26 +1126,39 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
                                                  billID:(NSString *)billID
                                                   error:(NSError **)error {
     SSJLoanCompoundChargeType chargeType = SSJLoanCompoundChargeTypeCreate;
+    
+    if (billID.length > 4) {
+        if (error) {
+            *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数billID的值无效"}];
+        }
+        return chargeType;
+    }
+    
+    SSJSpecialBillId billType = [billID integerValue];
     switch (loanType) {
         case SSJLoanTypeLend:
-            if ([billID isEqualToString:@"3"]) {
+            if (billType == SSJSpecialBillIdBalanceRollIn) {
                 // 创建
                 chargeType = SSJLoanCompoundChargeTypeCreate;
-            } else if ([billID isEqualToString:@"4"]) {
+            } else if (billType == SSJSpecialBillIdBalanceRollOut) {
                 // 结清
                 chargeType = SSJLoanCompoundChargeTypeCloseOut;
-            } else if ([billID isEqualToString:@"7"]) {
+            } else if (billType == SSJSpecialBillIdLoanChangeEarning) {
                 // 追加借出
                 chargeType = SSJLoanCompoundChargeTypeAdd;
-            } else if ([billID isEqualToString:@"8"]) {
+            } else if (billType == SSJSpecialBillIdLoanChangeExpense) {
                 // 收款
                 chargeType = SSJLoanCompoundChargeTypeRepayment;
-            } else if ([billID isEqualToString:@"9"]) {
+            } else if (billType == SSJSpecialBillIdLoanBalanceRollIn) {
                 // 余额增加
                 chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
-            } else if ([billID isEqualToString:@"10"]) {
+            } else if (billType == SSJSpecialBillIdLoanBalanceRollOut) {
                 // 余额减少
                 chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
+            } else if (billType == SSJSpecialBillIdLoanInterestEarning
+                       || billType == SSJSpecialBillIdLoanInterestExpense) {
+                // 利息
+                chargeType = SSJLoanCompoundChargeTypeInterest;
             } else {
                 if (error) {
                     *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数billID的值无效"}];
@@ -1154,24 +1167,28 @@ NSString *const SSJFundIDListKey = @"SSJFundIDListKey";
             break;
             
         case SSJLoanTypeBorrow:
-            if ([billID isEqualToString:@"3"]) {
+            if (billType == SSJSpecialBillIdBalanceRollIn) {
                 // 结清
                 chargeType = SSJLoanCompoundChargeTypeCloseOut;
-            } else if ([billID isEqualToString:@"4"]) {
+            } else if (billType == SSJSpecialBillIdBalanceRollOut) {
                 // 创建
                 chargeType = SSJLoanCompoundChargeTypeCreate;
-            } else if ([billID isEqualToString:@"7"]) {
+            } else if (billType == SSJSpecialBillIdLoanChangeEarning) {
                 // 还款
                 chargeType = SSJLoanCompoundChargeTypeRepayment;
-            } else if ([billID isEqualToString:@"8"]) {
+            } else if (billType == SSJSpecialBillIdLoanChangeExpense) {
                 // 追加欠款
                 chargeType = SSJLoanCompoundChargeTypeAdd;
-            } else if ([billID isEqualToString:@"9"]) {
+            } else if (billType == SSJSpecialBillIdLoanBalanceRollIn) {
                 // 余额减少
                 chargeType = SSJLoanCompoundChargeTypeBalanceDecrease;
-            } else if ([billID isEqualToString:@"10"]) {
+            } else if (billType == SSJSpecialBillIdLoanBalanceRollOut) {
                 // 余额增加
                 chargeType = SSJLoanCompoundChargeTypeBalanceIncrease;
+            } else if (billType == SSJSpecialBillIdLoanInterestEarning
+                       || billType == SSJSpecialBillIdLoanInterestExpense) {
+                // 利息
+                chargeType = SSJLoanCompoundChargeTypeInterest;
             } else {
                 if (error) {
                     *error = [NSError errorWithDomain:SSJErrorDomain code:SSJErrorCodeUndefined userInfo:@{NSLocalizedDescriptionKey:@"参数billID的值无效"}];
