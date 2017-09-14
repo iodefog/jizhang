@@ -67,10 +67,10 @@ typedef std::unordered_map<std::string,
 @protocol WCTTableCoding;
 @protocol WCTColumnCoding;
 class WCTExpr;
-typedef std::list<const WCTExpr> WCTExprList;
+class WCTExprList;
 class WCTAnyProperty;
 class WCTProperty;
-typedef std::list<const WCTProperty> WCTPropertyList;
+class WCTPropertyList;
 class WCTResult;
 class WCTResultList;
 typedef WCTExpr WCTCondition;

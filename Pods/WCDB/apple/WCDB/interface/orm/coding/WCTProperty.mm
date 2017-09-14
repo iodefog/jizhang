@@ -45,11 +45,6 @@ WCTResultList WCTProperty::distinct() const
     return WCTResultList(*this).distinct();
 }
 
-WCTProperty::operator WCTPropertyList() const
-{
-    return {*this};
-}
-
 WCTProperty WCTProperty::inTable(NSString *table) const
 {
     return WCTProperty(WCDB::Column::inTable(table.UTF8String), m_cls, m_columnBinding);
@@ -157,6 +152,11 @@ WCTExpr WCTProperty::operator+() const
 WCTExpr WCTProperty::operator-() const
 {
     return -WCTExpr(*this);
+}
+
+WCTExpr WCTProperty::operator~() const
+{
+    return ~WCTExpr(*this);
 }
 
 WCTExpr WCTProperty::operator||(const WCTExpr &operand) const
@@ -401,4 +401,28 @@ WCTExpr WCTProperty::isNot(const WCTExpr &operand) const
 NSString *WCTProperty::getDescription() const
 {
     return [NSString stringWithUTF8String:WCDB::Column::getDescription().c_str()];
+}
+
+WCTPropertyList::WCTPropertyList()
+    : std::list<const WCTProperty>()
+{
+}
+
+WCTPropertyList::WCTPropertyList(const WCTProperty &property)
+    : std::list<const WCTProperty>({property})
+{
+}
+
+WCTPropertyList::WCTPropertyList(std::initializer_list<const WCTProperty> il)
+    : std::list<const WCTProperty>(il)
+{
+}
+
+WCTPropertyList WCTPropertyList::inTable(NSString *tableName) const
+{
+    WCTPropertyList propertyList;
+    for (auto iter : *this) {
+        propertyList.push_back(iter.inTable(tableName));
+    }
+    return propertyList;
 }
