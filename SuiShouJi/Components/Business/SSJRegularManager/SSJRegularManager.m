@@ -636,15 +636,38 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
                 //查询最新时间
                 NSError *error = nil;
-                NSDate *date = [SSJFixedFinanceProductStore queryPaiFalLastBillDateWithPorductModel:item inDatabase:db];
-                NSDate *endDate;
-                if ([[NSDate date] compare:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
-                    endDate = [NSDate date];
+//                queryPaiFalLastBillDateStrWithPorductModel
+                NSString *date = [SSJFixedFinanceProductStore queryPaiFalLastBillDateStrWithPorductModel:item inDatabase:db];
+                NSDate *lastInvDate;
+                NSDate *investmentDate;
+                if (!date.length) {//还没有生成过利息
+                    lastInvDate = item.startDate;
+                    investmentDate = lastInvDate;
                 } else {
-                    endDate = [[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+                    lastInvDate = [date ssj_dateWithFormat:@"yyyy-MM-dd"];
+                    investmentDate = [lastInvDate dateByAddingDays:1];
                 }
                 
-                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:date endDate:endDate newMoney:0 type:1 inDatabase:db error:&error]) {
+                NSDate *endDate;
+                if ([[NSDate date] compare:[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
+                    endDate = [NSDate date];
+                } else {
+                    endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
+                }
+                NSDate *tempDate = [NSDate date];
+                NSDate *currentDay = [NSDate dateWithYear:tempDate.year month:tempDate.month day:tempDate.day];
+                
+                
+                
+                if ([investmentDate isSameDay:currentDay] && date.length) {//如果有利息的时候还是同一天就返回不在重复生成利息
+                    return;
+                }
+                
+//                if ([[investmentDate dateByAddingDays:1] isLaterThanOrEqualTo:currentDay] && !date.length) {//没有利息且是第此生成利息的时候继续生成利息
+//                    return;
+//                }
+                
+                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:investmentDate endDate:endDate newMoney:0 type:1 inDatabase:db error:&error]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatchMainAsync(^{
