@@ -188,8 +188,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         }
         
         if (self.startLunchItem.type == 0) {//0:静态图片,1:动态图片,2:图文
+            @weakify(self);
             [self.launchView downloadImgWithUrl:self.startLunchItem.startImageUrl timeout:kLoadStartImgTimeout completion:^{
-                [self jumpOutToRootView];
+                @strongify(self);
+                if ([self respondsToSelector:@selector(jumpOutToRootView)]) {
+                    [self jumpOutToRootView];
+                }
             }];
         } else if (self.startLunchItem.type == 2) {
             if (self.launchView.superview) {
@@ -198,8 +202,12 @@ static const NSTimeInterval kTransitionDuration = 0.3;
             
             [self.view addSubview:self.userSignLaunchView];
             
+            @weakify(self);
             [self.userSignLaunchView showWith:self.startLunchItem timeout:kLoadStartImgTimeout completion:^{
-                [self jumpOutToRootView];
+                @strongify(self);
+                if ([self respondsToSelector:@selector(jumpOutToRootView)]) {
+                    [self jumpOutToRootView];
+                }
             }];
             
         }

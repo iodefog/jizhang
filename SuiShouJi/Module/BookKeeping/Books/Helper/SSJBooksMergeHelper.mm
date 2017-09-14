@@ -248,7 +248,7 @@
                                                   where:SSJUserChargeTable.userId == userId
                                  && SSJUserChargeTable.booksId == booksId
                                  && SSJUserChargeTable.operatorType != 2
-                                 && (SSJUserChargeTable. chargeType != SSJChargeIdTypeLoan || SSJUserChargeTable.chargeType != SSJChargeIdTypeRepayment || SSJUserChargeTable.chargeType != SSJChargeIdTypeTransfer)];
+                                 && (SSJUserChargeTable.chargeType != SSJChargeIdTypeLoan || SSJUserChargeTable.chargeType != SSJChargeIdTypeRepayment || SSJUserChargeTable.chargeType != SSJChargeIdTypeTransfer)];
         SSJDispatch_main_async_safe(^{
             if (success) {
                 success(chargeCount);

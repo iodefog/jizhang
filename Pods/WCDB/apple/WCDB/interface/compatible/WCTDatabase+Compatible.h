@@ -18,31 +18,17 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#ifndef WCDB_OMIT_DEPRECATED
 
 #import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <WCDB/WCTDatabase.h>
 
-@interface NSDictionary (WCTColumnCoding) <WCTColumnCoding>
-@end
+@interface WCTDatabase (Compatible)
 
-@implementation NSDictionary (WCTColumnCoding)
++ (NSString *)DefaultSyncConfigName DEPRECATED_MSG_ATTRIBUTE("-DefaultSyncConfigName: is deprecated since v1.0.4. Use +DefaultSynchronousConfigName: instead");
 
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
-{
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
-}
-
-- (NSData *)archivedWCTValue
-{
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
-}
+- (void)setSyncEnabled:(BOOL)sync DEPRECATED_MSG_ATTRIBUTE("-setSyncEnabled: is deprecated since v1.0.4. Use -setSynchronousFull: instead");
 
 @end
 
-#endif //WCDB_BUILTIN_COLUMN_CODING
+#endif //WCDB_OMIT_DEPRECATED
