@@ -122,7 +122,7 @@ static const CGFloat kSpace = 8;
 
 @property (nonatomic, strong) _SSJRecycleListCellSeparatorView *subtitleView;
 
-@property (nonatomic, strong) UIButton *arrowBtn;
+@property (nonatomic, strong) UIImageView *arrow;
 
 @property (nonatomic, strong) SSJCheckMark *checkMark;
 
@@ -139,7 +139,7 @@ static const CGFloat kSpace = 8;
         [self.contentView addSubview:self.icon];
         [self.contentView addSubview:self.titleLab];
         [self.contentView addSubview:self.subtitleView];
-        [self.contentView addSubview:self.arrowBtn];
+        [self.contentView addSubview:self.arrow];
         [self.contentView addSubview:self.checkMark];
         [self updateAppearance];
         self.translatesAutoresizingMaskIntoConstraints = NO;
@@ -159,9 +159,9 @@ static const CGFloat kSpace = 8;
         make.centerY.mas_equalTo(_icon);
     }];
     
-    [_arrowBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(41, 41));
-        make.right.mas_equalTo(self.contentView);
+    [_arrow mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(_arrow.image.size);
+        make.right.mas_equalTo(self.contentView).offset(-15);
         make.centerY.mas_equalTo(_icon);
     }];
     
@@ -201,30 +201,30 @@ static const CGFloat kSpace = 8;
         
         switch ([stateValue integerValue]) {
             case SSJRecycleListCellStateNormal: {
-                UIImage *btnImg = [[UIImage imageNamed:@"recycle_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [_arrowBtn setImage:btnImg forState:UIControlStateNormal];
-                self.arrowBtn.hidden = NO;
+                UIImage *img = [[UIImage imageNamed:@"recycle_arrow_down"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.arrow.image = img;
+                self.arrow.hidden = NO;
                 self.checkMark.hidden = YES;
             }
                 break;
                 
             case SSJRecycleListCellStateExpanded: {
-                UIImage *btnImg = [[UIImage imageNamed:@"recycle_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-                [self.arrowBtn setImage:btnImg forState:UIControlStateNormal];
-                self.arrowBtn.hidden = NO;
+                UIImage *img = [[UIImage imageNamed:@"recycle_arrow_up"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                self.arrow.image = img;
+                self.arrow.hidden = NO;
                 self.checkMark.hidden = YES;
             }
                 break;
                 
             case SSJRecycleListCellStateSelected: {
-                self.arrowBtn.hidden = YES;
+                self.arrow.hidden = YES;
                 self.checkMark.hidden = NO;
                 self.checkMark.currentState = SSJCheckMarkSelected;
             }
                 break;
                 
             case SSJRecycleListCellStateUnselected: {
-                self.arrowBtn.hidden = YES;
+                self.arrow.hidden = YES;
                 self.checkMark.hidden = NO;
                 self.checkMark.currentState = SSJCheckMarkNormal;
             }
@@ -246,7 +246,7 @@ static const CGFloat kSpace = 8;
 
 - (void)updateAppearance {
     _titleLab.textColor = SSJ_MAIN_COLOR;
-    _arrowBtn.tintColor = SSJ_SECONDARY_COLOR;
+    _arrow.tintColor = SSJ_SECONDARY_COLOR;
     [_subtitleView updateAppearanceAccordingToTheme];
     [_checkMark updateAppearanceAccordingToTheme];
 }
@@ -273,18 +273,11 @@ static const CGFloat kSpace = 8;
     return _subtitleView;
 }
 
-- (UIButton *)arrowBtn {
-    if (!_arrowBtn) {
-        _arrowBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        @weakify(self);
-        [[_arrowBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
-            @strongify(self);
-            if (self.expandBtnDidClick) {
-                self.expandBtnDidClick(self);
-            }
-        }];
+- (UIImageView *)arrow {
+    if (!_arrow) {
+        _arrow = [[UIImageView alloc] init];
     }
-    return _arrowBtn;
+    return _arrow;
 }
 
 - (SSJCheckMark *)checkMark {
