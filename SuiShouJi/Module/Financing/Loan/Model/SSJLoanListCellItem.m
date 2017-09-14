@@ -50,7 +50,7 @@
     item.icon = model.productIcon;
     item.memo = model.memo;
     item.loanTitle = model.productName;
-    item.money = model.money;//[NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:model.productid]+ [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
+    item.money = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:model.productid]+ [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
     
     item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];
     item.showStamp = model.isend;

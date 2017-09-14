@@ -471,6 +471,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             _reminderItem.remindState = 1;
         }
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"修改后已有的相关流水会被抹清后重新计算生成，您确定要修改吗" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            weakSelf.sureButton.enabled = YES;
             [weakSelf.sureButton ssj_hideLoadingIndicator];
             return ;
         }],[SSJAlertViewAction actionWithTitle:@"确定修改" handler:^(SSJAlertViewAction * _Nonnull action) {
@@ -567,7 +568,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return NO;
     }
     
-    if (!self.nameTextF.text.length) {
+    if (!self.moneyTextF.text.length || [self.moneyTextF.text doubleValue] <=0) {
         [CDAutoHideMessageHUD showMessage:@"请输入投资金额"];
         return NO;
     }
@@ -621,11 +622,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
     self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
     
-    self.createCompoundModel.chargeModel.memo = self.model.memo;
+//    self.createCompoundModel.chargeModel.memo = self.model.memo;
     
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-    self.createCompoundModel.targetChargeModel.memo = self.model.memo;
+//    self.createCompoundModel.targetChargeModel.memo = self.model.memo;
     
     self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
     NSDate *billDate = self.model.startDate;

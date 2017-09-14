@@ -85,7 +85,6 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.stateImageView.hidden = !self.financeModel.isend;
     [self loadData];
 }
 
@@ -282,6 +281,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productID success:^(SSJFixedFinanceProductItem * _Nonnull model) {
             weakSelf.financeModel = model;
+            weakSelf.stateImageView.hidden = !weakSelf.financeModel.isend;
             [weakSelf.headerView reloadData];
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {

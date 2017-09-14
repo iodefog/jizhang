@@ -114,8 +114,8 @@ static NSString *kTitle6 = @"结算日期";
         self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
         
     } else {
-        double benjin = [self.financeModel.money doubleValue] - lixi;
-        self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
+        
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid]];
     }
     self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
     
@@ -425,7 +425,7 @@ static NSString *kTitle6 = @"结算日期";
     }
     
     if (_isLiXiOn) {
-        if (!self.poundageTextF.text.length && [self.poundageTextF.text doubleValue] <= 0) {
+        if (!self.poundageTextF.text.length || [self.poundageTextF.text doubleValue] <= 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入手续费"];
             return NO;
         }
