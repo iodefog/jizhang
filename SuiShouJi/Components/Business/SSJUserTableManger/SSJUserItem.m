@@ -37,9 +37,7 @@
                     @"adviceTime":@"cadvicetime",
                     @"selectFundid":@"ccurrentselectfundid",
                     @"lastSyncTime":@"clastsynctime",
-                    @"lastMergeTime":@"clastmergetime",
-                    @"fundDeletionReminded":@"ifunddeletionreminded",
-                    @"bookDeletionReminded":@"ibookdeletionreminded",};
+                    @"lastMergeTime":@"clastmergetime"};
     }
     return mapping;
 }

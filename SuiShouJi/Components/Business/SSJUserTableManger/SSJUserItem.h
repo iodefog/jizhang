@@ -82,12 +82,6 @@
 // 注意：时间格式：yyyy-MM-dd HH:mm:ss.SSS
 @property (nonatomic, copy) NSString *lastMergeTime;
 
-// 是否提示过资金账户被删除至回收站
-@property (nonatomic, copy) NSString *fundDeletionReminded;
-
-// 是否提示过账本被删除至回收站
-@property (nonatomic, copy) NSString *bookDeletionReminded;
-
 + (NSDictionary *)propertyMapping;
 
 @end

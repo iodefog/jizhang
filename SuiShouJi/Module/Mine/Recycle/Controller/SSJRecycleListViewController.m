@@ -118,26 +118,6 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     if ([cellItem isKindOfClass:[SSJRecycleListCellItem class]]) {
         SSJRecycleListCell *cell = [tableView dequeueReusableCellWithIdentifier:kRecycleListCellID forIndexPath:indexPath];
         cell.cellItem = cellItem;
-        @weakify(self);
-        cell.expandBtnDidClick = ^(SSJRecycleListCell *cell) {
-            @strongify(self);
-            
-            SSJRecycleListCellItem *item = cell.cellItem;
-            if (item.state == SSJRecycleListCellStateNormal) {
-                
-                [self deleteExpandedCell];
-                
-                item.state = SSJRecycleListCellStateExpanded;
-                [self.tableView beginUpdates];
-                NSIndexPath *currentIndexPath = [self indexPathForCellItem:item];
-                NSIndexPath *expandedIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:currentIndexPath.section];
-                [self insertEditCellAtIndexPath:expandedIndexPath recycleID:item.recycleID];
-                
-                [self.tableView endUpdates];
-            } else {
-                [self deleteExpandedCell];
-            }
-        };
         return cell;
         
     } else if ([cellItem isKindOfClass:[SSJRecycleRecoverClearCellItem class]]) {
@@ -222,10 +202,34 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     
     if ([item isKindOfClass:[SSJRecycleListCellItem class]]) {
         SSJRecycleListCellItem *cellItem = (SSJRecycleListCellItem *)item;
-        if (cellItem.state == SSJRecycleListCellStateSelected) {
-            cellItem.state = SSJRecycleListCellStateUnselected;
-        } else if (cellItem.state == SSJRecycleListCellStateUnselected) {
-            cellItem.state = SSJRecycleListCellStateSelected;
+        switch (cellItem.state) {
+            case SSJRecycleListCellStateNormal: {
+                [self deleteExpandedCell];
+                
+                cellItem.state = SSJRecycleListCellStateExpanded;
+                [self.tableView beginUpdates];
+                NSIndexPath *currentIndexPath = [self indexPathForCellItem:item];
+                NSIndexPath *expandedIndexPath = [NSIndexPath indexPathForRow:currentIndexPath.row + 1 inSection:currentIndexPath.section];
+                [self insertEditCellAtIndexPath:expandedIndexPath recycleID:cellItem.recycleID];
+                
+                [self.tableView endUpdates];
+            }
+                break;
+                
+            case SSJRecycleListCellStateExpanded: {
+                [self deleteExpandedCell];
+            }
+                break;
+                
+            case SSJRecycleListCellStateSelected: {
+                cellItem.state = SSJRecycleListCellStateUnselected;
+            }
+                break;
+                
+            case SSJRecycleListCellStateUnselected: {
+                cellItem.state = SSJRecycleListCellStateSelected;
+            }
+                break;
         }
     }
 }

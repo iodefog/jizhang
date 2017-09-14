@@ -138,13 +138,6 @@
     return _cellImage;
 }
 
-- (UIImageView *)fundImageView {
-    if (!_fundImageView) {
-        _fundImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 22, 22)];
-    }
-    return _fundImageView;
-}
-
 -(void)setCellTitle:(NSString *)cellTitle{
     _cellTitle = cellTitle;
     self.cellTitleLabel.text = _cellTitle;
@@ -172,19 +165,13 @@
 
 -(void)setCellTypeImageName:(NSString *)cellTypeImageName{
     _cellTypeImageName = cellTypeImageName;
-    self.typeImageView.image = [UIImage imageNamed:_cellTypeImageName];
-    [self setNeedsLayout];
-}
-
--(void)setCellFundImageName:(NSString *)cellFundImageName {
-    _cellFundImageName = cellFundImageName;
-    self.fundImageView.image = [[UIImage imageNamed:_cellFundImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    self.typeImageView.image = [[UIImage imageNamed:_cellTypeImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [self setNeedsLayout];
 }
 
 - (void)setCellTypeImageColor:(NSString *)cellTypeImageColor {
     _cellTypeImageColor = cellTypeImageColor;
-    self.fundImageView.tintColor = [UIColor ssj_colorWithHex:_cellTypeImageColor];
+    self.typeImageView.tintColor = [UIColor ssj_colorWithHex:_cellTypeImageColor];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged{

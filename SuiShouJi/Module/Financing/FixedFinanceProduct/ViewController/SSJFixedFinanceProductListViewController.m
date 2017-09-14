@@ -61,7 +61,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 #pragma mark - Private
 - (void)setUpNav {
     self.title = self.item.fundingName;
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(deleteAction)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"delete"] style:UIBarButtonItemStylePlain target:self action:@selector(showDeletionAlertView)];
 }
 
 - (void)reloadDataAccordingToHeaderViewIndex {
@@ -90,6 +90,17 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 
 #pragma mark - Action
+- (void)showDeletionAlertView {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"确定要删除该资金账户吗?" preferredStyle:UIAlertControllerStyleAlert];
+    @weakify(self);
+    [alert addAction:[UIAlertAction actionWithTitle:@"删除" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        @strongify(self);
+        [self deleteAction];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:NULL]];
+    [self presentViewController:alert animated:YES completion:NULL];
+}
+
 - (void)deleteAction {
     [self.view ssj_showLoadingIndicator];
     MJWeakSelf;
@@ -99,7 +110,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
             [weakSelf.view ssj_hideLoadingIndicator];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
+            [SSJRecycleDataDeletionAlertor showAlert:SSJRecycleDataDeletionTypeFund];
         } failure:^(NSError * _Nonnull error) {
             [weakSelf.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
@@ -108,16 +119,8 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
         [weakSelf.view ssj_hideLoadingIndicator];
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
-    
-    [[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        return nil;
-    }] then:^RACSignal *{
-        
-        return nil;
-    }];
-
-    
 }
+
 - (void)addAction {
     SSJAddOrEditFixedFinanceProductViewController *addOrEditVC = [[SSJAddOrEditFixedFinanceProductViewController alloc] init];
     [self.navigationController pushViewController:addOrEditVC animated:YES];

@@ -11,6 +11,4 @@
 
 @interface SSJRecycleListCell : SSJBaseTableViewCell
 
-@property (nonatomic, copy) void(^expandBtnDidClick)(SSJRecycleListCell *cell);
-
 @end

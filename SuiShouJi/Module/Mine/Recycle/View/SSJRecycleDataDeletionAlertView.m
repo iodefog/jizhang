@@ -19,14 +19,10 @@
 
 @implementation SSJRecycleDataDeletionAlertor
 
-+ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type {
-    [self showAlertIfNeeded:type success:NULL falure:NULL];
-}
-
-+ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type success:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure {
++ (void)showAlert:(SSJRecycleDataDeletionType)type {
     SSJRecycleDataDeletionAlertor *alertor = [[SSJRecycleDataDeletionAlertor alloc] init];
     alertor.type = type;
-    [alertor showAlertIfNeededWithSuccess:success falure:failure];
+    [alertor.alertView show];
 }
 
 - (instancetype)init {
@@ -35,49 +31,49 @@
     return self;
 }
 
-- (void)showAlertIfNeededWithSuccess:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure {
-    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
-            [subscriber sendNext:@([[userItem valueForKey:[self propertyName]] boolValue])];
-            [subscriber sendCompleted];
-        } failure:^(NSError * _Nonnull error) {
-            [subscriber sendError:error];
-        }];
-        return nil;
-    }] flattenMap:^RACStream *(id value) {
-        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-            if ([value boolValue]) {
-                [subscriber sendCompleted];
-            } else {
-                [self.alertView show];
-                
-                SSJUserItem *item = [[SSJUserItem alloc] init];
-                item.userId = SSJUSERID();
-                [item setValue:@"1" forKey:[self propertyName]];
-                [SSJUserTableManager saveUserItem:item success:^{
-                    [subscriber sendCompleted];
-                } failure:^(NSError * _Nonnull error) {
-                    [subscriber sendError:error];
-                }];
-            }
-            return nil;
-        }];
-    }] subscribeError:^(NSError *error) {
-        [CDAutoHideMessageHUD showError:error];
-    }];
-}
-
-- (NSString *)propertyName {
-    switch (self.type) {
-        case SSJRecycleDataDeletionTypeBook:
-            return @"bookDeletionReminded";
-            break;
-            
-        case SSJRecycleDataDeletionTypeFund:
-            return @"fundDeletionReminded";
-            break;
-    }
-}
+//- (void)showAlertIfNeededWithSuccess:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure {
+//    [[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//        [SSJUserTableManager queryUserItemWithID:SSJUSERID() success:^(SSJUserItem * _Nonnull userItem) {
+//            [subscriber sendNext:@([[userItem valueForKey:[self propertyName]] boolValue])];
+//            [subscriber sendCompleted];
+//        } failure:^(NSError * _Nonnull error) {
+//            [subscriber sendError:error];
+//        }];
+//        return nil;
+//    }] flattenMap:^RACStream *(id value) {
+//        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+//            if ([value boolValue]) {
+//                [subscriber sendCompleted];
+//            } else {
+//                [self.alertView show];
+//                
+//                SSJUserItem *item = [[SSJUserItem alloc] init];
+//                item.userId = SSJUSERID();
+//                [item setValue:@"1" forKey:[self propertyName]];
+//                [SSJUserTableManager saveUserItem:item success:^{
+//                    [subscriber sendCompleted];
+//                } failure:^(NSError * _Nonnull error) {
+//                    [subscriber sendError:error];
+//                }];
+//            }
+//            return nil;
+//        }];
+//    }] subscribeError:^(NSError *error) {
+//        [CDAutoHideMessageHUD showError:error];
+//    }];
+//}
+//
+//- (NSString *)propertyName {
+//    switch (self.type) {
+//        case SSJRecycleDataDeletionTypeBook:
+//            return @"bookDeletionReminded";
+//            break;
+//            
+//        case SSJRecycleDataDeletionTypeFund:
+//            return @"fundDeletionReminded";
+//            break;
+//    }
+//}
 
 - (SSJRecycleDataDeletionAlertView *)alertView {
     if (!_alertView) {

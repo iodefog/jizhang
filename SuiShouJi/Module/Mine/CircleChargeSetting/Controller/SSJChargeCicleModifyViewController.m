@@ -327,6 +327,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         circleModifyCell.cellDetail = self.item.typeName;
         circleModifyCell.cellTypeImageName = self.item.imageName;
+        circleModifyCell.cellTypeImageColor = self.item.colorValue;
     }else if ([title isEqualToString:kTitle8]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         switch (self.item.chargeCircleType) {
@@ -358,7 +359,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [SSJCircleChargeStore getFinancingItemWithFundingId:self.item.fundId success:^(SSJFinancingHomeitem *fundingItem) {
             circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             circleModifyCell.cellDetail = fundingItem.fundingName;
-            circleModifyCell.cellFundImageName = fundingItem.fundingIcon;
+            circleModifyCell.cellTypeImageName = fundingItem.fundingIcon;
             circleModifyCell.cellTypeImageColor = fundingItem.fundingColor;
         } failure:NULL];
     }else if ([title isEqualToString:kTitle10]) {
@@ -546,12 +547,10 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJCircleChargeTypeSelectView *)chargeTypeSelectView{
     if (!_chargeTypeSelectView) {
         _chargeTypeSelectView = [[SSJCircleChargeTypeSelectView alloc]init];
-
         @weakify(self);
         _chargeTypeSelectView.chargeTypeSelectBlock = ^(NSInteger selectType){
             @strongify(self);
-            self.item.incomeOrExpence = !selectType;
-            [SSJCircleChargeStore getFirstBillItemForBooksId:self.item.booksId billType:self.item.incomeOrExpence withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
+            [SSJCircleChargeStore getFirstBillItemForBooksId:self.item.booksId billType:selectType withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
                 self.item.billId = billItem.ID;
                 self.item.typeName = billItem.title;
                 self.item.imageName = billItem.imageName;

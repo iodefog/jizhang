@@ -155,7 +155,7 @@ static NSString *const kLoanListCellId = @"kLoanListCellId";
         @strongify(self);
         [SSJFinancingHomeHelper deleteFundingWithFundingItem:self.item deleteType:1 Success:^{
             [self.navigationController popToRootViewControllerAnimated:YES];
-            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
+            [SSJRecycleDataDeletionAlertor showAlert:SSJRecycleDataDeletionTypeFund];
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
         }];
