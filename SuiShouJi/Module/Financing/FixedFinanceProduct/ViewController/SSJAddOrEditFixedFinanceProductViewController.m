@@ -41,7 +41,7 @@
 static NSString *KTitle1 = @"投资名称";
 static NSString *KTitle2 = @"原始本金";
 static NSString *KTitle3 = @"转出账户";
-static NSString *KTitle4 = @"投资时间";
+static NSString *KTitle4 = @"起息日期";
 static NSString *KTitle5 = @"利率";
 static NSString *KTitle6 = @"期限";
 static NSString *KTitle7 = @"派息方式";

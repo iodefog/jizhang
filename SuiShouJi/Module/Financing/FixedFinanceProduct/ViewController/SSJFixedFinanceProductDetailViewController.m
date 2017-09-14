@@ -346,7 +346,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.financeModel.etargetfundid];
         SSJLoanFundAccountSelectionViewItem *fundItem = [SSJFixedFinanceProductStore queryfundNameWithFundid:funditem.ID];
             [self.section1Items addObjectsFromArray:
-             @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"投资日期" subtitle:startDateStr bottomTitle:nil],
+             @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"起息时间" subtitle:startDateStr bottomTitle:nil],
                [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算日期" subtitle:endDateStr bottomTitle:nil],
                [SSJLoanDetailCellItem itemWithImage:@"" title:@"结算转入账户" subtitle:fundItem.title bottomTitle:nil]]];
         
@@ -365,7 +365,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         NSString *endDateStr = _financeModel.enddate;
         NSString *memo = _financeModel.memo;
         [self.section1Items addObjectsFromArray:
-         @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"投资日期" subtitle:startDateStr bottomTitle:nil]]];
+         @[[SSJLoanDetailCellItem itemWithImage:@"" title:@"起息时间" subtitle:startDateStr bottomTitle:nil]]];
         if (_financeModel.remindid.length) {
            NSString *remindDate = [[SSJFixedFinanceProductStore queryRemindDateWithRemindid:_financeModel.remindid] ssj_dateStringFromFormat:@"yyyy-MM-dd HH:mm:ss" toFormat:@"yyyy-MM-dd"];
             [self.section1Items addObject:

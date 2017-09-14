@@ -682,7 +682,7 @@ static NSString *kTitle6 = @"备注";
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"日期不能早于投资日期哦"];
+                [CDAutoHideMessageHUD showMessage:@"日期不能早于起息时间哦"];
                 return NO;
             }
             //不能晚于当前日期
