@@ -209,6 +209,7 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
             }
         } else if (cellItem.idType == SSJChargeIdTypeFixedFinance) {
             [SSJFundingDetailHelper queryfixedFinanceDateWithChargeItem:cellItem success:^(SSJFixedFinanceProductItem *productItem, SSJFixedFinanceProductChargeItem *chargeItem) {
+                chargeItem.chargeType = cellItem.fixedFinanceChargeType;
                 if (cellItem.fixedFinanceChargeType == SSJFixedFinCompoundChargeTypeCloseOut) {
                     SSJFixedFinancesSettlementViewController *addvc = [[SSJFixedFinancesSettlementViewController alloc] init];
                     addvc.financeModel = productItem;
