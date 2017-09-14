@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SSJAnimatedGuideViewProtocol.h"
 
-@interface SSJNewUserGifGuideView : UIView
+@interface SSJNewUserGifGuideView : UIView<SSJAnimatedGuideViewProtocol>
+
+- (instancetype)initWithFrame:(CGRect)frame
+                WithImageName:(NSString *)imageName
+                        title:(NSString *)title
+                     subTitle:(NSString *)subTitle;
 
 @end

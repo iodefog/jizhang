@@ -18,31 +18,22 @@
  * limitations under the License.
  */
 
-#ifdef WCDB_BUILTIN_COLUMN_CODING
+#ifndef WCDB_OMIT_DEPRECATED
 
-#import <Foundation/Foundation.h>
-#import <WCDB/WCDB.h>
+#import <WCDB/WCTStatement+Compatible.h>
 
-@interface NSArray (WCTColumnCoding) <WCTColumnCoding>
-@end
+@implementation WCTStatement (Compatible)
 
-@implementation NSArray (WCTColumnCoding)
-
-+ (instancetype)unarchiveWithWCTValue:(NSData *)value
+- (int)getCount
 {
-    return value ? [NSKeyedUnarchiver unarchiveObjectWithData:value] : nil;
+    return [self getColumnCount];
 }
 
-- (NSData *)archivedWCTValue
+- (NSString *)getNameAtIndex:(int)index
 {
-    return [NSKeyedArchiver archivedDataWithRootObject:self];
-}
-
-+ (WCTColumnType)columnTypeForWCDB
-{
-    return WCTColumnTypeBinary;
+    return [self getColumnNameAtIndex:index];
 }
 
 @end
 
-#endif //WCDB_BUILTIN_COLUMN_CODING
+#endif //WCDB_OMIT_DEPRECATED

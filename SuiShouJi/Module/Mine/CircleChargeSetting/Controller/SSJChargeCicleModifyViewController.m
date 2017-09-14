@@ -201,6 +201,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
             weakSelf.item.typeName = item.title;
             weakSelf.item.billId = item.ID;
             weakSelf.item.imageName = item.imageName;
+            weakSelf.item.colorValue = item.colorValue;
             [weakSelf.tableView reloadData];
         };
         [self.navigationController pushViewController:billTypeSelectVC animated:YES];

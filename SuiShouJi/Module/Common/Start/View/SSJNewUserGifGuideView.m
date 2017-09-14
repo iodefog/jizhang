@@ -18,8 +18,6 @@
 
 @property (nonatomic, strong) YYImage *animatedImage;
 
-@property (nonatomic) double durantion;
-
 @end
 
 @implementation SSJNewUserGifGuideView
@@ -28,7 +26,6 @@
                 WithImageName:(NSString *)imageName
                         title:(NSString *)title
                      subTitle:(NSString *)subTitle
-                    durantion:(double)duration
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -39,7 +36,6 @@
         self.gifImageView.image = self.animatedImage;
         self.titleLab.text = title;
         self.subTitleLab.text = subTitle;
-        self.durantion = duration;
     }
     return self;
 }
@@ -51,8 +47,8 @@
             make.height.mas_equalTo(self);
             make.center.mas_equalTo(self);
         } else {
-            make.height.mas_equalTo(self).mas_offset(self.subTitleLab.bottom + 10);
-            make.bottom.mas_equalTo(self.subTitleLab.bottom).offset(10);
+            make.top.mas_equalTo(self.subTitleLab.bottom).offset(10);
+            make.height.mas_equalTo(self.animatedImage.size.height);
         }
     }];
     
@@ -82,6 +78,8 @@
         _titleLab = [[UILabel alloc] init];
         _titleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _titleLab.font = [UIFont ssj_compatibleBoldSystemFontOfSize:SSJ_FONT_SIZE_2];
+        _titleLab.textAlignment = NSTextAlignmentCenter;
+        _titleLab.numberOfLines = 0;
     }
     return _titleLab;
 }
@@ -91,8 +89,20 @@
         _subTitleLab = [[UILabel alloc] init];
         _subTitleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
         _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _subTitleLab.textAlignment = NSTextAlignmentCenter;
+        _subTitleLab.numberOfLines = 0;
     }
     return _subTitleLab;
+}
+
+- (void)startAnimating {
+    [self.gifImageView startAnimating];
+    self.subTitleLab.alpha = 0;
+    self.titleLab.alpha = 0;
+    [UIView animateWithDuration:2.f animations:^(void){
+        self.subTitleLab.alpha = 1.f;
+        self.titleLab.alpha = 1.f;
+    } completion:NULL];
 }
 
 /*
