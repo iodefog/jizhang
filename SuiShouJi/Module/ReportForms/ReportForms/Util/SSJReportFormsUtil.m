@@ -453,6 +453,7 @@ NSString *const SSJReportFormsCurveModelEndDateKey = @"SSJReportFormsCurveModelE
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
             item.type = type;
+            item.name = type == 0 ? @"收入" : @"支出";
             item.money = [resultSet doubleForColumn:@"sum(a.imoney)"];
             item.colorValue = type == 0 ? @"#f56262" : @"#59ae65";
             item.imageName = type == 0 ? @"reportForms_income" : @"reportForms_expenses";
