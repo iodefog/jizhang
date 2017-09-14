@@ -185,7 +185,7 @@ static const CGFloat kMaxSpeed = 100;
         
         _touchPointInCell = [_longPressGesture locationInView:touchedCell];
         
-        _cellSnapshot = [touchedCell snapshotViewAfterScreenUpdates:YES];
+        _cellSnapshot = [touchedCell snapshotViewAfterScreenUpdates:NO];
         _cellSnapshot.frame = touchedCell.frame;
         [self addSubview:_cellSnapshot];
         
