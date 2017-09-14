@@ -1117,7 +1117,7 @@
                     newMoney = oldMoney + model.chargeModel.oldMoney;
                     
                 } else if (type == 2) {//赎回
-                    newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.oldMoney;
+                    newMoney = oldMoney - (model.chargeModel.money - model.chargeModel.oldMoney) - (model.interestChargeModel.money - model.interestChargeModel.oldMoney);
                 }
             
                 //删除以前派发的利1息流水//重新派发利息流水
