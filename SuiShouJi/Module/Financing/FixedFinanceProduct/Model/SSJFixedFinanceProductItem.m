@@ -58,7 +58,8 @@
     //加上利息
     //未结算的时候加上利息
     if (!item.isend) {
-        item.money = [NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])];
+        NSString *moneyStr = [[NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])] copy];
+        item.money = moneyStr;
     }
     
     return item;
