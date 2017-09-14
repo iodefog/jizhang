@@ -493,24 +493,42 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         return;
     }
     
-    // 将比例小于0.01的item过滤掉
-    NSMutableArray *filterItems = [NSMutableArray array];
-    double scaleAmount = 0;
+    NSArray *sortedItems = [result sortedArrayUsingComparator:^NSComparisonResult(SSJReportFormsItem *item1, SSJReportFormsItem *item2) {
+        if (item1.scale > item2.scale) {
+            return NSOrderedAscending;
+        } else if (item1.scale < item2.scale) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
+    //----------------------------------- 组织饼图数据 -----------------------------------//
+    NSArray *otherItems = nil;
+    if (sortedItems.count > 20) {
+        otherItems = [sortedItems subarrayWithRange:NSMakeRange(20, sortedItems.count - 20)];
+    }
+    
+    double scaleAmount = [[result valueForKeyPath:@"@sum.scale"] doubleValue];
+    
+    NSMutableArray *chartItems = [[NSMutableArray alloc] init];
     for (SSJReportFormsItem *item in result) {
-        if (item.scale >= 0.01) {
-            [filterItems addObject:item];
-            scaleAmount += item.scale;
+        if (![otherItems containsObject:item]) {
+            // 收入、支出
+            SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
+            circleItem.scale = item.scale / scaleAmount;
+            circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
+            circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
+            [chartItems addObject:circleItem];
         }
     }
     
-    //----------------------------------- 组织饼图数据 -----------------------------------//
-    NSMutableArray *chartItems = [[NSMutableArray alloc] init];
-    for (SSJReportFormsItem *item in filterItems) {
-        //  收入、支出
+    if (otherItems.count) {
+        double scale = [[otherItems valueForKeyPath:@"@sum.scale"] doubleValue];
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-        circleItem.scale = item.scale / scaleAmount;
-        circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
-        circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
+        circleItem.scale = scale / scaleAmount;
+        circleItem.color = [UIColor ssj_colorWithHex:@"#565656"];
+        circleItem.text = [NSString stringWithFormat:@"其它类别 %.0f％", scale * 100];
         [chartItems addObject:circleItem];
     }
     
@@ -556,22 +574,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
     //----------------------------------------------------------------------------------------//
     
-    
     //--------------------------------------- 组织列表数据 --------------------------------------//
     switch ([self currentType]) {
         case SSJBillTypePay:
         case SSJBillTypeIncome: {
             //  将datas按照收支类型所占比例从大到小进行排序
-            NSArray *listItems = [result sortedArrayUsingComparator:^NSComparisonResult(SSJReportFormsItem *item1, SSJReportFormsItem *item2) {
-                if (item1.scale > item2.scale) {
-                    return NSOrderedAscending;
-                } else if (item1.scale < item2.scale) {
-                    return NSOrderedDescending;
-                } else {
-                    return NSOrderedSame;
-                }
-            }];
-            [self.datas addObjectsFromArray:listItems];
+            [self.datas addObjectsFromArray:sortedItems];
         }
             break;
             
