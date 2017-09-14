@@ -184,7 +184,7 @@ static NSString *kTitle6 = @"结算日期";
 }
 
 - (void)updateSubTitle {
-    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] - [self.poundageTextF.text doubleValue])];
+    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] - [self.poundageTextF.text doubleValue] + [self.lixiStr doubleValue])];
     NSString *oldStr = [NSString stringWithFormat:@"到账金额为：%@元",targetStr];
     self.subL.attributedText = [oldStr attributeStrWithTargetStr:targetStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
 }

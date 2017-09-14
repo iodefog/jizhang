@@ -358,7 +358,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [SSJCircleChargeStore getFinancingItemWithFundingId:self.item.fundId success:^(SSJFinancingHomeitem *fundingItem) {
             circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
             circleModifyCell.cellDetail = fundingItem.fundingName;
-            circleModifyCell.cellTypeImageName = fundingItem.fundingIcon;
+            circleModifyCell.cellFundImageName = fundingItem.fundingIcon;
             circleModifyCell.cellTypeImageColor = fundingItem.fundingColor;
         } failure:NULL];
     }else if ([title isEqualToString:kTitle10]) {
@@ -546,15 +546,17 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
 -(SSJCircleChargeTypeSelectView *)chargeTypeSelectView{
     if (!_chargeTypeSelectView) {
         _chargeTypeSelectView = [[SSJCircleChargeTypeSelectView alloc]init];
-        __weak typeof(self) weakSelf = self;
-        
+
+        @weakify(self);
         _chargeTypeSelectView.chargeTypeSelectBlock = ^(NSInteger selectType){
-            weakSelf.item.incomeOrExpence = !selectType;
-            SSJRecordMakingCategoryItem *categoryItem = [SSJCategoryListHelper queryfirstCategoryItemWithIncomeOrExpence:weakSelf.item.incomeOrExpence];
-            weakSelf.item.typeName = categoryItem.categoryTitle;
-            weakSelf.item.imageName = categoryItem.categoryImage;
-            weakSelf.item.billId = categoryItem.categoryID;
-            [weakSelf.tableView reloadData];
+            @strongify(self);
+            self.item.incomeOrExpence = !selectType;
+            [SSJCircleChargeStore getFirstBillItemForBooksId:self.item.booksId billType:self.item.incomeOrExpence withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
+                self.item.billId = billItem.ID;
+                self.item.typeName = billItem.title;
+                self.item.imageName = billItem.imageName;
+                [self.tableView reloadData];
+            } failure:NULL];
         };
     }
     return _chargeTypeSelectView;
