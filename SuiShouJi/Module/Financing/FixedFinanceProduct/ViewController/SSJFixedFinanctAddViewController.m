@@ -80,7 +80,7 @@ static NSUInteger kDateTag = 2005;
         //通过另一条流水的fundid查找名称
         [SSJFixedFinanceProductStore queryOtherFixedFinanceProductChargeItemWithChareItem:self.chargeItem success:^(NSArray<SSJFixedFinanceProductChargeItem *> * _Nonnull charegItemArr) {
             for (SSJFixedFinanceProductChargeItem *chargeItem in charegItemArr) {
-                if ([chargeItem.billId isEqualToString:weakSelf.chargeItem.billId]) {
+                if (![chargeItem.billId isEqualToString:weakSelf.chargeItem.billId]) {
                     weakSelf.otherChareItem = chargeItem;
                 }
             }
@@ -516,7 +516,7 @@ static NSUInteger kDateTag = 2005;
     //保存流水
     NSMutableArray *saveChargeModels = [@[self.compoundModel] mutableCopy];
     
-    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel   type:1 chargeModels:saveChargeModels success:^{
+    [SSJFixedFinanceProductStore addOrRedemptionInvestmentWithProductModel:self.financeModel type:1 chargeModels:saveChargeModels success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
