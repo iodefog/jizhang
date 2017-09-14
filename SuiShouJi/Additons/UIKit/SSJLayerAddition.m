@@ -168,7 +168,8 @@
     
     UIBezierPath *path = [UIBezierPath bezierPath];
     
-    CGFloat inset = self.customBorderWidth / 2;
+    CGFloat lineWidth = self.customBorderWidth / [UIScreen mainScreen].scale;
+    CGFloat inset = lineWidth / 2;
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(inset, inset, inset, inset));
     CGPoint leftTop = CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMinY(contentFrame));
     CGPoint rightTop = CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMinY(contentFrame));
@@ -265,7 +266,7 @@
     }
     
     CGContextAddPath(ctx, path.CGPath);
-    CGContextSetLineWidth(ctx, _customBorderWidth);
+    CGContextSetLineWidth(ctx, lineWidth);
     CGContextSetStrokeColorWithColor(ctx, _customBorderColor.CGColor);
     CGContextStrokePath(ctx);
 }

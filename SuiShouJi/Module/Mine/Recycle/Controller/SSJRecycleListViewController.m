@@ -64,6 +64,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
     [self.view addSubview:self.noDataRemindView];
     
     self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44, 0);
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [self.tableView registerClass:[SSJRecycleListCell class] forCellReuseIdentifier:kRecycleListCellID];
     [self.tableView registerClass:[SSJRecycleRecoverClearCell class] forCellReuseIdentifier:kRecycleRecoverClearCellID];
     [self.tableView registerClass:[SSJRecycleListHeaderView class] forHeaderFooterViewReuseIdentifier:kHeaderID];

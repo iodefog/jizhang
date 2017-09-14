@@ -87,7 +87,7 @@
         _tableView.delegate = self;
         _tableView.backgroundView = nil;
         _tableView.backgroundColor = [UIColor clearColor];
-        _tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+        _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
         [_tableView ssj_clearExtendSeparator];
         if ([_tableView respondsToSelector:@selector(setSeparatorInset:)]) {
             [_tableView setSeparatorInset:UIEdgeInsetsMake(0, 15, 0, 0)];

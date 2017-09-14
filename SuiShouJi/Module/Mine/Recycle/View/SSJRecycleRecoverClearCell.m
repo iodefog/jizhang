@@ -22,6 +22,7 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.recoverBtn];
         [self.contentView addSubview:self.deleteBtn];
+        [self.contentView ssj_setBorderStyle:SSJBorderStyleBottom];
         [self updateAppearanceAccordingToTheme];
         [self setNeedsUpdateConstraints];
     }
@@ -76,10 +77,11 @@
         _recoverBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_recoverBtn setTitle:NSLocalizedString(@"还原", nil) forState:UIControlStateNormal];
         [_recoverBtn setTitle:nil forState:UIControlStateDisabled];
-        [_recoverBtn setImage:[UIImage imageNamed:@"recycle_recover"] forState:UIControlStateNormal];
+        [_recoverBtn setImage:[[UIImage imageNamed:@"recycle_recover"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_recoverBtn setImage:nil forState:UIControlStateDisabled];
         _recoverBtn.spaceBetweenImageAndTitle = 10;
-        [_recoverBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleRight | SSJBorderStyleBottom)];
+        [_recoverBtn ssj_setBorderWidth:1];
+        [_recoverBtn ssj_setBorderStyle:SSJBorderStyleRight];
         @weakify(self);
         [[_recoverBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -96,10 +98,9 @@
         _deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_deleteBtn setTitle:NSLocalizedString(@"彻底删除", nil) forState:UIControlStateNormal];
         [_deleteBtn setTitle:nil forState:UIControlStateDisabled];
-        [_deleteBtn setImage:[UIImage imageNamed:@"recycle_delete"] forState:UIControlStateNormal];
+        [_deleteBtn setImage:[[UIImage imageNamed:@"recycle_delete"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
         [_deleteBtn setImage:nil forState:UIControlStateDisabled];
         _deleteBtn.spaceBetweenImageAndTitle = 10;
-        [_deleteBtn ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
         @weakify(self);
         [[_deleteBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(id x) {
             @strongify(self);
@@ -112,13 +113,13 @@
 }
 
 - (void)updateAppearanceAccordingToTheme {
-    _recoverBtn.tintColor = SSJ_SECONDARY_COLOR;
+    _recoverBtn.imageView.tintColor = SSJ_SECONDARY_COLOR;
     [_recoverBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
     [_recoverBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
     
-    _deleteBtn.tintColor = SSJ_SECONDARY_COLOR;
-    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-    [_deleteBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
+    _deleteBtn.imageView.tintColor = SSJ_SECONDARY_COLOR;
+    [_deleteBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+    [self.contentView ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
 }
 
 @end
