@@ -285,7 +285,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     [self setBind];
     //拍息方式
     NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate rateType:self.model.ratetype money:[self.model.money doubleValue]]];
-    NSString *oldlilvStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息%@元",targetLiLvStr];
+    NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
     self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
 
     if (self.jiXiMethodSelectionView.selectedIndex > 0) {
