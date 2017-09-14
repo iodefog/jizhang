@@ -29,6 +29,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = [UIColor whiteColor]; 
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
         [self addSubview:self.gifImageView];
@@ -43,22 +44,18 @@
 - (void)updateConstraints {
     [self.gifImageView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(self);
-        if (self.animatedImage.size.height > self.height) {
-            make.height.mas_equalTo(self);
-            make.center.mas_equalTo(self);
-        } else {
-            make.top.mas_equalTo(self.subTitleLab.bottom).offset(10);
-            make.height.mas_equalTo(self.animatedImage.size.height);
-        }
+        make.centerX.mas_equalTo(self);
+        make.top.mas_equalTo(self.subTitleLab.mas_bottom).offset(10);
+        make.height.mas_equalTo(self.animatedImage.size.height * self.width / self.animatedImage.size.width);
     }];
     
-    [self.subTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).offset(85);
         make.centerX.mas_equalTo(self);
     }];
     
-    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.subTitleLab.mas_bottom).offset(50);
+    [self.subTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(50);
         make.centerX.mas_equalTo(self);
     }];
     
@@ -96,6 +93,7 @@
 }
 
 - (void)startAnimating {
+    self.gifImageView.currentAnimatedImageIndex = 0;
     [self.gifImageView startAnimating];
     self.subTitleLab.alpha = 0;
     self.titleLab.alpha = 0;

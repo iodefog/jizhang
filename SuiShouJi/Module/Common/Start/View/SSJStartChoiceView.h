@@ -12,6 +12,8 @@
 
 @property (nonatomic, copy) void(^jumpOutButtonClickBlock)();
 
+@property (nonatomic, copy) void(^choiceOutButtonClickBlock)(NSInteger buttonTag);
+
 - (void)startAnimating;
 
 @end

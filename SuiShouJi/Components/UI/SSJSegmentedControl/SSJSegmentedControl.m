@@ -12,12 +12,14 @@
 
 @property (nonatomic, strong) NSMutableArray *buttons;
 
+@property (nonatomic, strong) NSMutableArray *separators;
+
 @end
 
 @implementation SSJSegmentedControl
 
-- (instancetype)initWithItems:(NSArray *)items; {
-    if (!items.count) {
+- (instancetype)initWithItems:(NSArray *)items {
+    if (items.count < 2) {
         return nil;
     }
     
@@ -25,6 +27,7 @@
         self.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         self.tintColor = [UIColor ssj_colorWithHex:@"#cccccc"];
         self.buttons = [NSMutableArray arrayWithCapacity:items.count];
+        self.separators = [NSMutableArray arrayWithCapacity:items.count - 1];
         
         self.layer.cornerRadius = 3;
         self.layer.masksToBounds = YES;
@@ -42,23 +45,31 @@
             [button setTitleColor:self.tintColor forState:UIControlStateNormal];
             [button addTarget:self action:@selector(buttonClickAction:) forControlEvents:UIControlEventTouchUpInside];
             
-            [button ssj_setBorderWidth:1];
-            [button ssj_setBorderStyle:SSJBorderStyleAll];
+            [button ssj_setBorderWidth:1 * SSJSCREENSCALE];
+            
             CGFloat inset = 0;
             if (i == 0) {
                 [button ssj_setCornerRadius:3];
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, inset, inset, 0)];
                 [button ssj_setCornerStyle:(UIRectCornerTopLeft | UIRectCornerBottomLeft)];
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, inset, inset, 0)];
+                [button ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleLeft | SSJBorderStyleBottom)];
             } else if (i == items.count - 1) {
                 [button ssj_setCornerRadius:3];
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, inset)];
                 [button ssj_setCornerStyle:(UIRectCornerTopRight | UIRectCornerBottomRight)];
+                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, inset)];
+                [button ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleRight | SSJBorderStyleBottom)];
             } else {
-                [button ssj_setBorderInsets:UIEdgeInsetsMake(inset, 0, inset, 0)];
+                [button ssj_setBorderStyle:(SSJBorderStyleTop | SSJBorderStyleBottom)];
             }
             
             [self addSubview:button];
             [self.buttons addObject:button];
+            
+            if (i > 0) {
+                UIView *separator = [[UIView alloc] init];
+                [self addSubview:separator];
+                [self.separators addObject:separator];
+            }
         }
     }
     return self;
@@ -74,6 +85,12 @@
     for (int i = 0; i < self.buttons.count; i ++) {
         UIButton *button = self.buttons[i];
         button.frame = CGRectMake(width * i, 0, width, height);
+        
+        if (i > 0) {
+            UIView *separator = self.separators[i - 1];
+            separator.size = CGSizeMake(1, self.height);
+            separator.left = width * i;
+        }
     }
 }
 
@@ -121,6 +138,24 @@
             UIColor *borderColor = (i == selectedSegmentIndex) ? _selectedBorderColor : _borderColor;
             [button ssj_setBorderColor:borderColor];
         }
+        
+        [self updateSeparatorsColor];
+    }
+}
+
+- (void)updateSeparatorsColor {
+    for (int i = 0; i < self.separators.count; i ++) {
+        BOOL selected = NO;
+        if (_selectedSegmentIndex == 0) {
+            selected = i == 0;
+        } else if (_selectedSegmentIndex == self.buttons.count - 1) {
+            selected = i == self.separators.count - 1;
+        } else {
+            selected = i == _selectedSegmentIndex || i == _selectedSegmentIndex - 1;
+        }
+        
+        UIView *separator = self.separators[i];
+        separator.backgroundColor = selected ? _selectedBorderColor : _borderColor;
     }
 }
 
@@ -141,6 +176,7 @@
                 [button ssj_setBorderColor:_borderColor];
             }
         }
+        [self updateSeparatorsColor];
     }
 }
 
@@ -149,6 +185,7 @@
         _selectedBorderColor = selectedBorderColor;
         UIButton *btn = [self.buttons ssj_safeObjectAtIndex:_selectedSegmentIndex];
         [btn ssj_setBorderColor:_selectedBorderColor];
+        [self updateSeparatorsColor];
     }
 }
 

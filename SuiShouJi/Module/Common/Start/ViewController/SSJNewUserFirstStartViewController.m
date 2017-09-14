@@ -10,6 +10,8 @@
 #import "SSJStartViewHelper.h"
 #import "SSJStartChoiceView.h"
 #import "SSJNavigationController.h"
+#import "SSJThemeSelectButton.h"
+#import "SSJStarterUserGuideViewController.h"
 
 @interface SSJNewUserFirstStartViewController ()
 
@@ -120,6 +122,16 @@
 - (SSJStartChoiceView *)choiceView {
     if (!_choiceView) {
         _choiceView = [[SSJStartChoiceView alloc] init];
+        @weakify(self);
+        _choiceView.choiceOutButtonClickBlock = ^(NSInteger buttonTag) {
+            @strongify(self);
+            if (buttonTag == 100) {
+                SSJStarterUserGuideViewController *starterUserVc = [[SSJStarterUserGuideViewController alloc] init];
+                [self.navigationController pushViewController:starterUserVc animated:YES];
+            } else {
+                
+            }
+        };
         _choiceView.hidden = YES;
     }
     return _choiceView;

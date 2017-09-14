@@ -12,18 +12,29 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface SSJSegmentedControl : UIControl
 
-//  选中的下标
+/**
+ 选中的下标
+ */
 @property (nonatomic) NSUInteger selectedSegmentIndex;
 
-//  标题字体
+/**
+ 标题字体
+ */
 @property (nonatomic, strong) UIFont *font;
 
-//  边框颜色、标题默认颜色
+/**
+ 未选中的边框颜色
+ */
 @property (null_resettable, nonatomic, strong) UIColor *borderColor;
 
+/**
+ 选中的边框颜色
+ */
 @property (null_resettable, nonatomic, strong) UIColor *selectedBorderColor;
 
-/**选中的背景颜色*/
+/**
+ 选中的背景颜色
+ */
 @property (null_resettable, nonatomic, strong) UIColor *selectedbgColor;
 
 /**
