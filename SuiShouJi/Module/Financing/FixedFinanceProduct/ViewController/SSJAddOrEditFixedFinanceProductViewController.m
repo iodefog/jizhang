@@ -1049,7 +1049,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (SSJLoanFundAccountSelectionView *)jiXiMethodSelectionView {
     if (!_jiXiMethodSelectionView) {
         __weak typeof(self) weakSelf = self;
-        NSArray *titleArr = @[@"一次性还本付息",@"每日付息，到期还本",@"每月付息，到期还本"];
+        NSArray *titleArr = @[@"一次性还本付息",@"每日付息，到期还本"];
         NSMutableArray *itemArr = [NSMutableArray array];
         for (NSString *title in titleArr) {
             SSJLoanFundAccountSelectionViewItem *item = [[SSJLoanFundAccountSelectionViewItem alloc] init];
@@ -1057,7 +1057,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             [itemArr addObject:item];
         }
         
-        _jiXiMethodSelectionView = [[SSJLoanFundAccountSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 192)];
+        _jiXiMethodSelectionView = [[SSJLoanFundAccountSelectionView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 142)];
         
         _jiXiMethodSelectionView.title = @"派息方式";
         _jiXiMethodSelectionView.items = itemArr;
