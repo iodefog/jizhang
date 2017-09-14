@@ -205,10 +205,10 @@
         
         //重新生成新的历史派发流水
         NSDate *endDate;
-        if ([[NSDate date] compare:[[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+        if ([[NSDate date] compare:[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
             endDate = [NSDate date];
         } else {
-            endDate = [[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+            endDate = [model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] ;
         }
         
         if (![self interestRecordWithProductModel:model investmentDate:model.startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
@@ -926,10 +926,10 @@
             
             //重新生成新的历史派发流水
             NSDate *endDate;
-            if ([[NSDate date] compare:[[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+            if ([[NSDate date] compare:[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
                 endDate = [NSDate date];
             } else {
-                endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+                endDate = [productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
             }
             //按照新的金额重新派发流水
             //重新生成新的历史派发流水
@@ -1144,10 +1144,10 @@
                 
                 //重新生成新的历史派发流水
                 NSDate *endDate;
-                if ([[NSDate date] compare:[[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]] == NSOrderedAscending) {
+                if ([[NSDate date] compare:[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] ] == NSOrderedAscending) {
                     endDate = [NSDate date];
                 } else {
-                    endDate = [[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1];
+                    endDate = [productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
                 }
             
             NSDate *startDate;
@@ -1629,7 +1629,7 @@
     
     //endDate当前日期
     //投资时间，计息时间：投资时间+1，产生利息时间：计息时间+1
-    NSDate *startDate = [investmentDate dateByAddingDays:2];
+    NSDate *startDate = [investmentDate dateByAddingDays:1];
     if ([startDate isLaterThanOrEqualTo:endDate]) {
         //        [CDAutoHideMessageHUD showMessage:@"如果开始时间晚于结束时间则返回"];
         return YES;
@@ -1647,7 +1647,7 @@
     interest = [[interestDic objectForKey:@"interest"] doubleValue];
     
     if (item.interesttype == SSJMethodOfInterestEveryDay) {
-        dayJixiDate = [investmentDate dateByAddingDays:1];
+        dayJixiDate = investmentDate;
     } else if (item.interesttype == SSJMethodOfInterestEveryMonth) {
         dayJixiDate = [item.startDate dateByAddingMonths:1];
     } else if (item.interesttype == SSJMethodOfInterestOncePaid) {
@@ -1964,14 +1964,14 @@
             NSInteger days = [endDate daysFrom:dayJixiDate calendar:gregorian];
             double lastLixi =0;
             
-            for (NSInteger i=0; i<days; i++) {
+            for (NSInteger i=1; i<=days; i++) {
                 NSDate *billDate = [dayJixiDate dateByAddingDays:i];
                 //如果已经到了结束日期了就返回
                 if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                    return 0;
+                    return YES;
                 }
-                if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
-                NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                if ([billDate isLaterThan:endDate]) return YES;//如果开始时间晚于结束时间则返回
+                NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
                 //生成利息
                 
                 //每日付息
@@ -2143,7 +2143,7 @@
 
     //endDate当前日期
     //投资时间，计息时间：投资时间+1，产生利息时间：计息时间+1
-    NSDate *startDate = [investmentDate dateByAddingDays:2];
+    NSDate *startDate = [investmentDate dateByAddingDays:1];
     if ([startDate isLaterThanOrEqualTo:endDate]) {
 //        [CDAutoHideMessageHUD showMessage:@"如果开始时间晚于结束时间则返回"];
         return YES;
@@ -2155,7 +2155,7 @@
     //生成利息
     double interest = 0;
     if (item.interesttype == SSJMethodOfInterestEveryDay) {
-        dayJixiDate = [investmentDate dateByAddingDays:1];
+        dayJixiDate = investmentDate;
     } else if (item.interesttype == SSJMethodOfInterestEveryMonth) {
         dayJixiDate = [item.startDate dateByAddingMonths:1];
         if ([investmentDate isSameDay:item.startDate]) {//新建
@@ -2272,7 +2272,7 @@
                     if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
                         return YES;
                     }
-                    NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                    NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
                     //生成利息
                     NSMutableArray *valueArr = [NSMutableArray array];
                     [valueArr addObject:SSJUUID()];
@@ -2313,10 +2313,10 @@
                     for (NSInteger i=0; i<days; i++) {
                         NSDate *billDate = [dayJixiDate dateByAddingDays:i];
                         //如果一定到了结束日期了就返回
-                        if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
+                        if ([billDate isLaterThan:[endDate dateByAddingDays:1]]) {
                             return YES;
                         }
-                        if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
+                        if ([billDate isLaterThan:endDate]) return YES;//如果开始时间晚于结束时间则返回//如果开始时间晚于结束时间则返回
                         NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                         //生成利息
                         
@@ -2377,7 +2377,7 @@
                     return YES;
                 }
                 if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
-                NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+                NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
                 //生成利息
                 NSMutableArray *valueArr = [NSMutableArray array];
                 [valueArr addObject:SSJUUID()];
@@ -2528,6 +2528,15 @@
         return model.startDate;
     }
     return [newDate ssj_dateWithFormat:@"yyyy-MM-dd"];
+}
+
++ (nullable NSString *)queryPaiFalLastBillDateStrWithPorductModel:(SSJFixedFinanceProductItem *)model inDatabase:(SSJDatabase *)db {
+    __block NSString *newDate;
+    newDate = [db stringForQuery:@"select max(cbilldate) from bk_user_charge where ichargetype = ? and cuserid = ? and cid = ? and ibillid = 19",@(SSJChargeIdTypeFixedFinance),SSJUSERID(),model.productid];
+    if (!newDate.length) {//如果不存在派发则是model的billdate
+        return @"";
+    }
+    return newDate;
 }
 
 

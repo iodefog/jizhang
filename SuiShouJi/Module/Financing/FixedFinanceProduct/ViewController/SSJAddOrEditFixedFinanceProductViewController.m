@@ -479,9 +479,15 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 weakSelf.sureButton.enabled = YES;
                 
                 //调转到详情页面
-                SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
-                detailVC.productID = weakSelf.model.productid;
-                [weakSelf.navigationController pushViewController:detailVC animated:YES];
+                //如果是新建的时候
+                
+                if (self.chargeItem) {
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                } else {
+                    SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                    detailVC.productID = weakSelf.model.productid;
+                    [weakSelf.navigationController pushViewController:detailVC animated:YES];
+                }
                 
                 //将当期页面从占中删除
                 NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
