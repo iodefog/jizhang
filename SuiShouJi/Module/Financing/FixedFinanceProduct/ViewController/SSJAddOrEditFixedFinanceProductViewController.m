@@ -481,7 +481,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 //调转到详情页面
                 //如果是新建的时候
                 
-                if (self.chargeItem) {
+                if (weakSelf.model) {//编辑的时候
                     [weakSelf.navigationController popViewControllerAnimated:YES];
                 } else {
                     SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];

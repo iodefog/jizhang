@@ -1734,7 +1734,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1833,7 +1833,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject: @""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1936,7 +1936,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2032,7 +2032,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2093,7 +2093,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject: @""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2214,7 +2214,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2248,7 +2248,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2282,7 +2282,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2328,7 +2328,7 @@
                         [valueArr addObject:billDateStr];
                         [valueArr addObject:cid];
                         [valueArr addObject:@(interest)];
-                        [valueArr addObject:item.memo.length ? item.memo : @""];
+                        [valueArr addObject:@""];
                         [valueArr addObject:@(SSJSyncVersion())];
                         [valueArr addObject:@(SSJOperatorTypeCreate)];
                         [valueArr addObject:writeDateStr];
@@ -2387,7 +2387,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
