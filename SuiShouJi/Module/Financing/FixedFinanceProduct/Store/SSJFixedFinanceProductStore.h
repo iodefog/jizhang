@@ -74,6 +74,13 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return 利息
  */
 + (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID;
+/**
+ 查询当前利息和
+ 
+ *  @param fixedFinanceProductID    理财产品id
+ @return 利息
+ */
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db;
 
 /**
  查询一定时间内利息和

@@ -414,7 +414,7 @@ static NSString *kTitle6 = @"备注";
                     self.liXiTextF.text = [NSString stringWithFormat:@"%.2f",item.money];
                     self.oldPoundageMoney = item.money;
                 } else if ([item.billId isEqualToString:@"16"]) {
-                    
+                    self.chargeModel = item;
                 }
             }
             SSJLoanFundAccountSelectionViewItem *funditem = [SSJFixedFinanceProductStore queryfundNameWithFundid:self.otherMoneyChareItem.fundId];
@@ -511,7 +511,9 @@ static NSString *kTitle6 = @"备注";
     }
     double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
     
-    self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue];
+    self.compoundModel.chargeModel.money = [self.moneyTextF.text doubleValue];
+    self.compoundModel.chargeModel.oldMoney = self.oldMoney;
+    
     if (!self.chargeModel) {
         double old = [self.financeModel.money doubleValue];
         double new = [self.moneyTextF.text doubleValue] + [self.liXiTextF.text doubleValue];
@@ -534,6 +536,7 @@ static NSString *kTitle6 = @"备注";
 
 - (void)updateModel {
     self.compoundModel.chargeModel.money = self.compoundModel.targetChargeModel.money = [self.moneyTextF.text doubleValue];
+    self.compoundModel.chargeModel.oldMoney = self.compoundModel.targetChargeModel.oldMoney = self.oldMoney;
     self.compoundModel.chargeModel.memo = self.compoundModel.targetChargeModel.memo = self.memoTextF.text.length ? self.memoTextF.text : @"";
     
     if (self.chargeModel) {//是编辑的时候
@@ -570,15 +573,15 @@ static NSString *kTitle6 = @"备注";
     //如果是编辑的时候
     if (self.chargeModel) {
         if (self.oldMoney >= [self.moneyTextF.text doubleValue]) {//为负数
-            self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
+            self.compoundModel.chargeModel.oldMoney = self.oldMoney;
         } else {
-            self.compoundModel.chargeModel.oldMoney = [self.moneyTextF.text doubleValue] - self.oldMoney;
+            self.compoundModel.chargeModel.oldMoney = self.oldMoney;
         }
         
         if (self.oldPoundageMoney >= [self.liXiTextF.text doubleValue]) {//为负数
-            self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue] - self.oldPoundageMoney;
+            self.compoundModel.interestChargeModel.oldMoney = self.oldPoundageMoney;
         } else {
-            self.compoundModel.interestChargeModel.oldMoney = [self.liXiTextF.text doubleValue] - self.oldPoundageMoney;
+            self.compoundModel.interestChargeModel.oldMoney = self.oldPoundageMoney;
         }
         
     }
@@ -586,7 +589,7 @@ static NSString *kTitle6 = @"备注";
 
 #pragma mark - Action
 - (void)sureButtonAction {
-//    if (![self checkIfNeedCheck]) return;
+    if (![self checkIfNeedCheck]) return;
     MJWeakSelf;
     if ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue]) {
         //提示结算弹框
@@ -679,7 +682,7 @@ static NSString *kTitle6 = @"备注";
         _dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         _dateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
             if ([date compare:weakSelf.financeModel.startDate] == NSOrderedAscending) {
-                [CDAutoHideMessageHUD showMessage:@"日期不能早于投资日期哦"];
+                [CDAutoHideMessageHUD showMessage:@"日期不能早于起息时间哦"];
                 return NO;
             }
             //不能晚于当前日期

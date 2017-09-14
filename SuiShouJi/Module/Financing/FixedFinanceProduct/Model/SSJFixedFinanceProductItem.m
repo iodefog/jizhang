@@ -8,6 +8,8 @@
 
 #import "SSJFixedFinanceProductItem.h"
 #import "FMResultSet.h"
+#import "FMDatabase.h"
+#import "SSJFixedFinanceProductStore.h"
 
 @implementation SSJFixedFinanceProductItem
 + (NSArray *)mj_allowedPropertyNames {
@@ -25,7 +27,7 @@
     return [NSDictionary dictionaryWithObjects:[self valueArr]  forKeys:[self keyArr]];
 }
 
-+ (instancetype)modelWithResultSet:(FMResultSet *)resultSet {
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db {
     SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
     item.productid = [resultSet stringForColumn:@"CPRODUCTID"];
     item.userid = [resultSet stringForColumn:@"CUSERID"];
@@ -52,6 +54,11 @@
     if (![resultSet columnIsNull:@"cstartcolor"] && ![resultSet columnIsNull:@"cendcolor"]) {
         item.startcolor = [resultSet stringForColumn:@"cstartcolor"];
         item.endcolor = [resultSet stringForColumn:@"cendcolor"];
+    }
+    //加上利息
+    //未结算的时候加上利息
+    if (!item.isend) {
+        item.money = [NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])];
     }
     
     return item;

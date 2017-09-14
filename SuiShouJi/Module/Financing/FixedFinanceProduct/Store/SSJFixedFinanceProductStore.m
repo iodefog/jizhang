@@ -62,7 +62,7 @@
         
         NSMutableArray *list = [[NSMutableArray alloc] init];
         while ([result next]) {
-            SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:result];
+            SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:result inDatabase:db];
         
             [list addObject:model];
         }
@@ -289,7 +289,7 @@
         
         SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
         while ([resultSet next]) {
-            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet];
+            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet inDatabase:db];
         }
         [resultSet close];
         
@@ -328,6 +328,10 @@
         interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
     }];
     return interest;
+}
+
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+    return [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
 }
 
 /**
@@ -369,16 +373,16 @@
 + (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID {
     double interest = 0;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
-        [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"20",SSJUSERID()];
+        [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ? and ifunsid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"20",SSJUSERID(),[NSString stringWithFormat:@"%@-8",SSJUSERID()]];
     }];
     return interest;
 }
 
-+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
-    double interest = 0;
-        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
-    return interest;
-}
+//+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+//    double interest = 0;
+//        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
+//    return interest;
+//}
 
 
 + (NSString *)queryFixedFinanceProductNewChargeBillDateWithModel:(SSJFixedFinanceProductItem *)model {
@@ -1117,7 +1121,7 @@
                     newMoney = oldMoney + model.chargeModel.oldMoney;
                     
                 } else if (type == 2) {//赎回
-                    newMoney = oldMoney - model.chargeModel.oldMoney - model.interestChargeModel.oldMoney;
+                    newMoney = oldMoney - (model.chargeModel.money - model.chargeModel.oldMoney) - (model.interestChargeModel.money - model.interestChargeModel.oldMoney);
                 }
             
                 //删除以前派发的利1息流水//重新派发利息流水
@@ -1224,12 +1228,13 @@
             
             //原来金额+利息+手续费
             newMoney += model.chargeModel.money;
-            newMoney -= model.interestChargeModel.money;
+//            newMoney -= model.interestChargeModel.money;
             
             double interest = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productModel.productid inDatabase:db];//所有派发利息的和
             //如果有利息时并且利息和派发利息不同的时候
-            
-            if (i == 0 && model.chargeModel && model.chargeModel.money != interest) {
+            NSString *interestStr = [NSString stringWithFormat:@"%.2f",interest];
+            NSString *chargeModelMoney = [NSString stringWithFormat:@"%.2f",model.chargeModel.money];
+            if (i == 0 && model.chargeModel && [interestStr isEqualToString:chargeModelMoney]) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
                     if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
@@ -1734,7 +1739,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1833,7 +1838,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject: @""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1936,7 +1941,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2032,7 +2037,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2093,7 +2098,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject: @""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2214,7 +2219,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2248,7 +2253,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2282,7 +2287,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2328,7 +2333,7 @@
                         [valueArr addObject:billDateStr];
                         [valueArr addObject:cid];
                         [valueArr addObject:@(interest)];
-                        [valueArr addObject:item.memo.length ? item.memo : @""];
+                        [valueArr addObject:@""];
                         [valueArr addObject:@(SSJSyncVersion())];
                         [valueArr addObject:@(SSJOperatorTypeCreate)];
                         [valueArr addObject:writeDateStr];
@@ -2387,7 +2392,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];

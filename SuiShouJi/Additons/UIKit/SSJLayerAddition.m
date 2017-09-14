@@ -168,7 +168,8 @@
     
     UIBezierPath *path = [UIBezierPath bezierPath];
     
-    CGFloat inset = self.customBorderWidth / 2;
+    CGFloat lineWidth = self.customBorderWidth / [UIScreen mainScreen].scale;
+    CGFloat inset = lineWidth / 2;
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, UIEdgeInsetsMake(inset, inset, inset, inset));
     CGPoint leftTop = CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMinY(contentFrame));
     CGPoint rightTop = CGPointMake(CGRectGetMaxX(contentFrame), CGRectGetMinY(contentFrame));
@@ -176,8 +177,8 @@
     CGPoint leftBottom = CGPointMake(CGRectGetMinX(contentFrame), CGRectGetMaxY(contentFrame));
     
     if ((_customBorderStyle & SSJBorderStyleTop) == SSJBorderStyleTop) {
-        CGPoint point_1 = leftTop;
-        CGPoint point_2 = rightTop;
+        CGPoint point_1 = CGPointMake(0, inset);
+        CGPoint point_2 = CGPointMake(self.width, inset);
         if ((_cornerStyle & UIRectCornerTopLeft) == UIRectCornerTopLeft) {
             point_1 = CGPointMake(leftTop.x + self.customCornerRadius, leftTop.y);
         }
@@ -189,8 +190,8 @@
     }
     
     if ((_customBorderStyle & SSJBorderStyleRight) == SSJBorderStyleRight) {
-        CGPoint point_1 = rightTop;
-        CGPoint point_2 = rightBottom;
+        CGPoint point_1 = CGPointMake(self.width - inset, 0);
+        CGPoint point_2 = CGPointMake(self.width - inset, self.height);
         if ((_cornerStyle & UIRectCornerTopRight) == UIRectCornerTopRight) {
             point_1 = CGPointMake(rightTop.x, rightTop.y + self.customCornerRadius);
         }
@@ -202,8 +203,8 @@
     }
     
     if ((_customBorderStyle & SSJBorderStyleBottom) == SSJBorderStyleBottom) {
-        CGPoint point_1 = rightBottom;
-        CGPoint point_2 = leftBottom;
+        CGPoint point_1 = CGPointMake(self.width, self.height - inset);
+        CGPoint point_2 = CGPointMake(0, self.height - inset);
         if ((_cornerStyle & UIRectCornerBottomRight) == UIRectCornerBottomRight) {
             point_1 = CGPointMake(rightBottom.x - self.customCornerRadius, rightBottom.y);
         }
@@ -215,8 +216,8 @@
     }
     
     if ((_customBorderStyle & SSJBorderStyleLeft) == SSJBorderStyleLeft) {
-        CGPoint point_1 = leftBottom;
-        CGPoint point_2 = leftTop;
+        CGPoint point_1 = CGPointMake(inset, self.height);
+        CGPoint point_2 = CGPointMake(inset, 0);
         if ((_cornerStyle & UIRectCornerBottomLeft) == UIRectCornerBottomLeft) {
             point_1 = CGPointMake(leftBottom.x, leftBottom.y - self.customCornerRadius);
         }
@@ -265,7 +266,7 @@
     }
     
     CGContextAddPath(ctx, path.CGPath);
-    CGContextSetLineWidth(ctx, _customBorderWidth);
+    CGContextSetLineWidth(ctx, lineWidth);
     CGContextSetStrokeColorWithColor(ctx, _customBorderColor.CGColor);
     CGContextStrokePath(ctx);
 }
