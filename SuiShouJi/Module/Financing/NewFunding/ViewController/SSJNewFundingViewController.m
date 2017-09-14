@@ -289,10 +289,8 @@
             [self presentViewController:alert animated:YES completion:NULL];
         }
     } failure:^(NSError *error) {
-        
+        [CDAutoHideMessageHUD showError:error];
     }];
-
-    
 }
 
 -(void)saveButtonClicked:(id)sender {
