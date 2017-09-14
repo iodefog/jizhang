@@ -664,7 +664,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [self getDateFromDB];
-            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeBook];
+            [SSJRecycleDataDeletionAlertor showAlert:SSJRecycleDataDeletionTypeBook];
             
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];

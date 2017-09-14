@@ -15,9 +15,7 @@ typedef NS_ENUM(NSInteger, SSJRecycleDataDeletionType) {
 
 @interface SSJRecycleDataDeletionAlertor : NSObject
 
-+ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type;
-
-+ (void)showAlertIfNeeded:(SSJRecycleDataDeletionType)type success:(void(^)(BOOL showed))success falure:(void(^)(NSError *error))failure;
++ (void)showAlert:(SSJRecycleDataDeletionType)type;
 
 @end
 

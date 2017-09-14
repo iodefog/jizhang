@@ -99,7 +99,7 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
             [weakSelf.view ssj_hideLoadingIndicator];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
             [weakSelf.navigationController popToRootViewControllerAnimated:YES];
-            [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
+            [SSJRecycleDataDeletionAlertor showAlert:SSJRecycleDataDeletionTypeFund];
         } failure:^(NSError * _Nonnull error) {
             [weakSelf.view ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];

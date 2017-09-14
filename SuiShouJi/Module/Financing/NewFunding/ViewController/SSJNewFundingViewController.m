@@ -410,7 +410,7 @@
     [SSJFinancingHomeHelper deleteFundingWithFundingItem:item deleteType:type Success:^{
         [weakSelf.navigationController popToRootViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        [SSJRecycleDataDeletionAlertor showAlertIfNeeded:SSJRecycleDataDeletionTypeFund];
+        [SSJRecycleDataDeletionAlertor showAlert:SSJRecycleDataDeletionTypeFund];
     } failure:^(NSError *error) {
         [CDAutoHideMessageHUD showError:error];
     }];
