@@ -538,7 +538,7 @@ static NSString *const kTitle6 = @"分期申请日";
     __block NSInteger instalmentCount;
     [[SSJDatabaseQueue sharedInstance] inDatabase:^(FMDatabase *db) {
         NSString *userId = SSJUSERID();
-        instalmentCount = [db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and operatortype <> 2 and iinstalmentcount > 0 and crepaymentmonth = ?",userId,[month formattedDateWithFormat:@"yyyy-MM"]];
+        instalmentCount = [db intForQuery:@"select count(1) from bk_credit_repayment where cuserid = ? and operatortype <> 2 and iinstalmentcount > 0 and crepaymentmonth = ? and ccardid = ?",userId,[month formattedDateWithFormat:@"yyyy-MM"],self.chargeItem.fundId];
     }];
     return instalmentCount;
 }

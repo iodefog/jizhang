@@ -335,8 +335,8 @@
                                                       where:SSJCreditRepaymentTable.repaymentMonth != [currentMonth formattedDateWithFormat:@"yyyy-MM"]
                                                             && SSJCreditRepaymentTable.userId == userId
                                                             && SSJCreditRepaymentTable.operatorType != 2
-                                                            && SSJCreditRepaymentTable.instalmentCount > 0
-                                                            && SSJCreditRepaymentTable.applyDate.notBetween([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
+                                                            && SSJCreditRepaymentTable.instalmentCount == 0
+                                                            && SSJCreditRepaymentTable.applyDate.between([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
                                                     doubleValue];
         sumMoney = currentIncome - currentExpence + currentRepaymentMoney + currentInstalMoney - currentRepaymentForOtherMonth;
         SSJDispatch_main_async_safe(^{
@@ -382,8 +382,11 @@
         item.fundingMemo = fundInfoTable.memo;
         item.fundingOrder = fundInfoTable.fundOrder;
     
+        
         if (success) {
-            success(item);
+            SSJDispatch_main_async_safe(^{
+                success(item);
+            });
         }
     }];
 }
@@ -412,7 +415,7 @@
     where((SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member") == SSJShareBooksMemberStateNormal
            || SSJShareBooksMemberTable.memberState.inTable(@"bk_share_books_member").isNull()
            || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"13"
-           || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14") && SSJUserChargeTable.billDate.between(startDate , endDate));
+           || SSJUserChargeTable.billId.inTable(@"bk_user_charge") == @"14") && SSJUserChargeTable.billDate.inTable(@"bk_user_charge").between(startDate , endDate));
     
     WCTStatement *statement = [db prepare:statementSelect];
     
