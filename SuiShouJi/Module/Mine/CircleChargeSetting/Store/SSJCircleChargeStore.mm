@@ -92,7 +92,7 @@
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
         item.billDetailDate = @"00:00";
-        item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? and operatortype <> 2 order by iorder limit 1", userid, @(incomeOrExpence), booksId];
+        item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? and operatortype <> 2 order by iorder, cwritedate, cbillid limit 1", userid, @(incomeOrExpence), booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.colorValue = [db stringForQuery:@"select ccolor from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.booksId = booksId;
