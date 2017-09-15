@@ -123,7 +123,7 @@ static const NSUInteger kColorLumpCountPerRow = 5;
 }
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex {
-    if (selectedIndex >= self.colors.count) {
+    if (selectedIndex != NSNotFound && selectedIndex >= self.colors.count) {
         SSJPRINT(@"selectedIndex必须小于self.colors.count");
         return;
     }
