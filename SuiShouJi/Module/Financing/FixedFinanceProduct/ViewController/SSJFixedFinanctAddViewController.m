@@ -201,8 +201,8 @@ static NSUInteger kDateTag = 2005;
             oneDaybenjin += chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
             oneDaybenjin -= chargeItem.money;
-            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
-            oneDaybenjin -= poundage;
+//            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+//            oneDaybenjin -= poundage;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
             oneDaybenjin += chargeItem.money;
         }

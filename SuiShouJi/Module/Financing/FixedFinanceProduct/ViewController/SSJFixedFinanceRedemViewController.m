@@ -74,6 +74,9 @@ static NSString *kTitle6 = @"备注";
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *moneyStr;
 
+/**利息*/
+@property (nonatomic, copy) NSString *lixiStr;
+
 /**<#注释#>*/
 @property (nonatomic, copy) NSString *otherFundid;
 
@@ -192,6 +195,7 @@ static NSString *kTitle6 = @"备注";
         if (self.moneyTextF == textField) {
             self.moneyStr = text;
         } else {
+            self.lixiStr = text;
             [self updateSubTitle];
         }
         return NO;
@@ -320,7 +324,7 @@ static NSString *kTitle6 = @"备注";
         [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         cell.switchControl.on = _isLiXiOn;
         [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
-//        self.liXiSwitch = cell.switchControl;
+        self.liXiSwitch = cell.switchControl;
         [cell setNeedsLayout];
         
         return cell;
@@ -332,9 +336,9 @@ static NSString *kTitle6 = @"备注";
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
-        cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        cell.textField.text = self.lixiStr;
         if (self.chargeModel) {
-            cell.textField.text = [NSString stringWithFormat:@"%.2f",self.poundageChareItem.money];
+            cell.textField.text = self.lixiStr;
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         self.liXiTextF = cell.textField;
@@ -411,6 +415,7 @@ static NSString *kTitle6 = @"备注";
                     self.moneyStr = [NSString stringWithFormat:@"%.2f",item.money];
                 } else if ([item.billId isEqualToString:@"20"]) {
                     self.poundageChareItem = item;
+                    self.lixiStr = [NSString stringWithFormat:@"%.2f",self.poundageChareItem.money];
                     self.liXiTextF.text = [NSString stringWithFormat:@"%.2f",item.money];
                     self.oldPoundageMoney = item.money;
                 } else if ([item.billId isEqualToString:@"16"]) {
@@ -490,7 +495,7 @@ static NSString *kTitle6 = @"备注";
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
             benjin += chargeItem.money;
           double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
-            benjin -= poundage;
+            benjin -= chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
             benjin += chargeItem.money;
         }
@@ -501,7 +506,11 @@ static NSString *kTitle6 = @"备注";
     }
     
     //加上以前的赎回
-    if (benjin + self.oldMoney < [self.moneyStr doubleValue]) {
+    if (!self.liXiSwitch.on) {
+        self.lixiStr = @"0";
+        
+    }
+    if (benjin  < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
         [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
        return NO;
     }
@@ -514,23 +523,6 @@ static NSString *kTitle6 = @"备注";
     
     self.compoundModel.chargeModel.money = [self.moneyTextF.text doubleValue];
     self.compoundModel.chargeModel.oldMoney = self.oldMoney;
-    
-    if (!self.chargeModel) {
-        double old = [self.financeModel.money doubleValue];
-        double new = [self.moneyTextF.text doubleValue] + [self.liXiTextF.text doubleValue];
-        if (old < new) {
-            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
-            return NO;
-        }
-    } else {
-        _canRedemMoney = [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
-        
-        //判断是否可以赎回   部分赎回金额+手续费 小于 可赎回最大金额
-        if (_canRedemMoney < self.compoundModel.chargeModel.money + self.compoundModel.interestChargeModel.money) {
-            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额\n可尝试结清此固定理财产品"];
-            return NO;
-        }
-    }
     
     return YES;
 }
