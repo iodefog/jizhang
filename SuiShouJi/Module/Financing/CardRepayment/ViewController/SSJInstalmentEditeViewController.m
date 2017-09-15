@@ -224,12 +224,16 @@ static NSString *const kTitle6 = @"分期申请日";
 
 #pragma mark - UITextFieldDelegate
 -(void)textFieldDidEndEditing:(UITextField *)textField{
+    NSString *currentText = textField.text;
+    if (!currentText.length) {
+        currentText = @"0.0";
+    }
     if (textField.tag == 101){
-        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:textField.text];
+        self.repaymentModel.repaymentMoney = [NSDecimalNumber decimalNumberWithString:currentText];
     }
     
     if (textField.tag == 102){
-        NSString *poudageStr = [[NSString stringWithFormat:@"%f",[textField.text doubleValue] / 100] ssj_moneyDecimalDisplayWithDigits:2];
+        NSString *poudageStr = [[NSString stringWithFormat:@"%f",[currentText doubleValue] / 100] ssj_moneyDecimalDisplayWithDigits:2];
         self.repaymentModel.poundageRate = [NSDecimalNumber decimalNumberWithString:poudageStr];
     }
 }
