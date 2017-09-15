@@ -92,7 +92,7 @@
         SSJBillingChargeCellItem *item = [[SSJBillingChargeCellItem alloc]init];
         item.billDate = [[NSDate date]ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd"];
         item.billDetailDate = @"00:00";
-        item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? and operatortype <> 2 order by iorder limit 1", userid, @(incomeOrExpence), booksId];
+        item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? and operatortype <> 2 order by iorder, cwritedate, cbillid limit 1", userid, @(incomeOrExpence), booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.colorValue = [db stringForQuery:@"select ccolor from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.booksId = booksId;
@@ -244,7 +244,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and iconf igid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.sundryId]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.sundryId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);
@@ -295,7 +295,8 @@
                                                                        && SSJUserBillTypeTable.userId == SSJUSERID()
                                                                        && SSJUserBillTypeTable.billType == billType
                                                                        && SSJUserBillTypeTable.operatorType != 2
-                                                               orderBy:SSJUserBillTypeTable.billOrder.order(WCTOrderedAscending)];
+                                                             orderBy:{SSJUserBillTypeTable.billOrder.order(WCTOrderedAscending), SSJUserBillTypeTable.writeDate.order(WCTOrderedAscending),
+                                                             SSJUserBillTypeTable.billId.order(WCTOrderedAscending)}];
         SSJRecordMakingBillTypeSelectionCellItem *billItem = [[SSJRecordMakingBillTypeSelectionCellItem alloc] init];
         billItem.imageName = userBillType.billIcon;
         billItem.title = userBillType.billName;
