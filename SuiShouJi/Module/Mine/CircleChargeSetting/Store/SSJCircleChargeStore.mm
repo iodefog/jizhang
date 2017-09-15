@@ -295,7 +295,8 @@
                                                                        && SSJUserBillTypeTable.userId == SSJUSERID()
                                                                        && SSJUserBillTypeTable.billType == billType
                                                                        && SSJUserBillTypeTable.operatorType != 2
-                                                               orderBy:SSJUserBillTypeTable.billOrder.order(WCTOrderedAscending)];
+                                                             orderBy:{SSJUserBillTypeTable.billOrder.order(WCTOrderedAscending), SSJUserBillTypeTable.writeDate.order(WCTOrderedAscending),
+                                                             SSJUserBillTypeTable.billId.order(WCTOrderedAscending)}];
         SSJRecordMakingBillTypeSelectionCellItem *billItem = [[SSJRecordMakingBillTypeSelectionCellItem alloc] init];
         billItem.imageName = userBillType.billIcon;
         billItem.title = userBillType.billName;
