@@ -94,6 +94,7 @@
 
 - (void)startAnimating {
     [self.gifImageView startAnimating];
+    self.gifImageView.currentAnimatedImageIndex = 0; 
     self.titleLab.alpha = 0;
     self.subTitleLab.alpha = 0;
     [UIView animateWithDuration:2.f animations:^(void){
