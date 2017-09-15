@@ -100,7 +100,7 @@
     CGFloat length_1 = self.lineLength1 + self.lineLength2;
     CGFloat rangeTop = CGRectGetMidY(self.bounds) - self.radius - length_1;
     CGFloat rangeBottom = CGRectGetMaxY(self.bounds) - rangeTop * 2;
-    self.composer.boundary = CGRectMake(10, rangeTop, self.width - 20, rangeBottom);
+    self.composer.boundary = CGRectMake(0, rangeTop, self.width, rangeBottom);
 //    [self setNeedsDisplay];
     
     self.contentView.frame = self.bounds;
@@ -277,13 +277,6 @@
 
 #warning test
 - (void)drawRect:(CGRect)rect {
-//    CGContextRef ctx = UIGraphicsGetCurrentContext();
-//    CGContextMoveToPoint(ctx, CGRectGetMinX(self.composer.boundary), CGRectGetMinY(self.composer.boundary));
-//    CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.composer.boundary), CGRectGetMinY(self.composer.boundary));
-//    CGContextMoveToPoint(ctx, CGRectGetMinX(self.composer.boundary), CGRectGetMaxY(self.composer.boundary));
-//    CGContextAddLineToPoint(ctx, CGRectGetMaxX(self.composer.boundary), CGRectGetMaxY(self.composer.boundary));
-//    CGContextStrokePath(ctx);
-    
     [[UIColor redColor] setStroke];
     UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.composer.boundary];
     [path stroke];
