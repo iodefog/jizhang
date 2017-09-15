@@ -536,10 +536,10 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
 - (void)updateSubscriptLineConstraint {
     CGRect frame = [self.tableView rectForRowAtIndexPath:self.tableView.indexPathForSelectedRow];
     CGFloat centerY = (CGRectGetMidY(frame) - self.tableView.contentOffset.y);
-    CGFloat height = self.tableView.rowHeight * [self.tableView numberOfRowsInSection:0] * 2;
     
     [self.subscriptLine mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(7, height));
+        make.width.mas_equalTo(7);
+        make.height.mas_equalTo(self).multipliedBy(4);
         make.centerY.mas_equalTo(self.mas_top).offset(centerY);
         make.left.mas_equalTo(self.tableView.mas_right);
     }];
@@ -556,6 +556,8 @@ static NSString *const kCollectionHeaderViewID = @"kCollectionHeaderViewID";
     if (self.style == SSJCaterotyMenuSelectionViewMenuLeft) {
         if (selectedIndexPath.menuIndex >= 0 && selectedIndexPath.menuIndex != NSNotFound) {
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:selectedIndexPath.menuIndex inSection:0] animated:animated scrollPosition:UITableViewScrollPositionMiddle];
+            [self updateSubscriptLineConstraint];
+            [self layoutIfNeeded];
         } else {
             for (NSIndexPath *indexPath in self.tableView.indexPathsForSelectedRows) {
                 [self.tableView deselectRowAtIndexPath:indexPath animated:animated];
