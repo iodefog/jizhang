@@ -512,10 +512,27 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         }],nil];
     } else {//新建的时候
         //保存固定收益理财
-        if (!self.remindSwitch.on) {
+        if (!self.remindSwitch.on && !_edited) {//新建
             self.reminderItem = nil;
+        } else if (!_edited && self.remindSwitch.on) { //如果新建并且打开提醒的时候
+            self.reminderItem.remindState = 1;
         }
-        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+        
+        if (_edited) {//编辑
+            if (self.remindSwitch.on) {//打开提醒
+                _reminderItem.remindState = 1;
+            } else {
+                //如果新建的时候没有有提醒编辑的时候删除提醒
+                if (!self.oldProductItem.remindid.length) {
+                    _reminderItem = nil;
+                } else {//如果新建的时候有提醒编辑的时候删除提醒
+                    _reminderItem.remindState = 0;
+                }
+            }
+
+        }
+        
+                [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             weakSelf.sureButton.enabled = YES;
             
             if (_edited) {
