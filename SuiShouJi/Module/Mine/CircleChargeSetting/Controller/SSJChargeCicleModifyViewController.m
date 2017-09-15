@@ -210,7 +210,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         if (self.item.billDate.length) {
             NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-            NSDate* date = [dateFormatter dateFromString:self.item.billDate];
+            NSDate *date = [dateFormatter dateFromString:self.item.billDate];
             self.chargeCircleTimeView.date = date;
         }else{
             self.chargeCircleTimeView.date = [NSDate date];
