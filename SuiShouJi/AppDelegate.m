@@ -191,7 +191,11 @@ NSDate *SCYEnterBackgroundTime() {
 //    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
     // 当程序从后台进入前台，检测是否自动补周期数据
-    [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:NULL failure:NULL];
+    [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {

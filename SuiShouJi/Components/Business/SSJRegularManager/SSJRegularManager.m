@@ -73,7 +73,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return successfull;
 }
 
-+ (void)supplementCycleRecordsForUserId:(NSString *)userId success:(nullable void(^)())success failure:(nullable void (^)(NSError *error))failure {
++ (void)supplementCycleRecordsForUserId:(NSString *)userId
+                                success:(nullable void(^)())success
+                                failure:(nullable void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         if ([self supplementCycleRecordsForUserId:userId inDatabase:db]) {
