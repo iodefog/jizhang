@@ -79,6 +79,7 @@
     item.startcolor = _startcolor;
     item.endcolor = _endcolor;
     item.rate = _rate;
+    item.startDate = _startDate;
     return item;
 }
 

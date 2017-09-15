@@ -16,4 +16,5 @@
 
 @property (nonatomic, strong) UISwitch *switchControl;
 
+@property (nonatomic, strong) UILabel *descLabel;
 @end

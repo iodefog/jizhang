@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (NSDictionary *)caculateYuQiInterestWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType time:(double)time timetype:(SSJMethodOfRateOrTime)timeType money:(double)money interestType:(SSJMethodOfInterest)interesttype startDate:(NSString *)startDate;
 
++ (double)caculateYuQiInterestWithProductItem:(SSJFixedFinanceProductItem *)item;
+
 //SSJMethodOfRateOrTime ratetype
 /**
  计算可变本金产生的利息；因为变更流水会改变本金，利息是按照不同时间段内的本金计算

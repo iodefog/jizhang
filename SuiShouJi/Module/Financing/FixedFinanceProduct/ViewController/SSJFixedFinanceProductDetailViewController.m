@@ -46,6 +46,10 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 @property (nonatomic, strong) UIBarButtonItem *editItem;
 
+@property (nonatomic, strong) UIButton *waningBtn;
+
+@property (nonatomic, strong) UIButton *waningDescBtn;
+
 @property (nonatomic, strong) SSJFinancingDetailHeadeView *headerView;
 
 @property (nonatomic, strong) SSJLoanDetailChargeChangeHeaderView *changeSectionHeaderView;
@@ -73,11 +77,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.tableView];
-    [self.view addSubview:self.changeBtn];
-    [self.view addSubview:self.deleteBtn];
-    [self.view addSubview:self.closeOutBtn];
-    [self.headerView addSubview:self.stateImageView];
+    [self headerUI];
     [self updateAppearance];
     self.changeSectionHeaderView.expanded= NO;
     self.title = @"固收理财详情";
@@ -88,6 +88,16 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [self loadData];
 }
 
+- (void)headerUI {
+    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.changeBtn];
+    [self.view addSubview:self.deleteBtn];
+    [self.view addSubview:self.closeOutBtn];
+    [self.headerView addSubview:self.stateImageView];
+    [self.view addSubview:self.waningBtn];
+    [self.view addSubview:self.waningDescBtn];
+}
+
 #pragma mark - Theme
 - (void)updateAppearanceAfterThemeChanged {
     [super updateAppearanceAfterThemeChanged];
@@ -95,22 +105,22 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 }
 
 - (void)updateAppearance {
-    //    self.headerView.separatorColor = [SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] ? [UIColor whiteColor] : SSJ_CELL_SEPARATOR_COLOR;
-    //    self.headerView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+    self.headerView.separatorColor = [SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID] ? [UIColor whiteColor] : SSJ_CELL_SEPARATOR_COLOR;
+    self.headerView.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
     
     _tableView.separatorColor = SSJ_CELL_SEPARATOR_COLOR;
-    //    [_changeSectionHeaderView updateAppearance];
-    //    [_changeChargeSelectionView updateAppearance];
+    [_changeSectionHeaderView updateAppearance];
+    [_changeChargeSelectionView updateAppearance];
     
     _closeOutBtn.backgroundColor = _deleteBtn.backgroundColor  = _changeBtn.backgroundColor = SSJ_SECONDARY_FILL_COLOR;
     
-//    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
+    //    if ([SSJ_CURRENT_THEME.ID isEqualToString:SSJDefaultThemeID]) {
 //        [_closeOutBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
 //        [_deleteBtn setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.bookKeepingHomeMutiButtonSelectColor] forState:UIControlStateNormal];
-//    } else {
-        [_closeOutBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-        [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
-//    }
+    //    } else {
+    [_closeOutBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    [_deleteBtn setTitleColor:SSJ_MARCATO_COLOR forState:UIControlStateNormal];
+    //    }
     
     [_changeBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
     [_changeBtn ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
@@ -282,6 +292,16 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productID success:^(SSJFixedFinanceProductItem * _Nonnull model) {
             weakSelf.financeModel = model;
             weakSelf.stateImageView.hidden = !weakSelf.financeModel.isend;
+            //如果已经过过期了就只显示结算按钮
+            if ([[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThanOrEqualTo:[NSDate date]]) {
+                weakSelf.changeBtn.hidden = YES;
+                weakSelf.closeOutBtn.frame = CGRectMake(0, weakSelf.view.height - 54, weakSelf.view.width, 50);
+                weakSelf.closeOutBtn.width = weakSelf.view.width;
+            } else {
+                weakSelf.changeBtn.hidden = NO;
+                weakSelf.closeOutBtn.frame = CGRectMake(weakSelf.view.width * 0.4, weakSelf.view.height - 54, weakSelf.view.width * 0.6, 50);
+            }
+
             [weakSelf.headerView reloadData];
             [subscriber sendCompleted];
         } failure:^(NSError * _Nonnull error) {
@@ -482,7 +502,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     // 本金 = financeModel。money + 所有手续费 - 总利息
     double benJinMoney = [self.financeModel.money doubleValue] + totleSxf - totleIn;
     
-    payment = self.financeModel.isend == 0 ? [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.financeModel.rate rateType:self.financeModel.ratetype time:self.financeModel.time timetype:self.financeModel.timetype money:[self.financeModel.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:self.financeModel.startdate] objectForKey:@"interest"] doubleValue] : benJinMoney;//预期利息
+    payment = self.financeModel.isend == 0 ? [SSJFixedFinanceProductHelper caculateYuQiInterestWithProductItem:[self.financeModel copy]] : benJinMoney;//预期利息
     
     
     NSString *sumTitle = @"年化收益率";
@@ -625,6 +645,63 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     return _changeBtn;
 }
 
+- (UIButton *)waningBtn {
+    if (!_waningBtn) {
+        _waningBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _waningBtn.left = self.headerView.width - 40;
+        _waningBtn.top = 170;
+        MJWeakSelf;
+        [_waningBtn setImage:[UIImage imageNamed:@"fixed_finance_question"] forState:UIControlStateNormal];
+        [_waningBtn sizeToFit];
+        [[_waningBtn rac_signalForControlEvents:UIControlEventTouchUpInside] subscribeNext:^(UIButton *btn) {
+            btn.selected = !btn.selected;
+            if (btn.selected) {
+                [UIView animateWithDuration:0.1 animations:^{
+                    weakSelf.waningDescBtn.alpha = 1;
+                }];
+                
+            } else {
+                [UIView animateWithDuration:0.1 animations:^{
+                    weakSelf.waningDescBtn.alpha = 0;
+                }];
+            }
+        }];
+        
+    }
+    return _waningBtn;
+
+}
+
+- (UIImage *)resizableImageWithName:(NSString *)imageName
+{
+    
+    // 加载原有图片
+    UIImage *norImage = [UIImage imageNamed:imageName];
+    // 获取原有图片的宽高的一半
+    CGFloat w = norImage.size.width * 0.5;
+    CGFloat h = norImage.size.height * 0.4;
+    // 生成可以拉伸指定位置的图片
+    UIImage *newImage = [norImage resizableImageWithCapInsets:UIEdgeInsetsMake(h, w, h, w) resizingMode:UIImageResizingModeStretch];
+    
+    return newImage;
+}
+
+- (UIButton *)waningDescBtn {
+    if (!_waningDescBtn) {
+        _waningDescBtn = [[UIButton alloc] init];
+        _waningDescBtn.top = self.waningBtn.bottom;
+        _waningDescBtn.alpha = 0;
+        [_waningDescBtn setBackgroundImage:[self resizableImageWithName:@"fixed_finance_question_bg"] forState:UIControlStateNormal];
+        [_waningDescBtn setTitle:@"预期利息与利息收入不一致时，可结算时输入利息平账" forState:UIControlStateNormal];
+        _waningDescBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
+        [_waningDescBtn sizeToFit];
+        _waningDescBtn.height = 28;
+        _waningDescBtn.left = self.view.width - _waningDescBtn.width - 18;
+        [_waningDescBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+    }
+    return _waningDescBtn;
+}
+
 - (UIButton *)closeOutBtn {
     if (!_closeOutBtn) {
         _closeOutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -663,6 +740,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (SSJFinancingDetailHeadeView *)headerView {
     if (!_headerView) {
+        _headerView.userInteractionEnabled = YES;
         _headerView = [[SSJFinancingDetailHeadeView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 174)];
         _headerView.backgroundColor = [UIColor clearColor];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
@@ -703,6 +781,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     return _changeChargeSelectionView;
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.waningBtn.top = -scrollView.mj_offsetY + 170;
+    self.waningDescBtn.top = self.waningBtn.bottom;
+}
 
 - (SSJLoanDetailChargeChangeHeaderView *)changeSectionHeaderView {
     if (!_changeSectionHeaderView) {

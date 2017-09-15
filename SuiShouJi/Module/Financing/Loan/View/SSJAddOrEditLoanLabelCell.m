@@ -31,6 +31,10 @@
         _switchControl = [[UISwitch alloc] init];
         [self.contentView addSubview:_switchControl];
         
+        _descLabel = [[UILabel alloc] init];
+        [self.contentView addSubview:_descLabel];
+        _descLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        
         [self updateAppearance];
     }
     return self;
@@ -69,6 +73,8 @@
     _subtitleLabel.width = _subtitleLabel.right - _additionalIcon.right - 5;
     
     _subtitleLabel.left = _additionalIcon.right + 5;
+    
+    _descLabel.frame = CGRectMake(15, self.contentView.height - 25, self.width - 30, 25);
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
@@ -84,6 +90,7 @@
     self.textLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     _subtitleLabel.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.imageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    _descLabel.textColor = SSJ_SECONDARY_COLOR;
 }
 
 @end

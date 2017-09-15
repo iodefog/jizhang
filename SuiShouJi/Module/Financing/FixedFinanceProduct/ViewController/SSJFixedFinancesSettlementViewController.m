@@ -475,12 +475,23 @@ static NSString *kTitle6 = @"结算日期";
     //保存流水
     NSArray *chargArr = @[self.lixicompoundModel,self.compoundModel];
     [SSJFixedFinanceProductStore settlementWithProductModel:self.financeModel chargeModels:chargArr success:^{
-        
+        BOOL hasDetail = NO;
         if (weakSelf.isRedemCenterIn) {
             for (UIViewController *vc in weakSelf.navigationController.viewControllers) {
                 if ([vc isKindOfClass:[SSJFixedFinanceProductDetailViewController class]]) {
-                    [weakSelf.navigationController popToViewController:vc animated:YES];
+                    SSJFixedFinanceProductDetailViewController *proVC = (SSJFixedFinanceProductDetailViewController *)vc;
+                    proVC.productID = self.financeModel.productid;
+                    [weakSelf.navigationController popToViewController:proVC animated:YES];
+                    hasDetail = YES;
+                    break;
                 }
+            }
+            if (hasDetail == NO) {
+                //跳转到详情页面
+                SSJFixedFinanceProductDetailViewController *Vc = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                Vc.productID = self.financeModel.productid;
+                [weakSelf.navigationController pushViewController:Vc animated:YES];
+                weakSelf.navigationController.viewControllers = @[[weakSelf.navigationController.viewControllers ssj_safeObjectAtIndex:0],Vc];
             }
         } else {
           [weakSelf.navigationController popViewControllerAnimated:YES];
