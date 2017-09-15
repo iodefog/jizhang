@@ -47,6 +47,22 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                  failure:(void (^)(NSError * error))failure;
 
 /**
+ 根据状态查询固定理财产品列表
+
+ @param fundID 所属的账户ID
+ @param userID 用户ID
+ @param state 状态：未结算，已结算，全部
+ @param db 数据库对象
+ @param error 错误描述对象
+ @return 固定理财产品列表
+ */
++ (NSArray<SSJFixedFinanceProductItem *> *)queryFixedFinanceProductWithFundID:(NSString *)fundID
+                                                                       userID:(NSString *)userID
+                                                                        state:(SSJFixedFinanceState)state
+                                                                     database:(FMDatabase *)db
+                                                                        error:(NSError **)error;
+
+/**
  *  查询固收理财产品详情
  *
  *  @param fixedFinanceProductID    理财产品id

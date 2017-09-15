@@ -37,47 +37,65 @@
     NSString *userId = SSJUSERID();
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSMutableString *sqlStr = [[NSString stringWithFormat:@"select l.*, fi.cicoin as productIcon from bk_fixed_finance_product as l, bk_fund_info as fi where l.cthisfundid = fi.cfundid and l.cuserid = ? and l.cthisfundid = ? and l.operatortype <> 2"] mutableCopy];
-        switch (state) {
-            case SSJFixedFinanceStateNoSettlement:
-                case SSJFixedFinanceStateSettlemented:
-                [sqlStr appendFormat:@" and isend = %ld ", state];
-                break;
-                case SSJFixedFinanceStateAll:
-                break;
-            default:
-                break;
-        }
-        [sqlStr appendString:@" order by l.cstartdate desc, l.isend asc, l.imoney desc"];
-        
-        FMResultSet *result = [db executeQuery:sqlStr, userId, fundID ,@(state)];
-        if (!result) {
+        NSError *error = nil;
+        NSArray *list = [self queryFixedFinanceProductWithFundID:fundID
+                                                          userID:userId
+                                                           state:state
+                                                        database:db
+                                                           error:&error];
+        if (error) {
             if (failure) {
                 SSJDispatchMainAsync(^{
-                    failure([db lastError]);
+                    failure(error);
                 });
             }
-            return;
-        }
-        
-        NSMutableArray *list = [[NSMutableArray alloc] init];
-        while ([result next]) {
-            SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:result inDatabase:db];
-        
-            [list addObject:model];
-        }
-        
-            [result close];
-            
+        } else {
             if (success) {
                 SSJDispatchMainAsync(^{
                     success(list);
                 });
             }
-
+        }
     }];
 }
-     
+
++ (NSArray<SSJFixedFinanceProductItem *> *)queryFixedFinanceProductWithFundID:(NSString *)fundID
+                                                                       userID:(NSString *)userID
+                                                                        state:(SSJFixedFinanceState)state
+                                                                     database:(FMDatabase *)db
+                                                                        error:(NSError **)error {
+    NSMutableString *sqlStr = [[NSString stringWithFormat:@"select l.*, fi.cicoin as productIcon from bk_fixed_finance_product as l, bk_fund_info as fi where l.cthisfundid = fi.cfundid and l.cuserid = ? and l.cthisfundid = ? and l.operatortype <> 2"] mutableCopy];
+    switch (state) {
+        case SSJFixedFinanceStateNoSettlement:
+        case SSJFixedFinanceStateSettlemented:
+            [sqlStr appendFormat:@" and isend = %ld ", state];
+            break;
+        case SSJFixedFinanceStateAll:
+            break;
+        default:
+            break;
+    }
+    [sqlStr appendString:@" order by l.cstartdate desc, l.isend asc, l.imoney desc"];
+    
+    FMResultSet *rs = [db executeQuery:sqlStr, userID, fundID ,@(state)];
+    if (!rs) {
+        if (error) {
+            *error = [db lastError];
+        }
+        return nil;
+    }
+    
+    NSMutableArray *list = [[NSMutableArray alloc] init];
+    while ([rs next]) {
+        SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:rs inDatabase:db];
+        
+        [list addObject:model];
+    }
+    [rs close];
+    
+    return list;
+}
+
 #pragma mark - 编辑理财产品，新建
 /**
  保存固收理财产品（新建，编辑）
@@ -1241,7 +1259,7 @@
             //如果有利息时并且利息和派发利息不同的时候
             NSString *interestStr = [NSString stringWithFormat:@"%.2f",interest];
             NSString *chargeModelMoney = [NSString stringWithFormat:@"%.2f",model.chargeModel.money];
-            if (i == 0 && model.chargeModel && [interestStr isEqualToString:chargeModelMoney]) {
+            if (i == 0 && model.chargeModel && ![interestStr isEqualToString:chargeModelMoney]) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
                     if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {

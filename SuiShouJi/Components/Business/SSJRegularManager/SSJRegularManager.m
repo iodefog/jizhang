@@ -60,9 +60,10 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
 }
 
+#pragma mark - 补充周期数据
 + (BOOL)supplementCycleRecordsForUserId:(NSString *)userId {
     __block BOOL successfull = NO;
-    [[SSJDatabaseQueue sharedInstance] inTransaction:^(FMDatabase *db, BOOL *rollback) {
+    [[SSJDatabaseQueue sharedInstance] inTransaction:^(SSJDatabase *db, BOOL *rollback) {
         if (![self supplementCycleRecordsForUserId:userId inDatabase:db]) {
             *rollback = YES;
             return;
@@ -72,9 +73,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return successfull;
 }
 
-+ (void)supplementCycleRecordsForUserId:(NSString *)userId success:(nullable void(^)())success failure:(nullable void (^)(NSError *error))failure {
++ (void)supplementCycleRecordsForUserId:(NSString *)userId
+                                success:(nullable void(^)())success
+                                failure:(nullable void (^)(NSError *error))failure {
     
-    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(FMDatabase *db, BOOL *rollback) {
+    [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
         if ([self supplementCycleRecordsForUserId:userId inDatabase:db]) {
             if (success) {
                 SSJDispatch_main_async_safe(^{
@@ -92,7 +95,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }];
 }
 
-+ (BOOL)supplementCycleRecordsForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
++ (BOOL)supplementCycleRecordsForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
     if (![self supplementBookkeepingForUserId:userId inDatabase:db]) {
         return NO;
     }
@@ -109,10 +112,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         return NO;
     }
     
+    if (![self regularDistributedInterestForUserId:userId inDatabase:db]) {
+        return NO;
+    }
+    
     return YES;
 }
 
-+ (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+#pragma mark - 补充周期记账
++ (BOOL)supplementBookkeepingForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
     
     if (!userId || !userId.length) {
         SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
@@ -260,8 +268,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
-    //  根据周期类型、支出类型分类，查询离今天最近的一次预算
+#pragma mark - 补充预算
++ (BOOL)supplementBudgetForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
+    // 根据周期类型、支出类型分类，查询离今天最近的一次预算
     FMResultSet *resultSet = [db executeQuery:@"select itype, imoney, iremindmoney, cbilltype, iremind, max(cedate), operatortype, istate, cbooksid, islastday from bk_user_budget where cuserid = ? and csdate <= datetime('now', 'localtime') group by itype, cbilltype, cbooksid", userId];
     if (!resultSet) {
         [resultSet close];
@@ -286,7 +295,7 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
             continue;
         }
         
-        int itype = [resultSet intForColumn:@"itype"];
+        SSJBudgetPeriodType periodType = [resultSet intForColumn:@"itype"];
         NSString *imoney = [resultSet stringForColumn:@"imoney"];
         NSString *iremindmoney = [resultSet stringForColumn:@"iremindmoney"];
         NSString *cbilltype = [resultSet stringForColumn:@"cbilltype"];
@@ -297,13 +306,16 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
 //        NSArray *periodArr = [SSJDatePeriod periodsBetweenDate:recentEndDate andAnotherDate:currentDate periodType:[self periodTypeForItype:itype]];
         
-        NSArray *periodArr = [self periodsWithAccountday:recentEndDate untilDate:currentDate type:itype isLastDay:isLastDay];
+        NSArray *periodArr = [self periodsFromDate:recentEndDate
+                                            toDate:currentDate
+                                        periodType:periodType
+                                         isLastDay:isLastDay];
         
         for (DTTimePeriod *period in periodArr) {
             NSString *beginDate = [period.StartDate formattedDateWithFormat:@"yyyy-MM-dd"];
             NSString *endDate = [period.EndDate formattedDateWithFormat:@"yyyy-MM-dd"];
             
-            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, islastday, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(itype), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, @(isLastDay), currentDateStr, @(SSJSyncVersion())]) {
+            if (![db executeUpdate:@"insert into bk_user_budget (ibid, cuserid, itype, imoney, iremindmoney, csdate, cedate, istate, ccadddate, cbilltype, iremind, ihasremind, cbooksid, islastday, cwritedate, iversion, operatortype) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, 0)", SSJUUID(), userId, @(periodType), imoney, iremindmoney, beginDate, endDate, @1, currentDateStr, cbilltype, @(iremind), booksId, @(isLastDay), currentDateStr, @(SSJSyncVersion())]) {
                 [resultSet close];
                 return NO;
             }
@@ -315,7 +327,54 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+#pragma mark - 计算两个日期之间的周期
++ (NSArray<DTTimePeriod *> *)periodsFromDate:(NSDate *)date1
+                                      toDate:(NSDate *)date2
+                                  periodType:(SSJBudgetPeriodType)periodType
+                                   isLastDay:(BOOL)isLastDay {
+    
+    NSMutableArray *periods = [NSMutableArray array];
+    NSDate *beginDate = [date1 dateByAddingDays:1];
+    NSDate *endDate = nil;
+    
+    switch (periodType) {
+        case SSJBudgetPeriodTypeWeek:
+            endDate = [date1 dateByAddingDays:7];
+            break;
+            
+        case SSJBudgetPeriodTypeMonth:
+            if (isLastDay) {
+                NSDate *tmpDate = [beginDate dateByAddingMonths:1];
+                endDate = [tmpDate dateBySubtractingDays:1];
+            } else {
+                endDate = [date1 dateByAddingMonths:1];
+            }
+            break;
+            
+        case SSJBudgetPeriodTypeYear:
+            if (date1.month == 2 && isLastDay) {
+                NSDate *tmpDate = [beginDate dateByAddingYears:1];
+                endDate = [tmpDate dateBySubtractingDays:1];
+            } else {
+                endDate = [date1 dateByAddingYears:1];
+            }
+            break;
+    }
+    
+    [periods addObject:[DTTimePeriod timePeriodWithStartDate:beginDate endDate:endDate]];
+    
+    if ([endDate compare:date2] == NSOrderedAscending) {
+        [periods addObjectsFromArray:[self periodsFromDate:endDate
+                                                    toDate:date2
+                                                periodType:periodType
+                                                 isLastDay:isLastDay]];
+    }
+    
+    return periods;
+}
+
+#pragma mark - 补充周期转账
++ (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
     if (!userId || !userId.length) {
         SSJPRINT(@">>> SSJ Warning:userid must not be nil or empty");
         return NO;
@@ -367,7 +426,10 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:NO];
         
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
+        [chargeList addObjectsFromArray:[self organiseChargeListWithResultSet:resultSet
+                                                                   billDates:billDates
+                                                                      userId:userId
+                                                                suffixMapping:cidSuffixMapping]];
     }
     [resultSet close];
     
@@ -398,7 +460,10 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         
         NSArray *billDates = [self billDatesFromDate:fromDate toDate:toDate periodType:periodType containFromDate:YES];
         
-        [self organiseChargeListWithResultSet:resultSet chargeList:chargeList billDates:billDates userId:userId suffixMapping:cidSuffixMapping];
+        [chargeList addObjectsFromArray:[self organiseChargeListWithResultSet:resultSet
+                                                                   billDates:billDates
+                                                                      userId:userId
+                                                                suffixMapping:cidSuffixMapping]];
     }
     [resultSet close];
     
@@ -412,7 +477,11 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-+ (void)organiseChargeListWithResultSet:(FMResultSet *)resultSet chargeList:(NSMutableArray *)chargeList billDates:(NSArray *)billDates userId:(NSString *)userId suffixMapping:(NSDictionary *)mapping {
+#pragma mark - 组织周期转账流水信息
++ (NSArray<NSDictionary *> *)organiseChargeListWithResultSet:(FMResultSet *)resultSet
+                                                   billDates:(NSArray *)billDates
+                                                      userId:(NSString *)userId
+                                               suffixMapping:(NSDictionary *)mapping {
     
     NSString *cycleId = [resultSet stringForColumn:@"icycleid"];
     NSString *money = [resultSet stringForColumn:@"imoney"];
@@ -420,6 +489,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     NSString *transferInId = [resultSet stringForColumn:@"ctransferinaccountid"];
     NSString *transferOutId = [resultSet stringForColumn:@"ctransferoutaccountid"];
     int cidSuffix = [mapping[cycleId] intValue];
+    
+    NSMutableArray *chargeList = [NSMutableArray array];
     
     for (NSDate *date in billDates) {
         NSString *billDate = [date formattedDateWithFormat:@"yyyy-MM-dd"];
@@ -455,41 +526,15 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
         [chargeList addObject:transferInChargeInfo];
         [chargeList addObject:transferOutChargeInfo];
     }
+    
+    return chargeList;
 }
 
-+ (NSArray *)periodsWithAccountday:(NSDate *)accountday untilDate:(NSDate *)untilDate type:(int)type isLastDay:(BOOL)isLastDay {
-    NSMutableArray *periods = [NSMutableArray array];
-    NSDate *beginDate = [accountday dateByAddingDays:1];
-    NSDate *endDate = nil;
-    
-    if (type == 0) {
-        endDate = [accountday dateByAddingDays:7];
-    } else if (type == 1) {
-        if (isLastDay) {
-            NSDate *tmpDate = [beginDate dateByAddingMonths:1];
-            endDate = [tmpDate dateBySubtractingDays:1];
-        } else {
-            endDate = [accountday dateByAddingMonths:1];
-        }
-    } else if (type == 2) {
-        if (accountday.month == 2 && isLastDay) {
-            NSDate *tmpDate = [beginDate dateByAddingYears:1];
-            endDate = [tmpDate dateBySubtractingDays:1];
-        } else {
-            endDate = [accountday dateByAddingYears:1];
-        }
-    }
-
-    [periods addObject:[DTTimePeriod timePeriodWithStartDate:beginDate endDate:endDate]];
-    
-    if ([endDate compare:untilDate] == NSOrderedAscending) {
-        [periods addObjectsFromArray:[self periodsWithAccountday:endDate untilDate:untilDate type:type isLastDay:isLastDay]];
-    }
-    
-    return periods;
-}
-
-+ (NSArray<NSDate *> *)billDatesFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate periodType:(SSJCyclePeriodType)periodType containFromDate:(BOOL)contained {
+#pragma mark - 根据周期类型计算两天之间的日期
++ (NSArray<NSDate *> *)billDatesFromDate:(NSDate *)fromDate
+                                  toDate:(NSDate *)toDate
+                              periodType:(SSJCyclePeriodType)periodType
+                         containFromDate:(BOOL)contained {
     //  如果date为空或晚于当前日期，就返回nil
     if (!fromDate || !toDate || [fromDate compare:toDate] == NSOrderedDescending) {
         return nil;
@@ -604,8 +649,8 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     }
 }
 
-// 关闭已过期的周期记账、转账
-+ (BOOL)closeExpiredPeriodDataForUserId:(NSString *)userId inDatabase:(FMDatabase *)db {
+#pragma mark - 关闭已过期的周期记账、转账
++ (BOOL)closeExpiredPeriodDataForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
     NSString *today = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
     NSString *updateDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     
@@ -621,74 +666,66 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
     return YES;
 }
 
-
-//派发利息生成步骤
-//1.查询所有为删除为结算的理财产品
-//2.查询最新一次派发时间
-//3.继续派发从最新一次派发时间到当天的利息
-
-+ (void)regularDistributedInterestSuccess:(void (^)())success
-                                  failure:(void (^)(NSError * error))failure {
-    NSString *fundid = [NSString stringWithFormat:@"%@-8",SSJUSERID()];
-    [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:fundid Type:SSJFixedFinanceStateNoSettlement success:^(NSArray<SSJFixedFinanceProductItem *> * _Nonnull resultList) {
-        for (SSJFixedFinanceProductItem *item in resultList) {
-            
-            [[SSJDatabaseQueue sharedInstance] asyncInTransaction:^(SSJDatabase *db, BOOL *rollback) {
-                //查询最新时间
-                NSError *error = nil;
-//                queryPaiFalLastBillDateStrWithPorductModel
-                NSString *date = [SSJFixedFinanceProductStore queryPaiFalLastBillDateStrWithPorductModel:item inDatabase:db];
-                NSDate *lastInvDate;
-                NSDate *investmentDate;
-                if (!date.length) {//还没有生成过利息
-                    lastInvDate = item.startDate;
-                    investmentDate = lastInvDate;
-                } else {
-                    lastInvDate = [date ssj_dateWithFormat:@"yyyy-MM-dd"];
-                    investmentDate = [lastInvDate dateByAddingDays:1];
-                }
-                
-                NSDate *endDate;
-                if ([[NSDate date] compare:[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
-                    endDate = [NSDate date];
-                } else {
-                    endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
-                }
-                NSDate *tempDate = [NSDate date];
-                NSDate *currentDay = [NSDate dateWithYear:tempDate.year month:tempDate.month day:tempDate.day];
-                
-                
-                
-                if ([investmentDate isSameDay:currentDay] && date.length) {//如果有利息的时候还是同一天就返回不在重复生成利息
-                    return;
-                }
-                
-//                if ([[investmentDate dateByAddingDays:1] isLaterThanOrEqualTo:currentDay] && !date.length) {//没有利息且是第此生成利息的时候继续生成利息
-//                    return;
-//                }
-                
-                if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:investmentDate endDate:endDate newMoney:0 type:1 inDatabase:db error:&error]) {
-                    if (failure) {
-                        *rollback = YES;
-                        SSJDispatchMainAsync(^{
-                            failure(error);
-                        });
-                    }
-                    return;
-                }
-                if (success) {
-                    SSJDispatchMainAsync(^{
-                        success();
-                    });
-                }
-            }];
+#pragma mark - 生成固收理财派发利息
+/**
+ 派发利息生成步骤：
+ 1.查询所有为删除为结算的理财产品
+ 2.查询最新一次派发时间
+ 3.继续派发从最新一次派发时间到当天的利息
+ */
++ (BOOL)regularDistributedInterestForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
+    
+    NSError *error = nil;
+    NSString *fundid = [NSString stringWithFormat:@"%@-8", userId];
+    NSArray *list = [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:fundid
+                                                                             userID:userId
+                                                                              state:SSJFixedFinanceStateNoSettlement
+                                                                           database:db
+                                                                              error:&error];
+    if (error) {
+        return NO;
+    }
+    
+    for (SSJFixedFinanceProductItem *item in list) {
+        
+        NSDate *lastInvDate;
+        NSDate *investmentDate;
+        NSString *date = [SSJFixedFinanceProductStore queryPaiFalLastBillDateStrWithPorductModel:item inDatabase:db];
+        
+        if (!date.length) {//还没有生成过利息
+            lastInvDate = item.startDate;
+            investmentDate = lastInvDate;
+        } else {
+            lastInvDate = [date ssj_dateWithFormat:@"yyyy-MM-dd"];
+            investmentDate = [lastInvDate dateByAddingDays:1];
         }
         
-    } failure:^(NSError * _Nonnull error) {
-        if (failure) {
-            failure(error);
+        NSDate *endDate;
+        if ([[NSDate date] compare:[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
+            endDate = [NSDate date];
+        } else {
+            endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
         }
-    }];
+        NSDate *tempDate = [NSDate date];
+        NSDate *currentDay = [NSDate dateWithYear:tempDate.year month:tempDate.month day:tempDate.day];
+        
+        //如果有利息的时候还是同一天就返回不在重复生成利息
+        if ([investmentDate isSameDay:currentDay] && date.length) {
+            continue;
+        }
+        
+        if (![SSJFixedFinanceProductStore interestRecordWithModel:item
+                                                   investmentDate:investmentDate
+                                                          endDate:endDate
+                                                         newMoney:0
+                                                             type:1
+                                                       inDatabase:db
+                                                            error:&error]) {
+            return NO;
+        }
+    }
+    
+    return YES;
 }
 
 
