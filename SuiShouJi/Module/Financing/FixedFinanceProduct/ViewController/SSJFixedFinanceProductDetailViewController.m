@@ -94,8 +94,8 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [self.view addSubview:self.deleteBtn];
     [self.view addSubview:self.closeOutBtn];
     [self.headerView addSubview:self.stateImageView];
-    [self.headerView addSubview:self.waningBtn];
-    [self.headerView addSubview:self.waningDescBtn];
+    [self.view addSubview:self.waningBtn];
+    [self.view addSubview:self.waningDescBtn];
 }
 
 #pragma mark - Theme
@@ -649,7 +649,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     if (!_waningBtn) {
         _waningBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _waningBtn.left = self.headerView.width - 40;
-        _waningBtn.top = 105;
+        _waningBtn.top = 170;
         MJWeakSelf;
         [_waningBtn setImage:[UIImage imageNamed:@"fixed_finance_question"] forState:UIControlStateNormal];
         [_waningBtn sizeToFit];
@@ -690,12 +690,12 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     if (!_waningDescBtn) {
         _waningDescBtn = [[UIButton alloc] init];
         _waningDescBtn.top = self.waningBtn.bottom;
-        
+        _waningDescBtn.alpha = 0;
         [_waningDescBtn setBackgroundImage:[self resizableImageWithName:@"fixed_finance_question_bg"] forState:UIControlStateNormal];
         [_waningDescBtn setTitle:@"预期利息与利息收入不一致时，可结算时输入利息平账" forState:UIControlStateNormal];
         _waningDescBtn.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
         [_waningDescBtn sizeToFit];
-        _waningDescBtn.height = 32;
+        _waningDescBtn.height = 28;
         _waningDescBtn.left = self.view.width - _waningDescBtn.width - 18;
         [_waningDescBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
     }
@@ -740,6 +740,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (SSJFinancingDetailHeadeView *)headerView {
     if (!_headerView) {
+        _headerView.userInteractionEnabled = YES;
         _headerView = [[SSJFinancingDetailHeadeView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 174)];
         _headerView.backgroundColor = [UIColor clearColor];
         _headerView.horizontalSeparatorInset = UIEdgeInsetsMake(0, 42, 0, 42);
@@ -780,6 +781,11 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     return _changeChargeSelectionView;
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    self.waningBtn.top = -scrollView.mj_offsetY + 170;
+    self.waningDescBtn.top = self.waningBtn.bottom;
+}
 
 - (SSJLoanDetailChargeChangeHeaderView *)changeSectionHeaderView {
     if (!_changeSectionHeaderView) {
