@@ -135,3 +135,27 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 @end
+
+#import <objc/runtime.h>
+
+static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
+
+@implementation SSJPercentCircleAdditionNodeItem (Composer)
+
+- (void)setTextSize:(CGSize)textSize {
+    objc_setAssociatedObject(self, kNodeTextSizeKey, [NSValue valueWithCGSize:textSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (CGSize)textSize {
+    return [objc_getAssociatedObject(self, kNodeTextSizeKey) CGSizeValue];
+}
+
+- (CGFloat)textTop {
+    return self.endPoint.y - self.textSize.height * 0.5;
+}
+
+- (CGFloat)textBottom {
+    return self.endPoint.y + self.textSize.height * 0.5;
+}
+
+@end

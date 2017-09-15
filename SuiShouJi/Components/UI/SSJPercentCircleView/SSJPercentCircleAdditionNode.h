@@ -51,4 +51,14 @@ typedef NS_ENUM(NSInteger, SSJRadianRange) {
 
 @end
 
+@interface SSJPercentCircleAdditionNodeItem (Composer)
+
+@property (nonatomic) CGSize textSize;
+
+- (CGFloat)textTop;
+
+- (CGFloat)textBottom;
+
+@end
+
 NS_ASSUME_NONNULL_END

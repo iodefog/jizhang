@@ -8,46 +8,6 @@
 
 #import "SSJPercentCircleAdditionNodeComposer.h"
 #import "SSJPercentCircleAdditionNode.h"
-#import <objc/runtime.h>
-
-SSJAxisYRange SSJAxisYRangeMake(CGFloat top, CGFloat bottom) {
-    SSJAxisYRange range;
-    range.top = top;
-    range.bottom = bottom;
-    return range;
-}
-
-@interface SSJPercentCircleAdditionNodeItem (SSJPrivate)
-
-@property (nonatomic) CGSize textSize;
-
-- (CGFloat)textTop;
-
-- (CGFloat)textBottom;
-
-@end
-
-static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
-
-@implementation SSJPercentCircleAdditionNodeItem (SSJPrivate)
-
-- (void)setTextSize:(CGSize)textSize {
-    objc_setAssociatedObject(self, kNodeTextSizeKey, [NSValue valueWithCGSize:textSize], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (CGSize)textSize {
-    return [objc_getAssociatedObject(self, kNodeTextSizeKey) CGSizeValue];
-}
-
-- (CGFloat)textTop {
-    return self.endPoint.y - self.textSize.height * 0.5;
-}
-
-- (CGFloat)textBottom {
-    return self.endPoint.y + self.textSize.height * 0.5;
-}
-
-@end
 
 @interface SSJPercentCircleAdditionNodeComposer ()
 
@@ -61,6 +21,8 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
 
 @end
 
+const CGFloat kBreakPointSpaceX = 5;
+
 @implementation SSJPercentCircleAdditionNodeComposer
 
 + (instancetype)composer {
@@ -73,10 +35,6 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
         self.rightItems = [NSMutableArray array];
     }
     return self;
-}
-
-- (void)setRange:(SSJAxisYRange)range {
-    _range = range;
 }
 
 - (void)clearItems {
@@ -142,11 +100,11 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     }
     
     // 如果最后一个节点超过顶部界限，反向遍历所有节点，将节点下移
-    if ([[self.leftItems lastObject] textTop] < self.range.top) {
+    if ([[self.leftItems lastObject] textTop] < CGRectGetMinY(self.boundary)) {
         __block SSJPercentCircleAdditionNodeItem *preItem = nil;
         [self.leftItems enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SSJPercentCircleAdditionNodeItem *item, NSUInteger idx, BOOL * _Nonnull stop) {
             if (idx == self.leftItems.count - 1) {
-                CGFloat y = self.range.top + item.textSize.height * 0.5;
+                CGFloat y = CGRectGetMinY(self.boundary) + item.textSize.height * 0.5;
                 item.breakPoint = CGPointMake(item.breakPoint.x, y);
                 item.endPoint = CGPointMake(item.endPoint.x, y);
             } else {
@@ -164,8 +122,8 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     
     // 如果第一个节点超过底部界限，将所有节点整体上移
     SSJPercentCircleAdditionNodeItem *firstItem = [self.leftItems firstObject];
-    if ([firstItem textBottom] > self.range.bottom) {
-        CGFloat offset = ([firstItem textBottom] - self.range.bottom) * 0.5;
+    if ([firstItem textBottom] > CGRectGetMaxY(self.boundary)) {
+        CGFloat offset = ([firstItem textBottom] - CGRectGetMaxY(self.boundary)) * 0.5;
         for (SSJPercentCircleAdditionNodeItem *item in self.leftItems) {
             CGFloat y = item.endPoint.y - offset;
             item.breakPoint = CGPointMake(item.breakPoint.x, y);
@@ -175,17 +133,31 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     
     // 调整X轴位置
     for (SSJPercentCircleAdditionNodeItem *item in self.leftItems) {
-        if (item.breakPoint.y < CGRectGetMinY(self.circleFrame)
-            || item.breakPoint.y > CGRectGetMaxY(self.circleFrame)) {
+        if (item.breakPoint.y + item.textSize.height * 0.5 < CGRectGetMinY(self.circleFrame)
+            || item.breakPoint.y - item.textSize.height * 0.5 > CGRectGetMaxY(self.circleFrame)) {
             continue;
         }
         
-        CGFloat side = pow(CGRectGetWidth(self.circleFrame) * 0.5, 2) - pow((item.breakPoint.y - CGRectGetMidY(self.circleFrame)), 2);
-        CGFloat breakPointX = CGRectGetMidX(self.circleFrame) - sqrt(side) - 5;
-        if (item.breakPoint.x > breakPointX) {
-            CGFloat offset = item.breakPoint.x - breakPointX;
-            item.breakPoint = CGPointMake(item.breakPoint.x - offset, item.breakPoint.y);
-            item.endPoint = CGPointMake(item.endPoint.x - offset, item.endPoint.y);
+        CGFloat point_2 = [self caculateIntersectionTopBottomPoint:item];
+        
+        if (item.endPoint.x > point_2 - kBreakPointSpaceX) {
+            item.endPoint = CGPointMake(point_2 - kBreakPointSpaceX, item.endPoint.y);
+        }
+        
+        if (item.endPoint.x - item.textSize.width < CGRectGetMinX(self.boundary)) {
+            CGFloat endPointX = CGRectGetMinX(self.boundary) + item.textSize.width;
+            item.endPoint = CGPointMake(endPointX, item.endPoint.y);
+        }
+        
+        if (item.endPoint.x > point_2) {
+            item.endPoint = CGPointMake(point_2, item.endPoint.y);
+            item.textSize = CGSizeMake(point_2 - CGRectGetMinX(self.boundary), item.textSize.height);
+        }
+        
+        CGFloat point_1 = [self caculateIntersectionCenterYPoint:item];
+        if (item.breakPoint.x >= point_1 || item.breakPoint.x < item.endPoint.x) {
+            CGFloat breakX = (point_1 - point_2) * 0.5 + point_2;
+            item.breakPoint = CGPointMake(breakX, item.breakPoint.y);
         }
     }
 }
@@ -206,11 +178,11 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     }
     
     // 如果最后一个节点超过底部界限，反向遍历所有节点，将节点上移
-    if ([[self.rightItems lastObject] textBottom] > self.range.bottom) {
+    if ([[self.rightItems lastObject] textBottom] > CGRectGetMaxY(self.boundary)) {
         __block SSJPercentCircleAdditionNodeItem *lastItem = nil;
         [self.rightItems enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(SSJPercentCircleAdditionNodeItem *item, NSUInteger idx, BOOL * _Nonnull stop) {
             if (idx == self.rightItems.count - 1) {
-                CGFloat y = self.range.bottom - item.textSize.height * 0.5;
+                CGFloat y = CGRectGetMaxY(self.boundary) - item.textSize.height * 0.5;
                 item.breakPoint = CGPointMake(item.breakPoint.x, y);
                 item.endPoint = CGPointMake(item.endPoint.x, y);
             } else {
@@ -228,8 +200,8 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     
     // 如果第一个节点超过顶部界限，将所有节点整体下移
     SSJPercentCircleAdditionNodeItem *firstItem = [self.rightItems firstObject];
-    if ([firstItem textTop] < self.range.top) {
-        CGFloat offset = (self.range.top - [firstItem textTop]) * 0.5;
+    if ([firstItem textTop] < CGRectGetMinY(self.boundary)) {
+        CGFloat offset = (CGRectGetMinY(self.boundary) - [firstItem textTop]) * 0.5;
         for (SSJPercentCircleAdditionNodeItem *item in self.rightItems) {
             CGFloat y = item.endPoint.y + offset;
             item.breakPoint = CGPointMake(item.breakPoint.x, y);
@@ -239,18 +211,75 @@ static const void *kNodeTextSizeKey = &kNodeTextSizeKey;
     
     // 调整X轴位置
     for (SSJPercentCircleAdditionNodeItem *item in self.rightItems) {
-        if (item.breakPoint.y < CGRectGetMinY(self.circleFrame)
-            || item.breakPoint.y > CGRectGetMaxY(self.circleFrame)) {
+        if (item.breakPoint.y + item.textSize.height * 0.5 < CGRectGetMinY(self.circleFrame)
+            || item.breakPoint.y - item.textSize.height * 0.5 > CGRectGetMaxY(self.circleFrame)) {
             continue;
         }
         
-        CGFloat side = pow(CGRectGetWidth(self.circleFrame) * 0.5, 2) - pow((item.breakPoint.y - CGRectGetMidY(self.circleFrame)), 2);
-        CGFloat breakPointX = sqrt(side) + CGRectGetMidX(self.circleFrame) + 5;
-        if (item.breakPoint.x < breakPointX) {
-            CGFloat offset = breakPointX - item.breakPoint.x;
-            item.breakPoint = CGPointMake(item.breakPoint.x + offset, item.breakPoint.y);
-            item.endPoint = CGPointMake(item.endPoint.x + offset, item.endPoint.y);
+        CGFloat point_2 = [self caculateIntersectionTopBottomPoint:item];
+        
+        if (item.endPoint.x < point_2 + kBreakPointSpaceX) {
+            item.endPoint = CGPointMake(point_2 + kBreakPointSpaceX, item.endPoint.y);
         }
+        
+        if (item.endPoint.x + item.textSize.width > CGRectGetMaxX(self.boundary)) {
+            CGFloat left = CGRectGetMaxX(self.boundary) - item.textSize.width;
+            item.endPoint = CGPointMake(left, item.endPoint.y);
+        }
+        
+        if (item.endPoint.x < point_2) {
+            item.endPoint = CGPointMake(point_2, item.endPoint.y);
+            item.textSize = CGSizeMake(CGRectGetMaxX(self.boundary) - point_2, item.textSize.height);
+        }
+        
+        CGFloat point_1 = [self caculateIntersectionCenterYPoint:item];
+        if (item.breakPoint.x <= point_1 || item.breakPoint.x > item.endPoint.x) {
+            CGFloat breakX = (item.endPoint.x - point_1) * 0.5 + point_1;
+            item.breakPoint = CGPointMake(breakX, item.breakPoint.y);
+        }
+    }
+}
+
+// 计算文本Y轴中间点与圆环交接的X轴位置
+- (CGFloat)caculateIntersectionCenterYPoint:(SSJPercentCircleAdditionNodeItem *)item {
+    CGFloat centerY = CGRectGetMidY(self.circleFrame);
+    CGFloat verticalSide = item.breakPoint.y - centerY;
+    CGFloat sideLength = sqrt(pow(CGRectGetWidth(self.circleFrame) * 0.5, 2) - pow(verticalSide, 2));
+    
+    CGFloat centerX = CGRectGetMidX(self.circleFrame);
+    if (item.breakPoint.x <= centerX) {
+        // 左半圆
+        return centerX - sideLength;
+    } else {
+        // 右半圆
+        return centerX + sideLength;
+    }
+}
+
+// 计算文本上／下边与圆环交接的X轴位置
+- (CGFloat)caculateIntersectionTopBottomPoint:(SSJPercentCircleAdditionNodeItem *)item {
+    CGFloat centerY = CGRectGetMidY(self.circleFrame);
+    CGFloat verticalSide = 0;
+    if (item.breakPoint.y < centerY) {
+        // 上半圆
+        verticalSide = centerY - item.breakPoint.y - item.textSize.height * 0.5;
+    } else if (item.breakPoint.y > centerY) {
+        // 下半圆
+        verticalSide = item.breakPoint.y - centerY - item.textSize.height * 0.5;
+    } else {
+        verticalSide = 0;
+    }
+    
+    CGFloat radius = CGRectGetWidth(self.circleFrame) * 0.5;
+    CGFloat sideLength = sqrt(pow(radius, 2) - pow(verticalSide, 2));
+    
+    CGFloat centerX = CGRectGetMidX(self.circleFrame);
+    if (item.breakPoint.x <= centerX) {
+        // 左半圆
+        return centerX - sideLength;
+    } else {
+        // 右半圆
+        return centerX + sideLength;
     }
 }
 
