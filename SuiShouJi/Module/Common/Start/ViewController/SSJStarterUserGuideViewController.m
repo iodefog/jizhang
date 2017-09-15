@@ -59,6 +59,10 @@
     self.beginButton.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.80);
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[self.contentViews objectAtIndex:0] startAnimating];
+}
 
 #pragma mark - Getter
 - (UIScrollView *)scrollView {
