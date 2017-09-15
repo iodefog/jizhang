@@ -91,7 +91,7 @@
         _beginButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _beginButton.clipsToBounds = YES;
         _beginButton.layer.cornerRadius = 6;
-        _beginButton.frame = CGRectMake(0, 0, 158, 44);
+        _beginButton.frame = CGRectMake(0, 0, 317, 48);
         _beginButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         //        [_beginButton setTitle:@"立即体验" forState:UIControlStateNormal];
         [_beginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
