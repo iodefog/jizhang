@@ -804,7 +804,13 @@
                 item.chargeType = SSJFixedFinCompoundChargeTypeRedemption;
             }
             
-            if ([item.billDate isSameDay:model.startDate]) {
+            NSDate *startDate;
+            if (model.startDate) {
+                startDate = model.startDate;
+            } else {
+                startDate = [model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+            }
+            if ([item.billDate isSameDay:startDate]) {
                 item.chargeType = SSJFixedFinCompoundChargeTypeCreate;
             }
             [newArr addObject:item];
@@ -900,7 +906,7 @@
                 }
                 return;
             }
-        } else if (model.chargeType == SSJFixedFinCompoundChargeTypeAdd) {//追加
+        } else {//追加
         //删除追加流水
             if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),model.chargeId]) {
                  *rollback = YES;
@@ -932,38 +938,7 @@
                 }
                 return;
             }
-        //删除派发流水
-        //重新生成派发流水
-        //修改本金
-            //删除以前派发的利息流水//重新派发利息流水
-            if (![self deleteDistributedInterestWithModel:productModel untilDate:[model.billDate dateByAddingDays:1] inDatabase:db error:&error]) {
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
-            }
-            
-            //重新生成新的历史派发流水
-            NSDate *endDate;
-            if ([[NSDate date] compare:[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
-                endDate = [NSDate date];
-            } else {
-                endDate = [productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
-            }
-            //按照新的金额重新派发流水
-            //重新生成新的历史派发流水
-            if (![self interestRecordWithProductModel:productModel investmentDate:productModel.startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
-                *rollback = YES;
-                if (failure) {
-                    SSJDispatchMainAsync(^{
-                        failure([db lastError]);
-                    });
-                }
-                return;
-            }
+
             
             //查询原始本金
             double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",SSJUSERID(),productModel.productid];
@@ -978,11 +953,43 @@
                 }
                 return;
             }
-        } else if (model.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {//赎回
-            
-        }  else {//手续费，利息，追加，赎回（手续费1赎回，2结算）
-            //双向流水
-            
+        }
+        
+        //删除以前派发的利1息流水//重新派发利息流水
+        if (![self deleteDistributedInterestWithModel:productModel untilDate:nil inDatabase:db error:&error]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
+        }
+
+        //重新生成新的历史派发流水
+        NSDate *endDate;
+        if ([[NSDate date] compare:[productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] ] == NSOrderedAscending) {
+            endDate = [NSDate date];
+        } else {
+            endDate = [productModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
+        }
+        
+        NSDate *startDate;
+        if (productModel.startDate) {
+            startDate = productModel.startDate;
+        } else {
+            if (productModel.startdate.length) {
+                startDate = [productModel.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
+            }
+        }
+        if (![self interestRecordWithProductModel:productModel investmentDate:startDate endDate:endDate delete:1 inDatabase:db error:&error]) {
+            *rollback = YES;
+            if (failure) {
+                SSJDispatchMainAsync(^{
+                    failure([db lastError]);
+                });
+            }
+            return;
         }
 
         
@@ -1252,7 +1259,7 @@
             //如果有利息时并且利息和派发利息不同的时候
             NSString *interestStr = [NSString stringWithFormat:@"%.2f",interest];
             NSString *chargeModelMoney = [NSString stringWithFormat:@"%.2f",model.chargeModel.money];
-            if (i == 0 && model.chargeModel && [interestStr isEqualToString:chargeModelMoney]) {
+            if (i == 0 && model.chargeModel && ![interestStr isEqualToString:chargeModelMoney]) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
                     if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {

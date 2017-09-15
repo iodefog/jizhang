@@ -108,6 +108,7 @@
         _newerButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_newerButton setImage:[UIImage imageNamed:@"neweruserimage"] forState:UIControlStateNormal];
         [_newerButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _newerButton.tag = 100;
     }
     return _newerButton;
 }
@@ -117,21 +118,20 @@
         _olderButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_olderButton setImage:[UIImage imageNamed:@"olderuserimage"] forState:UIControlStateNormal];
         [_olderButton addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _newerButton.tag = 101;
     }
     return _olderButton;
 }
 
 #pragma mark - Event
-- (void)buttonClicked:(id)sender {
-    if (sender == self.newerButton) {
-
-    } else {
-
+- (void)buttonClicked:(UIButton *)sender {
+    if (self.choiceOutButtonClickBlock) {
+        self.choiceOutButtonClickBlock(sender.tag);
     }
 }
 
 - (void)jumpOutButtonClicked:(id)sender {
-    if (self) {
+    if (self.jumpOutButtonClickBlock) {
         self.jumpOutButtonClickBlock();
     }
 }

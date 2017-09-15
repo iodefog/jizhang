@@ -118,7 +118,7 @@
             _limitTitleLab.textColor = [UIColor ssj_colorWithHex:@"#ffffff" alpha:0.5];
         }
         _limitTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_6];
-        _limitTitleLab.text = @"信用额度";
+        _limitTitleLab.text = @"剩余额度";
         [_limitTitleLab sizeToFit];
     }
     return _limitTitleLab;
@@ -242,7 +242,7 @@
     }
     [self.balanceTitleLab sizeToFit];
 
-    self.limitLab.text = [NSString stringWithFormat:@"%.2f",_item.cardItem.cardLimit];
+    self.limitLab.text = [[NSString stringWithFormat:@"%f",_item.cardItem.cardLimit + _item.fundingAmount] ssj_moneyDecimalDisplayWithDigits:2];
     [self.limitLab sizeToFit];
 
     if (_item.cardItem.cardRepaymentDay == 0) {

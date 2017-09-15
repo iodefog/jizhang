@@ -120,6 +120,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 /**是否让金额更改 当有赎回或者追加金额的时候不让*/
 @property (nonatomic, assign) BOOL allowMoneyChanged;
 
+/**<#注释#>*/
+@property (nonatomic, strong) SSJFixedFinanceProductItem *oldProductItem;
+
 @end
 
 @implementation SSJAddOrEditFixedFinanceProductViewController
@@ -371,6 +374,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
     }];
     
+    if (self.model) {
+        self.oldProductItem = [self.model copy];
+    }
+    
 }
 
 - (void)funditem:(SSJLoanFundAccountSelectionViewItem *)funditem {
@@ -464,13 +471,19 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     NSArray *saveChargeModels = @[self.createCompoundModel];
     _sureButton.enabled = NO;
     [_sureButton ssj_showLoadingIndicator];
-    if (_edited) {
-        if (!self.remindSwitch.on) {
-            _reminderItem.remindState = 0;
-        } else {
+    //如果是编辑并且修改了金额，时间，利率，派息方式，期限，期限类型，利率类型的时候
+    if (_edited && (!([self.oldProductItem.money doubleValue] == [self.model.money doubleValue]) || self.oldProductItem.time != self.model.time || self.model.timetype != self.oldProductItem.timetype || self.oldProductItem.rate != self.model.rate || self.oldProductItem.ratetype != self.model.ratetype || self.oldProductItem.interesttype != self.model.interesttype)) {
+        if (self.remindSwitch.on) {//打开提醒
             _reminderItem.remindState = 1;
+        } else {
+            //如果新建的时候有提醒编辑的时候删除提醒
+            if (self.oldProductItem.remindid.length) {
+                _reminderItem = nil;
+            }
         }
+        
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"修改后已有的相关流水会被抹清后重新计算生成，您确定要修改吗" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:^(SSJAlertViewAction * _Nonnull action) {
+            weakSelf.sureButton.enabled = YES;
             [weakSelf.sureButton ssj_hideLoadingIndicator];
             return ;
         }],[SSJAlertViewAction actionWithTitle:@"确定修改" handler:^(SSJAlertViewAction * _Nonnull action) {
@@ -481,13 +494,54 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 //调转到详情页面
                 //如果是新建的时候
                 
-                if (weakSelf.model) {//编辑的时候
+                if (_edited) {//编辑的时候
                     [weakSelf.navigationController popViewControllerAnimated:YES];
                 } else {
                     SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
                     detailVC.productID = weakSelf.model.productid;
                     [weakSelf.navigationController pushViewController:detailVC animated:YES];
                 }
+
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError * _Nonnull error) {
+                weakSelf.sureButton.enabled = YES;
+                [weakSelf.sureButton ssj_hideLoadingIndicator];
+                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
+            }];
+            
+        }],nil];
+    } else {//新建的时候
+        //保存固定收益理财
+        if (!self.remindSwitch.on && !_edited) {//新建
+            self.reminderItem = nil;
+        } else if (!_edited && self.remindSwitch.on) { //如果新建并且打开提醒的时候
+            self.reminderItem.remindState = 1;
+        }
+        
+        if (_edited) {//编辑
+            if (self.remindSwitch.on) {//打开提醒
+                _reminderItem.remindState = 1;
+            } else {
+                //如果新建的时候没有有提醒编辑的时候删除提醒
+                if (!self.oldProductItem.remindid.length) {
+                    _reminderItem = nil;
+                } else {//如果新建的时候有提醒编辑的时候删除提醒
+                    _reminderItem.remindState = 0;
+                }
+            }
+
+        }
+        
+                [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+            weakSelf.sureButton.enabled = YES;
+            
+            if (_edited) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            } else {
+                //调转到详情页面
+                SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
+                detailVC.productID = weakSelf.model.productid;
+                [weakSelf.navigationController pushViewController:detailVC animated:YES];
                 
                 //将当期页面从占中删除
                 NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
@@ -498,40 +552,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                     }
                 }
                 weakSelf.navigationController.viewControllers = [array copy];
-                //        [self saveRemind];
-                
-                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-            } failure:^(NSError * _Nonnull error) {
-                weakSelf.sureButton.enabled = YES;
-                [weakSelf.sureButton ssj_hideLoadingIndicator];
-                [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
-            }];
-            
-        }],nil];
-    } else {
-        //保存固定收益理财
-        if (!self.remindSwitch.on) {
-            _reminderItem.remindState = 0;
-        } else {
-            _reminderItem.remindState = 1;
-        }
-        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
-            weakSelf.sureButton.enabled = YES;
-            
-            //调转到详情页面
-            SSJFixedFinanceProductDetailViewController *detailVC = [[SSJFixedFinanceProductDetailViewController alloc] init];
-            detailVC.productID = weakSelf.model.productid;
-            [weakSelf.navigationController pushViewController:detailVC animated:YES];
-            
-            //将当期页面从占中删除
-            NSMutableArray *array = [weakSelf.navigationController.viewControllers mutableCopy];
-            for (UIViewController *vc in array) {
-                if ([vc isKindOfClass:[SSJAddOrEditFixedFinanceProductViewController class]]) {
-                    [array removeObject:vc];
-                    break;
-                }
             }
-            weakSelf.navigationController.viewControllers = [array copy];
+            
             //        [self saveRemind];
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
@@ -567,7 +589,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return NO;
     }
     
-    if (!self.nameTextF.text.length) {
+    if (!self.moneyTextF.text.length || [self.moneyTextF.text doubleValue] <=0) {
         [CDAutoHideMessageHUD showMessage:@"请输入投资金额"];
         return NO;
     }
@@ -621,11 +643,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.createCompoundModel.chargeModel.money = [self.model.money doubleValue];
     self.createCompoundModel.targetChargeModel.money = [self.model.money doubleValue];
     
-    self.createCompoundModel.chargeModel.memo = self.model.memo;
+//    self.createCompoundModel.chargeModel.memo = self.model.memo;
     
     self.createCompoundModel.targetChargeModel.fundId = self.model.targetfundid;
     self.createCompoundModel.targetChargeModel.billDate = [self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
-    self.createCompoundModel.targetChargeModel.memo = self.model.memo;
+//    self.createCompoundModel.targetChargeModel.memo = self.model.memo;
     
     self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
     NSDate *billDate = self.model.startDate;

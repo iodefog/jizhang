@@ -8,6 +8,7 @@
 
 #import "SSJFixedFinancesSettlementViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJFixedFinanceProductDetailViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
@@ -108,18 +109,17 @@ static NSString *kTitle6 = @"结算日期";
 - (void)orangeData {
     
     double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+    double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
     if (self.financeModel.isend) {
-        
-        double benjin = [self.financeModel.money doubleValue] - lixi;
+        double benjin = [self.financeModel.money doubleValue] - jiesuanlixi;
         self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
-        
+        self.lixiStr = [NSString stringWithFormat:@"%.2f",jiesuanlixi];
     } else {
-        double benjin = [self.financeModel.money doubleValue] - lixi;
-        self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
+        self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid]];
     }
-    self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
     
-    //
+
     if (self.chargeItem) {
         self.tableView.userInteractionEnabled = NO;
         if ([SSJFixedFinanceProductStore queryHasPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]) {//有手续费
@@ -425,7 +425,7 @@ static NSString *kTitle6 = @"结算日期";
     }
     
     if (_isLiXiOn) {
-        if (!self.poundageTextF.text.length && [self.poundageTextF.text doubleValue] <= 0) {
+        if (!self.poundageTextF.text.length || [self.poundageTextF.text doubleValue] <= 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入手续费"];
             return NO;
         }
@@ -475,7 +475,16 @@ static NSString *kTitle6 = @"结算日期";
     //保存流水
     NSArray *chargArr = @[self.lixicompoundModel,self.compoundModel];
     [SSJFixedFinanceProductStore settlementWithProductModel:self.financeModel chargeModels:chargArr success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        
+        if (weakSelf.isRedemCenterIn) {
+            for (UIViewController *vc in weakSelf.navigationController.viewControllers) {
+                if ([vc isKindOfClass:[SSJFixedFinanceProductDetailViewController class]]) {
+                    [weakSelf.navigationController popToViewController:vc animated:YES];
+                }
+            }
+        } else {
+          [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
          [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];

@@ -500,7 +500,8 @@ static NSString *kTitle6 = @"备注";
         }
     }
     
-    if (benjin < [self.moneyStr doubleValue]) {
+    //加上以前的赎回
+    if (benjin + self.oldMoney < [self.moneyStr doubleValue]) {
         [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
        return NO;
     }
@@ -591,12 +592,22 @@ static NSString *kTitle6 = @"备注";
 - (void)sureButtonAction {
     if (![self checkIfNeedCheck]) return;
     MJWeakSelf;
-    if ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue]) {
+    
+    BOOL isallow = NO;
+    if (self.chargeModel) {
+        isallow = [self.moneyStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney;
+        
+    } else {
+        isallow = [self.moneyStr doubleValue] == [self.financeModel.money doubleValue];
+    }
+    if (isallow) {
         //提示结算弹框
         [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"您部分赎回金额等于累计投资本金，是否立即结算该笔固收理财？" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL],[SSJAlertViewAction actionWithTitle:@"立即结算" handler:^(SSJAlertViewAction * _Nonnull action) {
             [weakSelf.view endEditing:YES];
             //跳转到结算页面
+            //结算成功后跳转到固定理财详情页面
             SSJFixedFinancesSettlementViewController *vc = [[SSJFixedFinancesSettlementViewController alloc] init];
+            vc.isRedemCenterIn = YES;
             [weakSelf.navigationController pushViewController:vc animated:YES];
             vc.financeModel = weakSelf.financeModel;
             

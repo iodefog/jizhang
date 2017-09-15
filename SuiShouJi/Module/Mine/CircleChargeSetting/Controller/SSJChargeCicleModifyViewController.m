@@ -108,8 +108,8 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     [super viewWillAppear:animated];
     if (self.item == nil) {
         __weak typeof(self) weakSelf = self;
-        [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:1 Success:^(SSJBillingChargeCellItem *item) {
-            item.incomeOrExpence = 1;
+        [SSJCircleChargeStore queryDefualtItemWithIncomeOrExpence:SSJBillTypePay Success:^(SSJBillingChargeCellItem *item) {
+            item.incomeOrExpence = SSJBillTypePay;
             weakSelf.item = item;
         } failure:^(NSError *error) {
             [SSJAlertViewAdapter showError:error];
@@ -218,6 +218,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         [self.chargeCircleTimeView show];
     }
     if ([title isEqualToString:kTitle2]) {
+        self.chargeTypeSelectView.selectIndex = self.item.incomeOrExpence;
         [self.chargeTypeSelectView show];
     }
     if ([title isEqualToString:kTitle6]) {
@@ -319,7 +320,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }else if ([title isEqualToString:kTitle2]) {
         circleModifyCell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        if (self.item.incomeOrExpence) {
+        if (self.item.incomeOrExpence == SSJBillTypePay) {
             circleModifyCell.cellDetail = @"支出";
         }else{
             circleModifyCell.cellDetail = @"收入";
@@ -549,8 +550,9 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     if (!_chargeTypeSelectView) {
         _chargeTypeSelectView = [[SSJCircleChargeTypeSelectView alloc]init];
         @weakify(self);
-        _chargeTypeSelectView.chargeTypeSelectBlock = ^(NSInteger selectType){
+        _chargeTypeSelectView.chargeTypeSelectBlock = ^(SSJBillType selectType){
             @strongify(self);
+            self.item.incomeOrExpence = selectType;
             [SSJCircleChargeStore getFirstBillItemForBooksId:self.item.booksId billType:selectType withSuccess:^(SSJRecordMakingBillTypeSelectionCellItem *billItem) {
                 self.item.billId = billItem.ID;
                 self.item.typeName = billItem.title;

@@ -85,6 +85,11 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 
 - (void)updateAmount {
     double amount = [[self.dataItems valueForKeyPath:@"@sum.money"] doubleValue];
+    for (SSJFixedFinanceProductItem *productItem in self.dataItems) {
+        if (!productItem.isend) {
+             amount += [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productItem.productid];
+        }
+    }
     self.amountView.amount = [NSString stringWithFormat:@"+%.2f", amount];
 }
 

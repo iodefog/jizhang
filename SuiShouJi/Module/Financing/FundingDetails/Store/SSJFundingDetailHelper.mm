@@ -548,7 +548,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             item.imageName = [resultSet stringForColumn:@"CICOIN"];
             item.typeName = [resultSet stringForColumn:@"CNAME"];
             item.colorValue = [resultSet stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [resultSet boolForColumn:@"ITYPE"];
+            item.incomeOrExpence = (SSJBillType)[resultSet boolForColumn:@"ITYPE"];
             item.ID = [resultSet stringForColumn:@"ICHARGEID"];
             item.fundId = [resultSet stringForColumn:@"IFUNSID"];
             item.billDate = [resultSet stringForColumn:@"CBILLDATE"];
@@ -716,7 +716,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         cardItem.cardRepaymentDay = credit.repaymentDate;
         cardItem.remindItem = [self getRemindItemWithRemindId:credit.remindId indataBase:db];
         cardItem.hasMadeInstalment = [(NSNumber *)[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentId.count()
-                                                   fromTable:@"bk_credit_repayme"
+                                                   fromTable:@"bk_credit_repayment"
                                                        where:SSJCreditRepaymentTable.cardId == cardItem.fundingID] boolValue];
         item.cardItem = cardItem;
 
@@ -766,7 +766,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if ([name isEqualToString:SSJUserBillTypeTable.billColor.getDescription()] && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
                 chargeItem.colorValue = value;
             } else if ([name isEqualToString:SSJUserChargeTable.chargeId.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
-                chargeItem.incomeOrExpence = [(NSNumber *) value boolValue];
+                chargeItem.incomeOrExpence = (SSJBillType)[(NSNumber *) value boolValue];
             } else if ([name isEqualToString:SSJUserChargeTable.fundId.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.fundId = value;
             } else if ([name isEqualToString:SSJUserChargeTable.billDate.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
@@ -798,7 +798,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if ([name isEqualToString:SSJUserChargeTable.billId.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.billId = value;
             } else if ([name isEqualToString:SSJUserBillTypeTable.billType.getDescription()] && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
-                chargeItem.incomeOrExpence = [value integerValue];
+                chargeItem.incomeOrExpence = (SSJBillType)[value integerValue];
             }
         }
 

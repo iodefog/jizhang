@@ -10,8 +10,8 @@
 #import "SSJPageControl.h"
 #import "SSJStartViewHelper.h"
 #import "SSJNewUserGifGuideView.h"
-#import "SSJAnimatedGuideViewProtocol.h"
 #import "SSJThemeGuideView.h"
+#import "SSJNavigationController.h"
 
 @interface SSJStarterUserGuideViewController ()<UIScrollViewDelegate>
 
@@ -29,15 +29,25 @@
 
 @implementation SSJStarterUserGuideViewController
 
+- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesNavigationBarWhenPushed = YES;
+        self.automaticallyAdjustsScrollViewInsets = NO;
+    }
+    return self;
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.scrollView];
-    [self.view addSubview:self.pageControl];
     [self createContentViews];
+    [self.view addSubview:self.pageControl];
     // Do any additional setup after loading the view.
 }
 
-- (void)layoutSubviews {
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
     self.scrollView.frame = self.view.bounds;
     self.scrollView.contentSize = CGSizeMake(self.contentViews.count * self.scrollView.width, self.scrollView.height);
     for (int idx = 0; idx < self.contentViews.count; idx ++) {
@@ -103,7 +113,6 @@
         }];
     } else {
         [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            id  currentView = [self.contentViews objectAtIndex:idx];
             [[self.contentViews objectAtIndex:idx] startAnimating];
         }];
     }
@@ -123,24 +132,24 @@
     }
     
     
-    for (int i = 0; i < 2; i ++) {
+    for (int i = 0; i < 3; i ++) {
         switch (i) {
             case 0:{
-                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectZero WithImageName:@"newuserguide3.gif" title:@"做好资金和预算设置,账目记起来" subTitle:@"资金列表、预算"];
+                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide3.gif" title:@"做好资金和预算设置,账目记起来" subTitle:@"资金列表、预算"];
                 [self.contentViews addObject:guideView];
                 [self.scrollView addSubview:guideView];
             }
                 break;
                 
             case 1:{
-                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectZero WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"手指哪个占大头?\n收支何时不寻常"];
+                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"手指哪个占大头?\n收支何时不寻常"];
                 [self.contentViews addObject:guideView];
                 [self.scrollView addSubview:guideView];
             }
                 break;
                 
             case 2:{
-                SSJThemeGuideView *themeGuideView = [[SSJThemeGuideView alloc] init];
+                SSJThemeGuideView *themeGuideView = [[SSJThemeGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height)];
                 [self.contentViews addObject:themeGuideView];
                 [self.scrollView addSubview:themeGuideView];
             }
