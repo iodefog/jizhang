@@ -319,7 +319,8 @@
                                                          where:SSJCreditRepaymentTable.repaymentMonth == [currentMonth formattedDateWithFormat:@"yyyy-MM"]
                                                                && SSJCreditRepaymentTable.userId == userId
                                                                && SSJCreditRepaymentTable.operatorType != 2
-                                                               && SSJCreditRepaymentTable.instalmentCount == 0]
+                                                               && SSJCreditRepaymentTable.instalmentCount == 0
+                                                               && SSJCreditRepaymentTable.cardId == cardId]
                                             doubleValue];
 
         double currentInstalMoney = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
@@ -327,7 +328,8 @@
                                                          where:SSJCreditRepaymentTable.repaymentMonth == [currentMonth formattedDateWithFormat:@"yyyy-MM"]
                                                                && SSJCreditRepaymentTable.userId == userId
                                                                && SSJCreditRepaymentTable.operatorType != 2
-                                                               && SSJCreditRepaymentTable.instalmentCount > 0]
+                                                               && SSJCreditRepaymentTable.instalmentCount > 0
+                                                               && SSJCreditRepaymentTable.cardId == cardId]
                                          doubleValue];
 
         double currentRepaymentForOtherMonth = [[db getOneValueOnResult:SSJCreditRepaymentTable.repaymentMoney.sum()
@@ -336,6 +338,7 @@
                                                             && SSJCreditRepaymentTable.userId == userId
                                                             && SSJCreditRepaymentTable.operatorType != 2
                                                             && SSJCreditRepaymentTable.instalmentCount == 0
+                                                            && SSJCreditRepaymentTable.cardId == cardId
                                                             && SSJCreditRepaymentTable.applyDate.between([firstDate formattedDateWithFormat:@"yyyy-MM-dd"] , [seconDate formattedDateWithFormat:@"yyyy-MM-dd"])]
                                                     doubleValue];
         sumMoney = currentIncome - currentExpence + currentRepaymentMoney + currentInstalMoney - currentRepaymentForOtherMonth;
