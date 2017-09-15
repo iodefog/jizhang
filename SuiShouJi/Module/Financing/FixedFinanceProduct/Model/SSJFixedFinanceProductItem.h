@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @class FMResultSet;
+@class FMDatabase;
 
 
 @interface SSJFixedFinanceProductItem : SSJBaseCellItem<NSCopying>
@@ -81,13 +82,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *endcolor;
 
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db;
 
 /**
  2:余额转入，由少变多，1:余额转出，由多变少，0：金额没有变动
  */
 //@property (nonatomic, assign) NSInteger balanceOutOrIn;
 
-+ (instancetype)modelWithResultSet:(FMResultSet *)resultSet;
+//+ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(SSJDatabase *)db;
 
 + (NSArray *)keyArr;
 

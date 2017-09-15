@@ -62,7 +62,7 @@
         
         NSMutableArray *list = [[NSMutableArray alloc] init];
         while ([result next]) {
-            SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:result];
+            SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:result inDatabase:db];
         
             [list addObject:model];
         }
@@ -289,7 +289,7 @@
         
         SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
         while ([resultSet next]) {
-            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet];
+            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet inDatabase:db];
         }
         [resultSet close];
         
@@ -328,6 +328,10 @@
         interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
     }];
     return interest;
+}
+
++ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+    return [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
 }
 
 /**
@@ -374,11 +378,11 @@
     return interest;
 }
 
-+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
-    double interest = 0;
-        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
-    return interest;
-}
+//+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+//    double interest = 0;
+//        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];
+//    return interest;
+//}
 
 
 + (NSString *)queryFixedFinanceProductNewChargeBillDateWithModel:(SSJFixedFinanceProductItem *)model {
@@ -1734,7 +1738,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1833,7 +1837,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject: @""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -1936,7 +1940,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2032,7 +2036,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2093,7 +2097,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject: @""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
@@ -2214,7 +2218,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2248,7 +2252,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2282,7 +2286,7 @@
                     [valueArr addObject:billDateStr];
                     [valueArr addObject:cid];
                     [valueArr addObject:@(interest)];
-                    [valueArr addObject:item.memo.length ? item.memo : @""];
+                    [valueArr addObject:@""];
                     [valueArr addObject:@(SSJSyncVersion())];
                     [valueArr addObject:@(SSJOperatorTypeCreate)];
                     [valueArr addObject:writeDateStr];
@@ -2328,7 +2332,7 @@
                         [valueArr addObject:billDateStr];
                         [valueArr addObject:cid];
                         [valueArr addObject:@(interest)];
-                        [valueArr addObject:item.memo.length ? item.memo : @""];
+                        [valueArr addObject:@""];
                         [valueArr addObject:@(SSJSyncVersion())];
                         [valueArr addObject:@(SSJOperatorTypeCreate)];
                         [valueArr addObject:writeDateStr];
@@ -2387,7 +2391,7 @@
                 [valueArr addObject:billDateStr];
                 [valueArr addObject:cid];
                 [valueArr addObject:@(interest)];
-                [valueArr addObject:item.memo.length ? item.memo : @""];
+                [valueArr addObject:@""];
                 [valueArr addObject:@(SSJSyncVersion())];
                 [valueArr addObject:@(SSJOperatorTypeCreate)];
                 [valueArr addObject:writeDateStr];
