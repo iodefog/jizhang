@@ -44,6 +44,7 @@
         [self.contentView addSubview:self.stateLabel];
         _stamp = [[UIImageView alloc] initWithImage:[UIImage ssj_themeImageWithName:@"loan_stamp"]];
         _stamp.size = CGSizeMake(72, 72);
+        _stamp.contentMode = UIViewContentModeScaleAspectFit;
         [self.contentView addSubview:_stamp];
         
         [self.contentView addSubview:self.descLabel];
@@ -124,11 +125,7 @@
         make.height.mas_equalTo(15);
     }];
     
-    [self.stateLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo(CGSizeMake(100, 70));
-        make.centerX.mas_equalTo(self.contentView.width - 20);
-        make.centerY.mas_equalTo(20);
-    }];
+    
 }
 
 - (void)setCellItem:(SSJBaseCellItem *)cellItem {
@@ -162,6 +159,9 @@
         _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
         _stateLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
         _stateLabel.text = @"已到期";
+        _stateLabel.size = CGSizeMake(110, 80);
+        _stateLabel.centerX = self.contentView.width+20;
+        _stateLabel.centerY = 35;
     }
     return _stateLabel;
 }
