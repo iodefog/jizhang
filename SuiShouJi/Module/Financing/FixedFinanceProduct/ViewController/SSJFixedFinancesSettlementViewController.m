@@ -8,6 +8,7 @@
 
 #import "SSJFixedFinancesSettlementViewController.h"
 #import "SSJFundingTypeSelectViewController.h"
+#import "SSJFixedFinanceProductDetailViewController.h"
 
 #import "TPKeyboardAvoidingTableView.h"
 #import "SSJLoanFundAccountSelectionView.h"
@@ -475,7 +476,16 @@ static NSString *kTitle6 = @"结算日期";
     //保存流水
     NSArray *chargArr = @[self.lixicompoundModel,self.compoundModel];
     [SSJFixedFinanceProductStore settlementWithProductModel:self.financeModel chargeModels:chargArr success:^{
-        [weakSelf.navigationController popViewControllerAnimated:YES];
+        
+        if (weakSelf.isRedemCenterIn) {
+            for (UIViewController *vc in weakSelf.navigationController.viewControllers) {
+                if ([vc isKindOfClass:[SSJFixedFinanceProductDetailViewController class]]) {
+                    [weakSelf.navigationController popToViewController:vc animated:YES];
+                }
+            }
+        } else {
+          [weakSelf.navigationController popViewControllerAnimated:YES];
+        }
          [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
