@@ -32,7 +32,7 @@
 @property (nonatomic, copy) NSString *userId;
 
 // 流水类型(1是支出,0是收入)
-@property (nonatomic) int incomeOrExpence;
+@property (nonatomic) SSJBillType incomeOrExpence;
 
 // 流水时间
 @property (nonatomic,strong) NSString *billDate;

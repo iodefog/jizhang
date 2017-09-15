@@ -41,7 +41,7 @@
             item.typeName = [chargeResult stringForColumn:@"CNAME"];
             item.money = [chargeResult stringForColumn:@"IMONEY"];
             item.colorValue = [chargeResult stringForColumn:@"CCOLOR"];
-            item.incomeOrExpence = [chargeResult boolForColumn:@"INCOMEOREXPENSE"];
+            item.incomeOrExpence = (SSJBillType)[chargeResult intForColumn:@"INCOMEOREXPENSE"];
             item.fundId = [chargeResult stringForColumn:@"IFUNSID"];
             item.editeDate = [chargeResult stringForColumn:@"CWRITEDATE"];
             item.billId = [chargeResult stringForColumn:@"IBILLID"];
@@ -121,7 +121,7 @@
     item.typeName = [set stringForColumn:@"CNAME"];
     item.money = [set stringForColumn:@"IMONEY"];
     item.colorValue = [set stringForColumn:@"CCOLOR"];
-    item.incomeOrExpence = [set boolForColumn:@"INCOMEOREXPENSE"];
+    item.incomeOrExpence = (SSJBillType)[set intForColumn:@"INCOMEOREXPENSE"];
     item.fundId = [set stringForColumn:@"IFUNSID"];
     item.editeDate = [set stringForColumn:@"CWRITEDATE"];
     item.billId = [set stringForColumn:@"IBILLID"];

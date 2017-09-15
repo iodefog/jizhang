@@ -10,9 +10,9 @@
 
 @interface SSJCircleChargeTypeSelectView : UIControl<UITableViewDelegate,UITableViewDataSource>
 
-typedef void (^chargeTypeSelectBlock)(NSInteger selectType);
+typedef void (^chargeTypeSelectBlock)(SSJBillType selectType);
 
-@property(nonatomic) NSInteger selectIndex;
+@property(nonatomic) SSJBillType selectIndex;
 
 //选择类型的回调
 @property (nonatomic, copy) chargeTypeSelectBlock chargeTypeSelectBlock;

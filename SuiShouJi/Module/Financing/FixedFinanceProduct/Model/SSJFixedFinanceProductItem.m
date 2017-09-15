@@ -55,13 +55,6 @@
         item.startcolor = [resultSet stringForColumn:@"cstartcolor"];
         item.endcolor = [resultSet stringForColumn:@"cendcolor"];
     }
-    //加上利息
-    //未结算的时候加上利息
-    if (!item.isend) {
-        NSString *moneyStr = [[NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])] copy];
-        item.money = moneyStr;
-    }
-    
     return item;
 }
 
@@ -85,6 +78,7 @@
     item.productIcon = _productIcon;
     item.startcolor = _startcolor;
     item.endcolor = _endcolor;
+    item.rate = _rate;
     return item;
 }
 

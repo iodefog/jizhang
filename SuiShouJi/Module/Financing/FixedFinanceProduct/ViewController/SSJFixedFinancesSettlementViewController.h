@@ -17,4 +17,7 @@
 
 /**编辑*/
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *chargeItem;
+
+/**是否是从赎回页面进入到结算页面的*/
+@property (nonatomic, assign) BOOL isRedemCenterIn;
 @end
