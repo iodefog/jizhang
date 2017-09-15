@@ -137,7 +137,7 @@ static NSString *const kRecycleTitle = @"回收站";
         SSJDataMergeSettingViewController *mergeVC = [[SSJDataMergeSettingViewController alloc] init];
         [self.navigationController pushViewController:mergeVC animated:YES];
     } else if ([title isEqualToString:kRecycleTitle]) {// 回收站
-        SSJRecycleListViewController *recycleVC = [[SSJRecycleListViewController alloc] init];
+        SSJRecycleListViewController *recycleVC = [[SSJRecycleListViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
         [self.navigationController pushViewController:recycleVC animated:YES];
     }
 }

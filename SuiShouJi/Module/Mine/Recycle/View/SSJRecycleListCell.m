@@ -141,6 +141,7 @@ static const CGFloat kSpace = 8;
         [self.contentView addSubview:self.subtitleView];
         [self.contentView addSubview:self.arrow];
         [self.contentView addSubview:self.checkMark];
+        [self.contentView ssj_setBorderStyle:SSJBorderStyleBottom];
         [self updateAppearance];
         self.translatesAutoresizingMaskIntoConstraints = NO;
     }
@@ -246,9 +247,10 @@ static const CGFloat kSpace = 8;
 
 - (void)updateAppearance {
     _titleLab.textColor = SSJ_MAIN_COLOR;
-    _arrow.tintColor = SSJ_SECONDARY_COLOR;
+    _arrow.tintColor = SSJ_CELL_SEPARATOR_COLOR;
     [_subtitleView updateAppearanceAccordingToTheme];
     [_checkMark updateAppearanceAccordingToTheme];
+    [self.contentView ssj_setBorderColor:SSJ_CELL_SEPARATOR_COLOR];
 }
 
 - (UIImageView *)icon {
