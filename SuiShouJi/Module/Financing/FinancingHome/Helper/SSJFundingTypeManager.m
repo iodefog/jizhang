@@ -153,6 +153,7 @@
                 }
                 model.subFunds = tempFundArr;
             }
+            [tempArr addObject:model];
         }
         _liabilitiesFundsWithOutLoan = tempArr;
     }
