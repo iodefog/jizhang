@@ -31,18 +31,21 @@
     if (self) {
         self.images = @[@"theme0",@"theme7",@"theme5",@"theme8",@"theme3",@"theme10"];
         self.themeIds = @[@"0",@"7",@"5",@"8",@"3",@"10"];
+        [self addSubview:self.titleLab];
+        [self addSubview:self.subTitleLab];
+        [self createButtons];
     }
     return self;
 }
 
 - (void)updateConstraints {
-    [self.subTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).offset(85);
         make.centerX.mas_equalTo(self);
     }];
 
-    [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.subTitleLab.mas_bottom).offset(50);
+    [self.subTitleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.titleLab.mas_bottom).offset(50);
         make.centerX.mas_equalTo(self);
     }];
 
@@ -92,7 +95,7 @@
 }
 
 - (void)createButtons {
-    if (self.buttons) {
+    if (!self.buttons) {
         self.buttons = [NSMutableArray arrayWithCapacity:0];
     }
     
@@ -101,25 +104,33 @@
         button.tag = i;
         [button setImage:[UIImage imageNamed:self.images[i]] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:button];
+        [self.buttons addObject:button];
     }
 }
 
 - (void)startAnimating {
     for (SSJThemeSelectButton *button in self.buttons) {
         if (button.tag / 3 == 0) {
-            button.transform = CGAffineTransformMakeTranslation(0 , self.width);
+            button.transform = CGAffineTransformMakeTranslation(self.width , 0);
         } else {
-            button.transform = CGAffineTransformMakeTranslation(0 , -self.width);
+            button.transform = CGAffineTransformMakeTranslation(-self.width , 0);
         }
     }
+    
+    self.titleLab.alpha = 0;
+    self.subTitleLab.alpha = 0;
+    
     for (SSJThemeSelectButton *button in self.buttons) {
         [UIView animateWithDuration:2.f animations:^(void) {
             button.transform = CGAffineTransformIdentity;
             button.transform = CGAffineTransformIdentity;
+            self.titleLab.alpha = 1.f;
+            self.subTitleLab.alpha = 1.f;
+
         } completion:NULL];
     }
 }
-
 
 /*
 // Only override drawRect: if you perform custom drawing.

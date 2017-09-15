@@ -34,7 +34,7 @@ static NSString *kCellID = @"cellID";
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor];
-        self.titles = @[kTitle1, kTitle2];
+        self.titles = @[kTitle2,kTitle1];
         [self addSubview:self.titleLab];
         [self addSubview:self.tableView];
         [self sizeToFit];
@@ -57,6 +57,8 @@ static NSString *kCellID = @"cellID";
     }
     
     UIWindow *keyWindow = [UIApplication sharedApplication].keyWindow;
+    
+    [self.tableView reloadData];    
     
     self.top = keyWindow.height;
     [keyWindow ssj_showViewWithBackView:self backColor:[UIColor blackColor] alpha:0.3 target:self touchAction:@selector(dismiss) animation:^{
@@ -98,9 +100,7 @@ static NSString *kCellID = @"cellID";
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     self.selectIndex = indexPath.row;
-    
     [self.tableView reloadData];
     [self dismiss];
     if (self.chargeTypeSelectBlock) {

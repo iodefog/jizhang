@@ -113,7 +113,6 @@
         }];
     } else {
         [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            id  currentView = [self.contentViews objectAtIndex:idx];
             [[self.contentViews objectAtIndex:idx] startAnimating];
         }];
     }
