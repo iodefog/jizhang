@@ -34,6 +34,11 @@
 
 @property (nonatomic) BOOL editing;
 
+/**
+ 类别的顺序是否改变过
+ */
+@property (nonatomic, readonly) BOOL orderChanged;
+
 - (BOOL)deleteItem:(SSJRecordMakingBillTypeSelectionCellItem *)item;
 
 - (void)scrollToSelectedItem;
