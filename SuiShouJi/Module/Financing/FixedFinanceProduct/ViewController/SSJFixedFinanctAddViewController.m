@@ -159,6 +159,8 @@ static NSUInteger kDateTag = 2005;
     if (self.financeModel.isend != 1) {
         self.tableView.tableFooterView = self.footerView;
     }
+    
+    
 }
 
 - (void)deleteButtonClicked {
@@ -401,7 +403,11 @@ static NSUInteger kDateTag = 2005;
             cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         } else {
-            cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            if ([self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"].length) {
+                cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
+            } else {
+                cell.subtitleLabel.text = @"请选择日期";
+            }
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         
@@ -409,6 +415,7 @@ static NSUInteger kDateTag = 2005;
             cell.customAccessoryType = UITableViewCellAccessoryNone;
             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
         }
+        cell.descLabel.text = @"T(追购日)+1日起息，输入起息日即追购后的次日";
         
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
@@ -434,6 +441,14 @@ static NSUInteger kDateTag = 2005;
         self.dateSelectionView.date = self.compoundModel.chargeModel.billDate;
         [self.dateSelectionView show];
     }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger tag = [[self.cellTags ssj_safeObjectAtIndex:indexPath.row] unsignedIntegerValue];
+    if (tag == kDateTag) {
+        return 75;
+    }
+    return 44;
 }
 
 
