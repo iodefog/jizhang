@@ -130,6 +130,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
 - (BOOL)collectionView:(SSJEditableCollectionView *)collectionView shouldMoveCellAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
     if (fromIndexPath.item != _internalItems.count - 1
         && toIndexPath.item != _internalItems.count - 1) {
+        _orderChanged = YES;
         return YES;
     }
     return NO;
@@ -229,6 +230,7 @@ static NSString *const kCellId = @"SSJRecordMakingBillTypeSelectionCell";
     
     _editing = editing;
     if (_editing) {
+        _orderChanged = NO;
         [self beginEditing];
     } else {
         [self endEditing];

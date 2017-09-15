@@ -215,10 +215,7 @@ const int SSJImmovableOrder = INT_MAX;
                              success:(void (^)())success
                              failure:(void(^)(NSError *error))failure {
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        
-        SSJRecordMakingBillTypeSelectionCellItem *firstItem = [items firstObject];
-        int firstOrder = firstItem.order;
-        
+        NSString *updateDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         for (int i = 0; i < items.count; i ++) {
             SSJRecordMakingBillTypeSelectionCellItem *item = items[i];
             if (item.ID.length == 0) {
@@ -233,7 +230,7 @@ const int SSJImmovableOrder = INT_MAX;
                 return;
             }
             
-            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ? where cbillid = ? and cuserid = ? and cbooksid = ?", @(i + firstOrder), item.ID, SSJUSERID(), booksID]) {
+            if (![db executeUpdate:@"update bk_user_bill_type set iorder = ?, iversion = ?, cwritedate = ?, operatortype = 1 where cbillid = ? and cuserid = ? and cbooksid = ?", @(i + 1), @(SSJSyncVersion()), updateDate, item.ID, SSJUSERID(), booksID]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         SSJDispatch_main_async_safe(^{
@@ -242,6 +239,12 @@ const int SSJImmovableOrder = INT_MAX;
                     });
                 }
             }
+        }
+        
+        if (success) {
+            SSJDispatchMainAsync(^{
+                success();
+            });
         }
     }];
 }

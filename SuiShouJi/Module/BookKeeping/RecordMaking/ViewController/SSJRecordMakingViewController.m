@@ -33,6 +33,7 @@
 #import "SSJRecordMakingStore.h"
 #import "SSJDatabaseQueue.h"
 #import "SSJCategoryListHelper.h"
+#import "SSJDataSynchronizer.h"
 
 
 #define INPUT_DEFAULT_COLOR [UIColor ssj_colorWithHex:@"#dddddd"]
@@ -175,8 +176,9 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [_billTypeInputView.moneyInput resignFirstResponder];
-    [_accessoryView.memoView resignFirstResponder];
+    _paymentTypeView.editing = NO;
+    _incomeTypeView.editing = NO;
+    [self.view endEditing:YES];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -489,13 +491,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 }
 
 #pragma mark - Event
-- (void)goBackAction {
-    [super goBackAction];
-    _paymentTypeView.editing = NO;
-    _incomeTypeView.editing = NO;
-    [self.view endEditing:YES];
-}
-
 - (void)segmentPressed {
     if (_customNaviBar.selectedBillType == SSJBillTypePay) {
         [SSJAnaliyticsManager event:@"addRecord_type_out"];
@@ -564,12 +559,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.memberSelectView show];
     [_billTypeInputView.moneyInput resignFirstResponder];
     [_accessoryView.memoView resignFirstResponder];
-}
-
-- (void)endEditingAction {
-    _paymentTypeView.editing = NO;
-    _incomeTypeView.editing = NO;
-    [self updateNavigationRightItem];
 }
 
 - (void)managerItemAction {
@@ -1022,9 +1011,14 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     billTypeView.endEditingAction = ^(SSJRecordMakingBillTypeSelectionView *selectionView) {
         [wself.currentInput becomeFirstResponder];
         wself.customNaviBar.managed = NO;
-        [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items booksID:(NSString *)wself.item.booksId success:NULL failure:^(NSError *error) {
-            [CDAutoHideMessageHUD showMessage:SSJ_ERROR_MESSAGE];
-        }];
+        
+        if (selectionView.orderChanged) {
+            [SSJCategoryListHelper updateCategoryOrderWithItems:selectionView.items booksID:(NSString *)wself.item.booksId success:^{
+                [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+            } failure:^(NSError *error) {
+                [CDAutoHideMessageHUD showError:error];
+            }];
+        }
         
         SSJRecordMakingBillTypeSelectionCellItem *selectedItem = [selectionView selectedItem];
         [UIView animateWithDuration:kAnimationDuration animations:^{
@@ -1069,14 +1063,6 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
     [self.customNaviBar updateAppearance];
     [self.accessoryView updateAppearance];
     self.dateSelectedView.horuAndMinuBgViewBgColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainFillColor alpha:1];
-}
-
-//-(void)closeButtonClicked:(id)sender{
-//    [self ssj_backOffAction];
-//}
-
--(void)reloadDataAfterSync{
-//    [self.categoryListView reloadData];
 }
 
 @end
