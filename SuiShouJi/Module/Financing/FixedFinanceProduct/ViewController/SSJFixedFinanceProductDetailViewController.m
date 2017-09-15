@@ -470,7 +470,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
     interest = self.financeModel.isend == 0 ?[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
     NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"到账金额";
-    NSString *surplusValue = self.financeModel.isend == 0 ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"%.2f",[self.financeModel.money doubleValue]];
+    NSString *surplusValue = self.financeModel.isend == 0 ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"%.2f",([self.financeModel.money doubleValue])];
     self.currentMoney = surplus;//可赎回最大金额
     
    //总利息

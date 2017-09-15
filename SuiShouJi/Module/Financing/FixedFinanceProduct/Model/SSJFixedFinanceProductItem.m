@@ -56,7 +56,10 @@
         item.endcolor = [resultSet stringForColumn:@"cendcolor"];
     }
     //加上利息
-    item.money = [NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])];
+    //未结算的时候加上利息
+    if (!item.isend) {
+        item.money = [NSString stringWithFormat:@"%.2f",([SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:item.productid inDatabase:db] + [item.money doubleValue])];
+    }
     
     return item;
 }
