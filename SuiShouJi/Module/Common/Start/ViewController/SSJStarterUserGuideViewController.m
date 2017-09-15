@@ -56,7 +56,7 @@
     }
     
     self.pageControl.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.93);
-    self.beginButton.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.80);
+    self.beginButton.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.93);
 }
 
 - (void)viewWillAppear:(BOOL)animated {

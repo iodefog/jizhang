@@ -600,6 +600,7 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
                 self.item.billId = billItem.ID;
                 self.item.typeName = billItem.title;
                 self.item.imageName = billItem.imageName;
+                self.item.colorValue = billItem.colorValue;
                 [self.tableView reloadData];
             } failure:NULL];
         };
