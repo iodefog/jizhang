@@ -109,18 +109,17 @@ static NSString *kTitle6 = @"结算日期";
 - (void)orangeData {
     
     double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
+    double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
     if (self.financeModel.isend) {
-        
-        double benjin = [self.financeModel.money doubleValue] - lixi;
+        double benjin = [self.financeModel.money doubleValue] - jiesuanlixi;
         self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
-        
+        self.lixiStr = [NSString stringWithFormat:@"%.2f",jiesuanlixi];
     } else {
-        
+        self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
         self.moneyStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid]];
     }
-    self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
     
-    //
+
     if (self.chargeItem) {
         self.tableView.userInteractionEnabled = NO;
         if ([SSJFixedFinanceProductStore queryHasPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]) {//有手续费

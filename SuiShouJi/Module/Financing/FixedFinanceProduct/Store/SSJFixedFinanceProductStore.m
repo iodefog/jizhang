@@ -1241,7 +1241,7 @@
             //如果有利息时并且利息和派发利息不同的时候
             NSString *interestStr = [NSString stringWithFormat:@"%.2f",interest];
             NSString *chargeModelMoney = [NSString stringWithFormat:@"%.2f",model.chargeModel.money];
-            if (i == 0 && model.chargeModel && [interestStr isEqualToString:chargeModelMoney]) {
+            if (i == 0 && model.chargeModel && ![interestStr isEqualToString:chargeModelMoney]) {
                 //如果利息收入大于预期利息：利息平账收入
                 if (model.chargeModel.money > interest) {
                     if (![self liXiPingzhangShouRuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
