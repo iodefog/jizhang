@@ -78,6 +78,7 @@
     item.productIcon = _productIcon;
     item.startcolor = _startcolor;
     item.endcolor = _endcolor;
+    item.rate = _rate;
     return item;
 }
 
