@@ -177,11 +177,21 @@ static NSString *kCellID = @"cellID";
 #pragma mark - Private
 
 - (void)reloadFundList {
-    if (!self.slideView.selectedIndex) {
-        self.items = [SSJFundingTypeManager sharedManager].sassetsFunds;
+    if (self.needLoanOrNot) {
+        if (!self.slideView.selectedIndex) {
+            self.items = [SSJFundingTypeManager sharedManager].sassetsFunds;
+        } else {
+            self.items = [SSJFundingTypeManager sharedManager].liabilitiesFunds;
+        }
     } else {
-        self.items = [SSJFundingTypeManager sharedManager].liabilitiesFunds;
+        if (!self.slideView.selectedIndex) {
+            self.items = [SSJFundingTypeManager sharedManager].sassetsFundsWithOutLoan;
+        } else {
+            self.items = [SSJFundingTypeManager sharedManager].liabilitiesFundsWithOutLoan;
+        }
     }
+
+
     [self.tableView reloadData];
 }
 
