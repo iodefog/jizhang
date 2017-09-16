@@ -16,4 +16,7 @@
                         title:(NSString *)title
                      subTitle:(NSString *)subTitle;
 
+@property (nonatomic, copy) void(^animationCompletBlock)();
+
+
 @end

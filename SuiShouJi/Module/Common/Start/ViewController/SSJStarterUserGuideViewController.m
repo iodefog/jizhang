@@ -122,6 +122,16 @@
     }
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (scrollView.contentOffset.x < self.view.width) {
+        [self.contentViews objectAtIndex:0].isNormalState = YES;
+    } else if (scrollView.contentOffset.x > self.view.width && scrollView.contentOffset.x < self.view.width * 2) {
+        [self.contentViews objectAtIndex:1].isNormalState = YES;
+    } else if (scrollView.contentOffset.x >= self.view.width * 2) {
+        [self.contentViews objectAtIndex:2].isNormalState = YES;
+    }
+}
+
 - (void)pageControlAction {
     CGFloat offsetX = _pageControl.currentPage * _scrollView.width;
     [self.scrollView setContentOffset:CGPointMake(offsetX, 0) animated:YES];

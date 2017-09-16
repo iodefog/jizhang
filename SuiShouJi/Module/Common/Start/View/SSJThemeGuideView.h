@@ -11,4 +11,6 @@
 
 @interface SSJThemeGuideView : UIView<SSJAnimatedGuideViewProtocol>
 
+@property (nonatomic,strong) NSArray *themeUrls;
+
 @end
