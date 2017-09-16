@@ -42,6 +42,7 @@
     item.interesttype = SSJMethodOfInterestOncePaid;
     double interest = 0;
     double lixi = 0;
+    NSDate *endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
     NSDate *lastChangeDate = item.startDate;
     switch (item.timetype) {
         case SSJMethodOfRateOrTimeDay:
@@ -56,19 +57,28 @@
                     //原始本金
                     investmentMoney += chaItem.money;
                 } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                    //如果变动日期已经超过结束日期的时候就返回不在计息
+                    if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                        break;
+                    }
                     
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                     lixi += [[interestDic objectForKey:@"interest"] doubleValue];
+                    
                     investmentMoney += chaItem.money;
                     lastChangeDate = chaItem.billDate;
                     
                 } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                    //如果变动日期已经超过结束日期的时候就返回不在计息
+                    if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                        break;
+                    }
                     //赎回手续费
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                     lixi += [[interestDic objectForKey:@"interest"] doubleValue];
-                    double poundate = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chaItem error:nil];
+//                    double poundate = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chaItem error:nil];
                     investmentMoney -= chaItem.money;
-                    investmentMoney -= poundate;
+//                    investmentMoney -= poundate;
                     lastChangeDate = chaItem.billDate;
                     
                 }

@@ -1731,19 +1731,26 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
-                            
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
                             investmentMoney += chaItem.money;
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                             
                         }
@@ -1808,6 +1815,10 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
                             NSInteger endDays = 30 - begDays;
@@ -1824,6 +1835,10 @@
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
@@ -1838,10 +1853,10 @@
                             lixi += [[feninterestDic objectForKey:@"interest"] doubleValue];
                             
                             //手续费
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
                             
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                         }
                     }
@@ -1905,6 +1920,10 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
                             ////第二个月
@@ -1920,6 +1939,10 @@
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
@@ -1934,10 +1957,10 @@
                             lixi += [[feninterestDic objectForKey:@"interest"] doubleValue];
                             
                             //手续费
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
                             
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                         }
                     }
@@ -2029,6 +2052,10 @@
                         lixi = [[interestDic objectForKey:@"interest"] doubleValue];
                         lastLixi = lixi;
                     } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                        //如果变动日期已经超过结束日期的时候就返回不在计息
+                        if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                            break;
+                        }
                         investmentMoney += chaItem.money;
                         NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:1 timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                         lixi = [[interestDic objectForKey:@"interest"] doubleValue];
@@ -2037,10 +2064,14 @@
                         lastLixi = lixi;
                         
                     } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                        //如果变动日期已经超过结束日期的时候就返回不在计息
+                        if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                            break;
+                        }
                         //赎回手续费
                         investmentMoney += chaItem.money;
-                        double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
-                        investmentMoney -= poundate;
+//                        double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+//                        investmentMoney -= poundate;
                         NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:1 timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                         lixi = [[interestDic objectForKey:@"interest"] doubleValue];
                         lastChangeDate = chaItem.billDate;
@@ -2250,19 +2281,26 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
-                            
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
                             investmentMoney += chaItem.money;
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                             
                         }
@@ -2329,19 +2367,26 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
-                            
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
                             investmentMoney += chaItem.money;
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
                             lixi += [[interestDic objectForKey:@"interest"] doubleValue];
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                             
                         }
@@ -2406,6 +2451,10 @@
                             //原始本金
                             investmentMoney += chaItem.money;
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
                             ////第二个月
@@ -2421,6 +2470,10 @@
                             lastChangeDate = chaItem.billDate;
                             
                         } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //如果变动日期已经超过结束日期的时候就返回不在计息
+                            if ([chaItem.billDate isLaterThanOrEqualTo:endDate]) {
+                                break;
+                            }
                             //赎回手续费
                             NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
                             NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
@@ -2435,10 +2488,10 @@
                             lixi += [[feninterestDic objectForKey:@"interest"] doubleValue];
                             
                             //手续费
-                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+//                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
                             
-                            investmentMoney -= chaItem.money;
-                            investmentMoney -= poundate;
+                            investmentMoney += chaItem.money;
+//                            investmentMoney -= poundate;
                             lastChangeDate = chaItem.billDate;
                         }
                     }
