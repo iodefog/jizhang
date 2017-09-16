@@ -897,7 +897,7 @@
         //派发利息，平账情况
         if (model.chargeType == SSJFixedFinCompoundChargeTypeInterest || model.chargeType == SSJFixedFinCompoundChargeTypePinZhangBalanceIncrease || model.chargeType == SSJFixedFinCompoundChargeTypePinZhangBalanceDecrease) {
             //单向面流水
-            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),model.chargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion =?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,@(SSJSyncVersion()),SSJUSERID(),model.chargeId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
@@ -908,7 +908,7 @@
             }
         } else {//追加
         //删除追加流水
-            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),model.chargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,@(SSJSyncVersion()),SSJUSERID(),model.chargeId]) {
                  *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
@@ -929,7 +929,7 @@
                 }
                 return;
             }
-            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),charegId]) {
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,@(SSJSyncVersion()),SSJUSERID(),charegId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
@@ -945,7 +945,7 @@
             double newMoney = oldMoney;
             newMoney = oldMoney - model.money;
             //修改本金
-            if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
+            if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
                 if (failure) {
                     SSJDispatchMainAsync(^{
                         failure(error);
@@ -1020,7 +1020,7 @@
         double shouxufeiMoney = 0;
         for (SSJFixedFinanceProductChargeItem *item in modelArr) {
             billDate = item.billDate;
-            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,SSJUSERID(),item.chargeId]) {
+            if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?,iversion = ?, operatortype = 2 where cuserid = ? and ichargeid = ?",writeDateStr,@(SSJSyncVersion()),SSJUSERID(),item.chargeId]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
@@ -1057,7 +1057,7 @@
         
         
         //修改本金
-        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype <> 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure(error);
@@ -1199,7 +1199,7 @@
             
             //更新固定理财金额
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.userid,productModel.productid]) {
+                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
                     if (failure) {
                         SSJDispatchMainAsync(^{
                             failure(error);
@@ -1288,7 +1288,7 @@
         }
         
         NSString *writeDateStr = [[lastDate dateByAddingSeconds:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(newMoney),productModel.etargetfundid,billDate,productModel.userid,productModel.productid]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.etargetfundid,billDate,productModel.userid,productModel.productid]) {
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure(error);
@@ -1566,7 +1566,7 @@
 + (BOOL)deleteDistributedInterestWithModel:(SSJFixedFinanceProductItem *)model untilDate:(NSDate *)untilDate inDatabase:(FMDatabase *)db error:(NSError **)error {
     NSString *writeDateStr = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
     if (untilDate) {
-        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ? and cbilldate >= ? and cid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID(),[untilDate formattedDateWithFormat:@"yyyy-MM-dd"],model.productid]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = ? where ibillid = ? and cuserid = ? and cbilldate >= ? and cid = ?",writeDateStr,@(SSJSyncVersion()),@(SSJOperatorTypeDelete),@(19),SSJUSERID(),[untilDate formattedDateWithFormat:@"yyyy-MM-dd"],model.productid]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -1574,7 +1574,7 @@
         }
 
     } else {
-        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, operatortype = ? where ibillid = ? and cuserid = ? and cid = ?",writeDateStr,@(SSJOperatorTypeDelete),@(19),SSJUSERID(),model.productid]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = ? where ibillid = ? and cuserid = ? and cid = ?",writeDateStr,@(SSJSyncVersion()),@(SSJOperatorTypeDelete),@(19),SSJUSERID(),model.productid]) {
             if (error) {
                 *error = [db lastError];
             }
@@ -2638,60 +2638,6 @@
 }
 
 #pragma mark - 计算利息
-
-//+ (double)fenduanlixiWithProductItem:(SSJFixedFinanceProductItem *)item {
-//    NSDate *dayJixiDate;
-//    //生成利息
-//    //每天
-//    //每月
-//    //一次性
-//    double interest = 0;
-//    if (item.interesttype == SSJMethodOfInterestEveryDay) {
-//        dayJixiDate = [investmentDate dateByAddingDays:1];
-//        NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
-//        interest = [[interestDic objectForKey:@"interest"] doubleValue];
-//    } else if (item.interesttype == SSJMethodOfInterestEveryMonth) {
-//        
-//        if ([investmentDate isSameDay:item.startDate]) {//新建
-//            dayJixiDate = [item.startDate dateByAddingMonths:1];
-//            interest = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""] objectForKey:@"interest"] doubleValue];
-//        } else {//编辑，追加或者赎回等
-//            NSInteger months = [investmentDate monthsFrom:item.startDate];
-//            NSInteger days = [investmentDate daysFrom:item.startDate];
-//            if (months > 1) {
-//                dayJixiDate = [item.startDate dateByAddingMonths:(months + 1)];
-//                NSDate *begDate = [item.startDate dateByAddingMonths:months];
-//                NSDate *centerDate = investmentDate;
-//                NSDate *endDate = dayJixiDate;
-//                NSInteger begDays = [centerDate daysFrom:begDate];
-//                NSInteger endDays = [endDate daysFrom:centerDate];
-//                interest = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:[item.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue] + [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:endDays timetype:SSJMethodOfRateOrTimeDay money:[money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue];
-//            } else if(months == 1) {
-//                dayJixiDate = [item.startDate dateByAddingMonths:(months + 1)];
-//                NSDate *begDate = [item.startDate dateByAddingMonths:months];
-//                NSDate *centerDate = investmentDate;
-//                NSDate *endDate = dayJixiDate;
-//                NSInteger begDays = [centerDate daysFrom:begDate];
-//                NSInteger endDays = [endDate daysFrom:centerDate];
-//                interest = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:[item.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue] + [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:endDays timetype:SSJMethodOfRateOrTimeDay money:[money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue];
-//            } else if (months < 1) {
-//                dayJixiDate = [item.startDate dateByAddingMonths:1];
-//                NSDate *begDate = [item.startDate dateByAddingMonths:months];
-//                NSDate *centerDate = investmentDate;
-//                NSDate *endDate = dayJixiDate;
-//                NSInteger begDays = [centerDate daysFrom:begDate];
-//                NSInteger endDays = [endDate daysFrom:centerDate];
-//                interest = [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:[item.money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue] + [[[SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:endDays timetype:SSJMethodOfRateOrTimeDay money:[money doubleValue] interestType:SSJMethodOfInterestOncePaid startDate:@""] objectForKey:@"interest"] doubleValue];
-//                
-//            }
-//        }
-//        
-//    } else if (item.interesttype == SSJMethodOfInterestOncePaid) {
-//        dayJixiDate = [investmentDate dateByAddingYears:1];
-//    }
-//    return interest;
-//}
-
 + (double)fenduanlixiWithProductItem:(SSJFixedFinanceProductItem *)item newMoney:(NSString *)money interestDate:(NSDate *)investmentDate {
     NSDate *dayJixiDate ;
     //生成利息
