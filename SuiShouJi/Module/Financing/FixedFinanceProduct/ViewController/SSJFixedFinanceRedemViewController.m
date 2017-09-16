@@ -477,6 +477,16 @@ static NSString *kTitle6 = @"备注";
         return NO;
     }
     
+    if ([self.chargeModel.billDate compare:self.financeModel.startDate] == NSOrderedAscending) {
+        [CDAutoHideMessageHUD showMessage:@"日期不能早于起息时间哦"];
+        return NO;
+    }
+    //不能晚于当前日期
+    if ([self.chargeModel.billDate compare:[NSDate date]] == NSOrderedDescending) {
+        [CDAutoHideMessageHUD showMessage:@"日期不能晚于当前日期哦"];
+        return NO;
+    }
+    
     if (_isLiXiOn) {
         if (!self.liXiTextF.text.length || [self.liXiTextF.text doubleValue] <= 0) {
             [CDAutoHideMessageHUD showMessage:@"请输入扣取金额"];

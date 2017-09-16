@@ -430,6 +430,24 @@ static NSString *kTitle6 = @"结算日期";
             return NO;
         }
     }
+    NSDate *newdate = [[SSJFixedFinanceProductStore queryFixedFinanceProductNewChargeBillDateWithModel:self.financeModel]
+                       ssj_dateWithFormat:@"yyyy-MM-dd"];
+    
+    if ([self.compoundModel.chargeModel.billDate compare:newdate] == NSOrderedAscending) {
+        [CDAutoHideMessageHUD showMessage:@"日期不能早于最新流水日期哦"];
+        //日期不能早于该账户有效流水日期
+        return NO;
+    }
+    
+    if ([self.compoundModel.chargeModel.billDate isLaterThan:[NSDate date]]) {
+        [CDAutoHideMessageHUD showMessage:@"日期不能晚于当前日期哦"];
+        return NO;
+    }
+    
+    if ([self.compoundModel.chargeModel.billDate isLaterThan:[self.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]]) {
+        [CDAutoHideMessageHUD showMessage:@"日期不能晚于结束日期哦"];
+        return NO;
+    }
     
     if (!self.liXiTextF.text.length || [self.liXiTextF.text doubleValue] < 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入利息"];
