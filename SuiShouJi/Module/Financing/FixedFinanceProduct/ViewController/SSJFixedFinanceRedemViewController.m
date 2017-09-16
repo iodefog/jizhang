@@ -587,7 +587,7 @@ static NSString *kTitle6 = @"备注";
     
     BOOL isallow = NO;
     if (self.chargeModel) {
-        isallow = [self.moneyStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney;
+        isallow = [self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
         
     } else {
         isallow = [self.moneyStr doubleValue] == [self.financeModel.money doubleValue];
