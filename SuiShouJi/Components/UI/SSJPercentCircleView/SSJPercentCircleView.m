@@ -97,9 +97,10 @@
 }
 
 - (void)layoutSubviews {
-    CGFloat rangeTop = CGRectGetMidY(self.bounds) - self.radius - self.lineLength1 - self.lineLength2;
-    CGFloat rangeBottom = CGRectGetMidY(self.bounds) + self.radius + self.lineLength1 + self.lineLength2;
-    self.composer.range = SSJAxisYRangeMake(rangeTop, rangeBottom);
+    CGFloat length_1 = self.lineLength1 + self.lineLength2;
+    CGFloat rangeTop = CGRectGetMidY(self.bounds) - self.radius - length_1;
+    CGFloat rangeBottom = CGRectGetMaxY(self.bounds) - rangeTop * 2;
+    self.composer.boundary = CGRectMake(0, rangeTop, self.width, rangeBottom);
 //    [self setNeedsDisplay];
     
     self.contentView.frame = self.bounds;
@@ -274,15 +275,11 @@
     }];
 }
 
-//#warning test
-//- (void)drawRect:(CGRect)rect {
-//    CGContextRef ctx = UIGraphicsGetCurrentContext();
-//    CGContextMoveToPoint(ctx, 0, self.composer.range.top);
-//    CGContextAddLineToPoint(ctx, self.width, self.composer.range.top);
-//    CGContextMoveToPoint(ctx, 0, self.composer.range.bottom);
-//    CGContextAddLineToPoint(ctx, self.width, self.composer.range.bottom);
-//    [[UIColor orangeColor] setStroke];
-//    CGContextStrokePath(ctx);
-//}
+#warning test
+- (void)drawRect:(CGRect)rect {
+    [[UIColor redColor] setStroke];
+    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.composer.boundary];
+    [path stroke];
+}
 
 @end

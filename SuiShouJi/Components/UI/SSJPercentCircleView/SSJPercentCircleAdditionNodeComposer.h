@@ -10,18 +10,11 @@
 
 @class SSJPercentCircleAdditionNodeItem;
 
-typedef struct {
-    CGFloat top;
-    CGFloat bottom;
-} SSJAxisYRange;
-
-SSJAxisYRange SSJAxisYRangeMake(CGFloat top, CGFloat bottom);
-
 @interface SSJPercentCircleAdditionNodeComposer : NSObject
 
 @property (nonatomic) CGRect circleFrame;
 
-@property (nonatomic) SSJAxisYRange range;
+@property (nonatomic) CGRect boundary;
 
 + (instancetype)composer;
 
