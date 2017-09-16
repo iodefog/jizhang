@@ -174,6 +174,11 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 + (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model success:(void (^)(void))success
                                   failure:(void (^)(NSError *error))failure;
 
++ (BOOL)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
+                                 writeDate:(NSString *)writeDate
+                                inDatabase:(FMDatabase *)db
+                                     error:(NSError **)error;
+
 
 #pragma mark - 固定理财流水
 

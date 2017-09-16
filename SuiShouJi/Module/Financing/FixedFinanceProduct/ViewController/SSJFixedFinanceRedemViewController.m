@@ -513,7 +513,7 @@ static NSString *kTitle6 = @"备注";
             benjin += chargeItem.money;
         }
     }
-    
+    benjin += self.oldMoney;
     //加上以前的赎回
     if (!self.liXiSwitch.on) {
         self.lixiStr = @"0";
