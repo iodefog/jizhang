@@ -1272,7 +1272,7 @@
                         return;
                     }
                 } else if (model.chargeModel.money < interest) {//如果利息收入小于预期利息：利息平账支出
-                    if (![self liXiPingzhangZhiChuWithModel:productModel chargeModel:model money:model.chargeModel.money - interest fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
+                    if (![self liXiPingzhangZhiChuWithModel:productModel chargeModel:model money:interest - model.chargeModel.money fundid:model.chargeModel.fundId inDatabase:db error:&error]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatchMainAsync(^{
