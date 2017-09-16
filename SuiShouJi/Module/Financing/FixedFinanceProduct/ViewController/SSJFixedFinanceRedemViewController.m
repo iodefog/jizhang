@@ -490,6 +490,9 @@ static NSString *kTitle6 = @"备注";
     
     double benjin = 0;
     for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+        if ([self.compoundModel.chargeModel.billDate isEarlierThan:chargeItem.billDate]) {
+            break;
+        }
         if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
             benjin += chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
@@ -498,10 +501,6 @@ static NSString *kTitle6 = @"备注";
             benjin -= chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
             benjin += chargeItem.money;
-        }
-        
-        if ([self.compoundModel.chargeModel.billDate isEarlierThanOrEqualTo:chargeItem.billDate]) {
-            break;
         }
     }
     

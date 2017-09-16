@@ -55,6 +55,12 @@ static NSUInteger kDateTag = 2005;
 
 /**编辑的时候输入框的金额*/
 @property (nonatomic, assign) double oldMoney;
+
+/**m*/
+@property (nonatomic, copy) NSString *moneyStr;
+
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *memoStr;
 @end
 
 @implementation SSJFixedFinanctAddViewController
@@ -70,6 +76,8 @@ static NSUInteger kDateTag = 2005;
         [self initCompoundModel];
     }
     self.oldMoney = self.chargeItem.money;
+    self.memoStr = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
+    self.memoStr = self.chargeItem.memo;
     [self updateAppearance];
 }
 
@@ -185,8 +193,6 @@ static NSUInteger kDateTag = 2005;
             benjin += chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
             benjin += chargeItem.money;
-            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
-            benjin -= poundage;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
             benjin += chargeItem.money;
         }
@@ -201,8 +207,8 @@ static NSUInteger kDateTag = 2005;
             oneDaybenjin += chargeItem.money;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
             oneDaybenjin -= chargeItem.money;
-//            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
-//            oneDaybenjin -= poundage;
+            double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+            oneDaybenjin -= poundage;
         } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
             oneDaybenjin += chargeItem.money;
         }
@@ -300,10 +306,14 @@ static NSUInteger kDateTag = 2005;
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     UITextField *field = [self.view viewWithTag:kMoneyTag];
+    UITextField *memo = [self.view viewWithTag:kMemoTag];
+    NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
     if (field == textField) {
-        NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-        textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        self.moneyStr = textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
+        
         return NO;
+    } else if(memo == textField) {
+        self.memoStr = text;
     }
     return YES;
 }
@@ -323,7 +333,7 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = [NSString stringWithFormat:@"%.2f", self.chargeItem.money];
+        cell.textField.text = self.moneyStr;
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
@@ -379,7 +389,7 @@ static NSUInteger kDateTag = 2005;
         cell.imageView.image = [[UIImage imageNamed:@"loan_memo"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
         cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"最多可输入10个字符" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-        cell.textField.text = self.chargeItem.memo;
+        cell.textField.text = self.memoStr;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.returnKeyType = UIReturnKeyDone;
         cell.textField.clearsOnBeginEditing = NO;
@@ -490,7 +500,12 @@ static NSUInteger kDateTag = 2005;
         return NO;
     }
     
-    if (memoF.text.length > 10) {
+    if ([self.compoundModel.chargeModel.billDate isLaterThan:[NSDate date]]) {
+        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+        return NO;
+    }
+    
+    if (self.memoStr.length > 10) {
         [CDAutoHideMessageHUD showMessage:@"备注最大可输入10个字符"];
         return NO;
     }

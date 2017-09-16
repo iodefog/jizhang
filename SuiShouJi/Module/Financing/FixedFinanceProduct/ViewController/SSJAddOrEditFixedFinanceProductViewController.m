@@ -622,6 +622,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
         return NO;
     }
+    
+    if ([self.model.startDate isLaterThan:[NSDate date]]) {
+        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+        return NO;
+    }
+
     return YES;
 }
 
