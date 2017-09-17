@@ -27,6 +27,8 @@
 #import "SSJWishProgressViewController.h"
 #import "SSJFixedFinanceProductDetailViewController.h"
 #import "SSJNewUserFirstStartViewController.h"
+#import "SSJGuideViewController.h"
+#import "SSJStartLauncherViewController.h"
 
 #import "UIViewController+SSJMotionPassword.h"
 
@@ -39,7 +41,6 @@
 #import "SSJStartViewManager.h"
 #import <UShareUI/UMSocialUIManager.h>
 #import "SSJShareBooksUrlHandle.h"
-#import "SSJStartLauncherViewController.h"
 
 //#import "SSJPatchUpdateService.h"
 //#import "SSJJspatchAnalyze.h"
@@ -292,7 +293,10 @@ NSDate *SCYEnterBackgroundTime() {
         SSJNavigationController *newUserNavi = [[SSJNavigationController alloc] initWithRootViewController:newUserVc];
         [UIApplication sharedApplication].keyWindow.rootViewController = newUserNavi;
 //    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
-//        
+//        SSJGuideViewController *guideVc = [[SSJGuideViewController alloc] init];
+//        SSJNavigationController *guideNavi = [[SSJNavigationController alloc] initWithRootViewController:guideVc];
+//        [UIApplication sharedApplication].keyWindow.rootViewController = guideNavi;
+//
 //    } else {
 //        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
 //        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];

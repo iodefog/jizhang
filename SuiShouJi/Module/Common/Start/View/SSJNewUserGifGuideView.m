@@ -22,7 +22,7 @@
 
 @implementation SSJNewUserGifGuideView
 
-@synthesize isNormalState;
+@synthesize isNormalState = _isNormalState;
 
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -42,6 +42,7 @@
         self.titleLab.text = title;
         self.subTitleLab.text = subTitle;
         [self.gifImageView addObserver:self forKeyPath:@"currentIsPlayingAnimation" options:NSKeyValueObservingOptionNew context:nil];
+        [self updateFocusIfNeeded];
     }
     return self;
 }

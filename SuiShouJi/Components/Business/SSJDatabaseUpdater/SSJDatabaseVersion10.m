@@ -427,7 +427,7 @@ static NSString *const kDefualtOrderKey = @"kDefualtOrderKey";
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1099','家具',1,'bt_furniture','#2793cb',1,0,'',5,'3')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1100','家用装饰',1,'bt_buzhi','#b4a81e',1,0,'',6,'3')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1101','门窗',1,'bt_menchuang','#d969ba',1,0,'',7,'3')",
-              @"INSERT INTO `BK_BILL_TYPE` VALUES ('1102','窗帘',1,'bt_changlian','#de4266',1,0,'',8,'3')",
+              @"INSERT INTO `BK_BILL_TYPE` VALUES ('1102','窗帘',1,'bt_chuanglian','#de4266',1,0,'',8,'3')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1103','室内设计费',1,'bt_sheji','#4f8ed5',1,0,'',9,'3')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1104','人工费',1,'bt_rengong','#d96c4b',1,0,'',10,'3')",
               @"INSERT INTO `BK_BILL_TYPE` VALUES ('1105','水电工',1,'bt_diangong','#647ede',1,0,'',11,'3')",
