@@ -152,12 +152,10 @@
         }
         
         if (!item.cardItem) {
-            // 如果是借贷
-            SSJFinancingHomeitem *fundingItem = (SSJFinancingHomeitem *) item;
-            if ([fundingItem.fundingParent isEqualToString:@"10"] || [fundingItem.fundingParent isEqualToString:@"11"]) {
+            if ([item.fundingParent isEqualToString:@"10"] || [item.fundingParent isEqualToString:@"11"]) {
                 if (!type) {
                     //如果保留数据只要将响应的借贷隐藏
-                    if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_sync_safe(^{
@@ -168,7 +166,7 @@
                     };
                 } else {
                     //如果删掉数据只要将响应的借贷隐藏
-                    if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set idisplay = 0 , cwritedate = ? , iversion = ?, operatortype = 1 where cfundid = ?" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_sync_safe(^{
@@ -180,7 +178,7 @@
 
                     // 删除和此账户相关的借贷数据（借贷项目、流水、提醒）
                     NSError *error = nil;
-                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:fundingItem.fundingID writeDate:writeDate database:db error:&error]) {
+                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:item.fundingID writeDate:writeDate database:db error:&error]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_sync_safe(^{
@@ -194,7 +192,7 @@
                 //如果是普通资金账户
                 if (!type) {
                     // 如果保留数据只要删掉资金账户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -205,7 +203,7 @@
                     };
                 } else {
                     // 如果不保留先删掉资金账户
-                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -217,7 +215,7 @@
 
                     // 删除和此账户相关的借贷数据（借贷项目、流水、提醒）
                     NSError *error = nil;
-                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:fundingItem.fundingID writeDate:writeDate database:db error:&error]) {
+                    if (![SSJLoanHelper deleteLoanDataRelatedToFundID:item.fundingID writeDate:writeDate database:db error:&error]) {
                         *rollback = YES;
                         if (failure) {
                             SSJDispatch_main_sync_safe(^{
@@ -228,7 +226,7 @@
                     }
 
                     //删除资金账户所对应的周期记账
-                    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID]) {
+                    if (![db executeUpdate:@"update bk_charge_period_config set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -239,7 +237,7 @@
                     };
                     
                     // 删掉账户所对应的转账
-                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:fundingItem.fundingID userId:userId error:NULL]) {
+                    if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:item.fundingID userId:userId error:NULL]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -250,7 +248,7 @@
                     }
 
                     //删除资金账户所对应的流水
-                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))" , writeDate , @(SSJSyncVersion()) , fundingItem.fundingID , @(SSJChargeIdTypeShareBooks) , userId , @(SSJShareBooksMemberStateNormal)]) {
+                    if (![db executeUpdate:@"update bk_user_charge set operatortype = 2 , cwritedate = ? , iversion = ? where ifunsid = ? and operatortype <> 2 and (ichargetype <> ? or cbooksid in (select cbooksid from bk_share_books_member where cmemberid = ? and istate = ?))" , writeDate , @(SSJSyncVersion()) , item.fundingID , @(SSJChargeIdTypeShareBooks) , userId , @(SSJShareBooksMemberStateNormal)]) {
                         if (failure) {
                             *rollback = YES;
                             SSJDispatch_main_async_safe(^{
@@ -270,14 +268,22 @@
                         }
                         return;
                     };
+                    
+                    if (![self deletefixedFinancingProductWithFundId:item.fundingID writeDate:writeDate inDatabase:db]) {
+                        if (failure) {
+                            *rollback = YES;
+                            SSJDispatch_main_async_safe(^{
+                                failure([db lastError]);
+                            });
+                        }
+                        return;
+                    }
                 }
             }
         } else {
-            // 如果是信用卡账户
-            SSJCreditCardItem *cardItem = (SSJCreditCardItem *) item;
             if (!type) {
                 //删掉资金账户
-                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , cardItem.fundingID]) {
+                if (![db executeUpdate:@"update bk_fund_info set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -287,7 +293,7 @@
                     return;
                 };
                 //删掉信用卡
-                if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , cardItem.fundingID]) {
+                if (![db executeUpdate:@"update bk_user_credit set operatortype = 2 , cwritedate = ? , iversion = ? where cfundid = ?" , writeDate , @(SSJSyncVersion()) , item.fundingID]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatch_main_async_safe(^{
@@ -297,8 +303,8 @@
                     return;
                 };
                 //删掉提醒
-                if (cardItem.remindItem) {
-                    if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?" , writeDate , @(SSJSyncVersion()) , userId , cardItem.remindItem.remindId]) {
+                if (item.cardItem.remindItem) {
+                    if (![db executeUpdate:@"update bk_user_remind set operatortype = 2 , cwritedate = ? , iversion = ? where cuserid = ? and cremindid = ?" , writeDate , @(SSJSyncVersion()) , userId , item.cardItem.remindItem.remindId]) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{
                             if (failure) {
@@ -308,11 +314,11 @@
                         });
                     }
                     //取消提醒
-                    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:cardItem.remindItem];
+                    [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:item.cardItem.remindItem];
                 }
             } else {
                 // 删掉账户所对应的转账
-                if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:cardItem.fundingID userId:userId error:NULL]) {
+                if (![self deleteTransferChargeInDataBase:db writeDate:writeDate withFundId:item.fundingID userId:userId error:NULL]) {
                     if (failure) {
                         *rollback = YES;
                         SSJDispatch_main_async_safe(^{
@@ -331,6 +337,17 @@
                         return;
                     });
                 };
+                
+                
+                if (![self deletefixedFinancingProductWithFundId:item.fundingID writeDate:writeDate inDatabase:db]) {
+                    if (failure) {
+                        *rollback = YES;
+                        SSJDispatch_main_async_safe(^{
+                            failure([db lastError]);
+                        });
+                    }
+                    return;
+                }
             }
         }
         if (success) {
@@ -380,6 +397,45 @@
     cardItem.cardBillingDay = userCredit.billingDate;
     cardItem.remindItem = [self getRemindItemWithRemindId:userCredit.remindId indataBase:db];
     return cardItem;
+}
+
++ (BOOL)deletefixedFinancingProductWithFundId:(NSString *)fundId
+                                    writeDate:(NSString *)writeDate
+                                   inDatabase:(FMDatabase *)db{
+    NSString *userId = SSJUSERID();
+    FMResultSet *result = [db executeQuery:@"select distinct substr(cid,1,36) as productid from bk_user_charge where cuserid = ? and ifunsid = ? and operatortype <> 2 and ichargetype = ?",userId,fundId,@(SSJChargeIdTypeFixedFinance)];
+    if (!result) {
+        return NO;
+    }
+    NSMutableArray *fixedFundingIds = [NSMutableArray arrayWithCapacity:0];
+    while ([result next]) {
+        NSString *cid = [result stringForColumn:@"productid"];
+        [fixedFundingIds addObject:cid];
+    }
+    
+    for (NSString *cid in fixedFundingIds) {
+        if (![db executeQuery:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, operatortype = 2 where cproductid = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
+            return NO;
+        }
+        
+        if (![db executeQuery:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 2 where sub(cid,1,36) = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
+            return NO;
+        }
+        
+        NSString *remindId = [db stringForQuery:@"select cremindid from bk_fixed_finance_product where cproductid = ?",cid];
+        if (remindId.length) {
+            if (![db executeQuery:@"update from bk_user_remind set cwritedate = ?, iversion = ?, operatortype = 2 where cremindid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),remindId]) {
+                return NO;
+            }
+            SSJReminderItem *remindItem = [[SSJReminderItem alloc] init];
+            remindItem.remindId = remindId;
+            remindItem.userId = userId;
+            [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
+
+        }
+    }
+    
+    return YES;
 }
 
 + (NSNumber *)getFundBalanceWithFundId:(NSString *)fundId type:(SSJBillType)type inDataBase:(WCTDatabase *)db {
