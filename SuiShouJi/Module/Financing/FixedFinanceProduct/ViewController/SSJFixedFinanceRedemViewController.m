@@ -513,7 +513,7 @@ static NSString *kTitle6 = @"备注";
             benjin += chargeItem.money;
         }
     }
-    benjin += self.oldMoney;
+//    benjin += self.oldMoney;
     //加上以前的赎回
     if (!self.liXiSwitch.on) {
         self.lixiStr = @"0";
@@ -599,7 +599,7 @@ static NSString *kTitle6 = @"备注";
         isallow = [self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
         
     } else {
-        isallow = [self.moneyStr doubleValue] == [self.financeModel.money doubleValue];
+        isallow = [self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue];
     }
     if (isallow) {
         //提示结算弹框
