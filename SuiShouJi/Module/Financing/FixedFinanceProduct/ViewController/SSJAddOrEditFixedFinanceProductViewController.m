@@ -301,8 +301,6 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 }
 
 - (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
-    rate = rate * 0.01;
-    self.model.rate = rate;
     NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:rate rateType:rateType money:money]];
     
 
@@ -996,7 +994,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         textField.text = [text ssj_reserveDecimalDigits:2 intDigits:9];
         
         //计算利息
-        [self updateDayLiXiWithRate:[self.liLvTextF.text doubleValue] interstType:[self switchRateType:self.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[self.moneyTextF.text doubleValue]];
+        [self updateDayLiXiWithRate:[self.liLvTextF.text doubleValue] * 0.01 interstType:[self switchRateType:self.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[self.moneyTextF.text doubleValue]];
         return NO;
     } else if (self.qiXianTextF == textField) {
         NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
