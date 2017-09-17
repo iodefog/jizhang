@@ -208,27 +208,29 @@
             circleNodeItem.color = item.color;
             [circleNodeItems addObject:circleNodeItem];
             
-            // 根据比例计算出角度，再根据角度计算出折现的起点
-            CGFloat angle = (0.5 * item.scale + overlapScale) * M_PI * 2 + M_PI * 1.5;
+            // 根据比例计算出角度，再根据角度计算出折线的起点
+            CGFloat angle = (0.5 * item.scale + overlapScale) * M_PI * 2 + self.startAngle;
             CGPoint startPoint = CGPointMake(cos(angle) * self.radius + self.width * 0.5, sin(angle) * self.radius + self.height * 0.5);
             CGPoint breakPoint = CGPointMake(cos(angle) * (self.radius + self.lineLength1) + self.width * 0.5, sin(angle) * (self.radius + self.lineLength1) + self.height * 0.5);
             CGPoint endPoint = CGPointZero;
             
             SSJRadianRange range = SSJRadianRangeTop;
             
-            if (angle > M_PI * 1.5 && angle < M_PI * 2.5) {
+            CGFloat angle_1 = angle - floor(angle / (M_PI * 2)) * (M_PI * 2);
+            
+            if ((angle_1 >= 0 && angle_1 < M_PI_2) || (angle_1 > M_PI_2 * 3 && angle_1 <= M_PI * 2)) {
                 // 右边
                 endPoint = CGPointMake(breakPoint.x + self.lineLength2, breakPoint.y);
                 range = SSJRadianRangeRight;
-            } else if (angle > M_PI * 2.5 && angle < M_PI * 3.5) {
+            } else if (angle_1 > M_PI_2 && angle_1 < M_PI_2 * 3) {
                 // 左边
                 endPoint = CGPointMake(breakPoint.x - self.lineLength2, breakPoint.y);
                 range = SSJRadianRangeLeft;
-            } else if (angle == M_PI * 1.5) {
+            } else if (angle_1 == M_PI_2 * 3) {
                 // 顶部
                 endPoint = CGPointMake(breakPoint.x, breakPoint.y - self.lineLength2);
                 range = SSJRadianRangeTop;
-            } else if (angle == M_PI * 2.5) {
+            } else if (angle_1 == M_PI_2) {
                 // 底部
                 endPoint = CGPointMake(breakPoint.x, breakPoint.y + self.lineLength2);
                 range = SSJRadianRangeBottom;
@@ -275,11 +277,11 @@
     }];
 }
 
-#warning test
-- (void)drawRect:(CGRect)rect {
-    [[UIColor redColor] setStroke];
-    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.composer.boundary];
-    [path stroke];
-}
+//#warning test
+//- (void)drawRect:(CGRect)rect {
+//    [[UIColor redColor] setStroke];
+//    UIBezierPath *path = [UIBezierPath bezierPathWithRect:self.composer.boundary];
+//    [path stroke];
+//}
 
 @end

@@ -96,8 +96,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
     CGPoint center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center
                                                               radius:self.radius
-                                                          startAngle:-M_PI_2
-                                                            endAngle:M_PI * 1.5
+                                                          startAngle:self.startAngle
+                                                            endAngle:self.startAngle + M_PI * 2
                                                            clockwise:YES];
     
     for (int idx = 0; idx < self.items.count; idx ++) {
@@ -136,8 +136,8 @@ static NSString *const kAnimationKey = @"kAnimationKey";
         CGPoint center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
         UIBezierPath *circlePath = [UIBezierPath bezierPathWithArcCenter:center
                                                                   radius:self.radius
-                                                              startAngle:(item.startAngle - M_PI_2)
-                                                                endAngle:(item.endAngle - M_PI_2)
+                                                              startAngle:(item.startAngle + self.startAngle)
+                                                                endAngle:(item.endAngle + self.startAngle)
                                                                clockwise:YES];
         
         CAShapeLayer *layer = [CAShapeLayer layer];
