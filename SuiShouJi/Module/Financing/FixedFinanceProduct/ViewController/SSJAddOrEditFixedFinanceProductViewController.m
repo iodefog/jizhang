@@ -604,7 +604,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [CDAutoHideMessageHUD showMessage:@"请输入利率"];
         return NO;
     }
-    if ([self.liLvTextF.text doubleValue] > 1) {
+    if ([self.liLvTextF.text doubleValue] > 100) {
         [CDAutoHideMessageHUD showMessage:@"利率不可以大于100%哦"];
         return NO;
     }
