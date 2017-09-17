@@ -36,12 +36,17 @@
     [super viewDidLoad];
     [self.view addSubview:self.guideView];
     [self.view addSubview:self.jumpOutButton];
+    [self.view addSubview:self.beginButton];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self.guideView startAnimating];
+    self.beginButton.alpha = 0;
+    [UIView animateWithDuration:2.f animations:^{
+        self.beginButton.alpha = 1;
+    } completion:NULL];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -49,6 +54,7 @@
     self.guideView.frame = self.view.bounds;
     self.jumpOutButton.size = CGSizeMake(50, 20);
     self.jumpOutButton.rightTop = CGPointMake(self.view.width - 30, 45);
+    self.beginButton.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.93);
 }
 
 #pragma mark - Getter

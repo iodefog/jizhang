@@ -24,7 +24,7 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
-@property (nonatomic, strong) SSJPageControl *pageControl;
+@property (nonatomic, strong) UIPageControl *pageControl;
 
 @property (nonatomic, strong) UIButton *beginButton;
 
@@ -61,7 +61,7 @@
         UIView *contentView = (UIView *)_contentViews[idx];
         contentView.frame = CGRectMake(self.scrollView.width * idx, 0, self.scrollView.width, self.scrollView.height);
     }
-    
+    self.pageControl.size = [self.pageControl sizeForNumberOfPages:3];
     self.pageControl.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.93);
     self.beginButton.center = CGPointMake(self.view.width * 0.5, self.view.height * 0.93);
 }
@@ -85,18 +85,17 @@
     return _scrollView;
 }
 
-- (SSJPageControl *)pageControl {
+- (UIPageControl *)pageControl {
     if (!_pageControl) {
-        _pageControl = [[SSJPageControl alloc] init];
-        _pageControl.numberOfPages = self.contentViews.count;
-        _pageControl.pageImage = [[UIImage imageNamed:@"dian_nor"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _pageControl.currentPageImage = [[UIImage imageNamed:@"dian_sel"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _pageControl.spaceBetweenPages = 20.0;
-        _pageControl.tintColor = [UIColor ssj_colorWithHex:@"aad97f"];
-        [_pageControl addTarget:self action:@selector(pageControlAction) forControlEvents:UIControlEventValueChanged];
+        _pageControl = [[UIPageControl alloc] initWithFrame:CGRectZero];
+        _pageControl.pageIndicatorTintColor = [UIColor ssj_colorWithHex:@"#333333" alpha:0.2];
+        _pageControl.currentPageIndicatorTintColor = [UIColor ssj_colorWithHex:@"#333333" alpha:0.4];
+        _pageControl.hidesForSinglePage = YES;
+        _pageControl.numberOfPages = 3;
     }
     return _pageControl;
 }
+
 
 - (UIButton *)beginButton {
     if (!_beginButton) {

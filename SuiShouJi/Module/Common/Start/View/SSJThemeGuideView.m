@@ -155,7 +155,6 @@
         self.selectIndex = sender.tag;
         SSJThemeItem *item = [self.themeItems objectAtIndex:sender.tag];
         if (![item.themeId isEqualToString:@"0"]) {
-            
             [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:item success:^(SSJThemeItem *item) {
                 [SSJThemeSetting switchToThemeID:item.themeId];
             } failure:^(NSError *error) {
