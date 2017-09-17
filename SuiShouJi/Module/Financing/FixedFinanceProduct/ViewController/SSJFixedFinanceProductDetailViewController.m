@@ -447,7 +447,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 - (void)organiseHeaderItems {
     
     double surplus = 0;     // 当前余额、到账金额
-    double rate = self.financeModel.rate;     // 年化收益率
+    double rate = self.financeModel.rate * 100;     // 年化收益率
     double interest = 0;    // 产生利息、利息收入
     double payment = 0;     // 预期利息、投资本金
 

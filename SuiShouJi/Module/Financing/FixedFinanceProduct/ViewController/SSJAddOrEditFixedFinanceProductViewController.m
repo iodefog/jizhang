@@ -166,7 +166,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)setBind {
     MJWeakSelf;
     [RACObserve(self, liLvSegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
-        [weakSelf updateDayLiXiWithRate:[weakSelf.liLvTextF.text doubleValue] interstType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[weakSelf.moneyTextF.text doubleValue]];
+        [weakSelf updateDayLiXiWithRate:[weakSelf.liLvTextF.text doubleValue] * 0.01 interstType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[weakSelf.moneyTextF.text doubleValue]];
         weakSelf.rateType = weakSelf.liLvSegmentControl.selectedSegmentIndex;
         [weakSelf updateJiXi];
     }];
@@ -208,7 +208,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)updateJiXi {
     MJWeakSelf;
     if (weakSelf.jiXiMethodSelectionView.selectedIndex >= 0) {
-        NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:[weakSelf.liLvTextF.text doubleValue] rateType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] time:[weakSelf.qiXianTextF.text doubleValue] timetype:[weakSelf switchRateType:weakSelf.qiXiansegmentControl.selectedSegmentIndex rate:NO] money:[weakSelf.moneyTextF.text doubleValue] interestType:[weakSelf switchJiXiMethodWithType:weakSelf.jiXiMethodSelectionView.selectedIndex]  startDate:@""];
+        NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:[weakSelf.liLvTextF.text doubleValue] * 0.01 rateType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] time:[weakSelf.qiXianTextF.text doubleValue] timetype:[weakSelf switchRateType:weakSelf.qiXiansegmentControl.selectedSegmentIndex rate:NO] money:[weakSelf.moneyTextF.text doubleValue] interestType:[weakSelf switchJiXiMethodWithType:weakSelf.jiXiMethodSelectionView.selectedIndex]  startDate:@""];
         
         NSString *targetJiXiStr = [dic objectForKey:@"interest"];
         NSString *oldJiXiStr = [dic objectForKey:@"desc"];
@@ -301,6 +301,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 }
 
 - (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
+    rate = rate * 0.01;
     self.model.rate = rate;
     NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:rate rateType:rateType money:money]];
     
@@ -635,7 +636,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     self.model.oldMoney = self.model.money;
     self.model.money = self.moneyTextF.text;
     self.model.memo = self.memoTextF.text;
-    self.model.rate = [self.liLvTextF.text doubleValue];
+    self.model.rate = [self.liLvTextF.text doubleValue] * 0.01;
     self.model.time = [self.qiXianTextF.text doubleValue];
     self.model.productName = self.nameTextF.text;
     self.model.ratetype = [self switchRateType:self.liLvSegmentControl.selectedSegmentIndex rate:YES];
@@ -883,7 +884,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利率" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
     cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
     cell.textField.delegate = self;
-    cell.textField.text = self.edited ? [NSString stringWithFormat:@"%.2f",self.model.rate] : self.title3;
+    cell.textField.text = self.edited ? [NSString stringWithFormat:@"%.2f",self.model.rate * 100] : self.title3;
     cell.nameL.text = @"利率";
     self.liLvTextF = cell.textField;
     cell.segmentControl.selectedSegmentIndex = [self indexWithType:self.rateType];

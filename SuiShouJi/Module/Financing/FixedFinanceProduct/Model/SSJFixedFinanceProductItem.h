@@ -52,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *memo;
 
 /**利率*/
-@property (nonatomic, assign) float rate;
+@property (nonatomic, assign) double rate;
 
 /**利率类型（年:2、月:1、日:0)*/
 @property (nonatomic, assign) SSJMethodOfRateOrTime ratetype;
