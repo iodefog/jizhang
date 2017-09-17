@@ -335,6 +335,7 @@ static NSString *kTitle6 = @"备注";
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
+        cell.segmentControl.hidden = YES;
         [cell.textField ssj_installToolbar];
         cell.textField.text = self.lixiStr;
         if (self.chargeModel) {
