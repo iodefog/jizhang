@@ -130,12 +130,16 @@ static NSString * SSJBillTypeSelectCellIdentifier = @"billTypeSelectCellIdentifi
 
 - (RACSignal *)queryBooksID {
     return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
-        [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
-            [subscriber sendNext:booksId];
-            [subscriber sendCompleted];
-        } failure:^(NSError * _Nonnull error) {
-            [subscriber sendError:error];
-        }];
+        if (self.booksId.length) {
+            [subscriber sendNext:self.booksId];
+        } else {
+            [SSJUserTableManager currentBooksId:^(NSString * _Nonnull booksId) {
+                [subscriber sendNext:booksId];
+                [subscriber sendCompleted];
+            } failure:^(NSError * _Nonnull error) {
+                [subscriber sendError:error];
+            }];
+        }
         return nil;
     }];
 }
