@@ -98,7 +98,7 @@
                @"cendcolor":@"#7fe8e0"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-8",userId],
-               @"cacctname":@"固收理财",
+               @"cacctname":@"固定收益理财",
                @"cparent":@17,
                @"ccolor":@"#5a98de",
                @"cwritedate":writeDate,

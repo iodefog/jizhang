@@ -80,7 +80,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [self headerUI];
     [self updateAppearance];
     self.changeSectionHeaderView.expanded= NO;
-    self.title = @"固收理财详情";
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -291,6 +291,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     [[[[RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
         [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productID success:^(SSJFixedFinanceProductItem * _Nonnull model) {
             weakSelf.financeModel = model;
+            weakSelf.title = model.productName;
             weakSelf.stateImageView.hidden = !weakSelf.financeModel.isend;
             //如果已经过过期了就只显示结算按钮
             if ([[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThanOrEqualTo:[NSDate date]]) {
