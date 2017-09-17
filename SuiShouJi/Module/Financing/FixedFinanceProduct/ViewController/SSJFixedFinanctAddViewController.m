@@ -74,6 +74,7 @@ static NSUInteger kDateTag = 2005;
     [self updateUI];
     if (!self.chargeItem) {
         [self initCompoundModel];
+        self.moneyStr = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
     }
     self.oldMoney = self.chargeItem.money;
     self.memoStr = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
