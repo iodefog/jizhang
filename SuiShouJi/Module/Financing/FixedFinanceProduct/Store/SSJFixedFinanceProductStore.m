@@ -867,10 +867,10 @@
                 break;
             }
         }
-        
-        [array insertObject:createItem atIndex:0];
+        if (createItem) {
+            [array insertObject:createItem atIndex:0];
+        }
     }
-    
     
     //分类
     NSArray *tempArr = [self updateFinanceChargeTypeWithModel:array];
