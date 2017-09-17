@@ -378,10 +378,8 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
 }
 
 - (void)organiseDatasWithResult:(NSArray *)result {
-    //  将datas按照收支类型所占比例从大到小进行排序
-    self.chargeDatas = [result sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-        SSJReportFormsItem *item1 = obj1;
-        SSJReportFormsItem *item2 = obj2;
+    // 将datas按照收支类型所占比例从大到小进行排序
+    self.chargeDatas = [result sortedArrayUsingComparator:^NSComparisonResult(SSJReportFormsItem *item1, SSJReportFormsItem *item2) {
         if (item1.scale > item2.scale) {
             return NSOrderedAscending;
         } else if (item1.scale < item2.scale) {
@@ -395,24 +393,29 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
     NSNumber *payment = [self.chargeDatas valueForKeyPath:@"@sum.money"];
     _header.amount = [NSString stringWithFormat:@"%.2f", [payment doubleValue]];
     
-    //  将比例小于0.01的item过滤掉
-    NSMutableArray *filterItems = [NSMutableArray array];
-    double scaleAmount = 0;
-    for (SSJReportFormsItem *item in result) {
-        if (item.scale >= 0.01) {
-            [filterItems addObject:item];
-            scaleAmount += item.scale;
-        }
+    NSArray *otherItems = nil;
+    if (self.chargeDatas.count > 20) {
+        otherItems = [self.chargeDatas subarrayWithRange:NSMakeRange(20, self.chargeDatas.count - 20)];
     }
     
-    //  将 SSJReportFormsItem 转换成 SSJReportFormsPercentCircleItem 存入数组
+    // 将 SSJReportFormsItem 转换成 SSJReportFormsPercentCircleItem 存入数组
     [self.circleItems removeAllObjects];
-    for (SSJReportFormsItem *item in filterItems) {
-        //  收入、支出
+    [result enumerateObjectsUsingBlock:^(SSJReportFormsItem *item, NSUInteger idx, BOOL * _Nonnull stop) {
+        // 收入、支出
+        if (![otherItems containsObject:item]) {
+            SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
+            circleItem.scale = item.scale;
+            circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
+            circleItem.text = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale * 100];
+            [self.circleItems addObject:circleItem];
+        }
+    }];
+    
+    if (otherItems.count > 0) {
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-        circleItem.scale = item.scale / scaleAmount;
-        circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
-        circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", item.name, item.scale * 100];
+        circleItem.scale = [[otherItems valueForKeyPath:@"@sum.scale"] doubleValue];
+        circleItem.color = [UIColor ssj_colorWithHex:@"#565656"];
+        circleItem.text = [NSString stringWithFormat:@"其它类别 %.1f％", circleItem.scale * 100];
         [self.circleItems addObject:circleItem];
     }
     
@@ -422,7 +425,6 @@ static NSString *const kIncomeAndPayCellID = @"incomeAndPayCellID";
         self.header.chartViewHasDataOrNot = NO;
     } else {
         self.header.chartViewHasDataOrNot = YES;
-
     }
     
     //        NSString *selectedTitle = [_segmentControl.titles ssj_safeObjectAtIndex:_segmentControl.selectedIndex];

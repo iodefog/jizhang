@@ -364,7 +364,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
                 SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                 circleItem.color = [UIColor ssj_colorWithHex:[resultSet stringForColumn:@"ccolor"]];
                 circleItem.scale = money / budgetModel.payMoney;
-                circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", [resultSet stringForColumn:@"cname"], circleItem.scale * 100];
+                circleItem.text = [NSString stringWithFormat:@"%@ %.1f％", [resultSet stringForColumn:@"cname"], circleItem.scale * 100];
                 [circleItemArr addObject:circleItem];
             } else {
                 otherItemsMoney += money;
