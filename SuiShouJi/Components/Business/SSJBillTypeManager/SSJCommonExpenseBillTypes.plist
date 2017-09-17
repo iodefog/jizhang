@@ -1207,7 +1207,7 @@
 		<key>expended</key>
 		<true/>
 		<key>icon</key>
-		<string>bt_changlian</string>
+		<string>bt_chuanglian</string>
 		<key>color</key>
 		<string>#de4266</string>
 	</dict>

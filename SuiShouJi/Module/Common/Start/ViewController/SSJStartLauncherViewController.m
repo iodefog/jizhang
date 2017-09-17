@@ -69,6 +69,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesNavigationBarWhenPushed = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -78,6 +79,13 @@ static const NSTimeInterval kTransitionDuration = 0.3;
     [super viewDidLoad];
     [self.view addSubview:self.launchView];
     [self.view addSubview:self.userSignLaunchView];
+    @weakify(self);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        @strongify(self);
+        if (self.startLunchService.state != SSJNetworkServiceStateSuccessful) {
+            [self jumpOutToRootView];
+        }
+    });
     // Do any additional setup after loading the view.
 }
 
@@ -100,13 +108,7 @@ static const NSTimeInterval kTransitionDuration = 0.3;
         }
     }];
     
-    @weakify(self);
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        @strongify(self);
-        if (self.startLunchService.state != SSJNetworkServiceStateSuccessful) {
-            [self jumpOutToRootView];
-        }
-    });
+
 }
 
 - (void)didReceiveMemoryWarning {

@@ -17,7 +17,7 @@
 
 - (void)dismiss;
 
-@property (nonatomic, copy) void(^didSelectFundItem)(SSJBaseCellItem *fundItem, NSString *selectParent);
+@property (nonatomic, copy) void(^didSelectFundItem)(SSJFinancingHomeitem *fundItem, NSString *selectParent);
 
 @property (nonatomic, copy) void(^dismissBlock)();
 

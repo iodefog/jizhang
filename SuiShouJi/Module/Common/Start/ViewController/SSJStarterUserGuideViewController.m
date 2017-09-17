@@ -12,12 +12,15 @@
 #import "SSJNewUserGifGuideView.h"
 #import "SSJThemeGuideView.h"
 #import "SSJNavigationController.h"
+#import "SSJStartThemeService.h"
 
 @interface SSJStarterUserGuideViewController ()<UIScrollViewDelegate>
 
 @property (nonatomic, strong) UIButton *jumpOutButton;
 
 @property (nonatomic, strong) NSMutableArray <UIView <SSJAnimatedGuideViewProtocol> *> *contentViews;
+
+@property (nonatomic, strong) SSJStartThemeService *themeService;
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 
@@ -33,6 +36,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesNavigationBarWhenPushed = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -40,14 +44,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self.view addSubview:self.scrollView];
     [self createContentViews];
+    [self.view addSubview:self.scrollView];
     [self.view addSubview:self.pageControl];
+    [self.view addSubview:self.jumpOutButton];
     // Do any additional setup after loading the view.
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
+    self.jumpOutButton.rightTop = CGPointMake(self.view.width - 30, 45);
+    self.jumpOutButton.size = CGSizeMake(50, 20);
     self.scrollView.frame = self.view.bounds;
     self.scrollView.contentSize = CGSizeMake(self.contentViews.count * self.scrollView.width, self.scrollView.height);
     for (int idx = 0; idx < self.contentViews.count; idx ++) {
@@ -62,6 +69,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [[self.contentViews objectAtIndex:0] startAnimating];
+    [self.themeService requestWithThemeIds:@[@"0",@"7",@"5",@"8",@"3",@"10"]];
 }
 
 #pragma mark - Getter
@@ -106,7 +114,36 @@
     return _beginButton;
 }
 
-#pragma mark - Private
+- (UIButton *)jumpOutButton {
+    if (!_jumpOutButton) {
+        _jumpOutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_jumpOutButton setTitle:@"跳过" forState:UIControlStateNormal];
+        [_jumpOutButton addTarget:self action:@selector(jumpOutButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _jumpOutButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
+        [_jumpOutButton setTitleColor:[UIColor ssj_colorWithHex:@"#EE4F4F"] forState:UIControlStateNormal];
+        _jumpOutButton.layer.cornerRadius = 4.f;
+        _jumpOutButton.layer.borderColor = [UIColor ssj_colorWithHex:@"#EE4F4F"].CGColor;
+        _jumpOutButton.layer.borderWidth = 1 / [UIScreen mainScreen].scale;
+    }
+    return _jumpOutButton;
+}
+
+- (SSJStartThemeService *)themeService {
+    if (!_themeService) {
+        _themeService = [[SSJStartThemeService alloc] initWithDelegate:self];
+    }
+    return _themeService;
+}
+
+#pragma mark - SSJBaseNetworkServiceDelegate
+- (void)serverDidFinished:(SSJBaseNetworkService *)service {
+    if ([service.returnCode isEqualToString:@"1"]) {
+        SSJThemeGuideView *themeGuideView = (SSJThemeGuideView *)[self.contentViews objectAtIndex:2];
+        themeGuideView.themeItems = self.themeService.themeItems;
+    }
+}
+
+#pragma mark - Event
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     NSUInteger idx = scrollView.contentOffset.x / scrollView.width;
     self.pageControl.currentPage = idx;
@@ -125,7 +162,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.x < self.view.width) {
         [self.contentViews objectAtIndex:0].isNormalState = YES;
-    } else if (scrollView.contentOffset.x > self.view.width && scrollView.contentOffset.x < self.view.width * 2) {
+    } else if (scrollView.contentOffset.x >= self.view.width && scrollView.contentOffset.x < self.view.width * 2) {
         [self.contentViews objectAtIndex:1].isNormalState = YES;
     } else if (scrollView.contentOffset.x >= self.view.width * 2) {
         [self.contentViews objectAtIndex:2].isNormalState = YES;
@@ -138,7 +175,13 @@
     [[self.contentViews objectAtIndex:_pageControl.currentPage] startAnimating];
 }
 
+- (void)beginButtonAciton {
+    [SSJStartViewHelper jumpOutOnViewController:self];
+}
 
+- (void)jumpOutButtonClicked:(id)sender {
+    [SSJStartViewHelper jumpOutOnViewController:self];
+}
 #pragma mark - Private
 - (void)createContentViews {
     if (!self.contentViews) {
@@ -174,11 +217,6 @@
                 break;
         }
     }
-}
-
-
-- (void)beginButtonAciton {
-    [SSJStartViewHelper jumpOutOnViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {

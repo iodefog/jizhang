@@ -16,19 +16,20 @@
 
 @property (nonatomic, strong) UILabel *subTitleLab;
 
-@property (nonatomic, strong) NSMutableArray *buttons;
+@property (nonatomic, strong) NSMutableArray <SSJThemeSelectButton *> *buttons;
 
 @property (nonatomic, strong) NSArray *images;
 
 @property (nonatomic, strong) NSArray *themeIds;
+
+@property (nonatomic) NSInteger selectIndex;
 
 @end
 
 
 @implementation SSJThemeGuideView
 
-@synthesize isNormalState;
-
+@synthesize isNormalState = _isNormalState;
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -38,6 +39,7 @@
         self.themeIds = @[@"0",@"7",@"5",@"8",@"3",@"10"];
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
+        self.isNormalState = YES;
         [self createButtons];
     }
     return self;
@@ -141,22 +143,25 @@
 }
 
 - (void)buttonClicked:(UIButton *)sender {
-    if (self.themeUrls.count) {
-        NSString *themeUrl = [self.themeUrls ssj_safeObjectAtIndex:sender.tag];
-        NSString *themeId = [self.themeIds ssj_safeObjectAtIndex:sender.tag];
-        SSJThemeItem *item = [[SSJThemeItem alloc] init];
-        item.themeId = themeId;
-        item.downLoadUrl = themeUrl;
-        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:item success:^(SSJThemeItem *item) {
-            
-        } failure:^(NSError *error) {
-            
-        }];
+    if (self.themeItems.count) {
+        SSJThemeItem *item = [self.themeItems objectAtIndex:sender.tag];
+        if (![item.themeId isEqualToString:@"0"]) {
+            [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:item success:^(SSJThemeItem *item) {
+                
+            } failure:^(NSError *error) {
+                
+            }];
+        } else {
+            [SSJThemeSetting switchToThemeID:@"0"];
+        }
     }
 }
 
 - (void)setIsNormalState:(BOOL)isNormalState {
+    _isNormalState = isNormalState;
     if (!self.isNormalState && isNormalState) {
+        self.titleLab.alpha = 0;
+        self.subTitleLab.alpha = 0;
         for (SSJThemeSelectButton *button in self.buttons) {
             button.hidden = YES;
             if (button.tag / 3 == 0) {
@@ -165,10 +170,11 @@
                 button.transform = CGAffineTransformMakeTranslation(-self.width , 0);
             }
         }
-        
-        self.titleLab.alpha = 0;
-        self.subTitleLab.alpha = 0;
     }
+}
+
+- (void)setThemeItems:(NSArray<SSJThemeItem *> *)themeItems {
+    _themeItems = themeItems;
 }
 
 /*

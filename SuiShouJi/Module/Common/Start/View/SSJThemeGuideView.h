@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import "SSJAnimatedGuideViewProtocol.h"
+#import "SSJThemeItem.h"
 
 @interface SSJThemeGuideView : UIView<SSJAnimatedGuideViewProtocol>
 
-@property (nonatomic,strong) NSArray *themeUrls;
+@property (nonatomic, strong) NSArray <SSJThemeItem *> *themeItems;
 
 @end
