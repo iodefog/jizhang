@@ -41,6 +41,7 @@ static NSString *const kAnimationKey = @"kAnimationKey";
 }
 
 - (void)layoutSubviews {
+    self.textLabel.size = self.item.textSize;
     switch (self.item.range) {
         case SSJRadianRangeTop:
             self.textLabel.centerX = self.item.endPoint.x;

@@ -100,7 +100,7 @@
     CGFloat length_1 = self.lineLength1 + self.lineLength2;
     CGFloat rangeTop = CGRectGetMidY(self.bounds) - self.radius - length_1;
     CGFloat rangeBottom = CGRectGetMaxY(self.bounds) - rangeTop * 2;
-    self.composer.boundary = CGRectMake(0, rangeTop, self.width, rangeBottom);
+    self.composer.boundary = CGRectMake(5, rangeTop, self.width - 10, rangeBottom);
 //    [self setNeedsDisplay];
     
     self.contentView.frame = self.bounds;

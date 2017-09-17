@@ -84,7 +84,11 @@
 
 - (SSJPercentCircleView *)chartView {
     if (!_chartView) {
-        _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 270) radius:80 thickness:20 lineLength1:15 lineLength2:10];
+        if (SSJSCREENWITH == 320) {
+            _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 270) radius:65 thickness:20 lineLength1:10 lineLength2:5];
+        } else {
+            _chartView = [[SSJPercentCircleView alloc] initWithFrame:CGRectMake(0, 70, self.width, 270) radius:80 thickness:20 lineLength1:15 lineLength2:10];
+        }
         _chartView.backgroundColor = [UIColor clearColor];
     }
     return _chartView;
