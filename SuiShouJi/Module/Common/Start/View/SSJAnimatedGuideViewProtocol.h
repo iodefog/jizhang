@@ -14,4 +14,6 @@
 
 - (void)startAnimating;
 
+@property (nonatomic) BOOL isNormalState;
+
 @end

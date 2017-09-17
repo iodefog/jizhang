@@ -8,6 +8,7 @@
 
 #import "SSJThemeGuideView.h"
 #import "SSJThemeSelectButton.h"
+#import "SSJThemeDownLoaderManger.h"
 
 @interface SSJThemeGuideView()
 
@@ -23,7 +24,11 @@
 
 @end
 
+
 @implementation SSJThemeGuideView
+
+@synthesize isNormalState;
+
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -111,6 +116,7 @@
 
 - (void)startAnimating {
     for (SSJThemeSelectButton *button in self.buttons) {
+        button.hidden = NO;
         if (button.tag / 3 == 0) {
             button.transform = CGAffineTransformMakeTranslation(self.width , 0);
         } else {
@@ -128,7 +134,40 @@
             self.titleLab.alpha = 1.f;
             self.subTitleLab.alpha = 1.f;
 
-        } completion:NULL];
+        } completion:^(BOOL finished) {
+            self.isNormalState = NO;
+        }];
+    }
+}
+
+- (void)buttonClicked:(UIButton *)sender {
+    if (self.themeUrls.count) {
+        NSString *themeUrl = [self.themeUrls ssj_safeObjectAtIndex:sender.tag];
+        NSString *themeId = [self.themeIds ssj_safeObjectAtIndex:sender.tag];
+        SSJThemeItem *item = [[SSJThemeItem alloc] init];
+        item.themeId = themeId;
+        item.downLoadUrl = themeUrl;
+        [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:item success:^(SSJThemeItem *item) {
+            
+        } failure:^(NSError *error) {
+            
+        }];
+    }
+}
+
+- (void)setIsNormalState:(BOOL)isNormalState {
+    if (!self.isNormalState && isNormalState) {
+        for (SSJThemeSelectButton *button in self.buttons) {
+            button.hidden = YES;
+            if (button.tag / 3 == 0) {
+                button.transform = CGAffineTransformMakeTranslation(self.width , 0);
+            } else {
+                button.transform = CGAffineTransformMakeTranslation(-self.width , 0);
+            }
+        }
+        
+        self.titleLab.alpha = 0;
+        self.subTitleLab.alpha = 0;
     }
 }
 

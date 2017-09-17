@@ -39,11 +39,6 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    NSLog(@"%@",self.titleLab);
-}
-
 - (void)updateConstraints {
     [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.centerX.mas_equalTo(self);
