@@ -18,6 +18,7 @@
 #import "SSJNavigationController.h"
 #import "SSJDataMergeSettingViewController.h"
 #import "SSJRecycleListViewController.h"
+#import "SSJDataImportViewController.h"
 
 #import "SSJMineHomeTabelviewCell.h"
 
@@ -35,6 +36,7 @@ static NSString *const kDataMergeTitle = @"数据迁移";
 static NSString *const kModifyPwdTitle = @"修改密码";
 static NSString *const kFingerPrintPwdTitle = @"指纹密码";
 static NSString *const kMotionPwdTitle = @"手势密码";
+static NSString *const kDataImportTitle = @"数据导入";
 static NSString *const kMagicExportTitle = @"数据导出";
 static NSString *const kDataSyncTitle = @"数据同步";
 static NSString *const kClearDataTitle = @"清理数据";
@@ -124,6 +126,9 @@ static NSString *const kRecycleTitle = @"回收站";
         modifyPwdVC.mobileNo = self.userItem.mobileNo;
         modifyPwdVC.type = SSJSettingPasswordTypeResettingPassword;
         [self.navigationController pushViewController:modifyPwdVC animated:YES];
+    } else if ([title isEqualToString:kDataImportTitle]) {// 数据导入
+        SSJDataImportViewController *dataImportVC = [[SSJDataImportViewController alloc] init];
+        [self.navigationController pushViewController:dataImportVC animated:YES];
     } else if ([title isEqualToString:kMagicExportTitle]) {// 数据导出
         SSJMagicExportViewController *magicExportVC = [[SSJMagicExportViewController alloc] init];
         [self.navigationController pushViewController:magicExportVC animated:YES];
@@ -238,7 +243,7 @@ static NSString *const kRecycleTitle = @"回收站";
             }
         }
         
-        NSArray *section3 = @[kDataMergeTitle, kMagicExportTitle, kDataSyncTitle, kClearDataTitle, kRecycleTitle];
+        NSArray *section3 = @[kDataImportTitle ,kMagicExportTitle, kDataMergeTitle, kDataSyncTitle, kClearDataTitle, kRecycleTitle];
         self.titles = @[section1, section2, section3];
         [self.tableView reloadData];
         
