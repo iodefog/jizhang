@@ -1766,7 +1766,8 @@
                     
                     NSString *billDateStr = [[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyy-MM-dd"];
                     NSMutableArray *valueArr = [NSMutableArray array];
-                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[billDate formattedDateWithFormat:@"yyyyMMdd"]];
+                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                    
                     [valueArr addObject:chargeid];
                     [valueArr addObject:SSJUSERID()];
                     [valueArr addObject:billId];
@@ -1878,7 +1879,8 @@
 
                     //生成利息
                     NSMutableArray *valueArr = [NSMutableArray array];
-                    [valueArr addObject:SSJUUID()];
+                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                    [valueArr addObject:chargeid];
                     [valueArr addObject:SSJUSERID()];
                     [valueArr addObject:billId];
                     [valueArr addObject:fundid];
@@ -1983,11 +1985,11 @@
                         NSDictionary *feninterestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:investmentMoney interestType:item.interesttype startDate:@""];
                         interest += [[feninterestDic objectForKey:@"interest"] doubleValue];
                     }
-                    
+                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
                     
                     //生成利息
                     NSMutableArray *valueArr = [NSMutableArray array];
-                    [valueArr addObject:SSJUUID()];
+                    [valueArr addObject:chargeid];
                     [valueArr addObject:SSJUSERID()];
                     [valueArr addObject:billId];
                     [valueArr addObject:fundid];
@@ -2089,10 +2091,9 @@
 //                //最后一条利息
 //                NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:1 timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
 //                interest = lastLixi;
-                
-                
+                NSString *chargeid = [[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"];
                 NSMutableArray *valueArr = [NSMutableArray array];
-                [valueArr addObject:SSJUUID()];
+                [valueArr addObject:[NSString stringWithFormat:@"%@_%@",item.productid,chargeid]];
                 [valueArr addObject:SSJUSERID()];
                 [valueArr addObject:billId];
                 [valueArr addObject:fundid];
@@ -2153,7 +2154,8 @@
                 NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                 //生成利息
                 NSMutableArray *valueArr = [NSMutableArray array];
-                [valueArr addObject:SSJUUID()];
+                NSString *chargeid = [billDate formattedDateWithFormat:@"yyyyMMdd"];
+                [valueArr addObject:[NSString stringWithFormat:@"%@_%@",item.productid,chargeid]];
                 [valueArr addObject:SSJUSERID()];
                 [valueArr addObject:billId];
                 [valueArr addObject:fundid];
@@ -2403,8 +2405,10 @@
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] daysFrom:lastChangeDate] timetype:SSJMethodOfRateOrTimeDay money:investmentMoney interestType:item.interesttype startDate:@""];
                     interest += [[interestDic objectForKey:@"interest"] doubleValue];
                     
+                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                    
                     NSMutableArray *valueArr = [NSMutableArray array];
-                    [valueArr addObject:SSJUUID()];
+                    [valueArr addObject:chargeid];
                     [valueArr addObject:SSJUSERID()];
                     [valueArr addObject:billId];
                     [valueArr addObject:fundid];
@@ -2511,8 +2515,11 @@
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:hasno ? item.time : months timetype:hasno ? item.timetype : SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
                     
                     interest += [[interestDic objectForKey:@"interest"] doubleValue];
+                    
+                    NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                    
                     NSMutableArray *valueArr = [NSMutableArray array];
-                    [valueArr addObject:SSJUUID()];
+                    [valueArr addObject:chargeid];
                     [valueArr addObject:SSJUSERID()];
                     [valueArr addObject:billId];
                     [valueArr addObject:fundid];
@@ -2558,9 +2565,10 @@
                         if ([billDate isLaterThan:endDate]) return YES;//如果开始时间晚于结束时间则返回//如果开始时间晚于结束时间则返回
                         NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                         //生成利息
+                        NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
                         
                         NSMutableArray *valueArr = [NSMutableArray array];
-                        [valueArr addObject:SSJUUID()];
+                        [valueArr addObject:chargeid];
                         [valueArr addObject:SSJUSERID()];
                         [valueArr addObject:billId];
                         [valueArr addObject:fundid];
@@ -2620,8 +2628,10 @@
                 if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
                 NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
                 //生成利息
+                NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                
                 NSMutableArray *valueArr = [NSMutableArray array];
-                [valueArr addObject:SSJUUID()];
+                [valueArr addObject:chargeid];
                 [valueArr addObject:SSJUSERID()];
                 [valueArr addObject:billId];
                 [valueArr addObject:fundid];

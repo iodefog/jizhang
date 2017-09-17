@@ -10,6 +10,7 @@
 #import "SSJBillingChargeCellItem.h"
 
 @interface SSJCircleChargeCell : SSJBaseTableViewCell
+
 @property (nonatomic,strong) SSJBillingChargeCellItem *item;
 
 typedef void (^openSpecialCircle)(SSJBillingChargeCellItem *item);

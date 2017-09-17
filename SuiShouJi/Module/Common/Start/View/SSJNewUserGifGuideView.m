@@ -22,7 +22,7 @@
 
 @implementation SSJNewUserGifGuideView
 
-@synthesize isNormalState;
+@synthesize isNormalState = _isNormalState;
 
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -42,6 +42,7 @@
         self.titleLab.text = title;
         self.subTitleLab.text = subTitle;
         [self.gifImageView addObserver:self forKeyPath:@"currentIsPlayingAnimation" options:NSKeyValueObservingOptionNew context:nil];
+        [self updateFocusIfNeeded];
     }
     return self;
 }
@@ -101,7 +102,7 @@
     if (!_subTitleLab) {
         _subTitleLab = [[UILabel alloc] init];
         _subTitleLab.textColor = [UIColor ssj_colorWithHex:@"#333333"];
-        _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _subTitleLab.textAlignment = NSTextAlignmentCenter;
         _subTitleLab.numberOfLines = 0;
     }

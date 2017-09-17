@@ -22,13 +22,14 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.selectImage];
+        [self updateConstraintsIfNeeded];
     }
     return self;
 }
 
 - (void)updateConstraints {
     [self.selectImage mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.mas_right).offset(-10);
+        make.right.mas_equalTo(self.mas_right).offset(-10);
         make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
     }];
     
@@ -36,7 +37,7 @@
 }
 
 - (UIImageView *)selectImage {
-    if (_selectImage) {
+    if (!_selectImage) {
         _selectImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"theme_select_checkmark"]];
     }
     return _selectImage;
@@ -44,7 +45,7 @@
 
 - (void)setIsSelected:(BOOL)isSelected {
     _isSelected = isSelected;
-    self.selectImage.hidden = _isSelected;
+    self.selectImage.hidden = !_isSelected;
 }
 
 /*

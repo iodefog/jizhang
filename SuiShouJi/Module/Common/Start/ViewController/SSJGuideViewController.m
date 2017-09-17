@@ -25,6 +25,7 @@
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
         self.hidesNavigationBarWhenPushed = YES;
         self.automaticallyAdjustsScrollViewInsets = NO;
+        self.appliesTheme = NO;
     }
     return self;
 }
@@ -42,15 +43,13 @@
     }];
     
     [self.jumpOutButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.view).offset(85);
+        make.top.mas_equalTo(self.view).offset(45);
         make.right.mas_equalTo(self.view.mas_right).offset(-30);
         make.size.mas_equalTo(CGSizeMake(50, 20));
     }];
     
     [super updateViewConstraints];
 }
-
-
 
 #pragma mark - Getter
 - (SSJGuideView *)guideView {

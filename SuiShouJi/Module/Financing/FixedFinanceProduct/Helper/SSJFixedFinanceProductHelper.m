@@ -19,7 +19,7 @@
  @return 计算结果
  */
 + (double)caculateInterestForEveryDayWithRate:(double)rate rateType:(SSJMethodOfRateOrTime)rateType money:(double)money {
-    double dayRate = rate * money * 0.01;
+    double dayRate = rate * money;
     switch (rateType) {
         case SSJMethodOfRateOrTimeDay:
             return dayRate;
@@ -233,15 +233,15 @@
             case SSJMethodOfRateOrTimeDay:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * money * 0.01;
+                        interest = time * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 30 * 0.01;
+                        interest = money * rate * 30;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -251,15 +251,15 @@
             case SSJMethodOfRateOrTimeMonth:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * 30 * rate * money * 0.01;
+                        interest = time * 30 * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 30 * 0.01;
+                        interest = money * rate * 30;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -270,15 +270,15 @@
             case SSJMethodOfRateOrTimeYear:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * 365 * rate * money * 0.01;
+                        interest = time * 365 * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 30 * 0.01;
+                        interest = money * rate * 30;
                         desc = [NSString stringWithFormat:@"预期每月10号该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -296,15 +296,15 @@
             case SSJMethodOfRateOrTimeDay:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = (time / 30) * rate * money * 0.01;
+                        interest = (time / 30) * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 30;
+                        interest = money * rate / 30;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -315,15 +315,15 @@
             case SSJMethodOfRateOrTimeMonth:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * money * 0.01;
+                        interest = time * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 30;
+                        interest = money * rate / 30;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -334,15 +334,15 @@
             case SSJMethodOfRateOrTimeYear:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * 12 * money * 0.01;
+                        interest = time * rate * 12 * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 30;
+                        interest = money * rate / 30;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 0.01;
+                        interest = money * rate;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -363,15 +363,15 @@
             case SSJMethodOfRateOrTimeDay:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * money * 0.01 / 365;
+                        interest = time * rate * money / 365;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 365;
+                        interest = money * rate / 365;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 0.01 / 12;
+                        interest = money * rate / 12;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -382,15 +382,15 @@
             case SSJMethodOfRateOrTimeMonth:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * (rate / 12) * money * 0.01;
+                        interest = time * (rate / 12) * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * (rate / 365) * 0.01;
+                        interest = money * (rate / 365);
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = (rate / 12) * money * 0.01;
+                        interest = (rate / 12) * money;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
@@ -401,15 +401,15 @@
             case SSJMethodOfRateOrTimeYear:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * money * 0.01;
+                        interest = time * rate * money;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
-                        interest = money * rate * 0.01 / 365;
+                        interest = money * rate / 365;
                         desc = [NSString stringWithFormat:@"预期每天该账户将生成%.2f元的利息流水",interest];
                         break;
                     case SSJMethodOfInterestEveryMonth:
-                        interest = money * rate * 0.01 / 12;
+                        interest = money * rate / 12;
                         desc = [NSString stringWithFormat:@"预期每月该账户将生成%.2f元的利息流水",interest];
                         break;
                     default:
