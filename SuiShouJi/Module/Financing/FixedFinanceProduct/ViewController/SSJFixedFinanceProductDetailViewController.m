@@ -703,7 +703,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         _waningDescBtn.contentMode = UIViewContentModeRight;
         _waningDescBtn.height = 28;
         _waningDescBtn.left = self.view.width - _waningDescBtn.width - 18;
-        [_waningDescBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+        [_waningDescBtn setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
     }
     return _waningDescBtn;
 }
