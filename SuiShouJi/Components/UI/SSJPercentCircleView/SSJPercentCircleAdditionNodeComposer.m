@@ -160,14 +160,14 @@ const CGFloat kBreakPointSpaceX = 5;
             item.endPoint = CGPointMake(endPointX, item.endPoint.y);
         }
         
-        if (item.endPoint.x > point_2) {
-            item.endPoint = CGPointMake(point_2, item.endPoint.y);
-            item.textSize = CGSizeMake(point_2 - CGRectGetMinX(self.boundary), item.textSize.height);
+        if (item.endPoint.x > point_2 - kBreakPointSpaceX) {
+            item.endPoint = CGPointMake(point_2 - kBreakPointSpaceX, item.endPoint.y);
+            item.textSize = CGSizeMake(point_2 - kBreakPointSpaceX - CGRectGetMinX(self.boundary), item.textSize.height);
         }
         
         CGFloat point_1 = [self caculateIntersectionCenterYPoint:item];
         if (item.breakPoint.x >= point_1 || item.breakPoint.x < item.endPoint.x) {
-            CGFloat breakX = (point_1 - point_2) * 0.5 + point_2;
+            CGFloat breakX = (point_1 - item.endPoint.x) * 0.5 + item.endPoint.x;
             item.breakPoint = CGPointMake(breakX, item.breakPoint.y);
         }
     }
