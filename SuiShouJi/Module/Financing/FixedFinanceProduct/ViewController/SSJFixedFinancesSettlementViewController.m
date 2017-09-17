@@ -220,6 +220,7 @@ static NSString *kTitle6 = @"结算日期";
         } else if([title isEqualToString:kTitle2]) {
             cell.textField.text = self.lixiStr;
             self.liXiTextF = cell.textField;
+            cell.textField.userInteractionEnabled = YES;
         }
         
         [cell setNeedsLayout];
@@ -230,7 +231,7 @@ static NSString *kTitle6 = @"结算日期";
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
-        
+        cell.subtitleLabel.hidden = NO;
         if (self.fundingSelectionView.selectedIndex >= 0) {
             SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.fundingSelectionView.items ssj_safeObjectAtIndex:self.fundingSelectionView.selectedIndex];
             cell.additionalIcon.image = [UIImage imageNamed:selectedFundItem.image];
@@ -263,7 +264,7 @@ static NSString *kTitle6 = @"结算日期";
         cell.subtitleLabel.text = self.compoundModel.chargeModel.billDate ? [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"] : [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
         cell.switchControl.hidden = YES;
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
-        
+        cell.subtitleLabel.hidden = NO;
         if (self.chargeItem) {
             cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             cell.customAccessoryType = UITableViewCellAccessoryNone;
@@ -280,6 +281,8 @@ static NSString *kTitle6 = @"结算日期";
         cell.additionalIcon.image = nil;
         cell.customAccessoryType = UITableViewCellAccessoryNone;
         cell.switchControl.hidden = NO;
+        cell.subtitleLabel.hidden = YES;
+        cell.descLabel.hidden = YES;
         [cell.switchControl removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
         cell.switchControl.on = _isLiXiOn;
         [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];

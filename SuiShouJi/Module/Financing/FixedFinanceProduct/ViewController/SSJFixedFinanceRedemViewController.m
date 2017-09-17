@@ -331,7 +331,7 @@ static NSString *kTitle6 = @"备注";
     } else if ([title isEqualToString:kTitle3]) {
         SSJFixedFinanceProDetailTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixefFinanceProSegmentTextFieldCellId forIndexPath:indexPath];
         cell.leftImageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入利息" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"请输入金额" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
