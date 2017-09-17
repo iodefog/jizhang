@@ -156,12 +156,13 @@
         _stateLabel = [[UILabel alloc] init];
         _stateLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         _stateLabel.textAlignment = NSTextAlignmentCenter;
-        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
+//        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
         _stateLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
         _stateLabel.text = @"已到期";
-        _stateLabel.size = CGSizeMake(110, 80);
-        _stateLabel.centerX = self.contentView.width+20;
-        _stateLabel.centerY = 35;
+        _stateLabel.size = CGSizeMake(200, 22);
+        _stateLabel.right = self.contentView.width - 15;
+        _stateLabel.center = CGPointMake(SSJSCREENWITH - 30, 30);
+        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
     }
     return _stateLabel;
 }
