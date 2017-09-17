@@ -39,6 +39,7 @@
         self.themeIds = @[@"0",@"7",@"5",@"8",@"3",@"10"];
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
+        self.selectIndex = 0;
         self.isNormalState = YES;
         [self createButtons];
     }
@@ -111,6 +112,11 @@
         button.tag = i;
         [button setImage:[UIImage imageNamed:self.images[i]] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        if (i == 0) {
+            button.isSelected = YES;
+        } else {
+            button.isSelected = NO;
+        }
         [self addSubview:button];
         [self.buttons addObject:button];
     }
@@ -144,10 +150,14 @@
 
 - (void)buttonClicked:(UIButton *)sender {
     if (self.themeItems.count) {
+        [self.buttons objectAtIndex:self.selectIndex].isSelected = NO;
+        [self.buttons objectAtIndex:sender.tag].isSelected = YES;
+        self.selectIndex = sender.tag;
         SSJThemeItem *item = [self.themeItems objectAtIndex:sender.tag];
         if (![item.themeId isEqualToString:@"0"]) {
+            
             [[SSJThemeDownLoaderManger sharedInstance] downloadThemeWithItem:item success:^(SSJThemeItem *item) {
-                
+                [SSJThemeSetting switchToThemeID:item.themeId];
             } failure:^(NSError *error) {
                 
             }];

@@ -135,8 +135,6 @@
 - (void)startAnimating {
     self.newerLab.alpha = 0;
     self.olderLab.alpha = 0;
-    self.newerButton.enabled = NO;
-    self.olderButton.enabled = NO;
     [UIView animateWithDuration:2.f animations:^(void){
         self.newerLab.alpha = 1.f;
         self.olderLab.alpha = 1.f;
@@ -150,8 +148,7 @@
             self.newerButton.transform = CGAffineTransformMakeScale(1.f, 1.f);
             self.olderButton.transform = CGAffineTransformMakeScale(1.f, 1.f);
         } completion:^(BOOL finished){
-            self.newerButton.enabled = YES;
-            self.olderButton.enabled = YES;
+
         }];
     }];
 }
