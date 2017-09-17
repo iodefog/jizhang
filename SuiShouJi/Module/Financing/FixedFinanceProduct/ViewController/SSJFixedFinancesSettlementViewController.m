@@ -444,11 +444,6 @@ static NSString *kTitle6 = @"结算日期";
         return NO;
     }
     
-    if ([self.compoundModel.chargeModel.billDate isLaterThan:[self.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]]) {
-        [CDAutoHideMessageHUD showMessage:@"日期不能晚于结束日期哦"];
-        return NO;
-    }
-    
     if (!self.liXiTextF.text.length || [self.liXiTextF.text doubleValue] < 0) {
         [CDAutoHideMessageHUD showMessage:@"请输入利息"];
         return NO;
@@ -594,11 +589,6 @@ static NSString *kTitle6 = @"结算日期";
             
             if ([date isLaterThan:[NSDate date]]) {
                 [CDAutoHideMessageHUD showMessage:@"日期不能晚于当前日期哦"];
-                return NO;
-            }
-            
-            if ([date isLaterThan:[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]]) {
-                [CDAutoHideMessageHUD showMessage:@"日期不能晚于结束日期哦"];
                 return NO;
             }
             return YES;

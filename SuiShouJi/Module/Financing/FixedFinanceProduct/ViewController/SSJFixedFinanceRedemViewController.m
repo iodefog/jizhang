@@ -494,35 +494,36 @@ static NSString *kTitle6 = @"备注";
         }
     }
     
-    //判断是否可以赎回
-    //查询所有可以影响到本金变化
-   NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+//    if (!self.chargeModel) {
+//        double benjin = 0;
+//        //查询所有可以影响到本金变化
+//        NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+//        for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+//            if ([self.compoundModel.chargeModel.billDate isEarlierThan:chargeItem.billDate]) {
+//                break;
+//            }
+//            if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
+//                benjin += chargeItem.money;
+//            } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+//                benjin += chargeItem.money;
+////                double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
+////                benjin -= chargeItem.money;
+//            } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+//                benjin += chargeItem.money;
+//            }
+//        }
+//        //    benjin += self.oldMoney;
+//        //加上以前的赎回
+//        if (!self.liXiSwitch.on) {
+//            self.lixiStr = @"0";
+//            
+//        }
+//        if (benjin < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
+//            [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+//            return NO;
+//        }
+//    }
     
-    double benjin = 0;
-    for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
-        if ([self.compoundModel.chargeModel.billDate isEarlierThan:chargeItem.billDate]) {
-            break;
-        }
-        if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
-            benjin += chargeItem.money;
-        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
-            benjin += chargeItem.money;
-          double poundage = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chargeItem error:nil];
-            benjin -= chargeItem.money;
-        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
-            benjin += chargeItem.money;
-        }
-    }
-//    benjin += self.oldMoney;
-    //加上以前的赎回
-    if (!self.liXiSwitch.on) {
-        self.lixiStr = @"0";
-        
-    }
-    if (benjin  < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
-        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
-       return NO;
-    }
     
     if (self.fundingSelectionView.selectedIndex < 0) {
         [CDAutoHideMessageHUD showMessage:@"请选择账户"];
@@ -596,10 +597,9 @@ static NSString *kTitle6 = @"备注";
     
     BOOL isallow = NO;
     if (self.chargeModel) {
-        isallow = [self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney;
-        
+        isallow = ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney) || ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney);
     } else {
-        isallow = [self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue];
+        isallow = ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue]) || ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue]);
     }
     if (isallow) {
         //提示结算弹框
@@ -615,6 +615,35 @@ static NSString *kTitle6 = @"备注";
         }], nil];
         return;
     }
+    
+    //判断是否可以赎回
+    //查询所有可以影响到本金变化
+    NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    
+    double benjin = 0;
+    for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+        if ([self.compoundModel.chargeModel.billDate isEarlierThan:chargeItem.billDate]) {
+            break;
+        }
+        if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeCreate) {
+            benjin += chargeItem.money;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+            benjin += chargeItem.money;
+        } else if (chargeItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+            benjin += chargeItem.money;
+        }
+    }
+    //    benjin += self.oldMoney;
+    //加上以前的赎回
+    if (!self.liXiSwitch.on) {
+        self.lixiStr = @"0";
+        
+    }
+    if (benjin  < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
+        [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
+        return ;
+    }
+    
     [self updateModel];
    
     //如果有
