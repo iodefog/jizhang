@@ -509,14 +509,12 @@ static NSString *const kSegmentTitleSurplus = @"结余";
         otherItems = [sortedItems subarrayWithRange:NSMakeRange(20, sortedItems.count - 20)];
     }
     
-    double scaleAmount = [[result valueForKeyPath:@"@sum.scale"] doubleValue];
-    
     NSMutableArray *chartItems = [[NSMutableArray alloc] init];
     for (SSJReportFormsItem *item in result) {
         if (![otherItems containsObject:item]) {
             // 收入、支出
             SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-            circleItem.scale = item.scale / scaleAmount;
+            circleItem.scale = item.scale;
             circleItem.color = [UIColor ssj_colorWithHex:item.colorValue];
             circleItem.text = [NSString stringWithFormat:@"%@ %.1f％", item.name, item.scale * 100];
             [chartItems addObject:circleItem];
@@ -524,11 +522,10 @@ static NSString *const kSegmentTitleSurplus = @"结余";
     }
     
     if (otherItems.count) {
-        double scale = [[otherItems valueForKeyPath:@"@sum.scale"] doubleValue];
         SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
-        circleItem.scale = scale / scaleAmount;
+        circleItem.scale = [[otherItems valueForKeyPath:@"@sum.scale"] doubleValue];
         circleItem.color = [UIColor ssj_colorWithHex:@"#565656"];
-        circleItem.text = [NSString stringWithFormat:@"其它类别 %.1f％", scale * 100];
+        circleItem.text = [NSString stringWithFormat:@"其它类别 %.1f％", circleItem.scale * 100];
         [chartItems addObject:circleItem];
     }
     
