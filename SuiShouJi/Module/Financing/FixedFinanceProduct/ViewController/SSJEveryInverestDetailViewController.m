@@ -96,6 +96,7 @@ static  NSString *kTitle3 = @"投资名称";
 //        }
 //        [self.titleArray addObjectsFromArray:@[]];
 //    }
+    [self updateAppearance];
 }
 
 - (void)setUpNav {
@@ -138,6 +139,9 @@ static  NSString *kTitle3 = @"投资名称";
         cell.detailTextLabel.textColor = SSJ_SECONDARY_COLOR;
         cell.textLabel.font = cell.detailTextLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         cell.imageView.tintColor = SSJ_SECONDARY_COLOR;
+        cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
+        cell.backgroundColor = SSJ_MAIN_BACKGROUND_COLOR;
+//        cell.indicatorView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellIndicatorColor];
     }
     cell.textLabel.text = title;
     cell.detailTextLabel.text = value;
@@ -185,7 +189,14 @@ static  NSString *kTitle3 = @"投资名称";
     return _tableView;
 }
 
+- (void)updateAppearanceAfterThemeChanged{
+    [super updateAppearanceAfterThemeChanged];
+    [self updateAppearance];
+}
 
+- (void)updateAppearance {
+    self.tableView.separatorColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha];
+}
 
 
 @end

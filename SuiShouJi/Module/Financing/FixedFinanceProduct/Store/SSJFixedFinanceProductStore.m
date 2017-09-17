@@ -946,6 +946,7 @@
             newMoney = oldMoney - model.money;
             //修改本金
             if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+                *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
                         failure(error);
@@ -1058,6 +1059,7 @@
         
         //修改本金
         if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype <> 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure(error);
@@ -1200,6 +1202,7 @@
             //更新固定理财金额
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
                 if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+                    *rollback = YES;
                     if (failure) {
                         SSJDispatchMainAsync(^{
                             failure(error);
@@ -1289,6 +1292,7 @@
         
         NSString *writeDateStr = [[lastDate dateByAddingSeconds:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
         if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.etargetfundid,billDate,productModel.userid,productModel.productid]) {
+            *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
                     failure(error);

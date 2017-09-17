@@ -86,6 +86,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self loadData];
+    
 }
 
 - (void)headerUI {
@@ -292,6 +293,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         [SSJFixedFinanceProductStore queryForFixedFinanceProduceWithProductID:self.productID success:^(SSJFixedFinanceProductItem * _Nonnull model) {
             weakSelf.financeModel = model;
             weakSelf.title = model.productName;
+            weakSelf.waningBtn.hidden = weakSelf.financeModel.isend;
             weakSelf.stateImageView.hidden = !weakSelf.financeModel.isend;
             //如果已经过过期了就只显示结算按钮
             if ([[weakSelf.financeModel.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThanOrEqualTo:[NSDate date]]) {
@@ -701,7 +703,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         _waningDescBtn.contentMode = UIViewContentModeRight;
         _waningDescBtn.height = 28;
         _waningDescBtn.left = self.view.width - _waningDescBtn.width - 18;
-        [_waningDescBtn setTitleColor:SSJ_MAIN_COLOR forState:UIControlStateNormal];
+        [_waningDescBtn setTitleColor:[UIColor ssj_colorWithHex:@"333333"] forState:UIControlStateNormal];
     }
     return _waningDescBtn;
 }
