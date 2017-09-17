@@ -18,6 +18,8 @@
 
 @property (nonatomic) CGFloat thickness;
 
+@property (nonatomic) CGFloat startAngle;
+
 - (void)setItems:(NSArray *)items completion:(void (^)(void))completion;
 
 @end

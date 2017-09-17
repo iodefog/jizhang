@@ -75,6 +75,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) CGFloat lineLength2;
 
 /**
+ 起始角度，默认0
+ */
+@property (nonatomic) CGFloat startAngle;
+
+/**
  圆环中间顶部标题和底部标题之间间隔
  */
 @property (nonatomic) CGFloat gapBetweenTitles;

@@ -85,6 +85,17 @@ const CGFloat kBreakPointSpaceX = 5;
 }
 
 - (void)composeLeftNodeItems {
+    // 按照从Y轴大到小对元素进行降序排序
+    [self.leftItems sortUsingComparator:^NSComparisonResult(SSJPercentCircleAdditionNodeItem *obj1, SSJPercentCircleAdditionNodeItem *obj2) {
+        if (obj1.endPoint.y > obj2.endPoint.y) {
+            return NSOrderedAscending;
+        } else if (obj1.endPoint.y < obj2.endPoint.y) {
+            return NSOrderedDescending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
     // 检测是否有重叠的节点，有的话依次排开
     SSJPercentCircleAdditionNodeItem *preItem = nil;
     for (SSJPercentCircleAdditionNodeItem *item in self.leftItems) {
@@ -163,6 +174,17 @@ const CGFloat kBreakPointSpaceX = 5;
 }
 
 - (void)composeRightNodeItems {
+    // 按照Y轴从小到大对元素进行升序排序
+    [self.rightItems sortUsingComparator:^NSComparisonResult(SSJPercentCircleAdditionNodeItem *obj1, SSJPercentCircleAdditionNodeItem *obj2) {
+        if (obj1.endPoint.y > obj2.endPoint.y) {
+            return NSOrderedDescending;
+        } else if (obj1.endPoint.y < obj2.endPoint.y) {
+            return NSOrderedAscending;
+        } else {
+            return NSOrderedSame;
+        }
+    }];
+    
     // 检测是否有重叠的节点，有的话依次排开
     SSJPercentCircleAdditionNodeItem *lastItem = nil;
     for (SSJPercentCircleAdditionNodeItem *item in self.rightItems) {
