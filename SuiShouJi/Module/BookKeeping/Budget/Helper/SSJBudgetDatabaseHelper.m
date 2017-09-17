@@ -327,7 +327,7 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         
         SSJBudgetDetailHeaderViewItem *headerItem = [SSJBudgetDetailHeaderViewItem itemWithBudgetModel:budgetModel billMapping:mapping];
         
-        //  查询预算范围内不同收支类型相应的金额、名称、图标、颜色
+        // 查询预算范围内不同收支类型相应的金额、名称、图标、颜色
         NSMutableString *query = [NSMutableString stringWithFormat:@"select sum(a.imoney), b.cicoin, b.ccolor, b.cname, b.cbillid from bk_user_charge as a, bk_user_bill_type as b where a.ibillid = b.cbillid and a.cuserid = b.cuserid and a.cbooksid = b.cbooksid and a.cuserid = '%@' and a.operatortype <> 2 and a.cbilldate >= '%@'and a.cbilldate <= '%@' and a.cbilldate <= datetime('now', 'localtime') and a.cbooksid = '%@' and b.itype = 1", userid, budgetModel.beginDate, budgetModel.endDate, budgetModel.booksId];
         
         if (![budgetModel.billIds containsObject:SSJAllBillTypeId]) {
@@ -351,22 +351,23 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
             return;
         }
         
-        double amount = 0;
+        int count = 0;
+        double otherItemsMoney = 0;
         NSMutableArray *circleItemArr = [NSMutableArray array];
-        NSMutableArray *moneyArr = [NSMutableArray array];
         NSMutableArray *listItem = [NSMutableArray array];
         
         while ([resultSet next]) {
             double money = [resultSet doubleForColumn:@"sum(a.imoney)"];
-            double scale = money / budgetModel.payMoney;
-            if (scale >= 0.01) {
-                amount += money;
-                [moneyArr addObject:@(money)];
-                
+            
+            count ++;
+            if (count <= 20) {
                 SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
                 circleItem.color = [UIColor ssj_colorWithHex:[resultSet stringForColumn:@"ccolor"]];
-                circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", [resultSet stringForColumn:@"cname"], scale * 100];
+                circleItem.scale = money / budgetModel.payMoney;
+                circleItem.text = [NSString stringWithFormat:@"%@ %.0f％", [resultSet stringForColumn:@"cname"], circleItem.scale * 100];
                 [circleItemArr addObject:circleItem];
+            } else {
+                otherItemsMoney += money;
             }
             
             SSJReportFormsItem *item = [[SSJReportFormsItem alloc] init];
@@ -380,10 +381,14 @@ NSString *const SSJBudgetConflictBudgetModelKey = @"SSJBudgetConflictBudgetModel
         }
         [resultSet close];
         
-        for (int i = 0; i < circleItemArr.count; i ++) {
-            SSJPercentCircleViewItem *circleItem = circleItemArr[i];
-            circleItem.scale = [moneyArr[i] doubleValue] / amount;
+        if (otherItemsMoney > 0) {
+            SSJPercentCircleViewItem *circleItem = [[SSJPercentCircleViewItem alloc] init];
+            circleItem.color = [UIColor ssj_colorWithHex:@"#565656"];
+            circleItem.scale = otherItemsMoney / budgetModel.payMoney;
+            circleItem.text = [NSString stringWithFormat:@"其它类别 %.1f％", circleItem.scale * 100];
+            [circleItemArr addObject:circleItem];
         }
+        
         headerItem.circleItems = circleItemArr;
         
         NSMutableDictionary *result = [NSMutableDictionary dictionaryWithCapacity:2];
