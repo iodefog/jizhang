@@ -54,6 +54,7 @@
 - (void)setStartPoint:(CGPoint)startPoint {
     if (!CGPointEqualToPoint(_startPoint, startPoint)) {
         _startPoint = startPoint;
+        [self sizeToFit];
         [self drawDash];
     }
 }
@@ -61,6 +62,7 @@
 - (void)setEndPoint:(CGPoint)endPoint {
     if (!CGPointEqualToPoint(_endPoint, endPoint)) {
         _endPoint = endPoint;
+        [self sizeToFit];
         [self drawDash];
     }
 }

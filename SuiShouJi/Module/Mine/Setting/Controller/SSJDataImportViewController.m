@@ -33,10 +33,11 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self addSubview:self.titleLab];
-        [self addSubview:self.icon_1];
-        [self addSubview:self.nameLab_1];
-        [self addSubview:self.icon_2];
-        [self addSubview:self.nameLab_2];
+        [self addSubview:self.container];
+        [self.container addSubview:self.icon_1];
+        [self.container addSubview:self.nameLab_1];
+        [self.container addSubview:self.icon_2];
+        [self.container addSubview:self.nameLab_2];
         self.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
@@ -45,29 +46,32 @@
 - (void)updateConstraints {
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(30);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(249, 16));
     }];
     [self.container mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab.mas_bottom).offset(20);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
         make.bottom.mas_equalTo(self).offset(-17);
     }];
     [self.icon_1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(self.icon_1.size);
         make.top.left.mas_equalTo(self.container);
     }];
     [self.nameLab_1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.icon_1.mas_bottom).offset(10);
         make.bottom.mas_equalTo(self.container);
-        make.centerY.mas_equalTo(self.icon_1);
+        make.centerX.mas_equalTo(self.icon_1);
     }];
     [self.icon_2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(self.icon_2.size);
         make.top.mas_equalTo(self.icon_1);
         make.left.mas_equalTo(self.icon_1.mas_right).offset(90);
         make.right.mas_equalTo(self.container);
     }];
     [self.nameLab_2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(self.icon_1);
-        make.centerY.mas_equalTo(self.icon_2);
+        make.top.mas_equalTo(self.icon_2.mas_bottom).offset(10);
+        make.centerX.mas_equalTo(self.icon_2);
     }];
     [super updateConstraints];
 }
@@ -159,6 +163,7 @@
         [self addSubview:self.titleLab];
         [self addSubview:self.imageView];
         [self addSubview:self.dashLine];
+        [self updateAppearance];
         self.translatesAutoresizingMaskIntoConstraints = NO;
     }
     return self;
@@ -172,16 +177,19 @@
 
 - (void)updateConstraints {
     [self.numberLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.size.mas_equalTo(CGSizeMake(18, 18));
         make.left.and.top.mas_equalTo(self);
     }];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self);
         make.left.mas_equalTo(self.numberLab.mas_right).offset(10);
+        make.right.mas_equalTo(self);
     }];
     [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab.mas_bottom).offset(14);
         make.left.mas_equalTo(self.titleLab);
         make.right.and.bottom.mas_equalTo(self);
+        make.size.mas_equalTo(self.imageView.image.size);
     }];
     [super updateConstraints];
 }
@@ -189,6 +197,7 @@
 - (void)updateAppearance {
     _numberLab.textColor = [UIColor whiteColor];
     _numberLab.backgroundColor = RGBCOLOR(255, 164, 140);
+    _dashLine.lineColor = RGBCOLOR(255, 164, 140);
     _titleLab.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
 }
 
@@ -261,19 +270,20 @@
 - (void)updateConstraints {
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self).offset(24);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
     }];
     [self.cell_1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.titleLab.mas_bottom).offset(22);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
     }];
     [self.cell_2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.cell_1.mas_bottom).offset(12);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
     }];
     [self.cell_3 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.cell_2.mas_bottom).offset(12);
-        make.centerY.mas_equalTo(self);
+        make.centerX.mas_equalTo(self);
+        make.bottom.mas_equalTo(self).offset(-20);
     }];
     [super updateConstraints];
 }
