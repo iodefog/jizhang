@@ -540,6 +540,21 @@
 
 
 /**
+ 删除提醒的时候更新固收理财产品的remindid为空
+ 
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (BOOL)deleteFixedFinanceProductRemindidWithModel:(SSJFixedFinanceProductItem *)model {
+    __block BOOL success = NO;
+    NSString *writeDate = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        success = [db executeUpdate:@"update bk_fixed_finance_product set cremindid = ?, cwritedate = ?, iversion = ? where cproductid = ? and cuserid = ?",@"",writeDate,@(SSJSyncVersion()),model.productid,SSJUSERID()];
+    }];
+    return success;
+}
+
+/**
  删除某个固定理财账户的所有流水
 
  @param model <#model description#>

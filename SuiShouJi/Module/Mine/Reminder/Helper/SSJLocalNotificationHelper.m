@@ -80,7 +80,8 @@
                 break;
                 
             case SSJReminderTypeWish:
-            case SSJReminderTypeCharge:{
+            case SSJReminderTypeCharge:
+            case SSJFixedFinaProduct: {
                 if (item.remindMemo.length) {
                     item.remindContent = [NSString stringWithFormat:@"%@(%@)",item.remindName,item.remindMemo];
                 }else{
@@ -88,7 +89,6 @@
                 }
                 break;
             }
-
                 
             default:
                 break;
