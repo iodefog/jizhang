@@ -751,35 +751,39 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
 
 // 获取选中的资金账户
 - (void)loadFundData {
-    __weak typeof(self) weakSelf = self;
+    @weakify(self);
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
+        @strongify(self);
         NSString *userId = SSJUSERID();
-        if (weakSelf.item.ID.length != 0) {
-            if (!weakSelf.item.fundName.length) {
-                if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = ?",weakSelf.item.fundId] == 2) {
-                    weakSelf.item.fundName = @"选择账户";
-                    weakSelf.item.fundOperatorType = 2;
+        if (self.item.ID.length != 0 || self.selectFundId.length) {
+            if (!self.item.fundName.length) {
+                if (self.selectFundId.length && !self.item.fundId.length) {
+                    self.item.fundId = self.selectFundId;
+                }
+                if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = ?",self.item.fundId] == 2) {
+                    self.item.fundName = @"选择账户";
+                    self.item.fundOperatorType = 2;
                 }else{
-                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
-                    weakSelf.item.fundOperatorType = [db intForQuery:@"select operatortype from bk_fund_info where cfundid = ? and cuserid = ?",weakSelf.item.fundId,userId];
+                    self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",self.item.fundId,userId];
+                    self.item.fundOperatorType = [db intForQuery:@"select operatortype from bk_fund_info where cfundid = ? and cuserid = ?",self.item.fundId,userId];
                 }
             }
         }else{
             if (![db stringForQuery:@"select lastselectfundid from bk_user where cuserid = ?",userId].length) {
-                weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
-                weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                self.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
             }else{
                 if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = (select lastselectfundid from bk_user where cuserid = ?)",userId] == 2) {
-                    weakSelf.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
-                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                    self.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                    self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
                 }else{
-                    weakSelf.item.fundId = [db stringForQuery:@"select lastselectfundid from bk_user as a where a.cuserid = ? and a.lastselectfundid in (select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 and cparent != 'root')",userId,userId];
-                    weakSelf.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",weakSelf.item.fundId,userId];
+                    self.item.fundId = [db stringForQuery:@"select lastselectfundid from bk_user as a where a.cuserid = ? and a.lastselectfundid in (select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 and cparent != 'root')",userId,userId];
+                    self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",self.item.fundId,userId];
                 }
             }
         }
         dispatch_async(dispatch_get_main_queue(), ^(){
-            [weakSelf updateFundingType];
+            [self updateFundingType];
         });
     }];
 }

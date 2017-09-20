@@ -45,6 +45,7 @@
 #import "SSJFixedFinanceRedemViewController.h"
 #import "SSJFixedFinancesSettlementViewController.h"
 #import "SSJEveryInverestDetailViewController.h"
+#import "SSJRecordMakingViewController.h"
 
 static NSString *const kFundingDetailCellID = @"kFundingDetailCellID";
 static NSString *const kFundingListFirstLineCellID = @"kFundingListFirstLineCellID";
@@ -68,6 +69,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 @property(nonatomic, strong) SSJLoanChangeChargeSelectionControl *repaymentPopView;
 
 @property(nonatomic, strong) UIButton *repaymentButton;
+
+@property(nonatomic, strong) UIButton *recordButton;
+
 @end
 
 @implementation SSJFundingDetailsViewController{
@@ -94,13 +98,22 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.tableView registerClass:[SSJFundingDailySumCell class] forCellReuseIdentifier:kFundingListDailySumCellID];
     [self.tableView registerClass:[SSJFundingDetailListFirstLineCell class] forCellReuseIdentifier:kCreditCardListFirstLineCellID];
     [self.tableView addSubview:self.noDataHeader];
+    [self.view addSubview:self.repaymentButton];
+    [self.view addSubview:self.recordButton];
+    [self.recordButton ssj_setBorderStyle:SSJBorderStyleTop];
     if (self.item.cardItem) {
-        [self.view addSubview:self.repaymentButton];
         self.tableView.tableHeaderView = self.creditCardHeader;
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
+        self.recordButton.width = self.repaymentButton.width = self.view.width / 2;
+        self.repaymentButton.right = self.view.width;
+        [self.repaymentButton ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleLeft];
     }else{
+        self.recordButton.width = self.view.width;
+        self.repaymentButton.hidden = YES;
         self.tableView.tableHeaderView = self.header;
     }
+
+
 }
 
 
@@ -346,6 +359,25 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     return _repaymentButton;
 }
 
+- (UIButton *)recordButton{
+    if (!_recordButton) {
+        _recordButton = [[UIButton alloc]initWithFrame:CGRectMake(0, self.view.height - 50, self.view.width, 50)];
+        [_recordButton setTitle:@"记一笔" forState:UIControlStateNormal];
+        if (SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor.length) {
+            [_recordButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.throughScreenButtonBackGroudColor alpha:SSJ_CURRENT_THEME.throughScreenButtonAlpha] forState:UIControlStateNormal];
+        } else {
+            [_recordButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryFillColor alpha:0.8] forState:UIControlStateNormal];
+        }
+        _recordButton.titleLabel.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
+        [_recordButton ssj_setBorderWidth:1];
+        
+        [_recordButton setTitleColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor] forState:UIControlStateNormal];
+        [_recordButton ssj_setBorderColor:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.cellSeparatorColor alpha:SSJ_CURRENT_THEME.cellSeparatorAlpha]];
+        [_recordButton addTarget:self action:@selector(recordButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _recordButton;
+}
+
 - (SSJLoanChangeChargeSelectionControl *)repaymentPopView {
     if (!_repaymentPopView) {
         __weak typeof(self) wself = self;
@@ -386,6 +418,12 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(void)repaymentButtonClicked:(id)sender{
     [self.repaymentPopView show];
+}
+
+- (void)recordButtonClicked:(id)sender {
+    SSJRecordMakingViewController *recordVc = [[SSJRecordMakingViewController alloc] init];
+    recordVc.selectFundId = self.item.fundingID;
+    [self.navigationController pushViewController:recordVc animated:YES];
 }
 
 #pragma mark - Private
