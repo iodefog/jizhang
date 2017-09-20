@@ -35,11 +35,8 @@
 @end
 
 @interface SSJThemeDownLoaderManger()
+
 @property(nonatomic, strong) AFURLSessionManager *manager;
-
-@end
-
-@interface SSJThemeDownLoaderManger ()
 
 @property (nonatomic, strong) NSMutableDictionary *blockerMapping;
 
@@ -230,6 +227,10 @@ static id _instance;
 //        NSLog(@"Progress is %f", progress.fractionCompleted);
 //        [self.delegate downLoadThemeWithProgress:progress];
     }
+}
+
+- (NSInteger)downloadingThemesCount {
+    return self.manager.downloadTasks.count;
 }
 
 @end

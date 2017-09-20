@@ -403,7 +403,7 @@
                                     writeDate:(NSString *)writeDate
                                    inDatabase:(FMDatabase *)db{
     NSString *userId = SSJUSERID();
-    FMResultSet *result = [db executeQuery:@"select distinct substr(cid,1,36) as productid from bk_user_charge where cuserid = ? and ifunsid = ? and operatortype <> 2 and ichargetype = ?",userId,fundId,@(SSJChargeIdTypeFixedFinance)];
+    FMResultSet *result = [db executeQuery:@"select distinct substr(cid,1,36) as productid from bk_user_charge where cuserid = ? and ifunsid = ? and ichargetype = ?",userId,fundId,@(SSJChargeIdTypeFixedFinance)];
     if (!result) {
         return NO;
     }
@@ -414,11 +414,11 @@
     }
     
     for (NSString *cid in fixedFundingIds) {
-        if (![db executeQuery:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, operatortype = 2 where cproductid = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, operatortype = 2 where cproductid = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
             return NO;
         }
         
-        if (![db executeQuery:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 2 where sub(cid,1,36) = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
+        if (![db executeUpdate:@"update bk_user_charge set cwritedate = ?, iversion = ?, operatortype = 2 where substr(cid,1,36) = ? and cuserid = ? and operatortype <> 2",writeDate,@(SSJSyncVersion()),cid,userId]) {
             return NO;
         }
         
