@@ -131,7 +131,6 @@
         self.gifImageView.currentAnimatedImageIndex = 0;
         self.titleLab.alpha = 0;
         self.subTitleLab.alpha = 0;
-        self.gifImageView.hidden = YES;
     }
 }
 

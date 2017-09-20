@@ -133,8 +133,6 @@
     }
     self.titleLab.hidden = NO;
     self.subTitleLab.hidden = NO;
-    self.titleLab.alpha = 0;
-    self.subTitleLab.alpha = 0;
     
     for (SSJThemeSelectButton *button in self.buttons) {
         [UIView animateWithDuration:2.f animations:^(void) {
