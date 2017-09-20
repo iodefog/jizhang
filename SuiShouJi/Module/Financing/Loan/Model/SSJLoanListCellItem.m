@@ -61,7 +61,7 @@
         double benJinMoney = money + jiesuanlixi;
         item.money = [NSString stringWithFormat:@"%.2f",benJinMoney];
     } else {
-        item.money = [NSString stringWithFormat:@"%.2f",money + [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
+        item.money = [NSString stringWithFormat:@"%.2f",money + [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:model.productid]];
     }
     
     item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];

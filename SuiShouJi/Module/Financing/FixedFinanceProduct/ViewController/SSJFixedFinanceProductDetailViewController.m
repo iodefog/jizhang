@@ -486,7 +486,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     }
 
     interest = self.financeModel.isend == 0 ? [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
-    NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"到账金额";
+    NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"结算金额";
     NSString *surplusValue;
     if (self.financeModel.isend) {
         double aleardyLixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.productID];
