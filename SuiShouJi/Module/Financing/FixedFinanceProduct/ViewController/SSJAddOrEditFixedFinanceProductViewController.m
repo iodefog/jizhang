@@ -36,6 +36,7 @@
 #import "SSJGeTuiManager.h"
 #import "NSString+MoneyDisplayFormat.h"
 #import "SSJLocalNotificationHelper.h"
+#import "SSJLocalNotificationStore.h"
 
 
 static NSString *KTitle1 = @"投资名称";
@@ -536,7 +537,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
         }
         
-                [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             weakSelf.sureButton.enabled = YES;
             
             if (_edited) {
@@ -558,7 +559,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 weakSelf.navigationController.viewControllers = [array copy];
             }
             
-            //        [self saveRemind];
+//            [weakSelf saveRemind];
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError * _Nonnull error) {
@@ -566,26 +567,25 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             [weakSelf.sureButton ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
-
-    }
-
-}
-
-- (void)saveRemind {
-    //保存提醒
-    MJWeakSelf;
-    if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
-        weakSelf.model.remindid = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
-        weakSelf.reminderItem.remindState = 1;
-        weakSelf.reminderItem.remindType = SSJReminderTypeWish;
-        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
-            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
-            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-        } failure:^(NSError *error) {
-            
-        }];
+    
     }
 }
+
+//- (void)saveRemind {
+//    //保存提醒
+//    MJWeakSelf;
+//    if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
+//        weakSelf.model.remindid = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
+//        weakSelf.reminderItem.remindState = 1;
+//        weakSelf.reminderItem.remindType = SSJFixedFinaProduct;
+//        [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
+//            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
+//            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+//        } failure:^(NSError *error) {
+//            
+//        }];
+//    }
+//}
 
 - (BOOL)checkFixedFinModelIsValid {
     if (!self.nameTextF.text.length) {
@@ -692,36 +692,27 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 - (void)enterReminderVC {
     SSJReminderItem *tmpRemindItem = _reminderItem;
-    
-    if (!tmpRemindItem) {
-        NSDate *paymentDate = [self paymentDate];
-        
-        tmpRemindItem = [[SSJReminderItem alloc] init];
-        tmpRemindItem.remindName = [NSString stringWithFormat:@"投资名称+投资到期"];
-        
-        tmpRemindItem.remindCycle = 7;
-        tmpRemindItem.remindType = SSJReminderTypeBorrowing;
-        tmpRemindItem.remindDate = [NSDate dateWithYear:paymentDate.year month:paymentDate.month day:paymentDate.day hour:20 minute:0 second:0];
-        tmpRemindItem.minimumDate = [NSDate date];
-        tmpRemindItem.remindState = YES;
-//        tmpRemindItem.borrowtarget = self.loanModel.lender;
-    }
-    
     __weak typeof(self) wself = self;
     SSJReminderEditeViewController *reminderVC = [[SSJReminderEditeViewController alloc] init];
     reminderVC.needToSave = NO;
     reminderVC.item = tmpRemindItem;
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
-        wself.model.remindid = wself.model.productid;
+        wself.model.remindid = item.remindId.length ? item.remindId : SSJUUID();
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
         [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     reminderVC.deleteReminderAction = ^{
-        wself.reminderItem = nil;
-        wself.reminderItem.remindId = nil;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
-        [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        if ([SSJLocalNotificationStore deleteReminderWithItem:wself.reminderItem error:nil]) {
+            wself.reminderItem = nil;
+            wself.reminderItem.remindId = nil;
+            //删除提醒
+            wself.model.remindid = nil;
+            //注销通知 删除通知流水
+            
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+            [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
     };
     [self.navigationController pushViewController:reminderVC animated:YES];
 }

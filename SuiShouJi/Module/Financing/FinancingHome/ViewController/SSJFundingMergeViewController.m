@@ -235,7 +235,7 @@
     if (!_transferInFundSelectView) {
         _transferInFundSelectView = [[SSJMergeFundSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 250)];
         @weakify(self);
-        _transferInFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
+        _transferInFundSelectView.didSelectFundItem = ^(SSJFinancingHomeitem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferInFundItem = fundItem;
             if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {
@@ -254,7 +254,7 @@
     if (!_transferOutFundSelectView) {
         _transferOutFundSelectView = [[SSJMergeFundSelectView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, 250)];
         @weakify(self);
-        _transferOutFundSelectView.didSelectFundItem = ^(SSJBaseCellItem *fundItem, NSString *selectParent) {
+        _transferOutFundSelectView.didSelectFundItem = ^(SSJFinancingHomeitem *fundItem, NSString *selectParent) {
             @strongify(self);
             self.transferOutFundItem = fundItem;
             if ([selectParent isEqualToString:@"3"] || [selectParent isEqualToString:@"16"]) {

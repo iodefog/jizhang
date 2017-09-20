@@ -46,5 +46,7 @@ typedef void(^SSJThemeDownLoaderProgressBlock)(float);
 //正在下载的主题的id
 @property (nonatomic, strong) NSMutableArray *downLoadingArr;
 
+@property (nonatomic) NSInteger downloadingThemesCount;
+
 @end
 

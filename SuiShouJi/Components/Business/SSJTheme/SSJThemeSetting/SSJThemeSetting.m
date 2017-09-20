@@ -14,6 +14,7 @@
 #import "SSJBookKeepingHomeViewController.h"
 #import "SSJReportFormsViewController.h"
 #import "SSJFinancingHomeViewController.h"
+#import "SSJThemeDownLoaderManger.h"
 
 @implementation SSJThemeSetting
 
@@ -39,11 +40,13 @@
         return NO;
     }
     
-    SSJSetCurrentThemeID(ID);
-    
-    [self updateTabbarAppearance];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
+    if ([SSJThemeDownLoaderManger sharedInstance].downloadingThemesCount) {
+        SSJSetCurrentThemeID(ID);
+        
+        [self updateTabbarAppearance];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:SSJThemeDidChangeNotification object:nil userInfo:nil];
+    }
     
     return YES;
 }

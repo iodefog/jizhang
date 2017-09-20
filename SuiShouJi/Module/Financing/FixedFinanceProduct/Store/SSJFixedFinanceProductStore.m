@@ -238,11 +238,11 @@
             }
             return;
         }
-
         
         // 存储提醒记录
         if (remindModel) {
             remindModel.fundId = model.productid;
+            remindModel.remindContent = remindModel.remindName;
             NSError *error = [SSJLocalNotificationStore saveReminderWithReminderItem:remindModel inDatabase:db];
             if (error) {
                 *rollback = YES;
