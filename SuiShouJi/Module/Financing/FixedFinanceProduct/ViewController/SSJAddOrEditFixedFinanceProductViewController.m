@@ -714,12 +714,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     reminderVC.addNewReminderAction = ^(SSJReminderItem *item) {
         wself.reminderItem = item;
         wself.model.remindid = wself.model.productid;
-        [wself.tableView reloadData];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+        [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     reminderVC.deleteReminderAction = ^{
         wself.reminderItem = nil;
         wself.reminderItem.remindId = nil;
-        [wself.tableView reloadData];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+        [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     [self.navigationController pushViewController:reminderVC animated:YES];
 }
