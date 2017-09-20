@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface SSJChargeCircleNoneView : UIView
+
 @property (nonatomic, copy) void (^makeChargeCircleBlock)();
 
 @end
