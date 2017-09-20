@@ -112,7 +112,7 @@
 @property(nonatomic) SSJLoanType loanType;
 
 //借贷的来源
-@property(nonatomic, strong) NSString *loanSource;
+@property(nonatomic, strong) NSString *loanOrFixedSource;
 
 //客户端添加时间
 @property(nonatomic, strong) NSString *clientAddDate;

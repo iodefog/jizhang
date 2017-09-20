@@ -33,6 +33,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.view addSubview:self.guideView];
+    [self.view addSubview:self.jumpOutButton];
+    [self.view updateConstraintsIfNeeded];
     // Do any additional setup after loading the view.
 }
 

@@ -27,6 +27,7 @@
 #import "SSJFundingTypeManager.h"
 #import "SSJFixedFinanceProductTable.h"
 
+
 NSString *const SSJFundingDetailDateKey = @"SSJFundingDetailDateKey";
 NSString *const SSJFundingDetailRecordKey = @"SSJFundingDetailRecordKey";
 NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
@@ -40,26 +41,21 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         NSString *userId = SSJUSERID();
 
-        WCTResultList resultList;
-
-        for (const WCTProperty &property : SSJUserChargeTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_USER_CHARGE"));
-        }
-        for (const WCTProperty &property : SSJUserBillTypeTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_USER_BILL_TYPE"));
-        }
-        for (const WCTProperty &property : SSJShareBooksMemberTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_SHARE_BOOKS_MEMBER"));
-        }
-        for (const WCTProperty &property : SSJLoanTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_LOAN"));
-        }
+        WCTResultList resultList = {
+            SSJUserChargeTable.AllProperties.inTable(@"BK_USER_CHARGE"),
+            SSJUserBillTypeTable.AllProperties.inTable(@"BK_USER_BILL_TYPE"),
+            SSJShareBooksMemberTable.AllProperties.inTable(@"BK_SHARE_BOOKS_MEMBER"),
+            SSJLoanTable.AllProperties.inTable(@"BK_LOAN"),
+            SSJFixedFinanceProductTable.AllProperties.inTable(@"BK_FIXED_FINANCE_PRODUCT")
+        };
 
         WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserChargeTable.fundId == ID);
 
         joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
+        
+        joinClause.join("BK_FIXED_FINANCE_PRODUCT" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE").like(SSJFixedFinanceProductTable.productId.concat(@"%%")));
 
         WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
 
@@ -90,6 +86,11 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         }
 
         for (SSJBillingChargeCellItem *item in chargeArr) {
+            if (item.chargeImage.length || item.chargeMemo.length || item.idType == SSJChargeIdTypeFixedFinance || item.idType == SSJChargeIdTypeLoan || item.memberNickname.length) {
+                item.rowHeight = 65;
+            } else {
+                item.rowHeight = 50;
+            }
             if (item.idType == SSJChargeIdTypeLoan && item.sundryId.length) {
                 // 先判断他是借入还是借出
                 if (item.loanType == SSJLoanTypeBorrow) {
@@ -191,6 +192,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     [listItem.chargeArray addObjectsFromArray:tempDateArr];
                     [tempDateArr removeAllObjects];
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                    dayItem.rowHeight = 35;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
                         dayItem.expenture = money;
@@ -218,6 +220,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
                 listItem.date = month;
                 SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                dayItem.rowHeight = 35;
                 dayItem.date = item.billDate;
                 if (item.incomeOrExpence) {
                     dayItem.expenture = money;
@@ -248,26 +251,21 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         NSString *userId = SSJUSERID();
 
-        WCTResultList resultList;
-
-        for (const WCTProperty &property : SSJUserChargeTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_USER_CHARGE"));
-        }
-        for (const WCTProperty &property : SSJUserBillTypeTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_USER_BILL_TYPE"));
-        }
-        for (const WCTProperty &property : SSJShareBooksMemberTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_SHARE_BOOKS_MEMBER"));
-        }
-        for (const WCTProperty &property : SSJLoanTable.AllProperties) {
-            resultList.push_back(property.inTable(@"BK_LOAN"));
-        }
+        WCTResultList resultList = {
+            SSJUserChargeTable.AllProperties.inTable(@"BK_USER_CHARGE"),
+            SSJUserBillTypeTable.AllProperties.inTable(@"BK_USER_BILL_TYPE"),
+            SSJShareBooksMemberTable.AllProperties.inTable(@"BK_SHARE_BOOKS_MEMBER"),
+            SSJLoanTable.AllProperties.inTable(@"BK_LOAN"),
+            SSJFixedFinanceProductTable.AllProperties.inTable(@"BK_FIXED_FINANCE_PRODUCT")
+        };
 
         WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserChargeTable.fundId == cardId);
 
         joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
+        
+        joinClause.join("BK_FIXED_FINANCE_PRODUCT" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE").like(SSJFixedFinanceProductTable.productId.concat(@"%%")));
 
         WCDB::OrderList orderList = {SSJUserChargeTable.billDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending),SSJUserChargeTable.writeDate.inTable(@"BK_USER_CHARGE").order(WCTOrderedDescending)};
         
@@ -294,9 +292,16 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             SSJBillingChargeCellItem *chargeItem = [self getChargeItemWithStatement:statement];
             [chargeArr addObject:chargeItem];
         }
+        
+
 
         for (SSJBillingChargeCellItem *item in chargeArr) {
             double money = ABS([item.money doubleValue]);
+            if (item.chargeImage.length || item.chargeMemo.length || item.idType == SSJChargeIdTypeFixedFinance || item.idType == SSJChargeIdTypeLoan || item.memberNickname.length) {
+                item.rowHeight = 65;
+            } else {
+                item.rowHeight = 50;
+            }
             if (item.idType == SSJChargeIdTypeLoan && item.sundryId.length) {
                 // 先判断他是借入还是借出
                 switch ( item.loanType ) {
@@ -429,6 +434,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     }
                 } else {
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                    dayItem.rowHeight = 35;
                     lastDayItem = dayItem;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
@@ -492,6 +498,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     [tempArray addObject:item];
                 } else {
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                    dayItem.rowHeight = 35;
                     lastDayItem = dayItem;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
@@ -567,6 +574,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if (!item.incomeOrExpence) {
                 item.money = [NSString stringWithFormat:@"+%.2f" , money];
             }
+            if (item.chargeImage.length || item.chargeMemo.length || item.idType == SSJChargeIdTypeFixedFinance || item.idType == SSJChargeIdTypeLoan || item.memberNickname.length) {
+                item.rowHeight = 65;
+            } else {
+                item.rowHeight = 50;
+            }
+            
             NSString *month = [resultSet stringForColumn:@"cmonth"];
             if ([month isEqualToString:lastDate]) {
                 SSJFundingDetailListItem *listItem = [result lastObject];
@@ -577,6 +590,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
                 if ([item.billDate isEqualToString:lastDetailDate]) {
                     SSJFundingListDayItem *dayItem = [tempDateArr firstObject];
+                    
                     if (item.incomeOrExpence) {
                         dayItem.expenture = dayItem.expenture + money;
                     } else {
@@ -587,6 +601,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     [listItem.chargeArray addObjectsFromArray:tempDateArr];
                     [tempDateArr removeAllObjects];
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                    dayItem.rowHeight = 35;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
                         dayItem.expenture = money;
@@ -614,6 +629,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 }
                 listItem.date = month;
                 SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
+                dayItem.rowHeight = 35;
                 dayItem.date = item.billDate;
                 if (item.incomeOrExpence) {
                     dayItem.expenture = money;
@@ -784,7 +800,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             } else if ([name isEqualToString:SSJUserChargeTable.booksId.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
                 chargeItem.booksId = value;
             } else if ([name isEqualToString:SSJLoanTable.lender.getDescription()] && [tableName isEqualToString:@"BK_LOAN"]) {
-                chargeItem.loanSource = value;
+                chargeItem.loanOrFixedSource = value;
             } else if ([name isEqualToString:SSJLoanTable.type.getDescription()] && [tableName isEqualToString:@"BK_LOAN"]) {
                 chargeItem.loanType = (SSJLoanType) [value integerValue];
             } else if ([name isEqualToString:SSJUserChargeTable.chargeType.getDescription()] && [tableName isEqualToString:@"BK_USER_CHARGE"]) {
@@ -799,6 +815,8 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                 chargeItem.billId = value;
             } else if ([name isEqualToString:SSJUserBillTypeTable.billType.getDescription()] && [tableName isEqualToString:@"BK_USER_BILL_TYPE"]) {
                 chargeItem.incomeOrExpence = (SSJBillType)[value integerValue];
+            } else if ([name isEqualToString:SSJFixedFinanceProductTable.productName.getDescription()] && [tableName isEqualToString:@"BK_FIXED_FINANCE_PRODUCT"]) {
+                chargeItem.loanOrFixedSource = value;
             }
         }
 

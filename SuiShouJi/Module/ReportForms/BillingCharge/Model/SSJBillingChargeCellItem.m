@@ -34,10 +34,11 @@
     item.deletedMembers = self.deletedMembers;
     item.loanChargeType = self.loanChargeType;
     item.loanType = self.loanType;
-    item.loanSource = self.loanSource;
+    item.loanOrFixedSource = self.loanOrFixedSource;
     item.clientAddDate = self.clientAddDate;
     item.idType = self.idType;
     item.sundryId = self.sundryId;
+    
 
     return item;
 }
