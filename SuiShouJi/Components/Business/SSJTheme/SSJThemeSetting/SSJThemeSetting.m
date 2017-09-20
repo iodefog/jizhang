@@ -40,7 +40,7 @@
         return NO;
     }
     
-    if ([SSJThemeDownLoaderManger sharedInstance].downloadingThemesCount) {
+    if (![SSJThemeDownLoaderManger sharedInstance].downloadingThemesCount) {
         SSJSetCurrentThemeID(ID);
         
         [self updateTabbarAppearance];
