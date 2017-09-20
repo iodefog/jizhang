@@ -40,7 +40,7 @@
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
         self.selectIndex = 0;
-        self.isNormalState = YES;
+        _isNormalState = NO;
         [self createButtons];
     }
     return self;
@@ -86,6 +86,7 @@
         _titleLab.font = [UIFont ssj_compatibleBoldSystemFontOfSize:SSJ_FONT_SIZE_2];
         _titleLab.textAlignment = NSTextAlignmentCenter;
         _titleLab.numberOfLines = 0;
+        _titleLab.hidden = YES;
     }
     return _titleLab;
 }
@@ -98,6 +99,7 @@
         _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_2];
         _subTitleLab.textAlignment = NSTextAlignmentCenter;
         _subTitleLab.numberOfLines = 0;
+        _subTitleLab.hidden = YES;
     }
     return _subTitleLab;
 }
@@ -135,7 +137,8 @@
     self.subTitleLab.hidden = NO;
     self.titleLab.alpha = 0;
     self.subTitleLab.alpha = 0;
-    
+    _isNormalState = NO;
+
     for (SSJThemeSelectButton *button in self.buttons) {
         [UIView animateWithDuration:2.f animations:^(void) {
             button.transform = CGAffineTransformIdentity;
@@ -144,7 +147,7 @@
             self.subTitleLab.alpha = 1.f;
 
         } completion:^(BOOL finished) {
-            self.isNormalState = NO;
+
         }];
     }
 }
@@ -168,7 +171,6 @@
 }
 
 - (void)setIsNormalState:(BOOL)isNormalState {
-    _isNormalState = isNormalState;
     if (!self.isNormalState && isNormalState) {
         self.titleLab.hidden = YES;
         self.subTitleLab.hidden = YES;
@@ -181,6 +183,7 @@
             }
         }
     }
+    _isNormalState = isNormalState;
 }
 
 - (void)setThemeItems:(NSArray<SSJThemeItem *> *)themeItems {

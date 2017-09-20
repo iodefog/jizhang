@@ -110,7 +110,9 @@
 }
 
 - (void)startAnimating {
+    _isNormalState = NO;
     self.gifImageView.currentAnimatedImageIndex = 0;
+    self.gifImageView.hidden = NO;
     [self.gifImageView startAnimating];
     self.titleLab.hidden = NO;
     self.subTitleLab.hidden = NO;
@@ -128,11 +130,11 @@
     if (!self.isNormalState && isNormalState) {
         self.titleLab.hidden = YES;
         self.subTitleLab.hidden = YES;
-        self.gifImageView.currentAnimatedImageIndex = 0;
+        self.gifImageView.hidden = YES;
         self.titleLab.alpha = 0;
         self.subTitleLab.alpha = 0;
-        self.gifImageView.hidden = YES;
     }
+    _isNormalState = isNormalState;
 }
 
 /*

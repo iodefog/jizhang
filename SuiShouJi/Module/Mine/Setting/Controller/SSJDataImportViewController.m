@@ -393,6 +393,7 @@
 - (_SSJDataImportTopView *)topView {
     if (!_topView) {
         _topView = [[_SSJDataImportTopView alloc] init];
+        _topView.backgroundColor = [UIColor whiteColor];
         UIColor *borderColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].cellIndicatorColor alpha:[SSJThemeSetting defaultThemeModel].cellSeparatorAlpha];
         [_topView ssj_setBorderColor:borderColor];
         [_topView ssj_setBorderStyle:SSJBorderStyleBottom];
@@ -403,6 +404,7 @@
 - (_SSJDataImportBottomView *)bottomView {
     if (!_bottomView) {
         _bottomView = [[_SSJDataImportBottomView alloc] init];
+        _bottomView.backgroundColor = [UIColor whiteColor];
     }
     return _bottomView;
 }
