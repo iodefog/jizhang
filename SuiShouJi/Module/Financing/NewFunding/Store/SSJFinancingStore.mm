@@ -44,7 +44,6 @@
 
 
             SSJFundInfoTable *fundInfo = [[SSJFundInfoTable alloc] init];
-            fundInfo.isAutoIncrement
             fundInfo.fundId = item.fundingID;
             fundInfo.fundName = item.fundingName;
             fundInfo.fundIcon = item.fundingIcon;
