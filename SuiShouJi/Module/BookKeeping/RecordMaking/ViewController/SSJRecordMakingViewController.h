@@ -29,6 +29,8 @@
 //是否是修改循环记账配置
 @property (nonatomic) BOOL isModifyCofig;
 
+@property (nonatomic, strong) NSString *selectFundId;
+
 
 typedef void (^addNewChargeBlock)(NSArray *chargeIdArr ,BOOL hasChangeBooksType);
 
