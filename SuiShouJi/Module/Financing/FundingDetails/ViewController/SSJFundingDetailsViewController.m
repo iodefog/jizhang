@@ -175,14 +175,10 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     SSJBaseCellItem *item = [((SSJFundingDetailListItem *)[self.listItems objectAtIndex:indexPath.section]).chargeArray objectAtIndex:indexPath.row];
-    if ([item isKindOfClass:[SSJBillingChargeCellItem class]]) {
-        SSJBillingChargeCellItem *billingItem = (SSJBillingChargeCellItem *)item;
-        if (billingItem.chargeImage.length || billingItem.chargeMemo.length) {
-            return 65;
-        }
-        return 50;
-    }else{
-        return 36;
+    if (item.rowHeight) {
+        return item.rowHeight;
+    } else {
+        return 35;
     }
 }
 

@@ -155,10 +155,7 @@
                     [self.contentViews objectAtIndex:i].isNormalState = YES;
                 }
             }
-            
         }];
-
-
     } else {
         [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
             for (int i = 0; i < self.contentViews.count; i ++) {
@@ -168,9 +165,7 @@
                     [self.contentViews objectAtIndex:i].isNormalState = YES;
                 }
             }
-
         }];
-
     }
 }
 
