@@ -1215,16 +1215,16 @@
                 }
             
             //更新固定理财金额
-                NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),SSJUSERID(),productModel.productid]) {
-                    *rollback = YES;
-                    if (failure) {
-                        SSJDispatchMainAsync(^{
-                            failure(error);
-                        });
-                    }
-                    return;
-                }
+//                NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+//                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),SSJUSERID(),productModel.productid]) {
+//                    *rollback = YES;
+//                    if (failure) {
+//                        SSJDispatchMainAsync(^{
+//                            failure(error);
+//                        });
+//                    }
+//                    return;
+//                }
         }
         
         
@@ -1269,7 +1269,7 @@
                 return;
             }
             
-            //原来金额+利息+手续费
+            //原来金额+利息+手续费（到期金额）
             newMoney += model.chargeModel.money;
 //            newMoney -= model.interestChargeModel.money;
             
@@ -1306,7 +1306,7 @@
         }
         
         NSString *writeDateStr = [[lastDate dateByAddingSeconds:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.etargetfundid,billDate,SSJUSERID(),productModel.productid]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),productModel.etargetfundid,billDate,SSJUSERID(),productModel.productid]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -1343,7 +1343,7 @@
     NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
     NSMutableArray *valueArr = [NSMutableArray array];
     [valueArr addObject:SSJUUID()];
-    [valueArr addObject:model.chargeModel.userId];
+    [valueArr addObject:SSJUSERID()];
     [valueArr addObject:@"21"];
     [valueArr addObject:model.chargeModel.fundId];
     [valueArr addObject:billDateStr];
@@ -1376,7 +1376,7 @@
     NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
     NSMutableArray *valueArr = [NSMutableArray array];
     [valueArr addObject:SSJUUID()];
-    [valueArr addObject:model.chargeModel.userId];
+    [valueArr addObject:SSJUSERID()];
     [valueArr addObject:@"22"];
     [valueArr addObject:model.chargeModel.fundId];
     [valueArr addObject:billDateStr];
@@ -1534,7 +1534,7 @@
         NSArray *keyArr = @[@"ichargeid",@"cuserid",@"ibillid",@"ifunsid",@"cbilldate",@"cid",@"imoney",@"cmemo",@"iversion",@"operatortype",@"cwritedate",@"ichargetype"];
         NSMutableArray *valueArr = [NSMutableArray array];
         [valueArr addObject:model.interestChargeModel.chargeId];
-        [valueArr addObject:model.interestChargeModel.userId];
+        [valueArr addObject:SSJUSERID()];
         [valueArr addObject:model.interestChargeModel.billId];
         [valueArr addObject:model.interestChargeModel.fundId];
         [valueArr addObject:billDateStr];

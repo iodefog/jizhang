@@ -10,6 +10,7 @@
 #import "SSJLoanModel.h"
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJFixedFinanceProductStore.h"
+#import "SSJFixedFinanceProductChargeItem.h"
 
 @implementation SSJLoanListCellItem
 
@@ -50,11 +51,17 @@
     item.icon = model.productIcon;
     item.memo = model.memo;
     item.loanTitle = model.productName;
-   
+    double money = 0;
+    NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:model error:nil];
+    for (SSJFixedFinanceProductChargeItem *tempItem in array) {
+        money += tempItem.money;
+    }
     if (model.isend) {
-         item.money = [NSString stringWithFormat:@"%.2f", [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
+        double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:model.productid];
+        double benJinMoney = money + jiesuanlixi;
+        item.money = [NSString stringWithFormat:@"%.2f",benJinMoney];
     } else {
-        item.money = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:model.productid]+ [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
+        item.money = [NSString stringWithFormat:@"%.2f",money + [SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:model.productid]];
     }
     
     item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];
