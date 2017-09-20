@@ -646,7 +646,12 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     __weak typeof(self) weakSelf = self;
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:NULL];
     UIAlertAction *comfirmAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [weakSelf deleteChargeConfig];
+        [weakSelf deleteChargeConfig:^{
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+        } failure:^(NSError *error) {
+            [CDAutoHideMessageHUD showError:error];
+        }];
     }];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"你确定要删除这条周期记账吗?" preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:cancelAction];
@@ -654,19 +659,31 @@ static NSString * SSJChargeCircleEditeCellIdentifier = @"chargeCircleEditeCell";
     [self.navigationController presentViewController:alert animated:YES completion:NULL];
 }
 
-- (void)deleteChargeConfig{
+- (void)deleteChargeConfig:(void(^)())success failure:(void(^)(NSError *error))failure {
     __weak typeof(self) weakSelf = self;
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(FMDatabase *db) {
-        NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+        BOOL successful = NO;
         if ([db intForQuery:@"select count(1) from bk_charge_period_config where iconfigid = ?",weakSelf.item.sundryId]) {
-            [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.sundryId];
+            NSString *writeDate = [[NSDate date] ssj_systemCurrentDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+            successful =  [db executeUpdate:@"update bk_charge_period_config set operatortype = 2 ,cwritedate = ? ,iversion = ? where iconfigid = ?",writeDate,@(SSJSyncVersion()),weakSelf.item.sundryId];
         }
-        SSJDispatch_main_async_safe(^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
-        });
+        
+        if (successful) {
+            if (success) {
+                SSJDispatchMainAsync(^{
+                    success();
+                });
+            }
+        } else {
+            if (failure) {
+                NSError *error = [db lastError];
+                SSJDispatchMainAsync(^{
+                    failure(error);
+                });
+            }
+        }
     }];
 }
-
 
 #pragma mark - Private
 -(void)takePhoto{
