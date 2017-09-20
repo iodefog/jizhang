@@ -135,6 +135,7 @@
 - (void)startAnimating {
     self.newerLab.alpha = 0;
     self.olderLab.alpha = 0;
+    
     [UIView animateWithDuration:2.f animations:^(void){
         self.newerLab.alpha = 1.f;
         self.olderLab.alpha = 1.f;
