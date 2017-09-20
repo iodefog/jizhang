@@ -315,7 +315,7 @@
             case SSJMethodOfRateOrTimeMonth:
                 switch (interesttype) {
                     case SSJMethodOfInterestOncePaid://一次性
-                        interest = time * rate * money;
+                        interest = time * rate * money / 30;
                         desc = [NSString stringWithFormat:@"预期到期利息为%.2f元",interest];
                         break;
                     case SSJMethodOfInterestEveryDay:
