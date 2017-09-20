@@ -68,7 +68,7 @@ typedef NS_ENUM(NSInteger, SSJChargeIdType) {
     SSJChargeIdTypeTransfer = 4,      // 转账（老版本）
     SSJChargeIdTypeCyclicTransfer = 5, // 周期转账（2.1.0新增）
     SSJChargeIdTypeShareBooks = 6,     // 共享账本（2.5.0新增）
-    SSJChargeIdTypeFixedFinance = 7     //固收理财
+    SSJChargeIdTypeFixedFinance = 7     //固收理财 (2.8.0新增)
 };
 
 //  预算周期
@@ -322,7 +322,7 @@ typedef NS_ENUM(NSInteger, SSJMethodOfInterest) {
  - SSJFinancingParentAlipay: 支付宝
  - SSJFinancingParentOthers: 其他
  - SSJFinancingParentHuabei: 蚂蚁花呗
- - SSJFinancingParentFixedEarnings: 固收理财
+ - SSJFinancingParentFixedEarnings: 固收理财 (2.8.0新增)
  */
 typedef NS_ENUM(NSInteger, SSJFinancingParent) {
     SSJFinancingParentCash = 1,
