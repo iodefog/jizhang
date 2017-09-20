@@ -301,10 +301,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 }
 
 - (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
+    self.model.ratetype = rateType;
     NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:rate rateType:rateType money:money]];
     
 
-    NSString *oldlilvStr = [NSString stringWithFormat:@"T（成交日）+1日计息，每天产生利息%@元",targetLiLvStr];
+    NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
     
     self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
 
