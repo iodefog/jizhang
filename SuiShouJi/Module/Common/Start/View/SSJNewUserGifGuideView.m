@@ -36,7 +36,7 @@
         [self addSubview:self.titleLab];
         [self addSubview:self.subTitleLab];
         [self addSubview:self.gifImageView];
-        self.isNormalState = YES;
+        _isNormalState = NO;
         self.animatedImage = [YYImage imageNamed:imageName];
         self.gifImageView.image = self.animatedImage;
         self.titleLab.text = title;
@@ -52,7 +52,7 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    self.isNormalState = NO;
+    _isNormalState = NO;
     if (self.animationCompletBlock) {
         self.animationCompletBlock();
     }
@@ -111,14 +111,12 @@
 
 - (void)startAnimating {
     self.gifImageView.currentAnimatedImageIndex = 0;
-    self.titleLab.alpha = 0;
-    self.subTitleLab.alpha = 0;
     [self.gifImageView startAnimating];
     [UIView animateWithDuration:2.f animations:^(void){
         self.subTitleLab.alpha = 1.f;
         self.titleLab.alpha = 1.f;
     } completion:^(BOOL finished) {
-//        self.isNormalState = NO;
+
     }];
 }
 
@@ -127,7 +125,7 @@
         self.gifImageView.currentAnimatedImageIndex = 0;
         self.titleLab.alpha = 0;
         self.subTitleLab.alpha = 0;
-    }  
+    }
 }
 
 /*
