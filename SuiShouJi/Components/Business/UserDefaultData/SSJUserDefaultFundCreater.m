@@ -15,7 +15,8 @@
     for (NSDictionary *record in [self datasWithUserId:userId]) {
         NSString *fundId = record[@"cfundid"];
         NSString *fundName = record[@"cacctname"];
-        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where (cfundid = ?) or (cacctname = ? and cuserid = ? and operatortype <> 2)", fundId, fundName, userId];
+        NSNumber *parent = record[@"cparent"];
+        BOOL existed = [db boolForQuery:@"select count(1) from bk_fund_info where (cfundid = ?) or (cacctname = ? and cuserid = ? and cparent = ?)", fundId, fundName, userId, parent];
         if (!existed) {
             BOOL successfull = [db executeUpdate:@"insert into bk_fund_info (cfundid, cacctname, cparent, ccolor, cwritedate, operatortype, iversion, cuserid, cicoin, iorder, cstartcolor, cendcolor) values (:cfundid, :cacctname, :cparent, :ccolor, :cwritedate, :operatortype, :iversion, :cuserid, :cicoin, :iorder, :cstartcolor, :cendcolor)" withParameterDictionary:record];
             if (!successfull) {
@@ -34,7 +35,7 @@
     
     return @[@{@"cfundid":[NSString stringWithFormat:@"%@-1",userId],
                @"cacctname":@"现金",
-               @"cparent":@1,
+               @"cparent":@(SSJFinancingParentCash),
                @"ccolor":@"#fc7a60",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -47,7 +48,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-2",userId],
                @"cacctname":@"储蓄卡",
-               @"cparent":@2,
+               @"cparent":@(SSJFinancingParentDepositCard),
                @"ccolor":@"#faa94a",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -60,7 +61,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-3",userId],
                @"cacctname":@"信用卡",
-               @"cparent":@3,
+               @"cparent":@(SSJFinancingParentCreditCard),
                @"ccolor":@"#8bb84a",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -73,7 +74,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-4",userId],
                @"cacctname":@"支付宝",
-               @"cparent":@14,
+               @"cparent":@(SSJFinancingParentAlipay),
                @"ccolor":@"#5a98de",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -86,7 +87,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-7",userId],
                @"cacctname":@"微信钱包",
-               @"cparent":@13,
+               @"cparent":@(SSJFinancingParentWeiXin),
                @"ccolor":@"#5a98de",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -99,7 +100,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-8",userId],
                @"cacctname":@"固定收益理财",
-               @"cparent":@17,
+               @"cparent":@(SSJFinancingParentFixedEarnings),
                @"ccolor":@"#5a98de",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -112,7 +113,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-5",userId],
                @"cacctname":@"借出款",
-               @"cparent":@10,
+               @"cparent":@(SSJFinancingParentPaidLeave),
                @"ccolor":@"#a883d8",
                @"cwritedate":writeDate,
                @"operatortype":@0,
@@ -125,7 +126,7 @@
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-6",userId],
                @"cacctname":@"欠款",
-               @"cparent":@11,
+               @"cparent":@(SSJFinancingParentDebt),
                @"ccolor":@"#ef6161",
                @"cwritedate":writeDate,
                @"operatortype":@0,

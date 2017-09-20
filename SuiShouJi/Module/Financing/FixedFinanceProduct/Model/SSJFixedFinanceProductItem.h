@@ -82,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy) NSString *endcolor;
 
-+ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db;
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db isProductList:(BOOL)list;
 
 /**
  2:余额转入，由少变多，1:余额转出，由多变少，0：金额没有变动
