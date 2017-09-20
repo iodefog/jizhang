@@ -131,9 +131,8 @@
             button.transform = CGAffineTransformMakeTranslation(-self.width , 0);
         }
     }
-    
-    self.titleLab.alpha = 0;
-    self.subTitleLab.alpha = 0;
+    self.titleLab.hidden = NO;
+    self.subTitleLab.hidden = NO;
     
     for (SSJThemeSelectButton *button in self.buttons) {
         [UIView animateWithDuration:2.f animations:^(void) {
@@ -169,8 +168,8 @@
 - (void)setIsNormalState:(BOOL)isNormalState {
     _isNormalState = isNormalState;
     if (!self.isNormalState && isNormalState) {
-        self.titleLab.alpha = 0;
-        self.subTitleLab.alpha = 0;
+        self.titleLab.hidden = YES;
+        self.subTitleLab.hidden = YES;
         for (SSJThemeSelectButton *button in self.buttons) {
             button.hidden = YES;
             if (button.tag / 3 == 0) {

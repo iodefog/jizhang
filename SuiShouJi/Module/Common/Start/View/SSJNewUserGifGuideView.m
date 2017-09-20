@@ -112,6 +112,10 @@
 - (void)startAnimating {
     self.gifImageView.currentAnimatedImageIndex = 0;
     [self.gifImageView startAnimating];
+    self.titleLab.hidden = NO;
+    self.subTitleLab.hidden = NO;
+    self.titleLab.alpha = 0;
+    self.subTitleLab.alpha = 0;
     [UIView animateWithDuration:2.f animations:^(void){
         self.subTitleLab.alpha = 1.f;
         self.titleLab.alpha = 1.f;
@@ -122,6 +126,8 @@
 
 - (void)setIsNormalState:(BOOL)isNormalState {
     if (!self.isNormalState && isNormalState) {
+        self.titleLab.hidden = YES;
+        self.subTitleLab.hidden = YES;
         self.gifImageView.currentAnimatedImageIndex = 0;
         self.titleLab.alpha = 0;
         self.subTitleLab.alpha = 0;

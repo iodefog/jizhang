@@ -149,18 +149,18 @@
     if (idx == self.contentViews.count - 1) {
         for (int i = 0; i < self.contentViews.count; i ++) {
             if (i == idx) {
-                [[self.contentViews objectAtIndex:idx] startAnimating];
+                [[self.contentViews objectAtIndex:i] startAnimating];
             } else {
-                [self.contentViews objectAtIndex:idx].isNormalState = YES;
+                [self.contentViews objectAtIndex:i].isNormalState = YES;
             }
         }
         
     } else {
         for (int i = 0; i < self.contentViews.count; i ++) {
             if (i == idx) {
-                [[self.contentViews objectAtIndex:idx] startAnimating];
+                [[self.contentViews objectAtIndex:i] startAnimating];
             } else {
-                [self.contentViews objectAtIndex:idx].isNormalState = YES;
+                [self.contentViews objectAtIndex:i].isNormalState = YES;
             }
         }
     }
