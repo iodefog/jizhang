@@ -13,7 +13,6 @@
 #import "SSJSynchronizeTaskQueue.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "SSJLoginVerifyPhoneViewController+SSJLoginCategory.h"
-#import "SSJDomainManager.h"
 #import "SSJShareBooksMemberKickedOutAlerter.h"
 #import "SSJSyncTable.h"
 
@@ -132,8 +131,7 @@ static const void * kSSJDataSynchronizerSpecificKey = &kSSJDataSynchronizerSpeci
 
 - (void)timingSyncData {
     if (SSJIsUserLogined()
-        && SSJSyncSetting() == SSJSyncSettingTypeWIFI
-        && [AFNetworkReachabilityManager managerForDomain:[SSJDomainManager domain]].isReachable) {
+        && SSJSyncSetting() == SSJSyncSettingTypeWIFI) {
         [self startSyncWithSuccess:NULL failure:NULL];
     }
 }

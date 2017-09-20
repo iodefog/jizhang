@@ -10,12 +10,23 @@
 
 @interface SSJDomainManager : NSObject
 
-+ (NSString *)domain;
+/**
+ 接口域名
 
-+ (NSString *)imageDomain;
+ @return <#return value description#>
+ */
++ (NSURL *)domain;
 
-+ (NSString *)formalDomain;
+/**
+ 图片域名
 
+ @return <#return value description#>
+ */
++ (NSURL *)imageDomain;
+
+/**
+ 请求下发域名
+ */
 + (void)requestDomain;
 
 @end

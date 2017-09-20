@@ -9,11 +9,11 @@
 #import "SSJDomainManager.h"
 #import "AFHTTPSessionManager.h"
 
-static NSString *const SSJDefaultFormalDomain = @"https://jz.youyuwo.com";
+static NSString *const SSJFormalDomain = @"jz.youyuwo.com";
 
-static NSString *const SSJTestDomain = @"http://account.gs.9188.com/";
+static NSString *const SSJTestInterfaceDomain = @"account.gs.9188.com";
 
-static NSString *const SSJTestImageDomain = @"http://account_img.gs.9188.com/";
+static NSString *const SSJTestImageDomain = @"account_img.gs.9188.com";
 
 // 请求失败后重试的最大次数
 const int kMaxRequestFailureTimes = 2;
@@ -22,28 +22,36 @@ static NSString *const kSSJDomainKey = @"SSJDomainManagerKey";
 
 @implementation SSJDomainManager
 
-+ (NSString *)domain {
++ (NSURL *)domain {
 #ifdef PRODUCTION
     return [self formalDomain];
 #else
-    return SSJTestDomain;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", [self scheme], SSJTestInterfaceDomain]];
 #endif
 }
 
-+ (NSString *)imageDomain {
++ (NSURL *)imageDomain {
 #ifdef PRODUCTION
     return [self formalDomain];
 #else
-    return SSJTestImageDomain;
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@://%@", [self scheme], SSJTestImageDomain]];
 #endif 
 }
 
-+ (NSString *)formalDomain {
++ (NSURL *)formalDomain {
     NSString *domain = [[NSUserDefaults standardUserDefaults] stringForKey:kSSJDomainKey];
-    if (domain.length) {
-        return domain;
+    if (!domain.length) {
+        domain = [NSString stringWithFormat:@"%@://%@", [self scheme], SSJFormalDomain];
     }
-    return SSJDefaultFormalDomain;
+    return [NSURL URLWithString:domain];
+}
+
++ (NSString *)scheme {
+#ifdef PRODUCTION
+    return @"https";
+#else
+    return @"http";
+#endif
 }
 
 + (void)requestDomain {

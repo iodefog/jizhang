@@ -7,9 +7,7 @@
 //
 
 #import "SSJBannerNetworkService.h"
-#import "SSJDomainManager.h"
 #import "SSJBannerItem.h"
-
 
 @implementation SSJBannerNetworkService
 

@@ -14,11 +14,11 @@
 #import "SSJDomainManager.h"
 
 NSString* SSJURLWithAPI(NSString* api) {
-    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
+    return [[NSURL URLWithString:api relativeToURL:[SSJDomainManager domain]] absoluteString];
 }
 
 NSString* SSJImageURLWithAPI(NSString* api) {
-    return [[NSURL URLWithString:api relativeToURL:[NSURL URLWithString:[SSJDomainManager domain]]] absoluteString];
+    return [[NSURL URLWithString:api relativeToURL:[SSJDomainManager imageDomain]] absoluteString];
 }
 
 NSString *SSJBundleID() {

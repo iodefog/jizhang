@@ -145,6 +145,8 @@
 
 @interface _SSJDataImportBottomCell : UIView
 
+@property (nonatomic, copy) void(^clickTitleLabBlock)(_SSJDataImportBottomCell *);
+
 @property (nonatomic, strong) UILabel *numberLab;
 
 @property (nonatomic, strong) UILabel *titleLab;
@@ -201,6 +203,12 @@
     _titleLab.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
 }
 
+- (void)clickTitleAction {
+    if (self.clickTitleLabBlock) {
+        self.clickTitleLabBlock(self);
+    }
+}
+
 - (UILabel *)numberLab {
     if (!_numberLab) {
         _numberLab = [[UILabel alloc] init];
@@ -217,6 +225,9 @@
         _titleLab = [[UILabel alloc] init];
         _titleLab.font = [UIFont ssj_pingFangMediumFontOfSize:SSJ_FONT_SIZE_4];
         _titleLab.numberOfLines = 0;
+        _titleLab.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickTitleAction)];
+        [_titleLab addGestureRecognizer:tap];
     }
     return _titleLab;
 }
@@ -242,6 +253,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - _SSJDataImportBottomView
 #pragma mark -
+
+#import "SSJDomainManager.h"
+
 @interface _SSJDataImportBottomView : UIView
 
 @property (nonatomic, strong) UILabel *titleLab;
@@ -308,8 +322,14 @@
     if (!_cell_1) {
         _cell_1 = [[_SSJDataImportBottomCell alloc] init];
         _cell_1.numberLab.text = @"1";
-        _cell_1.titleLab.text = @"电脑登录有鱼记账官网\n（http://jz.youyuwo.com 一键复制）";
+        NSString *url = [NSString stringWithFormat:@"http://%@", [SSJDomainManager domain].host];
+        _cell_1.titleLab.text = [NSString stringWithFormat:@"电脑登录有鱼记账官网\n（%@ 一键复制）", url];
         _cell_1.imageView.image = [UIImage imageNamed:@"data_import_guide_1"];
+        _cell_1.clickTitleLabBlock = ^(_SSJDataImportBottomCell *cell) {
+            UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+            pasteboard.string = url;
+            [CDAutoHideMessageHUD showMessage:@"复制成功"];
+        };
     }
     return _cell_1;
 }

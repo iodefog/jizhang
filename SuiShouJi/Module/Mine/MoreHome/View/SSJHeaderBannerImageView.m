@@ -12,6 +12,7 @@
 #import "SSJBannerItem.h"
 
 #import "SSJLoginVerifyPhoneViewController.h"
+#import "SSJDomainManager.h"
 
 static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID";
 
@@ -131,7 +132,8 @@ static NSString *const kHeadBannerCellID = @"SSJHeaderBannerCollectionViewCellID
 {
     SSJBannerItem *item = [self.bannerItemArray ssj_safeObjectAtIndex:indexPath.row];
     //是账单
-    if ([item.bannerTarget containsString:@"http://jz.youyuwo.com/5/zd"]) {
+    NSString *url = [NSString stringWithFormat:@"http://%@/5/zd", [SSJDomainManager domain].host];
+    if ([item.bannerTarget containsString:url]) {
         if (!SSJIsUserLogined()) {
             __weak typeof(self) weakSelf = self;
             [SSJAlertViewAdapter showAlertViewWithTitle:@"温馨提示" message:@"请登录后再查看2016账单吧！" action:[SSJAlertViewAction actionWithTitle:@"关闭" handler:^(SSJAlertViewAction *action) {
