@@ -180,6 +180,15 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                      error:(NSError **)error;
 
 
+/**
+ 删除提醒的时候更新固收理财产品的remindid为空
+
+ @param model <#model description#>
+ @return <#return value description#>
+ */
++ (BOOL)deleteFixedFinanceProductRemindidWithModel:(SSJFixedFinanceProductItem *)model;
+
+
 #pragma mark - 固定理财流水
 
 /**

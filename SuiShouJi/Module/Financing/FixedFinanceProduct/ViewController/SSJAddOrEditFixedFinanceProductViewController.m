@@ -703,16 +703,14 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     reminderVC.deleteReminderAction = ^{
-        if ([SSJLocalNotificationStore deleteReminderWithItem:wself.reminderItem error:nil]) {
-            wself.reminderItem = nil;
-            wself.reminderItem.remindId = nil;
-            //删除提醒
-            wself.model.remindid = nil;
-            //注销通知 删除通知流水
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
-            [wself.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        wself.reminderItem = nil;
+        wself.reminderItem.remindId = nil;
+        //删除提醒
+        wself.model.remindid = nil;
+        //将固收理财账户的提醒id更新为空
+        [SSJFixedFinanceProductStore deleteFixedFinanceProductRemindidWithModel:wself.model];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:0 inSection:2];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
     };
     [self.navigationController pushViewController:reminderVC animated:YES];
 }
