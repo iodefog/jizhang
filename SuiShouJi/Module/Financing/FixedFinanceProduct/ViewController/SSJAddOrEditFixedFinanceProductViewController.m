@@ -287,17 +287,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)originalData {
     [self setBind];
     //拍息方式
-    NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate rateType:self.model.ratetype money:[self.model.money doubleValue]]];
-    NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
-    self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
-
-    if (self.jiXiMethodSelectionView.selectedIndex > 0) {
-        NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.model.rate rateType:self.model.ratetype time:self.model.time timetype:self.model.timetype money:[self.model.money doubleValue] interestType:self.model.interesttype startDate:@""];
-        NSString *targetJiXiStr = [dic objectForKey:@"interest"];
-        NSString *oldJiXiStr = [dic objectForKey:@"desc"];
-        self.jixiTextL.attributedText = [oldJiXiStr attributeStrWithTargetStr:targetJiXiStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
-
-    }
+    @weakify(self);
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        @strongify(self);
+        NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate rateType:self.model.ratetype money:[self.model.money doubleValue]]];
+        NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
+        self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+        
+        if (self.jiXiMethodSelectionView.selectedIndex > 0) {
+            NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.model.rate rateType:self.model.ratetype time:self.model.time timetype:self.model.timetype money:[self.model.money doubleValue] interestType:self.model.interesttype startDate:@""];
+            NSString *targetJiXiStr = [dic objectForKey:@"interest"];
+            NSString *oldJiXiStr = [dic objectForKey:@"desc"];
+            self.jixiTextL.attributedText = [oldJiXiStr attributeStrWithTargetStr:targetJiXiStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+        }
+    });
 }
 
 - (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
