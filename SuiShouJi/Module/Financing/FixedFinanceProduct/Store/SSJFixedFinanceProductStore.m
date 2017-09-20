@@ -87,7 +87,7 @@
     
     NSMutableArray *list = [[NSMutableArray alloc] init];
     while ([rs next]) {
-        SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:rs inDatabase:db];
+        SSJFixedFinanceProductItem *model = [SSJFixedFinanceProductItem modelWithResultSet:rs inDatabase:db isProductList:YES];
         
         [list addObject:model];
     }
@@ -307,7 +307,7 @@
         
         SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
         while ([resultSet next]) {
-            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet inDatabase:db];
+            item = [SSJFixedFinanceProductItem modelWithResultSet:resultSet inDatabase:db isProductList:NO];
         }
         [resultSet close];
         
@@ -591,7 +591,7 @@
         //取消提醒
         SSJReminderItem *remindItem = [[SSJReminderItem alloc]init];
         remindItem.remindId = model.remindid;
-        remindItem.userId = model.userid;
+        remindItem.userId = SSJUSERID();
         [SSJLocalNotificationHelper cancelLocalNotificationWithremindItem:remindItem];
     }
     
@@ -688,7 +688,7 @@
                                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '%') and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '%') and ichargetype = ? and operatortype <> 2 order by cbilldate, cwritedate", SSJUSERID(), model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
         NSMutableArray *chargeModels = [NSMutableArray array];
         
         while ([resultSet next]) {
@@ -723,7 +723,7 @@
                                             failure:(void (^)(NSError *error))failure {
     
     [[SSJDatabaseQueue sharedInstance] asyncInDatabase:^(SSJDatabase *db) {
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4) and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4) and operatortype <> 2 order by cbilldate, cwritedate", SSJUSERID(), model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
         NSMutableArray *chargeModels = [NSMutableArray array];
         
         while ([resultSet next]) {
@@ -748,7 +748,7 @@
  */
 + (NSArray <SSJFixedFinanceProductChargeItem *>*)queryFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error {
 
-        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
+        FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and operatortype <> 2 order by cbilldate, cwritedate", SSJUSERID(), model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance)];
         NSMutableArray *chargeModels = [NSMutableArray array];
         
         while ([resultSet next]) {
@@ -860,7 +860,7 @@
 }
 
 + (NSArray <SSJFixedFinanceProductChargeItem *>*)queryOneDayFixedFinanceProductAddAndRedemChargeListWithModel:(SSJFixedFinanceProductItem *)model billDate:(NSDate *)date inDatabase:(FMDatabase *)db error:(NSError **)error {
-    FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and cbilldate = ? and operatortype <> 2 order by cbilldate, cwritedate", model.userid, model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance), [date ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
+    FMResultSet *resultSet = [db executeQuery:@"select ichargeid, ifunsid, ibillid, imoney, cmemo, cbilldate, cwritedate, cid from bk_user_charge as uc where cuserid = ? and ifunsid = ? and cid like (? || '_%') and ichargetype = ? and (ibillid = 3 or ibillid = 4 or ibillid = 15 or ibillid = 16) and cbilldate = ? and operatortype <> 2 order by cbilldate, cwritedate", SSJUSERID(), model.thisfundid, model.productid, @(SSJChargeIdTypeFixedFinance), [date ssj_dateStringWithFormat:@"yyyy-MM-dd"]];
     NSMutableArray *chargeModels = [NSMutableArray array];
     
     while ([resultSet next]) {
@@ -960,7 +960,7 @@
             double newMoney = oldMoney;
             newMoney = oldMoney - model.money;
             //修改本金
-            if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+            if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),SSJUSERID(),productModel.productid]) {
                 *rollback = YES;
                 if (failure) {
                     SSJDispatchMainAsync(^{
@@ -1073,7 +1073,7 @@
         
         
         //修改本金
-        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype <> 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype <> 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),SSJUSERID(),productModel.productid]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{
@@ -1157,7 +1157,7 @@
             lastDate = writeDate;
                 //修改投资金额
                 //查询原来金额
-                double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",productModel.userid,productModel.productid];
+                double oldMoney = [db doubleForQuery:@"select imoney from bk_fixed_finance_product where cuserid = ? and cproductid = ? and operatortype != 2",SSJUSERID(),productModel.productid];
                 double newMoney = oldMoney;
                 if (type == 1) {//追加
                     newMoney = oldMoney + model.chargeModel.oldMoney;
@@ -1216,7 +1216,7 @@
             
             //更新固定理财金额
                 NSString *writeDateStr = [writeDate formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.userid,productModel.productid]) {
+                if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?,iversion = ?, imoney = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),SSJUSERID(),productModel.productid]) {
                     *rollback = YES;
                     if (failure) {
                         SSJDispatchMainAsync(^{
@@ -1306,7 +1306,7 @@
         }
         
         NSString *writeDateStr = [[lastDate dateByAddingSeconds:1] formattedDateWithFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.etargetfundid,billDate,productModel.userid,productModel.productid]) {
+        if (![db executeUpdate:@"update bk_fixed_finance_product set cwritedate = ?, iversion = ?, imoney = ?, isend = 1, cetargetfundid = ?,cenddate = ? where cuserid = ? and cproductid = ? and operatortype != 2",writeDateStr,@(SSJSyncVersion()),@(newMoney),productModel.etargetfundid,billDate,SSJUSERID(),productModel.productid]) {
             *rollback = YES;
             if (failure) {
                 SSJDispatchMainAsync(^{

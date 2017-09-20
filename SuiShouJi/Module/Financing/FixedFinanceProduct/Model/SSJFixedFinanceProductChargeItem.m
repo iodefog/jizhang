@@ -17,7 +17,7 @@
     item.chargeId = [resultSet stringForColumn:@"ichargeid"];
     item.fundId = [resultSet stringForColumn:@"ifunsid"];
     item.billId = [resultSet stringForColumn:@"ibillid"];
-    item.userId = [resultSet stringForColumn:@"cuserid"];
+//    item.userId = [resultSet stringForColumn:@"cuserid"];
     item.memo = [resultSet stringForColumn:@"cmemo"];
     item.billDate = [NSDate dateWithString:[resultSet stringForColumn:@"cbilldate"] formatString:@"yyyy-MM-dd"];
     item.writeDate = [NSDate dateWithString:[resultSet stringForColumn:@"cwritedate"] formatString:@"yyyy-MM-dd HH:mm:ss.SSS"];

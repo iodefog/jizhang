@@ -27,10 +27,10 @@
     return [NSDictionary dictionaryWithObjects:[self valueArr]  forKeys:[self keyArr]];
 }
 
-+ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db {
++ (instancetype)modelWithResultSet:(FMResultSet *)resultSet inDatabase:(FMDatabase *)db isProductList:(BOOL)list {
     SSJFixedFinanceProductItem *item = [[SSJFixedFinanceProductItem alloc] init];
     item.productid = [resultSet stringForColumn:@"CPRODUCTID"];
-    item.userid = [resultSet stringForColumn:@"CUSERID"];
+//    item.userid = [resultSet stringForColumn:@"CUSERID"];
     item.productName = [resultSet stringForColumn:@"cproductname"];
     item.remindid = [resultSet stringForColumn:@"CREMINDID"];
     item.thisfundid = [resultSet stringForColumn:@"CTHISFUNDID"];
@@ -47,11 +47,10 @@
     item.startDate = [item.startdate ssj_dateWithFormat:@"yyyy-MM-dd"];
     item.enddate = [resultSet stringForColumn:@"CENDDATE"];
     item.isend = [resultSet boolForColumn:@"ISEND"];
-    if (![resultSet columnIsNull:@"producticon"]) {
+    if (list) {
         item.productIcon = [resultSet stringForColumn:@"productIcon"];
-    }
-    
-    if (![resultSet columnIsNull:@"cstartcolor"] && ![resultSet columnIsNull:@"cendcolor"]) {
+//        item.userid = [resultSet stringForColumn:@"CUSERID"];
+    } else {
         item.startcolor = [resultSet stringForColumn:@"cstartcolor"];
         item.endcolor = [resultSet stringForColumn:@"cendcolor"];
     }
