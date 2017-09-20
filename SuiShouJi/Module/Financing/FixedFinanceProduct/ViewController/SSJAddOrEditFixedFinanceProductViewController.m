@@ -536,7 +536,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
         }
         
-                [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
+        [SSJFixedFinanceProductStore saveFixedFinanceProductWithModel:weakSelf.model chargeModels:saveChargeModels remindModel:_reminderItem success:^{
             weakSelf.sureButton.enabled = YES;
             
             if (_edited) {
@@ -558,7 +558,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 weakSelf.navigationController.viewControllers = [array copy];
             }
             
-            //        [self saveRemind];
+//            [weakSelf saveRemind];
             
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError * _Nonnull error) {
@@ -566,9 +566,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
             [weakSelf.sureButton ssj_hideLoadingIndicator];
             [SSJAlertViewAdapter showAlertViewWithTitle:@"出错了" message:[error localizedDescription] action:[SSJAlertViewAction actionWithTitle:@"确定" handler:NULL], nil];
         }];
-
+    
     }
-
 }
 
 - (void)saveRemind {
@@ -577,7 +576,7 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     if (weakSelf.reminderItem && weakSelf.remindSwitch.isOn) {
         weakSelf.model.remindid = weakSelf.reminderItem.remindId.length ? weakSelf.reminderItem.remindId : SSJUUID();
         weakSelf.reminderItem.remindState = 1;
-        weakSelf.reminderItem.remindType = SSJReminderTypeWish;
+        weakSelf.reminderItem.remindType = SSJFixedFinaProduct;
         [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:weakSelf.reminderItem Success:^(SSJReminderItem *Ritem){
             [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:weakSelf.reminderItem];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
