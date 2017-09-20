@@ -8,7 +8,6 @@
 
 #import "SSJBaseNetworkService.h"
 #import "SSJGlobalServiceManager.h"
-#import "SSJDomainManager.h"
 
 static inline AFHTTPRequestSerializer *SSJRequestSerializer(SSJRequestSerialization serialization) {
     switch (serialization) {

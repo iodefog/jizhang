@@ -26,7 +26,7 @@
             NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
             configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
             
-            manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+            manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[SSJDomainManager domain] sessionConfiguration:configuration];
         }
     });
     return manager;
@@ -36,7 +36,7 @@
     NSURLSessionConfiguration *configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     configuration.requestCachePolicy = NSURLRequestReloadIgnoringLocalCacheData;
     
-    SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[NSURL URLWithString:[SSJDomainManager domain]] sessionConfiguration:configuration];
+    SSJGlobalServiceManager *manager = [[SSJGlobalServiceManager alloc] initWithBaseURL:[SSJDomainManager domain] sessionConfiguration:configuration];
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
     manager.httpsOpened = YES;
     

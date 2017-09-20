@@ -18,6 +18,7 @@
 #import "SSJSharebooksCodeNetworkService.h"
 #import "SSJShareManager.h"
 #import "SSJUserTableManager.h"
+#import "SSJDomainManager.h"
 
 
 @interface SSJSharebooksInviteViewController ()
@@ -378,8 +379,7 @@
         NSMutableString *url = [NSMutableString string];
         @strongify(self);
         
-        NSString *baseUrl = @"http://jz.youyuwo.com/5/invite/index.html?";
-        
+        NSString *baseUrl = [NSString stringWithFormat:@"http://%@/5/invite/index.html?", [SSJDomainManager domain].host];
         
         [url appendString:baseUrl];
         

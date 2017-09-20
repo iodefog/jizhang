@@ -9,7 +9,6 @@
 #import "SSJDatabaseErrorHandler.h"
 #import "SSJGlobalServiceManager.h"
 #import "AFNetworking.h"
-#import "SSJDomainManager.h"
 #import "SSJNetworkReachabilityManager.h"
 #import "ZipArchive.h"
 

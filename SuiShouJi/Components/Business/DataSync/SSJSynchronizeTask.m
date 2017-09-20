@@ -8,7 +8,6 @@
 
 #import "SSJSynchronizeTask.h"
 #import "AFNetworking.h"
-#import "SSJDomainManager.h"
 
 @interface SSJSynchronizeTask ()
 

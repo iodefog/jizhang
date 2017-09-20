@@ -19,6 +19,7 @@
 #import <TencentOpenAPI/TencentOAuth.h>
 #import "WeiboSDK.h"
 #import "SSJUserTableManager.h"
+#import "SSJDomainManager.h"
 
 static NSString *const ktitle1 = @"微信公众号";
 static NSString *const ktitle2 = @"新浪微博";
@@ -233,7 +234,8 @@ static NSString *SSJEncourageCellIndetifer = @"SSJEncourageCellIndetifer";
         _footerView.buttonClickBlock = ^(NSString *title) {
             @strongify(self);
             if ([title isEqualToString:@"团队介绍"]) {
-                SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:@"http://jz.youyuwo.com/about.html"]];
+                NSString *urlStr = [NSString stringWithFormat:@"http://%@/about.html", [SSJDomainManager domain].host];
+                SSJNormalWebViewController *webVc = [SSJNormalWebViewController webViewVCWithURL:[NSURL URLWithString:urlStr]];
                 webVc.title = @"团队介绍";
                 [self.navigationController pushViewController:webVc animated:YES];
             } else if ([title isEqualToString:@"用户协议"]) {
