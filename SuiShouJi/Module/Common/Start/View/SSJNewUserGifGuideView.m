@@ -110,6 +110,7 @@
 }
 
 - (void)startAnimating {
+    _isNormalState = NO;
     self.gifImageView.currentAnimatedImageIndex = 0;
     [self.gifImageView startAnimating];
     self.titleLab.hidden = NO;
@@ -132,6 +133,7 @@
         self.titleLab.alpha = 0;
         self.subTitleLab.alpha = 0;
     }
+    _isNormalState = isNormalState;
 }
 
 /*
