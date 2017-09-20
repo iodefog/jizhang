@@ -222,12 +222,13 @@
             _geXingSignLabel.text = @"啥也不留";
         }
         
-        [self setNeedsDisplay];
+        [self layoutIfNeeded];
     } else {
         self.headPotraitImage.image = [UIImage imageNamed:@"defualt_portrait"];
         self.nicknameLabel.text = @"待君登录";
         _geXingSignLabel.text = @"";
         [self.nicknameLabel sizeToFit];
+        [self layoutIfNeeded];
     }
 }
 

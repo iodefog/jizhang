@@ -23,9 +23,13 @@
 
 @property(nonatomic, strong) UILabel *memberLabel;
 
+@property (nonatomic, strong) UILabel *sourceLabel;
+
 @property(nonatomic, strong) UIView *seperator1;
 
 @property(nonatomic, strong) UIView *seperator2;
+
+@property(nonatomic, strong) UIView *seperator3;
 
 @end
 
@@ -42,6 +46,7 @@
         [self.contentView addSubview:self.memberLabel];
         [self.contentView addSubview:self.haveImage];
         [self.contentView addSubview:self.memoLabel];
+        [self.contentView addSubview:self.sourceLabel];
         [self.contentView addSubview:self.seperator1];
         [self.contentView addSubview:self.seperator2];
         self.backgroundColor = [UIColor clearColor];
@@ -63,6 +68,7 @@
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     }
     
+    
     if (_item.chargeMemo.length == 0
         && _item.chargeImage.length == 0
         && _item.memberNickname.length == 0){
@@ -75,6 +81,8 @@
         self.typeLabel.centerY = self.height * 0.5;
         self.seperator1.hidden = YES;
         self.seperator2.hidden = YES;
+        self.seperator3.hidden = YES;
+
     } else {
         self.imageView.size = CGSizeMake(imageDiam, imageDiam);
         self.imageView.left = 15;
@@ -447,6 +455,14 @@
         _seperator2.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     }
     return _seperator2;
+}
+
+- (UIView *)seperator3 {
+    if (!_seperator3) {
+        _seperator3 = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2 / [UIScreen mainScreen].scale, 9)];
+        _seperator3.backgroundColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    }
+    return _seperator3;
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {
