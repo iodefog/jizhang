@@ -641,9 +641,9 @@ static NSString *kTitle6 = @"备注";
     //加上以前的赎回
     if (!self.liXiSwitch.on) {
         self.lixiStr = @"0";
-        
     }
-    if (benjin  < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
+    
+    if (benjin + self.oldMoney + self.oldPoundageMoney < [self.moneyStr doubleValue] + [self.lixiStr doubleValue]) {
         [CDAutoHideMessageHUD showMessage:@"当前赎回金额大于可赎回金额"];
         return ;
     }

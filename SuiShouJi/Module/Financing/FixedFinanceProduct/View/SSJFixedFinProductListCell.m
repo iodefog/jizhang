@@ -69,7 +69,7 @@
         [self.contentView addSubview:_dateLab];
         
         [self.contentView addSubview:self.descLabel];
-        
+        [self.contentView.layer masksToBounds];
         [self updateAppearance];
         [self setNeedsUpdateConstraints];
     }
@@ -77,25 +77,41 @@
 }
 
 - (void)updateConstraints {
-    [super updateConstraints];
+    
     [_stamp mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(-22);
         make.centerX.mas_equalTo(self.contentView);
         make.size.mas_equalTo(CGSizeMake(72, 72));
     }];
-    
-    [_icon mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(15);
-        make.centerY.mas_equalTo(self.contentView);
-        make.size.mas_equalTo(CGSizeMake(30, 30));
-    }];
-    
-    [_titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(_icon.mas_right).offset(10);
-        make.centerY.mas_equalTo(_icon);
-        make.width.mas_equalTo(100);
-        make.height.mas_greaterThanOrEqualTo(0);
-    }];
+    SSJLoanListCellItem *item = (SSJLoanListCellItem *)self.cellItem;
+//    if (item.memo.length) {
+//        [_icon mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.mas_equalTo(15);
+//            make.centerY.mas_equalTo(self.contentView);
+//            make.size.mas_equalTo(CGSizeMake(30, 30));
+//        }];
+//        
+//        [_titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.mas_equalTo(_icon.mas_right).offset(10);
+//            make.centerY.mas_equalTo(_icon);
+//            make.width.mas_equalTo(100);
+//            make.height.mas_greaterThanOrEqualTo(0);
+//        }];
+//
+//    } else {
+        [_icon mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(15);
+            make.centerY.mas_equalTo(17);
+            make.size.mas_equalTo(CGSizeMake(20, 20));
+        }];
+        
+        [_titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.mas_equalTo(_icon.mas_right).offset(10);
+            make.centerY.mas_equalTo(_icon);
+            make.width.mas_equalTo(100);
+            make.height.mas_greaterThanOrEqualTo(0);
+        }];
+//    }
     
     [_dateLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(21);
@@ -107,7 +123,7 @@
     [_memoLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_titleLab.mas_left);
         make.right.mas_equalTo(100);
-        make.top.mas_equalTo(_titleLab.mas_bottom).offset(10);
+        make.top.mas_equalTo(_titleLab.mas_bottom).offset(2);
         make.height.mas_greaterThanOrEqualTo(0);
     }];
     
@@ -119,16 +135,17 @@
     }];
     
     [self.descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_moneyLab.mas_bottom).offset(10);
+        make.top.mas_equalTo(_moneyLab.mas_bottom).offset(2);
         make.right.mas_equalTo(_moneyLab.mas_right);
         make.width.mas_greaterThanOrEqualTo(0);
         make.height.mas_equalTo(15);
     }];
     
-    
+  [super updateConstraints];
 }
 
 - (void)setCellItem:(SSJBaseCellItem *)cellItem {
+    [super setCellItem:cellItem];
     SSJLoanListCellItem *item = (SSJLoanListCellItem *)cellItem;
     _icon.image = [UIImage imageNamed:item.icon];
     _titleLab.text = item.loanTitle;
@@ -147,7 +164,7 @@
     } else {
         self.stateLabel.hidden = !item.showStateL;
     }
-    
+    [self setNeedsUpdateConstraints];
 }
 
 #pragma mark - Lazy
@@ -159,7 +176,7 @@
 //        _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);
         _stateLabel.layer.anchorPoint = CGPointMake(0.5, 0.5);
         _stateLabel.text = @"已到期";
-        _stateLabel.size = CGSizeMake(200, 22);
+        _stateLabel.size = CGSizeMake(150, 22);
         _stateLabel.right = self.contentView.width - 15;
         _stateLabel.center = CGPointMake(SSJSCREENWITH - 30, 30);
         _stateLabel.transform = CGAffineTransformMakeRotation(M_PI_4);

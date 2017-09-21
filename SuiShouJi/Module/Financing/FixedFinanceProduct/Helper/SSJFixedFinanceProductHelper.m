@@ -97,8 +97,6 @@
             
         case SSJMethodOfRateOrTimeMonth:
         {
-
-            
             //生成利息
             //月，一次性
             double investmentMoney = 0;
@@ -119,7 +117,7 @@
                     
                 } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
                     //赎回手续费
-                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:item.timetype money:investmentMoney interestType:item.interesttype startDate:@""];
+                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:[chaItem.billDate daysFrom:lastChangeDate] timetype:SSJMethodOfRateOrTimeDay money:investmentMoney interestType:item.interesttype startDate:@""];
                     lixi += [[interestDic objectForKey:@"interest"] doubleValue];
 //                    double poundate = [SSJFixedFinanceProductStore queryRedemPoundageMoneyWithRedmModel:chaItem error:nil];
                     investmentMoney += chaItem.money;
@@ -141,7 +139,7 @@
             
         case SSJMethodOfRateOrTimeYear:
         {
-                       //年，一次性（当做月来处理）
+            //年，一次性（当做月来处理）
             double investmentMoney = 0;
             double lixi = 0;
             NSDate *lastChangeDate = item.startDate;

@@ -21,7 +21,7 @@
 #import "SSJTrasferCycleTableMerge.h"
 #import "SSJUserChargePeriodConfigMergeTable.h"
 #import "SSJUserBillTypeTableMerge.h"
-
+#import "SSJFixedFinanceTableMerge.h"
 
 @interface SSJAccountMergeManager()
 
@@ -49,7 +49,8 @@
         
         NSSet *thirdLayer = [NSSet setWithObjects:[SSJUserChargePeriodConfigMergeTable class],
                              [SSJTrasferCycleTableMerge class],
-                             [SSJLoanTableMerge class], nil];
+                             [SSJLoanTableMerge class],
+                             [SSJFixedFinanceTableMerge class], nil];
         
         NSSet *fourthLayer = [NSSet setWithObjects:[SSJUserChargeTableMerge class], nil];
         
@@ -218,6 +219,10 @@
         return NO;
     };
     
+    if (![db createTableAndIndexesOfName:@"temp_fixed_finance_product" withClass:SSJFixedFinanceProductTable.class]) {
+        return NO;
+    };
+    
     if (![db createTableAndIndexesOfName:@"temp_member" withClass:SSJMemberTable.class]) {
         return NO;
     };
@@ -271,6 +276,10 @@
     };
     
     if (![db dropTableOfName:@"temp_loan"]) {
+        return NO;
+    };
+    
+    if (![db dropTableOfName:@"temp_fixed_finance_product"]) {
         return NO;
     };
     
@@ -339,6 +348,12 @@
     
     if ([db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"].count) {
         if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJLoanTable.class fromTable:@"temp_loan"] into:@"BK_LOAN"]) {
+            return NO;
+        };
+    }
+    
+    if ([db getAllObjectsOfClass:SSJFixedFinanceProductTable.class fromTable:@"temp_fixed_finance_product"].count) {
+        if (![db insertOrReplaceObjects:[db getAllObjectsOfClass:SSJFixedFinanceProductTable.class fromTable:@"temp_fixed_finance_product"] into:@"BK_FIXED_FINANCE_PRODUCT"]) {
             return NO;
         };
     }

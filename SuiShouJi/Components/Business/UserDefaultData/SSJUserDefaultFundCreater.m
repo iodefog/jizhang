@@ -108,8 +108,8 @@
                @"cuserid":userId,
                @"cicoin":@"ft_gushou",
                @"iorder":@6,
-               @"cstartcolor":@"#39d4da",
-               @"cendcolor":@"#7fe8e0"},
+               @"cstartcolor":@"#4ea2ff",
+               @"cendcolor":@"#84befd"},
              
              @{@"cfundid":[NSString stringWithFormat:@"%@-5",userId],
                @"cacctname":@"借出款",

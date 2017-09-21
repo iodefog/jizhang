@@ -147,17 +147,16 @@
     NSUInteger idx = scrollView.contentOffset.x / scrollView.width;
     self.pageControl.currentPage = idx;
     if (idx == self.contentViews.count - 1) {        
-        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            for (int i = 0; i < self.contentViews.count; i ++) {
-                if (i == idx) {
-                    [[self.contentViews objectAtIndex:i] startAnimating];
-                } else {
-                    [self.contentViews objectAtIndex:i].isNormalState = YES;
-                }
-            }
-        }];
+        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
 
-      
+        }];
+        for (int i = 0; i < self.contentViews.count; i ++) {
+            if (i == idx) {
+                [[self.contentViews objectAtIndex:i] startAnimating];
+            } else {
+                [self.contentViews objectAtIndex:i].isNormalState = YES;
+            }
+        }
     } else {
         [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
             for (int i = 0; i < self.contentViews.count; i ++) {
@@ -201,7 +200,7 @@
                 break;
                 
             case 1:{
-                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"手指哪个占大头?\n收支何时不寻常"];
+                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"收支哪个占大头?\n收支何时不寻常"];
                 [self.contentViews addObject:guideView];
                 [self.scrollView addSubview:guideView];
             }

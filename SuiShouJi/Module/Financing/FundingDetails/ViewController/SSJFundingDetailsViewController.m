@@ -101,9 +101,9 @@ static NSString *const kCreditCardListFirstLineCellID = @"kCreditCardListFirstLi
     [self.view addSubview:self.repaymentButton];
     [self.view addSubview:self.recordButton];
     [self.recordButton ssj_setBorderStyle:SSJBorderStyleTop];
+    self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
     if (self.item.cardItem) {
         self.tableView.tableHeaderView = self.creditCardHeader;
-        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 50, 0);
         self.recordButton.width = self.repaymentButton.width = self.view.width / 2;
         self.repaymentButton.right = self.view.width;
         [self.repaymentButton ssj_setBorderStyle:SSJBorderStyleTop | SSJBorderStyleLeft];

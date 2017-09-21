@@ -145,6 +145,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         self.navigationItem.rightBarButtonItem = rightItem;
     } else {
         [self initCreateCompoundModel];
+        self.jiXiMethodSelectionView.selectedIndex = 0;
+        self.model.interesttype = SSJMethodOfInterestOncePaid;
     }
     [self updateAppearance];
 }
@@ -367,7 +369,9 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
                 self.model.targetfundid = nil;
             }
         } else {//新建
-            self.fundingSelectionView.selectedIndex = -1;
+            SSJLoanFundAccountSelectionViewItem *item = [items ssj_safeObjectAtIndex:0];
+            weakSelf.model.targetfundid = item.ID;
+            self.fundingSelectionView.selectedIndex = 0;
         }
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:2 inSection:0];
         [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
