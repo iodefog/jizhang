@@ -230,7 +230,7 @@ static id _instance;
 }
 
 - (NSInteger)downloadingThemesCount {
-    return self.manager.downloadTasks.count;
+    return self.downLoadingArr.count;
 }
 
 @end
