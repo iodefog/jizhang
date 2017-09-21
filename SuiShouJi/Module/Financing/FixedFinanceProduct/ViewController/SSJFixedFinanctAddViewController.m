@@ -77,6 +77,9 @@ static NSUInteger kDateTag = 2005;
     } else {
         self.moneyStr = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
     }
+    if (self.chargeItem) {
+        self.compoundModel.targetChargeModel.billDate = self.compoundModel.chargeModel.billDate = self.chargeItem.billDate;
+    }
     self.oldMoney = self.chargeItem.money;
     self.memoStr = [NSString stringWithFormat:@"%.2f",self.chargeItem.money];
     self.memoStr = self.chargeItem.memo;
@@ -125,7 +128,9 @@ static NSUInteger kDateTag = 2005;
         // 新建借贷设置默认账户
         weakSelf.fundingSelectionView.items = items;
         if (!funditem) {
-            weakSelf.fundingSelectionView.selectedIndex = -1;
+            SSJLoanFundAccountSelectionViewItem *item = [items ssj_safeObjectAtIndex:0];
+            weakSelf.fundingSelectionView.selectedIndex = 0;
+            weakSelf.compoundModel.targetChargeModel.fundId = item.ID;
         }else {
             for (NSInteger i=0; i<items.count; i++) {
                 SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
@@ -419,7 +424,8 @@ static NSUInteger kDateTag = 2005;
             if ([self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"].length) {
                 cell.subtitleLabel.text = [self.compoundModel.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             } else {
-                cell.subtitleLabel.text = @"请选择日期";
+                cell.subtitleLabel.text = [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"];
+                self.compoundModel.chargeModel.billDate = [[[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"] ssj_dateWithFormat:@"yyyy-MM-dd"];
             }
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -522,9 +528,10 @@ static NSUInteger kDateTag = 2005;
     self.compoundModel.targetChargeModel.oldMoney = self.compoundModel.targetChargeModel.money;
     self.compoundModel.targetChargeModel.memo = memoF.text.length ? memoF.text : @"";
     
-    if (self.chargeItem) {
-        self.compoundModel.targetChargeModel.billDate = self.compoundModel.chargeModel.billDate = self.chargeItem.billDate;
+    if (!self.chargeItem) {
+        self.compoundModel.targetChargeModel.billDate = self.compoundModel.chargeModel.billDate;
     }
+    
     //如果是编辑的时候
     if (self.chargeItem) {
         if (self.oldMoney >= [moneyF.text doubleValue]) {//为负数

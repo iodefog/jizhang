@@ -918,9 +918,11 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     SSJJiXiMethodTableViewCell *cell = [SSJJiXiMethodTableViewCell cellWithTableView:tableView];
     cell.additionalIcon.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     cell.nameLabel.text = title;
+    cell.detailL.textColor = SSJ_MAIN_COLOR;
     if (_jiXiMethodSelectionView.selectedIndex >= 0) {
         SSJLoanFundAccountSelectionViewItem *selectedFundItem = [self.jiXiMethodSelectionView.items ssj_safeObjectAtIndex:_jiXiMethodSelectionView.selectedIndex];
         cell.detailL.text = selectedFundItem.title;
+        
     } else {
         cell.detailL.text = @"请选择派息方式";
     }
