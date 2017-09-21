@@ -144,9 +144,13 @@
         // 更新流水表
         NSArray *oldCharges = [db getObjectsOfClass:SSJUserChargeTable.class fromTable:@"temp_user_charge" where:SSJUserChargeTable.cid.like([NSString stringWithFormat:@"%@%%",oldId])];
         for (SSJUserChargeTable *userCharge in oldCharges) {
-            userCharge.cid = [NSString stringWithFormat:@"%@_%@",newId,[[userCharge.cid componentsSeparatedByString:@"_"] lastObject]];
+            userCharge.cid = [userCharge.cid stringByReplacingOccurrencesOfString:oldId withString:newId];
+            userCharge.chargeId = [userCharge.chargeId stringByReplacingOccurrencesOfString:oldId withString:newId];
             success = [db updateRowsInTable:@"temp_user_charge"
-                               onProperties:SSJUserChargeTable.cid
+                               onProperties:{
+                                   SSJUserChargeTable.cid,
+                                   SSJUserChargeTable.chargeId
+                               }
                                  withObject:userCharge
                                       where:SSJUserChargeTable.chargeId == userCharge.chargeId];
             if (!success) {
