@@ -105,6 +105,7 @@
     
     NSArray *allCharges = [db getAllObjectsOfClass:SSJUserChargeTable.class fromTable:[self tempTableName]];
 
+    NSMutableDictionary *chargeIdDic = [NSMutableDictionary dictionaryWithCapacity:0];
     
     // 和流水有关的表:成员流水,图片同步表
     for (SSJUserChargeTable *charge in allCharges) {
@@ -142,14 +143,27 @@
         if (!success) {
             break;
         }
-        
+        NSString *chargeIdSuffix = [[charge.chargeId componentsSeparatedByString:@"_"] firstObject];
+        NSString *cidSuffix = [[charge.cid componentsSeparatedByString:@"_"] firstObject];
+
         // 如果有同名的则删除当前流水,如果没有则吧流水id更新为新的id
         if ([datas objectForKey:oldId]) {
             success = [db deleteObjectsFromTable:@"temp_user_charge"
                                            where:SSJUserChargeTable.chargeId == oldId];
         } else {
-            success = [db updateRowsInTable:@"temp_user_charge" onProperty:SSJUserChargeTable.chargeId withValue:newId
-                                      where:SSJUserChargeTable.chargeId == oldId];
+             // 如果是借贷,或者是固收理财除了利息,要改成一个新的 uuid 加上 billid
+            if (charge.cid.length > 36 && ![cidSuffix isEqualToString:chargeIdSuffix]) {
+                NSString *newChargeId = [chargeIdDic objectForKey:chargeIdSuffix];
+                if (!newChargeId.length) {
+                    newChargeId = SSJUUID();
+                    [chargeIdDic setObject:newChargeId forKey:chargeIdSuffix];
+                }
+                success = [db updateRowsInTable:@"temp_user_charge" onProperty:SSJUserChargeTable.chargeId withValue:[charge.chargeId stringByReplacingOccurrencesOfString:chargeIdSuffix withString:newChargeId]
+                                          where:SSJUserChargeTable.chargeId == oldId];
+            } else {
+                success = [db updateRowsInTable:@"temp_user_charge" onProperty:SSJUserChargeTable.chargeId withValue:newId
+                                          where:SSJUserChargeTable.chargeId == oldId];
+            }
         }
         
         if (!success) {

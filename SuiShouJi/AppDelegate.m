@@ -343,7 +343,7 @@ NSDate *SCYEnterBackgroundTime() {
                 if (!remindItem.fundId.length) {
                     [self getCreditCardIdForRemindId:remindItem.remindId Success:^(NSString *cardId) {
                         cardItem.fundingID = remindItem.fundId;
-                        SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc]init];
+                        SSJFundingDetailsViewController *creditCardVc = [[SSJFundingDetailsViewController alloc] init];
                         creditCardVc.item = cardItem;
                         [currentVc.navigationController pushViewController:creditCardVc animated:YES];
                     } failure:NULL];
