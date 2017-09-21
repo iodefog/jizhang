@@ -376,7 +376,23 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             if (_financeModel.memo.length) {
                 [self.section1Items addObject:[SSJLoanDetailCellItem itemWithImage:@"" title:@"备注" subtitle:memo bottomTitle:nil]];
             }
-            
+        //如果已经结算并且有赎回手续费的情况将年化收益率方下边
+        if (self.financeModel.isend) {
+            //赎回手续费的和
+            double redemInterest = [SSJFixedFinanceProductStore queryRedemInterestWithProductID:self.financeModel.productid];
+            if (redemInterest > 0) {
+                NSString *lilvTitle;
+                if (self.financeModel.ratetype == 0) {
+                    lilvTitle = @"日利率";
+                } else if (self.financeModel.ratetype == 1) {
+                    lilvTitle = @"月利率";
+                } else if (self.financeModel.ratetype == 2) {
+                    lilvTitle = @"年化收益率";
+                }
+                NSString *rateStr = [NSString stringWithFormat:@"%.1f%@", self.financeModel.rate * 100,@"%"];
+                [self.section1Items insertObject:[SSJLoanDetailCellItem itemWithImage:@"" title:lilvTitle subtitle:rateStr bottomTitle:nil] atIndex:0];
+            }
+        }
             if (completion) {
                 completion();
             }
@@ -487,11 +503,22 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
     interest = self.financeModel.isend == 0 ? [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
     NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"结算金额";
+    //赎回手续费的和
+    double redemInterest = [SSJFixedFinanceProductStore queryRedemInterestWithProductID:self.financeModel.productid];
     NSString *surplusValue;
     if (self.financeModel.isend) {
-        double aleardyLixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.productID];
+//        double aleardyLixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.productID];
         double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
-        double daozhang = (surplus + jiesuanlixi - aleardyLixi);
+        //结算金额=投资本金+利息收入 —赎回手续费
+        double money = 0;
+        NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+        for (SSJFixedFinanceProductChargeItem *item in array) {
+            money += item.money;
+        }
+        
+        double benJinMoney = money + redemInterest;
+        payment = benJinMoney;
+        double daozhang = payment - redemInterest + jiesuanlixi;
         surplusValue = [NSString stringWithFormat:@"%.2f",daozhang];
     } else {
         surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
@@ -507,20 +534,29 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     
     // 本金 = financeModel。money + 所有手续费 - 总利息
 //    double benJinMoney = [self.financeModel.money doubleValue] + totleSxf - totleIn;
+    /*
+     结算金额=投资本金+利息收入
+     —赎回手续费
+     投资本金=原始本金+追加本金—赎回本金
+     
+     有赎回手续费情况下：将手续费置于上方彩色格中，将年化收益率放在彩色格下方。若无赎回手续费，则年化收益率依旧
+     放在彩色格上。
+     */
     if (self.financeModel.isend) {
         double money = 0;
         NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
         for (SSJFixedFinanceProductChargeItem *item in array) {
             money += item.money;
         }
-//        double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
-        double benJinMoney = money;// + jiesuanlixi;
+        
+        double benJinMoney = money + redemInterest;
         payment = benJinMoney;
     } else {
         payment = [SSJFixedFinanceProductHelper caculateYuQiInterestWithProductItem:[self.financeModel copy]];//预期利息
     }
     
     NSString *sumTitle;
+    NSString *sumValue;
     /**利率类型（年:2、月:1、日:0)*/
     if (self.financeModel.ratetype == 0) {
         sumTitle = @"日利率";
@@ -529,6 +565,18 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     } else if (self.financeModel.ratetype == 2) {
         sumTitle = @"年化收益率";
     }
+    if (self.financeModel.isend) {
+        //赎回手续费的和
+        if (redemInterest > 0) {//有手续费
+            sumTitle = @"赎回手续费";
+            sumValue = [NSString stringWithFormat:@"%.2f",redemInterest];
+        } else {
+            sumValue = [NSString stringWithFormat:@"%.1f%@", rate,@"%"];
+        }
+    } else {
+        sumValue = [NSString stringWithFormat:@"%.1f%@", rate,@"%"];
+    }
+    
     NSString *interestTitle = nil;
     NSString *paymentTitle = self.financeModel.isend == 0 ? @"已产生利息" : @"利息收入";
     NSString *lenderTitle = self.financeModel.isend == 0 ?  @"预期利息" : @"投资本金";
@@ -555,7 +603,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                                                                                              bottomTitleFont:bottomTitleFont1 contentInsets:UIEdgeInsetsMake(0, 6, 0, 6)];
     
     SSJFinancingDetailHeadeViewCellItem *sumItem = [SSJFinancingDetailHeadeViewCellItem itemWithTopTitle:sumTitle
-                                                                                             bottomTitle:[NSString stringWithFormat:@"%.1f%@", rate,@"%"]
+                                                                                             bottomTitle:sumValue
                                                                                            topTitleColor:topTitleColor
                                                                                         bottomTitleColor:bottomTitleColor
                                                                                             topTitleFont:topTitleFont

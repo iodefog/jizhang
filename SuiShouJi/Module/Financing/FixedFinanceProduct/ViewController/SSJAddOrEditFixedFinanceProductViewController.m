@@ -40,7 +40,7 @@
 
 
 static NSString *KTitle1 = @"投资名称";
-static NSString *KTitle2 = @"原始本金";
+static NSString *KTitle2 = @"投资本金";
 static NSString *KTitle3 = @"转出账户";
 static NSString *KTitle4 = @"起息日期";
 static NSString *KTitle5 = @"利率";
@@ -631,10 +631,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         return NO;
     }
     
-//    if ([self.model.startDate isLaterThan:[NSDate date]]) {
-//        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
-//        return NO;
-//    }
+    if ([self.model.startDate isLaterThan:[NSDate date]]) {
+        [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+        return NO;
+    }
 
     return YES;
 }
@@ -665,7 +665,8 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     
     self.model.enddate = [[SSJFixedFinanceProductHelper endDateWithStartDate:[self.model.startdate ssj_dateWithFormat:@"yyyy-MM-dd"] time:self.model.time timeType:self.model.timetype] formattedDateWithFormat:@"yyyy-MM-dd"];
     NSDate *billDate = self.model.startDate;
-    NSString *cid = [NSString stringWithFormat:@"%@_%.2f",self.model.productid,[billDate timeIntervalSince1970]];
+    NSString *cid = [NSString stringWithFormat:@"%@_%.f",self.model.productid,[billDate timeIntervalSince1970]];
+    SSJMilliTimestamp();
     self.createCompoundModel.chargeModel.cid = self.createCompoundModel.targetChargeModel.cid = cid;
 }
 
@@ -1126,10 +1127,10 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         _borrowDateSelectionView.horuAndMinuBgViewBgColor = [UIColor clearColor];
         _borrowDateSelectionView.datePickerMode = SSJDatePickerModeDate;
         _borrowDateSelectionView.shouldConfirmBlock = ^BOOL(SSJHomeDatePickerView *view, NSDate *date) {
-//            if ([date isLaterThan:[NSDate date]]) {
-//                [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
-//                return NO;
-//            }
+            if ([date isLaterThan:[NSDate date]]) {
+                [CDAutoHideMessageHUD showMessage:@"不能输入未来时间"];
+                return NO;
+            }
             return YES;
         };
         _borrowDateSelectionView.confirmBlock = ^(SSJHomeDatePickerView *view) {
