@@ -32,16 +32,21 @@
     return self;
 }
 
+- (void)layoutSubviews {
+    
+}
+
 - (void)updateConstraints {
     [self.leftLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.size.mas_equalTo([self.leftLab.text sizeWithAttributes:@{NSFontAttributeName:self.leftLab.font}]);
+        make.size.mas_equalTo([self.leftLab ssj_textSize]);
+        make.top.mas_equalTo(16);
         make.left.mas_equalTo(15);
-        make.centerY.mas_equalTo(self.contentView);
     }];
     [self.rightLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(16);
+        make.bottom.mas_equalTo(-16);
         make.left.mas_equalTo(self.leftLab.mas_right).offset(15);
         make.right.mas_equalTo(self.contentView).offset(-15);
-        make.centerY.mas_equalTo(self.contentView);
     }];
     [super updateConstraints];
 }
@@ -81,6 +86,7 @@
         _rightLab = [[UILabel alloc] init];
         _rightLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _rightLab.textAlignment = NSTextAlignmentRight;
+        _rightLab.numberOfLines = 0;
     }
     return _rightLab;
 }

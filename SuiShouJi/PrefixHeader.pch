@@ -29,6 +29,7 @@
 #import "SSJImageAddition.h"
 #import "SSJLayerAddition.h"
 #import "SSJViewAddition.h"
+#import "SSJLabelAddition.h"
 #import "SSJButtonAddition.h"
 #import "SSJScrollViewAddition.h"
 #import "SSJTableView.h"

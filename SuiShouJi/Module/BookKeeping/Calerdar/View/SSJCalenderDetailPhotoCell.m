@@ -32,8 +32,10 @@
 
 - (void)updateConstraints {
     [self.photo mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(14);
+        make.bottom.mas_equalTo(-14);
         make.size.mas_equalTo(CGSizeMake(150, 150));
-        make.center.mas_equalTo(self.contentView);
+        make.centerX.mas_equalTo(self.contentView);
     }];
     [super updateConstraints];
 }

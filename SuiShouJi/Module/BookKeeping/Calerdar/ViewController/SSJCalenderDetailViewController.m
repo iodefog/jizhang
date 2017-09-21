@@ -59,6 +59,8 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
     insets.bottom = self.editBtn.height;
     self.tableView.contentInset = insets;
     self.tableView.tableFooterView = self.tipLab;
+    self.tableView.estimatedRowHeight = 54;
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self registerCellClass];
     
     [self.view addSubview:self.editBtn];
@@ -94,18 +96,6 @@ static NSString *const kSSJCalenderDetailPhotoCellId = @"kSSJCalenderDetailPhoto
 }
 
 #pragma mark - UITableViewDelegate
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    SSJBaseCellItem *item = [self.items ssj_objectAtIndexPath:indexPath];
-    if ([item isKindOfClass:[SSJCalenderTableViewCellItem class]]
-        || [item isKindOfClass:[SSJCalenderDetailInfoCellItem class]]) {
-        return 54;
-    } else if ([item isKindOfClass:[SSJCalenderDetailPhotoCellItem class]]) {
-        return 180;
-    } else {
-        return 0;
-    }
-}
-
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return 0.1;
 }

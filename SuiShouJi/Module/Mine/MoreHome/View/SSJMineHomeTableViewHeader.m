@@ -228,7 +228,7 @@
         self.nicknameLabel.text = @"待君登录";
         _geXingSignLabel.text = @"";
         [self.nicknameLabel sizeToFit];
-        [self layoutIfNeeded];
+        [self setNeedsLayout];
     }
 }
 
