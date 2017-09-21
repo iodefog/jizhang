@@ -396,6 +396,18 @@
     return interest;
 }
 
++ (double)queryRedemInterestWithProductID:(NSString *)fixedFinanceProductID {
+    __block double totalIntertet = 0;
+    [[SSJDatabaseQueue sharedInstance] inDatabase:^(SSJDatabase *db) {
+        totalIntertet = [self queryRedemInterestWithProductID:fixedFinanceProductID inDatabase:db];
+    }];
+    return totalIntertet;
+}
+
++ (double)queryRedemInterestWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
+    return [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ? and ifunsid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"20",SSJUSERID(),[NSString stringWithFormat:@"%@-8",SSJUSERID()]];
+}
+
 //+ (double)queryForFixedFinanceProduceInterestiothWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db {
 //    double interest = 0;
 //        interest = [db doubleForQuery:@"select sum(imoney) from bk_user_charge where operatortype != 2 and cid like (? || '%') and ichargetype = ? and ibillid = ? and cuserid = ?",fixedFinanceProductID,@(SSJChargeIdTypeFixedFinance),@"19",SSJUSERID()];

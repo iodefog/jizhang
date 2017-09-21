@@ -449,7 +449,9 @@ static NSString *kTitle6 = @"备注";
         // 新建借贷设置默认账户
         weakSelf.fundingSelectionView.items = items;
         if (!funditem) {
-            weakSelf.fundingSelectionView.selectedIndex = -1;
+            weakSelf.fundingSelectionView.selectedIndex = 0;
+            SSJLoanFundAccountSelectionViewItem *funditem = [items ssj_safeObjectAtIndex:0];
+            weakSelf.compoundModel.targetChargeModel.fundId = funditem.ID;
         }else {
             for (NSInteger i=0; i<items.count; i++) {
                 SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];

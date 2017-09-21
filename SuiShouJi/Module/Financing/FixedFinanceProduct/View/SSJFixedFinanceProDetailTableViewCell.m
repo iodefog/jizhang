@@ -96,7 +96,7 @@
 
 - (void)updateAppearance {
     self.nameL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
-    self.subNameL.textColor = self.percentageL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
+    self.subNameL.textColor = self.percentageL.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.textField.textColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.mainColor];
     self.leftImageView.tintColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];
     self.segmentControl.borderColor = [UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor];

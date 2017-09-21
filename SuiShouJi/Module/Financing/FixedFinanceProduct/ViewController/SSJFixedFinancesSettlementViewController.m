@@ -85,6 +85,9 @@ static NSString *kTitle6 = @"结算日期";
 
 @property (nonatomic, copy) NSString *lixiStr;
 
+/**<#注释#>*/
+@property (nonatomic, copy) NSString *poundStr;
+
 @property (nonatomic, strong) SSJFixedFinanceProductChargeItem *otherChareItem;
 @end
 
@@ -175,6 +178,7 @@ static NSString *kTitle6 = @"结算日期";
             self.moneyStr = text;
             [self updateSubTitle];
         } else {
+            self.poundStr = text;
             [self updateSubTitle];
         }
         return NO;
@@ -188,7 +192,8 @@ static NSString *kTitle6 = @"结算日期";
 }
 
 - (void)updateSubTitle {
-    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] + [self.lixiStr doubleValue])];//[NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] - [self.poundageTextF.text doubleValue] + [self.lixiStr doubleValue])];
+    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] - [self.poundStr doubleValue] + [self.lixiStr doubleValue])];
+    //[NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] + [self.lixiStr doubleValue])];
     NSString *oldStr = [NSString stringWithFormat:@"到账金额为：%@元",targetStr];
     self.subL.attributedText = [oldStr attributeStrWithTargetStr:targetStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
 }
@@ -225,7 +230,9 @@ static NSString *kTitle6 = @"结算日期";
             self.liXiTextF = cell.textField;
             cell.textField.userInteractionEnabled = YES;
         }
-        
+        if (self.financeModel.isend) {
+            cell.textField.textColor = SSJ_SECONDARY_COLOR;
+        }
         [cell setNeedsLayout];
         return cell;
         
@@ -271,6 +278,7 @@ static NSString *kTitle6 = @"结算日期";
         if (self.chargeItem) {
             cell.subtitleLabel.text = [self.chargeItem.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
             cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
         } else {
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -290,6 +298,7 @@ static NSString *kTitle6 = @"结算日期";
         cell.switchControl.on = _isLiXiOn;
         [cell.switchControl addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
         //        self.liXiSwitch = cell.switchControl;
+        
         [cell setNeedsLayout];
         
         return cell;
@@ -304,6 +313,7 @@ static NSString *kTitle6 = @"结算日期";
         cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
         if (self.chargeItem) {
             cell.textField.text = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]];
+            cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         self.poundageTextF = cell.textField;
         cell.nameL.text = title;
@@ -397,10 +407,17 @@ static NSString *kTitle6 = @"结算日期";
         weakSelf.tableView.hidden = NO;
         [weakSelf.view ssj_hideLoadingIndicator];
         
-        // 新建借贷设置默认账户
+        // 新建默认账户
         weakSelf.fundingSelectionView.items = items;
         if (!funditem) {
-            weakSelf.fundingSelectionView.selectedIndex = -1;
+            weakSelf.fundingSelectionView.selectedIndex = 0;
+            SSJLoanFundAccountSelectionViewItem *item = [items ssj_safeObjectAtIndex:0];
+            weakSelf.compoundModel.targetChargeModel.fundId = item.ID;
+            weakSelf.lixicompoundModel.targetChargeModel.fundId = item.ID;
+            weakSelf.compoundModel.interestChargeModel.fundId = item.ID;
+            //结算账户
+            weakSelf.financeModel.etargetfundid = item.ID;
+            
         }else {
             for (NSInteger i=0; i<items.count; i++) {
                 SSJLoanFundAccountSelectionViewItem *fund = [items ssj_safeObjectAtIndex:i];
