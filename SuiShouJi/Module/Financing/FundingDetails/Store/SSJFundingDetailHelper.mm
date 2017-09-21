@@ -871,9 +871,9 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
         remainningDaysStr = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBillDay];
     } else if (daysFromBillDay == 0 && daysFromRepaymentDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距还款日:%ld天",daysFromRepaymentDay];
-    }else if (minumDay == daysFromBillDay) {
+    }else if (minumDay == daysFromBillDay && daysFromBillDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距账单日:%ld天",daysFromBillDay];
-    } else if (minumDay == daysFromRepaymentDay) {
+    } else if (minumDay == daysFromRepaymentDay && daysFromRepaymentDay > 0) {
         remainningDaysStr = [NSString stringWithFormat:@"距还款日:%ld天",daysFromRepaymentDay];
     } else {
         remainningDaysStr = @"";

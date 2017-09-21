@@ -263,7 +263,7 @@
     self.balanceLab.text = [NSString stringWithFormat:@"%.2f",_item.fundingAmount];
     [self.balanceLab sizeToFit];
     
-    if (_item.startColor.length && _item.endColor.length {
+    if (_item.startColor.length && _item.endColor.length) {
         self.backLayer.colors = @[(__bridge id)[UIColor ssj_colorWithHex:_item.startColor].CGColor,(__bridge id)[UIColor ssj_colorWithHex:_item.endColor].CGColor];
         self.backLayer.shadowColor = [UIColor ssj_colorWithHex:_item.startColor].CGColor;
     }
