@@ -42,7 +42,6 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadDataIfNeeded) name:SSJSyncDataSuccessNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishInitDatabase) name:SSJInitDatabaseDidFinishNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
     }
     return self;
 }
@@ -53,6 +52,8 @@
     [self.view addSubview:self.backgroundView];
     [self updateBackgroundViewIfNeeded];
     [self showBackItemIfNeeded];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateAppearanceAfterThemeChanged) name:SSJThemeDidChangeNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
