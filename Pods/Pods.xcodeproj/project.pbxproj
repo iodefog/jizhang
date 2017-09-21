@@ -5005,7 +5005,7 @@
 		927A254DDC5FEC7340845E7E4F2679DC /* MQWebViewBubbleCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQWebViewBubbleCell.h; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQWebViewBubbleCell.h"; sourceTree = "<group>"; };
 		92A1E8899FED4CC2E7C3B114ED89A2FD /* pwd2key.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = pwd2key.h; path = SSZipArchive/minizip/aes/pwd2key.h; sourceTree = "<group>"; };
 		92B2CE797780E9567A12E9F4AA942E61 /* random_utils.c */ = {isa = PBXFileReference; includeInIndex = 1; name = random_utils.c; path = src/utils/random_utils.c; sourceTree = "<group>"; };
-		92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-YouYuJiZhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-YouYuJiZhang.debug.xcconfig"; sourceTree = "<group>"; };
+		92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-youyujizhang.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-youyujizhang.debug.xcconfig"; sourceTree = "<group>"; };
 		9306DF5BB192862060EA2FCFB1D8E3F8 /* WCTSelectBase+Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "WCTSelectBase+Private.h"; path = "apple/WCDB/interface/chaincall/WCTSelectBase+Private.h"; sourceTree = "<group>"; };
 		9351A02ACCB0E57BF9FC2E4095EA89DB /* libPods-BeiKeJiZhang.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-BeiKeJiZhang.a"; path = "libPods-BeiKeJiZhang.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		93914ABBD8E4D9DB41F3BBBDA948E040 /* MQBotMenuCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MQBotMenuCell.h; path = "Meiqia-SDK-files/MQChatViewController/TableCells/CellView/MQBotMenuCell.h"; sourceTree = "<group>"; };
@@ -5278,7 +5278,7 @@
 		BA065A1C693EB3C982F963C94773DBE2 /* Pods-SuiShouJiEnterprise.release-test.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-SuiShouJiEnterprise.release-test.xcconfig"; sourceTree = "<group>"; };
 		BA09BBAE21DE074DDE95244EEC3F0A76 /* auth.c */ = {isa = PBXFileReference; includeInIndex = 1; name = auth.c; path = sqlcipher/src/auth.c; sourceTree = "<group>"; };
 		BA15B54E2EB9C515632B3D1D1CDFA74D /* order_term.hpp */ = {isa = PBXFileReference; includeInIndex = 1; name = order_term.hpp; path = apple/WCDB/abstract/order_term.hpp; sourceTree = "<group>"; };
-		BA86BEF43EF1DED495EB2F6117626D69 /* Pods-YouYuJiZhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-YouYuJiZhang.release.xcconfig"; sourceTree = "<group>"; };
+		BA86BEF43EF1DED495EB2F6117626D69 /* Pods-youyujizhang.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-youyujizhang.release.xcconfig"; sourceTree = "<group>"; };
 		BA8F8BDAF9CA30B2F1B8EA9459F6F794 /* YYTextSelectionView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YYTextSelectionView.h; path = YYText/Component/YYTextSelectionView.h; sourceTree = "<group>"; };
 		BA91EA2AFAC566D641D629EDF743E3FD /* WCTInsert.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = WCTInsert.h; path = apple/WCDB/interface/chaincall/WCTInsert.h; sourceTree = "<group>"; };
 		BAB6EA46AD60E314DA2F011262389550 /* libMMDrawerController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libMMDrawerController.a; path = libMMDrawerController.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -7348,10 +7348,10 @@
 				C2D05F18C4060FA118EC5EB964DB25BF /* Pods-YouYuJiZhang-dummy.m */,
 				25D4B4EF047D48C4FA0D5EAD34177F0C /* Pods-YouYuJiZhang-frameworks.sh */,
 				63416CB27CCFE25CB1BA6FFA9A932EC6 /* Pods-YouYuJiZhang-resources.sh */,
-				92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-YouYuJiZhang.debug.xcconfig */,
+				92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-youyujizhang.debug.xcconfig */,
 				8FE9202CC5261DE6F3225A183F9AA3C4 /* Pods-YouYuJiZhang.debug-production.xcconfig */,
 				4F6C59E032099A18A7D806C3806F1B5A /* Pods-YouYuJiZhang.debug-test.xcconfig */,
-				BA86BEF43EF1DED495EB2F6117626D69 /* Pods-YouYuJiZhang.release.xcconfig */,
+				BA86BEF43EF1DED495EB2F6117626D69 /* Pods-youyujizhang.release.xcconfig */,
 				A3F9C0CC4A056C973EB865281241853D /* Pods-YouYuJiZhang.release-production.xcconfig */,
 				15C476054BD4F0F78F56756FB3BE872A /* Pods-YouYuJiZhang.release-test.xcconfig */,
 			);
@@ -14479,7 +14479,7 @@
 		};
 		20D7DDD6D7D5C36C3C94A388230D5D26 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA86BEF43EF1DED495EB2F6117626D69 /* Pods-YouYuJiZhang.release.xcconfig */;
+			baseConfigurationReference = BA86BEF43EF1DED495EB2F6117626D69 /* Pods-youyujizhang.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -16007,7 +16007,7 @@
 		};
 		5ED8DCAB9EF1BC08F96E479A17AD7FF7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-YouYuJiZhang.debug.xcconfig */;
+			baseConfigurationReference = 92DF44DCDF4BAABC3C14006F3B1D97C7 /* Pods-youyujizhang.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
