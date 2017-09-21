@@ -109,13 +109,34 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 //查询所有结算手续费和
 + (double)querySettmentInterestWithProductID:(NSString *)fixedFinanceProductID;
 
+
+/**
+ 查询所有赎回手续费的和
+
+ @param fixedFinanceProductID <#fixedFinanceProductID description#>
+ @return <#return value description#>
+ */
++ (double)queryRedemInterestWithProductID:(NSString *)fixedFinanceProductID;
+
+
+/**
+ 查询所有赎回手续费的和
+ 
+ @param fixedFinanceProductID <#fixedFinanceProductID description#>
+ @return <#return value description#>
+ */
+
++ (double)queryRedemInterestWithProductID:(NSString *)fixedFinanceProductID inDatabase:(FMDatabase *)db;
 /**
  查询结算时输入利息
+ 
  
  *  @param fixedFinanceProductID    理财产品id
  @return 利息
  */
 + (double)queryForFixedFinanceProduceJieSuanInterestiothWithProductID:(NSString *)fixedFinanceProductID;
+
+
 
 
 /**
