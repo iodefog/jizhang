@@ -209,7 +209,7 @@
                 break;
                 
             case 1:{
-                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"手指哪个占大头?\n收支何时不寻常"];
+                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide4.gif" title:@"多样报表帮你分析收支" subTitle:@"收支哪个占大头?\n收支何时不寻常"];
                 [self.contentViews addObject:guideView];
                 [self.scrollView addSubview:guideView];
             }

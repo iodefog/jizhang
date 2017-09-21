@@ -26,6 +26,7 @@
 #import "SSJTransferCycleTable.h"
 #import "SSJImageSyncTable.h"
 #import "SSJUserBillTypeTable.h"
+#import "SSJFixedFinanceProductTable.h"
 
 @interface SSJBaseTableMerge : NSObject
 
