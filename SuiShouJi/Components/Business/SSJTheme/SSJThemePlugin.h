@@ -11,3 +11,7 @@
 @interface SSJThemePlugin : NSObject
 
 @end
+
+@interface UITextField (SSJThemePlugin)
+
+@end

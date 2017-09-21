@@ -31,4 +31,28 @@
 
 @end
 
+@implementation UITextField (SSJThemePlugin)
+
++ (void)load {
+    SSJSwizzleSelector(self, NSSelectorFromString(@"dealloc"), @selector(ssj_delloc));
+    SSJSwizzleSelector(self, @selector(initWithFrame:), @selector(ssj_initWithFrame:));
+}
+
+- (void)ssj_delloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self ssj_delloc];
+}
+
+- (instancetype)ssj_initWithFrame:(CGRect)frame {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ssj_updateClearButtonTintColor) name:SSJThemeDidChangeNotification object:self];
+    [self ssj_updateClearButtonTintColor];
+    return [self ssj_initWithFrame:frame];
+}
+
+- (void)ssj_updateClearButtonTintColor {
+    [self ssj_setClearButtonTintColor:SSJ_MAIN_COLOR];
+}
+
+@end
+
 
