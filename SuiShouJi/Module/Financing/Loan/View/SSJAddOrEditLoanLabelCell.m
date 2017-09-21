@@ -75,6 +75,13 @@
     _subtitleLabel.left = _additionalIcon.right + 5;
     
     _descLabel.frame = CGRectMake(15, self.contentView.height - 25, self.width - 30, 25);
+    
+    if (_isProduct) {
+        self.imageView.top = 15;
+        self.textLabel.centerY = self.imageView.centerY;
+        self.descLabel.top = CGRectGetMaxY(self.imageView.frame) + 10;
+//        self.subtitleLabel.centerY = self.textLabel.centerY;
+    }
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

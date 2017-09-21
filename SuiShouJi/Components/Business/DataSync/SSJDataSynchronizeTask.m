@@ -496,7 +496,10 @@ static NSString *const kDownloadSyncZipFileName = @"download_sync_data.zip";
             BOOL successful = YES;
             if (![db boolForQuery:@"select count(*) from bk_user where cuserid = ?", userId]) {
                 successful = [db executeUpdate:@"insert into bk_user (cuserid, cregisterstate) values (?, 1)", userId];
-                successful = successful && SSJSetUserId(userId) && SSJSaveUserLogined(YES);
+            }
+            
+            if (successful) {
+                successful = SSJSetUserId(userId) && SSJSaveUserLogined(YES);
             }
             
             if (successful) {
