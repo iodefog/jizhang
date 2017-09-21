@@ -111,7 +111,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
     [self.navigationController.navigationBar setBackgroundImage:[UIImage ssj_imageWithColor:[UIColor clearColor] size:CGSizeMake(10, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.mm_drawerController.openDrawerGestureModeMask = MMOpenDrawerGestureModeAll;
 //    [self.adService requestBannersList];
-    [self.header startAnimating];
+    
     [SSJAnaliyticsManager event:@"main_account_book"];
     [self getDateFromDB];
     [self.mm_drawerController setMaximumLeftDrawerWidth:SSJSCREENWITH * 0.8];
@@ -122,7 +122,6 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
-    [self.header stopLoading];
     self.rightButton.selected = NO;
 }
 
@@ -439,7 +438,7 @@ static NSString * SSJBooksTypeCellHeaderIdentifier = @"SSJBooksTypeCellHeaderIde
 
 - (SSJBooksHeaderView *)header{
     if (!_header) {
-        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, 0, self.view.width, 164)];
+        _header = [[SSJBooksHeaderView alloc]initWithFrame:CGRectMake(0, SSJ_NAVIBAR_BOTTOM, self.view.width, 130)];
         __weak typeof(self) weakSelf = self;
         _header.buttonClickBlock = ^(){
             [SSJAnaliyticsManager event:@"account_all_booksType"];

@@ -5,19 +5,12 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface SSJCreditCardListFirstLineItem : SSJBaseCellItem
 
 @property (nonatomic , copy) NSString *period;
 
 @property (nonatomic , copy) NSString *remainingDaysStr;
 
-@property (nonatomic) double repaymentMoney;
-
-@property (nonatomic) double repaymentForOtherMonth;
-
-@property (nonatomic) double installMoney;
-
-@property (nonatomic) double totalBalance;
+@property (nonatomic , copy) NSString *repaymentStr;
 
 @end

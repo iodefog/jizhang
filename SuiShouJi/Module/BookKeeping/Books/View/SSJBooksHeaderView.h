@@ -18,10 +18,6 @@
 // 支出
 @property(nonatomic) double expenture;
 
-- (void)startAnimating;
-
-- (void)stopLoading;
-
 - (void)updateAfterThemeChange;
 
 @end

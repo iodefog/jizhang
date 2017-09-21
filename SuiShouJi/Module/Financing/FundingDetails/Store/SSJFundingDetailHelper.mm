@@ -498,7 +498,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     [tempArray addObject:item];
                 } else {
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
-                    dayItem.rowHeight = 65;
+                    dayItem.rowHeight = 35;
                     lastDayItem = dayItem;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
@@ -508,10 +508,12 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     }
                     lastDetailDate = item.billDate;
                     SSJCreditCardListFirstLineItem *firstLineItem = [[SSJCreditCardListFirstLineItem alloc] init];
-                    firstLineItem.repaymentMoney = listItem.repaymentMoney;
-                    firstLineItem.repaymentForOtherMonth = listItem.repaymentForOtherMonthMoney;
-                    firstLineItem.installMoney = listItem.instalmentMoney;
-                    firstLineItem.totalBalance = listItem.income - listItem.expenture;
+                    firstLineItem.repaymentStr = [self getRepaymentStrWithListItem:listItem];
+                    if (firstLineItem.repaymentStr.length) {
+                        firstLineItem.rowHeight = 65;
+                    } else {
+                        firstLineItem.rowHeight = 35;
+                    }
                     firstLineItem.period = currentPeriod;
                     firstLineItem.remainingDaysStr = [self caculateRemainingDaysStrWithBillingDay:newItem.cardItem.cardBillingDay
                                                                                      repaymentDay:newItem.cardItem.cardRepaymentDay
@@ -926,5 +928,53 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
             });
         }
     }];
+}
+
++ (NSString *)getRepaymentStrWithListItem:(SSJCreditCardListDetailItem *)creditCardItem {
+    NSString *repaymentStr;
+    double totalMoney = creditCardItem.income - creditCardItem.expenture + creditCardItem.instalmentMoney;
+    double moneyNeedToRepay = creditCardItem.income - creditCardItem.expenture + creditCardItem.repaymentMoney - creditCardItem.repaymentForOtherMonthMoney + creditCardItem.instalmentMoney;
+    if (moneyNeedToRepay < 0) {
+        // 本期应还大于0
+        if (creditCardItem.instalmentMoney > 0) {
+            // 本期分期大于0
+            if (creditCardItem.repaymentMoney > 0) {
+                // 本期还过款
+                repaymentStr = [NSString stringWithFormat:@"(本期已还%@元,分期%@元)",[[NSString stringWithFormat:@"%f",fabs(creditCardItem.repaymentMoney)]  ssj_moneyDecimalDisplayWithDigits:2],[[NSString stringWithFormat:@"%f",fabs(creditCardItem.instalmentMoney)]  ssj_moneyDecimalDisplayWithDigits:2]];
+                
+            } else {
+                // 本期未还过款
+                repaymentStr = [NSString stringWithFormat:@"(账单已分期,本期应还金额为%@元)",[[NSString stringWithFormat:@"%f",fabs(moneyNeedToRepay)]  ssj_moneyDecimalDisplayWithDigits:2]];
+            }
+        } else {
+            // 本期没有分期过
+            if (creditCardItem.repaymentMoney > 0) {
+                // 本期还过款
+                repaymentStr = [NSString stringWithFormat:@"(本期已还%@元,剩余应还%@元)",[[NSString stringWithFormat:@"%f",fabs(creditCardItem.repaymentMoney)]  ssj_moneyDecimalDisplayWithDigits:2],[[NSString stringWithFormat:@"%f",fabs(moneyNeedToRepay)]  ssj_moneyDecimalDisplayWithDigits:2]];
+            } else {
+                // 本期未还过款
+                repaymentStr = @"";
+            }
+            
+        }
+    } else {
+        if (creditCardItem.repaymentMoney > 0) {
+            if (creditCardItem.instalmentMoney > 0) {
+                // 本期分过期
+                repaymentStr = [NSString stringWithFormat:@"(账单已分期,本期应还金额为0.00元)"];
+            } else {
+                // 本期未分期代表已经还清
+                repaymentStr = @"账单已还清";
+            }
+        } else {
+            if (creditCardItem.instalmentMoney > 0) {
+                repaymentStr = [NSString stringWithFormat:@"(账单已分期,本期应还金额为0.00元)"];
+            } else {
+                repaymentStr = @"";
+            }
+        }
+        
+    }
+    return repaymentStr;
 }
 @end
