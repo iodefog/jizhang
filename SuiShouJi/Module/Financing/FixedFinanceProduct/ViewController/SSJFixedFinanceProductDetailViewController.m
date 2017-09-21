@@ -520,7 +520,15 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
         payment = [SSJFixedFinanceProductHelper caculateYuQiInterestWithProductItem:[self.financeModel copy]];//预期利息
     }
     
-    NSString *sumTitle = @"年化收益率";
+    NSString *sumTitle;
+    /**利率类型（年:2、月:1、日:0)*/
+    if (self.financeModel.ratetype == 0) {
+        sumTitle = @"日利率";
+    } else if (self.financeModel.ratetype == 1) {
+        sumTitle = @"月利率";
+    } else if (self.financeModel.ratetype == 2) {
+        sumTitle = @"年化收益率";
+    }
     NSString *interestTitle = nil;
     NSString *paymentTitle = self.financeModel.isend == 0 ? @"已产生利息" : @"利息收入";
     NSString *lenderTitle = self.financeModel.isend == 0 ?  @"预期利息" : @"投资本金";
