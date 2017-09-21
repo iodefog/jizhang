@@ -117,10 +117,10 @@
     
     BOOL success = NO;
     
-    NSArray *allReminds = [db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:[self tempTableName]];
+    NSArray *allFunds = [db getAllObjectsOfClass:SSJFundInfoTable.class fromTable:[self tempTableName]];
 
     // 和资金账户有关的表:流水,周期记账,借贷,信用卡,周期转账,信用卡还款
-    for (SSJFundInfoTable *fund in allReminds) {
+    for (SSJFundInfoTable *fund in allFunds) {
         NSString *oldId = fund.fundId;
         NSString *newId = [datas objectForKey:oldId];
         
@@ -128,7 +128,7 @@
             newId = SSJUUID();
         }
         
-        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_credit_repayment"] || ![db isTableExists:@"temp_loan"] || ![db isTableExists:@"temp_fund_info"] || ![db isTableExists:@"temp_transfer_cycle"]) {
+        if (![db isTableExists:@"temp_user_charge"] || ![db isTableExists:@"temp_charge_period_config"] || ![db isTableExists:@"temp_user_credit"] || ![db isTableExists:@"temp_credit_repayment"] || ![db isTableExists:@"temp_loan"]  || ![db isTableExists:@"temp_fixed_finance_product"] || ![db isTableExists:@"temp_fund_info"] || ![db isTableExists:@"temp_transfer_cycle"]) {
             SSJPRINT(@">>>>>>>>资金账户所关联的表不存在<<<<<<<<");
             success = NO;
             break;
@@ -202,6 +202,17 @@
                            onProperties:SSJLoanTable.endTargetFundid
                              withObject:loanEndFund
                                   where:SSJLoanTable.endTargetFundid == oldId];
+        
+        if (!success) {
+            break;
+        }
+        
+        // 更新固收理财表,分别更新来源和目标账户,结清账户
+        success = [db updateRowsInTable:@"temp_fixed_finance_product" onProperty:SSJFixedFinanceProductTable.targetFundid withValue:newId where:SSJFixedFinanceProductTable.targetFundid == oldId];
+        
+        success = [db updateRowsInTable:@"temp_fixed_finance_product" onProperty:SSJFixedFinanceProductTable.etargetFundid withValue:newId where:SSJFixedFinanceProductTable.etargetFundid == oldId];
+        
+        success = [db updateRowsInTable:@"temp_fixed_finance_product" onProperty:SSJFixedFinanceProductTable.thisFundid withValue:newId where:SSJFixedFinanceProductTable.thisFundid == oldId];
         
         if (!success) {
             break;

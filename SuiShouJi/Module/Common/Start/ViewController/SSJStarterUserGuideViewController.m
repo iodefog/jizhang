@@ -147,17 +147,16 @@
     NSUInteger idx = scrollView.contentOffset.x / scrollView.width;
     self.pageControl.currentPage = idx;
     if (idx == self.contentViews.count - 1) {        
-        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            for (int i = 0; i < self.contentViews.count; i ++) {
-                if (i == idx) {
-                    [[self.contentViews objectAtIndex:i] startAnimating];
-                } else {
-                    [self.contentViews objectAtIndex:i].isNormalState = YES;
-                }
-            }
-        }];
+        [UIView transitionFromView:self.pageControl toView:self.beginButton duration:2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
 
-      
+        }];
+        for (int i = 0; i < self.contentViews.count; i ++) {
+            if (i == idx) {
+                [[self.contentViews objectAtIndex:i] startAnimating];
+            } else {
+                [self.contentViews objectAtIndex:i].isNormalState = YES;
+            }
+        }
     } else {
         [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
             for (int i = 0; i < self.contentViews.count; i ++) {

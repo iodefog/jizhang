@@ -116,7 +116,7 @@
         NSNumber *userChargeCount = [[db getOneValueOnResult:SSJUserChargeTable.AnyProperty.count() fromTable:@"bk_user_charge"] where:SSJUserChargeTable.chargeId == currentMemberCharge.chargeId
                                           && SSJUserChargeTable.userId == targetUserId];
         
-        if (userChargeCount > 0 ) {
+        if ([userChargeCount intValue] > 0 ) {
             [newAndOldIdDic setObject:currentMemberChargeUnionId forKey:@""];
         }
         

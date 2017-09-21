@@ -269,18 +269,19 @@ NSDate *SCYEnterBackgroundTime() {
         
         [SSJUserDefaultDataCreater createAllDefaultDataWithUserId:SSJUSERID() error:nil];
         
-        // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
-            for (SSJReminderItem *item in result) {
-                [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
-            }
-        } failure:^(NSError *error) {
-            SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
-        }];
         
         SSJDispatchMainAsync(^{
             [[NSNotificationCenter defaultCenter] postNotificationName:SSJInitDatabaseDidFinishNotification object:self];
+            [[UIApplication sharedApplication] cancelAllLocalNotifications]; 
+            // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
+            [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
+                for (SSJReminderItem *item in result) {
+                    [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
+                }
+            } failure:^(NSError *error) {
+                SSJPRINT(@"警告：同步后注册本地通知失败 error:%@", [error localizedDescription]);
+            }];
+
             finishHandler(YES);
         });
     });
@@ -288,20 +289,20 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 设置根控制器
 - (void)setRootViewController {
-    if (SSJLaunchTimesForAllVersion() == 1) {
+//    if (SSJLaunchTimesForAllVersion() == 1) {
         SSJNewUserFirstStartViewController *newUserVc = [[SSJNewUserFirstStartViewController alloc] initWithNibName:nil bundle:nil];
         SSJNavigationController *newUserNavi = [[SSJNavigationController alloc] initWithRootViewController:newUserVc];
         [UIApplication sharedApplication].keyWindow.rootViewController = newUserNavi;
-    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
-        SSJGuideViewController *guideVc = [[SSJGuideViewController alloc] init];
-        SSJNavigationController *guideNavi = [[SSJNavigationController alloc] initWithRootViewController:guideVc];
-        [UIApplication sharedApplication].keyWindow.rootViewController = guideNavi;
-
-    } else {
-        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
-        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];
-        [UIApplication sharedApplication].keyWindow.rootViewController = launcherNavi;
-    }
+//    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
+//        SSJGuideViewController *guideVc = [[SSJGuideViewController alloc] init];
+//        SSJNavigationController *guideNavi = [[SSJNavigationController alloc] initWithRootViewController:guideVc];
+//        [UIApplication sharedApplication].keyWindow.rootViewController = guideNavi;
+//
+//    } else {
+//        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
+//        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];
+//        [UIApplication sharedApplication].keyWindow.rootViewController = launcherNavi;
+//    }
 }
     
 #pragma mark - qq快登
