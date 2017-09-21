@@ -21,6 +21,7 @@
 #import "SSJFixedFinanceProductItem.h"
 #import "SSJLoanListCellItem.h"
 #import "SSJFinancingHomeitem.h"
+#import "SSJFixedFinanceProductChargeItem.h"
 #import "SSJDataSynchronizer.h"
 
 static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductListCellId";
@@ -84,15 +85,20 @@ static NSString *const kFixedFinanceProductListCellId = @"kFixedFinanceProductLi
 }
 
 - (void)updateAmount {
-    double amount = [[self.dataItems valueForKeyPath:@"@sum.money"] doubleValue];
+    double money = 0;
     for (SSJFixedFinanceProductItem *productItem in self.dataItems) {
+        NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:productItem error:nil];
+        for (SSJFixedFinanceProductChargeItem *tempItem in array) {
+            money += tempItem.money;
+        }
         if (!productItem.isend) {
-             amount += [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productItem.productid];
+            money += [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:productItem.productid];
+        } else {
+            money += [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:productItem.productid];
         }
     }
-    self.amountView.amount = [NSString stringWithFormat:@"+%.2f", amount];
+    self.amountView.amount = [NSString stringWithFormat:@"+%.2f", money];
 }
-
 
 #pragma mark - Action
 - (void)showDeletionAlertView {

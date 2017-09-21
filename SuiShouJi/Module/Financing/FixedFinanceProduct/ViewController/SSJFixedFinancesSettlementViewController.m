@@ -107,16 +107,19 @@ static NSString *kTitle6 = @"结算日期";
 }
 
 - (void)orangeData {
+    double money = 0;
+     NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    for (SSJFixedFinanceProductChargeItem *item in array) {
+        money += item.money;
+    }
+    self.moneyStr = [NSString stringWithFormat:@"%.2f",money];
     
     double lixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid];
     double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
     if (self.financeModel.isend) {
-        double benjin = [self.financeModel.money doubleValue] - jiesuanlixi;
-        self.moneyStr = [NSString stringWithFormat:@"%.2f",benjin];
         self.lixiStr = [NSString stringWithFormat:@"%.2f",jiesuanlixi];
     } else {
         self.lixiStr = [NSString stringWithFormat:@"%.2f",lixi];
-        self.moneyStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryForFixedFinanceProduceCurrentMoneyWothWithProductID:self.financeModel.productid]];
     }
     
 
@@ -457,8 +460,8 @@ static NSString *kTitle6 = @"结算日期";
         return NO;
     }
     
-    if ([self.moneyTextF.text doubleValue] > [self.financeModel.money doubleValue]) {
-        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"你结算时的本金需等于累计投资本金金额%.2f元，请重新输入",[self.financeModel.money doubleValue]] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL],nil];
+    if ([self.moneyTextF.text doubleValue] > [self.moneyStr doubleValue]) {
+        [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:[NSString stringWithFormat:@"你结算时的本金需等于累计投资本金金额%.2f元，请重新输入",[self.moneyStr doubleValue]] action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL],nil];
         return NO;
     }
     

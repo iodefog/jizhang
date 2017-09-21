@@ -595,12 +595,16 @@ static NSString *kTitle6 = @"备注";
 - (void)sureButtonAction {
     if (![self checkIfNeedCheck]) return;
     MJWeakSelf;
-    
+    NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    double totalBenjin = 0;
+    for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
+        totalBenjin += chargeItem.money;
+    }
     BOOL isallow = NO;
     if (self.chargeModel) {
-        isallow = ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney) || ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue] + self.oldMoney + self.oldPoundageMoney);
+        isallow = ([self.moneyStr doubleValue] == totalBenjin + self.oldMoney + self.oldPoundageMoney) || ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == totalBenjin + self.oldMoney + self.oldPoundageMoney);
     } else {
-        isallow = ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == [self.financeModel.money doubleValue]) || ([self.moneyStr doubleValue] == [self.financeModel.money doubleValue]);
+        isallow = ([self.moneyStr doubleValue] + [self.lixiStr doubleValue] == totalBenjin) || ([self.moneyStr doubleValue] == totalBenjin);
     }
     if (isallow) {
         //提示结算弹框
@@ -619,7 +623,7 @@ static NSString *kTitle6 = @"备注";
     
     //判断是否可以赎回
     //查询所有可以影响到本金变化
-    NSArray *addAndRedChargeArr = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+    
     
     double benjin = 0;
     for (SSJFixedFinanceProductChargeItem *chargeItem in addAndRedChargeArr) {
@@ -634,7 +638,6 @@ static NSString *kTitle6 = @"备注";
             benjin += chargeItem.money;
         }
     }
-    //    benjin += self.oldMoney;
     //加上以前的赎回
     if (!self.liXiSwitch.on) {
         self.lixiStr = @"0";

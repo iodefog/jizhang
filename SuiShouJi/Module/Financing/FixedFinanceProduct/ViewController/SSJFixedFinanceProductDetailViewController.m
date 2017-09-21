@@ -464,36 +464,39 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             case SSJFixedFinCompoundChargeTypeRedemption://赎回
                 surplus -= model.money;
                 break;
-//            case SSJFixedFinCompoundChargeTypeBalanceIncrease://余额转入
-//                surplus += model.money;
-//                break;
-//            case SSJFixedFinCompoundChargeTypeBalanceDecrease://余额转出
-//                surplus -= model.money;
-//                break;
             case SSJFixedFinCompoundChargeTypeBalanceInterestIncrease://利息转入
-                surplus += model.money;
+//                surplus += model.money;
                 break;
             case SSJFixedFinCompoundChargeTypeBalanceInterestDecrease://利息转出
-                surplus -= model.money;
+//                surplus -= model.money;
                 break;
             case SSJFixedFinCompoundChargeTypeInterest://固收理财派发利息流水
                 surplus += model.money;
                 break;
                 
-            case SSJFixedFinCompoundChargeTypeCloseOutInterest://结算利息
+            case SSJFixedFinCompoundChargeTypeCloseOutInterest://固收理财手续费率（部分赎回，结算）
                 surplus -= model.money;
                 break;
             case SSJFixedFinCompoundChargeTypeCloseOut://结清
                 break;
-                surplus -= model.money;
+//                surplus -= model.money;
             default:
                 break;
         }
     }
 
-    interest = self.financeModel.isend == 0 ?[SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
-    NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"到账金额";
-    NSString *surplusValue = self.financeModel.isend == 0 ? [NSString stringWithFormat:@"%.2f", surplus] : [NSString stringWithFormat:@"%.2f",([self.financeModel.money doubleValue])];
+    interest = self.financeModel.isend == 0 ? [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.financeModel.productid] : [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
+    NSString *surplusTitle = self.financeModel.isend == 0 ? @"当前余额" : @"结算金额";
+    NSString *surplusValue;
+    if (self.financeModel.isend) {
+        double aleardyLixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceInterestiothWithProductID:self.productID];
+        double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
+        double daozhang = (surplus + jiesuanlixi - aleardyLixi);
+        surplusValue = [NSString stringWithFormat:@"%.2f",daozhang];
+    } else {
+        surplusValue = [NSString stringWithFormat:@"%.2f", surplus];
+    }
+
     self.currentMoney = surplus;//可赎回最大金额
     
    //总利息
@@ -503,10 +506,19 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
    double totleSxf = [SSJFixedFinanceProductStore querySettmentInterestWithProductID:self.financeModel.productid];
     
     // 本金 = financeModel。money + 所有手续费 - 总利息
-    double benJinMoney = [self.financeModel.money doubleValue] + totleSxf - totleIn;
-    
-    payment = self.financeModel.isend == 0 ? [SSJFixedFinanceProductHelper caculateYuQiInterestWithProductItem:[self.financeModel copy]] : benJinMoney;//预期利息
-    
+//    double benJinMoney = [self.financeModel.money doubleValue] + totleSxf - totleIn;
+    if (self.financeModel.isend) {
+        double money = 0;
+        NSArray *array = [SSJFixedFinanceProductStore queryFixedFinanceProductAddAndRedemChargeListWithModel:self.financeModel error:nil];
+        for (SSJFixedFinanceProductChargeItem *item in array) {
+            money += item.money;
+        }
+//        double jiesuanlixi = [SSJFixedFinanceProductStore queryForFixedFinanceProduceJieSuanInterestiothWithProductID:self.financeModel.productid];
+        double benJinMoney = money;// + jiesuanlixi;
+        payment = benJinMoney;
+    } else {
+        payment = [SSJFixedFinanceProductHelper caculateYuQiInterestWithProductItem:[self.financeModel copy]];//预期利息
+    }
     
     NSString *sumTitle = @"年化收益率";
     NSString *interestTitle = nil;

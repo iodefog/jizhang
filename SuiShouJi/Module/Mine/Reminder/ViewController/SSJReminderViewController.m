@@ -94,12 +94,10 @@ static NSString * SSJReminderListCellIdentifier = @"SSJReminderListCellIdentifie
         @strongify(self);
         [self remindLocationWithItem:item withSwitch:nil];
         [SSJLocalNotificationStore asyncsaveReminderWithReminderItem:item Success:^(SSJReminderItem *Ritem){
-            [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
             [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
         } failure:^(NSError *error) {
-            
+            [CDAutoHideMessageHUD showError:error];
         }];
-        
     };
     reminderEditeVc.item = item;
     [self.navigationController pushViewController:reminderEditeVc animated:YES];

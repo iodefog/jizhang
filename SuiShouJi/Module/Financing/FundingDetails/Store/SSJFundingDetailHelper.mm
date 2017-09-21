@@ -498,7 +498,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     [tempArray addObject:item];
                 } else {
                     SSJFundingListDayItem *dayItem = [[SSJFundingListDayItem alloc] init];
-                    dayItem.rowHeight = 35;
+                    dayItem.rowHeight = 65;
                     lastDayItem = dayItem;
                     dayItem.date = item.billDate;
                     if (item.incomeOrExpence) {
@@ -508,6 +508,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
                     }
                     lastDetailDate = item.billDate;
                     SSJCreditCardListFirstLineItem *firstLineItem = [[SSJCreditCardListFirstLineItem alloc] init];
+                    firstLineItem.repaymentMoney = listItem.repaymentMoney;
+                    firstLineItem.repaymentForOtherMonth = listItem.repaymentForOtherMonthMoney;
+                    firstLineItem.installMoney = listItem.instalmentMoney;
+                    firstLineItem.totalBalance = listItem.income - listItem.expenture;
                     firstLineItem.period = currentPeriod;
                     firstLineItem.remainingDaysStr = [self caculateRemainingDaysStrWithBillingDay:newItem.cardItem.cardBillingDay
                                                                                      repaymentDay:newItem.cardItem.cardRepaymentDay
