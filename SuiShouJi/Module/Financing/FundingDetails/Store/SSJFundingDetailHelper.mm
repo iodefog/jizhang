@@ -51,7 +51,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserChargeTable.fundId == ID);
 
-        joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
+        joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.memberId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
         
@@ -261,7 +261,7 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
         WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserChargeTable.fundId == cardId);
 
-        joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
+        joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.memberId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
 
         joinClause.join("BK_LOAN" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.cid.inTable(@"BK_USER_CHARGE") == SSJLoanTable.loanId.inTable(@"BK_LOAN"));
         
@@ -754,9 +754,10 @@ NSString *const SSJFundingDetailSumKey = @"SSJFundingDetailSumKey";
 
     WCTResultList resultList = {SSJUserChargeTable.money.inTable(@"BK_USER_CHARGE").sum()};
 
-    WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserBillTypeTable.billType == type && SSJUserChargeTable.fundId == fundId);
+    WCDB::JoinClause joinClause = WCDB::JoinClause("BK_USER_CHARGE").join("BK_USER_BILL_TYPE" , WCDB::JoinClause::Type::Inner).on(SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.billId.inTable(@"BK_USER_BILL_TYPE") && ((SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.booksId.inTable(@"BK_USER_BILL_TYPE") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUserBillTypeTable.userId.inTable(@"BK_USER_BILL_TYPE")) || SSJUserBillTypeTable.billId.length() < 4) && SSJUserBillTypeTable.userId.inTable(@"BK_USER_CHARGE") == SSJUSERID() && SSJUserChargeTable.operatorType.inTable(@"BK_USER_CHARGE") != 2 && SSJUserBillTypeTable.billType == type && SSJUserChargeTable.fundId == fundId && (SSJUserChargeTable.chargeType == SSJChargeIdTypeLoan || SSJUserChargeTable.billDate <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"])
+);
 
-    joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
+    joinClause.join("BK_SHARE_BOOKS_MEMBER" , WCDB::JoinClause::Type::Left).on(SSJUserChargeTable.booksId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.booksId.inTable(@"BK_SHARE_BOOKS_MEMBER") && SSJUserChargeTable.userId.inTable(@"BK_USER_CHARGE") == SSJShareBooksMemberTable.memberId.inTable(@"BK_SHARE_BOOKS_MEMBER"));
 
     WCDB::StatementSelect statementSelect = WCDB::StatementSelect().select(resultList).from(joinClause).where(SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER") == SSJShareBooksMemberStateNormal || SSJShareBooksMemberTable.memberState.inTable(@"BK_SHARE_BOOKS_MEMBER").isNull() || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"13" || SSJUserChargeTable.billId.inTable(@"BK_USER_CHARGE") == @"14");
 
