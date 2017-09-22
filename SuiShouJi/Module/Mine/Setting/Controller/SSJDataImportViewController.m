@@ -374,6 +374,7 @@
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+        self.hidesBottomBarWhenPushed = YES;
         self.title = @"数据导入";
         self.appliesTheme = NO;
     }
@@ -386,6 +387,18 @@
     [self.scrollView addSubview:self.topView];
     [self.scrollView addSubview:self.bottomView];
     [self.view setNeedsUpdateConstraints];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.tabBarController.tabBar.hidden = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    if (self.navigationController.viewControllers.count == 1) {
+        self.tabBarController.tabBar.hidden = NO;
+    }
 }
 
 - (void)updateViewConstraints {

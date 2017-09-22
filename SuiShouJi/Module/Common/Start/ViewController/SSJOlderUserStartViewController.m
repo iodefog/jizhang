@@ -101,7 +101,7 @@
 }
 
 - (void)beginButtonAciton {
-    [SSJStartViewHelper jumpOutOnViewController:self];
+    [SSJStartViewHelper jumpToImportViewController:self];
 }
 
 - (void)didReceiveMemoryWarning {
