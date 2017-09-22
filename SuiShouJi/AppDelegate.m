@@ -289,20 +289,20 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 设置根控制器
 - (void)setRootViewController {
-//    if (SSJLaunchTimesForAllVersion() == 1) {
+    if (SSJLaunchTimesForAllVersion() == 1) {
         SSJNewUserFirstStartViewController *newUserVc = [[SSJNewUserFirstStartViewController alloc] initWithNibName:nil bundle:nil];
         SSJNavigationController *newUserNavi = [[SSJNavigationController alloc] initWithRootViewController:newUserVc];
         [UIApplication sharedApplication].keyWindow.rootViewController = newUserNavi;
-//    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
-//        SSJGuideViewController *guideVc = [[SSJGuideViewController alloc] init];
-//        SSJNavigationController *guideNavi = [[SSJNavigationController alloc] initWithRootViewController:guideVc];
-//        [UIApplication sharedApplication].keyWindow.rootViewController = guideNavi;
-//
-//    } else {
-//        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
-//        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];
-//        [UIApplication sharedApplication].keyWindow.rootViewController = launcherNavi;
-//    }
+    } else if (SSJLaunchTimesForCurrentVersion() == 1) {
+        SSJGuideViewController *guideVc = [[SSJGuideViewController alloc] init];
+        SSJNavigationController *guideNavi = [[SSJNavigationController alloc] initWithRootViewController:guideVc];
+        [UIApplication sharedApplication].keyWindow.rootViewController = guideNavi;
+
+    } else {
+        SSJStartLauncherViewController *launcherVc = [[SSJStartLauncherViewController alloc] initWithNibName:nil bundle:nil];
+        SSJNavigationController *launcherNavi = [[SSJNavigationController alloc] initWithRootViewController:launcherVc];
+        [UIApplication sharedApplication].keyWindow.rootViewController = launcherNavi;
+    }
 }
     
 #pragma mark - qq快登

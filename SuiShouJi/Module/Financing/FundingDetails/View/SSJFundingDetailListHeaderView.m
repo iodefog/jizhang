@@ -226,7 +226,7 @@
     [self setNeedsUpdateConstraints];
 }
 
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.SectionHeaderClickedBlock) {
         self.SectionHeaderClickedBlock();
     }
