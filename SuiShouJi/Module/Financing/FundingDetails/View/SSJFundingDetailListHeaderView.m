@@ -206,7 +206,7 @@
         self.monthLab.text = [NSString stringWithFormat:@"%02ld月",currentDate.month];
         self.yearLab.text = [NSString stringWithFormat:@"%04ld",currentDate.year];
         
-        self.totalMoneyLab.text = [NSString stringWithFormat:@"%@",[[NSString stringWithFormat:@"%f",creditCardItem.income - creditCardItem.expenture] ssj_moneyDecimalDisplayWithDigits:2]];
+        self.totalMoneyLab.text = [NSString stringWithFormat:@"%@",[[NSString stringWithFormat:@"%f",creditCardItem.income - creditCardItem.expenture + creditCardItem.instalmentMoney] ssj_moneyDecimalDisplayWithDigits:2]];
         
         if (creditCardItem.instalmentMoney) {
             self.instalmentMoneyLab.text = [[NSString stringWithFormat:@"%f",creditCardItem.instalmentMoney] ssj_moneyDecimalDisplayWithDigits:2];

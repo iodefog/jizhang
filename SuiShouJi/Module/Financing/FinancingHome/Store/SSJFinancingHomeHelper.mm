@@ -450,6 +450,7 @@
                    )
                    || SSJUserBillTypeTable.billId.length() < 4
                )
+               && (SSJUserChargeTable.chargeType == SSJChargeIdTypeLoan || SSJUserChargeTable.billDate <= [[NSDate date] formattedDateWithFormat:@"yyyy-MM-dd"])
                && SSJUserBillTypeTable.userId.inTable(@"bk_user_charge") == SSJUSERID()
                && SSJUserChargeTable.operatorType.inTable(@"bk_user_charge") != 2
                && SSJUserBillTypeTable.billType == type
