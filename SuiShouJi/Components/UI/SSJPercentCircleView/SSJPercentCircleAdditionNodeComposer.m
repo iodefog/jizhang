@@ -69,13 +69,15 @@ const CGFloat kBreakPointSpaceX = 5;
     [self composeRightNodeItems];
     
     NSMutableArray *items = [NSMutableArray array];
-    if (self.topItem) {
+    if (_topItem) {
+        _topItem.textSize = [_topItem.text sizeWithAttributes:@{NSFontAttributeName:_topItem.font}];
         [items addObject:_topItem];
     }
     
     [items addObjectsFromArray:self.rightItems];
     
-    if (self.bottomItem) {
+    if (_bottomItem) {
+        _bottomItem.textSize = [_bottomItem.text sizeWithAttributes:@{NSFontAttributeName:_bottomItem.font}];
         [items addObject:self.bottomItem];
     }
     
