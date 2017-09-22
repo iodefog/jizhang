@@ -290,21 +290,6 @@ static NSUInteger kDateTag = 2005;
 //    }
 //}
 
-// 有些输入框的clearsOnBeginEditing设为YES，只要获取焦点文本内容就会清空，这种情况下不会收到文本改变的通知，所以在这个代理函数中进行了处理
-- (BOOL)textFieldShouldClear:(UITextField *)textField {
-//    if (textField.tag == kMoneyTag) {
-//        self.compoundModel.chargeModel.money = 0;
-//        self.compoundModel.targetChargeModel.money = 0;
-//    } else if (textField.tag == kInterestTag) {
-//        self.compoundModel.interestChargeModel.money = 0;
-//    } else if (textField.tag == kMemoTag) {
-//        self.compoundModel.chargeModel.memo = @"";
-//        self.compoundModel.targetChargeModel.memo = @"";
-//        self.compoundModel.interestChargeModel.memo = @"";
-//    }
-    
-    return YES;
-}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
@@ -339,10 +324,9 @@ static NSUInteger kDateTag = 2005;
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFinanceTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"loan_money"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"¥0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"0.00" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
         cell.textField.text = self.moneyStr;
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
-        cell.textField.clearsOnBeginEditing = YES;
         cell.textField.delegate = self;
         cell.textField.tag = kMoneyTag;
         if (self.financeModel.isend) {
@@ -401,7 +385,6 @@ static NSUInteger kDateTag = 2005;
         cell.textField.text = self.memoStr;
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.returnKeyType = UIReturnKeyDone;
-        cell.textField.clearsOnBeginEditing = NO;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         cell.textField.delegate = self;
         cell.textField.tag = kMemoTag;
