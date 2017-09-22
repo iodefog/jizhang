@@ -323,12 +323,12 @@
         _cell_1 = [[_SSJDataImportBottomCell alloc] init];
         _cell_1.numberLab.text = @"1";
         NSString *url = [NSString stringWithFormat:@"http://%@", [SSJDomainManager domain].host];
-        _cell_1.titleLab.text = [NSString stringWithFormat:@"电脑登录有鱼记账官网\n（%@ 一键复制）", url];
+        _cell_1.titleLab.text = [NSString stringWithFormat:@"在有鱼记账手机客户端2.8.0以上版本登录后，电脑登录有鱼记账官网\n（%@ 一键复制）", url];
         _cell_1.imageView.image = [UIImage imageNamed:@"data_import_guide_1"];
         _cell_1.clickTitleLabBlock = ^(_SSJDataImportBottomCell *cell) {
             UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
             pasteboard.string = url;
-            [CDAutoHideMessageHUD showMessage:@"复制成功"];
+            [SSJAlertViewAdapter showAlertViewWithTitle:@"" message:@"复制成功，您可粘贴发送至QQ或微信，然后在电脑上打开链接即可。" action:[SSJAlertViewAction actionWithTitle:@"知道了" handler:NULL], nil];
         };
     }
     return _cell_1;

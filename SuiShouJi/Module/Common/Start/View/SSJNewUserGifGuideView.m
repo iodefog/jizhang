@@ -94,6 +94,7 @@
         _titleLab.font = [UIFont ssj_compatibleBoldSystemFontOfSize:SSJ_FONT_SIZE_2];
         _titleLab.textAlignment = NSTextAlignmentCenter;
         _titleLab.numberOfLines = 0;
+        _titleLab.hidden = YES;
     }
     return _titleLab;
 }
@@ -105,6 +106,7 @@
         _subTitleLab.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _subTitleLab.textAlignment = NSTextAlignmentCenter;
         _subTitleLab.numberOfLines = 0;
+        _subTitleLab.hidden = YES;
     }
     return _subTitleLab;
 }

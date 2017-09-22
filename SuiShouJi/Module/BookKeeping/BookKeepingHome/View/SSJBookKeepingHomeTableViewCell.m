@@ -73,6 +73,10 @@ static const CGFloat kChargeImgWidth = 30;
     return self;
 }
 
+- (void)layoutSubviews {
+    [super layoutSubviews];
+}
+
 - (void)updateConstraints {
     [self.verticalLine mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.width.mas_equalTo(1);
@@ -116,17 +120,20 @@ static const CGFloat kChargeImgWidth = 30;
     if (self.bottomLabel.text.length || self.bottomLabel.attributedText.length) {
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.and.left.and.right.mas_equalTo(self.labelContainer);
+            make.height.mas_equalTo([self.topLabel ssj_textSize].height).priorityHigh();
         }];
         [self.bottomLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.mas_equalTo(self.topLabel.mas_bottom).offset(2);
             make.left.and.right.and.bottom.mas_equalTo(self.labelContainer);
+            make.height.mas_equalTo([self.bottomLabel ssj_textSize].height).priorityHigh();
         }];
     } else {
         [self.bottomLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
             make.top.left.mas_equalTo(0);
+            make.size.mas_equalTo(CGSizeZero);
         }];
         [self.topLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.mas_equalTo(self.labelContainer);
+            make.edges.mas_equalTo(self.labelContainer).priorityHigh();
         }];
     }
     
@@ -206,14 +213,15 @@ static const CGFloat kChargeImgWidth = 30;
         self.chargeImage.userInteractionEnabled = NO;
     }
     
-    [self setNeedsUpdateConstraints];
-    
     @weakify(self);
     [[[RACObserve(_item, expanded) skip:1] takeUntil:self.rac_prepareForReuseSignal] subscribeNext:^(NSNumber *expandedValue) {
         @strongify(self);
         [self showEditAndDeleteBtn:[expandedValue boolValue] animated:YES];
     }];
     [self showEditAndDeleteBtn:_item.expanded animated:NO];
+    
+    [self setNeedsUpdateConstraints];
+    [self setNeedsLayout];
 }
 
 - (void)setIsLastRow:(BOOL)isLastRow {

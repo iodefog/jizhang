@@ -383,25 +383,27 @@
 }
 
 + (void)cancelLocalNotificationWithKey:(nullable NSString *)key{
-    if (!key.length) {
-        [[UIApplication sharedApplication] cancelAllLocalNotifications];
-        return;
-    }
-    // 获取所有本地通知数组
-    NSArray *localNotifications = [[NSArray alloc]init];
-    localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
-    for (UILocalNotification *notification in localNotifications) {
-        NSDictionary *userInfo = notification.userInfo;
-        if (userInfo) {
-            // 根据设置通知参数时指定的key来获取通知参数
-            NSString *info = userInfo[@"key"];
-            
-            // 如果找到需要取消的通知，则取消
-            if (([info isEqualToString: key])) {
-                [[UIApplication sharedApplication] cancelLocalNotification:notification];
-            }  
-        }  
-    }
+    dispatch_main_async_safe(^{
+        if (!key.length) {
+            [[UIApplication sharedApplication] cancelAllLocalNotifications];
+            return;
+        }
+        // 获取所有本地通知数组
+        NSArray *localNotifications = [[NSArray alloc]init];
+        localNotifications = [UIApplication sharedApplication].scheduledLocalNotifications;
+        for (UILocalNotification *notification in localNotifications) {
+            NSDictionary *userInfo = notification.userInfo;
+            if (userInfo) {
+                // 根据设置通知参数时指定的key来获取通知参数
+                NSString *info = userInfo[@"key"];
+                
+                // 如果找到需要取消的通知，则取消
+                if (([info isEqualToString: key])) {
+                    [[UIApplication sharedApplication] cancelLocalNotification:notification];
+                }
+            }
+        }
+    });
 }
 
 + (void)cancelLocalNotificationWithremindItem:(SSJReminderItem *)item{
@@ -418,20 +420,21 @@
 }
 
 + (void)cancelLocalNotificationWithUserId:(NSString *)userId{
-    if (!userId.length) {
-        [CDAutoHideMessageHUD showMessage:@"用户id不能为空"];
-        return;
-    }
-    NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
-    for (UILocalNotification *notification in localNotifications) {
-        NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
-        SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
-        if ([remindItem.userId isEqualToString:userId]) {
-            dispatch_main_async_safe(^{
-                [[UIApplication sharedApplication] cancelLocalNotification:notification];
-            });
+    dispatch_main_async_safe(^{
+        if (!userId.length) {
+            [CDAutoHideMessageHUD showMessage:@"用户id不能为空"];
+            return;
         }
-    }
+        NSArray *localNotifications = [NSArray arrayWithArray:[UIApplication sharedApplication].scheduledLocalNotifications];
+        for (UILocalNotification *notification in localNotifications) {
+            NSDictionary *userinfo = [NSDictionary dictionaryWithDictionary:notification.userInfo];
+            SSJReminderItem *remindItem = [SSJReminderItem mj_objectWithKeyValues:[userinfo objectForKey:@"remindItem"]];
+            if ([remindItem.userId isEqualToString:userId]) {
+                [[UIApplication sharedApplication] cancelLocalNotification:notification];
+            }
+        }
+    });
+    
 }
 
 + (NSDate *)calculateNexRemindDateWithStartDate:(NSDate *)date remindCycle:(NSInteger)remindCycle remindAtEndOfMonth:(BOOL)remindAtEndOfMonth{
