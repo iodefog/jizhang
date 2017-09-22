@@ -170,7 +170,12 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
     MJWeakSelf;
     [RACObserve(self, liLvSegmentControl.selectedSegmentIndex) subscribeNext:^(id x) {
         [weakSelf updateDayLiXiWithRate:[weakSelf.liLvTextF.text doubleValue] * 0.01 interstType:[weakSelf switchRateType:weakSelf.liLvSegmentControl.selectedSegmentIndex rate:YES] money:[weakSelf.moneyTextF.text doubleValue]];
-        weakSelf.rateType = weakSelf.liLvSegmentControl.selectedSegmentIndex;
+//        if (weakSelf.chargeItem) {
+            weakSelf.rateType = weakSelf.model.ratetype;
+//        } else {
+//            weakSelf.rateType = SSJMethodOfRateOrTimeDay;
+//        }
+     
         [weakSelf updateJiXi];
     }];
 
@@ -183,28 +188,18 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         [weakSelf updateJiXi];
     }];
     
-    [self.qiXianTextF.rac_textSignal subscribeNext:^(id x) {
-        [weakSelf updateJiXi];
-    }];
-    
-    [self.moneyTextF.rac_textSignal subscribeNext:^(id x) {
-        [weakSelf updateJiXi];
-    }];
-    
-    [self.liLvTextF.rac_textSignal subscribeNext:^(id x) {
-        [weakSelf updateJiXi];
-    }];
-    
     [RACObserve(self, qiXianTextF.text) subscribeNext:^(id x) {
         [weakSelf updateJiXi];
     }];
     
     [RACObserve(self, liLvTextF.text) subscribeNext:^(id x) {
         [weakSelf updateJiXi];
+        [weakSelf updateDayLiXiWithRate:[self.title3 doubleValue] * 0.01 interstType:weakSelf.rateType money:[self.title2 doubleValue]];
     }];
     
-    [RACObserve(self, qiXianTextF.text) subscribeNext:^(id x) {
+    [RACObserve(self, moneyTextF.text) subscribeNext:^(id x) {
         [weakSelf updateJiXi];
+        [weakSelf updateDayLiXiWithRate:[self.title3 doubleValue] * 0.01 interstType:weakSelf.rateType money:[self.title2 doubleValue]];
     }];
 }
 
@@ -290,21 +285,21 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 - (void)originalData {
     [self setBind];
     //拍息方式
-    @weakify(self);
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        @strongify(self);
-        NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate rateType:self.model.ratetype money:[self.model.money doubleValue]]];
-        NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
-        self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
-        
-        if (self.jiXiMethodSelectionView.selectedIndex > 0) {
-            NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.model.rate rateType:self.model.ratetype time:self.model.time timetype:self.model.timetype money:[self.model.money doubleValue] interestType:self.model.interesttype startDate:@""];
-            NSString *targetJiXiStr = [dic objectForKey:@"interest"];
-            NSString *oldJiXiStr = [dic objectForKey:@"desc"];
-            self.jixiTextL.attributedText = [oldJiXiStr attributeStrWithTargetStr:targetJiXiStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
-        }
-    });
+//    @weakify(self);
+//    static dispatch_once_t onceToken;
+//    dispatch_once(&onceToken, ^{
+//        @strongify(self);
+//        NSString *targetLiLvStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductHelper caculateInterestForEveryDayWithRate:self.model.rate rateType:self.model.ratetype money:[self.model.money doubleValue]]];
+//        NSString *oldlilvStr = [NSString stringWithFormat:@"起息日开始计息，产生日息%@元",targetLiLvStr];
+//        self.liLvTextL.attributedText = [oldlilvStr attributeStrWithTargetStr:targetLiLvStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+//        
+//        if (self.jiXiMethodSelectionView.selectedIndex > 0) {
+//            NSDictionary *dic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:self.model.rate rateType:self.model.ratetype time:self.model.time timetype:self.model.timetype money:[self.model.money doubleValue] interestType:self.model.interesttype startDate:@""];
+//            NSString *targetJiXiStr = [dic objectForKey:@"interest"];
+//            NSString *oldJiXiStr = [dic objectForKey:@"desc"];
+//            self.jixiTextL.attributedText = [oldJiXiStr attributeStrWithTargetStr:targetJiXiStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
+//        }
+//    });
 }
 
 - (void)updateDayLiXiWithRate:(double)rate interstType:(SSJMethodOfRateOrTime)rateType money:(double)money {
@@ -340,10 +335,15 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
         self.jiXiMethodSelectionView.selectedIndex = [self switchJiXiMethodWithType:self.model.interesttype];
         self.rateType = self.model.ratetype;
         self.timeType = self.model.timetype;
+        self.title2 = self.model.money;
+        self.title3 = [NSString stringWithFormat:@"%.2f",self.model.rate * 100];
+        self.title4 = [NSString stringWithFormat:@"%.f",self.model.time];
+        self.liLvSegmentControl.selectedSegmentIndex = self.rateType;
     } else {
         self.jiXiMethodSelectionView.selectedIndex = -1;
         self.rateType = SSJMethodOfRateOrTimeYear;
         self.timeType = SSJMethodOfRateOrTimeDay;
+        self.rateType = self.liLvSegmentControl.selectedSegmentIndex = SSJMethodOfRateOrTimeYear;
     }
     
     MJWeakSelf;
@@ -457,6 +457,13 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 
 #pragma mark - Action
 - (void)deleteButtonClicked {
+    MJWeakSelf;
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您确定要删除此流水吗？" action:[SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        [weakSelf deleteFinanceModel];
+    }],[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], nil];
+}
+
+- (void)deleteFinanceModel {
     MJWeakSelf;
     [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.model success:^{
         NSArray *array = self.navigationController.viewControllers;
@@ -973,6 +980,18 @@ static NSString *kAddOrEditFixefFinanceProSegmentTextFieldCellId = @"kAddOrEditF
 #pragma mark - UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField == self.moneyTextF) {
+        self.moneyTextF.text = self.title2 = @"";
+    } else if (textField == self.liLvTextF) {
+        self.liLvTextF.text = self.title3 = @"";
+    } else if (textField == self.qiXianTextF) {
+        self.qiXianTextF.text = self.title4 = @"";
+    }
+    [self updateJiXi];
     return YES;
 }
 

@@ -77,19 +77,17 @@
 }
 
 - (void)layoutSubviews {
-    
+    [super layoutSubviews];
     CGRect contentFrame = UIEdgeInsetsInsetRect(self.bounds, self.contentInsets);
     _topLab.width = CGRectGetWidth(contentFrame);
     _bottomLab.width = CGRectGetWidth(contentFrame);
     _topLab.height = _item.topTitleFont.pointSize;
     _bottomLab.height = _item.bottomTitleFont.pointSize;
-    
     CGFloat baseGap = (self.height - _topLab.height - _bottomLab.height) * 0.2;
     CGFloat top = baseGap * 2;
     _bottomLab.top = top;
     _topLab.top = _bottomLab.bottom + baseGap;
     _bottomLab.centerX = _topLab.centerX = self.width * 0.5;
-    
     _topIndicator.center = _bottomLab.center;
     _bottomIndicator.center = _topLab.center;
 }
@@ -159,7 +157,7 @@
     if (self = [super initWithFrame:frame]) {
         _cells = [[NSMutableArray alloc] init];
         _horizontalSeparators = [[NSMutableArray alloc] init];
-        _verticalSeparators = [[NSMutableArray alloc] init];
+//        _verticalSeparators = [[NSMutableArray alloc] init];
         [self.layer addSublayer:self.backLayer];
     }
     return self;
@@ -181,13 +179,13 @@
         
         for (NSUInteger cellIdx = 0; cellIdx < rowCells.count; cellIdx ++) {
             SSJFinancingDetailHeadeViewCell *cell = rowCells[cellIdx];
-            cell.frame = CGRectMake(self.backLayer.left + cellWidth * cellIdx, rowHeight * rowIdx, cellWidth, rowHeight);
+            cell.frame = CGRectMake(self.backLayer.left + cellWidth * cellIdx, rowHeight * rowIdx - (rowIdx == 0 ? -5 : 9), cellWidth, rowHeight);
             
-            if (cellSeparators.count > cellIdx) {
-                UIView *cellSeparator = cellSeparators[cellIdx];
-                CGFloat top = rowHeight * rowIdx;
-                cellSeparator.frame = CGRectMake(self.backLayer.left + (cellIdx + 1) * cellWidth, top + _verticalSeparatorInset.top, SEPARATOR_WIDTH, rowHeight - _verticalSeparatorInset.top - _verticalSeparatorInset.bottom);
-            }
+//            if (cellSeparators.count > cellIdx) {
+//                UIView *cellSeparator = cellSeparators[cellIdx];
+//                CGFloat top = rowHeight * rowIdx - 9;
+//                cellSeparator.frame = CGRectMake(self.backLayer.left + (cellIdx + 1) * cellWidth, top + _verticalSeparatorInset.top, SEPARATOR_WIDTH, rowHeight - _verticalSeparatorInset.top - _verticalSeparatorInset.bottom);
+//            }
         }
     }
     

@@ -116,6 +116,21 @@ static NSString *kTitle6 = @"备注";
     [self updateAppearance];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self bind];
+}
+
+- (void)bind {
+    MJWeakSelf;
+    [RACObserve(self, moneyStr) subscribeNext:^(id x) {
+        [weakSelf updateSubTitle];
+    }];
+    [RACObserve(self, lixiStr) subscribeNext:^(id x) {
+        [weakSelf updateSubTitle];
+    }];
+}
+
 - (void)setUpNav {
     self.title = self.chargeModel ? @"部分赎回详情" : @"部分赎回";
     //不是新建并且没有结算的时候
@@ -187,6 +202,16 @@ static NSString *kTitle6 = @"备注";
     return YES;
 }
 
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField == self.moneyTextF) {
+        self.moneyTextF.text = self.moneyStr = @"";
+    } else if (textField == self.liXiTextF) {
+        self.liXiTextF.text = self.lixiStr = @"";
+    }
+    [self updateSubTitle];
+    return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     if (self.moneyTextF == textField || self.liXiTextF == textField) {
@@ -196,15 +221,19 @@ static NSString *kTitle6 = @"备注";
             self.moneyStr = text;
         } else {
             self.lixiStr = text;
-            [self updateSubTitle];
         }
+//        [self updateSubTitle];
         return NO;
     }
     return YES;
 }
 
+//- (BOOL)textFieldShouldClear:(UITextField *)textField {
+//    return YES;
+//}
+
 - (void)updateSubTitle {
-    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] + [self.liXiTextF.text doubleValue])];
+    NSString *targetStr = [NSString stringWithFormat:@"%.2f",([self.moneyStr doubleValue] + [self.lixiStr doubleValue])];
     NSString *oldStr = [NSString stringWithFormat:@"实际扣除金额为：%@元",targetStr];
     self.subL.attributedText = [oldStr attributeStrWithTargetStr:targetStr range:NSMakeRange(0, 0) color:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.marcatoColor]];
 }
@@ -277,8 +306,8 @@ static NSString *kTitle6 = @"备注";
         SSJAddOrEditLoanTextFieldCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFixedFinanceProTextFieldCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = title;
-        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"最多可输入10个字符" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
-//        cell.textField.text = self.compoundModel.chargeModel.memo;
+        cell.textField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"备注说明（最多10个字）" attributes:@{NSForegroundColorAttributeName:[UIColor ssj_colorWithHex:SSJ_CURRENT_THEME.secondaryColor]}];
+        cell.textField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_4];
         cell.textField.keyboardType = UIKeyboardTypeDefault;
         cell.textField.returnKeyType = UIReturnKeyDone;
         cell.textField.clearButtonMode = UITextFieldViewModeWhileEditing;
