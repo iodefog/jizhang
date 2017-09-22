@@ -770,12 +770,12 @@ static NSString *const kIsEverEnteredKey = @"kIsEverEnteredKey";
             }
         }else{
             if (![db stringForQuery:@"select lastselectfundid from bk_user where cuserid = ?",userId].length) {
-                self.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
-                self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and cparent != '10' and cparent != '11' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                self.item.fundName = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != '10' and cparent != '11' and cparent != '17' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != '10' and cparent != '11' and cparent != '17' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
             }else{
                 if ([db intForQuery:@"select operatortype from bk_fund_info where cfundid = (select lastselectfundid from bk_user where cuserid = ?)",userId] == 2) {
-                    self.item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
-                    self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != 'root' and operatortype <> 2 and cuserid = ? limit 1",userId];
+                    self.item.fundName = [db stringForQuery:@"select cfundid from bk_fund_info where cparent != '10' and cparent != '11' and cparent != '17' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
+                    self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cparent != '10' and cparent != '11' and cparent != '17' and operatortype <> 2 and cuserid = ? order by iorder limit 1",userId];
                 }else{
                     self.item.fundId = [db stringForQuery:@"select lastselectfundid from bk_user as a where a.cuserid = ? and a.lastselectfundid in (select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 and cparent != 'root')",userId,userId];
                     self.item.fundName = [db stringForQuery:@"select cacctname from bk_fund_info where cfundid = ? and cuserid = ? and operatortype <> 2",self.item.fundId,userId];
