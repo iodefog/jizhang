@@ -182,6 +182,7 @@ static NSString *const kBillingChargeHeaderViewID = @"kBillingChargeHeaderViewID
 
 - (void)enterCalenderDetailWithSelectedItem:(SSJBillingChargeCellItem *)selectedItem {
     SSJCalenderDetailViewController *calenderDetailVC = [[SSJCalenderDetailViewController alloc] initWithTableViewStyle:UITableViewStyleGrouped];
+    
     calenderDetailVC.item = selectedItem;
     __weak typeof(self) wself = self;
     calenderDetailVC.deleteHandler = ^ {

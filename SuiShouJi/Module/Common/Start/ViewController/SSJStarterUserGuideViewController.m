@@ -48,6 +48,7 @@
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.pageControl];
     [self.view addSubview:self.jumpOutButton];
+    [self.view addSubview:self.beginButton];
     // Do any additional setup after loading the view.
 }
 
@@ -109,6 +110,7 @@
         //        [_beginButton ssj_setBackgroundColor:[UIColor ssj_colorWithHex:@"f17272"] forState:UIControlStateNormal];
         [_beginButton setBackgroundImage:[UIImage imageNamed:@"aimateguide_btn_background"] forState:UIControlStateNormal];
         [_beginButton addTarget:self action:@selector(beginButtonAciton) forControlEvents:UIControlEventTouchUpInside];
+        _beginButton.hidden = YES;
     }
     return _beginButton;
 }
@@ -163,15 +165,19 @@
             }
         }
     } else {
-        [UIView transitionFromView:self.beginButton toView:self.pageControl duration:0.2 options:UIViewAnimationOptionTransitionCrossDissolve completion:^(BOOL finished) {
-            for (int i = 0; i < self.contentViews.count; i ++) {
-                if (i == idx) {
-                    [[self.contentViews objectAtIndex:i] startAnimating];
-                } else {
-                    [self.contentViews objectAtIndex:i].isNormalState = YES;
-                }
-            }
+        self.pageControl.hidden = NO;
+        [UIView animateWithDuration:0.2f animations:^{
+            self.beginButton.alpha = 0.f;
+        } completion:^(BOOL finished) {
+            self.beginButton.hidden = YES;
         }];
+        for (int i = 0; i < self.contentViews.count; i ++) {
+            if (i == idx) {
+                [[self.contentViews objectAtIndex:i] startAnimating];
+            } else {
+                [self.contentViews objectAtIndex:i].isNormalState = YES;
+            }
+        }
     }
 }
 
@@ -188,6 +194,7 @@
 - (void)jumpOutButtonClicked:(id)sender {
     [SSJStartViewHelper jumpOutOnViewController:self];
 }
+
 #pragma mark - Private
 - (void)createContentViews {
     if (!self.contentViews) {
@@ -198,7 +205,7 @@
     for (int i = 0; i < 3; i ++) {
         switch (i) {
             case 0:{
-                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide3.gif" title:@"做好资金和预算设置,账目记起来" subTitle:@"资金列表、预算"];
+                SSJNewUserGifGuideView *guideView = [[SSJNewUserGifGuideView alloc] initWithFrame:CGRectMake(0, 0, self.view.width, self.view.height) WithImageName:@"newuserguide3.gif" title:@"做好资金和预算设置,账目记起来" subTitle:@"资金账户、预算"];
                 [self.contentViews addObject:guideView];
                 [self.scrollView addSubview:guideView];
             }
