@@ -48,10 +48,12 @@
         } else {
             make.bottom.mas_equalTo(-13);
         }
+        make.height.mas_equalTo([self.topLab ssj_textSize].height).priorityHigh();
     }];
     [self.bottomLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(15);
         make.bottom.mas_equalTo(-13);
+        make.height.mas_equalTo([self.bottomLab ssj_textSize].height).priorityHigh();
     }];
     [super updateConstraints];
 }
