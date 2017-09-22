@@ -13,4 +13,6 @@
 
 + (void)jumpOutOnViewController:(SSJBaseViewController *)controller;
 
++ (void)jumpToImportViewController:(SSJBaseViewController *)controller;
+
 @end
