@@ -358,7 +358,7 @@ static NSUInteger kDateTag = 2005;
         SSJAddOrEditLoanLabelCell *cell = [tableView dequeueReusableCellWithIdentifier:kAddOrEditFinanceLabelCellId forIndexPath:indexPath];
         cell.imageView.image = [[UIImage imageNamed:@"fixed_finance_out"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.textLabel.text = [self titleForCellTag:tag];
-        
+        cell.descLabel.hidden = YES;
 //        if (self.chargeItem) {
 //            //查询当前charid对应的另外一跳流水
 //            //通过另一条流水的fundid查找名称
@@ -380,8 +380,10 @@ static NSUInteger kDateTag = 2005;
         
         if (self.financeModel.isend) {
             cell.customAccessoryType = UITableViewCellAccessoryNone;
+            cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
         } else {
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.subtitleLabel.textColor = SSJ_MAIN_COLOR;
         }
         
         cell.switchControl.hidden = YES;
@@ -434,6 +436,7 @@ static NSUInteger kDateTag = 2005;
             cell.customAccessoryType = UITableViewCellAccessoryNone;
             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
         }
+        cell.descLabel.hidden = NO;
         cell.descLabel.text = @"T(追购日)+1日起息，输入起息日即追购后的次日";
         
         cell.switchControl.hidden = YES;
