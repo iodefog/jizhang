@@ -43,4 +43,11 @@
     return [NSSet setWithObject:@"cproductid"];
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        self.subjectToDeletion = NO;
+    }
+    return self;
+}
+
 @end
