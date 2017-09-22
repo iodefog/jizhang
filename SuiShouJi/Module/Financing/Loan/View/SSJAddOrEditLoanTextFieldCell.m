@@ -19,6 +19,7 @@
         _textField = [[UITextField alloc] init];
         _textField.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
         _textField.textAlignment = NSTextAlignmentRight;
+        _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         [self.contentView addSubview:_textField];
         
         [self updateAppearance];

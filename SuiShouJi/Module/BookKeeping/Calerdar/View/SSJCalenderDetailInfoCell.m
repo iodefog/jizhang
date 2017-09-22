@@ -32,10 +32,6 @@
     return self;
 }
 
-- (void)layoutSubviews {
-    
-}
-
 - (void)updateConstraints {
     [self.leftLab mas_updateConstraints:^(MASConstraintMaker *make) {
         make.size.mas_equalTo([self.leftLab ssj_textSize]);
@@ -60,7 +56,6 @@
     SSJCalenderDetailInfoCellItem *item = cellItem;
     self.leftLab.text = item.leftText;
     self.rightLab.text = item.rightText;
-    [self setNeedsUpdateConstraints];
 }
 
 - (void)updateCellAppearanceAfterThemeChanged {

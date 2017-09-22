@@ -82,6 +82,8 @@ const CGFloat kImageDiam = 26;
         return;
     }
     
+    [super setCellItem:cellItem];
+    
     SSJCalenderTableViewCellItem *item = cellItem;
     
     self.icon.image = item.billImage;
