@@ -2496,7 +2496,7 @@
                     BOOL hasno = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:item inDatabase:db error:error];
                     //最后一条利息
                     NSDate *endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
-                    NSInteger months = [endDate daysFrom:lastChangeDate];
+                    NSInteger months = [endDate monthsFrom:lastChangeDate];
                     NSInteger begDays = [endDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
                     NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:hasno ? item.time : months timetype:hasno ? item.timetype : SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
                     
@@ -2536,8 +2536,13 @@
 //                case SSJMethodOfRateOrTimeDay://期限日
 //                case SSJMethodOfRateOrTimeMonth://期限月
 //                case SSJMethodOfRateOrTimeYear://期限年
+            
         {
-            NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
+            double totalNewMoney = 0;
+            for (SSJFixedFinanceProductChargeItem *chaItem in addAndRedemChargeItems) {
+                totalNewMoney += chaItem.money;
+            }
+            NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:totalNewMoney interestType:item.interesttype startDate:@""];
             interest = [[interestDic objectForKey:@"interest"] doubleValue];
 
         }
@@ -2551,7 +2556,7 @@
                         if ([billDate isLaterThan:endDate]) return YES;//如果开始时间晚于结束时间则返回//如果开始时间晚于结束时间则返回
                         NSString *billDateStr = [billDate formattedDateWithFormat:@"yyyy-MM-dd"];
                         //生成利息
-                        NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+                        NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[billDate formattedDateWithFormat:@"yyyyMMdd"]];
                         
                         NSMutableArray *valueArr = [NSMutableArray array];
                         [valueArr addObject:chargeid];
@@ -2576,69 +2581,69 @@
             }
             
             break;
-        case SSJMethodOfInterestEveryMonth://每月付息
-        {
-            NSInteger months = 0;
-            switch (item.timetype) {
-                    
-                case SSJMethodOfRateOrTimeMonth:
-                    months = item.time;
-                    break;
-                case SSJMethodOfRateOrTimeYear: //一年12个月一共12*n个月
-                    months = item.time * 12;
-                    break;
-                    
-                default:
-                    break;
-            }
-            for (NSInteger i = 0; i<months; i++) {
-                NSDate *monthJiXiDate = [dayJixiDate dateByAddingMonths:i];
-                if ([monthJiXiDate isLaterThanOrEqualTo:endDate] && monthJiXiDate ) return YES;
-                NSDate *billDate = monthJiXiDate;
-                if (newMoney == 0 || delete == 2) {//如果资金没有变动或者是删除的时候按照变更前的金额计算利息
-                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
-                    interest = [[interestDic objectForKey:@"interest"] doubleValue];
-                    //如果是追加或者赎回那么当月的利息将分段计算
-                } else if (i == 0 && isMoneyChange == YES) {//本金有变动(追加或者赎回)
-                    interest = [self fenduanlixiWithProductItem:item newMoney:money interestDate:investmentDate];
-                    
-                } else {//没有变动
-                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
-                    interest = [[interestDic objectForKey:@"interest"] doubleValue];
-                }
-                
-                //如果一定到了结束日期了就返回
-                if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
-                    return YES;
-                }
-                if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
-                NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
-                //生成利息
-                NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
-                
-                NSMutableArray *valueArr = [NSMutableArray array];
-                [valueArr addObject:chargeid];
-                [valueArr addObject:SSJUSERID()];
-                [valueArr addObject:billId];
-                [valueArr addObject:fundid];
-                [valueArr addObject:billDateStr];
-                [valueArr addObject:cid];
-                [valueArr addObject:@(interest)];
-                [valueArr addObject:@""];
-                [valueArr addObject:@(SSJSyncVersion())];
-                [valueArr addObject:@(SSJOperatorTypeCreate)];
-                [valueArr addObject:writeDateStr];
-                [valueArr addObject:@(SSJChargeIdTypeFixedFinance)];
-                NSDictionary *interestChargeInfo = [NSDictionary dictionaryWithObjects:[valueArr copy] forKeys:keyArr];
-                
-                if ([[NSString stringWithFormat:@"%.2f",interest] doubleValue] > 0) {
-                    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:ichargeid, :cuserid, :ibillid, :ifunsid, :cbilldate, :cid, :imoney, :cmemo, :iversion, :operatortype, :cwritedate, :ichargetype)" withParameterDictionary:interestChargeInfo]) {
-                        return NO;
-                    }
-                }
-            }
-        }
-            break;
+//        case SSJMethodOfInterestEveryMonth://每月付息
+//        {
+//            NSInteger months = 0;
+//            switch (item.timetype) {
+//                    
+//                case SSJMethodOfRateOrTimeMonth:
+//                    months = item.time;
+//                    break;
+//                case SSJMethodOfRateOrTimeYear: //一年12个月一共12*n个月
+//                    months = item.time * 12;
+//                    break;
+//                    
+//                default:
+//                    break;
+//            }
+//            for (NSInteger i = 0; i<months; i++) {
+//                NSDate *monthJiXiDate = [dayJixiDate dateByAddingMonths:i];
+//                if ([monthJiXiDate isLaterThanOrEqualTo:endDate] && monthJiXiDate ) return YES;
+//                NSDate *billDate = monthJiXiDate;
+//                if (newMoney == 0 || delete == 2) {//如果资金没有变动或者是删除的时候按照变更前的金额计算利息
+//                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
+//                    interest = [[interestDic objectForKey:@"interest"] doubleValue];
+//                    //如果是追加或者赎回那么当月的利息将分段计算
+//                } else if (i == 0 && isMoneyChange == YES) {//本金有变动(追加或者赎回)
+//                    interest = [self fenduanlixiWithProductItem:item newMoney:money interestDate:investmentDate];
+//                    
+//                } else {//没有变动
+//                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:item.time timetype:item.timetype money:[money doubleValue] interestType:item.interesttype startDate:@""];
+//                    interest = [[interestDic objectForKey:@"interest"] doubleValue];
+//                }
+//                
+//                //如果一定到了结束日期了就返回
+//                if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
+//                    return YES;
+//                }
+//                if ([billDate isLaterThanOrEqualTo:endDate]) return YES;//如果开始时间晚于结束时间则返回
+//                NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
+//                //生成利息
+//                NSString *chargeid = [NSString stringWithFormat:@"%@_%@",item.productid,[[billDate dateBySubtractingDays:1] formattedDateWithFormat:@"yyyyMMdd"]];
+//                
+//                NSMutableArray *valueArr = [NSMutableArray array];
+//                [valueArr addObject:chargeid];
+//                [valueArr addObject:SSJUSERID()];
+//                [valueArr addObject:billId];
+//                [valueArr addObject:fundid];
+//                [valueArr addObject:billDateStr];
+//                [valueArr addObject:cid];
+//                [valueArr addObject:@(interest)];
+//                [valueArr addObject:@""];
+//                [valueArr addObject:@(SSJSyncVersion())];
+//                [valueArr addObject:@(SSJOperatorTypeCreate)];
+//                [valueArr addObject:writeDateStr];
+//                [valueArr addObject:@(SSJChargeIdTypeFixedFinance)];
+//                NSDictionary *interestChargeInfo = [NSDictionary dictionaryWithObjects:[valueArr copy] forKeys:keyArr];
+//                
+//                if ([[NSString stringWithFormat:@"%.2f",interest] doubleValue] > 0) {
+//                    if (![db executeUpdate:@"replace into bk_user_charge (ichargeid, cuserid, ibillid, ifunsid, cbilldate, cid, imoney, cmemo, iversion, operatortype, cwritedate, ichargetype) values (:ichargeid, :cuserid, :ibillid, :ifunsid, :cbilldate, :cid, :imoney, :cmemo, :iversion, :operatortype, :cwritedate, :ichargetype)" withParameterDictionary:interestChargeInfo]) {
+//                        return NO;
+//                    }
+//                }
+//            }
+//        }
+//            break;
         default:
             break;
     }
