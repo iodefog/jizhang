@@ -191,7 +191,7 @@
             BOOL hasno = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:item];
             //最后一条利息
             NSDate *endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
-            NSInteger months = [endDate daysFrom:lastChangeDate];
+            NSInteger months = [endDate monthsFrom:lastChangeDate];
             NSInteger begDays = [endDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
             NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:hasno ? item.time : months timetype:hasno ? item.timetype : SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
             

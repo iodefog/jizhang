@@ -674,14 +674,9 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
  3.继续派发从最新一次派发时间到当天的利息
  */
 + (BOOL)regularDistributedInterestForUserId:(NSString *)userId inDatabase:(SSJDatabase *)db {
-    
     NSError *error = nil;
     NSString *fundid = [NSString stringWithFormat:@"%@-8", userId];
-    NSArray *list = [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:fundid
-                                                                             userID:userId
-                                                                              state:SSJFixedFinanceStateNoSettlement
-                                                                           database:db
-                                                                              error:&error];
+    NSArray *list = [SSJFixedFinanceProductStore queryFixedFinanceProductWithFundID:fundid userID:userId state:SSJFixedFinanceStateNoSettlement database:db error:&error];
     if (error) {
         return NO;
     }
