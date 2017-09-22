@@ -263,6 +263,7 @@ static NSString *kTitle6 = @"备注";
             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
             cell.customAccessoryType = UITableViewCellAccessoryNone;
         } else {
+            cell.subtitleLabel.textColor = SSJ_MAIN_COLOR;
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.subtitleLabel.hidden = NO;
@@ -286,7 +287,12 @@ static NSString *kTitle6 = @"备注";
         cell.textField.delegate = self;
         if (self.chargeModel) {
             cell.textField.text = self.chargeModel.memo;
+        }
+        
+        if (self.financeModel.isend) {
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
+        } else {
+            cell.textField.textColor = SSJ_MAIN_COLOR;
         }
         self.memoTextF = cell.textField;
         [cell setNeedsLayout];
@@ -305,9 +311,13 @@ static NSString *kTitle6 = @"备注";
         cell.selectionStyle = SSJ_CURRENT_THEME.cellSelectionStyle;
         if (self.chargeModel) {
             cell.subtitleLabel.text = [self.chargeModel.billDate formattedDateWithFormat:@"yyyy-MM-dd"];
-            cell.customAccessoryType = UITableViewCellAccessoryNone;
+        }
+        
+        if (self.financeModel.isend) {
             cell.subtitleLabel.textColor = SSJ_SECONDARY_COLOR;
+            cell.customAccessoryType = UITableViewCellAccessoryNone;
         } else {
+            cell.subtitleLabel.textColor = SSJ_MAIN_COLOR;
             cell.customAccessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         [cell setNeedsLayout];
@@ -340,12 +350,18 @@ static NSString *kTitle6 = @"备注";
         cell.textField.text = self.lixiStr;
         if (self.chargeModel) {
             cell.textField.text = self.lixiStr;
+        }
+        
+        if (self.financeModel.isend) {
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
+        } else {
+            cell.textField.textColor = SSJ_MAIN_COLOR;
         }
         self.liXiTextF = cell.textField;
         cell.nameL.text = title;
         cell.hasPercentageL = NO;
         cell.hasNotSegment = YES;
+        cell.subNameL.textColor = SSJ_SECONDARY_COLOR;
         self.subL = cell.subNameL;
         return cell;
 
