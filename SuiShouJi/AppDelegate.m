@@ -289,7 +289,7 @@ NSDate *SCYEnterBackgroundTime() {
 
 // 设置根控制器
 - (void)setRootViewController {
-    if (SSJLaunchTimesForAllVersion() == 1) {
+    if (SSJLaunchTimesForAllVersion() == 1) {1
         SSJNewUserFirstStartViewController *newUserVc = [[SSJNewUserFirstStartViewController alloc] initWithNibName:nil bundle:nil];
         SSJNavigationController *newUserNavi = [[SSJNavigationController alloc] initWithRootViewController:newUserVc];
         [UIApplication sharedApplication].keyWindow.rootViewController = newUserNavi;
