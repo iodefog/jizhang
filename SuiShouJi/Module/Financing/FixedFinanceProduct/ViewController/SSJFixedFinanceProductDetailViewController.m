@@ -389,7 +389,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
                 } else if (self.financeModel.ratetype == 2) {
                     lilvTitle = @"年化收益率";
                 }
-                NSString *rateStr = [NSString stringWithFormat:@"%.1f%@", self.financeModel.rate * 100,@"%"];
+                NSString *rateStr = [NSString stringWithFormat:@"%.2f%@", self.financeModel.rate * 100,@"%"];
                 [self.section1Items insertObject:[SSJLoanDetailCellItem itemWithImage:@"" title:lilvTitle subtitle:rateStr bottomTitle:nil] atIndex:0];
             }
         }
@@ -571,10 +571,10 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
             sumTitle = @"赎回手续费";
             sumValue = [NSString stringWithFormat:@"%.2f",redemInterest];
         } else {
-            sumValue = [NSString stringWithFormat:@"%.1f%@", rate,@"%"];
+            sumValue = [NSString stringWithFormat:@"%.2f%@", rate,@"%"];
         }
     } else {
-        sumValue = [NSString stringWithFormat:@"%.1f%@", rate,@"%"];
+        sumValue = [NSString stringWithFormat:@"%.2f%@", rate,@"%"];
     }
     
     NSString *interestTitle = nil;
@@ -669,20 +669,19 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
 
 - (void)deleteBtnAction {
     MJWeakSelf;
+    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"您确定要删除此流水吗？" action: [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
+        [weakSelf deleteFinanceModel];
+    }], [SSJAlertViewAction actionWithTitle:@"取消" handler:NULL],nil];
+}
+
+- (void)deleteFinanceModel {
+    MJWeakSelf;
     [SSJFixedFinanceProductStore deleteFixedFinanceProductWithModel:self.financeModel success:^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {
         [SSJAlertViewAdapter showError:error];
     }];
-//    + (void)deleteFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model success:(void (^)(void))success
-//failure:(void (^)(NSError *error))failure;
-//    __weak typeof(self) wself = self;
-//    [SSJAlertViewAdapter showAlertViewWithTitle:nil message:@"删除该项目后相关的账户流水数据(含转账、利息）将被彻底删除哦。" action:[SSJAlertViewAction actionWithTitle:@"取消" handler:NULL], [SSJAlertViewAction actionWithTitle:@"确定" handler:^(SSJAlertViewAction *action) {
-//        [wself deleteLoanModel];
-//    }], nil];
-//    
-
 }
 
 #pragma mark - Getter
@@ -720,7 +719,7 @@ static NSString *kSSJFinanceDetailCellID = @"kSSJFinanceDetailCellID";
     if (!_waningBtn) {
         _waningBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _waningBtn.left = self.headerView.width - 40;
-        _waningBtn.top = 170;
+        _waningBtn.top = 188;
         MJWeakSelf;
         [_waningBtn setImage:[UIImage imageNamed:@"fixed_finance_question"] forState:UIControlStateNormal];
         [_waningBtn sizeToFit];

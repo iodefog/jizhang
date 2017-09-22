@@ -101,8 +101,22 @@ static NSString *kTitle6 = @"结算日期";
     [self initCompoundModel];
     [self setUpNav];
     [self setBind];
-    
+    [self bind];
     [self updateAppearance];
+}
+
+- (void)bind {
+    MJWeakSelf;
+    [RACObserve(self, moneyStr) subscribeNext:^(id x) {
+        [weakSelf updateSubTitle];
+    }];
+    [RACObserve(self, lixiStr) subscribeNext:^(id x) {
+        [weakSelf updateSubTitle];
+    }];
+    
+    [RACObserve(self, poundStr) subscribeNext:^(id x) {
+        [weakSelf updateSubTitle];
+    }];
 }
 
 - (void)setUpNav {
@@ -128,6 +142,7 @@ static NSString *kTitle6 = @"结算日期";
 
     if (self.chargeItem) {
         self.tableView.userInteractionEnabled = NO;
+        self.poundStr = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]];
         if ([SSJFixedFinanceProductStore queryHasPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]) {//有手续费
             self.titleItems = @[@[kTitle1,kTitle2,kTitle3,kTitle4],@[kTitle5,kTitle6]];
             self.imageItems = @[@[@"loan_money",@"fixed_finance_lixi",@"fixed_finance_fei",@"fixed_finance_jin"],@[@"fixed_finance_in",@"fixed_finance_qixi"]];
@@ -169,6 +184,18 @@ static NSString *kTitle6 = @"结算日期";
     return YES;
 }
 
+- (BOOL)textFieldShouldClear:(UITextField *)textField {
+    if (textField == self.moneyTextF) {
+        self.moneyTextF.text = self.moneyStr = @"";
+    } else if (textField == self.liXiTextF) {
+        self.liXiTextF.text = self.lixiStr = @"";
+    } else if (textField == self.poundageTextF) {
+        self.poundageTextF.text = self.poundStr = @"";
+    }
+    [self updateSubTitle];
+    return YES;
+}
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
     NSString *text = [textField.text stringByReplacingCharactersInRange:range withString:string];
@@ -176,10 +203,8 @@ static NSString *kTitle6 = @"结算日期";
     if (self.moneyTextF == textField || self.poundageTextF == textField) {
         if (self.moneyTextF == textField) {
             self.moneyStr = text;
-            [self updateSubTitle];
         } else {
             self.poundStr = text;
-            [self updateSubTitle];
         }
         return NO;
     }
@@ -308,9 +333,9 @@ static NSString *kTitle6 = @"结算日期";
         cell.textField.keyboardType = UIKeyboardTypeDecimalPad;
         cell.textField.delegate = self;
         [cell.textField ssj_installToolbar];
-        cell.textField.text = [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money];
+        cell.textField.text = self.financeModel.isend ? [NSString stringWithFormat:@"%.2f", self.compoundModel.chargeModel.money] : self.poundStr;
         if (self.chargeItem) {
-            cell.textField.text = [NSString stringWithFormat:@"%.2f",[SSJFixedFinanceProductStore queryPoundageWithProduct:self.financeModel chargeItem:self.chargeItem]];
+            cell.textField.text = self.poundStr;
             cell.textField.textColor = SSJ_SECONDARY_COLOR;
         }
         self.poundageTextF = cell.textField;
@@ -318,6 +343,7 @@ static NSString *kTitle6 = @"结算日期";
         cell.hasPercentageL = NO;
         cell.hasNotSegment = YES;
         self.subL = cell.subNameL;
+        [self updateSubTitle];
         return cell;
         
     } else {
