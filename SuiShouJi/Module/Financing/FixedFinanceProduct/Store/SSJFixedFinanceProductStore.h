@@ -161,19 +161,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
 
 
 /**
- 结算固收理财产品
- 
- @param model 模型
- @param chargeModel 流水模型
- @param success 成功
- @param failure 失败
- */
-+ (void)settlementFixedFinanceProductWithModel:(SSJFixedFinanceProductItem *)model
-                                   chargeModel:(SSJFixedFinanceProductChargeItem *)chargeModel
-                                 success:(void (^)(void))success
-                                 failure:(void (^)(NSError *error))failure;
-
-/**
  删除固收理财账户
  
  @param model 模型
@@ -224,16 +211,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                      success:(void (^)(NSArray <SSJFixedFinanceProductChargeItem *>*resultList))success
                                      failure:(void (^)(NSError *error))failure;
 
-/**
- 查询固定理财流水详情
- 
- @param model 固定理财流水(转入、转出、利息)等
- @param success 成功的回调
- @param failure 失败的回调
- */
-+ (void)queryFixedFinanceProductChargeDetailWithChargeId:(NSString *)chargeId
-                                                 success:(void (^)(SSJFixedFinanceProductChargeItem *model))success
-                                                 failure:(void (^)(NSError *error))failure;
 
 /**
  查询某个固定理财所有的追加和赎回流水列表以及创建
@@ -288,17 +265,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                                               success:(void (^)(void))success
                                               failure:(void (^)(NSError *error))failure;
 
-
-/**
- 新增或修改固定理财的某个流水
- 
- @param model 借贷产生的流水
- @param success 成功的回调
- @param failure 失败的回调
- */
-+ (void)saveFinanceCompoundChargeModel:(SSJFixedFinanceProductChargeItem *)model
-                            success:(void (^)(void))success
-                            failure:(void (^)(NSError *error))failure;
 
 
 /**
@@ -355,16 +321,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
                              writeDate:(NSString *)writeDate
                needcreateRecycleRecord:(BOOL)needcreateRecycleRecord
                                  error:(NSError **)error;
-
-
-/**
- 重新设置某个理财产品的所有流水（等同删除某个理财产品）
-
- @param model
- @param db <#db description#>
- @param needcreateRecycleRecord <#needcreateRecycleRecord description#>
- */
-+ (void)reSetFixedFinanceProductModel:(SSJFixedFinanceProductItem *)model needcreateRecycleRecord:(BOOL)needcreateRecycleRecord;
 
 
 
@@ -449,8 +405,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  */
 + (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model;
 
-+ (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
-
 /**
  查询是否有赎回或者追加
  
@@ -458,24 +412,6 @@ typedef NS_ENUM(NSInteger, SSJFixedFinanceState) {
  @return <#return value description#>
  */
 + (BOOL)queryIsChangeMoneyWithProductModel:(SSJFixedFinanceProductItem *)model inDatabase:(FMDatabase *)db error:(NSError **)error;
-
-/**
- 查询最早一条赎回时间
-
- @param model <#model description#>
- @return <#return value description#>
- */
-+ (NSDate *)queryFirstRedemDateWithProductModel:(SSJFixedFinanceProductItem *)model;
-
-
-/**
- 查询最早一条添加时间
-
- @param model <#model description#>
- @return <#return value description#>
- */
-+ (NSDate *)queryFirstAddDateWithProductModel:(SSJFixedFinanceProductItem *)model;
-
 
 /**
  查询最早一条添加或者赎回时间
