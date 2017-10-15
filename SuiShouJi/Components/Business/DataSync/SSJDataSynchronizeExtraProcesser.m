@@ -21,7 +21,7 @@
 + (void)extraProcessWithUserID:(NSString *)userID data:(NSDictionary *)data {
     [self switchAnotherBookIfNeeded:userID];
     
-    // 合并数据完成后补充周期记账、周期转账、预算；即使补充失败，也不影响同步，在其他时机可以再次补充
+    // 合并数据完成后补充周期数据；即使补充失败，也不影响同步，在其他时机可以再次补充
     [SSJRegularManager supplementCycleRecordsForUserId:userID];
     
     [self supplementMemberCharges:userID];

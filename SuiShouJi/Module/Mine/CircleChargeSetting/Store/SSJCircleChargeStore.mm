@@ -94,6 +94,7 @@
         item.billDetailDate = @"00:00";
         item.billId = [db stringForQuery:@"select cbillid from bk_user_bill_type where cuserid = ? and itype = ? and cbooksid = ? and operatortype <> 2 order by iorder limit 1", userid, @(incomeOrExpence), booksId];
         item.typeName = [db stringForQuery:@"select cname from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
+        item.colorValue = [db stringForQuery:@"select ccolor from bk_user_bill_type where cbillid = ? and cuserid = ? and cbooksid = ?", item.billId, userid, booksId];
         item.booksId = booksId;
         item.booksName = [db stringForQuery:@"select cbooksname from bk_books_type where cbooksid = ?",booksId];
         item.fundId = [db stringForQuery:@"select cfundid from bk_fund_info where cuserid = ? and operatortype <> 2 order by iorder limit 1",userid];
@@ -243,7 +244,7 @@
             }
         }else{
             //修改周期记账
-            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and cbooksid = ? and iconfigid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.booksId,item.sundryId]) {
+            if (![db executeUpdate:@"update bk_charge_period_config set ibillid = ? ,ifunsid = ? ,itype = ? ,imoney = ?,cimgurl = ?,cmemo = ?,cbilldate = ?,iversion = ?,cwritedate = ?,operatortype = 1 , cmemberids = ?, cbilldateend = ? where cuserid = ? and iconf igid = ?",item.billId,item.fundId,@(item.chargeCircleType),item.money,item.chargeImage,item.chargeMemo,item.billDate,@(SSJSyncVersion()),cwriteDate,membersStr,item.chargeCircleEndDate,userid,item.sundryId]) {
                 if (failure) {
                     SSJDispatch_main_async_safe(^{
                         failure([db lastError]);

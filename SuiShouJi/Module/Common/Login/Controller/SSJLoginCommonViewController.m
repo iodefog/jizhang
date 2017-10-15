@@ -96,9 +96,8 @@
     if (!_titleL) {
         _titleL = [[UILabel alloc] init];
         _titleL.text = @"登录";
-        _titleL.textColor = [UIColor whiteColor];
         _titleL.font = [UIFont ssj_pingFangRegularFontOfSize:SSJ_FONT_SIZE_3];
-        _titleL.textColor = [UIColor ssj_colorWithHex:@"#EE4F4F"];
+        _titleL.textColor = [UIColor ssj_colorWithHex:[SSJThemeSetting defaultThemeModel].mainColor];
     }
     return _titleL;
 }

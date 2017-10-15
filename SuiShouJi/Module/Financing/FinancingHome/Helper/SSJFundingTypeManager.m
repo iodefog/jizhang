@@ -10,11 +10,6 @@
 
 @implementation SSJFundingParentmodel
 
-+ (NSDictionary *)mj_objectClassInArray {
-    return @{
-             @"subFunds" : @"SSJFundingParentmodel",
-             };
-}
 
 @end
 
@@ -61,8 +56,16 @@
     return @[@"1",@"2",@"18",@"19",@"20",@"21",@"10",@"15"];
 }
 
+- (NSArray *)assetsFundIdsWithOutLoan {
+    return @[@"1",@"2",@"18",@"19",@"20",@"21",@"15"];
+}
+
 - (NSArray *)liabilitiesFundIds {
     return @[@"3",@"16",@"11"];
+}
+
+- (NSArray *)liabilitiesFundIdsWithOutLoan {
+    return @[@"3",@"16"];
 }
 
 - (NSDictionary<NSString *,NSDictionary *> *)allParentFunds{
@@ -79,6 +82,14 @@
         NSDictionary *allFunds = [SSJFundingTypeManager sharedManager].allParentFunds;
         for (NSString *fundId in [self assetsFundIds]) {
             SSJFundingParentmodel *model = [self modelForFundId:fundId];
+            if (model.subFunds.count) {
+                NSMutableArray *tempFundArr = [NSMutableArray arrayWithCapacity:0];
+                for (NSString *subFundId in model.subFunds) {
+                    SSJFundingParentmodel *subModel = [self modelForFundId:subFundId];
+                    [tempFundArr addObject:subModel];
+                }
+                model.subFunds = tempFundArr;
+            }
             [tempArr addObject:model];
         }
         _sassetsFunds = tempArr;
@@ -89,9 +100,16 @@
 - (NSArray<SSJFundingParentmodel *> *)liabilitiesFunds {
     if (!_liabilitiesFunds) {
         NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
-        NSDictionary *allFunds = [SSJFundingTypeManager sharedManager].allParentFunds;
         for (NSString *fundId in [self liabilitiesFundIds]) {
             SSJFundingParentmodel *model = [self modelForFundId:fundId];
+            if (model.subFunds.count) {
+                NSMutableArray *tempFundArr = [NSMutableArray arrayWithCapacity:0];
+                for (NSString *subFundId in model.subFunds) {
+                    SSJFundingParentmodel *subModel = [self modelForFundId:subFundId];
+                    [tempFundArr addObject:subModel];
+                }
+                model.subFunds = tempFundArr;
+            }
             [tempArr addObject:model];
         }
         _liabilitiesFunds = tempArr;
@@ -99,6 +117,47 @@
     return _liabilitiesFunds;
 }
 
+- (NSArray<SSJFundingParentmodel *> *)sassetsFundsWithOutLoan {
+    if (!_sassetsFundsWithOutLoan) {
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        for (NSString *fundId in [self assetsFundIdsWithOutLoan]) {
+            SSJFundingParentmodel *model = [self modelForFundId:fundId];
+            if (model.subFunds.count) {
+                NSMutableArray *tempFundArr = [NSMutableArray arrayWithCapacity:0];
+                for (NSString *subFundId in model.subFunds) {
+                    SSJFundingParentmodel *subModel = [self modelForFundId:subFundId];
+                    if (![subFundId isEqualToString:@"17"]) {
+                        [tempFundArr addObject:subModel];
+                    }
+                }
+                model.subFunds = tempFundArr;
+            }
+            [tempArr addObject:model];
+        }
+        _sassetsFundsWithOutLoan = tempArr;
+    }
+    return _sassetsFundsWithOutLoan;
+}
 
+- (NSArray<SSJFundingParentmodel *> *)liabilitiesFundsWithOutLoan {
+    if (!_liabilitiesFundsWithOutLoan) {
+        NSMutableArray *tempArr = [NSMutableArray arrayWithCapacity:0];
+        NSDictionary *allFunds = [SSJFundingTypeManager sharedManager].allParentFunds;
+        for (NSString *fundId in [self liabilitiesFundIdsWithOutLoan]) {
+            SSJFundingParentmodel *model = [self modelForFundId:fundId];
+            if (model.subFunds.count) {
+                NSMutableArray *tempFundArr = [NSMutableArray arrayWithCapacity:0];
+                for (NSString *subFundId in model.subFunds) {
+                    SSJFundingParentmodel *subModel = [self modelForFundId:subFundId];
+                    [tempFundArr addObject:subModel];
+                }
+                model.subFunds = tempFundArr;
+            }
+            [tempArr addObject:model];
+        }
+        _liabilitiesFundsWithOutLoan = tempArr;
+    }
+    return _liabilitiesFundsWithOutLoan;
+}
 
 @end

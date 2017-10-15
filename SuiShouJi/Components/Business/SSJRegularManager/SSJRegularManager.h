@@ -64,7 +64,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (BOOL)supplementCyclicTransferForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
-+ (void)regularDistributedInterestSuccess:(void (^)())success failure:(void (^)(NSError * error))failure;
+/**
+ 生成固收理财派发利息
+ */
++ (BOOL)regularDistributedInterestForUserId:(NSString *)userId inDatabase:(FMDatabase *)db;
 
 @end
 

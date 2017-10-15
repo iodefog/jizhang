@@ -343,42 +343,8 @@
 		<integer>1</integer>
 		<key>subFunds</key>
 		<array>
-			<dict>
-				<key>ID</key>
-				<string>14</string>
-				<key>name</key>
-				<string>支付宝</string>
-				<key>icon</key>
-				<string>ft_zhifubao</string>
-				<key>memo</key>
-				<string></string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
-			<dict>
-				<key>ID</key>
-				<string>13</string>
-				<key>name</key>
-				<string>微信钱包</string>
-				<key>icon</key>
-				<string>ft_weixin</string>
-				<key>memo</key>
-				<string></string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
+			<string>14</string>
+			<string>13</string>
 		</array>
 	</dict>
 	<key>19</key>
@@ -399,60 +365,9 @@
 		<integer>0</integer>
 		<key>subFunds</key>
 		<array>
-			<dict>
-				<key>ID</key>
-				<string>17</string>
-				<key>name</key>
-				<string>固收理财</string>
-				<key>icon</key>
-				<string>ft_gushou</string>
-				<key>memo</key>
-				<string></string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<array/>
-			</dict>
-			<dict>
-				<key>ID</key>
-				<string>4</string>
-				<key>name</key>
-				<string>一般投资</string>
-				<key>icon</key>
-				<string>ft_invest</string>
-				<key>memo</key>
-				<string>基金账户、证券账户</string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>1</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
-			<dict>
-				<key>ID</key>
-				<string>5</string>
-				<key>name</key>
-				<string>货币基金</string>
-				<key>icon</key>
-				<string>ft_huobijijin</string>
-				<key>memo</key>
-				<string>宝宝类</string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
+			<string>17</string>
+			<string>4</string>
+			<string>5</string>
 		</array>
 	</dict>
 	<key>20</key>
@@ -473,42 +388,8 @@
 		<integer>0</integer>
 		<key>subFunds</key>
 		<array>
-			<dict>
-				<key>ID</key>
-				<string>6</string>
-				<key>name</key>
-				<string>实物储值卡</string>
-				<key>icon</key>
-				<string>ft_shiwuka</string>
-				<key>memo</key>
-				<string>购物卡、公交卡等</string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<array/>
-			</dict>
-			<dict>
-				<key>ID</key>
-				<string>7</string>
-				<key>name</key>
-				<string>网络充值账户</string>
-				<key>icon</key>
-				<string>ft_wangluochongzhi</string>
-				<key>memo</key>
-				<string>9188彩票等</string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<array/>
-			</dict>
+			<string>6</string>
+			<string>7</string>
 		</array>
 	</dict>
 	<key>21</key>
@@ -529,42 +410,8 @@
 		<integer>0</integer>
 		<key>subFunds</key>
 		<array>
-			<dict>
-				<key>ID</key>
-				<string>12</string>
-				<key>name</key>
-				<string>社保</string>
-				<key>icon</key>
-				<string>ft_shebao</string>
-				<key>memo</key>
-				<string>医保</string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
-			<dict>
-				<key>ID</key>
-				<string>8</string>
-				<key>name</key>
-				<string>住房公积金</string>
-				<key>icon</key>
-				<string>ft_house</string>
-				<key>memo</key>
-				<string></string>
-				<key>expand</key>
-				<false/>
-				<key>order</key>
-				<integer>0</integer>
-				<key>type</key>
-				<integer>0</integer>
-				<key>subFunds</key>
-				<dict/>
-			</dict>
+			<string>12</string>
+			<string>8</string>
 		</array>
 	</dict>
 </dict>

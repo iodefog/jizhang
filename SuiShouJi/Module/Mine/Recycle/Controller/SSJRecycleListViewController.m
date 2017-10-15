@@ -17,6 +17,7 @@
 #import "SSJRecycleListModel.h"
 #import "SSJRecycleHelper.h"
 #import "SSJRewardViewController.h"
+#import "SSJDataSynchronizer.h"
 
 static NSString *const kHeaderID = @"kHeaderID";
 static NSString *const kRecycleListCellID = @"SSJRecycleListCell";
@@ -139,6 +140,8 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
                         rewardAlertShowed = YES;
                         [self.rewardAlertView show];
                     }
+                    
+                    [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                 }
             }];
         };
@@ -153,6 +156,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
                     item.recoverBtnLoading = NO;
                     if (success) {
                         [self deleteCellsWithRecycleIDs:@[item.recycleID]];
+                        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                     }
                 }];
             };
@@ -453,6 +457,7 @@ static NSString *const kRecycleRecoverClearCellID = @"RecycleRecoverClearCell";
                     [button ssj_hideLoadingIndicator];
                     if (success) {
                         [self deleteCellsWithRecycleIDs:selectedIDs];
+                        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
                     }
                 }];
             };

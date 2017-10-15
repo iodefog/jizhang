@@ -180,14 +180,6 @@ NSDate *SCYEnterBackgroundTime() {
         [SSJCustomThemeManager initializeCustomTheme];
     });
     
-    //派发利息流水
-
-    [SSJRegularManager regularDistributedInterestSuccess:^{
-         [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
-    } failure:^(NSError * _Nonnull error) {
-        [SSJAlertViewAdapter showError:error];
-    }];
-    
     return YES;
 }
 
@@ -198,16 +190,16 @@ NSDate *SCYEnterBackgroundTime() {
     //每次从后台进入打一次补丁
 //    [SSJJspatchAnalyze SSJJsPatchAnalyzePatch];
     
-    // 当程序从后台进入前台，检测是否自动补充定期记账和预算，因为程序在后台不能收到本地通知
-    [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:NULL failure:NULL];
+    // 当程序从后台进入前台，检测是否自动补周期数据
+    [SSJRegularManager supplementCycleRecordsForUserId:SSJUSERID() success:^{
+        [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
+    } failure:^(NSError * _Nonnull error) {
+        [CDAutoHideMessageHUD showError:error];
+    }];
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
-    
     [self pushToControllerWithNotification:notification];
-    
-    //  收到本地通知后，检测通知是否自动补充定期记账和预算的通知，是的话就进行补充，反之忽略
-//    [SSJRegularManager performRegularTaskWithLocalNotification:notification];
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
@@ -278,7 +270,6 @@ NSDate *SCYEnterBackgroundTime() {
         
         // 1.7.0之前有每日提醒，此版本后提醒改变了，所以要取消之前所有提醒
         [[UIApplication sharedApplication] cancelAllLocalNotifications];
-//        [SSJRegularManager registerRegularTaskNotification];
         [SSJLocalNotificationStore queryForreminderListForUserId:SSJUSERID() WithSuccess:^(NSArray<SSJReminderItem *> *result) {
             for (SSJReminderItem *item in result) {
                 [SSJLocalNotificationHelper registerLocalNotificationWithremindItem:item];
