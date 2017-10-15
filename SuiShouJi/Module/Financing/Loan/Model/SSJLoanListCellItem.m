@@ -60,7 +60,7 @@
     item.date = [NSString stringWithFormat:@"起息日期：%@",model.startdate];
     item.showStamp = model.isend;
     item.imageName = @"fixed_jiesuan";
-    item.showStateL = [[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThan:[NSDate date]];
+    item.showStateL = [[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] isEarlierThanOrEqualTo:[NSDate date]];
     item.descStr = model.isend ? @"到账金额" : @"当前余额";
     //[[model.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] compare:[NSDate date]];
     return item;

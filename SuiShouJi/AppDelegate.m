@@ -181,8 +181,7 @@ NSDate *SCYEnterBackgroundTime() {
     });
     
     //派发利息流水
-//    + (void)regularDistributedInterestSuccess:(void (^)())success
-//failure:(void (^)(NSError * error))failure
+
     [SSJRegularManager regularDistributedInterestSuccess:^{
          [[SSJDataSynchronizer shareInstance] startSyncIfNeededWithSuccess:NULL failure:NULL];
     } failure:^(NSError * _Nonnull error) {

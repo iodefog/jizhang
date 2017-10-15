@@ -650,22 +650,28 @@ static NSString *const SSJRegularManagerNotificationIdValue = @"SSJRegularManage
                 
                 NSDate *endDate;
                 if ([[NSDate date] compare:[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"]] == NSOrderedAscending) {
-                    endDate = [NSDate date];
+                    endDate = [[[NSDate date] ssj_dateStringWithFormat:@"yyyy-MM-dd"] ssj_dateWithFormat:@"yyyy-MM-dd"];
                 } else {
                     endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
                 }
                 NSDate *tempDate = [NSDate date];
                 NSDate *currentDay = [NSDate dateWithYear:tempDate.year month:tempDate.month day:tempDate.day];
                 
-                
-                
                 if ([investmentDate isSameDay:currentDay] && date.length) {//如果有利息的时候还是同一天就返回不在重复生成利息
                     return;
                 }
                 
+                //如果有利息生成并且是最后一天的时候返回
+                if ([lastInvDate isSameDay:currentDay] && date.length) {
+                    return;
+                }
 //                if ([[investmentDate dateByAddingDays:1] isLaterThanOrEqualTo:currentDay] && !date.length) {//没有利息且是第此生成利息的时候继续生成利息
 //                    return;
 //                }
+                
+                if ([currentDay isEarlierThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1]]) {
+                    return;
+                }
                 
                 if (![SSJFixedFinanceProductStore interestRecordWithModel:item investmentDate:investmentDate endDate:endDate newMoney:0 type:1 inDatabase:db error:&error]) {
                     if (failure) {
