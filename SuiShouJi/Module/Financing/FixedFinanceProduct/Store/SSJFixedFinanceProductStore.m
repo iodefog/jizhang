@@ -2377,17 +2377,81 @@
 
                 case SSJMethodOfRateOrTimeYear:
                 {
-                    if ([[dayJixiDate dateByAddingYears:item.time] isLaterThanOrEqualTo:currentDate]) return YES;//如果没到时间返回
+//                    if ([[dayJixiDate dateByAddingYears:item.time] isLaterThanOrEqualTo:currentDate]) return YES;//如果没到时间返回
                     NSDate *writeDate = [[dayJixiDate dateByAddingYears:(item.time)] dateByAddingDays:1];
-                    if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
+//                    if ([writeDate isLaterThanOrEqualTo:currentDate]) return YES;
 
                     NSDate *billDate = [writeDate dateBySubtractingDays:1];
                     //如果一定到了结束日期了就返回
                     if ([billDate isLaterThan:[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateByAddingDays:1]]) {
                         return YES;
                     }
-                    NSString *billDateStr = [[billDate dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
+                    NSString *billDateStr = [[[item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"] dateBySubtractingDays:1]formattedDateWithFormat:@"yyyy-MM-dd"];
                     //生成利息
+                    //年一次性
+
+                    //如果一定到了结束日期了就返回
+                    if ([currentDate isEarlierThan:endDate]) {
+                        return YES;
+                    }
+                    
+                    //年，一次性（当做月来处理）
+                    double investmentMoney = 0;
+                    double lixi = 0;
+                    NSDate *lastChangeDate = item.startDate;
+                    for (NSInteger i=0; i<addAndRedemChargeItems.count; i++) {
+                        SSJFixedFinanceProductChargeItem *chaItem = [addAndRedemChargeItems ssj_safeObjectAtIndex:i];
+                        
+                        if (chaItem.chargeType ==SSJFixedFinCompoundChargeTypeCreate) {
+                            //原始本金
+                            investmentMoney += chaItem.money;
+                        } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeAdd) {
+                            NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
+                            NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
+                            ////第二个月
+                            //第二个月初第一天并入第二个月
+                            NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:months timetype:SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
+                            lixi += [[interestDic objectForKey:@"interest"] doubleValue];
+                            
+                            //分段按照天分段利息
+                            NSDictionary *feninterestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:investmentMoney interestType:item.interesttype startDate:@""];
+                            lixi += [[feninterestDic objectForKey:@"interest"] doubleValue];
+                            
+                            investmentMoney += chaItem.money;
+                            lastChangeDate = chaItem.billDate;
+                            
+                        } else if (chaItem.chargeType == SSJFixedFinCompoundChargeTypeRedemption) {
+                            //赎回手续费
+                            NSInteger months = [chaItem.billDate monthsFrom:lastChangeDate];
+                            NSInteger begDays = [chaItem.billDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
+                            
+                            ////第二个月
+                            //第二个月初第一天并入第二个月
+                            NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:months timetype:SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
+                            lixi += [[interestDic objectForKey:@"interest"] doubleValue];
+                            
+                            //分段按照天分段利息
+                            NSDictionary *feninterestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:begDays timetype:SSJMethodOfRateOrTimeDay money:investmentMoney interestType:item.interesttype startDate:@""];
+                            lixi += [[feninterestDic objectForKey:@"interest"] doubleValue];
+                            
+                            //手续费
+                            double poundate = [self queryRedemPoundageMoneyWithRedmModel:chaItem inDatabase:db error:error];
+                            
+                            investmentMoney -= chaItem.money;
+                            investmentMoney -= poundate;
+                            lastChangeDate = chaItem.billDate;
+                        }
+                    }
+                    
+                    interest = lixi;
+                    BOOL hasno = [SSJFixedFinanceProductStore queryIsChangeMoneyWithProductModel:item inDatabase:db error:error];
+                    //最后一条利息
+                    NSDate *endDate = [item.enddate ssj_dateWithFormat:@"yyyy-MM-dd"];
+                    NSInteger months = [endDate daysFrom:lastChangeDate];
+                    NSInteger begDays = [endDate daysFrom: [lastChangeDate dateByAddingMonths:months]];
+                    NSDictionary *interestDic = [SSJFixedFinanceProductHelper caculateYuQiInterestWithRate:item.rate rateType:item.ratetype time:hasno ? item.time : months timetype:hasno ? item.timetype : SSJMethodOfRateOrTimeMonth money:investmentMoney interestType:item.interesttype startDate:@""];
+                    
+                    interest += [[interestDic objectForKey:@"interest"] doubleValue];
                     NSMutableArray *valueArr = [NSMutableArray array];
                     [valueArr addObject:SSJUUID()];
                     [valueArr addObject:SSJUSERID()];
