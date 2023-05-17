@@ -7,6 +7,7 @@
 //
 
 #import "SSJDatabaseQueue.h"
+#import "SSJDatabaseErrorHandler.h"
 
 static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey;
 
@@ -37,6 +38,51 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
     return self;
 }
 
+- (void)inDatabase:(void (^)(FMDatabase *))block {
+    [super inDatabase:^(FMDatabase *db) {
+        if (block) {
+            block(db);
+        }
+        
+        NSError *error = [db lastError];
+        if (error) {
+            [SSJDatabaseErrorHandler handleError:error];
+        }
+    }];
+}
+
+- (void)inTransaction:(void (^)(FMDatabase *, BOOL *))block {
+    [super inTransaction:^(FMDatabase *db, BOOL *rollback) {
+        BOOL shouldRollback;
+        if (block) {
+            block(db, &shouldRollback);
+        }
+        
+        NSError *error = [db lastError];
+        if (error) {
+            [SSJDatabaseErrorHandler handleError:error];
+        }
+        
+        *rollback = shouldRollback;
+    }];
+}
+
+- (void)inDeferredTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
+    [super inDeferredTransaction:^(FMDatabase *db, BOOL *rollback) {
+        BOOL shouldRollback;
+        if (block) {
+            block(db, &shouldRollback);
+        }
+        
+        NSError *error = [db lastError];
+        if (error) {
+            [SSJDatabaseErrorHandler handleError:error];
+        }
+        
+        *rollback = shouldRollback;
+    }];
+}
+
 - (void)asyncInDatabase:(void (^)(FMDatabase *db))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
     if (currentDatabaseQueue == self) {
@@ -47,13 +93,6 @@ static const void * kSSJDatabaseQueueSpecificKey = &kSSJDatabaseQueueSpecificKey
         });
     }
 }
-
-//- (void)setDataBaseQueue:(dispatch_queue_t)dataBaseQueue {
-//    if (dataBaseQueue == NULL || dataBaseQueue == nil) {
-//        
-//    }
-//    _dataBaseQueue = dataBaseQueue;
-//}
 
 - (void)asyncInTransaction:(void (^)(FMDatabase *db, BOOL *rollback))block {
     SSJDatabaseQueue *currentDatabaseQueue = (__bridge id)dispatch_get_specific(kSSJDatabaseQueueSpecificKey);
