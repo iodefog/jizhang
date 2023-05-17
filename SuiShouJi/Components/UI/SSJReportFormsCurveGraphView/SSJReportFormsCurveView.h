@@ -31,6 +31,11 @@
 @property (nonatomic) UIEdgeInsets contentInsets;
 
 /**
+ 阴影的偏移量，默认CGPointZero
+ */
+@property (nonatomic) CGPoint shadowOffset;
+
+/**
  是否显示曲线阴影，默认NO
  */
 @property (nonatomic) BOOL showShadow;

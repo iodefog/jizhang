@@ -83,6 +83,8 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         
+        _shadowOffset = CGPointZero;
+        
         _incomeCurvePath = [UIBezierPath bezierPath];
         _incomeShadowPath = [UIBezierPath bezierPath];
         _incomeFillPath = [UIBezierPath bezierPath];
@@ -169,6 +171,18 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
     }
 }
 
+- (void)setShadowOffset:(CGPoint)shadowOffset {
+    if (!CGPointEqualToPoint(_shadowOffset, shadowOffset)) {
+        _shadowOffset = shadowOffset;
+        
+        if (_showShadow) {
+            [self updateCurveShadowPath:_incomeShadowPath withValues:_incomeValues];
+            [self updateCurveShadowPath:_paymentShadowPath withValues:_paymentValues];
+            [self setNeedsDisplay];
+        }
+    }
+}
+
 - (void)setShowShadow:(BOOL)showShadow {
     if (_showShadow != showShadow) {
         _showShadow = showShadow;
@@ -223,11 +237,11 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
     [self updateCurvePath:_incomeCurvePath withValues:_incomeValues];
     
     if (_showShadow) {
-        [self updateFillPath:_incomeFillPath withCurvePath:_incomeCurvePath];
+        [self updateCurveShadowPath:_incomeShadowPath withValues:_incomeValues];
     }
     
     if (_fillCurve) {
-        [self updateCurveShadowPath:_incomeShadowPath withValues:_incomeValues];
+        [self updateFillPath:_incomeFillPath withCurvePath:_incomeCurvePath];
     }
     
     // 这个方法只能取到贝塞尔曲线的起始点、终点、两个控制点
@@ -290,15 +304,17 @@ void MyCGPathApplierFunc (void *info, const CGPathElement *element) {
         NSNumber *value = values[i];
         CGFloat x = unitX * i + contentFrame.origin.x;
         CGFloat y = contentFrame.size.height * (1 - [value floatValue] / _maxValue) + contentFrame.origin.y;
-        y -= 5;
+        
+        x += _shadowOffset.x;
+        y += _shadowOffset.y;
         
         CGPoint point = CGPointMake(x, y);
         if (i == 0) {
             [path moveToPoint:point];
         } else {
             CGFloat offset = (point.x - path.currentPoint.x) * 0.35;
-            CGPoint controlPoint1 = CGPointMake(path.currentPoint.x + offset, path.currentPoint.y);
-            CGPoint controlPoint2 = CGPointMake(point.x - offset, point.y);
+            CGPoint controlPoint1 = CGPointMake(path.currentPoint.x + offset + _shadowOffset.x, path.currentPoint.y + _shadowOffset.y);
+            CGPoint controlPoint2 = CGPointMake(point.x - offset + _shadowOffset.x, point.y + _shadowOffset.y);
             [path addCurveToPoint:point controlPoint1:controlPoint1 controlPoint2:controlPoint2];
         }
     }
