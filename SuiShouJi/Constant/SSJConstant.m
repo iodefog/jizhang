@@ -36,9 +36,13 @@ NSString *const SSJReminderNotificationKey = @"SSJReminderNotificationKey";
 
 NSString *const SSJSyncDataSuccessNotification = @"SSJSyncDataSuccessNotification";
 
+NSString *const SSJSyncDataFailureNotification = @"SSJSyncDataFailureNotification";
+
 NSString *const SSJUserLoginTypeKey = @"SSJUserLoginTypeKey";
 
 NSString *const SSJSyncImageSuccessNotification = @"SSJSyncImageSuccessNotification";
+
+NSString *const SSJSyncImageFailureNotification = @"SSJSyncImageFailureNotification";
 
 NSString *const SSJLoginOrRegisterNotification = @"SSJLoginOrRegisterNotification";
 
